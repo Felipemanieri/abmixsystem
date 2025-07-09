@@ -60,7 +60,6 @@ function App() {
 
     setChatMessages(prev => [...prev, userMessage]);
 
-    // Bot response
     setTimeout(() => {
       const response = getBotResponse(newMessage);
       const botMessage: ChatMessage = {
@@ -117,45 +116,39 @@ function App() {
 
   // Página inicial com seleção de portais
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 relative overflow-hidden watermark-bg particles-bg">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/3 left-1/3 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-purple-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-gradient-to-br from-yellow-400/15 to-orange-400/15 rounded-full blur-3xl animate-pulse delay-3000"></div>
-        <div className="absolute top-1/4 right-1/3 w-72 h-72 bg-gradient-to-br from-green-400/10 to-emerald-400/10 rounded-full blur-3xl animate-pulse delay-4000"></div>
-      </div>
-
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="nav-professional relative z-10">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img 
                   src="/Logo Abmix.jpg" 
                   alt="Abmix" 
-                  className="h-12 w-auto logo-enhanced"
+                  className="h-8 w-auto"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
-                    const fallback = e.currentTarget.nextElementSibling;
-                    if (fallback) fallback.classList.remove('hidden');
+                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-6 h-6 text-white" />
+                <div className="hidden w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <div className="ml-4">
+                  <span className="text-xl font-bold text-gray-900">Abmix</span>
+                  <p className="text-sm text-gray-600">Seguros & Benefícios</p>
                 </div>
               </div>
             </div>
             
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Sobre</a>
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Contato</a>
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">Suporte</a>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Sobre</a>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Contato</a>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Suporte</a>
               </div>
-              <button className="btn-primary">
+              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                 Fale Conosco
               </button>
             </div>
@@ -164,31 +157,31 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Title */}
-        <div className="text-center mb-20 fade-in">
-          <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-semibold mb-8 shadow-soft">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-6">
             <Shield className="w-4 h-4 mr-2" />
             Sistema Seguro e Confiável
           </div>
-          <h1 className="heading-primary mb-8 slide-up text-glow">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-professional max-w-4xl mx-auto mb-12 slide-up">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
-          <div className="flex items-center justify-center space-x-12 slide-up">
-            <div className="flex items-center text-gray-600 font-medium">
+          <div className="flex items-center justify-center space-x-8">
+            <div className="flex items-center text-gray-600">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-gray-600 font-medium">
+            <div className="flex items-center text-gray-600">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-gray-600 font-medium">
+            <div className="flex items-center text-gray-600">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
@@ -196,21 +189,21 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
           {/* Portal do Cliente */}
           <div 
             onClick={() => setCurrentPortal('client')}
-            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-blue-200 group-hover:to-blue-300 transition-all shadow-medium mx-auto">
-              <Users className="w-10 h-10 text-blue-600" />
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+              <Users className="w-6 h-6 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors text-center">Portal do Cliente</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Portal do Cliente</h3>
+            <p className="text-gray-600 text-sm mb-4">
               Acompanhe suas propostas e documentos
             </p>
-            <div className="flex items-center justify-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-blue-600 font-medium text-sm">
+              <ArrowRight className="w-4 h-4 mr-1" />
               Acessar Portal
             </div>
           </div>
@@ -218,35 +211,35 @@ function App() {
           {/* Portal Vendedor */}
           <div 
             onClick={() => setCurrentPortal('vendor')}
-            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-medium mx-auto">
-              <FileText className="w-10 h-10 text-green-600" />
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+              <FileText className="w-6 h-6 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors text-center">Portal Vendedor</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Portal Vendedor</h3>
+            <p className="text-gray-600 text-sm mb-4">
               Gerencie propostas e clientes
             </p>
-            <div className="flex items-center justify-center text-green-600 font-semibold group-hover:text-green-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-green-600 font-medium text-sm">
+              <ArrowRight className="w-4 h-4 mr-1" />
               Acessar Portal
             </div>
           </div>
 
-          {/* Portal Financeiro */}
+          {/* Portal Implantação */}
           <div 
             onClick={() => setCurrentPortal('implantacao')}
-            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-medium mx-auto">
-              <Zap className="w-10 h-10 text-teal-600" />
+            <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-teal-200 transition-colors">
+              <Zap className="w-6 h-6 text-teal-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-teal-600 transition-colors text-center">Portal Implantação</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Portal Implantação</h3>
+            <p className="text-gray-600 text-sm mb-4">
               Validação e automação de propostas
             </p>
-            <div className="flex items-center justify-center text-teal-600 font-semibold group-hover:text-teal-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-teal-600 font-medium text-sm">
+              <ArrowRight className="w-4 h-4 mr-1" />
               Acessar Portal
             </div>
           </div>
@@ -254,17 +247,17 @@ function App() {
           {/* Portal Financeiro */}
           <div 
             onClick={() => setCurrentPortal('financial')}
-            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-medium mx-auto">
-              <DollarSign className="w-10 h-10 text-green-600" />
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+              <DollarSign className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors text-center">Portal Financeiro</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Portal Financeiro</h3>
+            <p className="text-gray-600 text-sm mb-4">
               Análise financeira e relatórios
             </p>
-            <div className="flex items-center justify-center text-green-600 font-semibold group-hover:text-green-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-purple-600 font-medium text-sm">
+              <ArrowRight className="w-4 h-4 mr-1" />
               Acessar Portal
             </div>
           </div>
@@ -272,114 +265,111 @@ function App() {
           {/* Portal Supervisor */}
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-medium mx-auto">
-              <Zap className="w-10 h-10 text-orange-600" />
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-200 transition-colors">
+              <Zap className="w-6 h-6 text-orange-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-orange-600 transition-colors text-center">Portal Supervisor</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Portal Supervisor</h3>
+            <p className="text-gray-600 text-sm mb-4">
               Supervisão e relatórios gerenciais
             </p>
-            <div className="flex items-center justify-center text-orange-600 font-semibold group-hover:text-orange-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-orange-600 font-medium text-sm">
+              <ArrowRight className="w-4 h-4 mr-1" />
               Acessar Portal
             </div>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="card-professional mb-16 watermark-bg shadow-professional">
-          <div className="text-center mb-12">
-            <h2 className="heading-secondary mb-6">Por que escolher nossa plataforma?</h2>
-            <p className="text-professional">Tecnologia de ponta para simplificar seus processos</p>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Por que escolher nossa plataforma?</h2>
+            <p className="text-gray-600">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center hover-lift">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <Zap className="w-10 h-10 text-blue-600" />
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Processo Ágil</h3>
-              <p className="text-gray-600 leading-relaxed">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Processo Ágil</h3>
+              <p className="text-gray-600">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
             </div>
             
-            <div className="text-center hover-lift">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <Shield className="w-10 h-10 text-green-600" />
+            <div className="text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Máxima Segurança</h3>
-              <p className="text-gray-600 leading-relaxed">Criptografia avançada e conformidade total com LGPD</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Máxima Segurança</h3>
+              <p className="text-gray-600">Criptografia avançada e conformidade total com LGPD</p>
             </div>
             
-            <div className="text-center hover-lift">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <Users className="w-10 h-10 text-purple-600" />
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Users className="w-6 h-6 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Suporte Dedicado</h3>
-              <p className="text-gray-600 leading-relaxed">Equipe especializada disponível 24/7 para auxiliar</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Suporte Dedicado</h3>
+              <p className="text-gray-600">Equipe especializada disponível 24/7 para auxiliar</p>
             </div>
           </div>
         </div>
+
         {/* Security Notice */}
-        <div className="card-professional bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200 shadow-professional">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-large">
-              <Shield className="w-10 h-10 text-white" />
+        <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-teal-200 p-8">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center">
+              <Shield className="w-6 h-6 text-white" />
             </div>
             <div className="ml-4">
-              <h3 className="heading-secondary">Segurança e Privacidade</h3>
-              <p className="text-teal-700 font-medium">Seus dados protegidos com a mais alta tecnologia</p>
+              <h3 className="text-xl font-bold text-gray-900">Segurança e Privacidade</h3>
+              <p className="text-teal-700">Seus dados protegidos com a mais alta tecnologia</p>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-8">
-            <div className="hover-lift">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <Shield className="w-8 h-8 text-teal-600" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Shield className="w-5 h-5 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-4 text-lg">Dados Protegidos</h4>
-              <p className="text-gray-600 leading-relaxed">Criptografia de ponta a ponta e armazenamento seguro</p>
+              <h4 className="font-semibold text-gray-900 mb-2">Dados Protegidos</h4>
+              <p className="text-gray-600 text-sm">Criptografia de ponta a ponta e armazenamento seguro</p>
             </div>
-            <div className="hover-lift">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <Users className="w-8 h-8 text-teal-600" />
+            <div>
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Users className="w-5 h-5 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-4 text-lg">Acesso Controlado</h4>
-              <p className="text-gray-600 leading-relaxed">Permissões granulares e autenticação multifator</p>
+              <h4 className="font-semibold text-gray-900 mb-2">Acesso Controlado</h4>
+              <p className="text-gray-600 text-sm">Permissões granulares e autenticação multifator</p>
             </div>
-            <div className="hover-lift">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-medium">
-                <FileText className="w-8 h-8 text-teal-600" />
+            <div>
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <FileText className="w-5 h-5 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-4 text-lg">Conformidade LGPD</h4>
-              <p className="text-gray-600 leading-relaxed">100% em conformidade com a legislação brasileira</p>
+              <h4 className="font-semibold text-gray-900 mb-2">Conformidade LGPD</h4>
+              <p className="text-gray-600 text-sm">100% em conformidade com a legislação brasileira</p>
             </div>
           </div>
         </div>
       </main>
       
       {/* Footer */}
-      <footer className="footer-professional py-16 relative z-10">
+      <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <img 
-                  src="/Logo Abmix.jpg" 
-                  alt="Abmix" 
-                  className="h-10 w-auto logo-enhanced"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-white" />
+                </div>
+                <span className="ml-3 text-lg font-bold">Abmix</span>
               </div>
-              <p className="text-gray-300 leading-relaxed">Soluções completas em seguros e benefícios para sua empresa.</p>
+              <p className="text-gray-400">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
             
             <div>
-              <h3 className="font-bold mb-6 text-lg">Contato</h3>
-              <div className="space-y-3 text-gray-300">
+              <h3 className="font-semibold mb-4">Contato</h3>
+              <div className="space-y-2 text-gray-400 text-sm">
                 <p>📞 (11) 99999-9999</p>
                 <p>✉️ contato@abmix.com.br</p>
                 <p>📍 São Paulo, SP</p>
@@ -387,8 +377,8 @@ function App() {
             </div>
             
             <div>
-              <h3 className="font-bold mb-6 text-lg">Suporte</h3>
-              <div className="space-y-3 text-gray-300">
+              <h3 className="font-semibold mb-4">Suporte</h3>
+              <div className="space-y-2 text-gray-400 text-sm">
                 <p>Segunda a Sexta: 8h às 18h</p>
                 <p>Sábado: 8h às 12h</p>
                 <p>Atendimento 24/7 online</p>
@@ -396,23 +386,23 @@ function App() {
             </div>
             
             <div>
-              <h3 className="font-bold mb-6 text-lg">Redes Sociais</h3>
+              <h3 className="font-semibold mb-4">Redes Sociais</h3>
               <div className="flex space-x-3">
-                <button className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-700 transition-all hover-lift shadow-medium">
-                  <span className="text-white font-bold">f</span>
+                <button className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <span className="text-white text-sm font-bold">f</span>
                 </button>
-                <button className="w-12 h-12 bg-blue-400 rounded-xl flex items-center justify-center hover:bg-blue-500 transition-all hover-lift shadow-medium">
-                  <span className="text-white font-bold">t</span>
+                <button className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center hover:bg-blue-500 transition-colors">
+                  <span className="text-white text-sm font-bold">t</span>
                 </button>
-                <button className="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center hover:bg-blue-800 transition-all hover-lift shadow-medium">
-                  <span className="text-white font-bold">in</span>
+                <button className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
+                  <span className="text-white text-sm font-bold">in</span>
                 </button>
               </div>
             </div>
           </div>
           
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-300">
-            <p className="font-medium">&copy; 2024 Abmix. Todos os direitos reservados.</p>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
@@ -420,36 +410,36 @@ function App() {
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large border-animated">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 w-80 h-96 flex flex-col">
             {/* Chat Header */}
-            <div className="gradient-animated text-white p-6 rounded-t-2xl flex items-center justify-between">
+            <div className="bg-blue-600 text-white p-4 rounded-t-xl flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <Bot className="w-4 h-4" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="font-bold text-lg">Assistente Abmix</h3>
+                  <h3 className="font-semibold">Assistente Abmix</h3>
                   <p className="text-xs text-blue-100">Online agora</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowChat(false)}
-                className="text-white/80 hover:text-white"
+                className="text-blue-100 hover:text-white"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+            <div className="flex-1 p-4 overflow-y-auto space-y-3">
               {chatMessages.map((message) => (
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-xs p-4 rounded-2xl shadow-soft ${
+                  <div className={`max-w-xs p-3 rounded-lg text-sm ${
                     message.isBot 
                       ? 'bg-gray-100 text-gray-800' 
-                      : 'gradient-animated text-white'
+                      : 'bg-blue-600 text-white'
                   }`}>
-                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    <p>{message.text}</p>
                     <p className={`text-xs mt-1 ${
                       message.isBot ? 'text-gray-500' : 'text-blue-100'
                     }`}>
@@ -461,7 +451,7 @@ function App() {
             </div>
 
             {/* Chat Input */}
-            <div className="p-6 border-t border-gray-200">
+            <div className="p-4 border-t border-gray-200">
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
@@ -469,11 +459,11 @@ function App() {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="input-professional flex-1"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
                 <button
                   onClick={sendMessage}
-                  className="btn-primary p-3 interactive-element"
+                  className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -483,9 +473,9 @@ function App() {
         ) : (
           <button
             onClick={() => setShowChat(true)}
-            className="w-20 h-20 gradient-animated text-white rounded-full shadow-large hover:shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center hover-lift interactive-element"
+            className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center"
           >
-            <MessageCircle className="w-10 h-10" />
+            <MessageCircle className="w-6 h-6" />
           </button>
         )}
       </div>

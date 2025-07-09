@@ -2,79 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fonte profissional */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Fonte limpa e profissional */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Variáveis CSS customizadas */
-:root {
-  --primary-blue: #1e40af;
-  --primary-teal: #0d9488;
-  --accent-gold: #f59e0b;
-  --neutral-dark: #1f2937;
-  --neutral-light: #f8fafc;
-  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #0d9488 100%);
-  --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-}
-
-/* Reset e base */
 * {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
-  background: var(--neutral-light);
-  color: var(--neutral-dark);
+  background: #f8fafc;
+  color: #1f2937;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* MARCA D'ÁGUA PROFISSIONAL COM LOGO ABMIX */
-.watermark-bg {
-  position: relative;
-  overflow: hidden;
-}
-
-.watermark-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(13, 148, 136, 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
-  background-size: 400px 400px, 300px 300px, 500px 500px;
-  background-repeat: repeat;
-  opacity: 0.6;
-  z-index: 0;
-  pointer-events: none;
-  animation: float 30s ease-in-out infinite;
-}
-
-.watermark-bg::after {
-  content: 'ABMIX';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  font-size: clamp(6rem, 15vw, 12rem);
-  font-weight: 900;
-  color: rgba(30, 64, 175, 0.03);
-  z-index: 0;
-  pointer-events: none;
-  letter-spacing: 1rem;
-  text-shadow: 0 0 50px rgba(30, 64, 175, 0.1);
-}
-
-.watermark-bg > * {
-  position: relative;
-  z-index: 1;
 }
 
 /* CHATBOT SEMPRE FIXO - SOLUÇÃO DEFINITIVA */
@@ -82,428 +21,42 @@ body {
   position: fixed !important;
   bottom: 24px !important;
   right: 24px !important;
-  z-index: 99999 !important;
+  z-index: 9999 !important;
   pointer-events: auto !important;
 }
 
-/* LOGO DESTACADO COM EFEITOS PROFISSIONAIS */
-.logo-enhanced {
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 8px;
-}
-
-.logo-enhanced:hover {
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
-  transform: scale(1.05) translateY(-2px);
-}
-
-/* BOTÕES PROFISSIONAIS COM SHIMMER */
-.btn-primary {
-  background: var(--gradient-primary);
-  color: white;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.025em;
-  border: none;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-primary:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-large);
-  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--primary-blue);
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-weight: 700;
-  font-size: 16px;
-  border: 2px solid var(--primary-blue);
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
-}
-
-.btn-secondary:hover {
-  background: var(--primary-blue);
-  color: white;
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-large);
-}
-
-/* CARDS PROFISSIONAIS COM EFEITOS AVANÇADOS */
-.card-professional {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: var(--shadow-medium);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.card-professional::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: var(--gradient-primary);
-  transform: scaleX(0);
-  transition: transform 0.4s ease;
-  border-radius: 24px 24px 0 0;
-}
-
-.card-professional:hover::before {
-  transform: scaleX(1);
-}
-
-.card-professional:hover {
-  transform: translateY(-12px);
-  box-shadow: var(--shadow-large);
-  border-color: rgba(30, 64, 175, 0.2);
-  background: rgba(255, 255, 255, 0.98);
-}
-
-/* EFEITOS DE HOVER PROFISSIONAIS */
-.hover-lift {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-large);
-}
-
-/* TIPOGRAFIA PROFISSIONAL */
-.heading-primary {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.heading-secondary {
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
-  font-weight: 800;
-  line-height: 1.2;
-  color: var(--neutral-dark);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.text-professional {
-  font-size: 1.25rem;
-  line-height: 1.8;
-  color: #64748b;
-  font-weight: 500;
-}
-
-/* INPUTS PROFISSIONAIS */
-.input-professional {
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(30, 64, 175, 0.1);
-  border-radius: 16px;
-  padding: 20px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
-}
-
-.input-professional:focus {
-  outline: none;
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 6px rgba(30, 64, 175, 0.1);
-  background: white;
-  transform: translateY(-2px);
-}
-
-/* NAVEGAÇÃO PROFISSIONAL */
-.nav-professional {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(30px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: var(--shadow-soft);
-}
-
-/* FOOTER PROFISSIONAL */
-.footer-professional {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.footer-professional::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-/* SCROLLBAR CUSTOMIZADA PROFISSIONAL */
+/* Scrollbar limpa */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
-  border-radius: 6px;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gradient-primary);
-  border-radius: 6px;
-  border: 2px solid #f1f5f9;
+  background: #cbd5e1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
+  background: #94a3b8;
 }
 
-/* ANIMAÇÕES PROFISSIONAIS */
-.fade-in {
-  animation: fadeIn 0.8s ease-out;
-}
-
-.slide-up {
-  animation: slideUp 1s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg); 
-  }
-  33% { 
-    transform: translateY(-20px) rotate(1deg); 
-  }
-  66% { 
-    transform: translateY(-10px) rotate(-1deg); 
-  }
-}
-
-/* EFEITOS DE PARTÍCULAS ANIMADAS */
-.particles-bg {
-  position: relative;
-  overflow: hidden;
-}
-
-.particles-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
-  pointer-events: none;
-  animation: float 25s ease-in-out infinite;
-}
-
-/* ESTADOS DE LOADING COM SHIMMER */
-.loading-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-/* MELHORIAS DE ACESSIBILIDADE */
-.focus-visible:focus {
-  outline: 3px solid var(--primary-blue);
-  outline-offset: 3px;
-  border-radius: 8px;
-}
-
-/* TRANSIÇÕES GLOBAIS SUAVES */
+/* Transições suaves */
 * {
-  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-/* SELEÇÃO DE TEXTO PERSONALIZADA */
+/* Seleção de texto */
 ::selection {
-  background: rgba(30, 64, 175, 0.3);
-  color: var(--neutral-dark);
+  background: rgba(59, 130, 246, 0.2);
 }
 
-/* RESPONSIVIDADE PROFISSIONAL */
+/* Responsividade */
 @media (max-width: 768px) {
-  .heading-primary {
-    font-size: 2.5rem;
-  }
-  
-  .card-professional {
-    padding: 24px;
-    border-radius: 20px;
-  }
-  
-  .btn-primary,
-  .btn-secondary {
-    padding: 14px 24px;
-    font-size: 16px;
-  }
-  
   .chatbot-container {
     bottom: 16px !important;
     right: 16px !important;
   }
-}
-
-/* EFEITOS ESPECIAIS PARA ELEMENTOS INTERATIVOS */
-.interactive-element {
-  position: relative;
-  overflow: hidden;
-}
-
-.interactive-element::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.interactive-element:hover::after {
-  width: 300px;
-  height: 300px;
-}
-
-/* GRADIENTES ANIMADOS */
-.gradient-animated {
-  background: linear-gradient(-45deg, #1e40af, #0d9488, #f59e0b, #dc2626);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* MELHORIAS PARA DARK MODE (FUTURO) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --neutral-dark: #f8fafc;
-    --neutral-light: #1f2937;
-  }
-  
-  .watermark-bg::after {
-    color: rgba(255, 255, 255, 0.03);
-  }
-}
-
-/* EFEITOS DE BORDA ANIMADA */
-.border-animated {
-  position: relative;
-  border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(45deg, #1e40af, #0d9488) border-box;
-}
-
-/* SOMBRAS PROFISSIONAIS CUSTOMIZADAS */
-.shadow-professional {
-  box-shadow: 
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.shadow-professional-hover:hover {
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(30, 64, 175, 0.1);
-}
-
-/* TEXTO COM EFEITO NEON SUTIL */
-.text-glow {
-  text-shadow: 
-    0 0 5px rgba(30, 64, 175, 0.3),
-    0 0 10px rgba(30, 64, 175, 0.2),
-    0 0 15px rgba(30, 64, 175, 0.1);
 }
