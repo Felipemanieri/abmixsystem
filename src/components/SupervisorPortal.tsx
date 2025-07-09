@@ -22,7 +22,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
 
   // Mostrar mensagem de boas-vindas ao carregar o componente
   React.useEffect(() => {
-    if (user.name === 'Rodrigo Ribas') {
+    if (user.name === 'Felipe Abmix') {
       showNotification(`Bem-vindo, ${user.name}! Você tem 5 notificações não lidas.`, 'success');
     }
   }, []);
@@ -663,7 +663,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       case 'team':
         return renderTeamView();
       case 'restricted':
-        if (user.name === 'Rodrigo Ribas') {
+        if (user.name === 'Felipe Abmix') {
           return renderRestrictedView();
         }
         return <div className="bg-red-50 p-6 rounded-xl text-center"><AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" /><p className="text-red-700 font-medium">Acesso restrito. Você não tem permissão para visualizar esta área.</p></div>;
@@ -887,12 +887,14 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <AbmixLogo size={40} className="mr-3" />
-                <span className="text-xl font-bold text-gray-900">Portal Supervisor</span>
+                <div className="flex items-center">
+                  <span className="text-xl font-bold text-gray-900">Portal Supervisor</span>
+                </div>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 {/* Navigation */}
                 {activeView !== 'dashboard' && (
                   <button
@@ -906,7 +908,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                 
                 <button 
                   onClick={() => setActiveView('restricted')}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-orange-600 hover:text-orange-900 hover:bg-orange-100 rounded-lg transition-colors border border-orange-200"
+                  className="flex items-center px-4 py-2 text-sm font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg transition-colors shadow-sm"
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   Área Restrita

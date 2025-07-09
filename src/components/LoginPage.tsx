@@ -54,12 +54,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
     setIsLoading(true);
     setErrorMessage('');
 
-    // Verificar credenciais para o supervisor
-    if (portal === 'supervisor' && email === 'supervisao@abmix.com.br' && password === '123456') {
+    // Verificar credenciais para o supervisor - agora aceita o email felipe@abmix.com.br
+    if (portal === 'supervisor' && 
+        ((email === 'supervisao@abmix.com.br' && password === '123456') || 
+         (email === 'felipe@abmix.com.br' && password === '123456'))) {
       setTimeout(() => {
         const user = {
           id: '1',
-          name: 'Rodrigo Ribas',
+          name: 'Felipe Abmix',
           email,
           role: portal,
         };
@@ -185,7 +187,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               {portal === 'supervisor' ? (
                 <p className="text-xs text-gray-600 text-center">
-                  <strong>Acesso Supervisor:</strong> supervisao@abmix.com.br / 123456
+                  <strong>Acesso Supervisor:</strong> felipe@abmix.com.br / 123456
                 </p>
               ) : (
                 <p className="text-xs text-gray-600 text-center">

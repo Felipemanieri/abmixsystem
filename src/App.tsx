@@ -124,7 +124,7 @@ function App() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img 
-                  src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                  src="https://i.imgur.com/nLLYwdI.png" 
                   alt="Abmix" 
                   className="h-20 w-auto"
                 />
@@ -151,7 +151,7 @@ function App() {
           {/* Logo como marca d'água */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <img 
-              src="/6078b216-6252-4ede-8d9b-4c2164c3ed8f copy copy.png" 
+              src="https://i.imgur.com/nLLYwdI.png" 
               alt="Abmix Logo Watermark" 
               className="w-96 h-96 opacity-20 object-contain"
             />
@@ -374,7 +374,7 @@ function App() {
             {/* Logo */}
             <div className="flex items-center">
               <img 
-                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                src="https://i.imgur.com/nLLYwdI.png" 
                 alt="Abmix" 
                 className="h-24 w-auto"
               />
