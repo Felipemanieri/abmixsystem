@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, MessageCircle, Mail, Download, Search, Filter } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Mail, Download, Search, Filter, ArrowLeft, Home } from 'lucide-react';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 
@@ -42,6 +42,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [generatedLinks, setGeneratedLinks] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const stats = [
     {
@@ -94,7 +95,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       documents: 8,
       lastActivity: '2 horas atrás',
       email: 'contato@empresaabc.com.br',
-      phone: '(11) 99999-9999',
+      phone: '11999999999',
       attachments: [
         { id: '1', name: 'cnpj_empresa_abc.pdf', type: 'pdf', size: '2.1 MB', url: '/docs/cnpj_empresa_abc.pdf' },
         { id: '2', name: 'rg_titular.jpg', type: 'image', size: '1.8 MB', url: '/docs/rg_titular.jpg' },
@@ -116,7 +117,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       documents: 6,
       lastActivity: '1 dia atrás',
       email: 'admin@techsolutions.com',
-      phone: '(11) 88888-8888',
+      phone: '11888888888',
       attachments: [
         { id: '4', name: 'contrato_social.pdf', type: 'pdf', size: '3.2 MB', url: '/docs/contrato_social.pdf' },
         { id: '5', name: 'comprovante_residencia.pdf', type: 'pdf', size: '0.8 MB', url: '/docs/comprovante_residencia.pdf' },
@@ -137,7 +138,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       documents: 5,
       lastActivity: '3 dias atrás',
       email: 'contato@consultoriaxyz.com.br',
-      phone: '(11) 77777-7777',
+      phone: '11777777777',
       attachments: [
         { id: '6', name: 'carteirinha_atual.jpg', type: 'image', size: '1.2 MB', url: '/docs/carteirinha_atual.jpg' },
         { id: '7', name: 'analitico_plano.pdf', type: 'pdf', size: '1.5 MB', url: '/docs/analitico_plano.pdf' },
@@ -178,10 +179,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const handleCopyLink = async (link: string) => {
     try {
       await navigator.clipboard.writeText(link);
-      alert('Link copiado para a área de transferência!');
+      showNotification('Link copiado para a área de transferência!', 'success');
     } catch (err) {
       console.error('Erro ao copiar link:', err);
-      alert('Erro ao copiar link. Tente novamente.');
+      showNotification('Erro ao copiar link. Tente novamente.', 'error');
     }
   };
 
@@ -198,9 +199,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const handleSendWhatsApp = (link: string, clientName: string, phone?: string) => {
     const message = `Olá! Segue o link para preenchimento da proposta de plano de saúde da ${clientName}: ${link}`;
     const whatsappUrl = phone 
-      ? `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+      ? `https://wa.me/55${phone}?text=${encodeURIComponent(message)}`
       : `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    showNotification('WhatsApp aberto com sucesso!', 'success');
   };
 
   const handleSendEmail = (email: string, clientName: string, link: string) => {
@@ -219,6 +221,7 @@ Abmix Seguros`;
 
     const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl);
+    showNotification('Cliente de email aberto com sucesso!', 'success');
   };
 
   const handleDownloadAttachment = (attachment: any) => {
@@ -229,7 +232,40 @@ Abmix Seguros`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    alert(`Download iniciado: ${attachment.name}`);
+    showNotification(`Download iniciado: ${attachment.name}`, 'success');
+  };
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    // Criar notificação toast
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
+  };
+
+  const triggerCelebration = () => {
+    setShowCelebration(true);
+    setTimeout(() => setShowCelebration(false), 3000);
+    
+    // Notificar todos os colaboradores
+    const collaborators = [
+      { name: 'Supervisor', email: 'supervisor@abmix.com', phone: '11999999999' },
+      { name: 'Financeiro', email: 'financeiro@abmix.com', phone: '11888888888' },
+    ];
+    
+    collaborators.forEach(collab => {
+      // Simular envio de notificação
+      console.log(`Notificação enviada para ${collab.name}: Proposta finalizada!`);
+    });
+    
+    showNotification('🎉 Proposta finalizada! Todos os colaboradores foram notificados.', 'success');
   };
 
   const filteredProposals = recentProposals.filter(proposal => {
@@ -241,6 +277,16 @@ Abmix Seguros`;
 
   const renderSpreadsheetView = () => (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setActiveView('dashboard')}
+          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar ao Dashboard
+        </button>
+      </div>
+
       <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">Planilha Completa de Propostas</h1>
         <p className="text-green-100">Visualização completa de todas as propostas com anexos</p>
@@ -332,7 +378,7 @@ Abmix Seguros`;
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{proposal.email}</div>
-                    <div className="text-sm text-gray-500">{proposal.phone}</div>
+                    <div className="text-sm text-gray-500">({proposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-wrap gap-1">
@@ -370,7 +416,9 @@ Abmix Seguros`;
                         className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
                         title="WhatsApp"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                        </svg>
                       </button>
                       <button 
                         onClick={() => handleSendEmail(proposal.email, proposal.client, proposal.link)}
@@ -433,7 +481,7 @@ Abmix Seguros`;
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
@@ -448,7 +496,7 @@ Abmix Seguros`;
 
               <button
                 onClick={handleGenerateLinks}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
@@ -463,7 +511,7 @@ Abmix Seguros`;
 
               <button
                 onClick={() => setActiveView('tracker')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
@@ -478,7 +526,7 @@ Abmix Seguros`;
 
               <button
                 onClick={() => setActiveView('spreadsheet')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
@@ -494,8 +542,14 @@ Abmix Seguros`;
 
             {/* Recent Proposals */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-              <div className="px-6 py-4 border-b border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">Propostas Recentes</h2>
+                <button
+                  onClick={triggerCelebration}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                >
+                  🎉 Finalizar Proposta
+                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -556,28 +610,30 @@ Abmix Seguros`;
                           <div className="flex space-x-2">
                             <button 
                               onClick={() => handleViewProposal(proposal)}
-                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
                               title="Visualizar proposta"
                             >
                               <Eye className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleCopyLink(proposal.link)}
-                              className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                              className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
                               title="Copiar link"
                             >
                               <Link className="w-4 h-4" />
                             </button>
                             <button 
                               onClick={() => handleSendWhatsApp(proposal.link, proposal.client, proposal.phone)}
-                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
                               title="Enviar por WhatsApp"
                             >
-                              <MessageCircle className="w-4 h-4" />
+                              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                              </svg>
                             </button>
                             <button 
                               onClick={() => handleSendEmail(proposal.email, proposal.client, proposal.link)}
-                              className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                              className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
                               title="Enviar por Email"
                             >
                               <Mail className="w-4 h-4" />
@@ -597,6 +653,18 @@ Abmix Seguros`;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Celebration Animation */}
+      {showCelebration && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 text-center animate-bounce">
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Parabéns!</h2>
+            <p className="text-gray-600">Proposta finalizada com sucesso!</p>
+            <p className="text-sm text-gray-500 mt-2">Todos os colaboradores foram notificados</p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -620,6 +688,15 @@ Abmix Seguros`;
             </div>
 
             <div className="flex items-center space-x-4">
+              {activeView !== 'dashboard' && (
+                <button
+                  onClick={() => setActiveView('dashboard')}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Dashboard
+                </button>
+              )}
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
               <button
                 onClick={onLogout}
@@ -680,7 +757,7 @@ Abmix Seguros`;
                     <h4 className="font-semibold text-gray-900 border-b pb-2">Contato</h4>
                     <div className="space-y-2 text-sm">
                       <div><span className="font-medium text-gray-700">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
-                      <div><span className="font-medium text-gray-700">Telefone:</span> <span className="ml-2">{selectedProposal.phone}</span></div>
+                      <div><span className="font-medium text-gray-700">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
                       <div><span className="font-medium text-gray-700">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
                       <div><span className="font-medium text-gray-700">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
                     </div>
@@ -748,7 +825,9 @@ Abmix Seguros`;
                     onClick={() => handleSendWhatsApp(selectedProposal.link, selectedProposal.client, selectedProposal.phone)}
                     className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                    </svg>
                     Enviar WhatsApp
                   </button>
                   <button
@@ -819,7 +898,9 @@ Abmix Seguros`;
                         className="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                         title="Enviar por WhatsApp"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                        </svg>
                       </button>
                     </div>
                   </div>
