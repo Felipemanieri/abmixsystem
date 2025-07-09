@@ -129,18 +129,18 @@ function App() {
                   className="h-12 w-auto"
                 />
                 <div className="ml-4">
-                  <span className="text-3xl font-bold text-teal-600">Abmix</span>
-                  <p className="text-sm font-semibold text-gray-500">Seguros & Benefícios</p>
+                  <span className="text-3xl font-bold text-blue-900">Abmix</span>
+                  <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Sobre</a>
-                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Contato</a>
-                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Suporte</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Sobre</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Contato</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-teal-800 transition-all shadow-lg hover:shadow-xl font-bold">
+              <button className="bg-gradient-to-r from-blue-700 to-blue-800 text-white px-6 py-3 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl font-bold">
                 Fale Conosco
               </button>
             </div>
@@ -152,6 +152,14 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
         <div className="text-center mb-20 relative">
+          {/* Logo marca d'água atrás do texto */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img 
+              src="/Logo Abmix.jpg" 
+              alt="" 
+              className="w-96 h-96 object-contain opacity-5 select-none"
+            />
+          </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
@@ -292,8 +300,8 @@ function App() {
         {/* Features Section */}
         <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-500 mb-4">Por que escolher nossa plataforma?</h2>
-            <p className="text-gray-500 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
+            <h2 className="text-3xl font-bold text-gray-700 mb-4">Por que escolher nossa plataforma?</h2>
+            <p className="text-gray-600 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -301,24 +309,24 @@ function App() {
               <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-500 mb-2">Processo Ágil</h3>
-              <p className="text-gray-500 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Processo Ágil</h3>
+              <p className="text-gray-600 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-500 mb-2">Máxima Segurança</h3>
-              <p className="text-gray-500 font-medium">Criptografia avançada e conformidade total com LGPD</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Máxima Segurança</h3>
+              <p className="text-gray-600 font-medium">Criptografia avançada e conformidade total com LGPD</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-500 mb-2">Suporte Dedicado</h3>
-              <p className="text-gray-500 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
+              <p className="text-gray-600 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
             </div>
           </div>
         </div>
@@ -330,8 +338,8 @@ function App() {
               <Shield className="w-8 h-8 text-white" />
             </div>
             <div className="ml-4">
-              <h3 className="text-2xl font-bold text-gray-500">Segurança e Privacidade</h3>
-              <p className="text-gray-500 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
+              <h3 className="text-2xl font-bold text-gray-700">Segurança e Privacidade</h3>
+              <p className="text-gray-600 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
             </div>
           </div>
           
@@ -340,22 +348,22 @@ function App() {
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Shield className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-500 mb-2 text-lg">Dados Protegidos</h4>
-              <p className="text-gray-500 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Dados Protegidos</h4>
+              <p className="text-gray-600 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Users className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-500 mb-2 text-lg">Acesso Controlado</h4>
-              <p className="text-gray-500 font-medium">Permissões granulares e autenticação multifator</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Acesso Controlado</h4>
+              <p className="text-gray-600 font-medium">Permissões granulares e autenticação multifator</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <FileText className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-gray-500 mb-2 text-lg">Conformidade LGPD</h4>
-              <p className="text-gray-500 font-medium">100% em conformidade com a legislação brasileira</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Conformidade LGPD</h4>
+              <p className="text-gray-600 font-medium">100% em conformidade com a legislação brasileira</p>
             </div>
           </div>
         </div>
