@@ -124,23 +124,23 @@ function App() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img 
-                  src="/Logo Abmix.jpg" 
+                  src="/abmix-logo.png" 
                   alt="Abmix" 
-                  className="h-12 w-auto"
+                  className="h-10 w-auto"
                 />
                 <div className="ml-4">
-                  <span className="text-3xl font-bold text-blue-900">Abmix</span>
-                  <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
+                  <span className="text-3xl font-bold text-teal-600">Abmix</span>
+                  <p className="text-sm font-semibold text-gray-500">Seguros & Benefícios</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Sobre</a>
-                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Contato</a>
-                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Suporte</a>
+                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Sobre</a>
+                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Contato</a>
+                <a href="#" className="text-teal-600 hover:text-teal-700 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-blue-700 to-blue-800 text-white px-6 py-3 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl font-bold">
+              <button className="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-3 rounded-xl hover:from-teal-700 hover:to-teal-800 transition-all shadow-lg hover:shadow-xl font-bold">
                 Fale Conosco
               </button>
             </div>
@@ -371,12 +371,17 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-5 h-5 text-white" />
+                <img 
+                  src="/abmix-logo.png" 
+                  alt="Abmix" 
+                  className="h-8 w-auto mr-3"
+                />
+                <div>
+                  <span className="text-2xl font-bold text-teal-500">Abmix</span>
+                  <p className="text-sm text-gray-400">Seguros & Benefícios</p>
                 </div>
-                <span className="ml-3 text-2xl font-bold text-teal-500">Abmix</span>
               </div>
-              <p className="text-gray-300 font-semibold">Soluções completas em seguros e benefícios para sua empresa.</p>
+              <p className="text-gray-300 font-semibold mt-4">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
             
             <div>
