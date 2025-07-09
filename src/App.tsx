@@ -148,15 +148,25 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
         <div className="text-center mb-20 relative">
+          {/* Logo como marca d'água */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img 
+              src="/6078b216-6252-4ede-8d9b-4c2164c3ed8f copy.png" 
+              alt="Abmix Logo Watermark" 
+              className="w-96 h-96 opacity-10 object-contain"
+            />
+          </div>
+          
+          {/* Texto principal com z-index maior */}
           <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed relative z-10">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
-          <div className="flex items-center justify-center space-x-8 mt-8">
+          <div className="flex items-center justify-center space-x-8 mt-8 relative z-10">
             <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
