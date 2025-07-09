@@ -386,7 +386,7 @@ function App() {
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>Rua das Flores, 123 - Centro</span>
                 </div>
-                <p>📍 São Paulo, SP</p>
+                <p className="ml-6">São Paulo, SP</p>
                 <div className="flex items-center">
                   <Globe className="w-4 h-4 mr-2" />
                   <span>www.sistema.com.br</span>
