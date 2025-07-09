@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import AbmixLogo from './components/AbmixLogo';
+import AbmixLogo from './components/AbmixLogo';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -148,10 +149,8 @@ function App() {
           {/* Logo como marca d'água */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="opacity-10">
-              <AbmixLogo size={200} />
+              <AbmixLogo size={300} />
             </div>
-          </div>
-          
           {/* Texto principal com z-index maior */}
           <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
@@ -368,11 +367,7 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Logo */}
             <div className="flex items-center">
-              <AbmixLogo size={60} className="text-white" />
-            </div>
-            
-            {/* Contato */}
-            <div>
+              <AbmixLogo size={70} className="text-white" />
               <h3 className="font-bold mb-4">Contato</h3>
               <div className="space-y-2 text-gray-400">
                 <div className="flex items-center">
@@ -506,11 +501,7 @@ function App() {
                 <input
                   type="text"
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
+                <AbmixLogo size={60} />
                 <button
                   onClick={sendMessage}
                   className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 transition-colors"

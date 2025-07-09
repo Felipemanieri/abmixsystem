@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import AbmixLogo from './AbmixLogo';
 
 interface SupervisorPortalProps {
   user: any;
@@ -660,6 +661,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <AbmixLogo size={40} className="mr-3" />
+                <span className="text-xl font-bold text-gray-900">Portal Supervisor</span>
                 <span className="text-xl font-bold text-gray-900">Portal Supervisor</span>
               </div>
             </div>

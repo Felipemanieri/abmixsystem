@@ -1,5 +1,4 @@
 import React from 'react';
-import { CircleDot, Activity } from 'lucide-react';
 
 interface AbmixLogoProps {
   className?: string;
@@ -7,24 +6,54 @@ interface AbmixLogoProps {
 }
 
 const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
+  // Calcular tamanhos baseados no tamanho principal
+  const fontSize = Math.max(Math.floor(size / 2.5), 14);
+  const subFontSize = Math.max(Math.floor(size / 5), 10);
+  const circleSize = size * 0.9;
+  
   return (
     <div className={`flex items-center ${className}`}>
-      <div className="relative mr-2">
-        <div className="absolute inset-0 bg-teal-500 rounded-full opacity-20"></div>
-        <CircleDot 
-          size={size} 
-          className="text-teal-600" 
-          strokeWidth={2.5}
-        />
-        <Activity 
-          size={size * 0.6} 
-          className="text-teal-700 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" 
-          strokeWidth={3}
-        />
+      {/* Logo circular */}
+      <div className="relative mr-3" style={{ width: circleSize, height: circleSize }}>
+        <svg width={circleSize} height={circleSize} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Seção teal superior esquerda */}
+          <path d="M50 0C22.4 0 0 22.4 0 50h50V0Z" fill="#0AB3B8" />
+          
+          {/* Seção teal inferior direita */}
+          <path d="M50 100C77.6 100 100 77.6 100 50H50V100Z" fill="#0AB3B8" />
+          
+          {/* Seção cinza superior direita */}
+          <path d="M50 0C77.6 0 100 22.4 100 50H50V0Z" fill="#9CA3AF" />
+          
+          {/* Seta branca */}
+          <path d="M50 15C30.67 15 15 30.67 15 50H50V15Z" fill="white" />
+          <path d="M50 85C69.33 85 85 69.33 85 50H50V85Z" fill="white" />
+          <path d="M50 15C69.33 15 85 30.67 85 50H50V15Z" fill="white" />
+        </svg>
       </div>
+      
+      {/* Texto */}
       <div className="flex flex-col">
-        <span className="font-bold text-gray-800 text-xl leading-tight">Abmix</span>
-        <span className="text-gray-500 text-xs leading-tight">Consultoria em Benefícios</span>
+        <span 
+          className="font-bold leading-none" 
+          style={{ 
+            fontSize: `${fontSize}px`, 
+            color: '#0AB3B8',
+            letterSpacing: '0.5px'
+          }}
+        >
+          <span style={{ color: '#0AB3B8' }}>Ab</span><span style={{ color: '#9CA3AF' }}>mix</span>
+        </span>
+        <span 
+          className="leading-tight" 
+          style={{ 
+            fontSize: `${subFontSize}px`, 
+            color: '#9CA3AF',
+            letterSpacing: '0.2px'
+          }}
+        >
+          Consultoria em Benefícios
+        </span>
       </div>
     </div>
   );
