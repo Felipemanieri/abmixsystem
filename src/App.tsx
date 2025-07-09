@@ -126,7 +126,7 @@ function App() {
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                   alt="Abmix" 
-                  className="h-12 w-auto"
+                  className="h-20 w-auto"
                 />
               </div>
             </div>
@@ -453,13 +453,6 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 pt-8 flex items-center justify-between">
-            <div className="flex items-center">
-              <img 
-                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
-                alt="Abmix" 
-                className="h-16 w-auto mr-4"
-              />
-            </div>
             <div className="text-gray-400 text-xl">
               <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
             </div>
