@@ -132,7 +132,6 @@ function App() {
                 </div>
               </div>
             </div>
-                <div className="hidden w-10 h-10 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
                 <a href="#" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Sobre</a>
@@ -189,16 +188,16 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-blue-200 group-hover:to-blue-300 transition-all shadow-lg">
-              <Users className="w-8 h-8 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">Portal do Cliente</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Acompanhe suas propostas e documentos
-            </p>
-            <div className="flex items-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
-              Acessar Portal
-            </div>
+                <Users className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">Portal do Cliente</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Acompanhe suas propostas e documentos
+              </p>
+              <div className="flex items-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors">
+                <ArrowRight className="w-4 h-4 mr-2" />
+                Acessar Portal
+              </div>
             </div>
           </div>
 
@@ -210,16 +209,16 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-lg">
-              <FileText className="w-8 h-8 text-green-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">Portal Vendedor</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Gerencie propostas e clientes
-            </p>
-            <div className="flex items-center text-green-600 font-semibold group-hover:text-green-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
-              Acessar Portal
-            </div>
+                <FileText className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">Portal Vendedor</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Gerencie propostas e clientes
+              </p>
+              <div className="flex items-center text-green-600 font-semibold group-hover:text-green-700 transition-colors">
+                <ArrowRight className="w-4 h-4 mr-2" />
+                Acessar Portal
+              </div>
             </div>
           </div>
 
@@ -231,16 +230,16 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-teal-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-lg">
-              <Zap className="w-8 h-8 text-teal-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors">Portal Implantação</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Validação e automação de propostas
-            </p>
-            <div className="flex items-center text-teal-600 font-semibold group-hover:text-teal-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
-              Acessar Portal
-            </div>
+                <Zap className="w-8 h-8 text-teal-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors">Portal Implantação</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Validação e automação de propostas
+              </p>
+              <div className="flex items-center text-teal-600 font-semibold group-hover:text-teal-700 transition-colors">
+                <ArrowRight className="w-4 h-4 mr-2" />
+                Acessar Portal
+              </div>
             </div>
           </div>
 
@@ -252,16 +251,16 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-purple-200 group-hover:to-purple-300 transition-all shadow-lg">
-              <DollarSign className="w-8 h-8 text-purple-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">Portal Financeiro</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Análise financeira e relatórios
-            </p>
-            <div className="flex items-center text-purple-600 font-semibold group-hover:text-purple-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
-              Acessar Portal
-            </div>
+                <DollarSign className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">Portal Financeiro</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Análise financeira e relatórios
+              </p>
+              <div className="flex items-center text-purple-600 font-semibold group-hover:text-purple-700 transition-colors">
+                <ArrowRight className="w-4 h-4 mr-2" />
+                Acessar Portal
+              </div>
             </div>
           </div>
 
@@ -273,16 +272,16 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-lg">
-              <Zap className="w-8 h-8 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">Portal Supervisor</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Supervisão e relatórios gerenciais
-            </p>
-            <div className="flex items-center text-orange-600 font-semibold group-hover:text-orange-700 transition-colors">
-              <ArrowRight className="w-4 h-4 mr-2" />
-              Acessar Portal
-            </div>
+                <Zap className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors">Portal Supervisor</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Supervisão e relatórios gerenciais
+              </p>
+              <div className="flex items-center text-orange-600 font-semibold group-hover:text-orange-700 transition-colors">
+                <ArrowRight className="w-4 h-4 mr-2" />
+                Acessar Portal
+              </div>
             </div>
           </div>
         </div>
@@ -369,7 +368,7 @@ function App() {
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <span className="ml-3 text-xl font-bold">Abmix</span>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">Abmix</span>
+              </div>
               <p className="text-gray-400">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
             
@@ -433,8 +432,8 @@ function App() {
                 className="text-white/80 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Contato</a>
-                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Suporte</a>
+              </button>
+            </div>
 
             {/* Chat Messages */}
             <div className="flex-1 p-4 overflow-y-auto space-y-4">
@@ -474,7 +473,7 @@ function App() {
                   <Send className="w-4 h-4" />
                 </button>
               </div>
-              <button className="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-6 py-2 rounded-xl hover:from-blue-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            </div>
           </div>
         ) : (
           <button
