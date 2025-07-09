@@ -359,50 +359,10 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Contato</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>📞 (11) 99999-9999</p>
-                <p>✉️ contato@abmix.com.br</p>
-                <p>📍 São Paulo, SP</p>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Suporte</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>Segunda a Sexta: 8h às 18h</p>
-                <p>Sábado: 8h às 12h</p>
-                <p>Atendimento 24/7 online</p>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-bold mb-4">Redes Sociais</h3>
-              <div className="flex space-x-4">
-                <button className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                  <span className="text-white font-bold">f</span>
-                </button>
-                <button className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center hover:bg-blue-500 transition-colors">
-                  <span className="text-white font-bold">t</span>
-                </button>
-                <button className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
-                  <span className="text-white font-bold">in</span>
-                </button>
-              </div>
-            </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Plataforma. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Sistema. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
