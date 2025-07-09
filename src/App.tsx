@@ -122,9 +122,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span className="text-3xl font-bold text-blue-900">Portal</span>
-              </div>
+              <div className="flex-shrink-0"></div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
@@ -149,7 +147,7 @@ function App() {
             Sistema Seguro e Confiável
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Sistema de Gestão
+            Plataforma de Gestão
           </h1>
           <p className="text-xl text-blue-900 font-bold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão empresarial. 
@@ -366,9 +364,9 @@ function App() {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-3 text-2xl font-bold text-blue-500">Sistema</span>
+                <span className="ml-3 text-2xl font-bold text-blue-500">Plataforma</span>
               </div>
-              <p className="text-gray-300 font-semibold">Sistema completo de gestão empresarial.</p>
+              <p className="text-gray-300 font-semibold">Plataforma completa de gestão empresarial.</p>
             </div>
             
             <div>
@@ -406,7 +404,7 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Portal. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Plataforma. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
@@ -423,7 +421,7 @@ function App() {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
-                  <h3 className="font-bold">Assistente Sistema</h3>
+                  <h3 className="font-bold">Assistente Virtual</h3>
                   <p className="text-xs text-teal-100">Online agora</p>
                 </div>
               </div>
