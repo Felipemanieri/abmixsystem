@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Lock, User, Eye, EyeOff } from 'lucide-react';
 
 interface LoginPageProps {
-  portal: 'client' | 'vendor' | 'financial' | 'supervisor';
+  portal: 'client' | 'vendor' | 'financial' | 'supervisor' | 'implantacao';
   onLogin: (user: any) => void;
   onBack: () => void;
 }
@@ -37,6 +37,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
       subtitle: 'Supervisão e relatórios gerenciais',
       color: 'orange',
       bgColor: 'from-orange-500 to-orange-600',
+    },
+    implantacao: {
+      title: 'Portal de Implantação',
+      subtitle: 'Gestão de implantação de sistemas',
+      color: 'indigo',
+      bgColor: 'from-indigo-500 to-indigo-600',
     },
   };
 
