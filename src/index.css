@@ -2,22 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fonte limpa e profissional */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-* {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-body {
-  background: #f9fafb;
-  color: #111827;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* CHATBOT SEMPRE FIXO - SOLUÇÃO DEFINITIVA */
+/* Chatbot sempre fixo */
 .chatbot-container {
   position: fixed !important;
   bottom: 24px !important;
@@ -26,7 +11,7 @@ body {
   pointer-events: auto !important;
 }
 
-/* Scrollbar limpa */
+/* Scrollbar customizada */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -44,7 +29,7 @@ body {
   background: #9ca3af;
 }
 
-/* Transições suaves */
+/* Transições globais */
 * {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -53,35 +38,4 @@ body {
 ::selection {
   background: rgba(59, 130, 246, 0.25);
   color: #1e40af;
-}
-
-/* Melhorias visuais */
-.bg-gradient-to-r {
-  background-attachment: fixed;
-}
-
-/* Sombras personalizadas */
-.shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.shadow-3xl {
-  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
-}
-
-/* Hover effects melhorados */
-.hover\:scale-110:hover {
-  transform: scale(1.1);
-}
-
-.hover\:-translate-y-1:hover {
-  transform: translateY(-4px);
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .chatbot-container {
-    bottom: 16px !important;
-    right: 16px !important;
-  }
 }
