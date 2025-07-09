@@ -592,7 +592,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  src="/abmix-logo.png"
+                  src="https://i.imgur.com/JQlFGrh.png"
                   alt="Abmix"
                   className="h-10 w-auto mr-3"
                 />
