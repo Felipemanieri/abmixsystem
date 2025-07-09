@@ -205,9 +205,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  src="https://i.imgur.com/JQlFGrh.png"
+                  src="https://i.imgur.com/JQlFGrh.png?v=1"
                   alt="Abmix"
-                  className="h-10 w-auto mr-3"
+                  className="h-12 w-auto mr-3"
                 />
                 <span className="ml-3 text-xl font-bold text-gray-900">Portal Financeiro</span>
               </div>

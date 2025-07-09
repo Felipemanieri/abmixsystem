@@ -735,9 +735,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  src="https://i.imgur.com/JQlFGrh.png"
+                  src="https://i.imgur.com/JQlFGrh.png?v=1"
                   alt="Abmix"
-                  className="h-10 w-auto mr-3"
+                  className="h-12 w-auto mr-3"
                 />
                 <div className="w-10 h-10 bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
                   <Settings className="w-6 h-6 text-white" />
