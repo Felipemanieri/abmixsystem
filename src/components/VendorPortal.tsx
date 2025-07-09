@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, MessageCircle } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, MessageCircle, Mail, Download, Search, Filter } from 'lucide-react';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 
@@ -8,7 +8,7 @@ interface VendorPortalProps {
   onLogout: () => void;
 }
 
-type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients';
+type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet';
 
 interface Proposal {
   id: string;
@@ -24,6 +24,15 @@ interface Proposal {
   vendedor: string;
   documents: number;
   lastActivity: string;
+  email: string;
+  phone: string;
+  attachments: Array<{
+    id: string;
+    name: string;
+    type: string;
+    size: string;
+    url: string;
+  }>;
 }
 
 const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
@@ -31,6 +40,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [generatedLinks, setGeneratedLinks] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   const stats = [
     {
@@ -82,6 +93,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       vendedor: user.name,
       documents: 8,
       lastActivity: '2 horas atrás',
+      email: 'contato@empresaabc.com.br',
+      phone: '(11) 99999-9999',
+      attachments: [
+        { id: '1', name: 'cnpj_empresa_abc.pdf', type: 'pdf', size: '2.1 MB', url: '/docs/cnpj_empresa_abc.pdf' },
+        { id: '2', name: 'rg_titular.jpg', type: 'image', size: '1.8 MB', url: '/docs/rg_titular.jpg' },
+        { id: '3', name: 'cpf_titular.pdf', type: 'pdf', size: '0.9 MB', url: '/docs/cpf_titular.pdf' },
+      ]
     },
     {
       id: 'VEND001-PROP124',
@@ -97,6 +115,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       vendedor: user.name,
       documents: 6,
       lastActivity: '1 dia atrás',
+      email: 'admin@techsolutions.com',
+      phone: '(11) 88888-8888',
+      attachments: [
+        { id: '4', name: 'contrato_social.pdf', type: 'pdf', size: '3.2 MB', url: '/docs/contrato_social.pdf' },
+        { id: '5', name: 'comprovante_residencia.pdf', type: 'pdf', size: '0.8 MB', url: '/docs/comprovante_residencia.pdf' },
+      ]
     },
     {
       id: 'VEND001-PROP125',
@@ -112,6 +136,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       vendedor: user.name,
       documents: 5,
       lastActivity: '3 dias atrás',
+      email: 'contato@consultoriaxyz.com.br',
+      phone: '(11) 77777-7777',
+      attachments: [
+        { id: '6', name: 'carteirinha_atual.jpg', type: 'image', size: '1.2 MB', url: '/docs/carteirinha_atual.jpg' },
+        { id: '7', name: 'analitico_plano.pdf', type: 'pdf', size: '1.5 MB', url: '/docs/analitico_plano.pdf' },
+      ]
     },
   ];
 
@@ -156,7 +186,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   const handleGenerateLinks = () => {
-    // Simular geração de links únicos
     const newLinks = [
       `${window.location.origin}/cliente/VEND001-PROP${Math.floor(Math.random() * 10000)}`,
       `${window.location.origin}/cliente/VEND001-PROP${Math.floor(Math.random() * 10000)}`,
@@ -166,11 +195,200 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     setShowLinkModal(true);
   };
 
-  const handleSendWhatsApp = (link: string, clientName: string) => {
+  const handleSendWhatsApp = (link: string, clientName: string, phone?: string) => {
     const message = `Olá! Segue o link para preenchimento da proposta de plano de saúde da ${clientName}: ${link}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = phone 
+      ? `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  const handleSendEmail = (email: string, clientName: string, link: string) => {
+    const subject = `Proposta de Plano de Saúde - ${clientName}`;
+    const body = `Olá!
+
+Segue o link para preenchimento da proposta de plano de saúde:
+
+${link}
+
+Qualquer dúvida, estou à disposição.
+
+Atenciosamente,
+${user.name}
+Abmix Seguros`;
+
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl);
+  };
+
+  const handleDownloadAttachment = (attachment: any) => {
+    // Simular download
+    const link = document.createElement('a');
+    link.href = attachment.url;
+    link.download = attachment.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert(`Download iniciado: ${attachment.name}`);
+  };
+
+  const filteredProposals = recentProposals.filter(proposal => {
+    const matchesSearch = proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         proposal.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || proposal.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const renderSpreadsheetView = () => (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Planilha Completa de Propostas</h1>
+        <p className="text-green-100">Visualização completa de todas as propostas com anexos</p>
+      </div>
+
+      {/* Filtros e Busca */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar por cliente ou ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Filter className="w-4 h-4 text-gray-400" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="all">Todos os Status</option>
+              <option value="client_filling">Cliente Preenchendo</option>
+              <option value="docs_pending">Documentos Pendentes</option>
+              <option value="completed">Finalizadas</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Planilha Completa */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CNPJ</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contato</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anexos</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredProposals.map((proposal) => (
+                <tr key={proposal.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {proposal.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                    <div className="text-sm text-gray-500">{proposal.vendedor}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {proposal.cnpj}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {proposal.plan}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
+                    {proposal.value}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
+                      {getStatusText(proposal.status)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                        <div 
+                          className="bg-green-600 h-2 rounded-full" 
+                          style={{ width: `${proposal.progress}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-gray-600">{proposal.progress}%</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{proposal.email}</div>
+                    <div className="text-sm text-gray-500">{proposal.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-wrap gap-1">
+                      {proposal.attachments.map((attachment) => (
+                        <button
+                          key={attachment.id}
+                          onClick={() => handleDownloadAttachment(attachment)}
+                          className="inline-flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200"
+                          title={`${attachment.name} (${attachment.size})`}
+                        >
+                          <Download className="w-3 h-3 mr-1" />
+                          {attachment.type}
+                        </button>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex space-x-1">
+                      <button 
+                        onClick={() => handleViewProposal(proposal)}
+                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                        title="Visualizar"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleCopyLink(proposal.link)}
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                        title="Copiar link"
+                      >
+                        <Link className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleSendWhatsApp(proposal.link, proposal.client, proposal.phone)}
+                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                        title="WhatsApp"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleSendEmail(proposal.email, proposal.client, proposal.link)}
+                        className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                        title="Email"
+                      >
+                        <Mail className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderContent = () => {
     switch (activeView) {
@@ -178,6 +396,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
+      case 'spreadsheet':
+        return renderSpreadsheetView();
       default:
         return (
           <div className="space-y-6">
@@ -210,7 +430,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
@@ -221,7 +441,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Nova Proposta</h3>
-                    <p className="text-sm text-gray-500">Criar proposta para cliente</p>
+                    <p className="text-sm text-gray-500">Criar proposta</p>
                   </div>
                 </div>
               </button>
@@ -236,7 +456,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Gerar Links</h3>
-                    <p className="text-sm text-gray-500">Links únicos para clientes</p>
+                    <p className="text-sm text-gray-500">Links únicos</p>
                   </div>
                 </div>
               </button>
@@ -251,7 +471,22 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Acompanhar</h3>
-                    <p className="text-sm text-gray-500">Status das propostas</p>
+                    <p className="text-sm text-gray-500">Status propostas</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveView('spreadsheet')}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+              >
+                <div className="flex items-center">
+                  <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
+                    <FileText className="w-6 h-6 text-orange-600" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-medium text-gray-900">Planilha</h3>
+                    <p className="text-sm text-gray-500">Ver tudo</p>
                   </div>
                 </div>
               </button>
@@ -334,11 +569,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                               <Link className="w-4 h-4" />
                             </button>
                             <button 
-                              onClick={() => handleSendWhatsApp(proposal.link, proposal.client)}
+                              onClick={() => handleSendWhatsApp(proposal.link, proposal.client, proposal.phone)}
                               className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
                               title="Enviar por WhatsApp"
                             >
                               <MessageCircle className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => handleSendEmail(proposal.email, proposal.client, proposal.link)}
+                              className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                              title="Enviar por Email"
+                            >
+                              <Mail className="w-4 h-4" />
                             </button>
                           </div>
                         </td>
@@ -406,7 +648,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       {/* Modal de Visualização da Proposta */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -420,39 +662,53 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 </button>
               </div>
               
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="font-medium text-gray-700">ID:</span>
-                    <span className="ml-2">{selectedProposal.id}</span>
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900 border-b pb-2">Informações Básicas</h4>
+                    <div className="space-y-2 text-sm">
+                      <div><span className="font-medium text-gray-700">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
+                      <div><span className="font-medium text-gray-700">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>
+                      <div><span className="font-medium text-gray-700">CNPJ:</span> <span className="ml-2">{selectedProposal.cnpj}</span></div>
+                      <div><span className="font-medium text-gray-700">Plano:</span> <span className="ml-2">{selectedProposal.plan}</span></div>
+                      <div><span className="font-medium text-gray-700">Valor:</span> <span className="ml-2">{selectedProposal.value}</span></div>
+                      <div><span className="font-medium text-gray-700">Progresso:</span> <span className="ml-2">{selectedProposal.progress}%</span></div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Cliente:</span>
-                    <span className="ml-2">{selectedProposal.client}</span>
+
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900 border-b pb-2">Contato</h4>
+                    <div className="space-y-2 text-sm">
+                      <div><span className="font-medium text-gray-700">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
+                      <div><span className="font-medium text-gray-700">Telefone:</span> <span className="ml-2">{selectedProposal.phone}</span></div>
+                      <div><span className="font-medium text-gray-700">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
+                      <div><span className="font-medium text-gray-700">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-medium text-gray-700">CNPJ:</span>
-                    <span className="ml-2">{selectedProposal.cnpj}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Plano:</span>
-                    <span className="ml-2">{selectedProposal.plan}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Valor:</span>
-                    <span className="ml-2">{selectedProposal.value}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Progresso:</span>
-                    <span className="ml-2">{selectedProposal.progress}%</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Documentos:</span>
-                    <span className="ml-2">{selectedProposal.documents}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Última Atividade:</span>
-                    <span className="ml-2">{selectedProposal.lastActivity}</span>
+                </div>
+
+                {/* Anexos */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900 border-b pb-2">Anexos ({selectedProposal.attachments.length})</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedProposal.attachments.map((attachment) => (
+                      <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center">
+                          <FileText className="w-5 h-5 text-gray-500 mr-3" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">{attachment.name}</div>
+                            <div className="text-xs text-gray-500">{attachment.size}</div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleDownloadAttachment(attachment)}
+                          className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                        >
+                          <Download className="w-4 h-4 mr-1" />
+                          Baixar
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 
@@ -482,7 +738,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     Fechar
                   </button>
                   <button
-                    onClick={() => handleSendWhatsApp(selectedProposal.link, selectedProposal.client)}
+                    onClick={() => handleSendEmail(selectedProposal.email, selectedProposal.client, selectedProposal.link)}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Enviar Email
+                  </button>
+                  <button
+                    onClick={() => handleSendWhatsApp(selectedProposal.link, selectedProposal.client, selectedProposal.phone)}
                     className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
@@ -543,6 +806,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                         title="Copiar link"
                       >
                         <Copy className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleSendEmail('cliente@email.com', 'Cliente', link)}
+                        className="px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                        title="Enviar por Email"
+                      >
+                        <Mail className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleSendWhatsApp(link, 'Cliente')}
