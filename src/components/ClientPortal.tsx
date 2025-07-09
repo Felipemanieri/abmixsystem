@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Bell } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Bell, Eye, Users } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
