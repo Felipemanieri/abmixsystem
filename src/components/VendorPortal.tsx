@@ -512,7 +512,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {recentProposals.map((proposal) => (
                       <tr key={proposal.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                          {attachment.type === 'image' ? (
+                            <Image className="w-5 h-5 text-gray-500 mr-3" />
+                          ) : (
+                            <FileText className="w-5 h-5 text-gray-500 mr-3" />
+                          )}
                           <div>
                             <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
                             <div className="text-sm text-gray-500">{proposal.id}</div>
@@ -682,6 +686,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                       </div>
                     ))}
                   </div>
+                </div>
                 </div>
                 
                 <div className="bg-gray-50 p-4 rounded-lg">
