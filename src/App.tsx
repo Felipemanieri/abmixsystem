@@ -152,10 +152,6 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-6">
-            <Shield className="w-4 h-4 mr-2" />
-            Sistema Seguro e Confiável
-          </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="text-gray-500">Sistema de Propostas de Plano de Saúde</span>
           </h1>
