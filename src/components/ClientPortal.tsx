@@ -763,7 +763,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       </main>
 
       {/* Chatbot */}
-      <div className="chatbot-fixed">
+      <div className="chatbot-container">
         {showChat ? (
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
             {/* Chat Header */}

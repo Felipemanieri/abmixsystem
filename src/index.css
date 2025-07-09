@@ -74,6 +74,15 @@ body {
   z-index: 1;
 }
 
+/* Chatbot sempre fixo */
+.chatbot-container {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+}
+
 /* Logo destacado */
 .logo-enhanced {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));

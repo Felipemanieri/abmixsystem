@@ -887,7 +887,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       )}
 
       {/* Chatbot */}
-      <div className="chatbot-fixed">
+      <div className="chatbot-container">
         {showChat ? (
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
             <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white p-4 rounded-t-2xl flex items-center justify-between">

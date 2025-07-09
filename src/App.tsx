@@ -138,13 +138,8 @@ function App() {
                   className="h-12 w-auto logo-enhanced"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <div className="ml-4">
-                  <span className="text-3xl font-bold gradient-text">Abmix</span>
-                  <p className="text-sm text-gray-600 font-medium">Seguros & Benefícios</p>
-                </div>
               </div>
             </div>
             
@@ -370,10 +365,8 @@ function App() {
                   className="h-10 w-auto logo-enhanced"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <span className="ml-3 text-2xl font-bold gradient-text">Abmix</span>
               </div>
               <p className="text-gray-300 leading-relaxed">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
@@ -419,7 +412,7 @@ function App() {
       </footer>
 
       {/* Chatbot */}
-      <div className="chatbot-fixed">
+      <div className="chatbot-container">
         {showChat ? (
           <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large">
             {/* Chat Header */}
