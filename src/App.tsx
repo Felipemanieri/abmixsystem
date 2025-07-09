@@ -127,18 +127,18 @@ function App() {
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <div className="ml-4">
-                  <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Abmix</span>
+                  <span className="text-3xl font-bold text-blue-800">Abmix</span>
                   <p className="text-sm font-semibold text-blue-700">Seguros & Benefícios</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-blue-700 hover:text-blue-800 font-semibold transition-colors">Sobre</a>
-                <a href="#" className="text-blue-700 hover:text-blue-800 font-semibold transition-colors">Contato</a>
-                <a href="#" className="text-blue-700 hover:text-blue-800 font-semibold transition-colors">Suporte</a>
+                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Sobre</a>
+                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Contato</a>
+                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl font-semibold">
+              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl font-bold">
                 Fale Conosco
               </button>
             </div>
@@ -157,21 +157,21 @@ function App() {
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-blue-800 font-semibold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-blue-700 font-semibold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-blue-700 font-semibold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-blue-700 font-semibold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
@@ -372,9 +372,9 @@ function App() {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">Abmix</span>
+                <span className="ml-3 text-2xl font-bold text-blue-800">Abmix</span>
               </div>
-              <p className="text-gray-300 font-medium">Soluções completas em seguros e benefícios para sua empresa.</p>
+              <p className="text-gray-300 font-semibold">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
             
             <div>
