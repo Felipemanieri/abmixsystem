@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, CreditCard, PieChart, BarChart3, Wallet } from 'lucide-react';
 
 interface FinancialPortalProps {
   user: any;
   onLogout: () => void;
 }
 
-interface Proposal {
+interface Transaction {
   id: string;
   client: string;
-  vendor: string;
   plan: string;
   value: string;
-  status: 'pending_validation' | 'validated' | 'sent_to_automation';
-  submissionDate: string;
-  documents: number;
-  observations?: string;
+  type: 'income' | 'expense' | 'pending';
+  date: string;
+  status: 'completed' | 'pending' | 'cancelled';
+  category: string;
 }
 
 interface ChatMessage {
@@ -26,121 +25,102 @@ interface ChatMessage {
 }
 
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
-  const [selectedStatus, setSelectedStatus] = useState('pending_validation');
-  const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
-  const [observations, setObservations] = useState('');
+  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [showChat, setShowChat] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente do portal financeiro. Como posso ajudá-lo com as validações?',
+      text: 'Olá! Sou o assistente do portal financeiro. Como posso ajudá-lo com análises financeiras e relatórios?',
       isBot: true,
       timestamp: new Date()
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
 
-  const [proposals, setProposals] = useState<Proposal[]>([
+  const [transactions] = useState<Transaction[]>([
     {
-      id: 'VEND001-PROP123',
+      id: 'TXN001',
       client: 'Empresa ABC Ltda',
-      vendor: 'Ana Caroline',
       plan: 'Plano Empresarial Premium',
       value: 'R$ 1.250,00',
-      status: 'pending_validation',
-      submissionDate: '2024-01-15',
-      documents: 8,
+      type: 'income',
+      date: '2024-01-15',
+      status: 'completed',
+      category: 'Planos Empresariais',
     },
     {
-      id: 'VEND002-PROP124',
+      id: 'TXN002',
       client: 'Tech Solutions SA',
-      vendor: 'Bruna Garcia',
       plan: 'Plano Família Básico',
       value: 'R$ 650,00',
-      status: 'pending_validation',
-      submissionDate: '2024-01-14',
-      documents: 6,
+      type: 'income',
+      date: '2024-01-14',
+      status: 'completed',
+      category: 'Planos Familiares',
     },
     {
-      id: 'VEND001-PROP125',
+      id: 'TXN003',
       client: 'Consultoria XYZ',
-      vendor: 'Ana Caroline',
       plan: 'Plano Individual',
       value: 'R$ 320,00',
-      status: 'validated',
-      submissionDate: '2024-01-13',
-      documents: 5,
-      observations: 'Documentação completa e validada',
+      type: 'income',
+      date: '2024-01-13',
+      status: 'pending',
+      category: 'Planos Individuais',
     },
     {
-      id: 'VEND003-PROP126',
+      id: 'TXN004',
       client: 'Inovação Digital',
-      vendor: 'Carlos Silva',
-      plan: 'Plano Empresarial',
-      value: 'R$ 890,00',
-      status: 'sent_to_automation',
-      submissionDate: '2024-01-12',
-      documents: 7,
-      observations: 'Enviado para automação Make/Zapier',
+      plan: 'Comissão Vendedor',
+      value: 'R$ 125,00',
+      type: 'expense',
+      date: '2024-01-12',
+      status: 'completed',
+      category: 'Comissões',
     },
   ]);
 
   const financialStats = [
     {
-      name: 'Aguardando Validação',
-      value: proposals.filter(p => p.status === 'pending_validation').length.toString(),
-      change: 'Para revisar',
-      changeType: 'warning',
-      icon: AlertCircle,
-    },
-    {
-      name: 'Validadas Hoje',
-      value: proposals.filter(p => p.status === 'validated').length.toString(),
-      change: 'Prontas para envio',
-      changeType: 'positive',
-      icon: CheckCircle,
-    },
-    {
-      name: 'Enviadas p/ Automação',
-      value: proposals.filter(p => p.status === 'sent_to_automation').length.toString(),
-      change: 'Processadas',
-      changeType: 'positive',
-      icon: TrendingUp,
-    },
-    {
-      name: 'Valor Total Validado',
-      value: 'R$ 3.110,00',
-      change: 'Este mês',
+      name: 'Receita Total',
+      value: 'R$ 45.680,00',
+      change: '+12% este mês',
       changeType: 'positive',
       icon: DollarSign,
+      color: 'green',
+    },
+    {
+      name: 'Despesas',
+      value: 'R$ 8.920,00',
+      change: '-3% vs mês anterior',
+      changeType: 'positive',
+      icon: CreditCard,
+      color: 'red',
+    },
+    {
+      name: 'Lucro Líquido',
+      value: 'R$ 36.760,00',
+      change: '+18% este mês',
+      changeType: 'positive',
+      icon: TrendingUp,
+      color: 'blue',
+    },
+    {
+      name: 'Margem de Lucro',
+      value: '80.5%',
+      change: '+2.3% vs anterior',
+      changeType: 'positive',
+      icon: PieChart,
+      color: 'purple',
     },
   ];
 
-  const validateProposal = (proposalId: string) => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { ...proposal, status: 'validated', observations }
-        : proposal
-    ));
-    setSelectedProposal(null);
-    setObservations('');
-    showNotification('Proposta validada com sucesso!', 'success');
-  };
-
-  const sendToAutomation = (proposalId: string) => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { 
-            ...proposal, 
-            status: 'sent_to_automation',
-            observations: observations || 'Enviado para automação Make/Zapier'
-          }
-        : proposal
-    ));
-    setSelectedProposal(null);
-    setObservations('');
-    showNotification('Proposta enviada para automação!', 'success');
-  };
+  const categoryStats = [
+    { name: 'Planos Empresariais', value: 'R$ 28.500', percentage: 62 },
+    { name: 'Planos Familiares', value: 'R$ 12.800', percentage: 28 },
+    { name: 'Planos Individuais', value: 'R$ 4.380', percentage: 10 },
+  ];
 
   const sendMessage = () => {
     if (!newMessage.trim()) return;
@@ -171,17 +151,20 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const getBotResponse = (message: string): string => {
     const lowerMessage = message.toLowerCase();
     
-    if (lowerMessage.includes('validar') || lowerMessage.includes('aprovar')) {
-      return 'Para validar uma proposta, clique no ícone de visualização e depois em "Validar Proposta". Certifique-se de revisar todos os documentos antes.';
+    if (lowerMessage.includes('receita') || lowerMessage.includes('faturamento')) {
+      return 'A receita total este mês foi de R$ 45.680,00, com crescimento de 12%. Os planos empresariais representam 62% do faturamento.';
     }
-    if (lowerMessage.includes('automação') || lowerMessage.includes('make') || lowerMessage.includes('zapier')) {
-      return 'Após validar uma proposta, você pode enviá-la para automação. Isso irá processar os dados no Make/Zapier para criação automática do contrato.';
+    if (lowerMessage.includes('despesa') || lowerMessage.includes('custo')) {
+      return 'As despesas totais foram R$ 8.920,00, principalmente comissões e custos operacionais. Houve redução de 3% vs mês anterior.';
     }
-    if (lowerMessage.includes('documento') || lowerMessage.includes('anexo')) {
-      return 'Verifique se todos os documentos obrigatórios foram enviados antes de validar. RG, CPF, CNPJ e comprovantes são essenciais.';
+    if (lowerMessage.includes('lucro') || lowerMessage.includes('margem')) {
+      return 'O lucro líquido foi R$ 36.760,00 com margem de 80.5%. Excelente performance financeira com crescimento sustentável.';
+    }
+    if (lowerMessage.includes('relatório') || lowerMessage.includes('análise')) {
+      return 'Posso gerar relatórios detalhados por período, categoria ou vendedor. Use os filtros para análises específicas.';
     }
     
-    return 'Como analista financeiro, você pode validar propostas, enviar para automação e acompanhar o fluxo. O que precisa fazer?';
+    return 'Como analista financeiro, posso ajudar com relatórios de receita, análise de custos, projeções e métricas de performance. O que precisa analisar?';
   };
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
@@ -200,12 +183,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending_validation':
-        return 'bg-orange-100 text-orange-800';
-      case 'validated':
+      case 'completed':
         return 'bg-green-100 text-green-800';
-      case 'sent_to_automation':
-        return 'bg-purple-100 text-purple-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -213,21 +196,67 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'pending_validation':
-        return 'Aguardando Validação';
-      case 'validated':
-        return 'Validado';
-      case 'sent_to_automation':
-        return 'Enviado p/ Automação';
+      case 'completed':
+        return 'Concluído';
+      case 'pending':
+        return 'Pendente';
+      case 'cancelled':
+        return 'Cancelado';
       default:
         return 'Desconhecido';
     }
   };
 
-  const filteredProposals = proposals.filter(proposal => {
-    if (selectedStatus === 'all') return true;
-    return proposal.status === selectedStatus;
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'income':
+        return 'text-green-600';
+      case 'expense':
+        return 'text-red-600';
+      case 'pending':
+        return 'text-yellow-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
+  const getTypeText = (type: string) => {
+    switch (type) {
+      case 'income':
+        return 'Receita';
+      case 'expense':
+        return 'Despesa';
+      case 'pending':
+        return 'Pendente';
+      default:
+        return 'N/A';
+    }
+  };
+
+  const filteredTransactions = transactions.filter(transaction => {
+    if (selectedCategory === 'all') return true;
+    return transaction.category === selectedCategory;
   });
+
+  const exportFinancialReport = () => {
+    const reportData = {
+      periodo: selectedPeriod,
+      stats: financialStats,
+      categorias: categoryStats,
+      transacoes: filteredTransactions,
+      dataGeracao: new Date().toLocaleDateString('pt-BR')
+    };
+    
+    const dataStr = JSON.stringify(reportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `relatorio-financeiro-${selectedPeriod}.json`;
+    link.click();
+    
+    showNotification('Relatório financeiro exportado!', 'success');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -246,7 +275,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <div className="hidden w-8 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center">
                   <DollarSign className="w-5 h-5 text-white" />
                 </div>
                 <span className="ml-3 text-xl font-bold text-gray-900">Portal Financeiro</span>
@@ -257,7 +286,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
                 <Bell className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  3
+                  4
                 </span>
               </button>
               
@@ -278,8 +307,31 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Financeiro</h1>
-          <p className="text-gray-600">Valide propostas e controle o fluxo para automação</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Financeiro</h1>
+              <p className="text-gray-600">Análise financeira, receitas, despesas e relatórios</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <select
+                value={selectedPeriod}
+                onChange={(e) => setSelectedPeriod(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="week">Esta Semana</option>
+                <option value="month">Este Mês</option>
+                <option value="quarter">Este Trimestre</option>
+                <option value="year">Este Ano</option>
+              </select>
+              <button
+                onClick={exportFinancialReport}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Exportar Relatório
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="space-y-6">
@@ -294,15 +346,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       <p className="text-sm font-medium text-gray-600">{stat.name}</p>
                       <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                     </div>
-                    <div className="p-3 bg-purple-100 rounded-full">
-                      <Icon className="w-6 h-6 text-purple-600" />
+                    <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
+                      <Icon className={`w-6 h-6 text-${stat.color}-600`} />
                     </div>
                   </div>
                   <div className="mt-4 flex items-center">
-                    <span className={`text-sm font-medium ${
-                      stat.changeType === 'positive' ? 'text-green-600' : 
-                      stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600'
-                    }`}>
+                    <span className="text-sm font-medium text-green-600">
                       {stat.change}
                     </span>
                   </div>
@@ -311,49 +360,116 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             })}
           </div>
 
-          {/* Filters */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">Propostas para Validação</h2>
-                <p className="text-sm text-gray-600">Gerencie o fluxo de validação financeira</p>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+              <div className="flex items-center">
+                <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                  <Calculator className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-medium text-gray-900">Calculadora</h3>
+                  <p className="text-sm text-gray-500">Cálculos financeiros</p>
+                </div>
               </div>
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="pending_validation">Aguardando Validação</option>
-                <option value="validated">Validadas</option>
-                <option value="sent_to_automation">Enviadas p/ Automação</option>
-                <option value="all">Todas</option>
-              </select>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+              <div className="flex items-center">
+                <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
+                  <BarChart3 className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-medium text-gray-900">Análises</h3>
+                  <p className="text-sm text-gray-500">Gráficos e métricas</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+              <div className="flex items-center">
+                <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                  <PieChart className="w-6 h-6 text-purple-600" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-medium text-gray-900">Projeções</h3>
+                  <p className="text-sm text-gray-500">Previsões financeiras</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+              <div className="flex items-center">
+                <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
+                  <Wallet className="w-6 h-6 text-orange-600" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-medium text-gray-900">Fluxo de Caixa</h3>
+                  <p className="text-sm text-gray-500">Controle financeiro</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Proposals Table */}
+          {/* Category Performance */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-6">Performance por Categoria</h2>
+            <div className="space-y-4">
+              {categoryStats.map((category) => (
+                <div key={category.name} className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                    <span className="text-sm font-medium text-gray-900">{category.name}</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-green-500 h-2 rounded-full" 
+                        style={{ width: `${category.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-medium text-gray-900 w-20 text-right">{category.value}</span>
+                    <span className="text-sm text-gray-500 w-12 text-right">{category.percentage}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Transactions */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Transações Recentes</h2>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="all">Todas as Categorias</option>
+                <option value="Planos Empresariais">Planos Empresariais</option>
+                <option value="Planos Familiares">Planos Familiares</option>
+                <option value="Planos Individuais">Planos Individuais</option>
+                <option value="Comissões">Comissões</option>
+              </select>
+            </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Proposta
+                      Transação
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Vendedor
+                      Cliente/Descrição
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Plano
+                      Tipo
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Valor
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Documentos
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Data
@@ -364,61 +480,42 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredProposals.map((proposal) => (
-                    <tr key={proposal.id} className="hover:bg-gray-50">
+                  {filteredTransactions.map((transaction) => (
+                    <tr key={transaction.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                          <div className="text-sm text-gray-500">{proposal.id}</div>
+                          <div className="text-sm font-medium text-gray-900">{transaction.id}</div>
+                          <div className="text-sm text-gray-500">{transaction.category}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                            <User className="w-4 h-4 text-purple-600" />
-                          </div>
-                          <div className="ml-3">
-                            <div className="text-sm text-gray-900">{proposal.vendor}</div>
-                          </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{transaction.client}</div>
+                          <div className="text-sm text-gray-500">{transaction.plan}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{proposal.plan}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
-                          {getStatusText(proposal.status)}
+                        <span className={`text-sm font-medium ${getTypeColor(transaction.type)}`}>
+                          {getTypeText(transaction.type)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-400 mr-1" />
-                          <span className="text-sm text-gray-900">{proposal.documents}</span>
+                        <div className={`text-sm font-medium ${getTypeColor(transaction.type)}`}>
+                          {transaction.type === 'expense' ? '-' : '+'}{transaction.value}
                         </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(transaction.status)}`}>
+                          {getStatusText(transaction.status)}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
+                        {new Date(transaction.date).toLocaleDateString('pt-BR')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button 
-                            onClick={() => setSelectedProposal(proposal.id)}
-                            className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          {proposal.status === 'validated' && (
-                            <button 
-                              onClick={() => sendToAutomation(proposal.id)}
-                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
-                            >
-                              <Send className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
+                        <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors">
+                          <Eye className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -429,105 +526,18 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         </div>
       </main>
 
-      {/* Proposal Detail Modal */}
-      {selectedProposal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Validação da Proposta
-                </h3>
-                <button 
-                  onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              
-              {(() => {
-                const proposal = proposals.find(p => p.id === selectedProposal);
-                if (!proposal) return null;
-                
-                return (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium text-gray-700">Cliente:</span>
-                        <span className="ml-2">{proposal.client}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Vendedor:</span>
-                        <span className="ml-2">{proposal.vendor}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Plano:</span>
-                        <span className="ml-2">{proposal.plan}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Valor:</span>
-                        <span className="ml-2">{proposal.value}</span>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Observações Financeiras
-                      </label>
-                      <textarea
-                        value={observations}
-                        onChange={(e) => setObservations(e.target.value)}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Adicione observações sobre a validação..."
-                      />
-                    </div>
-                    
-                    <div className="flex justify-end space-x-4">
-                      <button
-                        onClick={() => setSelectedProposal(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                      >
-                        Cancelar
-                      </button>
-                      {proposal.status === 'pending_validation' && (
-                        <button
-                          onClick={() => validateProposal(proposal.id)}
-                          className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
-                        >
-                          Validar Proposta
-                        </button>
-                      )}
-                      {proposal.status === 'validated' && (
-                        <button
-                          onClick={() => sendToAutomation(proposal.id)}
-                          className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
-                        >
-                          Enviar para Make/Zapier
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Chatbot */}
       <div className="fixed bottom-6 right-6 z-50">
         {showChat ? (
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Financeiro</h3>
-                  <p className="text-xs text-purple-100">Online agora</p>
+                  <p className="text-xs text-green-100">Online agora</p>
                 </div>
               </div>
               <button
@@ -544,11 +554,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
                       ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-purple-600 to-purple-700 text-white'
+                      : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>
                     <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-purple-100'
+                      message.isBot ? 'text-gray-500' : 'text-green-100'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -565,11 +575,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button
                   onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-colors"
+                  className="p-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-colors"
                 >
                   <SendIcon className="w-4 h-4" />
                 </button>
@@ -579,7 +589,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         ) : (
           <button
             onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+            className="w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
           >
             <MessageCircle className="w-8 h-8" />
           </button>

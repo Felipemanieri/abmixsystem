@@ -4,9 +4,10 @@ import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
 import FinancialPortal from './components/FinancialPortal';
+import ImplantacaoPortal from './components/ImplantacaoPortal';
 import SupervisorPortal from './components/SupervisorPortal';
 
-type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'supervisor';
+type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor';
 type User = {
   id: string;
   name: string;
@@ -107,6 +108,8 @@ function App() {
         return <ClientPortal user={currentUser} onLogout={handleLogout} />;
       case 'financial':
         return <FinancialPortal user={currentUser} onLogout={handleLogout} />;
+      case 'implantacao':
+        return <ImplantacaoPortal user={currentUser} onLogout={handleLogout} />;
       case 'supervisor':
         return <SupervisorPortal user={currentUser} onLogout={handleLogout} />;
     }
@@ -194,7 +197,7 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
           {/* Portal do Cliente */}
           <div 
             onClick={() => setCurrentPortal('client')}
@@ -239,19 +242,40 @@ function App() {
 
           {/* Portal Financeiro */}
           <div 
+            onClick={() => setCurrentPortal('implantacao')}
+            className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-teal-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-lg">
+              <Zap className="w-8 h-8 text-teal-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors">Portal Implantação</h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              Validação e automação de propostas
+            </p>
+            <div className="flex items-center text-teal-600 font-semibold group-hover:text-teal-700 transition-colors">
+              <ArrowRight className="w-4 h-4 mr-2" />
+              Acessar Portal
+            </div>
+            </div>
+          </div>
+
+          {/* Portal Financeiro */}
+          <div 
             onClick={() => setCurrentPortal('financial')}
             className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-purple-200 group-hover:to-purple-300 transition-all shadow-lg">
-              <DollarSign className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-lg">
+              <DollarSign className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">Portal Financeiro</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">Portal Financeiro</h3>
             <p className="text-gray-600 mb-6 leading-relaxed">
-              Validação e aprovação de propostas
+              Análise financeira e relatórios
             </p>
-            <div className="flex items-center text-purple-600 font-semibold group-hover:text-purple-700 transition-colors">
+            <div className="flex items-center text-green-600 font-semibold group-hover:text-green-700 transition-colors">
               <ArrowRight className="w-4 h-4 mr-2" />
               Acessar Portal
             </div>
