@@ -368,6 +368,10 @@ const App = () => {
             {/* Logo */}
             <div className="flex items-center">
               <AbmixLogo size={70} className="text-white" />
+            </div>
+            
+            {/* Contato */}
+            <div>
               <h3 className="font-bold mb-4">Contato</h3>
               <div className="space-y-2 text-gray-400">
                 <div className="flex items-center">
