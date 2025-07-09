@@ -122,16 +122,9 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
-                <img 
-                  src="/Logo Abmix.jpg" 
-                  alt="Abmix" 
-                  className="h-12 w-auto"
-                />
-                <div className="ml-4">
-                  <span className="text-3xl font-bold text-blue-900">Abmix</span>
-                  <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
-                </div>
+              <div className="flex-shrink-0">
+                <span className="text-3xl font-bold text-blue-900">Abmix</span>
+                <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -152,13 +145,9 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
         <div className="text-center mb-20 relative">
-          {/* Logo marca d'água atrás do texto */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img 
-              src="/Logo Abmix.jpg" 
-              alt="" 
-              className="w-96 h-96 object-contain opacity-5 select-none"
-            />
+          <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-6">
+            <Shield className="w-4 h-4 mr-2" />
+            Sistema Seguro e Confiável
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
@@ -375,10 +364,10 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-3 text-2xl font-bold text-teal-500">Abmix</span>
+                <span className="ml-3 text-2xl font-bold text-blue-500">Sistema</span>
               </div>
               <p className="text-gray-300 font-semibold">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
