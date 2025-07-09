@@ -151,7 +151,7 @@ function App() {
           {/* Logo como marca d'água */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <img 
-              src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+              src="/6078b216-6252-4ede-8d9b-4c2164c3ed8f copy copy.png" 
               alt="Abmix Logo Watermark" 
               className="w-96 h-96 opacity-20 object-contain"
             />
