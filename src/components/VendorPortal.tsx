@@ -830,64 +830,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         )}
       </div>
 
-      {/* Internal Chat Modal */}
-      {showInternalChat && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Chat Interno da Equipe
-              </h3>
-              <button 
-                onClick={() => setShowInternalChat(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="h-96 overflow-y-auto p-6 space-y-4">
-              {internalMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.from === user.name
-                      ? 'bg-green-600 text-white' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    <div className="text-xs font-medium mb-1 opacity-75">
-                      {message.from}
-                    </div>
-                    <p className="text-sm">{message.message}</p>
-                    <p className={`text-xs mt-1 opacity-75`}>
-                      {message.timestamp.toLocaleString('pt-BR')}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-6 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newInternalMessage}
-                  onChange={(e) => setNewInternalMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
-                  placeholder="Mensagem para toda a equipe..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-                <button
-                  onClick={sendInternalMessage}
-                  className="p-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
       {/* Modal de Visualização da Proposta */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -1014,6 +956,65 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
         </div>
       )}
+
+      {/* Internal Chat Modal */}
+      {showInternalChat && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Chat Interno da Equipe
+              </h3>
+              <button 
+                onClick={() => setShowInternalChat(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="h-96 overflow-y-auto p-6 space-y-4">
+              {internalMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.from === user.name
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    <div className="text-xs font-medium mb-1 opacity-75">
+                      {message.from}
+                    </div>
+                    <p className="text-sm">{message.message}</p>
+                    <p className={`text-xs mt-1 opacity-75`}>
+                      {message.timestamp.toLocaleString('pt-BR')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-6 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newInternalMessage}
+                  onChange={(e) => setNewInternalMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
+                  placeholder="Mensagem para toda a equipe..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button
+                  onClick={sendInternalMessage}
+                  className="p-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
 
   );
 };
