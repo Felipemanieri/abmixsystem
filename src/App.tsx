@@ -364,9 +364,7 @@ function App() {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-3 text-2xl font-bold text-blue-500">Plataforma</span>
               </div>
-              <p className="text-gray-300 font-semibold">Plataforma completa de gestão empresarial.</p>
             </div>
             
             <div>
