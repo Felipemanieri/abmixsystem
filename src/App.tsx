@@ -457,10 +457,10 @@ function App() {
               <img 
                 src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                 alt="Abmix" 
-                className="h-12 w-auto mr-4"
+                className="h-16 w-auto mr-4"
               />
             </div>
-            <div className="text-gray-400 text-lg">
+            <div className="text-gray-400 text-xl">
               <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
             </div>
           </div>
@@ -478,7 +478,6 @@ function App() {
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="font-bold">Assistente Abmix</h3>
                   <h3 className="font-bold">Assistente Abmix</h3>
                   <p className="text-xs text-teal-100">Online agora</p>
                 </div>
