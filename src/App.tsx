@@ -370,7 +370,7 @@ function App() {
               <img 
                 src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                 alt="Abmix" 
-                className="h-16 w-auto"
+                className="h-24 w-auto"
               />
             </div>
             
