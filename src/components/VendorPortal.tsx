@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Mail, Download, Search, Filter, ArrowLeft, Home } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Mail, Download, Search, Filter, ArrowLeft, Home, Calculator, MessageCircle, Bot, X, Send } from 'lucide-react';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 
@@ -8,7 +8,14 @@ interface VendorPortalProps {
   onLogout: () => void;
 }
 
-type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet';
+type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation';
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  isBot: boolean;
+  timestamp: Date;
+}
 
 interface Proposal {
   id: string;
@@ -43,6 +50,16 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: 'Olá! Sou o assistente do portal vendedor. Como posso ajudá-lo com suas propostas?',
+      isBot: true,
+      timestamp: new Date()
+    }
+  ]);
+  const [newMessage, setNewMessage] = useState('');
 
   const stats = [
     {
@@ -265,8 +282,163 @@ Abmix Seguros`;
       console.log(`Notificação enviada para ${collab.name}: Proposta finalizada!`);
     });
     
-    showNotification('🎉 Proposta finalizada! Todos os colaboradores foram notificados.', 'success');
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: newMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Bot response
+    setTimeout(() => {
+      const response = getBotResponse(newMessage);
+      const botMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response,
+        isBot: true,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, botMessage]);
+    }, 1000);
+
+    setNewMessage('');
   };
+
+  const getBotResponse = (message: string): string => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('proposta') || lowerMessage.includes('criar')) {
+      return 'Para criar uma nova proposta, clique em "Nova Proposta" no dashboard. Você precisará preencher os dados da empresa e do plano.';
+    }
+    if (lowerMessage.includes('link') || lowerMessage.includes('cliente')) {
+      return 'Você pode gerar links únicos para clientes ou copiar o link de propostas existentes. Use os botões de ação nas propostas.';
+    }
+    if (lowerMessage.includes('status') || lowerMessage.includes('acompanhar')) {
+      return 'No painel você pode ver o status de todas as propostas: Cliente Preenchendo, Documentos Pendentes, ou Finalizadas.';
+    }
+    if (lowerMessage.includes('cotação') || lowerMessage.includes('preço')) {
+      return 'Use a função "Gerar Cotação" para criar orçamentos rápidos para clientes interessados.';
+    }
+    
+    return 'Posso ajudar com criação de propostas, acompanhamento de status, geração de links e cotações. O que você gostaria de saber?';
+  };
+
+  const renderQuotationGenerator = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setActiveView('dashboard')}
+          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar ao Dashboard
+        </button>
+      </div>
+
+      <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Gerador de Cotações</h1>
+        <p className="text-purple-100">Crie cotações rápidas para clientes interessados</p>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <form className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Nome do Cliente</label>
+              <input
+                type="text"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Digite o nome do cliente"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="email@exemplo.com"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Plano</label>
+              <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option>Plano Individual</option>
+                <option>Plano Família Básico</option>
+                <option>Plano Família Premium</option>
+                <option>Plano Empresarial</option>
+                <option>Plano Empresarial Premium</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Número de Vidas</label>
+              <input
+                type="number"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="1"
+                min="1"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex items-center">
+              <input type="checkbox" className="rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
+              <label className="ml-2 text-sm text-gray-700">Odonto Conjugado</label>
+            </div>
+            <div className="flex items-center">
+              <input type="checkbox" className="rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
+              <label className="ml-2 text-sm text-gray-700">Coparticipação</label>
+            </div>
+            <div className="flex items-center">
+              <input type="checkbox" className="rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
+              <label className="ml-2 text-sm text-gray-700">Acomodação</label>
+            </div>
+          </div>
+    showNotification('🎉 Proposta finalizada! Todos os colaboradores foram notificados.', 'success');
+          <div className="bg-gray-50 p-6 rounded-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumo da Cotação</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Valor Base:</span>
+                <span className="font-medium">R$ 850,00</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Odonto:</span>
+                <span className="font-medium">R$ 45,00</span>
+              </div>
+              <div className="flex justify-between border-t pt-2">
+                <span className="font-semibold text-gray-900">Total Mensal:</span>
+                <span className="font-bold text-purple-600 text-xl">R$ 895,00</span>
+              </div>
+            </div>
+          </div>
+  };
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              className="px-6 py-3 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+            >
+              Limpar
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-colors"
+            >
+              Gerar Cotação
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 
   const filteredProposals = recentProposals.filter(proposal => {
     const matchesSearch = proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -446,6 +618,8 @@ Abmix Seguros`;
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
       case 'spreadsheet':
         return renderSpreadsheetView();
+      case 'quotation':
+        return renderQuotationGenerator();
       default:
         return (
           <div className="space-y-6">
@@ -481,7 +655,7 @@ Abmix Seguros`;
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
@@ -495,8 +669,23 @@ Abmix Seguros`;
               </button>
 
               <button
+                onClick={() => setActiveView('quotation')}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+              >
+                <div className="flex items-center">
+                  <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                    <Calculator className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-medium text-gray-900">Gerar Cotação</h3>
+                    <p className="text-sm text-gray-500">Cotações rápidas</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
                 onClick={handleGenerateLinks}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
@@ -511,11 +700,11 @@ Abmix Seguros`;
 
               <button
                 onClick={() => setActiveView('tracker')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
-                  <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                    <BarChart3 className="w-6 h-6 text-purple-600" />
+                  <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition-colors">
+                    <BarChart3 className="w-6 h-6 text-indigo-600" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Acompanhar</h3>
@@ -526,7 +715,7 @@ Abmix Seguros`;
 
               <button
                 onClick={() => setActiveView('spreadsheet')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
@@ -926,6 +1115,79 @@ Abmix Seguros`;
           </div>
         </div>
       )}
+
+      {/* Chatbot */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {showChat ? (
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="font-bold">Assistente Vendedor</h3>
+                  <p className="text-xs text-green-100">Online agora</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowChat(false)}
+                className="text-white/80 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.isBot 
+                      ? 'bg-gray-100 text-gray-800' 
+                      : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
+                  }`}>
+                    <p className="text-sm">{message.text}</p>
+                    <p className={`text-xs mt-1 ${
+                      message.isBot ? 'text-gray-500' : 'text-green-100'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button
+                  onClick={sendMessage}
+                  className="p-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowChat(true)}
+            className="w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+          >
+            <MessageCircle className="w-8 h-8" />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

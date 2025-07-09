@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle } from 'lucide-react';
+import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -14,9 +14,26 @@ type User = {
   email: string;
 } | null;
 
+interface ChatMessage {
+  id: string;
+  text: string;
+  isBot: boolean;
+  timestamp: Date;
+}
+
 function App() {
   const [currentPortal, setCurrentPortal] = useState<Portal>('home');
   const [currentUser, setCurrentUser] = useState<User>(null);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo hoje?',
+      isBot: true,
+      timestamp: new Date()
+    }
+  ]);
+  const [newMessage, setNewMessage] = useState('');
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
@@ -28,6 +45,52 @@ function App() {
   const handleLogout = () => {
     setCurrentUser(null);
     setCurrentPortal('home');
+  };
+
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: newMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Bot response
+    setTimeout(() => {
+      const response = getBotResponse(newMessage);
+      const botMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response,
+        isBot: true,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, botMessage]);
+    }, 1000);
+
+    setNewMessage('');
+  };
+
+  const getBotResponse = (message: string): string => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('plano') || lowerMessage.includes('saúde')) {
+      return 'Oferecemos diversos planos de saúde empresariais e individuais. Posso conectá-lo com um de nossos vendedores para mais informações.';
+    }
+    if (lowerMessage.includes('preço') || lowerMessage.includes('valor') || lowerMessage.includes('cotação')) {
+      return 'Os valores variam conforme o plano escolhido. Nossos vendedores podem fazer uma cotação personalizada para você.';
+    }
+    if (lowerMessage.includes('documento') || lowerMessage.includes('anexo')) {
+      return 'Para contratar um plano, você precisará de documentos como RG, CPF, comprovante de residência e CNPJ da empresa. Posso ajudar com mais detalhes.';
+    }
+    if (lowerMessage.includes('contato') || lowerMessage.includes('telefone')) {
+      return 'Você pode entrar em contato conosco pelo telefone (11) 99999-9999 ou WhatsApp. Também temos atendimento online 24/7.';
+    }
+    
+    return 'Entendi sua pergunta! Para informações mais específicas, recomendo falar com nossos especialistas. Posso ajudar com informações gerais sobre planos de saúde.';
   };
 
   // Se não está logado e não está na home, mostrar login
@@ -341,6 +404,79 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Chatbot */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {showChat ? (
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="font-bold">Assistente Abmix</h3>
+                  <p className="text-xs text-blue-100">Online agora</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowChat(false)}
+                className="text-white/80 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.isBot 
+                      ? 'bg-gray-100 text-gray-800' 
+                      : 'bg-gradient-to-r from-blue-600 to-teal-600 text-white'
+                  }`}>
+                    <p className="text-sm">{message.text}</p>
+                    <p className={`text-xs mt-1 ${
+                      message.isBot ? 'text-gray-500' : 'text-blue-100'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={sendMessage}
+                  className="p-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl hover:from-blue-700 hover:to-teal-700 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowChat(true)}
+            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+          >
+            <MessageCircle className="w-8 h-8" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
