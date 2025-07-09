@@ -12,6 +12,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const portalConfig = {
     client: {
@@ -51,18 +52,38 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage('');
 
-    // Simular autenticação
-    setTimeout(() => {
-      const user = {
-        id: '1',
-        name: 'Usuário Teste',
-        email,
-        role: portal,
-      };
-      onLogin(user);
-      setIsLoading(false);
-    }, 1000);
+    // Verificar credenciais para o supervisor
+    if (portal === 'supervisor' && email === 'supervisao@abmix.com.br' && password === '123456') {
+      setTimeout(() => {
+        const user = {
+          id: '1',
+          name: 'Rodrigo Ribas',
+          email,
+          role: portal,
+        };
+        onLogin(user);
+        setIsLoading(false);
+      }, 1000);
+    } else {
+      // Para fins de demonstração, permitir qualquer login para outros portais
+      setTimeout(() => {
+        if (portal === 'supervisor') {
+          setErrorMessage('Credenciais inválidas para o portal do supervisor');
+          setIsLoading(false);
+        } else {
+          const user = {
+            id: '1',
+            name: 'Usuário Teste',
+            email,
+            role: portal,
+          };
+          onLogin(user);
+          setIsLoading(false);
+        }
+      }, 1000);
+    }
   };
 
   return (
@@ -153,12 +174,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                 {isLoading ? 'Entrando...' : 'Entrar'}
               </button>
             </form>
+            
+            {errorMessage && (
+              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+                {errorMessage}
+              </div>
+            )}
 
             {/* Demo Credentials */}
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <p className="text-xs text-gray-600 text-center">
-                <strong>Demo:</strong> Use qualquer email e senha para testar
-              </p>
+              {portal === 'supervisor' ? (
+                <p className="text-xs text-gray-600 text-center">
+                  <strong>Acesso Supervisor:</strong> supervisao@abmix.com.br / 123456
+                </p>
+              ) : (
+                <p className="text-xs text-gray-600 text-center">
+                  <strong>Demo:</strong> Use qualquer email e senha para testar
+                </p>
+              )}
             </div>
           </div>
         </div>

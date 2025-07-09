@@ -19,6 +19,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
 
+  // Mostrar mensagem de boas-vindas ao carregar o componente
+  React.useEffect(() => {
+    if (user.name === 'Rodrigo Ribas') {
+      showNotification(`Bem-vindo, ${user.name}! Você tem 5 notificações não lidas.`, 'success');
+    }
+  }, []);
+
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
     {
@@ -767,7 +774,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
-              
+
               <button
                 onClick={onLogout}
                 className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
