@@ -157,7 +157,7 @@ function App() {
             Sistema Seguro e Confiável
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Sistema de Propostas de Plano de Saúde
+            <span className="text-gray-500">Sistema de Propostas de Plano de Saúde</span>
           </h1>
           <p className="text-xl text-gray-500 font-bold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão de propostas de planos de saúde. 
