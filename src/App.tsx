@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, FileText, DollarSign, Zap, Shield, ArrowRight } from 'lucide-react';
+import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
