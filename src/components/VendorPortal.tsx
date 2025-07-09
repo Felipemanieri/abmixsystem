@@ -743,6 +743,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
+              
+              <button
+                onClick={onLogout}
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sair
+              </button>
             </div>
           </div>
         </div>
