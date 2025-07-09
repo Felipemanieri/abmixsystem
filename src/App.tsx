@@ -374,7 +374,7 @@ function App() {
             {/* Logo */}
             <div className="flex items-center">
               <img 
-                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                src="/abmix-logo.png" 
                 alt="Abmix" 
                 className="h-24 w-auto"
               />
@@ -533,7 +533,7 @@ function App() {
           <button
             onClick={() => setShowChat(true)}
             className="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
-          >
+          src="/abmix-logo.png" 
             <MessageCircle className="w-8 h-8" />
           </button>
         )}
