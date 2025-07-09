@@ -123,8 +123,7 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-3xl font-bold text-blue-900">Sistema</span>
-                <p className="text-sm font-semibold text-blue-800">Planos de Saúde</p>
+                <span className="text-3xl font-bold text-blue-900">Portal</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -150,11 +149,11 @@ function App() {
             Sistema Seguro e Confiável
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Sistema de Propostas de Plano de Saúde
+            Sistema de Gestão
           </h1>
           <p className="text-xl text-blue-900 font-bold max-w-4xl mx-auto leading-relaxed">
-            Plataforma completa para gestão de propostas de planos de saúde. 
-            Acesse sua área específica e gerencie todo o processo de forma simples e segura.
+            Plataforma completa para gestão empresarial. 
+            Acesse sua área específica e gerencie seus processos de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
@@ -369,7 +368,7 @@ function App() {
                 </div>
                 <span className="ml-3 text-2xl font-bold text-blue-500">Sistema</span>
               </div>
-              <p className="text-gray-300 font-semibold">Sistema completo de propostas de planos de saúde.</p>
+              <p className="text-gray-300 font-semibold">Sistema completo de gestão empresarial.</p>
             </div>
             
             <div>
@@ -407,7 +406,7 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Sistema. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Portal. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
