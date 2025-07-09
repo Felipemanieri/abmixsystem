@@ -1,6 +1,3 @@
-Here's the fixed version with all missing closing brackets and required whitespace added:
-
-```typescript
 import React, { useState } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import AbmixLogo from './components/AbmixLogo';
