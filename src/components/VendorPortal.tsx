@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image } from 'lucide-react';
+import AbmixLogo from './AbmixLogo';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 
@@ -591,12 +592,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <img
-                  src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt="Abmix"
-                  className="h-12 w-auto mr-3"
-                />
-                <span className="ml-3 text-xl font-bold text-gray-900">Portal Vendedor</span>
+                <AbmixLogo size={40} className="mr-3" />
+                <span className="text-xl font-bold text-gray-900">Portal Vendedor</span>
               </div>
             </div>
 

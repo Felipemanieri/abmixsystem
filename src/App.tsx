@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
+import AbmixLogo from './components/AbmixLogo';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -123,11 +124,7 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <img
-                  src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt="Abmix"
-                  className="h-16 w-auto object-contain"
-                />
+                <AbmixLogo size={48} />
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -150,11 +147,9 @@ function App() {
         <div className="text-center mb-20 relative">
           {/* Logo como marca d'água */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img 
-              src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
-              alt="Abmix Logo Watermark" 
-              className="w-96 h-96 opacity-15 object-contain"
-            />
+            <div className="opacity-10">
+              <AbmixLogo size={200} />
+            </div>
           </div>
           
           {/* Texto principal com z-index maior */}
@@ -373,11 +368,7 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Logo */}
             <div className="flex items-center">
-              <img
-                src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="Abmix"
-                className="h-20 w-auto"
-              />
+              <AbmixLogo size={60} className="text-white" />
             </div>
             
             {/* Contato */}
