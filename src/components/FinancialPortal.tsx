@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2, Download, ArrowLeft, Home } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2, Download, ArrowLeft, Home, MessageCircle, Bot, Calculator, BarChart3 } from 'lucide-react';
 
 interface FinancialPortalProps {
   user: any;
@@ -39,6 +39,13 @@ interface Proposal {
   }>;
 }
 
+interface ChatMessage {
+  id: string;
+  text: string;
+  isBot: boolean;
+  timestamp: Date;
+}
+
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
@@ -47,6 +54,16 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [customFields, setCustomFields] = useState<{ [key: string]: string }>({});
   const [newFieldName, setNewFieldName] = useState('');
   const [newFieldValue, setNewFieldValue] = useState('');
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: 'Olá! Sou o assistente do portal financeiro. Como posso ajudá-lo com validações e análises?',
+      isBot: true,
+      timestamp: new Date()
+    }
+  ]);
+  const [newMessage, setNewMessage] = useState('');
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -272,6 +289,52 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     showNotification('Campo removido!', 'success');
   };
 
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: newMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Bot response
+    setTimeout(() => {
+      const response = getBotResponse(newMessage);
+      const botMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response,
+        isBot: true,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, botMessage]);
+    }, 1000);
+
+    setNewMessage('');
+  };
+
+  const getBotResponse = (message: string): string => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('validar') || lowerMessage.includes('aprovar')) {
+      return 'Para validar uma proposta, clique no ícone de visualizar e depois em "Validar Proposta". Você pode adicionar observações antes de validar.';
+    }
+    if (lowerMessage.includes('automação') || lowerMessage.includes('enviar')) {
+      return 'Propostas validadas podem ser enviadas para automação Make/Zapier. Use o botão "Enviar para Automação" nas propostas validadas.';
+    }
+    if (lowerMessage.includes('campo') || lowerMessage.includes('personalizado')) {
+      return 'Você pode adicionar campos personalizados nas propostas para incluir informações específicas na planilha final.';
+    }
+    if (lowerMessage.includes('anexo') || lowerMessage.includes('documento')) {
+      return 'Todos os anexos das propostas podem ser visualizados e baixados diretamente do sistema. Use o botão de download nos anexos.';
+    }
+    
+    return 'Como financeiro, você pode validar propostas, enviar para automação, gerenciar campos personalizados e baixar documentos. O que você precisa fazer?';
+  };
+
   const handleSendWhatsApp = (phone: string, clientName: string) => {
     const message = `Olá! Entrando em contato sobre a proposta de plano de saúde da ${clientName}.`;
     const whatsappUrl = `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
@@ -427,7 +490,7 @@ Financeiro - Abmix Seguros`;
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div key={stat.name} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <div key={stat.name} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">{stat.name}</p>
@@ -448,6 +511,57 @@ Financeiro - Abmix Seguros`;
               </div>
             );
           })}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                <CheckCircle className="w-6 h-6 text-purple-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Validar Propostas</h3>
+                <p className="text-sm text-gray-500">Aprovar pendentes</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
+                <Send className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Enviar Automação</h3>
+                <p className="text-sm text-gray-500">Make/Zapier</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                <Calculator className="w-6 h-6 text-green-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Análise Financeira</h3>
+                <p className="text-sm text-gray-500">Relatórios</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
+                <BarChart3 className="w-6 h-6 text-orange-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Dashboard</h3>
+                <p className="text-sm text-gray-500">Visão geral</p>
+              </div>
+            </div>
+          </button>
         </div>
 
         {/* Filters */}
@@ -823,6 +937,79 @@ Financeiro - Abmix Seguros`;
           </div>
         )}
       </main>
+
+      {/* Chatbot */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {showChat ? (
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="font-bold">Assistente Financeiro</h3>
+                  <p className="text-xs text-purple-100">Online agora</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowChat(false)}
+                className="text-white/80 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.isBot 
+                      ? 'bg-gray-100 text-gray-800' 
+                      : 'bg-gradient-to-r from-purple-600 to-purple-700 text-white'
+                  }`}>
+                    <p className="text-sm">{message.text}</p>
+                    <p className={`text-xs mt-1 ${
+                      message.isBot ? 'text-gray-500' : 'text-purple-100'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <button
+                  onClick={sendMessage}
+                  className="p-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowChat(true)}
+            className="w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+          >
+            <MessageCircle className="w-8 h-8" />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

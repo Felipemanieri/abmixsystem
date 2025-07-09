@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, Clock, TrendingUp, AlertTriangle, CheckCircle, Eye, Calendar, Download, Mail, Search, Filter, FileText, ArrowLeft, Home, Edit } from 'lucide-react';
+import { LogOut, BarChart3, Users, Clock, TrendingUp, AlertTriangle, CheckCircle, Eye, Calendar, Download, Mail, Search, Filter, FileText, ArrowLeft, Home, Edit, Target, MessageCircle, Bot, X, Send } from 'lucide-react';
 
 interface SupervisorPortalProps {
   user: any;
@@ -26,12 +26,30 @@ interface Proposal {
   }>;
 }
 
+interface ChatMessage {
+  id: string;
+  text: string;
+  isBot: boolean;
+  timestamp: Date;
+}
+
 const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('7days');
-  const [selectedView, setSelectedView] = useState('overview');
+  const [selectedView, setSelectedView] = useState<'overview' | 'spreadsheet' | 'goals'>('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [goalType, setGoalType] = useState<'individual' | 'team'>('team');
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: 'Olá! Sou o assistente do portal supervisor. Como posso ajudá-lo com relatórios e supervisão?',
+      isBot: true,
+      timestamp: new Date()
+    }
+  ]);
+  const [newMessage, setNewMessage] = useState('');
 
   const allProposals: Proposal[] = [
     {
@@ -166,6 +184,239 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       conversionRate: '83%',
     },
   ];
+
+  const teamGoals = {
+    current: 89500,
+    target: 150000,
+    percentage: 59.7
+  };
+
+  const individualGoals = [
+    { name: 'Ana Caroline', current: 8500, target: 10000, percentage: 85 },
+    { name: 'Bruna Garcia', current: 7200, target: 10000, percentage: 72 },
+    { name: 'Carlos Silva', current: 6800, target: 10000, percentage: 68 },
+    { name: 'Diana Santos', current: 9100, target: 10000, percentage: 91 },
+  ];
+
+  const sendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: newMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+
+    // Bot response
+    setTimeout(() => {
+      const response = getBotResponse(newMessage);
+      const botMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: response,
+        isBot: true,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, botMessage]);
+    }, 1000);
+
+    setNewMessage('');
+  };
+
+  const getBotResponse = (message: string): string => {
+    const lowerMessage = message.toLowerCase();
+    
+    if (lowerMessage.includes('meta') || lowerMessage.includes('objetivo')) {
+      return 'No módulo de metas você pode acompanhar o desempenho individual e da equipe. A meta da equipe é R$ 150.000 e individual R$ 10.000.';
+    }
+    if (lowerMessage.includes('relatório') || lowerMessage.includes('planilha')) {
+      return 'Você tem acesso à planilha completa com todas as propostas, anexos e dados dos clientes. Use os filtros para encontrar informações específicas.';
+    }
+    if (lowerMessage.includes('vendedor') || lowerMessage.includes('performance')) {
+      return 'No dashboard você pode ver a performance de cada vendedor, taxa de conversão e tempo médio de fechamento.';
+    }
+    if (lowerMessage.includes('proposta') || lowerMessage.includes('status')) {
+      return 'Você pode visualizar todas as propostas independente do status e entrar em contato com clientes diretamente.';
+    }
+    
+    return 'Como supervisor, você tem acesso completo a relatórios, metas, planilhas e pode supervisionar toda a equipe. O que você gostaria de saber?';
+  };
+
+  const renderGoalsModule = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setSelectedView('overview')}
+          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar ao Dashboard
+        </button>
+      </div>
+
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Módulo de Metas</h1>
+        <p className="text-orange-100">Acompanhe o desempenho individual e da equipe</p>
+      </div>
+
+      {/* Goal Type Selector */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm font-medium text-gray-700">Visualizar:</span>
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setGoalType('team')}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                goalType === 'team'
+                  ? 'bg-white text-orange-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Equipe
+            </button>
+            <button
+              onClick={() => setGoalType('individual')}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                goalType === 'individual'
+                  ? 'bg-white text-orange-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Individual
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {goalType === 'team' ? (
+        /* Team Goals */
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+              <Target className="w-6 h-6 text-white" />
+            </div>
+            <div className="ml-4">
+              <h2 className="text-xl font-bold text-gray-900">Meta da Equipe</h2>
+              <p className="text-gray-600">Objetivo mensal: R$ 150.000</p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-3xl font-bold text-gray-900">
+                  R$ {teamGoals.current.toLocaleString('pt-BR')}
+                </p>
+                <p className="text-gray-600">Vendido este mês</p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-orange-600">
+                  {teamGoals.percentage.toFixed(1)}%
+                </p>
+                <p className="text-gray-600">da meta</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Progresso</span>
+                <span className="text-gray-900 font-medium">
+                  R$ {(teamGoals.target - teamGoals.current).toLocaleString('pt-BR')} restantes
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-4">
+                <div 
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-4 rounded-full transition-all duration-500 relative"
+                  style={{ width: `${Math.min(teamGoals.percentage, 100)}%` }}
+                >
+                  <div className="absolute right-2 top-0 h-full flex items-center">
+                    <span className="text-xs font-bold text-white">
+                      {teamGoals.percentage.toFixed(0)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-green-600">32</p>
+                <p className="text-sm text-gray-600">Propostas Fechadas</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-blue-600">R$ 2.797</p>
+                <p className="text-sm text-gray-600">Ticket Médio</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple-600">68%</p>
+                <p className="text-sm text-gray-600">Taxa de Conversão</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Individual Goals */
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+          <div className="flex items-center mb-6">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <div className="ml-4">
+              <h2 className="text-xl font-bold text-gray-900">Metas Individuais</h2>
+              <p className="text-gray-600">Objetivo individual: R$ 10.000</p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {individualGoals.map((goal, index) => (
+              <div key={index} className="p-6 bg-gray-50 rounded-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                      <Users className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="font-bold text-gray-900">{goal.name}</h3>
+                      <p className="text-sm text-gray-600">Vendedor</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-gray-900">
+                      R$ {goal.current.toLocaleString('pt-BR')}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {goal.percentage}% da meta
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Meta: R$ 10.000</span>
+                    <span className="text-gray-900 font-medium">
+                      R$ {(goal.target - goal.current).toLocaleString('pt-BR')} restantes
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div 
+                      className={`h-3 rounded-full transition-all duration-500 ${
+                        goal.percentage >= 90 ? 'bg-gradient-to-r from-green-500 to-green-600' :
+                        goal.percentage >= 70 ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' :
+                        'bg-gradient-to-r from-red-500 to-red-600'
+                      }`}
+                      style={{ width: `${Math.min(goal.percentage, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -544,10 +795,10 @@ Supervisor - Abmix Seguros`;
                   <h2 className="text-lg font-semibold text-gray-900">Ações Rápidas</h2>
                 </div>
                 <div className="p-6">
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <button
                       onClick={() => setSelectedView('spreadsheet')}
-                      className="w-full flex items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+                      className="w-full flex items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer"
                     >
                       <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
                         <FileText className="w-5 h-5 text-orange-600" />
@@ -558,7 +809,20 @@ Supervisor - Abmix Seguros`;
                       </div>
                     </button>
 
-                    <button className="w-full flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                    <button
+                      onClick={() => setSelectedView('goals')}
+                      className="w-full flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer"
+                    >
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Target className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div className="ml-3 text-left">
+                        <p className="text-sm font-medium text-gray-900">Módulo de Metas</p>
+                        <p className="text-xs text-gray-500">Individual e equipe</p>
+                      </div>
+                    </button>
+
+                    <button className="w-full flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors cursor-pointer">
                       <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                         <BarChart3 className="w-5 h-5 text-blue-600" />
                       </div>
@@ -568,7 +832,7 @@ Supervisor - Abmix Seguros`;
                       </div>
                     </button>
 
-                    <button className="w-full flex items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                    <button className="w-full flex items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors cursor-pointer">
                       <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-red-600" />
                       </div>
@@ -583,7 +847,7 @@ Supervisor - Abmix Seguros`;
             </div>
           </>
         ) : (
-          renderCompleteSpreadsheet()
+          selectedView === 'spreadsheet' ? renderCompleteSpreadsheet() : renderGoalsModule()
         )}
       </main>
 
@@ -688,6 +952,79 @@ Supervisor - Abmix Seguros`;
           </div>
         </div>
       )}
+
+      {/* Chatbot */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {showChat ? (
+          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="font-bold">Assistente Supervisor</h3>
+                  <p className="text-xs text-orange-100">Online agora</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowChat(false)}
+                className="text-white/80 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+              {chatMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.isBot 
+                      ? 'bg-gray-100 text-gray-800' 
+                      : 'bg-gradient-to-r from-orange-600 to-orange-700 text-white'
+                  }`}>
+                    <p className="text-sm">{message.text}</p>
+                    <p className={`text-xs mt-1 ${
+                      message.isBot ? 'text-gray-500' : 'text-orange-100'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  placeholder="Digite sua mensagem..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <button
+                  onClick={sendMessage}
+                  className="p-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-700 hover:to-orange-800 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowChat(true)}
+            className="w-16 h-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+          >
+            <MessageCircle className="w-8 h-8" />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

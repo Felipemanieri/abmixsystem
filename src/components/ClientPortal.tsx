@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Home, Eye, Edit } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
@@ -700,6 +700,56 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               <p className="text-lg font-bold text-purple-900">{contractInfo.valor}</p>
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-teal-100 rounded-full group-hover:bg-teal-200 transition-colors">
+                <FileText className="w-6 h-6 text-teal-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Preencher Dados</h3>
+                <p className="text-sm text-gray-500">Formulário</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
+                <Upload className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Enviar Documentos</h3>
+                <p className="text-sm text-gray-500">Anexos</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                <Eye className="w-6 h-6 text-green-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Acompanhar Status</h3>
+                <p className="text-sm text-gray-500">Progresso</p>
+              </div>
+            </div>
+          </button>
+
+          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
+            <div className="flex items-center">
+              <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                <MessageCircle className="w-6 h-6 text-purple-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Suporte</h3>
+                <p className="text-sm text-gray-500">Ajuda</p>
+              </div>
+            </div>
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
