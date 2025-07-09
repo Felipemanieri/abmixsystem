@@ -136,8 +136,8 @@ function App() {
                 <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Contato</a>
                 <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-blue-700 to-blue-800 text-gray-400 px-6 py-3 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl font-bold">
-                <span className="text-gray-600">Fale Conosco</span>
+              <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white px-6 py-3 rounded-xl hover:from-teal-500 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl font-bold">
+                Fale Conosco
               </button>
             </div>
           </div>
