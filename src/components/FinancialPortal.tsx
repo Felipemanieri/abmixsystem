@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2, Download, ArrowLeft, Home, MessageCircle, Bot, Calculator, BarChart3 } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2, Download, ArrowLeft, Home, MessageCircle, Bot, Calculator, BarChart3, Bell } from 'lucide-react';
 
 interface FinancialPortalProps {
   user: any;
@@ -46,6 +46,15 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+interface InternalMessage {
+  id: string;
+  from: string;
+  to: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+}
+
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
@@ -64,6 +73,21 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
+
+  const [showInternalChat, setShowInternalChat] = useState(false);
+  const [internalMessages, setInternalMessages] = useState<InternalMessage[]>([
+    {
+      id: '1',
+      from: 'Ana Vendedora',
+      to: 'financeiro',
+      message: 'Proposta PROP-123 está pronta para validação.',
+      timestamp: new Date(Date.now() - 1800000),
+      read: false
+    }
+  ]);
+  const [newInternalMessage, setNewInternalMessage] = useState('');
+
+  const unreadCount = internalMessages.filter(msg => !msg.read).length;
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -335,6 +359,27 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     return 'Como financeiro, você pode validar propostas, enviar para automação, gerenciar campos personalizados e baixar documentos. O que você precisa fazer?';
   };
 
+  const sendInternalMessage = () => {
+    if (!newInternalMessage.trim()) return;
+
+    const message: InternalMessage = {
+      id: Date.now().toString(),
+      from: user.name,
+      to: 'todos',
+      message: newInternalMessage,
+      timestamp: new Date(),
+      read: false
+    };
+
+    setInternalMessages(prev => [...prev, message]);
+    setNewInternalMessage('');
+    showNotification('Mensagem enviada para todos!', 'success');
+  };
+
+  const markMessagesAsRead = () => {
+    setInternalMessages(prev => prev.map(msg => ({ ...msg, read: true })));
+  };
+
   const handleSendWhatsApp = (phone: string, clientName: string) => {
     const message = `Olá! Entrando em contato sobre a proposta de plano de saúde da ${clientName}.`;
     const whatsappUrl = `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
@@ -464,6 +509,28 @@ Financeiro - Abmix Seguros`;
             </div>
 
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => {
+                  setShowInternalChat(true);
+                  markMessagesAsRead();
+                }}
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+                <Bell className="w-5 h-5" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  3
+                </span>
+              </button>
+              
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
               <button
                 onClick={onLogout}
@@ -1010,6 +1077,64 @@ Financeiro - Abmix Seguros`;
           </button>
         )}
       </div>
+
+      {/* Internal Chat Modal */}
+      {showInternalChat && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Chat Interno da Equipe
+              </h3>
+              <button 
+                onClick={() => setShowInternalChat(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="h-96 overflow-y-auto p-6 space-y-4">
+              {internalMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.from === user.name
+                      ? 'bg-purple-600 text-white' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    <div className="text-xs font-medium mb-1 opacity-75">
+                      {message.from}
+                    </div>
+                    <p className="text-sm">{message.message}</p>
+                    <p className={`text-xs mt-1 opacity-75`}>
+                      {message.timestamp.toLocaleString('pt-BR')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-6 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newInternalMessage}
+                  onChange={(e) => setNewInternalMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
+                  placeholder="Mensagem para toda a equipe..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <button
+                  onClick={sendInternalMessage}
+                  className="p-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

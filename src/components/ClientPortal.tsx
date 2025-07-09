@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Home, Eye, Edit, Users } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Bell } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
@@ -46,6 +46,22 @@ interface DocumentRequirement {
   uploaded?: boolean;
 }
 
+interface InternalMessage {
+  id: string;
+  from: string;
+  to: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+}
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  isBot: boolean;
+  timestamp: Date;
+}
+
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [titulares, setTitulares] = useState<PersonData[]>([{
     id: '1',
@@ -82,6 +98,20 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [newMessage, setNewMessage] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [showDocumentGuide, setShowDocumentGuide] = useState(false);
+  const [showInternalChat, setShowInternalChat] = useState(false);
+  const [internalMessages, setInternalMessages] = useState<InternalMessage[]>([
+    {
+      id: '1',
+      from: 'Carlos Vendedor',
+      to: 'cliente',
+      message: 'Olá! Recebi seus documentos. Vou organizar e enviar para aprovação.',
+      timestamp: new Date(Date.now() - 1800000),
+      read: false
+    }
+  ]);
+  const [newInternalMessage, setNewInternalMessage] = useState('');
+
+  const unreadCount = internalMessages.filter(msg => !msg.read).length;
 
   // Dados do contrato (simulados)
   const contractInfo = {
@@ -349,6 +379,31 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     }
     
     return 'Entendi sua pergunta! Para dúvidas específicas, recomendo entrar em contato com nosso suporte pelo WhatsApp ou telefone. Posso ajudar com informações sobre documentos e preenchimento da proposta.';
+  };
+
+  const sendInternalMessage = () => {
+    if (!newInternalMessage.trim()) return;
+
+    const message: InternalMessage = {
+      id: Date.now().toString(),
+      from: user.name,
+      to: 'vendedor',
+      message: newInternalMessage,
+      timestamp: new Date(),
+      read: false
+    };
+
+    setInternalMessages(prev => [...prev, message]);
+    setNewInternalMessage('');
+    showNotification('Mensagem enviada para o vendedor!', 'success');
+  };
+
+  const markMessagesAsRead = () => {
+    setInternalMessages(prev => prev.map(msg => ({ ...msg, read: true })));
+  };
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    // Implementar notificação toast
   };
 
   const calculateProgress = () => {
@@ -638,6 +693,28 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               {/* Progress Indicator */}
+              <button
+                onClick={() => {
+                  setShowInternalChat(true);
+                  markMessagesAsRead();
+                }}
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageCircle className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+                <Bell className="w-5 h-5" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  1
+                </span>
+              </button>
+              
               <div className="hidden md:flex items-center space-x-3">
                 <span className="text-sm font-medium text-gray-600">Progresso:</span>
                 <div className="w-32 bg-gray-200 rounded-full h-2">
@@ -927,7 +1004,15 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             </div>
             
             {/* Upload Area */}
-            <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-blue-400 transition-colors bg-gradient-to-br from-gray-50 to-white">
+            <div 
+              className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-blue-400 transition-colors bg-gradient-to-br from-gray-50 to-white cursor-pointer"
+              onDrop={(e) => {
+                e.preventDefault();
+                handleFileUpload(e.dataTransfer.files);
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnter={(e) => e.preventDefault()}
+            >
               <div className="space-y-6">
                 <div className="flex justify-center space-x-6">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
@@ -943,7 +1028,22 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 
                 <div>
                   <label className="cursor-pointer">
-                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700">
+                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center">
+                      <Camera className="w-5 h-5 mr-2" />
+                      Tirar Foto
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={(e) => handleFileUpload(e.target.files)}
+                      className="hidden"
+                    />
+                  </label>
+                  <span className="mx-4 text-gray-400">ou</span>
+                  <label className="cursor-pointer">
+                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center">
+                      <Upload className="w-5 h-5 mr-2" />
                       Clique para selecionar arquivos
                     </span>
                     <input
@@ -954,6 +1054,10 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                       className="hidden"
                     />
                   </label>
+                  <span className="mx-4 text-gray-400">ou</span>
+                  <span className="text-xl font-semibold text-green-600">
+                    📁 Galeria
+                  </span>
                   <p className="text-gray-500 mt-2">ou arraste e solte aqui</p>
                 </div>
                 
@@ -1166,6 +1270,64 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <li>• Mantenha os arquivos dentro do limite de tamanho</li>
                   <li>• Em caso de dúvidas, use o chat para ajuda</li>
                 </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Internal Chat Modal */}
+      {showInternalChat && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Mensagens com o Vendedor
+              </h3>
+              <button 
+                onClick={() => setShowInternalChat(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="h-96 overflow-y-auto p-6 space-y-4">
+              {internalMessages.map((message) => (
+                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-xs p-3 rounded-2xl ${
+                    message.from === user.name
+                      ? 'bg-teal-600 text-white' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    <div className="text-xs font-medium mb-1 opacity-75">
+                      {message.from}
+                    </div>
+                    <p className="text-sm">{message.message}</p>
+                    <p className={`text-xs mt-1 opacity-75`}>
+                      {message.timestamp.toLocaleString('pt-BR')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-6 border-t border-gray-200">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newInternalMessage}
+                  onChange={(e) => setNewInternalMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
+                  placeholder="Mensagem para o vendedor..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+                <button
+                  onClick={sendInternalMessage}
+                  className="p-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
