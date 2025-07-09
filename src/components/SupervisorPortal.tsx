@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, Clock, TrendingUp, AlertTriangle, CheckCircle, Eye, Calendar, Download, MessageCircle, Mail, Search, Filter, FileText } from 'lucide-react';
+import { LogOut, BarChart3, Users, Clock, TrendingUp, AlertTriangle, CheckCircle, Eye, Calendar, Download, Mail, Search, Filter, FileText, ArrowLeft, Home, Edit } from 'lucide-react';
 
 interface SupervisorPortalProps {
   user: any;
@@ -44,7 +44,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       submissionDate: '2024-01-15',
       documents: 8,
       email: 'contato@empresaabc.com.br',
-      phone: '(11) 99999-9999',
+      phone: '11999999999',
       attachments: [
         { id: '1', name: 'cnpj_empresa_abc.pdf', type: 'pdf', size: '2.1 MB', url: '/docs/cnpj_empresa_abc.pdf' },
         { id: '2', name: 'rg_titular.jpg', type: 'image', size: '1.8 MB', url: '/docs/rg_titular.jpg' },
@@ -60,7 +60,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       submissionDate: '2024-01-14',
       documents: 6,
       email: 'admin@techsolutions.com',
-      phone: '(11) 88888-8888',
+      phone: '11888888888',
       attachments: [
         { id: '3', name: 'contrato_social.pdf', type: 'pdf', size: '3.2 MB', url: '/docs/contrato_social.pdf' },
       ]
@@ -75,7 +75,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       submissionDate: '2024-01-13',
       documents: 5,
       email: 'contato@consultoriaxyz.com.br',
-      phone: '(11) 77777-7777',
+      phone: '11777777777',
       attachments: [
         { id: '4', name: 'carteirinha_atual.jpg', type: 'image', size: '1.2 MB', url: '/docs/carteirinha_atual.jpg' },
       ]
@@ -90,7 +90,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       submissionDate: '2024-01-12',
       documents: 7,
       email: 'contato@inovacaodigital.com',
-      phone: '(11) 66666-6666',
+      phone: '11666666666',
       attachments: [
         { id: '5', name: 'analitico_plano.pdf', type: 'pdf', size: '1.5 MB', url: '/docs/analitico_plano.pdf' },
       ]
@@ -201,6 +201,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
     const message = `Olá! Entrando em contato sobre a proposta de plano de saúde da ${clientName}.`;
     const whatsappUrl = `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    showNotification('WhatsApp aberto com sucesso!', 'success');
   };
 
   const handleSendEmail = (email: string, clientName: string) => {
@@ -217,6 +218,7 @@ Supervisor - Abmix Seguros`;
 
     const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.open(mailtoUrl);
+    showNotification('Cliente de email aberto com sucesso!', 'success');
   };
 
   const handleDownloadAttachment = (attachment: any) => {
@@ -226,7 +228,21 @@ Supervisor - Abmix Seguros`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    alert(`Download iniciado: ${attachment.name}`);
+    showNotification(`Download iniciado: ${attachment.name}`, 'success');
+  };
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
   };
 
   const filteredProposals = allProposals.filter(proposal => {
@@ -239,6 +255,16 @@ Supervisor - Abmix Seguros`;
 
   const renderCompleteSpreadsheet = () => (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setSelectedView('overview')}
+          className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar ao Dashboard
+        </button>
+      </div>
+
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">Planilha Completa - Visão Supervisor</h1>
         <p className="text-orange-100">Acesso total a todas as propostas e documentos do sistema</p>
@@ -326,7 +352,7 @@ Supervisor - Abmix Seguros`;
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{proposal.email}</div>
-                    <div className="text-sm text-gray-500">{proposal.phone}</div>
+                    <div className="text-sm text-gray-500">({proposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-wrap gap-1">
@@ -347,21 +373,29 @@ Supervisor - Abmix Seguros`;
                     <div className="flex space-x-1">
                       <button 
                         onClick={() => setSelectedProposal(proposal)}
-                        className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50"
+                        className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50 transition-colors"
                         title="Visualizar"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button 
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+                        title="Editar"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button 
                         onClick={() => handleSendWhatsApp(proposal.phone, proposal.client)}
-                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
                         title="WhatsApp"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                        </svg>
                       </button>
                       <button 
                         onClick={() => handleSendEmail(proposal.email, proposal.client)}
-                        className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                        className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
                         title="Email"
                       >
                         <Mail className="w-4 h-4" />
@@ -402,6 +436,16 @@ Supervisor - Abmix Seguros`;
             </div>
 
             <div className="flex items-center space-x-4">
+              {selectedView !== 'overview' && (
+                <button
+                  onClick={() => setSelectedView('overview')}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                >
+                  <Home className="w-4 h-4 mr-2" />
+                  Dashboard
+                </button>
+              )}
+              
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
@@ -583,7 +627,7 @@ Supervisor - Abmix Seguros`;
                     <h4 className="font-semibold text-gray-900 border-b pb-2">Informações de Contato</h4>
                     <div className="space-y-2 text-sm">
                       <div><span className="font-medium text-gray-700">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
-                      <div><span className="font-medium text-gray-700">Telefone:</span> <span className="ml-2">{selectedProposal.phone}</span></div>
+                      <div><span className="font-medium text-gray-700">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
                       <div><span className="font-medium text-gray-700">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
                       <div><span className="font-medium text-gray-700">Data Submissão:</span> <span className="ml-2">{new Date(selectedProposal.submissionDate).toLocaleDateString('pt-BR')}</span></div>
                     </div>
@@ -633,7 +677,9 @@ Supervisor - Abmix Seguros`;
                     onClick={() => handleSendWhatsApp(selectedProposal.phone, selectedProposal.client)}
                     className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                    </svg>
                     Enviar WhatsApp
                   </button>
                 </div>

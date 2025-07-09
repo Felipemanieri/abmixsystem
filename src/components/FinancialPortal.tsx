@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2 } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, User, FileText, Edit, Save, X, Plus, Trash2, Download, ArrowLeft, Home } from 'lucide-react';
 
 interface FinancialPortalProps {
   user: any;
@@ -28,6 +28,15 @@ interface Proposal {
   rejectionReason?: string;
   automationDate?: string;
   customFields?: { [key: string]: string };
+  email?: string;
+  phone?: string;
+  attachments?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    size: string;
+    url: string;
+  }>;
 }
 
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
@@ -57,7 +66,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
       installments: '12x',
       discount: '0%',
       additionalFees: 'R$ 0,00',
-      customFields: {}
+      customFields: {},
+      email: 'contato@empresaabc.com.br',
+      phone: '11999999999',
+      attachments: [
+        { id: '1', name: 'cnpj_empresa_abc.pdf', type: 'pdf', size: '2.1 MB', url: '/docs/cnpj_empresa_abc.pdf' },
+        { id: '2', name: 'rg_titular.jpg', type: 'image', size: '1.8 MB', url: '/docs/rg_titular.jpg' },
+      ]
     },
     {
       id: 'VEND002-PROP124',
@@ -76,7 +91,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
       installments: '6x',
       discount: '10%',
       additionalFees: 'R$ 15,00',
-      customFields: { 'Desconto Especial': '10%', 'Motivo': 'Cliente fidelidade' }
+      customFields: { 'Desconto Especial': '10%', 'Motivo': 'Cliente fidelidade' },
+      email: 'admin@techsolutions.com',
+      phone: '11888888888',
+      attachments: [
+        { id: '3', name: 'contrato_social.pdf', type: 'pdf', size: '3.2 MB', url: '/docs/contrato_social.pdf' },
+      ]
     },
     {
       id: 'VEND001-PROP125',
@@ -97,7 +117,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
       discount: '0%',
       additionalFees: 'R$ 0,00',
       approvalDate: '2024-01-15',
-      customFields: {}
+      customFields: {},
+      email: 'contato@consultoriaxyz.com.br',
+      phone: '11777777777',
+      attachments: [
+        { id: '4', name: 'carteirinha_atual.jpg', type: 'image', size: '1.2 MB', url: '/docs/carteirinha_atual.jpg' },
+      ]
     },
     {
       id: 'VEND003-PROP126',
@@ -119,7 +144,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
       additionalFees: 'R$ 25,00',
       approvalDate: '2024-01-14',
       automationDate: '2024-01-15',
-      customFields: { 'Observação Especial': 'Cliente VIP' }
+      customFields: { 'Observação Especial': 'Cliente VIP' },
+      email: 'contato@inovacaodigital.com',
+      phone: '11666666666',
+      attachments: [
+        { id: '5', name: 'analitico_plano.pdf', type: 'pdf', size: '1.5 MB', url: '/docs/analitico_plano.pdf' },
+      ]
     },
   ]);
 
@@ -172,14 +202,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     ));
     setSelectedProposal(null);
     setObservations('');
-    alert('Proposta validada com sucesso!');
+    showNotification('Proposta validada com sucesso!', 'success');
   };
 
   const sendToAutomation = (proposalId: string) => {
     const proposal = proposals.find(p => p.id === proposalId);
-    if (proposal?.status !== 'validated') {
-      alert('Apenas propostas validadas podem ser enviadas para automação!');
-      return;
+    if (proposal?.status !== 'validated' && proposal?.status !== 'pending_validation') {
+      showNotification('Proposta enviada para automação!', 'success');
     }
 
     setProposals(prev => prev.map(proposal => 
@@ -189,13 +218,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             status: 'sent_to_automation',
             observations: observations || 'Enviado para automação Make/Zapier',
             automationDate: new Date().toISOString().split('T')[0],
-            financialNotes: proposal.financialNotes + ' | Enviado para automação'
+            financialNotes: (proposal.financialNotes || '') + ' | Enviado para automação'
           }
         : proposal
     ));
     setSelectedProposal(null);
     setObservations('');
-    alert('Proposta enviada para automação com sucesso!');
+    showNotification('Proposta enviada para automação com sucesso!', 'success');
   };
 
   const updateProposal = (proposalId: string, field: keyof Proposal, value: any) => {
@@ -208,7 +237,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   const addCustomField = (proposalId: string) => {
     if (!newFieldName.trim() || !newFieldValue.trim()) {
-      alert('Por favor, preencha o nome e valor do campo');
+      showNotification('Por favor, preencha o nome e valor do campo', 'error');
       return;
     }
 
@@ -226,6 +255,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     
     setNewFieldName('');
     setNewFieldValue('');
+    showNotification('Campo personalizado adicionado!', 'success');
   };
 
   const removeCustomField = (proposalId: string, fieldName: string) => {
@@ -239,6 +269,55 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           }
         : proposal
     ));
+    showNotification('Campo removido!', 'success');
+  };
+
+  const handleSendWhatsApp = (phone: string, clientName: string) => {
+    const message = `Olá! Entrando em contato sobre a proposta de plano de saúde da ${clientName}.`;
+    const whatsappUrl = `https://wa.me/55${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    showNotification('WhatsApp aberto com sucesso!', 'success');
+  };
+
+  const handleSendEmail = (email: string, clientName: string) => {
+    const subject = `Proposta de Plano de Saúde - ${clientName}`;
+    const body = `Olá!
+
+Entrando em contato sobre a proposta de plano de saúde.
+
+Qualquer dúvida, estou à disposição.
+
+Atenciosamente,
+${user.name}
+Financeiro - Abmix Seguros`;
+
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl);
+    showNotification('Cliente de email aberto com sucesso!', 'success');
+  };
+
+  const handleDownloadAttachment = (attachment: any) => {
+    const link = document.createElement('a');
+    link.href = attachment.url;
+    link.download = attachment.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification(`Download iniciado: ${attachment.name}`, 'success');
+  };
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
   };
 
   const getStatusColor = (status: string) => {
@@ -460,30 +539,46 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-1">
                         <button 
                           onClick={() => setSelectedProposal(proposal.id)}
-                          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50"
+                          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
                           title="Visualizar e editar"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => setEditingProposal(proposal.id)}
-                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
                           title="Edição rápida"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
-                        {(proposal.status === 'validated' || proposal.status === 'pending_validation') && (
-                          <button 
-                            onClick={() => sendToAutomation(proposal.id)}
-                            className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
-                            title="Enviar para automação"
-                          >
-                            <Send className="w-4 h-4" />
-                          </button>
-                        )}
+                        <button 
+                          onClick={() => handleSendWhatsApp(proposal.phone || '', proposal.client)}
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+                          title="WhatsApp"
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                          </svg>
+                        </button>
+                        <button 
+                          onClick={() => handleSendEmail(proposal.email || '', proposal.client)}
+                          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors"
+                          title="Email"
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                          </svg>
+                        </button>
+                        <button 
+                          onClick={() => sendToAutomation(proposal.id)}
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+                          title="Enviar para automação"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -588,59 +683,32 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                         </div>
                       </div>
 
-                      {/* Detalhes de Pagamento */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-gray-900 border-b pb-2">Detalhes de Pagamento</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Forma de Pagamento</label>
-                            <select
-                              value={proposal.paymentMethod || ''}
-                              onChange={(e) => updateProposal(proposal.id, 'paymentMethod', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                            >
-                              <option value="">Selecione</option>
-                              <option value="PIX">PIX</option>
-                              <option value="Cartão de Crédito">Cartão de Crédito</option>
-                              <option value="Cartão de Débito">Cartão de Débito</option>
-                              <option value="Boleto">Boleto</option>
-                              <option value="Transferência">Transferência</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Parcelas</label>
-                            <input
-                              type="text"
-                              value={proposal.installments || ''}
-                              onChange={(e) => updateProposal(proposal.id, 'installments', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                              placeholder="Ex: 12x"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Taxas Adicionais</label>
-                            <input
-                              type="text"
-                              value={proposal.additionalFees || ''}
-                              onChange={(e) => updateProposal(proposal.id, 'additionalFees', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                              placeholder="R$ 0,00"
-                            />
+                      {/* Anexos */}
+                      {proposal.attachments && proposal.attachments.length > 0 && (
+                        <div className="space-y-4">
+                          <h4 className="font-semibold text-gray-900 border-b pb-2">Anexos ({proposal.attachments.length})</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {proposal.attachments.map((attachment) => (
+                              <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                  <FileText className="w-5 h-5 text-gray-500 mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium text-gray-900">{attachment.name}</div>
+                                    <div className="text-xs text-gray-500">{attachment.size}</div>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => handleDownloadAttachment(attachment)}
+                                  className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                  <Download className="w-4 h-4 mr-1" />
+                                  Baixar
+                                </button>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      </div>
-
-                      {/* Observações Financeiras */}
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-gray-900 border-b pb-2">Observações Financeiras</h4>
-                        <textarea
-                          value={proposal.financialNotes || ''}
-                          onChange={(e) => updateProposal(proposal.id, 'financialNotes', e.target.value)}
-                          rows={3}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                          placeholder="Adicione observações financeiras específicas..."
-                        />
-                      </div>
+                      )}
 
                       {/* Campos Personalizados */}
                       <div className="space-y-4">
@@ -728,19 +796,17 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           </button>
                         )}
                         
-                        {(proposal.status === 'validated' || proposal.status === 'pending_validation') && (
-                          <button
-                            onClick={() => sendToAutomation(proposal.id)}
-                            className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
-                          >
-                            <Send className="w-4 h-4 mr-2 inline" />
-                            Enviar para Automação
-                          </button>
-                        )}
+                        <button
+                          onClick={() => sendToAutomation(proposal.id)}
+                          className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                        >
+                          <Send className="w-4 h-4 mr-2 inline" />
+                          Enviar para Automação
+                        </button>
 
                         <button
                           onClick={() => {
-                            alert('Dados salvos com sucesso!');
+                            showNotification('Dados salvos com sucesso!', 'success');
                             setSelectedProposal(null);
                           }}
                           className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
