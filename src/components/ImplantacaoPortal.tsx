@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import ActionButtons from './ActionButtons';
+import InternalMessage from './InternalMessage';
+import NotificationCenter from './NotificationCenter';
 
 interface ImplantacaoPortalProps {
   user: any;
@@ -42,8 +45,39 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
   const [observations, setObservations] = useState('');
   const [showChat, setShowChat] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [activeTab, setActiveTab] = useState<'proposals' | 'automation' | 'integrations' | 'logs'>('proposals');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Notificações simuladas
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      title: 'Nova proposta para validação',
+      message: 'A proposta VEND001-PROP123 foi enviada para validação',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
+      read: false,
+    },
+    {
+      id: '2',
+      title: 'Automação concluída',
+      message: 'A automação da proposta VEND003-PROP126 foi concluída com sucesso',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 horas atrás
+      read: false,
+    },
+    {
+      id: '3',
+      title: 'Erro na integração',
+      message: 'A integração com o CRM falhou. Verifique as configurações.',
+      type: 'alert',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
+      read: true,
+    },
+  ]);
+  
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -227,6 +261,20 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     setSelectedProposal(null);
     setObservations('');
     showNotification('Proposta enviada para automação!', 'success');
+  };
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
   };
 
   const sendMessage = () => {
@@ -476,22 +524,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     {new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button 
-                        onClick={() => setSelectedProposal(proposal.id)}
-                        className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      {proposal.status === 'validated' && (
-                        <button 
-                          onClick={() => sendToAutomation(proposal.id)}
-                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
-                        >
-                          <Send className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
+                    <ActionButtons 
+                      onView={() => setSelectedProposal(proposal.id)}
+                      onMessage={() => setShowInternalMessage(true)}
+                      onEdit={() => showNotification('Editando proposta...', 'info')}
+                      onDownload={() => showNotification('Baixando documentos...', 'success')}
+                    />
                   </td>
                 </tr>
               ))}
@@ -744,11 +782,32 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             </div>
 
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+              <button 
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  3
-                </span>
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <NotificationCenter 
+                  notifications={notifications}
+                  onMarkAsRead={handleMarkAsRead}
+                  onMarkAllAsRead={handleMarkAllAsRead}
+                  onClose={() => setShowNotifications(false)}
+                />
+              )}
+              
+              <button
+                onClick={() => setShowInternalMessage(true)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
@@ -935,6 +994,18 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             </div>
           </div>
         </div>
+      )}
+
+      {/* Internal Message Modal */}
+      {showInternalMessage && (
+        <InternalMessage 
+          isOpen={showInternalMessage}
+          onClose={() => setShowInternalMessage(false)}
+          currentUser={{
+            name: user.name,
+            role: 'implantacao'
+          }}
+        />
       )}
 
       {/* Chatbot */}

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import ActionButtons from './ActionButtons';
+import InternalMessage from './InternalMessage';
+import NotificationCenter from './NotificationCenter';
 
 interface SupervisorPortalProps {
   user: any;
@@ -13,6 +16,52 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [activeView, setActiveView] = useState<SupervisorView>('dashboard');
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showInternalMessage, setShowInternalMessage] = useState(false);
+
+  // Notificações simuladas
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      title: 'Nova proposta criada',
+      message: 'Ana Caroline criou uma nova proposta para Empresa ABC Ltda',
+      type: 'document',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
+      read: false,
+    },
+    {
+      id: '2',
+      title: 'Meta atingida',
+      message: 'Bruna Garcia atingiu 100% da meta mensal de vendas',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 horas atrás
+      read: false,
+    },
+    {
+      id: '3',
+      title: 'Relatório mensal disponível',
+      message: 'O relatório gerencial de Abril/2024 está disponível para análise',
+      type: 'document',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 dia atrás
+      read: false,
+    },
+    {
+      id: '4',
+      title: 'Alerta de conversão',
+      message: 'A taxa de conversão caiu 5% na última semana',
+      type: 'alert',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48), // 2 dias atrás
+      read: true,
+    },
+    {
+      id: '5',
+      title: 'Nova mensagem',
+      message: 'Carlos Silva enviou uma mensagem sobre a equipe de vendas',
+      type: 'message',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 72), // 3 dias atrás
+      read: true,
+    },
+  ]);
 
   const supervisorStats = [
     {
@@ -169,6 +218,20 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       default:
         return 'interagiu com';
     }
+  };
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
   };
 
   const exportReport = () => {
@@ -596,12 +659,11 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                           <div className="text-sm font-medium text-gray-900">{vendor.revenue}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button 
-                            onClick={() => handleViewVendor(vendor.id)}
-                            className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50 transition-colors"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
+                          <ActionButtons 
+                            onView={() => handleViewVendor(vendor.id)}
+                            onMessage={() => setShowInternalMessage(true)}
+                            onEdit={() => showNotification(`Editando dados de ${vendor.name}`, 'info')}
+                          />
                         </td>
                       </tr>
                     ))}
@@ -676,11 +738,32 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                 </button>
               )}
               
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+              <button 
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  5
-                </span>
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <NotificationCenter 
+                  notifications={notifications}
+                  onMarkAsRead={handleMarkAsRead}
+                  onMarkAllAsRead={handleMarkAllAsRead}
+                  onClose={() => setShowNotifications(false)}
+                />
+              )}
+              
+              <button
+                onClick={() => setShowInternalMessage(true)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
@@ -817,6 +900,17 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         </div>
       )}
 
+      {/* Internal Message Modal */}
+      {showInternalMessage && (
+        <InternalMessage 
+          isOpen={showInternalMessage}
+          onClose={() => setShowInternalMessage(false)}
+          currentUser={{
+            name: user.name,
+            role: 'supervisor'
+          }}
+        />
+      )}
     </div>
   );
 };

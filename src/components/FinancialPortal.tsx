@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import ActionButtons from './ActionButtons';
+import InternalMessage from './InternalMessage';
+import NotificationCenter from './NotificationCenter';
 
 interface FinancialPortalProps {
   user: any;
@@ -20,7 +23,45 @@ interface Transaction {
 
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Notificações simuladas
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      title: 'Nova proposta para validação',
+      message: 'A proposta VEND001-PROP123 está aguardando validação financeira',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
+      read: false,
+    },
+    {
+      id: '2',
+      title: 'Lembrete de validação',
+      message: 'Existem 3 propostas aguardando validação há mais de 2 dias',
+      type: 'reminder',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 horas atrás
+      read: false,
+    },
+    {
+      id: '3',
+      title: 'Relatório mensal disponível',
+      message: 'O relatório financeiro de Abril/2024 está disponível para download',
+      type: 'document',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 dia atrás
+      read: true,
+    },
+    {
+      id: '4',
+      title: 'Nova mensagem',
+      message: 'Carlos Silva enviou uma mensagem sobre a proposta VEND002-PROP124',
+      type: 'message',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48), // 2 dias atrás
+      read: true,
+    },
+  ]);
 
   const [transactions] = useState<Transaction[]>([
     {
@@ -197,6 +238,20 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     showNotification('Relatório financeiro exportado!', 'success');
   };
 
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -211,11 +266,32 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
 
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+              <button 
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  4
-                </span>
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <NotificationCenter 
+                  notifications={notifications}
+                  onMarkAsRead={handleMarkAsRead}
+                  onMarkAllAsRead={handleMarkAllAsRead}
+                  onClose={() => setShowNotifications(false)}
+                />
+              )}
+              
+              <button
+                onClick={() => setShowInternalMessage(true)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
@@ -441,9 +517,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                         {new Date(transaction.date).toLocaleDateString('pt-BR')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors">
-                          <Eye className="w-4 h-4" />
-                        </button>
+                        <ActionButtons 
+                          onView={() => showNotification(`Visualizando transação ${transaction.id}`, 'info')}
+                          onDownload={() => showNotification('Baixando comprovante...', 'success')}
+                          onMessage={() => setShowInternalMessage(true)}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -454,6 +532,17 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         </div>
       </main>
 
+      {/* Internal Message Modal */}
+      {showInternalMessage && (
+        <InternalMessage 
+          isOpen={showInternalMessage}
+          onClose={() => setShowInternalMessage(false)}
+          currentUser={{
+            name: user.name,
+            role: 'financial'
+          }}
+        />
+      )}
     </div>
   );
 };

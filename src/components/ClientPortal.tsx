@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import ActionButtons from './ActionButtons';
+import InternalMessage from './InternalMessage';
+import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 
 interface ClientPortalProps {
@@ -28,6 +31,8 @@ interface ChatMessage {
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<'proposals' | 'profile' | 'documents'>('proposals');
   const [showChat, setShowChat] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -38,6 +43,26 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   ]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
+  
+  // Notificações simuladas
+  const [notifications, setNotifications] = useState([
+    {
+      id: '1',
+      title: 'Documentos pendentes',
+      message: 'Sua proposta PROP-2024-001 está aguardando documentos',
+      type: 'document',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
+      read: false,
+    },
+    {
+      id: '2',
+      title: 'Proposta aprovada',
+      message: 'Sua proposta PROP-2024-002 foi aprovada com sucesso',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
+      read: false,
+    },
+  ]);
 
   const proposals: Proposal[] = [
     {
@@ -103,6 +128,20 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     }
     
     return 'Estou aqui para ajudar com informações sobre suas propostas, documentos necessários e dados do seu perfil. Como posso auxiliá-lo?';
+  };
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, read: true }))
+    );
   };
 
   const getStatusColor = (status: string) => {
@@ -182,12 +221,11 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                     {new Date(proposal.date).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
-                      onClick={() => setSelectedProposal(proposal.id)}
-                      className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
-                    >
-                      Ver Detalhes
-                    </button>
+                    <ActionButtons 
+                      onView={() => setSelectedProposal(proposal.id)}
+                      onMessage={() => setShowInternalMessage(true)}
+                      onDownload={() => alert('Baixando documentos da proposta...')}
+                    />
                   </td>
                 </tr>
               ))}
@@ -195,6 +233,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           </table>
         </div>
       </div>
+
+      {/* Internal Message Modal */}
+      {showInternalMessage && (
+        <InternalMessage 
+          isOpen={showInternalMessage}
+          onClose={() => setShowInternalMessage(false)}
+          currentUser={{
+            name: user.name,
+            role: 'client'
+          }}
+        />
+      )}
 
       {selectedProposal && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -455,11 +505,32 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
+              <button 
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  2
-                </span>
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.filter(n => !n.read).length}
+                  </span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <NotificationCenter 
+                  notifications={notifications}
+                  onMarkAsRead={handleMarkAsRead}
+                  onMarkAllAsRead={handleMarkAllAsRead}
+                  onClose={() => setShowNotifications(false)}
+                />
+              )}
+              
+              <button
+                onClick={() => setShowInternalMessage(true)}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
               </button>
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
