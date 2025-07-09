@@ -364,7 +364,16 @@ function App() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Logo */}
+            <div className="flex items-center">
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-16 w-auto"
+              />
+            </div>
+            
             {/* Contato */}
             <div>
               <h3 className="font-bold mb-4">Contato</h3>
@@ -443,8 +452,17 @@ function App() {
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
+          <div className="border-t border-gray-800 pt-8 flex items-center justify-between">
+            <div className="flex items-center">
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-12 w-auto mr-4"
+              />
+            </div>
+            <div className="text-gray-400 text-lg">
+              <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
+            </div>
           </div>
         </div>
       </footer>
