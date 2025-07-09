@@ -437,9 +437,94 @@ function App() {
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-  )
-}
-  )
-}
-  )
-}
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Suporte */}
+            <div>
+              <h3 className="font-bold mb-4">Suporte</h3>
+              <div className="space-y-2 text-gray-400">
+                <p>Precisa de ajuda?</p>
+                <p>Nossa equipe está pronta para atendê-lo</p>
+                <button className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors mt-3">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Abrir Chamado
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 ABMIX. Todos os direitos reservados.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Chat Widget */}
+      {showChat && (
+        <div className="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-50">
+          <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+            <div className="flex items-center">
+              <Bot className="w-5 h-5 mr-2" />
+              <span className="font-semibold">Assistente Virtual</span>
+            </div>
+            <button 
+              onClick={() => setShowChat(false)}
+              className="text-white hover:text-gray-200 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          
+          <div className="flex-1 p-4 overflow-y-auto">
+            {chatMessages.map((message) => (
+              <div key={message.id} className={`mb-4 ${message.isBot ? 'text-left' : 'text-right'}`}>
+                <div className={`inline-block p-3 rounded-lg max-w-xs ${
+                  message.isBot 
+                    ? 'bg-gray-100 text-gray-800' 
+                    : 'bg-teal-500 text-white'
+                }`}>
+                  <p className="text-sm">{message.text}</p>
+                  <p className="text-xs mt-1 opacity-70">
+                    {message.timestamp.toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="p-4 border-t border-gray-200">
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                placeholder="Digite sua mensagem..."
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+              <button
+                onClick={sendMessage}
+                className="bg-teal-500 text-white p-2 rounded-lg hover:bg-teal-600 transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Chat Button */}
+      <button
+        onClick={() => setShowChat(!showChat)}
+        className="fixed bottom-4 right-4 bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-full shadow-lg hover:from-teal-600 hover:to-teal-700 transition-all z-40"
+      >
+        <MessageCircle className="w-6 h-6" />
+      </button>
+    </div>
+  );
+
+export default App;
