@@ -292,8 +292,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <span className="text-sm text-purple-800">Notificação Enviada</span>
                 </div>
               </div>
-              </div>
 
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={onLogout}
@@ -312,6 +312,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   </button>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>
