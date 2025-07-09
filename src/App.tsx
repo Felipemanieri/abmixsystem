@@ -29,7 +29,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo hoje?',
+     text: 'Olá! Sou o assistente virtual do sistema. Como posso ajudá-lo hoje?',
       isBot: true,
       timestamp: new Date()
     }
@@ -123,8 +123,8 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-3xl font-bold text-blue-900">Abmix</span>
-                <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
+                <span className="text-3xl font-bold text-blue-900">Sistema</span>
+                <p className="text-sm font-semibold text-blue-800">Planos de Saúde</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -369,7 +369,7 @@ function App() {
                 </div>
                 <span className="ml-3 text-2xl font-bold text-blue-500">Sistema</span>
               </div>
-              <p className="text-gray-300 font-semibold">Soluções completas em seguros e benefícios para sua empresa.</p>
+              <p className="text-gray-300 font-semibold">Sistema completo de propostas de planos de saúde.</p>
             </div>
             
             <div>
@@ -407,7 +407,7 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Sistema. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
@@ -424,6 +424,7 @@ function App() {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
+                  <h3 className="font-bold">Assistente Sistema</h3>
                   <p className="text-xs text-teal-100">Online agora</p>
                 </div>
               </div>

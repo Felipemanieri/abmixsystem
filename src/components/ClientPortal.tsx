@@ -62,7 +62,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo com sua proposta de plano de saúde?',
+      text: 'Olá! Sou o assistente virtual do sistema. Como posso ajudá-lo com sua proposta de plano de saúde?',
       isBot: true,
       timestamp: new Date()
     }
@@ -274,7 +274,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <span className="font-semibold text-teal-800">Protocolo Gerado</span>
                 </div>
                 <p className="text-lg font-mono text-teal-700 bg-white px-4 py-2 rounded-lg border">
-                  #ABMIX-2024-{Math.floor(Math.random() * 10000)}
+                  #SIST-2024-{Math.floor(Math.random() * 10000)}
                 </p>
               </div>
 
@@ -774,6 +774,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
+                  <h3 className="font-bold">Assistente Sistema</h3>
                   <p className="text-xs text-blue-100">Online agora</p>
                 </div>
               </div>
