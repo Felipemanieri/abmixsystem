@@ -21,9 +21,9 @@ interface ChatMessage {
   text: string;
   isBot: boolean;
   timestamp: Date;
-}
+};
 
-function App() {
+const App = () => {
   const [currentPortal, setCurrentPortal] = useState<Portal>('home');
   const [currentUser, setCurrentUser] = useState<User>(null);
   const [showChat, setShowChat] = useState(false);
