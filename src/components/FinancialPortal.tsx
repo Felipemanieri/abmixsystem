@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, CreditCard, PieChart, BarChart3, Wallet } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet } from 'lucide-react';
 
 interface FinancialPortalProps {
   user: any;
@@ -17,26 +17,9 @@ interface Transaction {
   category: string;
 }
 
-interface ChatMessage {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
-
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      text: 'Olá! Sou o assistente do portal financeiro. Como posso ajudá-lo com análises financeiras e relatórios?',
-      isBot: true,
-      timestamp: new Date()
-    }
-  ]);
-  const [newMessage, setNewMessage] = useState('');
 
   const [transactions] = useState<Transaction[]>([
     {
@@ -121,51 +104,6 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     { name: 'Planos Familiares', value: 'R$ 12.800', percentage: 28 },
     { name: 'Planos Individuais', value: 'R$ 4.380', percentage: 10 },
   ];
-
-  const sendMessage = () => {
-    if (!newMessage.trim()) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      text: newMessage,
-      isBot: false,
-      timestamp: new Date()
-    };
-
-    setChatMessages(prev => [...prev, userMessage]);
-
-    setTimeout(() => {
-      const response = getBotResponse(newMessage);
-      const botMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        text: response,
-        isBot: true,
-        timestamp: new Date()
-      };
-      setChatMessages(prev => [...prev, botMessage]);
-    }, 1000);
-
-    setNewMessage('');
-  };
-
-  const getBotResponse = (message: string): string => {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('receita') || lowerMessage.includes('faturamento')) {
-      return 'A receita total este mês foi de R$ 45.680,00, com crescimento de 12%. Os planos empresariais representam 62% do faturamento.';
-    }
-    if (lowerMessage.includes('despesa') || lowerMessage.includes('custo')) {
-      return 'As despesas totais foram R$ 8.920,00, principalmente comissões e custos operacionais. Houve redução de 3% vs mês anterior.';
-    }
-    if (lowerMessage.includes('lucro') || lowerMessage.includes('margem')) {
-      return 'O lucro líquido foi R$ 36.760,00 com margem de 80.5%. Excelente performance financeira com crescimento sustentável.';
-    }
-    if (lowerMessage.includes('relatório') || lowerMessage.includes('análise')) {
-      return 'Posso gerar relatórios detalhados por período, categoria ou vendedor. Use os filtros para análises específicas.';
-    }
-    
-    return 'Como analista financeiro, posso ajudar com relatórios de receita, análise de custos, projeções e métricas de performance. O que precisa analisar?';
-  };
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
@@ -514,75 +452,6 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         </div>
       </main>
 
-      {/* Chatbot */}
-      <div className="chatbot-container">
-        {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
-            <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div className="ml-3">
-                  <h3 className="font-bold">Assistente Financeiro</h3>
-                  <p className="text-xs text-green-100">Online agora</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-white/80 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
-              {chatMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
-                  }`}>
-                    <p className="text-sm">{message.text}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-green-100'
-                    }`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-                <button
-                  onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-colors"
-                >
-                  <SendIcon className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
-          >
-            <MessageCircle className="w-8 h-8" />
-          </button>
-        )}
-      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
@@ -27,13 +27,6 @@ interface PersonData {
   parentesco?: string;
 }
 
-interface ChatMessage {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
-
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [titulares, setTitulares] = useState<PersonData[]>([{
     id: '1',
@@ -58,16 +51,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [dependentes, setDependentes] = useState<PersonData[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo com sua proposta de plano de saúde?',
-      isBot: true,
-      timestamp: new Date()
-    }
-  ]);
-  const [newMessage, setNewMessage] = useState('');
 
   // Dados do contrato (simulados)
   const contractInfo = {
@@ -78,37 +61,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     odontoConjugado: true,
     inicioVigencia: '01/02/2024',
   };
-
-  const botResponses = [
-    {
-      keywords: ['documento', 'anexo', 'enviar', 'upload'],
-      response: 'Para anexar documentos, você pode usar a área de upload na seção "Documentos". Aceito PDF, JPG, PNG e DOC. Precisa de ajuda com algum documento específico?'
-    },
-    {
-      keywords: ['cpf', 'rg', 'identidade'],
-      response: 'Para documentos pessoais, você precisa enviar RG (frente e verso) e CPF. Pode ser foto clara ou scan. Tem alguma dúvida sobre estes documentos?'
-    },
-    {
-      keywords: ['empresa', 'cnpj', 'contrato'],
-      response: 'Para documentos da empresa, preciso do CNPJ atualizado e contrato social. Estes são obrigatórios para a contratação do plano empresarial.'
-    },
-    {
-      keywords: ['dependente', 'família', 'cônjuge'],
-      response: 'Para dependentes, você precisa enviar RG de cada um e certidão de casamento (para cônjuge). Menores de 16 anos podem usar certidão de nascimento.'
-    },
-    {
-      keywords: ['plano', 'atual', 'carteirinha'],
-      response: 'Se você já tem plano de saúde, envie a carteirinha atual e o demonstrativo analítico. Isso ajuda na análise da proposta.'
-    },
-    {
-      keywords: ['ajuda', 'dúvida', 'como'],
-      response: 'Estou aqui para ajudar! Você pode perguntar sobre documentos, preenchimento de dados ou qualquer dúvida sobre sua proposta.'
-    },
-    {
-      keywords: ['obrigado', 'valeu', 'thanks'],
-      response: 'Por nada! Estou sempre aqui para ajudar. Se tiver mais dúvidas, é só perguntar! 😊'
-    }
-  ];
 
   const addTitular = () => {
     const newTitular: PersonData = {
@@ -195,45 +147,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     setIsSubmitted(true);
   };
 
-  const sendMessage = () => {
-    if (!newMessage.trim()) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      text: newMessage,
-      isBot: false,
-      timestamp: new Date()
-    };
-
-    setChatMessages(prev => [...prev, userMessage]);
-
-    // Bot response
-    setTimeout(() => {
-      const response = getBotResponse(newMessage);
-      const botMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        text: response,
-        isBot: true,
-        timestamp: new Date()
-      };
-      setChatMessages(prev => [...prev, botMessage]);
-    }, 1000);
-
-    setNewMessage('');
-  };
-
-  const getBotResponse = (message: string): string => {
-    const lowerMessage = message.toLowerCase();
-    
-    for (const response of botResponses) {
-      if (response.keywords.some(keyword => lowerMessage.includes(keyword))) {
-        return response.response;
-      }
-    }
-    
-    return 'Entendi sua pergunta! Para dúvidas específicas, recomendo entrar em contato com nosso suporte pelo WhatsApp ou telefone. Posso ajudar com informações sobre documentos e preenchimento da proposta.';
-  };
-
   const calculateProgress = () => {
     const totalFields = titulares.length * 13 + dependentes.length * 14;
     const filledFields = titulares.reduce((acc, titular) => {
@@ -299,15 +212,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   className="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl hover:from-teal-700 hover:to-teal-800 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                   Finalizar
-                </button>
-                <button
-                  onClick={() => window.open('https://wa.me/5511999999999?text=Olá! Acabei de enviar minha proposta de plano de saúde.', '_blank')}
-                  className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center"
-                >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-                  </svg>
-                  Contato WhatsApp
                 </button>
               </div>
             </div>
@@ -765,76 +669,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
-            {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div className="ml-3">
-                  <h3 className="font-bold">Assistente Abmix</h3>
-                  <h3 className="font-bold">Assistente Abmix</h3>
-                  <p className="text-xs text-blue-100">Online agora</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-white/80 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
-              {chatMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-blue-600 to-teal-600 text-white'
-                  }`}>
-                    <p className="text-sm">{message.text}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-blue-100'
-                    }`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
             {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl hover:from-blue-700 hover:to-teal-700 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
-          >
-            <MessageCircle className="w-8 h-8" />
-          </button>
-        )}
-      </div>
     </div>
   );
 };

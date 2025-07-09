@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Building, FileText, DollarSign, Check, Copy } from 'lucide-react';
 
 interface ProposalGeneratorProps {
   onBack: () => void;
@@ -137,13 +137,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
               className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors"
             >
               Nova Proposta
-            </button>
-            <button
-              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Segue o link para preenchimento da proposta de plano de saúde: ${generatedLink}`)}`)}
-              className="flex items-center bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Enviar WhatsApp
             </button>
           </div>
         </div>
