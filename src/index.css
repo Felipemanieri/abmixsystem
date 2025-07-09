@@ -32,9 +32,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Marca d'água com logo */
+/* MARCA D'ÁGUA PROFISSIONAL COM LOGO ABMIX */
 .watermark-bg {
   position: relative;
+  overflow: hidden;
 }
 
 .watermark-bg::before {
@@ -45,14 +46,15 @@ body {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(13, 148, 136, 0.03) 0%, transparent 50%);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.4;
+    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(13, 148, 136, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+  background-size: 400px 400px, 300px 300px, 500px 500px;
+  background-repeat: repeat;
+  opacity: 0.6;
   z-index: 0;
   pointer-events: none;
+  animation: float 30s ease-in-out infinite;
 }
 
 .watermark-bg::after {
@@ -61,12 +63,13 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-45deg);
-  font-size: 8rem;
+  font-size: clamp(6rem, 15vw, 12rem);
   font-weight: 900;
-  color: rgba(30, 64, 175, 0.02);
+  color: rgba(30, 64, 175, 0.03);
   z-index: 0;
   pointer-events: none;
-  letter-spacing: 2rem;
+  letter-spacing: 1rem;
+  text-shadow: 0 0 50px rgba(30, 64, 175, 0.1);
 }
 
 .watermark-bg > * {
@@ -74,7 +77,7 @@ body {
   z-index: 1;
 }
 
-/* Chatbot sempre fixo */
+/* CHATBOT SEMPRE FIXO - SOLUÇÃO DEFINITIVA */
 .chatbot-container {
   position: fixed !important;
   bottom: 24px !important;
@@ -83,32 +86,34 @@ body {
   pointer-events: auto !important;
 }
 
-/* Logo destacado */
+/* LOGO DESTACADO COM EFEITOS PROFISSIONAIS */
 .logo-enhanced {
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-  transition: all 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
 }
 
 .logo-enhanced:hover {
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
-  transform: scale(1.05);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
+  transform: scale(1.05) translateY(-2px);
 }
 
-/* Botões profissionais */
+/* BOTÕES PROFISSIONAIS COM SHIMMER */
 .btn-primary {
   background: var(--gradient-primary);
   color: white;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
+  padding: 16px 32px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 16px;
   letter-spacing: 0.025em;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-soft);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-medium);
   position: relative;
   overflow: hidden;
+  text-transform: uppercase;
 }
 
 .btn-primary::before {
@@ -118,8 +123,8 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
 }
 
 .btn-primary:hover::before {
@@ -127,39 +132,41 @@ body {
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-large);
+  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
 }
 
 .btn-secondary {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   color: var(--primary-blue);
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
+  padding: 16px 32px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 16px;
   border: 2px solid var(--primary-blue);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
   background: var(--primary-blue);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-large);
 }
 
-/* Cards profissionais */
+/* CARDS PROFISSIONAIS COM EFEITOS AVANÇADOS */
 .card-professional {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 40px;
   box-shadow: var(--shadow-medium);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -170,10 +177,11 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 6px;
   background: var(--gradient-primary);
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
+  border-radius: 24px 24px 0 0;
 }
 
 .card-professional:hover::before {
@@ -181,45 +189,131 @@ body {
 }
 
 .card-professional:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-large);
+  border-color: rgba(30, 64, 175, 0.2);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+/* EFEITOS DE HOVER PROFISSIONAIS */
+.hover-lift {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-large);
-  border-color: rgba(30, 64, 175, 0.1);
 }
 
-/* Gradientes profissionais */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.gradient-text {
+/* TIPOGRAFIA PROFISSIONAL */
+.heading-primary {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Animações suaves */
+.heading-secondary {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--neutral-dark);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.text-professional {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* INPUTS PROFISSIONAIS */
+.input-professional {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(30, 64, 175, 0.1);
+  border-radius: 16px;
+  padding: 20px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+.input-professional:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 6px rgba(30, 64, 175, 0.1);
+  background: white;
+  transform: translateY(-2px);
+}
+
+/* NAVEGAÇÃO PROFISSIONAL */
+.nav-professional {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-soft);
+}
+
+/* FOOTER PROFISSIONAL */
+.footer-professional {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-professional::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* SCROLLBAR CUSTOMIZADA PROFISSIONAL */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 6px;
+  border: 2px solid #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%);
+}
+
+/* ANIMAÇÕES PROFISSIONAIS */
 .fade-in {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .slide-up {
-  animation: slideUp 0.8s ease-out;
+  animation: slideUp 1s ease-out;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -227,118 +321,51 @@ body {
   }
 }
 
-/* Efeitos de hover profissionais */
-.hover-lift {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-medium);
-}
-
-/* Tipografia profissional */
-.heading-primary {
-  font-size: 3.5rem;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.heading-secondary {
-  font-size: 2.25rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--neutral-dark);
-}
-
-.text-professional {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: #64748b;
-  font-weight: 400;
-}
-
-/* Inputs profissionais */
-.input-professional {
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid rgba(30, 64, 175, 0.1);
-  border-radius: 12px;
-  padding: 16px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-soft);
-}
-
-.input-professional:focus {
-  outline: none;
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
-  background: white;
-}
-
-/* Navegação profissional */
-.nav-professional {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: var(--shadow-soft);
-}
-
-/* Footer profissional */
-.footer-professional {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  color: white;
-}
-
-/* Scrollbar customizada */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--gradient-primary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-blue);
-}
-
-.chatbot-fixed {
-  position: fixed !important;
-  bottom: 24px !important;
-  right: 24px !important;
-  z-index: 9999 !important;
-}
-
-/* Responsividade profissional */
-@media (max-width: 768px) {
-  .heading-primary {
-    font-size: 2.5rem;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-  
-  .card-professional {
-    padding: 24px;
-  }
-  
-  .btn-primary,
-  .btn-secondary {
-    padding: 14px 20px;
-    font-size: 16px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Estados de loading */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  33% { 
+    transform: translateY(-20px) rotate(1deg); 
+  }
+  66% { 
+    transform: translateY(-10px) rotate(-1deg); 
+  }
+}
+
+/* EFEITOS DE PARTÍCULAS ANIMADAS */
+.particles-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.particles-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  animation: float 25s ease-in-out infinite;
+}
+
+/* ESTADOS DE LOADING COM SHIMMER */
 .loading-shimmer {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -354,52 +381,129 @@ body {
   }
 }
 
-/* Efeitos de partículas */
-.particles-bg {
-  position: relative;
-}
-
-.particles-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(2deg); }
-}
-
-/* Melhorias de acessibilidade */
+/* MELHORIAS DE ACESSIBILIDADE */
 .focus-visible:focus {
-  outline: 2px solid var(--primary-blue);
-  outline-offset: 2px;
+  outline: 3px solid var(--primary-blue);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
-/* Transições globais suaves */
+/* TRANSIÇÕES GLOBAIS SUAVES */
 * {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Seleção de texto personalizada */
+/* SELEÇÃO DE TEXTO PERSONALIZADA */
 ::selection {
-  background: rgba(30, 64, 175, 0.2);
+  background: rgba(30, 64, 175, 0.3);
   color: var(--neutral-dark);
 }
 
-/* Melhorias para dark mode (futuro) */
+/* RESPONSIVIDADE PROFISSIONAL */
+@media (max-width: 768px) {
+  .heading-primary {
+    font-size: 2.5rem;
+  }
+  
+  .card-professional {
+    padding: 24px;
+    border-radius: 20px;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+  
+  .chatbot-container {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+}
+
+/* EFEITOS ESPECIAIS PARA ELEMENTOS INTERATIVOS */
+.interactive-element {
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-element::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.interactive-element:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* GRADIENTES ANIMADOS */
+.gradient-animated {
+  background: linear-gradient(-45deg, #1e40af, #0d9488, #f59e0b, #dc2626);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* MELHORIAS PARA DARK MODE (FUTURO) */
 @media (prefers-color-scheme: dark) {
   :root {
     --neutral-dark: #f8fafc;
     --neutral-light: #1f2937;
   }
+  
+  .watermark-bg::after {
+    color: rgba(255, 255, 255, 0.03);
+  }
+}
+
+/* EFEITOS DE BORDA ANIMADA */
+.border-animated {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(45deg, #1e40af, #0d9488) border-box;
+}
+
+/* SOMBRAS PROFISSIONAIS CUSTOMIZADAS */
+.shadow-professional {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-professional-hover:hover {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(30, 64, 175, 0.1);
+}
+
+/* TEXTO COM EFEITO NEON SUTIL */
+.text-glow {
+  text-shadow: 
+    0 0 5px rgba(30, 64, 175, 0.3),
+    0 0 10px rgba(30, 64, 175, 0.2),
+    0 0 15px rgba(30, 64, 175, 0.1);
 }

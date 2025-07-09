@@ -120,10 +120,11 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 relative overflow-hidden watermark-bg particles-bg">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/15 to-teal-400/15 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-teal-400/15 to-blue-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/3 left-1/3 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-purple-400/8 to-pink-400/8 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-gradient-to-br from-yellow-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse delay-3000"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-teal-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/3 left-1/3 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-purple-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-gradient-to-br from-yellow-400/15 to-orange-400/15 rounded-full blur-3xl animate-pulse delay-3000"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 bg-gradient-to-br from-green-400/10 to-emerald-400/10 rounded-full blur-3xl animate-pulse delay-4000"></div>
       </div>
 
       {/* Header */}
@@ -138,8 +139,13 @@ function App() {
                   className="h-12 w-auto logo-enhanced"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.nextElementSibling;
+                    if (fallback) fallback.classList.remove('hidden');
                   }}
                 />
+                <div className="hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
               </div>
             </div>
             
@@ -165,7 +171,7 @@ function App() {
             <Shield className="w-4 h-4 mr-2" />
             Sistema Seguro e Confiável
           </div>
-          <h1 className="heading-primary mb-8 slide-up">
+          <h1 className="heading-primary mb-8 slide-up text-glow">
             Sistema de Propostas de Plano de Saúde
           </h1>
           <p className="text-professional max-w-4xl mx-auto mb-12 slide-up">
@@ -194,7 +200,7 @@ function App() {
           {/* Portal do Cliente */}
           <div 
             onClick={() => setCurrentPortal('client')}
-            className="card-professional cursor-pointer group hover-lift"
+            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-blue-200 group-hover:to-blue-300 transition-all shadow-medium mx-auto">
               <Users className="w-10 h-10 text-blue-600" />
@@ -212,7 +218,7 @@ function App() {
           {/* Portal Vendedor */}
           <div 
             onClick={() => setCurrentPortal('vendor')}
-            className="card-professional cursor-pointer group hover-lift"
+            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-medium mx-auto">
               <FileText className="w-10 h-10 text-green-600" />
@@ -230,7 +236,7 @@ function App() {
           {/* Portal Financeiro */}
           <div 
             onClick={() => setCurrentPortal('implantacao')}
-            className="card-professional cursor-pointer group hover-lift"
+            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-medium mx-auto">
               <Zap className="w-10 h-10 text-teal-600" />
@@ -248,7 +254,7 @@ function App() {
           {/* Portal Financeiro */}
           <div 
             onClick={() => setCurrentPortal('financial')}
-            className="card-professional cursor-pointer group hover-lift"
+            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-medium mx-auto">
               <DollarSign className="w-10 h-10 text-green-600" />
@@ -266,7 +272,7 @@ function App() {
           {/* Portal Supervisor */}
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="card-professional cursor-pointer group hover-lift"
+            className="card-professional cursor-pointer group hover-lift interactive-element shadow-professional shadow-professional-hover"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-medium mx-auto">
               <Zap className="w-10 h-10 text-orange-600" />
@@ -283,7 +289,7 @@ function App() {
         </div>
 
         {/* Features Section */}
-        <div className="card-professional mb-16 watermark-bg">
+        <div className="card-professional mb-16 watermark-bg shadow-professional">
           <div className="text-center mb-12">
             <h2 className="heading-secondary mb-6">Por que escolher nossa plataforma?</h2>
             <p className="text-professional">Tecnologia de ponta para simplificar seus processos</p>
@@ -316,7 +322,7 @@ function App() {
           </div>
         </div>
         {/* Security Notice */}
-        <div className="card-professional bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+        <div className="card-professional bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200 shadow-professional">
           <div className="flex items-center justify-center mb-4">
             <div className="w-20 h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-large">
               <Shield className="w-10 h-10 text-white" />
@@ -414,9 +420,9 @@ function App() {
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large">
+          <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large border-animated">
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
+            <div className="gradient-animated text-white p-6 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                   <Bot className="w-5 h-5" />
@@ -441,7 +447,7 @@ function App() {
                   <div className={`max-w-xs p-4 rounded-2xl shadow-soft ${
                     message.isBot 
                       ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-blue-600 to-teal-600 text-white'
+                      : 'gradient-animated text-white'
                   }`}>
                     <p className="text-sm leading-relaxed">{message.text}</p>
                     <p className={`text-xs mt-1 ${
@@ -467,7 +473,7 @@ function App() {
                 />
                 <button
                   onClick={sendMessage}
-                  className="btn-primary p-3"
+                  className="btn-primary p-3 interactive-element"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -477,7 +483,7 @@ function App() {
         ) : (
           <button
             onClick={() => setShowChat(true)}
-            className="w-20 h-20 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-full shadow-large hover:shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center hover-lift"
+            className="w-20 h-20 gradient-animated text-white rounded-full shadow-large hover:shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center hover-lift interactive-element"
           >
             <MessageCircle className="w-10 h-10" />
           </button>
