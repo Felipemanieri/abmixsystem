@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
 
 interface ImplantacaoPortalProps {
   user: any;
@@ -12,10 +12,12 @@ interface Proposal {
   vendor: string;
   plan: string;
   value: string;
-  status: 'pending_validation' | 'validated' | 'sent_to_automation';
+  status: 'pending_validation' | 'validated' | 'sent_to_automation' | 'processing' | 'completed';
   submissionDate: string;
   documents: number;
   observations?: string;
+  priority: 'low' | 'medium' | 'high';
+  estimatedCompletion: string;
 }
 
 interface ChatMessage {
@@ -25,15 +27,26 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+interface AutomationRule {
+  id: string;
+  name: string;
+  trigger: string;
+  action: string;
+  status: 'active' | 'inactive';
+  lastRun: string;
+}
+
 const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout }) => {
   const [selectedStatus, setSelectedStatus] = useState('pending_validation');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
   const [observations, setObservations] = useState('');
   const [showChat, setShowChat] = useState(false);
+  const [activeTab, setActiveTab] = useState<'proposals' | 'automation' | 'integrations' | 'logs'>('proposals');
+  const [searchTerm, setSearchTerm] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente do portal de implantação. Como posso ajudá-lo com as validações e automações?',
+      text: 'Olá! Sou o assistente do portal de implantação. Como posso ajudá-lo com validações, automações e integrações?',
       isBot: true,
       timestamp: new Date()
     }
@@ -50,6 +63,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       status: 'pending_validation',
       submissionDate: '2024-01-15',
       documents: 8,
+      priority: 'high',
+      estimatedCompletion: '2024-01-17',
     },
     {
       id: 'VEND002-PROP124',
@@ -60,6 +75,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       status: 'pending_validation',
       submissionDate: '2024-01-14',
       documents: 6,
+      priority: 'medium',
+      estimatedCompletion: '2024-01-16',
     },
     {
       id: 'VEND001-PROP125',
@@ -71,6 +88,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       submissionDate: '2024-01-13',
       documents: 5,
       observations: 'Documentação completa e validada',
+      priority: 'low',
+      estimatedCompletion: '2024-01-15',
     },
     {
       id: 'VEND003-PROP126',
@@ -82,7 +101,70 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       submissionDate: '2024-01-12',
       documents: 7,
       observations: 'Enviado para automação Make/Zapier',
+      priority: 'high',
+      estimatedCompletion: '2024-01-14',
     },
+    {
+      id: 'VEND004-PROP127',
+      client: 'Startup Moderna',
+      vendor: 'Diana Santos',
+      plan: 'Plano Família Premium',
+      value: 'R$ 980,00',
+      status: 'processing',
+      submissionDate: '2024-01-11',
+      documents: 9,
+      observations: 'Em processamento automático',
+      priority: 'medium',
+      estimatedCompletion: '2024-01-13',
+    },
+    {
+      id: 'VEND005-PROP128',
+      client: 'Consultoria Avançada',
+      vendor: 'Eduardo Lima',
+      plan: 'Plano Individual Plus',
+      value: 'R$ 450,00',
+      status: 'completed',
+      submissionDate: '2024-01-10',
+      documents: 6,
+      observations: 'Implantação concluída com sucesso',
+      priority: 'low',
+      estimatedCompletion: '2024-01-12',
+    },
+  ]);
+
+  const [automationRules] = useState<AutomationRule[]>([
+    {
+      id: '1',
+      name: 'Validação Automática de Documentos',
+      trigger: 'Documentos completos',
+      action: 'Enviar para aprovação',
+      status: 'active',
+      lastRun: '2024-01-15 14:30'
+    },
+    {
+      id: '2',
+      name: 'Notificação de Pendências',
+      trigger: 'Proposta pendente > 3 dias',
+      action: 'Enviar email para vendedor',
+      status: 'active',
+      lastRun: '2024-01-15 09:15'
+    },
+    {
+      id: '3',
+      name: 'Backup Automático',
+      trigger: 'Diariamente às 02:00',
+      action: 'Backup completo do sistema',
+      status: 'active',
+      lastRun: '2024-01-15 02:00'
+    },
+    {
+      id: '4',
+      name: 'Integração CRM',
+      trigger: 'Proposta aprovada',
+      action: 'Criar cliente no CRM',
+      status: 'inactive',
+      lastRun: '2024-01-14 16:45'
+    }
   ]);
 
   const implantacaoStats = [
@@ -92,27 +174,31 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       change: 'Para revisar',
       changeType: 'warning',
       icon: AlertCircle,
+      color: 'orange',
     },
     {
-      name: 'Validadas Hoje',
+      name: 'Validadas',
       value: proposals.filter(p => p.status === 'validated').length.toString(),
       change: 'Prontas para envio',
       changeType: 'positive',
       icon: CheckCircle,
+      color: 'green',
     },
     {
-      name: 'Enviadas p/ Automação',
-      value: proposals.filter(p => p.status === 'sent_to_automation').length.toString(),
-      change: 'Processadas',
+      name: 'Em Processamento',
+      value: proposals.filter(p => p.status === 'processing').length.toString(),
+      change: 'Automação ativa',
+      changeType: 'positive',
+      icon: Settings,
+      color: 'blue',
+    },
+    {
+      name: 'Concluídas',
+      value: proposals.filter(p => p.status === 'completed').length.toString(),
+      change: 'Finalizadas',
       changeType: 'positive',
       icon: TrendingUp,
-    },
-    {
-      name: 'Sistemas Integrados',
-      value: '12',
-      change: 'Ativos',
-      changeType: 'positive',
-      icon: Database,
+      color: 'purple',
     },
   ];
 
@@ -183,8 +269,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     if (lowerMessage.includes('implantação') || lowerMessage.includes('sistema')) {
       return 'A implantação envolve validação de dados, integração com sistemas e automação de processos. Posso ajudar com qualquer etapa.';
     }
+    if (lowerMessage.includes('integração') || lowerMessage.includes('api')) {
+      return 'Temos integrações ativas com CRM, sistemas de pagamento e automações. Verifique a aba "Integrações" para mais detalhes.';
+    }
     
-    return 'Como especialista em implantação, você pode validar propostas, configurar automações e integrar sistemas. O que precisa fazer?';
+    return 'Como especialista em implantação, posso ajudar com validações, automações, integrações e monitoramento. O que precisa fazer?';
   };
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
@@ -208,7 +297,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       case 'validated':
         return 'bg-green-100 text-green-800';
       case 'sent_to_automation':
+        return 'bg-blue-100 text-blue-800';
+      case 'processing':
         return 'bg-purple-100 text-purple-800';
+      case 'completed':
+        return 'bg-emerald-100 text-emerald-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -222,15 +315,416 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         return 'Validado';
       case 'sent_to_automation':
         return 'Enviado p/ Automação';
+      case 'processing':
+        return 'Em Processamento';
+      case 'completed':
+        return 'Concluído';
       default:
         return 'Desconhecido';
     }
   };
 
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-100 text-red-800';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'low':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getPriorityText = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'Alta';
+      case 'medium':
+        return 'Média';
+      case 'low':
+        return 'Baixa';
+      default:
+        return 'Normal';
+    }
+  };
+
   const filteredProposals = proposals.filter(proposal => {
-    if (selectedStatus === 'all') return true;
-    return proposal.status === selectedStatus;
+    const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
+    const matchesSearch = proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         proposal.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         proposal.vendor.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesStatus && matchesSearch;
   });
+
+  const renderProposalsTab = () => (
+    <div className="space-y-6">
+      {/* Filters */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar propostas..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              <option value="all">Todos os Status</option>
+              <option value="pending_validation">Aguardando Validação</option>
+              <option value="validated">Validadas</option>
+              <option value="sent_to_automation">Enviadas p/ Automação</option>
+              <option value="processing">Em Processamento</option>
+              <option value="completed">Concluídas</option>
+            </select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => showNotification('Exportando relatório...', 'info')}
+              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Proposals Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Propostas ({filteredProposals.length})
+          </h2>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Proposta
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Vendedor
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Plano
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Valor
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Prioridade
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Previsão
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredProposals.map((proposal) => (
+                <tr key={proposal.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                      <div className="text-sm text-gray-500">{proposal.id}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-teal-600" />
+                      </div>
+                      <div className="ml-3">
+                        <div className="text-sm text-gray-900">{proposal.vendor}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{proposal.plan}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
+                      {getStatusText(proposal.status)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(proposal.priority)}`}>
+                      {getPriorityText(proposal.priority)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => setSelectedProposal(proposal.id)}
+                        className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      {proposal.status === 'validated' && (
+                        <button 
+                          onClick={() => sendToAutomation(proposal.id)}
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAutomationTab = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold text-gray-900">Regras de Automação</h2>
+          <button
+            onClick={() => showNotification('Nova regra criada!', 'success')}
+            className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Nova Regra
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {automationRules.map((rule) => (
+            <div key={rule.id} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3">
+                    <h3 className="text-sm font-medium text-gray-900">{rule.name}</h3>
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                      rule.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {rule.status === 'active' ? 'Ativo' : 'Inativo'}
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm text-gray-600">
+                    <span className="font-medium">Gatilho:</span> {rule.trigger}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium">Ação:</span> {rule.action}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-2">
+                    Última execução: {rule.lastRun}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => showNotification('Regra editada!', 'info')}
+                    className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => showNotification('Regra removida!', 'error')}
+                    className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderIntegrationsTab = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Database className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">Make.com</h3>
+                <p className="text-xs text-gray-500">Automação de processos</p>
+              </div>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+              Conectado
+            </span>
+          </div>
+          <div className="text-sm text-gray-600">
+            <p>Status: Ativo</p>
+            <p>Última sincronização: 2 min atrás</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">Zapier</h3>
+                <p className="text-xs text-gray-500">Integrações automáticas</p>
+              </div>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+              Conectado
+            </span>
+          </div>
+          <div className="text-sm text-gray-600">
+            <p>Status: Ativo</p>
+            <p>Última sincronização: 5 min atrás</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <Cloud className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">Google Drive</h3>
+                <p className="text-xs text-gray-500">Armazenamento de documentos</p>
+              </div>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+              Conectado
+            </span>
+          </div>
+          <div className="text-sm text-gray-600">
+            <p>Status: Ativo</p>
+            <p>Espaço usado: 2.3 GB / 15 GB</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                <Mail className="w-5 h-5 text-orange-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">SendGrid</h3>
+                <p className="text-xs text-gray-500">Envio de emails</p>
+              </div>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+              Configurando
+            </span>
+          </div>
+          <div className="text-sm text-gray-600">
+            <p>Status: Em configuração</p>
+            <p>Emails enviados hoje: 0</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                <Database className="w-5 h-5 text-red-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">CRM Sistema</h3>
+                <p className="text-xs text-gray-500">Gestão de clientes</p>
+              </div>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+              Desconectado
+            </span>
+          </div>
+          <div className="text-sm text-gray-600">
+            <p>Status: Erro de conexão</p>
+            <p>Última tentativa: 1 hora atrás</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                <Plus className="w-5 h-5 text-gray-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-gray-900">Nova Integração</h3>
+                <p className="text-xs text-gray-500">Adicionar nova conexão</p>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => showNotification('Configurando nova integração...', 'info')}
+            className="w-full mt-2 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
+          >
+            Configurar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderLogsTab = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Logs do Sistema</h2>
+        
+        <div className="space-y-3">
+          {[
+            { time: '15:30:25', type: 'success', message: 'Proposta VEND001-PROP123 validada com sucesso' },
+            { time: '15:28:12', type: 'info', message: 'Backup automático iniciado' },
+            { time: '15:25:45', type: 'warning', message: 'Tentativa de conexão com CRM falhou' },
+            { time: '15:22:33', type: 'success', message: 'Integração Make.com sincronizada' },
+            { time: '15:20:18', type: 'error', message: 'Erro ao processar documento - arquivo corrompido' },
+            { time: '15:18:07', type: 'info', message: 'Nova proposta recebida de Ana Caroline' },
+            { time: '15:15:52', type: 'success', message: 'Email de notificação enviado para cliente' },
+            { time: '15:12:39', type: 'info', message: 'Sistema de automação reiniciado' },
+          ].map((log, index) => (
+            <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+              <div className="text-xs text-gray-500 font-mono w-16">
+                {log.time}
+              </div>
+              <div className={`w-2 h-2 rounded-full ${
+                log.type === 'success' ? 'bg-green-500' :
+                log.type === 'error' ? 'bg-red-500' :
+                log.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+              }`}></div>
+              <div className="flex-1 text-sm text-gray-700">
+                {log.message}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -240,6 +734,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
+                  <Settings className="w-6 h-6 text-white" />
+                </div>
                 <span className="ml-3 text-xl font-bold text-gray-900">Portal Implantação</span>
               </div>
             </div>
@@ -285,8 +782,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       <p className="text-sm font-medium text-gray-600">{stat.name}</p>
                       <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                     </div>
-                    <div className="p-3 bg-teal-100 rounded-full">
-                      <Icon className="w-6 h-6 text-teal-600" />
+                    <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
+                      <Icon className={`w-6 h-6 text-${stat.color}-600`} />
                     </div>
                   </div>
                   <div className="mt-4 flex items-center">
@@ -302,170 +799,40 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             })}
           </div>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
-              <div className="flex items-center">
-                <div className="p-3 bg-teal-100 rounded-full group-hover:bg-teal-200 transition-colors">
-                  <Zap className="w-6 h-6 text-teal-600" />
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Automações</h3>
-                  <p className="text-sm text-gray-500">Configurar Make/Zapier</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
-              <div className="flex items-center">
-                <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                  <Database className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Integrações</h3>
-                  <p className="text-sm text-gray-500">Sistemas externos</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
-              <div className="flex items-center">
-                <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                  <Cloud className="w-6 h-6 text-purple-600" />
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Deploy</h3>
-                  <p className="text-sm text-gray-500">Publicar alterações</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
-              <div className="flex items-center">
-                <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
-                  <Cog className="w-6 h-6 text-orange-600" />
-                </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-medium text-gray-900">Configurações</h3>
-                  <p className="text-sm text-gray-500">Sistema</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Filters */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">Propostas para Validação</h2>
-                <p className="text-sm text-gray-600">Gerencie o fluxo de validação e automação</p>
-              </div>
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-              >
-                <option value="pending_validation">Aguardando Validação</option>
-                <option value="validated">Validadas</option>
-                <option value="sent_to_automation">Enviadas p/ Automação</option>
-                <option value="all">Todas</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Proposals Table */}
+          {/* Navigation Tabs */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Proposta
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Vendedor
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Plano
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Valor
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Documentos
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Data
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ações
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredProposals.map((proposal) => (
-                    <tr key={proposal.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                          <div className="text-sm text-gray-500">{proposal.id}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                            <User className="w-4 h-4 text-teal-600" />
-                          </div>
-                          <div className="ml-3">
-                            <div className="text-sm text-gray-900">{proposal.vendor}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{proposal.plan}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
-                          {getStatusText(proposal.status)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-400 mr-1" />
-                          <span className="text-sm text-gray-900">{proposal.documents}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button 
-                            onClick={() => setSelectedProposal(proposal.id)}
-                            className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          {proposal.status === 'validated' && (
-                            <button 
-                              onClick={() => sendToAutomation(proposal.id)}
-                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
-                            >
-                              <Send className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="border-b border-gray-200">
+              <nav className="flex space-x-8 px-6">
+                {[
+                  { id: 'proposals', label: 'Propostas', icon: FileText },
+                  { id: 'automation', label: 'Automação', icon: Zap },
+                  { id: 'integrations', label: 'Integrações', icon: Database },
+                  { id: 'logs', label: 'Logs', icon: Settings },
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id as any)}
+                      className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                        activeTab === tab.id
+                          ? 'border-teal-500 text-teal-600'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 mr-2" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+            
+            <div className="p-6">
+              {activeTab === 'proposals' && renderProposalsTab()}
+              {activeTab === 'automation' && renderAutomationTab()}
+              {activeTab === 'integrations' && renderIntegrationsTab()}
+              {activeTab === 'logs' && renderLogsTab()}
             </div>
           </div>
         </div>
@@ -474,7 +841,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       {/* Proposal Detail Modal */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -510,6 +877,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       <div>
                         <span className="font-medium text-gray-700">Valor:</span>
                         <span className="ml-2">{proposal.value}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Prioridade:</span>
+                        <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(proposal.priority)}`}>
+                          {getPriorityText(proposal.priority)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Previsão:</span>
+                        <span className="ml-2">{new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}</span>
                       </div>
                     </div>
                     
