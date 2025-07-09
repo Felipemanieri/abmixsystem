@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send } from 'lucide-react';
+import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -359,45 +359,97 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Logo e Descrição */}
             <div>
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <span className="ml-3 text-2xl font-bold text-blue-400">Sistema</span>
+              </div>
+              <p className="text-gray-300 font-medium">Plataforma completa de gestão empresarial.</p>
             </div>
             
+            {/* Contato */}
             <div>
               <h3 className="font-bold mb-4">Contato</h3>
               <div className="space-y-2 text-gray-400">
-                <p>📞 (11) 99999-9999</p>
-                <p>✉️ contato@abmix.com.br</p>
+                <div className="flex items-center">
+                  <Phone className="w-4 h-4 mr-2" />
+                  <span>(11) 99999-9999</span>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="w-4 h-4 mr-2" />
+                  <span>contato@sistema.com.br</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  <span>Rua das Flores, 123 - Centro</span>
+                </div>
                 <p>📍 São Paulo, SP</p>
+                <div className="flex items-center">
+                  <Globe className="w-4 h-4 mr-2" />
+                  <span>www.sistema.com.br</span>
+                </div>
               </div>
             </div>
             
+            {/* WhatsApp */}
             <div>
-              <h3 className="font-bold mb-4">Suporte</h3>
+              <h3 className="font-bold mb-4">WhatsApp</h3>
               <div className="space-y-2 text-gray-400">
-                <p>Segunda a Sexta: 8h às 18h</p>
-                <p>Sábado: 8h às 12h</p>
-                <p>Atendimento 24/7 online</p>
+                <div className="flex items-center">
+                  <MessageCircle className="w-4 h-4 mr-2 text-green-400" />
+                  <span>(11) 98888-8888</span>
+                </div>
+                <p className="text-sm">Atendimento 24/7</p>
+                <button 
+                  onClick={() => window.open('https://wa.me/5511988888888?text=Olá! Gostaria de mais informações.', '_blank')}
+                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mt-3"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Falar no WhatsApp
+                </button>
               </div>
             </div>
             
+            {/* Redes Sociais */}
             <div>
               <h3 className="font-bold mb-4">Redes Sociais</h3>
-              <div className="flex space-x-4">
-                <button className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                  <span className="text-white font-bold">f</span>
-                </button>
-                <button className="w-10 h-10 bg-blue-400 rounded-lg flex items-center justify-center hover:bg-blue-500 transition-colors">
-                  <span className="text-white font-bold">t</span>
-                </button>
-                <button className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors">
-                  <span className="text-white font-bold">in</span>
-                </button>
+              <div className="space-y-2 text-gray-400">
+                <p className="mb-4">Siga-nos nas redes sociais</p>
+                <div className="flex space-x-4">
+                  <button 
+                    onClick={() => window.open('https://facebook.com/sistema', '_blank')}
+                    className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => window.open('https://instagram.com/sistema', '_blank')}
+                    className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.781c-.49 0-.928-.175-1.297-.49-.367-.315-.49-.753-.49-1.243 0-.49.123-.928.49-1.243.369-.367.807-.49 1.297-.49s.928.123 1.297.49c.367.315.49.753.49 1.243 0 .49-.123.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => window.open('https://linkedin.com/company/sistema', '_blank')}
+                    className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Plataforma. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Sistema. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
