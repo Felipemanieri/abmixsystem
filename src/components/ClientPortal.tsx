@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
-import AbmixLogo from './AbmixLogo';
 import ClientForm from './ClientForm';
 
 interface ClientPortalProps {
@@ -447,7 +446,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <AbmixLogo size={40} className="mr-3" />
                 <AbmixLogo size={40} className="mr-3" />
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
                   <User className="w-6 h-6 text-white" />

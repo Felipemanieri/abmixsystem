@@ -38,7 +38,6 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
           className="font-bold leading-none" 
           style={{ 
             fontSize: `${fontSize}px`, 
-            color: '#0AB3B8',
             letterSpacing: '0.5px'
           }}
         >

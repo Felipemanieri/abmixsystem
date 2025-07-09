@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
-import AbmixLogo from './AbmixLogo';
 
 interface ImplantacaoPortalProps {
   user: any;
@@ -736,7 +735,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <AbmixLogo size={40} className="mr-3" />
                 <AbmixLogo size={40} className="mr-3" />
                 <div className="w-10 h-10 bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
                   <Settings className="w-6 h-6 text-white" />
