@@ -159,21 +159,21 @@ function App() {
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-xl text-blue-900 font-bold max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
-            <div className="flex items-center text-blue-900 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-blue-900 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-blue-900 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
