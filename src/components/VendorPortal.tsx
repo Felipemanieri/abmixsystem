@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, MessageCircle } from 'lucide-react';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 
@@ -10,8 +10,27 @@ interface VendorPortalProps {
 
 type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients';
 
+interface Proposal {
+  id: string;
+  client: string;
+  plan: string;
+  status: string;
+  progress: number;
+  date: string;
+  link: string;
+  value: string;
+  empresa: string;
+  cnpj: string;
+  vendedor: string;
+  documents: number;
+  lastActivity: string;
+}
+
 const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [activeView, setActiveView] = useState<VendorView>('dashboard');
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [generatedLinks, setGeneratedLinks] = useState<string[]>([]);
 
   const stats = [
     {
@@ -48,7 +67,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     },
   ];
 
-  const recentProposals = [
+  const recentProposals: Proposal[] = [
     {
       id: 'VEND001-PROP123',
       client: 'Empresa ABC Ltda',
@@ -56,7 +75,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       status: 'client_filling',
       progress: 75,
       date: '2024-01-15',
-      link: 'https://abmix.com/cliente/VEND001-PROP123',
+      link: `${window.location.origin}/cliente/VEND001-PROP123`,
+      value: 'R$ 1.250,00',
+      empresa: 'Empresa ABC Ltda',
+      cnpj: '12.345.678/0001-90',
+      vendedor: user.name,
+      documents: 8,
+      lastActivity: '2 horas atrás',
     },
     {
       id: 'VEND001-PROP124',
@@ -65,7 +90,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       status: 'docs_pending',
       progress: 45,
       date: '2024-01-14',
-      link: 'https://abmix.com/cliente/VEND001-PROP124',
+      link: `${window.location.origin}/cliente/VEND001-PROP124`,
+      value: 'R$ 650,00',
+      empresa: 'Tech Solutions SA',
+      cnpj: '98.765.432/0001-10',
+      vendedor: user.name,
+      documents: 6,
+      lastActivity: '1 dia atrás',
     },
     {
       id: 'VEND001-PROP125',
@@ -74,7 +105,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       status: 'completed',
       progress: 100,
       date: '2024-01-13',
-      link: 'https://abmix.com/cliente/VEND001-PROP125',
+      link: `${window.location.origin}/cliente/VEND001-PROP125`,
+      value: 'R$ 320,00',
+      empresa: 'Consultoria XYZ',
+      cnpj: '11.222.333/0001-44',
+      vendedor: user.name,
+      documents: 5,
+      lastActivity: '3 dias atrás',
     },
   ];
 
@@ -102,6 +139,37 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       default:
         return 'Desconhecido';
     }
+  };
+
+  const handleViewProposal = (proposal: Proposal) => {
+    setSelectedProposal(proposal);
+  };
+
+  const handleCopyLink = async (link: string) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      alert('Link copiado para a área de transferência!');
+    } catch (err) {
+      console.error('Erro ao copiar link:', err);
+      alert('Erro ao copiar link. Tente novamente.');
+    }
+  };
+
+  const handleGenerateLinks = () => {
+    // Simular geração de links únicos
+    const newLinks = [
+      `${window.location.origin}/cliente/VEND001-PROP${Math.floor(Math.random() * 10000)}`,
+      `${window.location.origin}/cliente/VEND001-PROP${Math.floor(Math.random() * 10000)}`,
+      `${window.location.origin}/cliente/VEND001-PROP${Math.floor(Math.random() * 10000)}`,
+    ];
+    setGeneratedLinks(newLinks);
+    setShowLinkModal(true);
+  };
+
+  const handleSendWhatsApp = (link: string, clientName: string) => {
+    const message = `Olá! Segue o link para preenchimento da proposta de plano de saúde da ${clientName}: ${link}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const renderContent = () => {
@@ -159,28 +227,31 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </button>
 
               <button
-                onClick={() => setActiveView('tracker')}
+                onClick={handleGenerateLinks}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                    <Link className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Acompanhar</h3>
-                    <p className="text-sm text-gray-500">Status das propostas</p>
+                    <h3 className="text-lg font-medium text-gray-900">Gerar Links</h3>
+                    <p className="text-sm text-gray-500">Links únicos para clientes</p>
                   </div>
                 </div>
               </button>
 
-              <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group">
+              <button
+                onClick={() => setActiveView('tracker')}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-left group"
+              >
                 <div className="flex items-center">
                   <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                    <Users className="w-6 h-6 text-purple-600" />
+                    <BarChart3 className="w-6 h-6 text-purple-600" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Clientes</h3>
-                    <p className="text-sm text-gray-500">Gerenciar clientes</p>
+                    <h3 className="text-lg font-medium text-gray-900">Acompanhar</h3>
+                    <p className="text-sm text-gray-500">Status das propostas</p>
                   </div>
                 </div>
               </button>
@@ -236,7 +307,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           <div className="flex items-center">
                             <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
                               <div 
-                                className="bg-teal-600 h-2 rounded-full transition-all duration-300" 
+                                className="bg-green-600 h-2 rounded-full transition-all duration-300" 
                                 style={{ width: `${proposal.progress}%` }}
                               ></div>
                             </div>
@@ -248,14 +319,26 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
-                            <button className="text-teal-600 hover:text-teal-900">
+                            <button 
+                              onClick={() => handleViewProposal(proposal)}
+                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                              title="Visualizar proposta"
+                            >
                               <Eye className="w-4 h-4" />
                             </button>
                             <button 
-                              onClick={() => navigator.clipboard.writeText(proposal.link)}
-                              className="text-blue-600 hover:text-blue-900"
+                              onClick={() => handleCopyLink(proposal.link)}
+                              className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                              title="Copiar link"
                             >
                               <Link className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => handleSendWhatsApp(proposal.link, proposal.client)}
+                              className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                              title="Enviar por WhatsApp"
+                            >
+                              <MessageCircle className="w-4 h-4" />
                             </button>
                           </div>
                         </td>
@@ -319,6 +402,179 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         
         {renderContent()}
       </main>
+
+      {/* Modal de Visualização da Proposta */}
+      {selectedProposal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Detalhes da Proposta
+                </h3>
+                <button 
+                  onClick={() => setSelectedProposal(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-700">ID:</span>
+                    <span className="ml-2">{selectedProposal.id}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Cliente:</span>
+                    <span className="ml-2">{selectedProposal.client}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">CNPJ:</span>
+                    <span className="ml-2">{selectedProposal.cnpj}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Plano:</span>
+                    <span className="ml-2">{selectedProposal.plan}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Valor:</span>
+                    <span className="ml-2">{selectedProposal.value}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Progresso:</span>
+                    <span className="ml-2">{selectedProposal.progress}%</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Documentos:</span>
+                    <span className="ml-2">{selectedProposal.documents}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Última Atividade:</span>
+                    <span className="ml-2">{selectedProposal.lastActivity}</span>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <span className="font-medium text-gray-700">Link do Cliente:</span>
+                  <div className="flex items-center mt-2 space-x-2">
+                    <input
+                      type="text"
+                      value={selectedProposal.link}
+                      readOnly
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
+                    />
+                    <button
+                      onClick={() => handleCopyLink(selectedProposal.link)}
+                      className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-end space-x-4">
+                  <button
+                    onClick={() => setSelectedProposal(null)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                  >
+                    Fechar
+                  </button>
+                  <button
+                    onClick={() => handleSendWhatsApp(selectedProposal.link, selectedProposal.client)}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Enviar WhatsApp
+                  </button>
+                  <button
+                    onClick={() => window.open(selectedProposal.link, '_blank')}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Abrir Link
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Links Gerados */}
+      {showLinkModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Links Únicos Gerados
+                </h3>
+                <button 
+                  onClick={() => setShowLinkModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Links únicos prontos para enviar aos clientes:
+                </p>
+                
+                {generatedLinks.map((link, index) => (
+                  <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-gray-700">Link {index + 1}:</span>
+                      <span className="text-xs text-gray-500">Gerado agora</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={link}
+                        readOnly
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
+                      />
+                      <button
+                        onClick={() => handleCopyLink(link)}
+                        className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        title="Copiar link"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleSendWhatsApp(link, 'Cliente')}
+                        className="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                        title="Enviar por WhatsApp"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                  <button
+                    onClick={() => setShowLinkModal(false)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                  >
+                    Fechar
+                  </button>
+                  <button
+                    onClick={handleGenerateLinks}
+                    className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Gerar Mais Links
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
