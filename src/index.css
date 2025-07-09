@@ -35,24 +35,38 @@ body {
 /* Marca d'água com logo */
 .watermark-bg {
   position: relative;
-  overflow: hidden;
 }
 
 .watermark-bg::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  width: 400px;
-  height: 400px;
-  background-image: url('/Logo Abmix.jpg');
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(13, 148, 136, 0.03) 0%, transparent 50%);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.03;
+  opacity: 0.4;
   z-index: 0;
   pointer-events: none;
+}
+
+.watermark-bg::after {
+  content: 'ABMIX';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 8rem;
+  font-weight: 900;
+  color: rgba(30, 64, 175, 0.02);
+  z-index: 0;
+  pointer-events: none;
+  letter-spacing: 2rem;
 }
 
 .watermark-bg > * {
@@ -327,10 +341,9 @@ body {
 /* Efeitos de partículas */
 .particles-bg {
   position: relative;
-  overflow: hidden;
 }
 
-.particles-bg::after {
+.particles-bg::before {
   content: '';
   position: absolute;
   top: 0;
@@ -338,10 +351,16 @@ body {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 50%);
   pointer-events: none;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
 }
 
 /* Melhorias de acessibilidade */

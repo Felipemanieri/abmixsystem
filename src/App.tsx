@@ -141,9 +141,6 @@ function App() {
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg logo-enhanced">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
                 <div className="ml-4">
                   <span className="text-3xl font-bold gradient-text">Abmix</span>
                   <p className="text-sm text-gray-600 font-medium">Seguros & Benefícios</p>
@@ -376,9 +373,6 @@ function App() {
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center logo-enhanced">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
                 <span className="ml-3 text-2xl font-bold gradient-text">Abmix</span>
               </div>
               <p className="text-gray-300 leading-relaxed">Soluções completas em seguros e benefícios para sua empresa.</p>
@@ -425,7 +419,7 @@ function App() {
       </footer>
 
       {/* Chatbot */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-[9999]">
         {showChat ? (
           <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large">
             {/* Chat Header */}
