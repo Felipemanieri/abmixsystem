@@ -59,23 +59,29 @@ body {
 .bg-gradient-to-r {
   background-attachment: fixed;
 }
-/* Responsividade */
-@media (max-width: 768px) {
-  .chatbot-container {
+
 /* Sombras personalizadas */
 .shadow-2xl {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
-    bottom: 16px !important;
+
 .shadow-3xl {
   box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
 }
-    right: 16px !important;
+
 /* Hover effects melhorados */
 .hover\:scale-110:hover {
   transform: scale(1.1);
 }
-  }
+
 .hover\:-translate-y-1:hover {
   transform: translateY(-4px);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .chatbot-container {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
 }
