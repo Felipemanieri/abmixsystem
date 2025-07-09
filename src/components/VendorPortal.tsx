@@ -667,42 +667,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                       <div><span className="font-medium text-gray-700">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
                     </div>
                   </div>
-                        </div>
-                        <button
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = attachment.url;
-                            link.download = attachment.name;
-                            link.click();
-                          }}
-                          className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                          <Download className="w-4 h-4 mr-1" />
-                          Baixar
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 border-b pb-2">Documentos Anexados</h4>
-                  <div className="space-y-2">
-                    {selectedProposal.attachments.map((attachment) => (
-                      <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <div className="p-2 bg-blue-100 rounded">
-                            {attachment.type === 'pdf' ? (
-                              <FileText className="w-4 h-4 text-blue-600" />
-                            ) : (
-                              <Image className="w-4 h-4 text-blue-600" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">{attachment.name}</p>
-                            <p className="text-xs text-gray-500">{attachment.size}</p>
-                          </div>
-                        </div>
                         <button
                           onClick={() => {
                             const link = document.createElement('a');
