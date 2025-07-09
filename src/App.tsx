@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import AbmixLogo from './components/AbmixLogo';
-import AbmixLogo from './components/AbmixLogo';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
