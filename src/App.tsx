@@ -157,7 +157,7 @@ function App() {
             <img 
               src="/6078b216-6252-4ede-8d9b-4c2164c3ed8f.png" 
               alt="Abmix Watermark" 
-              className="w-96 h-96 object-contain opacity-10 select-none"
+              className="w-96 h-96 object-contain opacity-20 select-none"
             />
           </div>
           
