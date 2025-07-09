@@ -123,10 +123,10 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <img 
-                  src="/Logo Abmix.jpg" 
-                  alt="Abmix" 
-                  className="h-20 w-auto"
+                <img
+                  src="/abmix-logo.png"
+                  alt="Abmix"
+                  className="h-16 w-auto"
                 />
               </div>
             </div>
@@ -151,9 +151,9 @@ function App() {
           {/* Logo como marca d'água */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <img 
-              src="/Logo Abmix.jpg" 
+              src="/abmix-logo.png" 
               alt="Abmix Logo Watermark" 
-              className="w-96 h-96 opacity-20 object-contain"
+              className="w-96 h-96 opacity-15 object-contain"
             />
           </div>
           
@@ -373,10 +373,10 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Logo */}
             <div className="flex items-center">
-              <img 
-                src="/Logo Abmix.jpg" 
-                alt="Abmix" 
-                className="h-24 w-auto"
+              <img
+                src="/abmix-logo.png"
+                alt="Abmix"
+                className="h-20 w-auto"
               />
             </div>
             
