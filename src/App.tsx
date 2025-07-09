@@ -132,12 +132,12 @@ function App() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-gray-400 hover:text-gray-600 font-bold transition-colors">Sobre</a>
-                <a href="#" className="text-gray-400 hover:text-gray-600 font-bold transition-colors">Contato</a>
-                <a href="#" className="text-gray-400 hover:text-gray-600 font-bold transition-colors">Suporte</a>
+                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Sobre</a>
+                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Contato</a>
+                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Suporte</a>
               </div>
               <button className="bg-gradient-to-r from-blue-700 to-blue-800 text-gray-400 px-6 py-3 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl font-bold">
-                <span className="text-gray-400">Fale Conosco</span>
+                <span className="text-gray-600">Fale Conosco</span>
               </button>
             </div>
           </div>
@@ -148,24 +148,24 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
         <div className="text-center mb-20 relative">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-400 mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-xl text-gray-400 font-bold max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
-            <div className="flex items-center text-gray-400 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-gray-400 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-gray-400 font-bold">
+            <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
