@@ -205,7 +205,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  src="https://raw.githubusercontent.com/abmix/abmix-assets/main/logo-abmix.png"
+                  src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   alt="Abmix"
                   className="h-12 w-auto mr-3"
                 />
