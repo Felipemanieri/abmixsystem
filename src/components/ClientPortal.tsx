@@ -317,6 +317,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           </div>
         </div>
       </div>
+    </div>
     );
   }
 
