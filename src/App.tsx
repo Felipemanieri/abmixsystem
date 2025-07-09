@@ -123,22 +123,24 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
+                <img 
+                  src="/Logo Abmix.jpg" 
+                  alt="Abmix" 
+                  className="h-12 w-auto"
+                />
                 <div className="ml-4">
-                  <span className="text-3xl font-bold text-blue-800">Abmix</span>
-                  <p className="text-sm font-semibold text-blue-700">Seguros & Benefícios</p>
+                  <span className="text-3xl font-bold text-blue-900">Abmix</span>
+                  <p className="text-sm font-semibold text-blue-800">Seguros & Benefícios</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Sobre</a>
-                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Contato</a>
-                <a href="#" className="text-blue-800 hover:text-blue-900 font-bold transition-colors">Suporte</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Sobre</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Contato</a>
+                <a href="#" className="text-blue-900 hover:text-blue-800 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl font-bold">
+              <button className="bg-gradient-to-r from-blue-700 to-blue-800 text-white px-6 py-3 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl font-bold">
                 Fale Conosco
               </button>
             </div>
@@ -157,21 +159,21 @@ function App() {
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
           </h1>
-          <p className="text-xl text-blue-800 font-semibold max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-blue-900 font-bold max-w-4xl mx-auto leading-relaxed">
             Plataforma completa para gestão de propostas de planos de saúde. 
             Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
-            <div className="flex items-center text-blue-700 font-semibold">
+            <div className="flex items-center text-blue-900 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-blue-700 font-semibold">
+            <div className="flex items-center text-blue-900 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-blue-700 font-semibold">
+            <div className="flex items-center text-blue-900 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
@@ -184,18 +186,19 @@ function App() {
           <div 
             onClick={() => setCurrentPortal('client')}
             className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400"
+            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-400"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-300 rounded-3xl transition-all duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-blue-200 group-hover:to-blue-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Users className="w-8 h-8 text-blue-600" />
+              <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
+                <Users className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-blue-900 mb-3 group-hover:text-blue-700 transition-colors">Portal do Cliente</h3>
-              <p className="text-blue-700 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-teal-800 mb-3 group-hover:text-teal-600 transition-colors">Portal do Cliente</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Acompanhe suas propostas e documentos
               </p>
-              <div className="flex items-center text-blue-700 font-bold group-hover:text-blue-800 transition-colors">
+              <div className="flex items-center text-teal-600 font-bold group-hover:text-teal-700 transition-colors">
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Acessar Portal
               </div>
@@ -214,7 +217,7 @@ function App() {
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-bold text-green-900 mb-3 group-hover:text-green-700 transition-colors">Portal Vendedor</h3>
-              <p className="text-green-700 mb-6 leading-relaxed font-medium">
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Gerencie propostas e clientes
               </p>
               <div className="flex items-center text-green-700 font-bold group-hover:text-green-800 transition-colors">
@@ -236,7 +239,7 @@ function App() {
                 <Zap className="w-8 h-8 text-teal-600" />
               </div>
               <h3 className="text-xl font-bold text-teal-900 mb-3 group-hover:text-teal-700 transition-colors">Portal Implantação</h3>
-              <p className="text-teal-700 mb-6 leading-relaxed font-medium">
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Validação e automação de propostas
               </p>
               <div className="flex items-center text-teal-700 font-bold group-hover:text-teal-800 transition-colors">
@@ -258,7 +261,7 @@ function App() {
                 <DollarSign className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-bold text-purple-900 mb-3 group-hover:text-purple-700 transition-colors">Portal Financeiro</h3>
-              <p className="text-purple-700 mb-6 leading-relaxed font-medium">
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Análise financeira e relatórios
               </p>
               <div className="flex items-center text-purple-700 font-bold group-hover:text-purple-800 transition-colors">
@@ -279,8 +282,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <Zap className="w-8 h-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-bold text-orange-900 mb-3 group-hover:text-orange-700 transition-colors">Portal Supervisor</h3>
-              <p className="text-orange-700 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-orange-600 transition-colors">Portal Supervisor</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Supervisão e relatórios gerenciais
               </p>
               <div className="flex items-center text-orange-700 font-bold group-hover:text-orange-800 transition-colors">
@@ -294,33 +297,34 @@ function App() {
         {/* Features Section */}
         <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-blue-900 mb-4">Por que escolher nossa plataforma?</h2>
-            <p className="text-blue-700 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
+            <h2 className="text-3xl font-bold text-gray-700 mb-4">Por que escolher nossa plataforma?</h2>
+            <p className="text-gray-600 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-blue-600" />
+              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-blue-900 mb-2">Processo Ágil</h3>
-              <p className="text-blue-700 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Processo Ágil</h3>
+              <p className="text-gray-600 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-green-900 mb-2">Máxima Segurança</h3>
-              <p className="text-green-700 font-medium">Criptografia avançada e conformidade total com LGPD</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Máxima Segurança</h3>
+              <p className="text-gray-600 font-medium">Criptografia avançada e conformidade total com LGPD</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold text-purple-900 mb-2">Suporte Dedicado</h3>
-              <p className="text-purple-700 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
+              <p className="text-gray-600 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
             </div>
           </div>
         </div>
@@ -332,8 +336,8 @@ function App() {
               <Shield className="w-8 h-8 text-white" />
             </div>
             <div className="ml-4">
-              <h3 className="text-2xl font-bold text-teal-900">Segurança e Privacidade</h3>
-              <p className="text-teal-800 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
+              <h3 className="text-2xl font-bold text-gray-700">Segurança e Privacidade</h3>
+              <p className="text-gray-600 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
             </div>
           </div>
           
@@ -342,22 +346,22 @@ function App() {
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Shield className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-teal-900 mb-2 text-lg">Dados Protegidos</h4>
-              <p className="text-teal-700 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Dados Protegidos</h4>
+              <p className="text-gray-600 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Users className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-teal-900 mb-2 text-lg">Acesso Controlado</h4>
-              <p className="text-teal-700 font-medium">Permissões granulares e autenticação multifator</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Acesso Controlado</h4>
+              <p className="text-gray-600 font-medium">Permissões granulares e autenticação multifator</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <FileText className="w-6 h-6 text-teal-600" />
               </div>
-              <h4 className="font-bold text-teal-900 mb-2 text-lg">Conformidade LGPD</h4>
-              <p className="text-teal-700 font-medium">100% em conformidade com a legislação brasileira</p>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Conformidade LGPD</h4>
+              <p className="text-gray-600 font-medium">100% em conformidade com a legislação brasileira</p>
             </div>
           </div>
         </div>
@@ -369,10 +373,10 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="ml-3 text-2xl font-bold text-blue-800">Abmix</span>
+                <span className="ml-3 text-2xl font-bold text-teal-500">Abmix</span>
               </div>
               <p className="text-gray-300 font-semibold">Soluções completas em seguros e benefícios para sua empresa.</p>
             </div>
@@ -422,14 +426,14 @@ function App() {
         {showChat ? (
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
             {/* Chat Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
-                  <p className="text-xs text-blue-100">Online agora</p>
+                  <p className="text-xs text-teal-100">Online agora</p>
                 </div>
               </div>
               <button
@@ -447,11 +451,11 @@ function App() {
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
                       ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-blue-600 to-teal-600 text-white'
+                      : 'bg-gradient-to-r from-teal-500 to-teal-600 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>
                     <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-blue-100'
+                      message.isBot ? 'text-gray-500' : 'text-teal-100'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -469,11 +473,11 @@ function App() {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
                 <button
                   onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl hover:from-blue-700 hover:to-teal-700 transition-colors"
+                  className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 transition-colors"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -483,7 +487,7 @@ function App() {
         ) : (
           <button
             onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
+            className="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
           >
             <MessageCircle className="w-8 h-8" />
           </button>
