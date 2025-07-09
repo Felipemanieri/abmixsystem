@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, User, MessageSquare, Clock, Search, Filter, Download } from 'lucide-react';
+import { X, Send, User, MessageSquare, Clock, Search, Filter, Download, FileText, Trash2 } from 'lucide-react';
 
 interface Message {
   id: string;
