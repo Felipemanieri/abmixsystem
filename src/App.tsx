@@ -359,17 +359,6 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Logo e Descrição */}
-            <div>
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <span className="ml-3 text-2xl font-bold text-blue-400">Sistema</span>
-              </div>
-              <p className="text-gray-300 font-medium">Plataforma completa de gestão empresarial.</p>
-            </div>
-            
             {/* Contato */}
             <div>
               <h3 className="font-bold mb-4">Contato</h3>
@@ -449,7 +438,7 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Sistema. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Plataforma. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
