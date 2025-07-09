@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, Zap } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
+import IntegrationGuide from './IntegrationGuide';
 
 interface SupervisorPortalProps {
   user: any;
   onLogout: () => void;
 }
 
-type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings';
+type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings' | 'integrations';
 
 const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
@@ -445,6 +446,12 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
     </div>
   );
 
+  const renderIntegrationsView = () => (
+    <div className="space-y-6">
+      <IntegrationGuide />
+    </div>
+  );
+
   const renderSettingsView = () => (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-gray-500 to-gray-600 rounded-xl p-6 text-white">
@@ -509,6 +516,8 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         return renderAnalyticsView();
       case 'team':
         return renderTeamView();
+      case 'integrations':
+        return renderIntegrationsView();
       case 'settings':
         return renderSettingsView();
       default:
@@ -582,6 +591,21 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Equipe</h3>
                     <p className="text-sm text-gray-500">Gerenciar vendedores</p>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveView('integrations')}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+              >
+                <div className="flex items-center">
+                  <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                    <Zap className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-medium text-gray-900">Integrações</h3>
+                    <p className="text-sm text-gray-500">Google Sheets e Make</p>
                   </div>
                 </div>
               </button>
