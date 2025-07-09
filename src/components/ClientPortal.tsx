@@ -62,7 +62,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente virtual. Como posso ajudá-lo com sua proposta de plano de saúde?',
+      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo com sua proposta de plano de saúde?',
       isBot: true,
       timestamp: new Date()
     }
@@ -774,7 +774,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
-                  <h3 className="font-bold">Assistente Virtual</h3>
+                  <h3 className="font-bold">Assistente Abmix</h3>
                   <p className="text-xs text-blue-100">Online agora</p>
                 </div>
               </div>

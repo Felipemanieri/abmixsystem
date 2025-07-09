@@ -122,7 +122,13 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0"></div>
+              <div className="flex-shrink-0 flex items-center">
+                <img 
+                  src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                  alt="Abmix" 
+                  className="h-12 w-auto"
+                />
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">
@@ -147,11 +153,11 @@ function App() {
             Sistema Seguro e Confiável
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Plataforma de Gestão
+            Sistema de Propostas de Plano de Saúde
           </h1>
           <p className="text-xl text-blue-900 font-bold max-w-4xl mx-auto leading-relaxed">
-            Plataforma completa para gestão empresarial. 
-            Acesse sua área específica e gerencie seus processos de forma simples e segura.
+            Plataforma completa para gestão de propostas de planos de saúde. 
+            Acesse sua área específica e gerencie todo o processo de forma simples e segura.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8">
@@ -369,7 +375,7 @@ function App() {
                 </div>
                 <div className="flex items-center">
                   <Mail className="w-4 h-4 mr-2" />
-                  <span>contato@sistema.com.br</span>
+                  <span>contato@abmix.com.br</span>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2" />
@@ -378,7 +384,7 @@ function App() {
                 <p className="ml-6">São Paulo, SP</p>
                 <div className="flex items-center">
                   <Globe className="w-4 h-4 mr-2" />
-                  <span>www.sistema.com.br</span>
+                  <span>www.abmix.com.br</span>
                 </div>
               </div>
             </div>
@@ -409,7 +415,7 @@ function App() {
                 <p className="mb-4">Siga-nos nas redes sociais</p>
                 <div className="flex space-x-4">
                   <button 
-                    onClick={() => window.open('https://facebook.com/sistema', '_blank')}
+                    onClick={() => window.open('https://facebook.com/abmix', '_blank')}
                     className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -417,7 +423,7 @@ function App() {
                     </svg>
                   </button>
                   <button 
-                    onClick={() => window.open('https://instagram.com/sistema', '_blank')}
+                    onClick={() => window.open('https://instagram.com/abmix', '_blank')}
                     className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors"
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -425,7 +431,7 @@ function App() {
                     </svg>
                   </button>
                   <button 
-                    onClick={() => window.open('https://linkedin.com/company/sistema', '_blank')}
+                    onClick={() => window.open('https://linkedin.com/company/abmix', '_blank')}
                     className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -438,7 +444,7 @@ function App() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Plataforma. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
@@ -455,7 +461,7 @@ function App() {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Abmix</h3>
-                  <h3 className="font-bold">Assistente Virtual</h3>
+                  <h3 className="font-bold">Assistente Abmix</h3>
                   <p className="text-xs text-teal-100">Online agora</p>
                 </div>
               </div>
