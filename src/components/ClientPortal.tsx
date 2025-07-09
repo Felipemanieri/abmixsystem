@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Home, Eye, Edit, Bell } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Home, Eye, Edit } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
@@ -32,15 +32,6 @@ interface ChatMessage {
   text: string;
   isBot: boolean;
   timestamp: Date;
-}
-
-interface InternalMessage {
-  id: string;
-  from: string;
-  to: string;
-  message: string;
-  timestamp: Date;
-  read: boolean;
 }
 
 interface DocumentRequirement {
@@ -91,26 +82,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [newMessage, setNewMessage] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [showDocumentGuide, setShowDocumentGuide] = useState(false);
-  const [showInternalChat, setShowInternalChat] = useState(false);
-  const [internalMessages, setInternalMessages] = useState<InternalMessage[]>([
-    {
-      id: '1',
-      from: 'Sistema ABMIX',
-      to: 'cliente',
-      message: 'Sua proposta PROP-001 foi recebida e está em análise.',
-      timestamp: new Date(Date.now() - 3600000),
-      read: false
-    },
-    {
-      id: '2',
-      from: 'Carlos Vendedor',
-      to: 'cliente',
-      message: 'Olá! Recebi seus documentos. Vou organizar e enviar para aprovação.',
-      timestamp: new Date(Date.now() - 1800000),
-      read: false
-    }
-  ]);
-  const [newInternalMessage, setNewInternalMessage] = useState('');
 
   // Dados do contrato (simulados)
   const contractInfo = {
@@ -367,29 +338,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
     setNewMessage('');
   };
-
-  const sendInternalMessage = () => {
-    if (!newInternalMessage.trim()) return;
-
-    const message: InternalMessage = {
-      id: Date.now().toString(),
-      from: user.name,
-      to: 'vendedor',
-      message: newInternalMessage,
-      timestamp: new Date(),
-      read: false
-    };
-
-    setInternalMessages(prev => [...prev, message]);
-    setNewInternalMessage('');
-    showNotification('Mensagem enviada para o vendedor!', 'success');
-  };
-
-  const markMessagesAsRead = () => {
-    setInternalMessages(prev => prev.map(msg => ({ ...msg, read: true })));
-  };
-
-  const unreadCount = internalMessages.filter(msg => !msg.read).length;
 
   const getBotResponse = (message: string): string => {
     const lowerMessage = message.toLowerCase();
@@ -691,28 +639,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             <div className="flex items-center space-x-4">
               {/* Progress Indicator */}
               <div className="hidden md:flex items-center space-x-3">
-                <button
-                  onClick={() => {
-                    setShowInternalChat(true);
-                    markMessagesAsRead();
-                  }}
-                  className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      {unreadCount}
-                    </span>
-                  )}
-                </button>
-                
-                <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    1
-                  </span>
-                </button>
-                
                 <span className="text-sm font-medium text-gray-600">Progresso:</span>
                 <div className="w-32 bg-gray-200 rounded-full h-2">
                   <div 
@@ -874,6 +800,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             {titulares.map((titular, index) => renderPersonForm(titular, 'titular', index))}
           </div>
 
+          {/* Botão para adicionar mais titulares */}
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              onClick={addTitular}
+              className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Adicionar Mais Titular
+            </button>
+          </div>
+
           {/* Dependentes */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <div className="flex items-center justify-between mb-8">
@@ -907,6 +845,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             ) : (
               dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))
             )}
+          </div>
+
+          {/* Botão para adicionar mais dependentes */}
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              onClick={addDependente}
+              className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:from-green-700 hover:to-green-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Adicionar Mais Dependente
+            </button>
           </div>
 
           {/* Document Upload */}
@@ -1136,64 +1086,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           </button>
         )}
       </div>
-
-      {/* Internal Chat Modal */}
-      {showInternalChat && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Mensagens Internas
-              </h3>
-              <button 
-                onClick={() => setShowInternalChat(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="h-96 overflow-y-auto p-6 space-y-4">
-              {internalMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.from === user.name
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    <div className="text-xs font-medium mb-1 opacity-75">
-                      {message.from}
-                    </div>
-                    <p className="text-sm">{message.message}</p>
-                    <p className={`text-xs mt-1 opacity-75`}>
-                      {message.timestamp.toLocaleString('pt-BR')}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-6 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newInternalMessage}
-                  onChange={(e) => setNewInternalMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
-                  placeholder="Digite sua mensagem para o vendedor..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  onClick={sendInternalMessage}
-                  className="p-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Document Guide Modal */}
       {showDocumentGuide && (
