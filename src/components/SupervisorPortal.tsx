@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, MessageCircle, Bot, X, Send, Settings, Target, PieChart, Calculator } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator } from 'lucide-react';
 
 interface SupervisorPortalProps {
   user: any;
   onLogout: () => void;
-}
-
-interface ChatMessage {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
 }
 
 type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings';
@@ -18,17 +11,7 @@ type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings
 const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [activeView, setActiveView] = useState<SupervisorView>('dashboard');
-  const [showChat, setShowChat] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      text: 'Olá! Sou o assistente do portal supervisor. Como posso ajudá-lo com relatórios e análises?',
-      isBot: true,
-      timestamp: new Date()
-    }
-  ]);
-  const [newMessage, setNewMessage] = useState('');
 
   const supervisorStats = [
     {
@@ -142,48 +125,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
       status: 'success',
     },
   ];
-
-  const sendMessage = () => {
-    if (!newMessage.trim()) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      text: newMessage,
-      isBot: false,
-      timestamp: new Date()
-    };
-
-    setChatMessages(prev => [...prev, userMessage]);
-
-    setTimeout(() => {
-      const response = getBotResponse(newMessage);
-      const botMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        text: response,
-        isBot: true,
-        timestamp: new Date()
-      };
-      setChatMessages(prev => [...prev, botMessage]);
-    }, 1000);
-
-    setNewMessage('');
-  };
-
-  const getBotResponse = (message: string): string => {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('relatório') || lowerMessage.includes('report')) {
-      return 'Você pode gerar relatórios detalhados de performance, conversão e receita. Use os filtros de período para análises específicas.';
-    }
-    if (lowerMessage.includes('vendedor') || lowerMessage.includes('performance')) {
-      return 'A tabela de performance mostra métricas individuais de cada vendedor: propostas, conversões e receita gerada.';
-    }
-    if (lowerMessage.includes('meta') || lowerMessage.includes('objetivo')) {
-      return 'Você pode definir metas mensais para vendedores e acompanhar o progresso em tempo real através dos dashboards.';
-    }
-    
-    return 'Como supervisor, você tem acesso a relatórios completos, análise de performance e métricas da equipe. O que gostaria de analisar?';
-  };
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
@@ -874,75 +815,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         </div>
       )}
 
-      {/* Chatbot */}
-      <div className="chatbot-container">
-        {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
-            <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div className="ml-3">
-                  <h3 className="font-bold">Assistente Supervisor</h3>
-                  <p className="text-xs text-orange-100">Online agora</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-white/80 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
-              {chatMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-orange-600 to-orange-700 text-white'
-                  }`}>
-                    <p className="text-sm">{message.text}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-orange-100'
-                    }`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                  placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-                <button
-                  onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-700 hover:to-orange-800 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
-          >
-            <MessageCircle className="w-8 h-8" />
-          </button>
-        )}
-      </div>
     </div>
   );
 };
