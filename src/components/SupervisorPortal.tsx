@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, Lock, Database, ShieldAlert } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, Lock, Database, ShieldAlert, FileSpreadsheet, Zap, Mail } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -892,24 +892,26 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Navigation */}
-              {activeView !== 'dashboard' && (
-                <button
-                  onClick={() => setActiveView('dashboard')}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              <div className="flex items-center space-x-2">
+                {/* Navigation */}
+                {activeView !== 'dashboard' && (
+                  <button
+                    onClick={() => setActiveView('dashboard')}
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </button>
+                )}
+                
+                <button 
+                  onClick={() => setActiveView('restricted')}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-orange-600 hover:text-orange-900 hover:bg-orange-100 rounded-lg transition-colors border border-orange-200"
                 >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Dashboard
+                  <Lock className="w-4 h-4 mr-2" />
+                  Área Restrita
                 </button>
-              )}
-              
-              <button 
-                onClick={() => setActiveView('restricted')}
-                className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <Lock className="w-4 h-4 mr-2" />
-                Área Restrita
-              </button>
+              </div>
               
               <button 
                 className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
