@@ -419,7 +419,7 @@ function App() {
       </footer>
 
       {/* Chatbot */}
-      <div className="fixed bottom-6 right-6 z-[9999]">
+      <div className="chatbot-fixed">
         {showChat ? (
           <div className="card-professional w-96 h-96 flex flex-col p-0 shadow-large">
             {/* Chat Header */}

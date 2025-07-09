@@ -305,6 +305,13 @@ body {
   background: var(--primary-blue);
 }
 
+.chatbot-fixed {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9999 !important;
+}
+
 /* Responsividade profissional */
 @media (max-width: 768px) {
   .heading-primary {
