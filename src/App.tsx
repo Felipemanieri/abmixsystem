@@ -151,7 +151,18 @@ function App() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Title */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-20 relative">
+          {/* Logo como marca d'água */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <img 
+              src="/6078b216-6252-4ede-8d9b-4c2164c3ed8f.png" 
+              alt="Abmix Watermark" 
+              className="w-96 h-96 object-contain opacity-10 select-none"
+            />
+          </div>
+          
+          {/* Conteúdo principal */}
+          <div className="relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="text-gray-500">Sistema de Propostas de Plano de Saúde</span>
           </h1>
@@ -173,6 +184,7 @@ function App() {
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte 24/7</span>
             </div>
+          </div>
           </div>
         </div>
 
