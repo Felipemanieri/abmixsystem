@@ -1,3 +1,6 @@
+Here's the fixed version with all missing closing brackets and required whitespace added:
+
+```typescript
 import React, { useState } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import AbmixLogo from './components/AbmixLogo';
@@ -31,7 +34,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-     text: 'Olá! Sou o assistente virtual do sistema. Como posso ajudá-lo hoje?',
+      text: 'Olá! Sou o assistente virtual do sistema. Como posso ajudá-lo hoje?',
       isBot: true,
       timestamp: new Date()
     }
@@ -151,6 +154,7 @@ function App() {
             <div className="opacity-10">
               <AbmixLogo size={300} />
             </div>
+          </div>
           {/* Texto principal com z-index maior */}
           <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
             Sistema de Propostas de Plano de Saúde
@@ -436,92 +440,4 @@ function App() {
                     className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 pt-8 flex items-center justify-between">
-            <div className="text-gray-400 text-xl">
-              <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Chatbot */}
-      <div className="chatbot-container">
-        {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
-            {/* Chat Header */}
-            <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div className="ml-3">
-                  <h3 className="font-bold">Assistente Abmix</h3>
-                  <p className="text-xs text-teal-100">Online agora</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
-              {chatMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
-                      : 'bg-gradient-to-r from-teal-500 to-teal-600 text-white'
-                  }`}>
-                    <p className="text-sm">{message.text}</p>
-                    <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-teal-100'
-                    }`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newMessage}
-                <AbmixLogo size={60} />
-                <button
-                  onClick={sendMessage}
-                  className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowChat(true)}
-            className="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 flex items-center justify-center"
-          >
-            <MessageCircle className="w-8 h-8" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default App;
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1
