@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download, Bell, Eye, Users } from 'lucide-react';
+import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, MessageCircle, Send, Bot, X, Info, AlertCircle, CheckCircle2, Clock, Download } from 'lucide-react';
 
 interface ClientPortalProps {
   user: any;
@@ -25,34 +25,6 @@ interface PersonData {
   endereco: string;
   dadosReembolso: string;
   parentesco?: string;
-}
-
-interface ChatMessage {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
-
-interface DocumentRequirement {
-  id: string;
-  name: string;
-  description: string;
-  required: boolean;
-  category: 'empresa' | 'titular' | 'dependente' | 'plano';
-  examples: string[];
-  formats: string[];
-  maxSize: string;
-  uploaded?: boolean;
-}
-
-interface InternalMessage {
-  id: string;
-  from: string;
-  to: string;
-  message: string;
-  timestamp: Date;
-  read: boolean;
 }
 
 interface ChatMessage {
@@ -96,22 +68,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
-  const [currentStep, setCurrentStep] = useState(1);
-  const [showDocumentGuide, setShowDocumentGuide] = useState(false);
-  const [showInternalChat, setShowInternalChat] = useState(false);
-  const [internalMessages, setInternalMessages] = useState<InternalMessage[]>([
-    {
-      id: '1',
-      from: 'Carlos Vendedor',
-      to: 'cliente',
-      message: 'Olá! Recebi seus documentos. Vou organizar e enviar para aprovação.',
-      timestamp: new Date(Date.now() - 1800000),
-      read: false
-    }
-  ]);
-  const [newInternalMessage, setNewInternalMessage] = useState('');
-
-  const unreadCount = internalMessages.filter(msg => !msg.read).length;
 
   // Dados do contrato (simulados)
   const contractInfo = {
@@ -122,109 +78,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     odontoConjugado: true,
     inicioVigencia: '01/02/2024',
   };
-
-  const documentRequirements: DocumentRequirement[] = [
-    {
-      id: 'cnpj',
-      name: 'CNPJ da Empresa',
-      description: 'Cartão CNPJ atualizado da empresa contratante',
-      required: true,
-      category: 'empresa',
-      examples: ['Cartão CNPJ da Receita Federal', 'Comprovante de Inscrição CNPJ'],
-      formats: ['PDF', 'JPG', 'PNG'],
-      maxSize: '5MB'
-    },
-    {
-      id: 'contrato_social',
-      name: 'Contrato Social',
-      description: 'Contrato social da empresa ou última alteração contratual',
-      required: true,
-      category: 'empresa',
-      examples: ['Contrato Social registrado na Junta Comercial', 'Última alteração contratual'],
-      formats: ['PDF'],
-      maxSize: '10MB'
-    },
-    {
-      id: 'rg_titular',
-      name: 'RG do Titular',
-      description: 'Documento de identidade (RG) do titular do plano',
-      required: true,
-      category: 'titular',
-      examples: ['RG (frente e verso)', 'CNH', 'Carteira de Trabalho (página da foto)'],
-      formats: ['JPG', 'PNG', 'PDF'],
-      maxSize: '3MB'
-    },
-    {
-      id: 'cpf_titular',
-      name: 'CPF do Titular',
-      description: 'Comprovante de CPF do titular',
-      required: true,
-      category: 'titular',
-      examples: ['Cartão CPF', 'Comprovante de situação cadastral da Receita Federal'],
-      formats: ['JPG', 'PNG', 'PDF'],
-      maxSize: '2MB'
-    },
-    {
-      id: 'comprovante_residencia',
-      name: 'Comprovante de Residência',
-      description: 'Comprovante de endereço atualizado (últimos 3 meses)',
-      required: true,
-      category: 'titular',
-      examples: ['Conta de luz', 'Conta de água', 'Conta de telefone', 'Extrato bancário'],
-      formats: ['JPG', 'PNG', 'PDF'],
-      maxSize: '3MB'
-    },
-    {
-      id: 'carteirinha_atual',
-      name: 'Carteirinha do Plano Atual',
-      description: 'Carteirinha do plano de saúde atual (se houver)',
-      required: false,
-      category: 'plano',
-      examples: ['Carteirinha frente e verso', 'Comprovante de plano atual'],
-      formats: ['JPG', 'PNG', 'PDF'],
-      maxSize: '2MB'
-    },
-    {
-      id: 'analitico_atual',
-      name: 'Analítico do Plano Atual',
-      description: 'Demonstrativo analítico do plano de saúde atual',
-      required: true,
-      category: 'plano',
-      examples: ['Demonstrativo de utilização', 'Extrato do plano atual'],
-      formats: ['PDF', 'JPG', 'PNG'],
-      maxSize: '5MB'
-    },
-    {
-      id: 'rg_dependentes',
-      name: 'RG dos Dependentes',
-      description: 'Documento de identidade de todos os dependentes',
-      required: false,
-      category: 'dependente',
-      examples: ['RG (frente e verso)', 'Certidão de nascimento (menores de 16 anos)'],
-      formats: ['JPG', 'PNG', 'PDF'],
-      maxSize: '3MB'
-    },
-    {
-      id: 'certidao_casamento',
-      name: 'Certidão de Casamento',
-      description: 'Certidão de casamento (para cônjuge como dependente)',
-      required: false,
-      category: 'dependente',
-      examples: ['Certidão de casamento atualizada', 'Declaração de união estável'],
-      formats: ['PDF', 'JPG', 'PNG'],
-      maxSize: '3MB'
-    },
-    {
-      id: 'declaracao_ir',
-      name: 'Declaração de Imposto de Renda',
-      description: 'Última declaração de IR do titular (se aplicável)',
-      required: false,
-      category: 'titular',
-      examples: ['Declaração de IR completa', 'Recibo de entrega da declaração'],
-      formats: ['PDF'],
-      maxSize: '10MB'
-    }
-  ];
 
   const botResponses = [
     {
@@ -381,31 +234,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     return 'Entendi sua pergunta! Para dúvidas específicas, recomendo entrar em contato com nosso suporte pelo WhatsApp ou telefone. Posso ajudar com informações sobre documentos e preenchimento da proposta.';
   };
 
-  const sendInternalMessage = () => {
-    if (!newInternalMessage.trim()) return;
-
-    const message: InternalMessage = {
-      id: Date.now().toString(),
-      from: user.name,
-      to: 'vendedor',
-      message: newInternalMessage,
-      timestamp: new Date(),
-      read: false
-    };
-
-    setInternalMessages(prev => [...prev, message]);
-    setNewInternalMessage('');
-    showNotification('Mensagem enviada para o vendedor!', 'success');
-  };
-
-  const markMessagesAsRead = () => {
-    setInternalMessages(prev => prev.map(msg => ({ ...msg, read: true })));
-  };
-
-  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
-    // Implementar notificação toast
-  };
-
   const calculateProgress = () => {
     const totalFields = titulares.length * 13 + dependentes.length * 14;
     const filledFields = titulares.reduce((acc, titular) => {
@@ -478,9 +306,10 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 >
                   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-                  </svg>
-                  Contato WhatsApp
-                </button>
+                    </svg>
+                    Contato WhatsApp
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -693,28 +522,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               {/* Progress Indicator */}
-              <button
-                onClick={() => {
-                  setShowInternalChat(true);
-                  markMessagesAsRead();
-                }}
-                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-              
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  1
-                </span>
-              </button>
-              
               <div className="hidden md:flex items-center space-x-3">
                 <span className="text-sm font-medium text-gray-600">Progresso:</span>
                 <div className="w-32 bg-gray-200 rounded-full h-2">
@@ -779,80 +586,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
-            <div className="flex items-center">
-              <div className="p-3 bg-teal-100 rounded-full group-hover:bg-teal-200 transition-colors">
-                <FileText className="w-6 h-6 text-teal-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Preencher Dados</h3>
-                <p className="text-sm text-gray-500">Formulário</p>
-              </div>
-            </div>
-          </button>
-
-          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                <Upload className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Enviar Documentos</h3>
-                <p className="text-sm text-gray-500">Anexos</p>
-              </div>
-            </div>
-          </button>
-
-          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
-            <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                <Eye className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Acompanhar Status</h3>
-                <p className="text-sm text-gray-500">Progresso</p>
-              </div>
-            </div>
-          </button>
-
-          <button className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer">
-            <div className="flex items-center">
-              <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                <MessageCircle className="w-6 h-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">Suporte</h3>
-                <p className="text-sm text-gray-500">Ajuda</p>
-              </div>
-            </div>
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Step Indicator */}
-          <div className="flex items-center justify-center mb-8">
-            <div className="flex items-center space-x-4">
-              {[1, 2, 3].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                    currentStep >= step 
-                      ? 'bg-gradient-to-r from-blue-600 to-teal-600 text-white' 
-                      : 'bg-gray-200 text-gray-600'
-                  }`}>
-                    {step}
-                  </div>
-                  {step < 3 && (
-                    <div className={`w-16 h-1 mx-2 ${
-                      currentStep > step ? 'bg-gradient-to-r from-blue-600 to-teal-600' : 'bg-gray-200'
-                    }`}></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Titulares */}
+          {/* Dados Pessoais */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center">
@@ -860,191 +595,82 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <User className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <h2 className="text-xl font-bold text-gray-900">Titulares do Plano</h2>
-                  <p className="text-gray-600">Adicione os dados dos titulares</p>
+                  <h2 className="text-xl font-bold text-gray-900">Dados Pessoais</h2>
+                  <p className="text-gray-600">Preencha os dados dos titulares e dependentes</p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={addTitular}
-                className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Titular
-              </button>
-            </div>
-            
-            {titulares.map((titular, index) => renderPersonForm(titular, 'titular', index))}
-          </div>
-
-          {/* Botão para adicionar mais titulares */}
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              onClick={addTitular}
-              className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar Mais Titular
-            </button>
-          </div>
-
-          {/* Dependentes */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-xl font-bold text-gray-900">Dependentes</h2>
-                  <p className="text-gray-600">Adicione os dependentes do plano</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={addDependente}
-                className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:from-green-700 hover:to-green-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Dependente
-              </button>
-            </div>
-            
-            {dependentes.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-gray-400" />
-                </div>
-                <p className="text-gray-500 text-lg">Nenhum dependente adicionado</p>
-                <p className="text-gray-400 text-sm">Clique em "Adicionar Dependente" para incluir</p>
-              </div>
-            ) : (
-              dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))
-            )}
-          </div>
-
-          {/* Botão para adicionar mais dependentes */}
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              onClick={addDependente}
-              className="flex items-center px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:from-green-700 hover:to-green-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar Mais Dependente
-            </button>
-          </div>
-
-          {/* Document Upload */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-xl font-bold text-gray-900">Documentos Necessários</h2>
-                  <p className="text-gray-600">Anexe todos os documentos listados abaixo</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowDocumentGuide(true)}
-                className="flex items-center px-4 py-2 text-sm font-medium text-purple-600 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"
-              >
-                <Info className="w-4 h-4 mr-2" />
-                Guia de Documentos
-              </button>
             </div>
 
-            {/* Document Requirements List */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {documentRequirements.map((doc) => (
-                <div key={doc.id} className={`p-6 rounded-xl border-2 ${
-                  doc.required 
-                    ? 'border-red-200 bg-red-50' 
-                    : 'border-blue-200 bg-blue-50'
-                }`}>
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className={`font-bold ${
-                      doc.required ? 'text-red-800' : 'text-blue-800'
-                    }`}>
-                      {doc.name}
-                      {doc.required && <span className="text-red-500 ml-1">*</span>}
-                    </h3>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      doc.required 
-                        ? 'bg-red-100 text-red-700' 
-                        : 'bg-blue-100 text-blue-700'
-                    }`}>
-                      {doc.required ? 'Obrigatório' : 'Opcional'}
-                    </span>
+            {/* Titulares */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Titulares</h3>
+                <button
+                  type="button"
+                  onClick={addTitular}
+                  className="flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar Titular
+                </button>
+              </div>
+              
+              {titulares.map((titular, index) => renderPersonForm(titular, 'titular', index))}
+            </div>
+
+            {/* Dependentes */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Dependentes</h3>
+                <button
+                  type="button"
+                  onClick={addDependente}
+                  className="flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:from-green-700 hover:to-green-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar Dependente
+                </button>
+              </div>
+              
+              {dependentes.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <User className="w-8 h-8 text-gray-400" />
                   </div>
-                  
-                  <p className="text-sm text-gray-600 mb-3">{doc.description}</p>
-                  
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-xs font-medium text-gray-500">Exemplos:</span>
-                      <ul className="text-xs text-gray-600 ml-2">
-                        {doc.examples.map((example, idx) => (
-                          <li key={idx}>• {example}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>Formatos: {doc.formats.join(', ')}</span>
-                      <span>Máx: {doc.maxSize}</span>
-                    </div>
-                  </div>
+                  <p className="text-gray-500 text-lg">Nenhum dependente adicionado</p>
+                  <p className="text-gray-400 text-sm">Clique em "Adicionar Dependente" para incluir</p>
                 </div>
-              ))}
+              ) : (
+                dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))
+              )}
+            </div>
+          </div>
+
+          {/* Documentos */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div className="flex items-center mb-6">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <div className="ml-4">
+                <h2 className="text-xl font-bold text-gray-900">Documentos ({uploadedFiles.length})</h2>
+                <p className="text-gray-600">Anexe todos os documentos necessários</p>
+              </div>
             </div>
             
             {/* Upload Area */}
-            <div 
-              className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-blue-400 transition-colors bg-gradient-to-br from-gray-50 to-white cursor-pointer"
-              onDrop={(e) => {
-                e.preventDefault();
-                handleFileUpload(e.dataTransfer.files);
-              }}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnter={(e) => e.preventDefault()}
-            >
+            <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-blue-400 transition-colors bg-gradient-to-br from-gray-50 to-white mb-6">
               <div className="space-y-6">
-                <div className="flex justify-center space-x-6">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Upload className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-green-600" />
-                  </div>
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                    <FileText className="w-8 h-8 text-purple-600" />
+                <div className="flex justify-center">
+                  <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                    <Upload className="w-10 h-10 text-blue-600" />
                   </div>
                 </div>
                 
                 <div>
                   <label className="cursor-pointer">
-                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center">
-                      <Camera className="w-5 h-5 mr-2" />
-                      Tirar Foto
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={(e) => handleFileUpload(e.target.files)}
-                      className="hidden"
-                    />
-                  </label>
-                  <span className="mx-4 text-gray-400">ou</span>
-                  <label className="cursor-pointer">
-                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700 inline-flex items-center">
-                      <Upload className="w-5 h-5 mr-2" />
-                      Clique para selecionar arquivos
+                    <span className="text-xl font-semibold text-blue-600 hover:text-blue-700">
+                      📎 Arraste arquivos ou clique para selecionar
                     </span>
                     <input
                       type="file"
@@ -1054,27 +680,46 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                       className="hidden"
                     />
                   </label>
-                  <span className="mx-4 text-gray-400">ou</span>
-                  <span className="text-xl font-semibold text-green-600">
-                    📁 Galeria
-                  </span>
-                  <p className="text-gray-500 mt-2">ou arraste e solte aqui</p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-xl border border-gray-200 inline-block">
-                  <p className="text-sm text-gray-600">
-                    <strong>Formatos aceitos:</strong> PDF, JPG, PNG, DOC, DOCX
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <strong>Tamanho máximo:</strong> 10MB por arquivo
-                  </p>
+                <div className="flex justify-center space-x-6">
+                  <button
+                    type="button"
+                    onClick={() => document.querySelector('input[type="file"]')?.click()}
+                    className="flex items-center px-6 py-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    <Camera className="w-5 h-5 mr-2" />
+                    📷 Tirar Foto
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => document.querySelector('input[type="file"]')?.click()}
+                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    <FileText className="w-5 h-5 mr-2" />
+                    📁 Galeria
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={() => document.querySelector('input[type="file"]')?.click()}
+                    className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    <Upload className="w-5 h-5 mr-2" />
+                    📤 Selecionar
+                  </button>
                 </div>
+                
+                <p className="text-sm text-gray-500">
+                  PDF, JPG, PNG, DOC, DOCX
+                </p>
               </div>
             </div>
             
             {/* Uploaded Files */}
             {uploadedFiles.length > 0 && (
-              <div className="mt-8">
+              <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-4">
                   Arquivos Anexados ({uploadedFiles.length})
                 </h3>
@@ -1190,149 +835,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           </button>
         )}
       </div>
-
-      {/* Document Guide Modal */}
-      {showDocumentGuide && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">
-                  Guia Completo de Documentos
-                </h3>
-                <button 
-                  onClick={() => setShowDocumentGuide(false)}
-                  className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-              
-              <div className="space-y-8">
-                {['empresa', 'titular', 'dependente', 'plano'].map((category) => (
-                  <div key={category}>
-                    <h4 className="text-xl font-bold text-gray-800 mb-4 capitalize">
-                      Documentos - {category === 'empresa' ? 'Empresa' : category === 'titular' ? 'Titular' : category === 'dependente' ? 'Dependentes' : 'Plano Atual'}
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {documentRequirements
-                        .filter(doc => doc.category === category)
-                        .map((doc) => (
-                          <div key={doc.id} className="p-6 border border-gray-200 rounded-xl">
-                            <div className="flex items-start justify-between mb-3">
-                              <h5 className="font-bold text-gray-900">{doc.name}</h5>
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                doc.required 
-                                  ? 'bg-red-100 text-red-700' 
-                                  : 'bg-blue-100 text-blue-700'
-                              }`}>
-                                {doc.required ? 'Obrigatório' : 'Opcional'}
-                              </span>
-                            </div>
-                            
-                            <p className="text-sm text-gray-600 mb-4">{doc.description}</p>
-                            
-                            <div className="space-y-3">
-                              <div>
-                                <span className="text-sm font-medium text-gray-700">Exemplos aceitos:</span>
-                                <ul className="text-sm text-gray-600 mt-1 space-y-1">
-                                  {doc.examples.map((example, idx) => (
-                                    <li key={idx} className="flex items-center">
-                                      <CheckCircle2 className="w-4 h-4 text-green-500 mr-2" />
-                                      {example}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              
-                              <div className="flex items-center justify-between text-sm">
-                                <span className="text-gray-600">
-                                  <strong>Formatos:</strong> {doc.formats.join(', ')}
-                                </span>
-                                <span className="text-gray-600">
-                                  <strong>Máx:</strong> {doc.maxSize}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-8 p-6 bg-blue-50 rounded-xl">
-                <h4 className="font-bold text-blue-900 mb-2">💡 Dicas Importantes</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• Certifique-se de que todos os documentos estejam legíveis</li>
-                  <li>• Fotos devem ter boa iluminação e foco</li>
-                  <li>• Documentos em PDF são preferíveis quando possível</li>
-                  <li>• Mantenha os arquivos dentro do limite de tamanho</li>
-                  <li>• Em caso de dúvidas, use o chat para ajuda</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Internal Chat Modal */}
-      {showInternalChat && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Mensagens com o Vendedor
-              </h3>
-              <button 
-                onClick={() => setShowInternalChat(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="h-96 overflow-y-auto p-6 space-y-4">
-              {internalMessages.map((message) => (
-                <div key={message.id} className={`flex ${message.from === user.name ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-xs p-3 rounded-2xl ${
-                    message.from === user.name
-                      ? 'bg-teal-600 text-white' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    <div className="text-xs font-medium mb-1 opacity-75">
-                      {message.from}
-                    </div>
-                    <p className="text-sm">{message.message}</p>
-                    <p className={`text-xs mt-1 opacity-75`}>
-                      {message.timestamp.toLocaleString('pt-BR')}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-6 border-t border-gray-200">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newInternalMessage}
-                  onChange={(e) => setNewInternalMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendInternalMessage()}
-                  placeholder="Mensagem para o vendedor..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-                <button
-                  onClick={sendInternalMessage}
-                  className="p-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
