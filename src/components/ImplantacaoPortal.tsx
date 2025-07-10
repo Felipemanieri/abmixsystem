@@ -541,6 +541,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                        navigator.clipboard.writeText(`${window.location.origin}/implantacao/compartilhar/${proposal.id}`);
                        showNotification('Link de compartilhamento copiado!', 'success');
                      }}
+                     onApprove={proposal.status === 'pending_validation' ? () => validateProposal(proposal.id) : undefined}
+                     onReject={proposal.status === 'pending_validation' ? () => {
+                       if (confirm(`Tem certeza que deseja rejeitar a proposta ${proposal.id}?`)) {
+                         showNotification('Proposta rejeitada. Notificação enviada ao vendedor.', 'error');
+                       }
+                     } : undefined}
                     />
                   </td>
                 </tr>

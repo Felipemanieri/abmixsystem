@@ -34,6 +34,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [selectedCategory, setSelectedCategory] = useState('all'); 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'proposals' | 'clients' | 'analysis' | 'forms'>('dashboard');
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
+  const [showFinancialArea, setShowFinancialArea] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const { getClientDocuments } = useGoogleDrive();
 
@@ -403,6 +404,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               />
               
               <button
+                onClick={() => setShowFinancialArea(!showFinancialArea)}
+                className="p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                title={showFinancialArea ? "Mostrar Área Financeira Completa" : "Mostrar Área Financeira Simplificada"}
+              >
+                <Settings className="h-6 w-6" />
+              </button>
+              
+              <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
@@ -458,6 +467,25 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           </nav>
         </div>
       </div>
+
+      {/* Área Financeira Completa */}
+      {showFinancialArea && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Área Financeira Completa</h2>
+            <p className="text-gray-600 mb-4">
+              Esta área permite validar propostas, aprovar ou rejeitar documentos, e enviar para automação.
+            </p>
+            <button
+              onClick={() => setShowAutomationModal(true)}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              <Zap className="w-4 h-4 mr-2 inline-block" />
+              Enviar Proposta para Automação
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Notifications Panel */}
       {showNotifications && (

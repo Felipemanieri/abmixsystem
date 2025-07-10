@@ -514,7 +514,10 @@ const FinancialArea: React.FC = () => {
                         }) || showNotification('Compartilhando proposta...', 'info');
                       }}
                       onAutomate={proposal.status === 'validated' ? () => sendToAutomation(proposal.id) : undefined}
-                      onApprove={proposal.status === 'pending_validation' ? () => validateProposal(proposal.id) : undefined}
+                      onApprove={proposal.status === 'pending_validation' ? () => {
+                        validateProposal(proposal.id);
+                        showNotification('Proposta aprovada com sucesso!', 'success');
+                      } : undefined}
                       onReject={proposal.status === 'pending_validation' ? () => {
                         showNotification('Proposta rejeitada. Notificação enviada ao vendedor.', 'error');
                       } : undefined}
