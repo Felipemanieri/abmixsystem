@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { LogOut, Settings, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, MessageSquare, Lock, Database, Shield, Zap, Home, Mail, Link, Trash2 } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import IntegrationGuide from './IntegrationGuide';
+import GoogleDriveSetup from './GoogleDriveSetup';
+
+// Configurações do Google Drive
+const GOOGLE_DRIVE_CONFIG = {
+  clientId: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+  apiKey: 'YOUR_API_KEY',
+  spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+  scopes: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/spreadsheets',
+};
 
 interface RestrictedAreaPortalProps {
   user: any;
@@ -10,11 +19,309 @@ interface RestrictedAreaPortalProps {
 
 type RestrictedView = 'dashboard' | 'integrations' | 'settings' | 'users';
 
+// Adicionar novo tipo para visualizações específicas de integração
+type IntegrationView = 'guide' | 'google-drive' | 'make' | 'sheets';
+
+interface DriveIntegrationStatus {
+  connected: boolean;
+  lastSync: string;
+  totalFiles: number;
+  totalSheets: number;
+}
+
 const RestrictedAreaPortal: React.FC<RestrictedAreaPortalProps> = ({ user, onLogout }) => {
   const [activeView, setActiveView] = useState<RestrictedView>('dashboard');
+  const [activeIntegration, setActiveIntegration] = useState<IntegrationView>('guide');
+  const [driveStatus, setDriveStatus] = useState<DriveIntegrationStatus>({
+    connected: true,
+    lastSync: '2024-05-15 15:30:25',
+    totalFiles: 156,
+    totalSheets: 8
+  });
+
+  // Simular conexão com o Google Drive
+  const connectGoogleDrive = () => {
+    // Em um ambiente real, aqui você abriria a janela de autenticação do Google
+    alert('Em um ambiente de produção, isso abriria a janela de autenticação do Google para autorizar o acesso ao Drive e Sheets.');
+    
+    // Simular conexão bem-sucedida
+    setDriveStatus({
+      connected: true,
+      lastSync: new Date().toLocaleString(),
+      totalFiles: 156,
+      totalSheets: 8
+    });
+  };
+
+  // Simular sincronização com o Google Drive
+  const syncGoogleDrive = () => {
+    alert('Sincronizando dados com o Google Drive...');
+    
+    // Simular sincronização bem-sucedida
+    setTimeout(() => {
+      setDriveStatus({
+        ...driveStatus,
+        lastSync: new Date().toLocaleString(),
+        totalFiles: driveStatus.totalFiles + Math.floor(Math.random() * 5)
+      });
+      alert('Sincronização concluída com sucesso!');
+    }, 2000);
+  };
 
   const renderIntegrationsView = () => (
-    <IntegrationGuide />
+    <div className="space-y-8">
+      <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Integrações</h1>
+        <p className="text-purple-200">Configure integrações com serviços externos</p>
+      </div>
+      
+      {/* Tabs de navegação */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8 px-6">
+            <button
+              onClick={() => setActiveIntegration('guide')}
+              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                activeIntegration === 'guide'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Info className="w-4 h-4 mr-2" />
+              Guia Geral
+            </button>
+            <button
+              onClick={() => setActiveIntegration('google-drive')}
+              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                activeIntegration === 'google-drive'
+                  ? 'border-yellow-500 text-yellow-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Google Drive
+            </button>
+            <button
+              onClick={() => setActiveIntegration('sheets')}
+              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                activeIntegration === 'sheets'
+                  ? 'border-green-500 text-green-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <FileSpreadsheet className="w-4 h-4 mr-2" />
+              Google Sheets
+            </button>
+            <button
+              onClick={() => setActiveIntegration('make')}
+              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                activeIntegration === 'make'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              Make (Integromat)
+            </button>
+          </nav>
+        </div>
+      </div>
+      
+      <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 text-white mb-6">
+        <h1 className="text-2xl font-bold mb-2">Integração com Google Drive</h1>
+        <p className="text-yellow-100">Configure a integração para armazenar dados dos clientes</p>
+      </div>
+      
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Status da Integração</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-medium text-gray-900">Google Drive</h3>
+              <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                driveStatus.connected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}>
+                {driveStatus.connected ? 'Conectado' : 'Desconectado'}
+              </span>
+            </div>
+            
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Última sincronização:</span>
+                <span className="font-medium">{driveStatus.lastSync}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Total de arquivos:</span>
+                <span className="font-medium">{driveStatus.totalFiles}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Planilhas:</span>
+                <span className="font-medium">{driveStatus.totalSheets}</span>
+              </div>
+            </div>
+            
+            <div className="mt-4 flex space-x-3">
+              <button 
+                onClick={connectGoogleDrive}
+                className={`px-4 py-2 text-sm font-medium rounded-lg ${
+                  driveStatus.connected 
+                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+                disabled={driveStatus.connected}
+              >
+                {driveStatus.connected ? 'Conectado' : 'Conectar'}
+              </button>
+              
+              <button 
+                onClick={syncGoogleDrive}
+                className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700"
+                disabled={!driveStatus.connected}
+              >
+                Sincronizar Agora
+              </button>
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="font-medium text-gray-900 mb-4">Configurações</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ID da Pasta Principal
+                </label>
+                <input
+                  type="text"
+                  value={GOOGLE_DRIVE_CONFIG.clientId}
+                  readOnly
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ID da Planilha Principal
+                </label>
+                <input
+                  type="text"
+                  value={GOOGLE_DRIVE_CONFIG.spreadsheetId}
+                  readOnly
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Criar pasta por cliente</span>
+                <div className="relative inline-block w-12 h-6">
+                  <input type="checkbox" id="toggle-folder" className="sr-only" defaultChecked />
+                  <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
+                  <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Sincronização automática</span>
+                <div className="relative inline-block w-12 h-6">
+                  <input type="checkbox" id="toggle-sync" className="sr-only" defaultChecked />
+                  <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
+                  <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Estrutura de Armazenamento</h2>
+        
+        <div className="bg-gray-50 p-4 rounded-lg mb-6">
+          <h3 className="font-medium text-gray-900 mb-3">Organização de Pastas</h3>
+          
+          <div className="space-y-2 pl-4 border-l-2 border-gray-300">
+            <div className="flex items-center">
+              <FileText className="w-4 h-4 text-yellow-600 mr-2" />
+              <span className="text-sm font-medium">Abmix - Propostas (Pasta Raiz)</span>
+            </div>
+            
+            <div className="space-y-2 pl-4 border-l-2 border-gray-300">
+              <div className="flex items-center">
+                <FileText className="w-4 h-4 text-yellow-600 mr-2" />
+                <span className="text-sm">Clientes</span>
+              </div>
+              
+              <div className="space-y-2 pl-4 border-l-2 border-gray-300">
+                <div className="flex items-center">
+                  <FileText className="w-4 h-4 text-yellow-600 mr-2" />
+                  <span className="text-sm">[ID do Cliente] - [Nome do Cliente]</span>
+                </div>
+                
+                <div className="space-y-1 pl-4 border-l-2 border-gray-300">
+                  <div className="flex items-center">
+                    <FileText className="w-4 h-4 text-blue-600 mr-2" />
+                    <span className="text-sm">Documentos Pessoais</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FileText className="w-4 h-4 text-green-600 mr-2" />
+                    <span className="text-sm">Documentos da Empresa</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FileText className="w-4 h-4 text-purple-600 mr-2" />
+                    <span className="text-sm">Contratos</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                <FileText className="w-4 h-4 text-green-600 mr-2" />
+                <span className="text-sm">Planilha de Clientes.xlsx</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h3 className="font-medium text-blue-900 mb-3">Estrutura da Planilha</h3>
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-blue-200">
+              <thead>
+                <tr className="bg-blue-100">
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">ID Cliente</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Nome</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">CPF</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Email</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Telefone</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Empresa</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Plano</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Data Envio</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">Pasta Drive</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-blue-100">
+                <tr>
+                  <td className="px-3 py-2 text-xs text-gray-500">CLIENT-123456</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">João Silva</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">123.456.789-00</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">joao@email.com</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">(11) 99999-9999</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">Empresa ABC</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">Plano Empresarial</td>
+                  <td className="px-3 py-2 text-xs text-gray-500">15/05/2024</td>
+                  <td className="px-3 py-2 text-xs text-blue-500 underline">Link</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {activeIntegration === 'guide' && <IntegrationGuide />}
+      {activeIntegration === 'google-drive' && <GoogleDriveSetup />}
+    </div>
+  );
   );
 
   const renderSettingsView = () => (
@@ -352,6 +659,12 @@ const RestrictedAreaPortal: React.FC<RestrictedAreaPortalProps> = ({ user, onLog
         {activeView === 'integrations' && renderIntegrationsView()}
         {activeView === 'settings' && renderSettingsView()}
         {activeView === 'users' && renderUsersView()}
+      </main>
+    </div>
+  );
+};
+
+export default RestrictedAreaPortal;
       </main>
     </div>
   );
