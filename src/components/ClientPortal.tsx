@@ -5,6 +5,7 @@ import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
+import { showNotification } from '../utils/notifications';
 
 interface ClientPortalProps {
   user: any;
@@ -128,6 +129,20 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     }
     
     return 'Estou aqui para ajudar com informações sobre suas propostas, documentos necessários e dados do seu perfil. Como posso auxiliá-lo?';
+  };
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
   };
 
   const handleMarkAsRead = (id: string) => {

@@ -6,6 +6,7 @@ import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
+import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 
 interface VendorPortalProps {
@@ -290,20 +291,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     } catch (err) {
       showNotification('Erro ao copiar link. Tente novamente.', 'error');
     }
-  };
-
-  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
-      type === 'success' ? 'bg-green-500' : 
-      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-    }`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      document.body.removeChild(toast);
-    }, 3000);
   };
 
   const renderQuotationModule = () => (

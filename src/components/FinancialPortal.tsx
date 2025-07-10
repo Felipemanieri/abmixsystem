@@ -7,6 +7,7 @@ import FinancialAutomationModal from './FinancialAutomationModal';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
+import { showNotification } from '../utils/notifications';
 
 interface FinancialPortalProps {
   user: any;
