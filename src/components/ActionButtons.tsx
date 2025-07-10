@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, InternalMessage } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -12,6 +12,8 @@ interface ActionButtonsProps {
   onExternalLink?: () => void;
   onMessage?: () => void;
   onSend?: () => void;
+  onInternalMessage?: () => void;
+  userRole?: string;
   className?: string;
 }
 
@@ -26,6 +28,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onExternalLink,
   onMessage,
   onSend,
+  onInternalMessage,
+  userRole,
   className = ''
 }) => {
   return (
@@ -125,10 +129,25 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onMessage && (
         <button 
           onClick={onMessage}
-          className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
+          className={`text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors ${userRole ? 'relative' : ''}`}
           title="Mensagem Interna"
         >
           <MessageSquare className="w-4 h-4" />
+          {userRole && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              2
+            </span>
+          )}
+        </button>
+      )}
+      
+      {onInternalMessage && (
+        <button 
+          onClick={onInternalMessage}
+          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors"
+          title="Mensagem Interna"
+        >
+          <InternalMessage className="w-4 h-4" />
         </button>
       )}
     </div>

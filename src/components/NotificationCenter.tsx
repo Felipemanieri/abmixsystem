@@ -12,17 +12,21 @@ interface Notification {
 }
 
 interface NotificationCenterProps {
+  isOpen?: boolean;
   notifications: Notification[];
   onMarkAsRead: (id: string) => void;
   onMarkAllAsRead: () => void;
   onClose: () => void;
+  userRole?: string;
 }
 
 const NotificationCenter: React.FC<NotificationCenterProps> = ({
+  isOpen = true,
   notifications,
   onMarkAsRead,
   onMarkAllAsRead,
-  onClose
+  onClose,
+  userRole
 }) => {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   
@@ -65,6 +69,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
       return date.toLocaleDateString('pt-BR');
     }
   };
+  
+  if (!isOpen) return null;
   
   return (
     <div className="absolute top-16 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[80vh] flex flex-col">
