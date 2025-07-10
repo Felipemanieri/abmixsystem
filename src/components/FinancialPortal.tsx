@@ -519,8 +519,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <ActionButtons 
                           onView={() => showNotification(`Visualizando transação ${transaction.id}`, 'info')}
+                          onCopyLink={() => {
+                            navigator.clipboard.writeText(`${window.location.origin}/financeiro/transacao/${transaction.id}`);
+                            showNotification('Link copiado para a área de transferência!', 'success');
+                          }}
                           onDownload={() => showNotification('Baixando comprovante...', 'success')}
                           onMessage={() => setShowInternalMessage(true)}
+                          onEdit={() => showNotification('Editando transação...', 'info')}
                         />
                       </td>
                     </tr>

@@ -223,6 +223,9 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <ActionButtons 
                       onView={() => setSelectedProposal(proposal.id)}
+                      onCopyLink={() => navigator.clipboard.writeText(`${window.location.origin}/proposta/${proposal.id}`)}
+                      onWhatsApp={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Preciso de ajuda com minha proposta ${proposal.id}`)}`)}
+                      onEmail={() => window.open(`mailto:atendimento@abmix.com.br?subject=Proposta ${proposal.id}`)}
                       onMessage={() => setShowInternalMessage(true)}
                       onDownload={() => alert('Baixando documentos da proposta...')}
                     />

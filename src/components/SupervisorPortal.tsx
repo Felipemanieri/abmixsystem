@@ -661,8 +661,14 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <ActionButtons 
                             onView={() => handleViewVendor(vendor.id)}
+                           onCopyLink={() => {
+                             navigator.clipboard.writeText(`${window.location.origin}/supervisor/vendedor/${vendor.id}`);
+                             showNotification('Link copiado para a área de transferência!', 'success');
+                           }}
                             onMessage={() => setShowInternalMessage(true)}
                             onEdit={() => showNotification(`Editando dados de ${vendor.name}`, 'info')}
+                           onWhatsApp={() => window.open(`https://wa.me/55${vendor.phone}?text=${encodeURIComponent(`Olá ${vendor.name}! Preciso falar sobre sua performance de vendas.`)}`)}
+                           onEmail={() => window.open(`mailto:${vendor.email}?subject=Performance de Vendas`)}
                           />
                         </td>
                       </tr>

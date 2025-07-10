@@ -167,6 +167,15 @@ const RestrictedAreaPortal: React.FC<RestrictedAreaPortalProps> = ({ user, onLog
                       <button className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors">
                         <Eye className="w-4 h-4" />
                       </button>
+                     <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors">
+                       <Settings className="w-4 h-4" />
+                     </button>
+                     <button className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors">
+                       <Mail className="w-4 h-4" />
+                     </button>
+                     <button className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors">
+                       <Trash2 className="w-4 h-4" />
+                     </button>
                       <button className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors">
                         <Settings className="w-4 h-4" />
                       </button>

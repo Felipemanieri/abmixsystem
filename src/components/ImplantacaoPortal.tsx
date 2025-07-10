@@ -526,9 +526,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <ActionButtons 
                       onView={() => setSelectedProposal(proposal.id)}
+                      onCopyLink={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/implantacao/proposta/${proposal.id}`);
+                        showNotification('Link copiado para a área de transferência!', 'success');
+                      }}
                       onMessage={() => setShowInternalMessage(true)}
                       onEdit={() => showNotification('Editando proposta...', 'info')}
                       onDownload={() => showNotification('Baixando documentos...', 'success')}
+                      onWhatsApp={() => window.open(`https://wa.me/55${proposal.vendor.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id} do cliente ${proposal.client}...`)}`)}
+                      onEmail={() => window.open(`mailto:${proposal.vendor.toLowerCase().replace(/\s/g, '.')}@abmix.com.br?subject=Proposta ${proposal.id}`)}
                     />
                   </td>
                 </tr>
