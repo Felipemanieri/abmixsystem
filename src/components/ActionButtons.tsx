@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, MessageCircle as InternalMessage } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, MessageCircle, Copy, Zap } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -12,7 +12,7 @@ interface ActionButtonsProps {
   onExternalLink?: () => void;
   onMessage?: () => void;
   onSend?: () => void;
-  onInternalMessage?: () => void;
+  onWhatsApp?: () => void;
   userRole?: string;
   className?: string;
 }
@@ -28,7 +28,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onExternalLink,
   onMessage,
   onSend,
-  onInternalMessage,
+  onWhatsApp,
   userRole,
   className = ''
 }) => {
@@ -37,7 +37,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onView && (
         <button 
           onClick={onView}
-          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
           title="Visualizar"
         >
           <Eye className="w-4 h-4" />
@@ -47,7 +47,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onCopyLink && (
         <button 
           onClick={onCopyLink}
-          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
           title="Copiar Link"
         >
           <Link className="w-4 h-4" />
@@ -57,7 +57,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onWhatsApp && (
         <button 
           onClick={onWhatsApp}
-          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors mr-1"
           title="Enviar WhatsApp"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -69,7 +69,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onEmail && (
         <button 
           onClick={onEmail}
-          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors mr-1"
           title="Enviar Email"
         >
           <Mail className="w-4 h-4" />
@@ -79,7 +79,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onDownload && (
         <button 
           onClick={onDownload}
-          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors"
+          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors mr-1"
           title="Baixar"
         >
           <Download className="w-4 h-4" />
@@ -89,7 +89,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onEdit && (
         <button 
           onClick={onEdit}
-          className="text-amber-600 hover:text-amber-900 p-1 rounded hover:bg-amber-50 transition-colors"
+          className="text-amber-600 hover:text-amber-900 p-1 rounded hover:bg-amber-50 transition-colors mr-1"
           title="Editar"
         >
           <Edit className="w-4 h-4" />
@@ -99,7 +99,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onDelete && (
         <button 
           onClick={onDelete}
-          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors mr-1"
           title="Excluir"
         >
           <Trash2 className="w-4 h-4" />
@@ -109,7 +109,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onExternalLink && (
         <button 
           onClick={onExternalLink}
-          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors mr-1"
           title="Abrir Link"
         >
           <ExternalLink className="w-4 h-4" />
@@ -119,7 +119,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onSend && (
         <button 
           onClick={onSend}
-          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors mr-1"
           title="Enviar"
         >
           <Send className="w-4 h-4" />
@@ -129,7 +129,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onMessage && (
         <button 
           onClick={onMessage}
-          className={`text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors ${userRole ? 'relative' : ''}`}
+          className={`text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors mr-1 ${userRole ? 'relative' : ''}`}
           title="Mensagem Interna"
         >
           <MessageSquare className="w-4 h-4" />
@@ -138,16 +138,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
               2
             </span>
           )}
-        </button>
-      )}
-      
-      {onInternalMessage && (
-        <button 
-          onClick={onInternalMessage}
-          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50 transition-colors"
-          title="Mensagem Interna"
-        >
-          <InternalMessage className="w-4 h-4" />
         </button>
       )}
     </div>

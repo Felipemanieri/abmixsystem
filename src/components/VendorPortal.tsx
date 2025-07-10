@@ -615,8 +615,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                             onWhatsApp={() => window.open(`https://wa.me/55${proposal.phone}?text=${encodeURIComponent(`Olá! Segue o link da proposta: ${proposal.link}`)}`)}
                             onEmail={() => window.open(`mailto:${proposal.email}?subject=Proposta de Plano de Saúde&body=Olá! Segue o link da proposta: ${proposal.link}`)}
                             onMessage={() => setShowInternalMessage(true)}
-                           onExternalLink={() => window.open(proposal.link, '_blank')}
-                           onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
+                            onExternalLink={() => window.open(proposal.link, '_blank')}
+                            onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
                           />
                         </td>
                       </tr>

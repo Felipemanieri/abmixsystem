@@ -662,16 +662,16 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                           <ActionButtons 
                             onView={() => handleViewVendor(vendor.id)}
                            onCopyLink={() => {
-                             navigator.clipboard.writeText(`${window.location.origin}/supervisor/vendedor/${vendor.id}`);
-                             showNotification('Link copiado para a área de transferência!', 'success');
+                               navigator.clipboard.writeText(`${window.location.origin}/supervisor/vendedor/${vendor.id}`);
+                               showNotification('Link copiado para a área de transferência!', 'success');
                            }}
                             onMessage={() => setShowInternalMessage(true)}
                             onEdit={() => showNotification(`Editando dados de ${vendor.name}`, 'info')}
-                           onWhatsApp={() => window.open(`https://wa.me/55${vendor.phone}?text=${encodeURIComponent(`Olá ${vendor.name}! Preciso falar sobre sua performance de vendas.`)}`)}
-                           onEmail={() => window.open(`mailto:${vendor.email}?subject=Performance de Vendas`)}
-                           onExternalLink={() => window.open(`${window.location.origin}/supervisor/vendedor/${vendor.id}`, '_blank')}
-                           onDownload={() => showNotification('Baixando relatório de performance...', 'success')}
-                           onDelete={() => showNotification('Esta ação requer confirmação adicional', 'error')}
+                            onWhatsApp={() => window.open(`https://wa.me/55${vendor.phone}?text=${encodeURIComponent(`Olá ${vendor.name}! Preciso falar sobre sua performance de vendas.`)}`)}
+                            onEmail={() => window.open(`mailto:${vendor.email}?subject=Performance de Vendas`)}
+                            onExternalLink={() => window.open(`${window.location.origin}/supervisor/vendedor/${vendor.id}`, '_blank')}
+                            onDownload={() => showNotification('Baixando relatório de performance...', 'success')}
+                            onDelete={() => showNotification('Esta ação requer confirmação adicional', 'error')}
                           />
                         </td>
                       </tr>

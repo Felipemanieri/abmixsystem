@@ -392,7 +392,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             
             <div className="flex items-center space-x-4">
               <ActionButtons 
-                onInternalMessage={() => setShowInternalMessage(true)}
+                onMessage={() => setShowInternalMessage(true)}
                 userRole="financial"
               />
               
