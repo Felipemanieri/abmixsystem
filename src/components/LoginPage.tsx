@@ -125,7 +125,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               <h1 className="text-2xl font-bold mb-2 text-shadow">{config.title}</h1>
               <p className="text-white text-opacity-90 max-w-xs mx-auto">{config.subtitle}</p>
             </div>
-            </div>
           </div>
 
           {/* Form */}
