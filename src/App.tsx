@@ -7,6 +7,7 @@ import FinancialPortal from './components/FinancialPortal';
 import ImplantacaoPortal from './components/ImplantacaoPortal';
 import SupervisorPortal from './components/SupervisorPortal';
 import RestrictedAreaPortal from './components/RestrictedAreaPortal';
+import { Lock } from 'lucide-react';
 
 type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor' | 'restricted';
 type User = {
