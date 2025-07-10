@@ -7,12 +7,12 @@ interface AbmixLogoProps {
 
 const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
   // Calcular tamanhos baseados no tamanho principal
-  const fontSize = Math.max(Math.floor(size / 2.2), 16);
-  const subFontSize = Math.max(Math.floor(size / 4.5), 11);
+  const fontSize = Math.max(Math.floor(size / 2), 18);
+  const subFontSize = Math.max(Math.floor(size / 4), 12);
   const circleSize = size * 0.9;
   
   return (
-    <div className={`flex items-center ${className}`}>
+    <div className={`flex items-center ${className} animate-float`} style={{animationDelay: '0.5s'}}>
       {/* Logo circular */}
       <div className="relative mr-3" style={{ width: circleSize, height: circleSize }}>
         <svg width={circleSize} height={circleSize} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +34,7 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
           <defs>
             <linearGradient id="paint0_linear" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
               <stop stopColor="#0AB3B8" />
-              <stop offset="1" stopColor="#0ABFB8" />
+              <stop offset="1" stopColor="#0ACFB8" />
             </linearGradient>
             <linearGradient id="paint1_linear" x1="50" y1="50" x2="100" y2="100" gradientUnits="userSpaceOnUse">
               <stop stopColor="#0AB3B8" />
@@ -42,7 +42,7 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
             </linearGradient>
             <linearGradient id="paint2_linear" x1="50" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse">
               <stop stopColor="#9CA3AF" />
-              <stop offset="1" stopColor="#6B7280" />
+              <stop offset="1" stopColor="#4B5563" />
             </linearGradient>
           </defs>
         </svg>
@@ -55,7 +55,7 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
           style={{ 
             fontSize: `${fontSize}px`, 
             letterSpacing: '0.5px',
-            textShadow: '0 1px 2px rgba(0,0,0,0.05)'
+            textShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}
         >
           <span style={{ color: '#0AB3B8', fontWeight: 800 }}>Ab</span><span style={{ color: '#6B7280', fontWeight: 700 }}>mix</span>
@@ -65,7 +65,8 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
           style={{ 
             fontSize: `${subFontSize}px`, 
             color: '#6B7280',
-            letterSpacing: '0.2px',
+            letterSpacing: '0.3px',
+            fontWeight: 500,
             opacity: 0.9
           }}
         >
