@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
