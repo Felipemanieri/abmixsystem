@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, InternalMessage } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, MessageCircle as InternalMessage } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
