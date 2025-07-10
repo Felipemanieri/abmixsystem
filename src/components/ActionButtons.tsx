@@ -12,7 +12,6 @@ interface ActionButtonsProps {
   onExternalLink?: () => void;
   onMessage?: () => void;
   onSend?: () => void;
-  onWhatsApp?: () => void;
   userRole?: string;
   className?: string;
 }
@@ -28,7 +27,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onExternalLink,
   onMessage,
   onSend,
-  onWhatsApp,
   userRole,
   className = ''
 }) => {
