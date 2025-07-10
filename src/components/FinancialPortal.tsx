@@ -3,6 +3,7 @@ import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculat
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
+import FinancialAutomationModal from './FinancialAutomationModal';
 import NotificationCenter from './NotificationCenter';
 
 interface FinancialPortalProps {
@@ -25,6 +26,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
+  const [showAutomationModal, setShowAutomationModal] = useState(false);
+  const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<{id: string, client: string} | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Notificações simuladas
@@ -159,6 +162,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     setTimeout(() => {
       document.body.removeChild(toast);
     }, 3000);
+  };
+
+  const handleSendToAutomation = (id: string, client: string) => {
+    setSelectedProposalForAutomation({id, client});
+    setShowAutomationModal(true);
   };
 
   const getStatusColor = (status: string) => {
@@ -402,6 +410,20 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </div>
             </div>
 
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group"
+              onClick={() => handleSendToAutomation('BATCH-ALL', 'Todas as Propostas Validadas')}
+            >
+              <div className="flex items-center">
+                <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition-colors">
+                  <Zap className="w-6 h-6 text-indigo-600" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-medium text-gray-900">Enviar para Automação</h3>
+                  <p className="text-sm text-gray-500">Planilha final para Make/Zapier</p>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
               <div className="flex items-center">
                 <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
@@ -523,6 +545,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                             navigator.clipboard.writeText(`${window.location.origin}/financeiro/transacao/${transaction.id}`);
                             showNotification('Link copiado para a área de transferência!', 'success');
                           }}
+                          onSend={() => handleSendToAutomation(transaction.id, transaction.client)}
                           onDownload={() => showNotification('Baixando comprovante...', 'success')}
                           onMessage={() => setShowInternalMessage(true)}
                           onEdit={() => showNotification('Editando transação...', 'info')}
@@ -546,9 +569,19 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           isOpen={showInternalMessage}
           onClose={() => setShowInternalMessage(false)}
           currentUser={{
-            name: user.name,
-            role: 'financial'
+            name: user?.name || 'Usuário Financeiro',
+            role: 'financial' 
           }}
+        />
+      )}
+      
+      {/* Automation Modal */}
+      {showAutomationModal && selectedProposalForAutomation && (
+        <FinancialAutomationModal
+          isOpen={showAutomationModal}
+          onClose={() => setShowAutomationModal(false)}
+          proposalId={selectedProposalForAutomation.id}
+          clientName={selectedProposalForAutomation.client}
         />
       )}
     </div>

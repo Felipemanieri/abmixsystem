@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User } from 'lucide-react';
+import FinancialAutomationModal from './FinancialAutomationModal';
 
 interface Proposal {
   id: string;
@@ -17,6 +18,8 @@ const FinancialArea: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState('pending_validation');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
   const [observations, setObservations] = useState('');
+  const [showAutomationModal, setShowAutomationModal] = useState(false);
+  const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<Proposal | null>(null);
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -105,15 +108,27 @@ const FinancialArea: React.FC = () => {
   };
 
   const sendToAutomation = (proposalId: string) => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { 
-            ...proposal, 
-            status: 'sent_to_automation',
-            observations: observations || 'Enviado para automação Make/Zapier'
-          }
-        : proposal
-    ));
+    const proposal = proposals.find(p => p.id === proposalId);
+    if (proposal) {
+      setSelectedProposalForAutomation(proposal);
+      setShowAutomationModal(true);
+    }
+  };
+
+  const handleAutomationComplete = () => {
+    if (selectedProposalForAutomation) {
+      setProposals(prev => prev.map(proposal => 
+        proposal.id === selectedProposalForAutomation.id 
+          ? { 
+              ...proposal, 
+              status: 'sent_to_automation',
+              observations: observations || 'Enviado para automação Make/Zapier'
+            }
+          : proposal
+      ));
+    }
+    setShowAutomationModal(false);
+    setSelectedProposalForAutomation(null);
     setSelectedProposal(null);
     setObservations('');
   };
@@ -281,6 +296,7 @@ const FinancialArea: React.FC = () => {
                       <button 
                         onClick={() => setSelectedProposal(proposal.id)}
                         className="text-teal-600 hover:text-teal-900"
+                        title="Enviar para automação"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -360,6 +376,7 @@ const FinancialArea: React.FC = () => {
                       <button
                         onClick={() => setSelectedProposal(null)}
                         className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                        title="Enviar para automação Make/Zapier"
                       >
                         Cancelar
                       </button>
@@ -386,6 +403,16 @@ const FinancialArea: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+      
+      {/* Automation Modal */}
+      {showAutomationModal && selectedProposalForAutomation && (
+        <FinancialAutomationModal
+          isOpen={showAutomationModal}
+          onClose={handleAutomationComplete}
+          proposalId={selectedProposalForAutomation.id}
+          clientName={selectedProposalForAutomation.client}
+        />
       )}
     </div>
   );
