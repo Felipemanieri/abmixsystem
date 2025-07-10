@@ -15,8 +15,8 @@ export interface ClientData {
 
 class GoogleDriveService {
   private static instance: GoogleDriveService;
-  private readonly FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID || '';
-  private readonly SPREADSHEET_ID = process.env.GOOGLE_SHEETS_ID || '';
+  private readonly FOLDER_ID = import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID || '';
+  private readonly SPREADSHEET_ID = import.meta.env.VITE_GOOGLE_SHEETS_ID || '';
   private isInitialized = false;
   
   private constructor() {
