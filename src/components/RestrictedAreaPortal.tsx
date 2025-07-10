@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, MessageSquare, Lock, Database, Shield, Zap } from 'lucide-react';
+import { LogOut, Settings, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, MessageSquare, Lock, Database, Shield, Zap, Home } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import IntegrationGuide from './IntegrationGuide';
 
