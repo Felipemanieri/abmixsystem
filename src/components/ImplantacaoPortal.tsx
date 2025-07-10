@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus, MessageSquare, Mail } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -48,7 +48,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
-  const [activeTab, setActiveTab] = useState<'proposals' | 'automation' | 'integrations' | 'logs'>('proposals');
+  const [activeTab, setActiveTab] = useState<'proposals' | 'automation'>('proposals');
   const [searchTerm, setSearchTerm] = useState('');
   
   // Notificações simuladas
@@ -702,172 +702,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     </div>
   );
 
-  const renderIntegrationsTab = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">Make.com</h3>
-                <p className="text-xs text-gray-500">Automação de processos</p>
-              </div>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-              Conectado
-            </span>
-          </div>
-          <div className="text-sm text-gray-600">
-            <p>Status: Ativo</p>
-            <p>Última sincronização: 2 min atrás</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-purple-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">Zapier</h3>
-                <p className="text-xs text-gray-500">Integrações automáticas</p>
-              </div>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-              Conectado
-            </span>
-          </div>
-          <div className="text-sm text-gray-600">
-            <p>Status: Ativo</p>
-            <p>Última sincronização: 5 min atrás</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <Cloud className="w-5 h-5 text-green-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">Google Drive</h3>
-                <p className="text-xs text-gray-500">Armazenamento de documentos</p>
-              </div>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-              Conectado
-            </span>
-          </div>
-          <div className="text-sm text-gray-600">
-            <p>Status: Ativo</p>
-            <p>Espaço usado: 2.3 GB / 15 GB</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Mail className="w-5 h-5 text-orange-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">SendGrid</h3>
-                <p className="text-xs text-gray-500">Envio de emails</p>
-              </div>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-              Configurando
-            </span>
-          </div>
-          <div className="text-sm text-gray-600">
-            <p>Status: Em configuração</p>
-            <p>Emails enviados hoje: 0</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-red-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">CRM Sistema</h3>
-                <p className="text-xs text-gray-500">Gestão de clientes</p>
-              </div>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-              Desconectado
-            </span>
-          </div>
-          <div className="text-sm text-gray-600">
-            <p>Status: Erro de conexão</p>
-            <p>Última tentativa: 1 hora atrás</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Plus className="w-5 h-5 text-gray-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-gray-900">Nova Integração</h3>
-                <p className="text-xs text-gray-500">Adicionar nova conexão</p>
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={() => showNotification('Configurando nova integração...', 'info')}
-            className="w-full mt-2 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
-          >
-            Configurar
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderLogsTab = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Logs do Sistema</h2>
-        
-        <div className="space-y-3">
-          {[
-            { time: '15:30:25', type: 'success', message: 'Proposta VEND001-PROP123 validada com sucesso' },
-            { time: '15:28:12', type: 'info', message: 'Backup automático iniciado' },
-            { time: '15:25:45', type: 'warning', message: 'Tentativa de conexão com CRM falhou' },
-            { time: '15:22:33', type: 'success', message: 'Integração Make.com sincronizada' },
-            { time: '15:20:18', type: 'error', message: 'Erro ao processar documento - arquivo corrompido' },
-            { time: '15:18:07', type: 'info', message: 'Nova proposta recebida de Ana Caroline' },
-            { time: '15:15:52', type: 'success', message: 'Email de notificação enviado para cliente' },
-            { time: '15:12:39', type: 'info', message: 'Sistema de automação reiniciado' },
-          ].map((log, index) => (
-            <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-              <div className="text-xs text-gray-500 font-mono w-16">
-                {log.time}
-              </div>
-              <div className={`w-2 h-2 rounded-full ${
-                log.type === 'success' ? 'bg-green-500' :
-                log.type === 'error' ? 'bg-red-500' :
-                log.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
-              }`}></div>
-              <div className="flex-1 text-sm text-gray-700">
-                {log.message}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -969,9 +803,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               <nav className="flex space-x-8 px-6">
                 {[
                   { id: 'proposals', label: 'Propostas', icon: FileText },
-                  { id: 'automation', label: 'Automação', icon: Zap },
-                  { id: 'integrations', label: 'Integrações', icon: Database },
-                  { id: 'logs', label: 'Logs', icon: Settings },
+                  { id: 'automation', label: 'Automação', icon: Zap }
                 ].map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -995,8 +827,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             <div className="p-6">
               {activeTab === 'proposals' && renderProposalsTab()}
               {activeTab === 'automation' && renderAutomationTab()}
-              {activeTab === 'integrations' && renderIntegrationsTab()}
-              {activeTab === 'logs' && renderLogsTab()}
             </div>
           </div>
         </div>
