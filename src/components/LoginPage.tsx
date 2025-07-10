@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Lock, User, Eye, EyeOff, Mail } from 'lucide-react';
+import { ArrowLeft, Lock, User, Eye, EyeOff, Mail, Info } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 
 interface LoginPageProps {
