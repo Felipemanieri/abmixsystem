@@ -6,8 +6,9 @@ import ClientPortal from './components/ClientPortal';
 import FinancialPortal from './components/FinancialPortal';
 import ImplantacaoPortal from './components/ImplantacaoPortal';
 import SupervisorPortal from './components/SupervisorPortal';
+import RestrictedAreaPortal from './components/RestrictedAreaPortal';
 
-type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor';
+type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor' | 'restricted';
 type User = {
   id: string;
   name: string;
@@ -111,6 +112,8 @@ function App() {
         return <ImplantacaoPortal user={currentUser} onLogout={handleLogout} />;
       case 'supervisor':
         return <SupervisorPortal user={currentUser} onLogout={handleLogout} />;
+      case 'restricted':
+        return <RestrictedAreaPortal user={currentUser} onLogout={handleLogout} />;
     }
   }
 
@@ -121,7 +124,7 @@ function App() {
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <div className="flex-shrink-0 flex items-center">
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
@@ -129,6 +132,13 @@ function App() {
                   className="h-20 w-auto"
                 />
               </div>
+              <button
+                onClick={() => setCurrentPortal('restricted')}
+                className="flex items-center px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition-colors shadow-sm"
+              >
+                <Lock className="w-4 h-4 mr-2" />
+                Área Restrita
+              </button>
             </div>
             <div className="flex items-center space-x-4">
               <div className="hidden md:flex items-center space-x-6">

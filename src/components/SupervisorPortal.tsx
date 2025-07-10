@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, Lock, Database, ShieldAlert, FileSpreadsheet, Zap, Mail } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -10,7 +10,7 @@ interface SupervisorPortalProps {
   onLogout: () => void;
 }
 
-type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings' | 'restricted';
+type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings';
 
 const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
@@ -18,14 +18,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
-  const [showRestrictedAccess, setShowRestrictedAccess] = useState(false);
-
-  // Mostrar mensagem de boas-vindas ao carregar o componente
-  React.useEffect(() => {
-    if (user.name === 'Felipe Abmix') {
-      showNotification(`Bem-vindo, ${user.name}! Você tem 5 notificações não lidas.`, 'success');
-    }
-  }, []);
 
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -502,158 +494,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
     </div>
   );
 
-  const renderRestrictedView = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Área Restrita</h1>
-        <p className="text-gray-300">Acesso a configurações avançadas e integrações do sistema</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-blue-100 rounded-full">
-              <FileSpreadsheet className="w-6 h-6 text-blue-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Google Sheets</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Integração com planilhas para relatórios e análises</p>
-          <button 
-            onClick={() => window.open('https://docs.google.com/spreadsheets/d/1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '_blank')}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Acessar Planilha Mestra
-          </button>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-purple-100 rounded-full">
-              <Zap className="w-6 h-6 text-purple-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Make</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Automações e integrações com sistemas externos</p>
-          <button 
-            onClick={() => window.open('https://make.com', '_blank')}
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Configurar Automações
-          </button>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-red-100 rounded-full">
-              <Database className="w-6 h-6 text-red-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Banco de Dados</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Acesso direto ao banco de dados do sistema</p>
-          <button 
-            onClick={() => showNotification('Acesso ao banco de dados restrito a administradores', 'info')}
-            className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors"
-          >
-            Gerenciar Banco de Dados
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Configurações Avançadas do Sistema</h2>
-        
-        <div className="space-y-4">
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <ShieldAlert className="w-5 h-5 text-orange-600 mr-3" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Permissões de Acesso</h3>
-                  <p className="text-sm text-gray-600">Gerenciar permissões de usuários e funções</p>
-                </div>
-              </div>
-              <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
-                Configurar
-              </button>
-            </div>
-          </div>
-          
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Database className="w-5 h-5 text-blue-600 mr-3" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Backup do Sistema</h3>
-                  <p className="text-sm text-gray-600">Configurar backups automáticos e restauração</p>
-                </div>
-              </div>
-              <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
-                Configurar
-              </button>
-            </div>
-          </div>
-          
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Zap className="w-5 h-5 text-purple-600 mr-3" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Webhooks e APIs</h3>
-                  <p className="text-sm text-gray-600">Gerenciar endpoints e chaves de API</p>
-                </div>
-              </div>
-              <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm">
-                Configurar
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
-          <div className="flex items-start">
-            <AlertCircle className="w-5 h-5 text-yellow-600 mr-2 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-yellow-700">
-              <span className="font-medium">Atenção:</span> Alterações nesta área podem afetar todo o sistema. Certifique-se de que você entende as consequências antes de fazer qualquer modificação.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Planilha Completa do Sistema</h2>
-        
-        <div className="bg-gray-50 p-4 rounded-lg mb-6">
-          <div className="flex items-center mb-4">
-            <FileSpreadsheet className="w-6 h-6 text-green-600 mr-3" />
-            <h3 className="text-lg font-medium text-gray-900">Planilha Mestra Abmix</h3>
-          </div>
-          
-          <p className="text-sm text-gray-600 mb-4">
-            A planilha mestra contém todos os dados do sistema, incluindo:
-          </p>
-          
-          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 mb-4">
-            <li>Propostas e status</li>
-            <li>Dados de clientes</li>
-            <li>Performance de vendedores</li>
-            <li>Análises financeiras</li>
-            <li>Métricas de conversão</li>
-            <li>Relatórios gerenciais</li>
-          </ul>
-          
-          <div className="flex justify-center">
-            <button 
-              onClick={() => window.open('https://docs.google.com/spreadsheets/d/1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '_blank')}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Acessar Planilha Completa
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const renderContent = () => {
     switch (activeView) {
       case 'reports':
@@ -662,11 +502,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         return renderAnalyticsView();
       case 'team':
         return renderTeamView();
-      case 'restricted':
-        if (user.name === 'Felipe Abmix') {
-          return renderRestrictedView();
-        }
-        return <div className="bg-red-50 p-6 rounded-xl text-center"><AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" /><p className="text-red-700 font-medium">Acesso restrito. Você não tem permissão para visualizar esta área.</p></div>;
       case 'settings':
         return renderSettingsView();
       default:
@@ -888,32 +723,22 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
               <div className="flex-shrink-0 flex items-center">
                 <AbmixLogo size={40} className="mr-3" />
                 <div className="flex items-center">
-                  <span className="text-xl font-bold text-gray-900">Portal Supervisor</span>
+                  <span className="ml-3 text-xl font-bold text-gray-900">Portal Supervisor</span>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                {/* Navigation */}
-                {activeView !== 'dashboard' && (
-                  <button
-                    onClick={() => setActiveView('dashboard')}
-                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <BarChart3 className="w-4 h-4 mr-2" />
-                    Dashboard
-                  </button>
-                )}
-                
-                <button 
-                  onClick={() => setActiveView('restricted')}
-                  className="flex items-center px-4 py-2 text-sm font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg transition-colors shadow-sm"
+              {/* Navigation */}
+              {activeView !== 'dashboard' && (
+                <button
+                  onClick={() => setActiveView('dashboard')}
+                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <Lock className="w-4 h-4 mr-2" />
-                  Área Restrita
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  Dashboard
                 </button>
-              </div>
+              )}
               
               <button 
                 className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
