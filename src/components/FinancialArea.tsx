@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User } from 'lucide-react';
+import { DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Download, Mail, MessageSquare, Share2, Link, ExternalLink } from 'lucide-react';
+import ActionButtons from './ActionButtons';
 import FinancialAutomationModal from './FinancialAutomationModal';
 
 interface Proposal {
@@ -12,6 +13,8 @@ interface Proposal {
   submissionDate: string;
   documents: number;
   observations?: string;
+  email?: string;
+  phone?: string;
 }
 
 const FinancialArea: React.FC = () => {
@@ -20,6 +23,8 @@ const FinancialArea: React.FC = () => {
   const [observations, setObservations] = useState('');
   const [showAutomationModal, setShowAutomationModal] = useState(false);
   const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<Proposal | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterDate, setFilterDate] = useState('');
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -31,6 +36,8 @@ const FinancialArea: React.FC = () => {
       status: 'pending_validation',
       submissionDate: '2024-01-15',
       documents: 8,
+      email: 'contato@empresaabc.com.br',
+      phone: '11999999999'
     },
     {
       id: 'VEND002-PROP124',
@@ -41,6 +48,8 @@ const FinancialArea: React.FC = () => {
       status: 'pending_validation',
       submissionDate: '2024-01-14',
       documents: 6,
+      email: 'contato@techsolutions.com.br',
+      phone: '11888888888'
     },
     {
       id: 'VEND001-PROP125',
@@ -52,6 +61,8 @@ const FinancialArea: React.FC = () => {
       submissionDate: '2024-01-13',
       documents: 5,
       observations: 'Documentação completa e validada',
+      email: 'contato@consultoriaxyz.com.br',
+      phone: '11777777777'
     },
     {
       id: 'VEND003-PROP126',
@@ -63,6 +74,8 @@ const FinancialArea: React.FC = () => {
       submissionDate: '2024-01-12',
       documents: 7,
       observations: 'Enviado para automação Make/Zapier',
+      email: 'contato@inovacaodigital.com.br',
+      phone: '11666666666'
     },
   ]);
 
@@ -160,9 +173,39 @@ const FinancialArea: React.FC = () => {
   };
 
   const filteredProposals = proposals.filter(proposal => {
-    if (selectedStatus === 'all') return true;
-    return proposal.status === selectedStatus;
+    // Filtrar por status
+    if (selectedStatus !== 'all' && proposal.status !== selectedStatus) {
+      return false;
+    }
+    
+    // Filtrar por termo de busca
+    if (searchTerm && !proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) && 
+        !proposal.id.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !proposal.vendor.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+    
+    // Filtrar por data
+    if (filterDate && proposal.submissionDate !== filterDate) {
+      return false;
+    }
+    
+    return true;
   });
+
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 3000);
+  };
 
   return (
     <div className="space-y-6">
@@ -202,21 +245,52 @@ const FinancialArea: React.FC = () => {
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Propostas para Validação</h2>
             <p className="text-sm text-gray-600">Gerencie o fluxo de validação financeira</p>
           </div>
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-          >
-            <option value="pending_validation">Aguardando Validação</option>
-            <option value="validated">Validadas</option>
-            <option value="sent_to_automation">Enviadas p/ Automação</option>
-            <option value="all">Todas</option>
-          </select>
+          <div className="flex flex-wrap gap-3">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Buscar propostas..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 pl-10"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              <option value="pending_validation">Aguardando Validação</option>
+              <option value="validated">Validadas</option>
+              <option value="sent_to_automation">Enviadas p/ Automação</option>
+              <option value="all">Todas</option>
+            </select>
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => setFilterDate(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+          </div>
         </div>
       </div>
 
@@ -292,23 +366,26 @@ const FinancialArea: React.FC = () => {
                     {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button 
-                        onClick={() => setSelectedProposal(proposal.id)}
-                        className="text-teal-600 hover:text-teal-900"
-                        title="Enviar para automação"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      {proposal.status === 'validated' && (
-                        <button 
-                          onClick={() => sendToAutomation(proposal.id)}
-                          className="text-purple-600 hover:text-purple-900"
-                        >
-                          <Send className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
+                    <ActionButtons 
+                      onView={() => setSelectedProposal(proposal.id)}
+                      onCopyLink={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/proposta/${proposal.id}`);
+                        showNotification('Link copiado para a área de transferência!', 'success');
+                      }}
+                      onWhatsApp={() => window.open(`https://wa.me/55${proposal.phone}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id}...`)}`)}
+                      onEmail={() => window.open(`mailto:${proposal.email}?subject=Proposta ${proposal.id}`)}
+                      onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
+                      onExternalLink={() => window.open(`${window.location.origin}/proposta/${proposal.id}`, '_blank')}
+                      onMessage={() => showNotification('Enviando mensagem interna...', 'info')}
+                      onSend={proposal.status === 'validated' ? () => sendToAutomation(proposal.id) : undefined}
+                      onShare={() => {
+                        navigator.share?.({
+                          title: `Proposta ${proposal.id}`,
+                          text: `Proposta para ${proposal.client}`,
+                          url: `${window.location.origin}/proposta/${proposal.id}`
+                        }) || showNotification('Compartilhando proposta...', 'info');
+                      }}
+                    />
                   </td>
                 </tr>
               ))}
@@ -320,7 +397,7 @@ const FinancialArea: React.FC = () => {
       {/* Proposal Detail Modal */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -357,6 +434,38 @@ const FinancialArea: React.FC = () => {
                         <span className="font-medium text-gray-700">Valor:</span>
                         <span className="ml-2">{proposal.value}</span>
                       </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Status:</span>
+                        <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
+                          {getStatusText(proposal.status)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Data:</span>
+                        <span className="ml-2">{new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-gray-700 mb-2">Documentos</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">RG/CPF</span>
+                          <span className="text-sm text-green-600">✓ Verificado</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Comprovante de Residência</span>
+                          <span className="text-sm text-green-600">✓ Verificado</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Carteirinha Plano Atual</span>
+                          <span className="text-sm text-green-600">✓ Verificado</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Contrato Social</span>
+                          <span className="text-sm text-green-600">✓ Verificado</span>
+                        </div>
+                      </div>
                     </div>
                     
                     <div>
@@ -376,7 +485,6 @@ const FinancialArea: React.FC = () => {
                       <button
                         onClick={() => setSelectedProposal(null)}
                         className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                        title="Enviar para automação Make/Zapier"
                       >
                         Cancelar
                       </button>
@@ -384,6 +492,7 @@ const FinancialArea: React.FC = () => {
                         <button
                           onClick={() => validateProposal(proposal.id)}
                           className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                          title="Validar proposta"
                         >
                           Validar Proposta
                         </button>
@@ -392,6 +501,7 @@ const FinancialArea: React.FC = () => {
                         <button
                           onClick={() => sendToAutomation(proposal.id)}
                           className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                          title="Enviar para Make/Zapier"
                         >
                           Enviar para Make/Zapier
                         </button>

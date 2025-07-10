@@ -670,6 +670,11 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                             onWhatsApp={() => window.open(`https://wa.me/55${vendor.phone}?text=${encodeURIComponent(`Olá ${vendor.name}! Preciso falar sobre sua performance de vendas.`)}`)}
                             onEmail={() => window.open(`mailto:${vendor.email}?subject=Performance de Vendas`)}
                             onExternalLink={() => window.open(`${window.location.origin}/supervisor/vendedor/${vendor.id}`, '_blank')}
+                           onSend={() => showNotification(`Enviando metas para ${vendor.name}...`, 'info')}
+                           onShare={() => {
+                             navigator.clipboard.writeText(`${window.location.origin}/supervisor/compartilhar/${vendor.id}`);
+                             showNotification('Link de compartilhamento copiado!', 'success');
+                           }}
                             onDownload={() => showNotification('Baixando relatório de performance...', 'success')}
                             onDelete={() => showNotification('Esta ação requer confirmação adicional', 'error')}
                           />

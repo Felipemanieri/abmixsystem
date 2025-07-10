@@ -212,12 +212,17 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     {new Date(transaction.date).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-green-600 hover:text-green-900 mr-3">
-                      <Eye className="h-4 w-4" />
-                    </button>
-                    <button className="text-blue-600 hover:text-blue-900">
-                      <FileText className="h-4 w-4" />
-                    </button>
+                    <ActionButtons 
+                      onView={() => showNotification(`Visualizando transação ${transaction.id}`, 'info')}
+                      onCopyLink={() => navigator.clipboard.writeText(`${window.location.origin}/financial/transaction/${transaction.id}`)}
+                      onWhatsApp={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Informações sobre a transação ${transaction.id}`)}`)}
+                      onEmail={() => window.open(`mailto:?subject=Transação ${transaction.id}&body=Detalhes da transação: ${transaction.client} - ${transaction.value}`)}
+                      onDownload={() => showNotification('Baixando comprovante...', 'success')}
+                      onMessage={() => setShowInternalMessage(true)}
+                      onEdit={() => showNotification(`Editando transação ${transaction.id}...`, 'info')}
+                      onExternalLink={() => window.open(`${window.location.origin}/financial/transaction/${transaction.id}`, '_blank')}
+                      onSend={() => showNotification(`Enviando transação ${transaction.id} para processamento...`, 'info')}
+                    />
                   </td>
                 </tr>
               ))}

@@ -539,10 +539,21 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       onSend={() => {
                         if (proposal.status === 'validated') {
                           sendToAutomation(proposal.id);
+                       } else if (proposal.status === 'pending_validation') {
+                         validateProposal(proposal.id);
                         } else {
                           showNotification('Esta proposta não está pronta para ser enviada', 'error');
                         }
                       }}
+                     onDelete={() => {
+                       if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.id}?`)) {
+                         showNotification('Proposta excluída com sucesso', 'success');
+                       }
+                     }}
+                     onShare={() => {
+                       navigator.clipboard.writeText(`${window.location.origin}/implantacao/compartilhar/${proposal.id}`);
+                       showNotification('Link de compartilhamento copiado!', 'success');
+                     }}
                     />
                   </td>
                 </tr>

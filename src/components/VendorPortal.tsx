@@ -615,8 +615,25 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                             onWhatsApp={() => window.open(`https://wa.me/55${proposal.phone}?text=${encodeURIComponent(`Olá! Segue o link da proposta: ${proposal.link}`)}`)}
                             onEmail={() => window.open(`mailto:${proposal.email}?subject=Proposta de Plano de Saúde&body=Olá! Segue o link da proposta: ${proposal.link}`)}
                             onMessage={() => setShowInternalMessage(true)}
+                           onEdit={() => showNotification(`Editando proposta ${proposal.id}...`, 'info')}
+                           onDelete={() => {
+                             if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.id}?`)) {
+                               showNotification('Proposta excluída com sucesso', 'success');
+                             }
+                           }}
                             onExternalLink={() => window.open(proposal.link, '_blank')}
                             onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
+                           onShare={() => {
+                             navigator.clipboard.writeText(`${window.location.origin}/compartilhar/${proposal.id}`);
+                             showNotification('Link de compartilhamento copiado!', 'success');
+                           }}
+                           onSend={() => {
+                             if (proposal.status === 'docs_pending') {
+                               showNotification('Enviando lembrete para o cliente...', 'success');
+                             } else {
+                               showNotification('Enviando proposta para o financeiro...', 'success');
+                             }
+                           }}
                           />
                         </td>
                       </tr>

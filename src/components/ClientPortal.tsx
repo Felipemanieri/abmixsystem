@@ -224,11 +224,16 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                     <ActionButtons 
                       onView={() => setSelectedProposal(proposal.id)}
                       onCopyLink={() => navigator.clipboard.writeText(`${window.location.origin}/proposta/${proposal.id}`)}
+                      onShare={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/compartilhar/cliente/${proposal.id}`);
+                        alert('Link de compartilhamento copiado!');
+                      }}
                       onWhatsApp={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Preciso de ajuda com minha proposta ${proposal.id}`)}`)}
                       onEmail={() => window.open(`mailto:atendimento@abmix.com.br?subject=Proposta ${proposal.id}`)}
                       onMessage={() => setShowInternalMessage(true)}
                       onDownload={() => alert('Baixando documentos da proposta...')}
                       onExternalLink={() => window.open(`${window.location.origin}/proposta/${proposal.id}`, '_blank')}
+                      onSend={() => alert('Enviando documentos adicionais...')}
                     />
                   </td>
                 </tr>
