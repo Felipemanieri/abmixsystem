@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2 } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -12,6 +12,7 @@ interface ActionButtonsProps {
   onExternalLink?: () => void;
   onMessage?: () => void;
   onSend?: () => void;
+  onShare?: () => void;
   userRole?: string;
   className?: string;
 }
@@ -27,6 +28,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onExternalLink,
   onMessage,
   onSend,
+  onShare,
   userRole,
   className = ''
 }) => {
@@ -121,6 +123,16 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           title="Enviar"
         >
           <Send className="w-4 h-4" />
+        </button>
+      )}
+      
+      {onShare && (
+        <button 
+          onClick={onShare}
+          className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50 transition-colors"
+          title="Compartilhar"
+        >
+          <Share2 className="w-4 h-4" />
         </button>
       )}
       
