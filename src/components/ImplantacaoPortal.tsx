@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus, MessageSquare } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, Bot, X, Send as SendIcon, Zap, Database, Cloud, Cog, Filter, Search, Download, Upload, Trash2, Edit, Plus, MessageSquare, Mail } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
