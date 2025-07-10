@@ -223,19 +223,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
             {/* Demo Credentials */}
             <div className="mt-8 p-5 bg-gray-50 rounded-xl border border-gray-100 shadow-inner">
-              {portal === 'supervisor' ? (
-                <p className="text-sm text-gray-600 text-center flex items-center justify-center">
-                  <User className="w-4 h-4 mr-2 text-orange-500" />
-                  <strong className="text-orange-600 mr-1">Acesso Supervisor:</strong> 
-                  <span>felipe@abmix.com.br / 123456</span>
-                </p>
-              ) : (
-                <p className="text-sm text-gray-600 text-center flex items-center justify-center">
-                  <Info className="w-4 h-4 mr-2 text-blue-500" />
-                  <strong className="text-blue-600 mr-1">Demo:</strong> 
-                  <span>Use qualquer email e senha para testar</span>
-                </p>
-              )}
+              <p className="text-sm text-gray-600 text-center flex items-center justify-center">
+                <Info className="w-4 h-4 mr-2 text-blue-500" />
+                <strong className="text-blue-600 mr-1">Demo:</strong> 
+                <span>Use qualquer email e senha para testar</span>
+              </p>
             </div>
             
             {/* Footer */}

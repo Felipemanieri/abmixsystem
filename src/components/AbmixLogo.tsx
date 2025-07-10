@@ -12,7 +12,7 @@ const AbmixLogo: React.FC<AbmixLogoProps> = ({ className = "", size = 40 }) => {
   const circleSize = size * 0.9;
   
   return (
-    <div className={`flex items-center ${className} animate-float`} style={{animationDelay: '0.5s'}}>
+    <div className={`flex items-center ${className}`}>
       {/* Logo circular */}
       <div className="relative mr-3" style={{ width: circleSize, height: circleSize }}>
         <svg width={circleSize} height={circleSize} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
