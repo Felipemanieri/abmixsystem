@@ -269,6 +269,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           console.error('Erro ao buscar documentos do Google Drive:', error);
         });
     }
+    
+    // Quando visualizar uma proposta, buscar documentos do Google Drive
+    if (proposal.id) {
+      getClientDocuments(proposal.id)
+        .then(documents => {
+          console.log('Documentos do cliente no Google Drive:', documents);
+          // Aqui você poderia atualizar a lista de documentos da proposta
+        })
+        .catch(error => {
+          console.error('Erro ao buscar documentos do Google Drive:', error);
+        });
+    }
   };
 
   const handleCopyLink = async (link: string) => {

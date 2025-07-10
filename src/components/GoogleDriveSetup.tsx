@@ -34,9 +34,9 @@ const GoogleDriveSetup: React.FC = () => {
       
       {/* Passos */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 relative">
           {[1, 2, 3, 4].map((s) => (
-            <div key={s} className="flex flex-col items-center">
+            <div key={s} className="flex flex-col items-center z-10">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 step > s ? 'bg-green-100 text-green-600' : 
                 step === s ? 'bg-blue-100 text-blue-600' : 
@@ -58,7 +58,7 @@ const GoogleDriveSetup: React.FC = () => {
             </div>
           ))}
           
-          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 z-0" style={{ top: '5rem' }}></div>
+          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 top-5"></div>
         </div>
         
         {step === 1 && (

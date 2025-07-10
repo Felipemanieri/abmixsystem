@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Phone, Mail, MapPin, Calendar, Users, Shield, Check, Plus, Upload, Camera, FileText } from 'lucide-react';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
+import { useGoogleDrive } from '../hooks/useGoogleDrive';
 
 interface PersonData {
   id: string;
@@ -57,6 +58,9 @@ const ClientForm: React.FC = () => {
   const [dependentes, setDependentes] = useState<PersonData[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const { saveClientData, uploadDocument, createClientFolder } = useGoogleDrive();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const { saveClientData, uploadDocument, createClientFolder } = useGoogleDrive();
@@ -147,6 +151,65 @@ const ClientForm: React.FC = () => {
     
     // Iniciar processo de upload e salvamento
     handleSaveToGoogleDrive();
+    // Iniciar processo de upload e salvamento
+    handleSaveToGoogleDrive();
+  };
+
+  const handleSaveToGoogleDrive = async () => {
+    setIsUploading(true);
+    setUploadProgress(10);
+    
+    try {
+      // Gerar ID único para o cliente
+      const clientId = `CLIENT-${Date.now()}`;
+      
+      // Criar pasta para o cliente no Google Drive
+      setUploadProgress(20);
+      const folderId = await createClientFolder(clientId, titulares[0].nome);
+      
+      // Upload de documentos
+      setUploadProgress(40);
+      const documentUrls: string[] = [];
+      
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        const file = uploadedFiles[i];
+        const documentUrl = await uploadDocument(file, clientId);
+        documentUrls.push(documentUrl);
+        
+        // Atualizar progresso de upload
+        setUploadProgress(40 + Math.floor((i + 1) / uploadedFiles.length * 30));
+      }
+      
+      // Preparar dados do cliente para salvar no Google Sheets
+      setUploadProgress(80);
+      const clientData = {
+        id: clientId,
+        nome: titulares[0].nome,
+        cpf: titulares[0].cpf,
+        rg: titulares[0].rg,
+        dataNascimento: titulares[0].dataNascimento,
+        email: titulares[0].emailPessoal,
+        telefone: titulares[0].telefonePessoal,
+        empresa: contractInfo.nomeEmpresa,
+        plano: contractInfo.planoContratado,
+        documentos: documentUrls,
+        dataEnvio: new Date().toISOString()
+      };
+      
+      // Salvar dados no Google Sheets
+      setUploadProgress(90);
+      await saveClientData(clientData);
+      
+      // Finalizar
+      setUploadProgress(100);
+      setIsUploading(false);
+      setIsSubmitted(true);
+      
+    } catch (error) {
+      console.error('Erro ao salvar dados no Google Drive:', error);
+      setIsUploading(false);
+      alert('Ocorreu um erro ao enviar os dados. Por favor, tente novamente.');
+    }
   };
 
   const handleSaveToGoogleDrive = async () => {
@@ -416,6 +479,38 @@ const ClientForm: React.FC = () => {
     );
   }
 
+  if (isUploading) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Upload className="w-8 h-8 text-blue-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Enviando Dados...</h2>
+          <p className="text-gray-600 mb-6">
+            Seus dados estão sendo enviados e armazenados no Google Drive. Por favor, não feche esta janela.
+          </p>
+          
+          <div className="mb-4">
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                className="bg-teal-600 h-3 rounded-full transition-all duration-300" 
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">{uploadProgress}% concluído</p>
+          </div>
+          
+          <p className="text-sm text-gray-500">
+            {uploadProgress < 30 ? 'Criando pasta para seus documentos...' : 
+             uploadProgress < 70 ? 'Enviando documentos...' : 
+             'Salvando informações...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
@@ -556,6 +651,7 @@ const ClientForm: React.FC = () => {
         {/* Submit Button */}
         <div className="flex justify-center">
           <button
+            disabled={isUploading}
             disabled={isUploading}
             type="submit"
             className="px-8 py-3 text-lg font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

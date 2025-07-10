@@ -1,5 +1,3 @@
-import { GoogleAuth } from 'google-auth-library';
-
 // Interface para os dados do cliente
 export interface ClientData {
   id: string;
@@ -19,9 +17,11 @@ class GoogleDriveService {
   private static instance: GoogleDriveService;
   private readonly FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID || '';
   private readonly SPREADSHEET_ID = process.env.GOOGLE_SHEETS_ID || '';
+  private isInitialized = false;
   
   private constructor() {
     // Singleton
+    this.initGoogleApi();
   }
 
   public static getInstance(): GoogleDriveService {
@@ -29,6 +29,18 @@ class GoogleDriveService {
       GoogleDriveService.instance = new GoogleDriveService();
     }
     return GoogleDriveService.instance;
+  }
+
+  private async initGoogleApi(): Promise<void> {
+    try {
+      // Em um ambiente real, aqui você inicializaria a API do Google
+      // Exemplo: await gapi.client.init({ ... })
+      this.isInitialized = true;
+      console.log('Google API inicializada com sucesso');
+    } catch (error) {
+      console.error('Erro ao inicializar Google API:', error);
+      this.isInitialized = false;
+    }
   }
 
   // Salva os dados do cliente no Google Sheets
@@ -69,7 +81,7 @@ class GoogleDriveService {
       console.log(`Criando pasta para o cliente ${clientName} (${clientId})`);
       
       // Simulação de ID da pasta para demonstração
-      return Math.random().toString(36).substring(2, 15);
+      return `client-${clientId.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
     } catch (error) {
       console.error('Erro ao criar pasta no Google Drive:', error);
       throw error;
@@ -87,11 +99,41 @@ class GoogleDriveService {
       return [
         'RG.pdf',
         'CPF.pdf',
-        'Comprovante_Residencia.pdf'
+        'Comprovante_Residencia.pdf',
+        'Carteirinha_Plano_Atual.jpg',
+        'Contrato_Social.pdf'
       ];
     } catch (error) {
       console.error('Erro ao obter documentos do Google Drive:', error);
       return [];
+    }
+  }
+
+  // Verifica se o cliente já tem uma pasta no Google Drive
+  public async checkClientFolder(clientId: string): Promise<boolean> {
+    try {
+      // Em um ambiente real, aqui você verificaria se a pasta já existe
+      console.log(`Verificando se o cliente ${clientId} já tem pasta`);
+      
+      // Simulação para demonstração
+      return Math.random() > 0.5;
+    } catch (error) {
+      console.error('Erro ao verificar pasta do cliente:', error);
+      return false;
+    }
+  }
+
+  // Cria uma planilha para o cliente no Google Sheets
+  public async createClientSpreadsheet(clientId: string, clientName: string): Promise<string> {
+    try {
+      // Em um ambiente real, aqui você criaria uma nova planilha
+      console.log(`Criando planilha para o cliente ${clientName} (${clientId})`);
+      
+      // Simulação de ID da planilha para demonstração
+      return Math.random().toString(36).substring(2, 15);
+    } catch (error) {
+      console.error('Erro ao criar planilha no Google Sheets:', error);
+      throw error;
     }
   }
 }
