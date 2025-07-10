@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2 } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2, Zap, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -12,6 +12,10 @@ interface ActionButtonsProps {
   onExternalLink?: () => void;
   onMessage?: () => void;
   onSend?: () => void;
+  onAutomate?: () => void;
+  onApprove?: () => void;
+  onReject?: () => void;
+  onForward?: () => void;
   onShare?: () => void;
   userRole?: string;
   className?: string;
@@ -28,6 +32,10 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onExternalLink,
   onMessage,
   onSend,
+  onAutomate,
+  onApprove,
+  onReject,
+  onForward,
   onShare,
   userRole,
   className = ''
@@ -123,6 +131,46 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           title="Enviar"
         >
           <Send className="w-4 h-4" />
+        </button>
+      )}
+
+      {onAutomate && (
+        <button 
+          onClick={onAutomate}
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          title="Automatizar"
+        >
+          <Zap className="w-4 h-4" />
+        </button>
+      )}
+
+      {onApprove && (
+        <button 
+          onClick={onApprove}
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          title="Aprovar"
+        >
+          <CheckCircle className="w-4 h-4" />
+        </button>
+      )}
+
+      {onReject && (
+        <button 
+          onClick={onReject}
+          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+          title="Rejeitar"
+        >
+          <AlertCircle className="w-4 h-4" />
+        </button>
+      )}
+
+      {onForward && (
+        <button 
+          onClick={onForward}
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          title="Encaminhar"
+        >
+          <ArrowRight className="w-4 h-4" />
         </button>
       )}
       
