@@ -535,6 +535,14 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       onDownload={() => showNotification('Baixando documentos...', 'success')}
                       onWhatsApp={() => window.open(`https://wa.me/55${proposal.vendor.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id} do cliente ${proposal.client}...`)}`)}
                       onEmail={() => window.open(`mailto:${proposal.vendor.toLowerCase().replace(/\s/g, '.')}@abmix.com.br?subject=Proposta ${proposal.id}`)}
+                      onExternalLink={() => window.open(`${window.location.origin}/implantacao/proposta/${proposal.id}`, '_blank')}
+                      onSend={() => {
+                        if (proposal.status === 'validated') {
+                          sendToAutomation(proposal.id);
+                        } else {
+                          showNotification('Esta proposta não está pronta para ser enviada', 'error');
+                        }
+                      }}
                     />
                   </td>
                 </tr>

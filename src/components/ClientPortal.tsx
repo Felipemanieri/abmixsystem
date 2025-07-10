@@ -228,6 +228,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                       onEmail={() => window.open(`mailto:atendimento@abmix.com.br?subject=Proposta ${proposal.id}`)}
                       onMessage={() => setShowInternalMessage(true)}
                       onDownload={() => alert('Baixando documentos da proposta...')}
+                      onExternalLink={() => window.open(`${window.location.origin}/proposta/${proposal.id}`, '_blank')}
                     />
                   </td>
                 </tr>

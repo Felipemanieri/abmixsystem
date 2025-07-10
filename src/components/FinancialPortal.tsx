@@ -526,6 +526,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           onDownload={() => showNotification('Baixando comprovante...', 'success')}
                           onMessage={() => setShowInternalMessage(true)}
                           onEdit={() => showNotification('Editando transação...', 'info')}
+                          onWhatsApp={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Sobre a transação ${transaction.id} do cliente ${transaction.client}...`)}`)}
+                          onExternalLink={() => window.open(`${window.location.origin}/financeiro/transacao/${transaction.id}`, '_blank')}
+                          onDelete={() => showNotification('Esta funcionalidade requer permissão especial', 'error')}
                         />
                       </td>
                     </tr>
