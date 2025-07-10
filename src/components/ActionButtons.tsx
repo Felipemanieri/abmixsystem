@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2 } from 'lucide-react';
+import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink } from 'lucide-react';
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -9,6 +9,7 @@ interface ActionButtonsProps {
   onDownload?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  onExternalLink?: () => void;
   onMessage?: () => void;
   className?: string;
 }
@@ -21,6 +22,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   onDownload,
   onEdit,
   onDelete,
+  onExternalLink,
   onMessage,
   className = ''
 }) => {
@@ -95,6 +97,16 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           title="Excluir"
         >
           <Trash2 className="w-4 h-4" />
+        </button>
+      )}
+
+      {onExternalLink && (
+        <button 
+          onClick={onExternalLink}
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          title="Abrir Link"
+        >
+          <ExternalLink className="w-4 h-4" />
         </button>
       )}
       
