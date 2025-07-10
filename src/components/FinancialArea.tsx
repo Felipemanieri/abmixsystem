@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Download, Mail, MessageSquare, Share2, Link, ExternalLink, Search, Filter, Clock, Zap, ArrowRight } from 'lucide-react';
+import { DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Download, Mail, MessageSquare, Share2, Link, ExternalLink, Search, Filter, Clock, Zap, ArrowRight, X, Copy, Trash2, Edit, Plus, BarChart3, CreditCard, PieChart, Wallet, Calculator } from 'lucide-react';
 import ActionButtons from './ActionButtons';
 import FinancialAutomationModal from './FinancialAutomationModal';
 
@@ -25,6 +25,9 @@ const FinancialArea: React.FC = () => {
   const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<Proposal | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDate, setFilterDate] = useState('');
+  const [showFinancialStats, setShowFinancialStats] = useState(true);
+  const [showQuickActions, setShowQuickActions] = useState(true);
+  const [showCategoryPerformance, setShowCategoryPerformance] = useState(true);
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -123,6 +126,7 @@ const FinancialArea: React.FC = () => {
       change: 'Para revisar',
       changeType: 'warning',
       icon: AlertCircle,
+      color: 'orange',
     },
     {
       name: 'Validadas Hoje',
@@ -130,6 +134,7 @@ const FinancialArea: React.FC = () => {
       change: 'Prontas para envio',
       changeType: 'positive',
       icon: CheckCircle,
+      color: 'green',
     },
     {
       name: 'Enviadas p/ Automação',
@@ -137,6 +142,7 @@ const FinancialArea: React.FC = () => {
       change: 'Processadas',
       changeType: 'positive',
       icon: TrendingUp,
+      color: 'purple',
     },
     {
       name: 'Valor Total Validado',
@@ -144,7 +150,14 @@ const FinancialArea: React.FC = () => {
       change: 'Este mês',
       changeType: 'positive',
       icon: DollarSign,
+      color: 'blue',
     },
+  ];
+
+  const categoryStats = [
+    { name: 'Planos Empresariais', value: 'R$ 28.500', percentage: 62 },
+    { name: 'Planos Familiares', value: 'R$ 12.800', percentage: 28 },
+    { name: 'Planos Individuais', value: 'R$ 4.380', percentage: 10 },
   ];
 
   const validateProposal = (proposalId: string) => {
@@ -255,32 +268,114 @@ const FinancialArea: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {financialStats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+      {showFinancialStats && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {financialStats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">{stat.name}</p>
+                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  </div>
+                  <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
+                    <Icon className={`w-6 h-6 text-${stat.color}-600`} />
+                  </div>
                 </div>
-                <div className="p-3 bg-teal-100 rounded-full">
-                  <Icon className="w-6 h-6 text-teal-600" />
+                <div className="mt-4 flex items-center">
+                  <span className={`text-sm font-medium ${
+                    stat.changeType === 'positive' ? 'text-green-600' : 
+                    stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600'
+                  }`}>
+                    {stat.change}
+                  </span>
                 </div>
               </div>
-              <div className="mt-4 flex items-center">
-                <span className={`text-sm font-medium ${
-                  stat.changeType === 'positive' ? 'text-green-600' : 
-                  stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600'
-                }`}>
-                  {stat.change}
-                </span>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      {showQuickActions && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+            <div className="flex items-center">
+              <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
+                <Calculator className="w-6 h-6 text-green-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Calculadora</h3>
+                <p className="text-sm text-gray-500">Cálculos financeiros</p>
               </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+            <div className="flex items-center">
+              <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
+                <BarChart3 className="w-6 h-6 text-blue-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Análises</h3>
+                <p className="text-sm text-gray-500">Gráficos e métricas</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+            <div className="flex items-center">
+              <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
+                <PieChart className="w-6 h-6 text-purple-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Projeções</h3>
+                <p className="text-sm text-gray-500">Previsões financeiras</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+            <div className="flex items-center">
+              <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
+                <Wallet className="w-6 h-6 text-orange-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-medium text-gray-900">Fluxo de Caixa</h3>
+                <p className="text-sm text-gray-500">Controle financeiro</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Category Performance */}
+      {showCategoryPerformance && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">Performance por Categoria</h2>
+          <div className="space-y-4">
+            {categoryStats.map((category) => (
+              <div key={category.name} className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                  <span className="text-sm font-medium text-gray-900">{category.name}</span>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-green-500 h-2 rounded-full" 
+                      style={{ width: `${category.percentage}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900 w-20 text-right">{category.value}</span>
+                  <span className="text-sm text-gray-500 w-12 text-right">{category.percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -424,6 +519,12 @@ const FinancialArea: React.FC = () => {
                         showNotification('Proposta rejeitada. Notificação enviada ao vendedor.', 'error');
                       } : undefined}
                       onForward={() => showNotification('Proposta encaminhada para análise adicional', 'info')}
+                      onEdit={() => showNotification('Editando proposta...', 'info')}
+                      onDelete={() => {
+                        if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.id}?`)) {
+                          showNotification('Proposta excluída com sucesso', 'success');
+                        }
+                      }}
                     />
                   </td>
                 </tr>
@@ -446,7 +547,7 @@ const FinancialArea: React.FC = () => {
                   onClick={() => setSelectedProposal(null)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  ✕
+                  <X className="w-5 h-5" />
                 </button>
               </div>
               
@@ -635,6 +736,49 @@ const FinancialArea: React.FC = () => {
           clientName={selectedProposalForAutomation.client}
         />
       )}
+
+      {/* Toggle Controls */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h3 className="text-sm font-medium text-gray-700 mb-3">Personalizar Dashboard</h3>
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="showStats"
+              checked={showFinancialStats}
+              onChange={() => setShowFinancialStats(!showFinancialStats)}
+              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+            />
+            <label htmlFor="showStats" className="ml-2 text-sm text-gray-600">
+              Mostrar Estatísticas
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="showQuickActions"
+              checked={showQuickActions}
+              onChange={() => setShowQuickActions(!showQuickActions)}
+              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+            />
+            <label htmlFor="showQuickActions" className="ml-2 text-sm text-gray-600">
+              Mostrar Ações Rápidas
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="showCategoryPerformance"
+              checked={showCategoryPerformance}
+              onChange={() => setShowCategoryPerformance(!showCategoryPerformance)}
+              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+            />
+            <label htmlFor="showCategoryPerformance" className="ml-2 text-sm text-gray-600">
+              Mostrar Performance por Categoria
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
