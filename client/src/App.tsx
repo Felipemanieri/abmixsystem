@@ -80,19 +80,25 @@ function App() {
     const lowerMessage = message.toLowerCase();
     
     if (lowerMessage.includes('plano') || lowerMessage.includes('saúde')) {
-      return 'Oferecemos diversos planos de saúde empresariais e individuais. Posso conectá-lo com um de nossos vendedores para mais informações.';
+      return 'Oferecemos diversos planos de saúde empresariais e individuais com coberturas completas. Nossos especialistas podem fazer uma apresentação personalizada para sua empresa. Gostaria de agendar?';
     }
     if (lowerMessage.includes('preço') || lowerMessage.includes('valor') || lowerMessage.includes('cotação')) {
-      return 'Os valores variam conforme o plano escolhido. Nossos vendedores podem fazer uma cotação personalizada para você.';
+      return 'Os valores são calculados conforme o perfil da empresa e número de colaboradores. Nossa equipe comercial faz cotações gratuitas em até 24h. Posso conectá-lo com um consultor?';
     }
-    if (lowerMessage.includes('documento') || lowerMessage.includes('anexo')) {
-      return 'Para contratar um plano, você precisará de documentos como RG, CPF, comprovante de residência e CNPJ da empresa. Posso ajudar com mais detalhes.';
+    if (lowerMessage.includes('documento') || lowerMessage.includes('anexo') || lowerMessage.includes('papelada')) {
+      return 'O processo é 100% digital! Você precisará apenas de: CNPJ da empresa, RG e CPF dos beneficiários, e comprovante de endereço. Tudo pode ser enviado pelo sistema online.';
     }
-    if (lowerMessage.includes('contato') || lowerMessage.includes('telefone')) {
-      return 'Você pode entrar em contato conosco pelo telefone (11) 99999-9999 ou WhatsApp. Também temos atendimento online 24/7.';
+    if (lowerMessage.includes('contato') || lowerMessage.includes('telefone') || lowerMessage.includes('whatsapp')) {
+      return 'Você pode falar conosco por WhatsApp: (11) 98888-8888, telefone: (11) 99999-9999 ou email: contato@abmix.com.br. Atendemos 24/7 para sua comodidade!';
+    }
+    if (lowerMessage.includes('portal') || lowerMessage.includes('acesso') || lowerMessage.includes('login')) {
+      return 'Cada usuário tem acesso ao seu portal específico: Cliente (acompanhar propostas), Vendedor (criar propostas), Financeiro (análises) e Supervisor (relatórios). Qual portal você precisa acessar?';
+    }
+    if (lowerMessage.includes('como funciona') || lowerMessage.includes('processo')) {
+      return 'É muito simples: 1) Vendedor cria a proposta, 2) Cliente preenche os dados online, 3) Sistema valida automaticamente, 4) Aprovação em até 48h. Todo processo é acompanhado em tempo real!';
     }
     
-    return 'Entendi sua pergunta! Para informações mais específicas, recomendo falar com nossos especialistas. Posso ajudar com informações gerais sobre planos de saúde.';
+    return 'Estou aqui para ajudar! Posso esclarecer sobre planos, preços, documentação, processo de contratação ou conectá-lo com nossa equipe especializada. Como posso auxiliá-lo?';
   };
 
   // Se não está logado e não está na home, mostrar login
@@ -147,8 +153,11 @@ function App() {
                 <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Contato</a>
                 <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Suporte</a>
               </div>
-              <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white px-6 py-3 rounded-xl hover:from-teal-500 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl font-bold">
-                Fale Conosco
+              <button 
+                onClick={() => window.open('https://wa.me/5511988888888?text=Olá! Gostaria de conhecer o Sistema Abmix.', '_blank')}
+                className="bg-gradient-to-r from-teal-400 to-teal-500 text-white px-6 py-3 rounded-xl hover:from-teal-500 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl font-bold"
+              >
+                Solicitar Demonstração
               </button>
             </div>
           </div>
@@ -170,11 +179,11 @@ function App() {
           
           {/* Texto principal com z-index maior */}
           <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
-            Sistema de Propostas de Plano de Saúde
+            Sistema Abmix de Propostas
           </h1>
           <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed relative z-10">
-            Plataforma completa para gestão de propostas de planos de saúde. 
-            Acesse sua área específica e gerencie todo o processo de forma simples e segura.
+            Plataforma completa para gestão de propostas de planos de saúde empresariais. 
+            Acesse sua área específica e gerencie todo o processo de forma simples, segura e eficiente.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8 relative z-10">

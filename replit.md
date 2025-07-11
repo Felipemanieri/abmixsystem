@@ -7,6 +7,8 @@ The Abmix System is a comprehensive proposal management and client portal applic
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Language: Portuguese (Brazilian)
+Interface: Completely localized in Portuguese with enhanced chatbot responses
 
 ## System Architecture
 
