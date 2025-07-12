@@ -6,7 +6,7 @@ import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
-import ProposalForm from './ProposalForm';
+
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 
@@ -15,7 +15,7 @@ interface VendorPortalProps {
   onLogout: () => void;
 }
 
-type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation' | 'cotacoes' | 'proposal-form';
+type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation' | 'cotacoes';
 
 interface Proposal {
   id: string;
@@ -1014,32 +1014,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'proposal-form':
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center mb-6">
-              <button
-                onClick={() => setActiveView('dashboard')}
-                className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
-              >
-                <ArrowLeft className="w-5 h-5 mr-1" />
-                Voltar
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900">Formulário Digital de Proposta</h1>
-            </div>
-            <ProposalForm 
-              isVendor={true}
-              onSave={(data) => {
-                console.log('Proposta salva:', data);
-                showNotification('Proposta salva com sucesso!', 'success');
-              }}
-              onSend={(data) => {
-                console.log('Proposta enviada para cliente:', data);
-                showNotification('Link enviado para o cliente!', 'success');
-              }}
-            />
-          </div>
-        );
       case 'new-proposal':
         return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
       case 'tracker':
@@ -1080,22 +1054,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <button
-                onClick={() => setActiveView('proposal-form')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <FileText className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Formulário Digital</h3>
-                    <p className="text-sm text-gray-500">Criar proposta completa</p>
-                  </div>
-                </div>
-              </button>
-
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"

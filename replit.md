@@ -177,6 +177,13 @@ The application provides role-based portals with specific functionality:
   - Form validation and submission with success confirmation
   - Removed redundant "Formulário" tab for cleaner navigation
 
+- **Module Removal and Simplification (Jan 12, 2025)**:
+  - Removed "Formulário Digital" module from vendor portal dashboard
+  - Consolidated proposal creation into "Nova Proposta" workflow
+  - Updated Quick Actions grid from 4 to 3 columns for cleaner layout
+  - Removed ProposalForm component imports and references
+  - Streamlined vendor portal navigation for better user experience
+
 - **Form Features Implemented**:
   - All required fields from user specifications (CPF, RG, birth date, complete address, etc.)
   - Expandable dependents with parentesco field
