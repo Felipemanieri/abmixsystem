@@ -22,6 +22,17 @@ interface Proposal {
   lastUpdate: string;
 }
 
+interface Cotacao {
+  id: string;
+  operadora: string;
+  tipoplano: string;
+  numeroVidas: number;
+  valor: string;
+  validade: string;
+  dataEnvio: string;
+  arquivos: File[];
+}
+
 interface ChatMessage {
   id: string;
   text: string;
@@ -30,7 +41,7 @@ interface ChatMessage {
 }
 
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'proposals' | 'profile' | 'documents'>('proposals');
+  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents'>('cotacoes');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
@@ -49,40 +60,53 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [notifications, setNotifications] = useState([
     {
       id: '1',
-      title: 'Documentos pendentes',
-      message: 'Sua proposta PROP-2024-001 está aguardando documentos',
+      title: 'Nova Cotação Recebida',
+      message: 'Você recebeu uma nova cotação da Amil - R$ 1.250,00',
       type: 'document',
       timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
       read: false,
     },
     {
       id: '2',
-      title: 'Proposta aprovada',
-      message: 'Sua proposta PROP-2024-002 foi aprovada com sucesso',
+      title: 'Cotação Atualizada',
+      message: 'A cotação da Bradesco foi atualizada com novas condições',
       type: 'approval',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
       read: false,
     },
   ]);
 
-  const proposals: Proposal[] = [
+  // Dados de cotações criadas pelo vendedor (espelham as cotações do VendorPortal)
+  const cotacoes: Cotacao[] = [
     {
-      id: 'PROP-2024-001',
-      status: 'pending',
-      date: '2024-01-15',
-      plan: 'Plano Empresarial Premium',
-      value: 'R$ 1.250,00',
-      documents: 8,
-      lastUpdate: '2 horas atrás'
+      id: '1',
+      operadora: 'Amil',
+      tipoplano: 'Empresarial',
+      numeroVidas: 15,
+      valor: '1.250,00',
+      validade: '2024-03-15',
+      dataEnvio: '2024-01-15',
+      arquivos: []
     },
     {
-      id: 'PROP-2024-002',
-      status: 'approved',
-      date: '2024-01-10',
-      plan: 'Plano Família Básico',
-      value: 'R$ 650,00',
-      documents: 6,
-      lastUpdate: '5 dias atrás'
+      id: '2',
+      operadora: 'Bradesco',
+      tipoplano: 'Familiar',
+      numeroVidas: 4,
+      valor: '850,00',
+      validade: '2024-03-20',
+      dataEnvio: '2024-01-18',
+      arquivos: []
+    },
+    {
+      id: '3',
+      operadora: 'Sulamérica',
+      tipoplano: 'Individual',
+      numeroVidas: 1,
+      valor: '420,00',
+      validade: '2024-03-25',
+      dataEnvio: '2024-01-20',
+      arquivos: []
     }
   ];
 
@@ -115,11 +139,11 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const getBotResponse = (message: string): string => {
     const lowerMessage = message.toLowerCase();
     
-    if (lowerMessage.includes('proposta') || lowerMessage.includes('status')) {
-      return 'Você pode acompanhar o status das suas propostas na aba "Propostas". Lá você verá todas as informações e poderá enviar documentos adicionais se necessário.';
+    if (lowerMessage.includes('cotação') || lowerMessage.includes('cotacao') || lowerMessage.includes('status')) {
+      return 'Você pode acompanhar suas cotações na aba "Minhas Cotações". Lá você verá todas as informações detalhadas e poderá compartilhar as cotações recebidas.';
     }
     if (lowerMessage.includes('documento') || lowerMessage.includes('anexo')) {
-      return 'Para enviar documentos, acesse a aba "Documentos" ou clique em uma proposta específica para anexar documentos a ela.';
+      return 'Para enviar documentos, acesse a aba "Documentos" ou visualize uma cotação específica para ver os detalhes completos.';
     }
     if (lowerMessage.includes('perfil') || lowerMessage.includes('dados')) {
       return 'Seus dados pessoais podem ser visualizados e editados na aba "Perfil". Mantenha sempre suas informações atualizadas.';
@@ -185,198 +209,137 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     }
   };
 
-  const renderProposalsTab = () => (
+  const renderCotacoesTab = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Minhas Propostas</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Minhas Cotações</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Visualize todas as cotações criadas pelo seu vendedor
+          </p>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Plano
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Valor
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Data
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {proposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.id}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.plan}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
-                      {getStatusText(proposal.status)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(proposal.date).toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <ActionButtons 
-                      onView={() => setSelectedProposal(proposal.id)}
-                      onCopyLink={() => navigator.clipboard.writeText(`${window.location.origin}/proposta/${proposal.id}`)}
-                      onShare={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/compartilhar/cliente/${proposal.id}`);
-                        alert('Link de compartilhamento copiado!');
-                      }}
-                      onWhatsApp={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Preciso de ajuda com minha proposta ${proposal.id}`)}`)}
-                      onEmail={() => window.open(`mailto:atendimento@abmix.com.br?subject=Proposta ${proposal.id}`)}
-                      onMessage={() => setShowInternalMessage(true)}
-                      onDownload={() => alert('Baixando documentos da proposta...')}
-                      onExternalLink={() => window.open(`${window.location.origin}/proposta/${proposal.id}`, '_blank')}
-                      onSend={() => alert('Enviando documentos adicionais...')}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Internal Message Modal */}
-      {showInternalMessage && (
-        <InternalMessage 
-          isOpen={showInternalMessage}
-          onClose={() => setShowInternalMessage(false)}
-          currentUser={{
-            name: user.name,
-            role: 'client'
-          }}
-        />
-      )}
-
-      {selectedProposal && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Detalhes da Proposta {selectedProposal}
-            </h3>
-            <button 
-              onClick={() => setSelectedProposal(null)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        
+        {cotacoes.length === 0 ? (
+          <div className="p-8 text-center">
+            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma cotação disponível</h3>
+            <p className="text-gray-600">Aguarde seu vendedor criar suas primeiras cotações.</p>
           </div>
-          
-          {(() => {
-            const proposal = proposals.find(p => p.id === selectedProposal);
-            if (!proposal) return null;
-            
-            return (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        ) : (
+          <div className="space-y-4 p-6">
+            {cotacoes.map((cotacao) => (
+              <div key={cotacao.id} className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <h4 className="font-medium text-gray-700 mb-3">Informações da Proposta</h4>
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">ID:</span>
-                        <span className="text-sm font-medium">{proposal.id}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Plano:</span>
-                        <span className="text-sm font-medium">{proposal.plan}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Valor:</span>
-                        <span className="text-sm font-medium">{proposal.value}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Status:</span>
-                        <span className={`text-sm font-medium ${
-                          proposal.status === 'approved' ? 'text-green-600' : 
-                          proposal.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'
-                        }`}>
-                          {getStatusText(proposal.status)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Data:</span>
-                        <span className="text-sm font-medium">{new Date(proposal.date).toLocaleDateString('pt-BR')}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Última Atualização:</span>
-                        <span className="text-sm font-medium">{proposal.lastUpdate}</span>
-                      </div>
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700">Data de Envio</label>
+                    <p className="text-sm text-gray-900 mt-1">
+                      {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
+                    </p>
                   </div>
-                  
                   <div>
-                    <h4 className="font-medium text-gray-700 mb-3">Documentos</h4>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm text-gray-600">Documentos Enviados:</span>
-                        <span className="text-sm font-medium">{proposal.documents} / 10</span>
-                      </div>
-                      
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                        <Upload className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm text-gray-600 mb-1">Arraste e solte arquivos aqui</p>
-                        <p className="text-xs text-gray-500">ou</p>
-                        <button className="mt-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
-                          Selecionar Arquivos
-                        </button>
-                      </div>
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700">Operadora</label>
+                    <p className="text-sm text-gray-900 mt-1">{cotacao.operadora}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Tipo do Plano</label>
+                    <p className="text-sm text-gray-900 mt-1">{cotacao.tipoplano}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Número de Vidas</label>
+                    <p className="text-sm text-gray-900 mt-1">{cotacao.numeroVidas}</p>
                   </div>
                 </div>
-                
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-3">Próximos Passos</h4>
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="flex items-start">
-                      <Info className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-sm text-blue-800 font-medium">Aguardando análise da operadora</p>
-                        <p className="text-sm text-blue-600 mt-1">
-                          Sua proposta está sendo analisada pela operadora. Você receberá uma notificação assim que houver uma atualização.
-                        </p>
-                      </div>
-                    </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Valor</label>
+                    <p className="text-lg font-semibold text-green-600 mt-1">R$ {cotacao.valor}</p>
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Validade da Cotação</label>
+                    <p className="text-sm text-gray-900 mt-1">
+                      {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Ações - Mesmos ícones do ActionButtons */}
+                <div className="flex justify-end border-t border-gray-200 pt-4">
+                  <ActionButtons
+                    onView={() => {
+                      showNotification('Visualizando detalhes da cotação', 'info');
+                    }}
+                    onCopyLink={() => {
+                      navigator.clipboard.writeText(`Cotação ${cotacao.id} - ${cotacao.operadora} - R$ ${cotacao.valor}`);
+                      showNotification('Link da cotação copiado!', 'success');
+                    }}
+                    onWhatsApp={() => {
+                      const mensagem = `Cotação ${cotacao.operadora} - ${cotacao.tipoplano} - R$ ${cotacao.valor}`;
+                      const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+                      window.open(url, '_blank');
+                      showNotification('Redirecionando para WhatsApp...', 'success');
+                    }}
+                    onEmail={() => {
+                      const assunto = `Cotação ${cotacao.operadora} - ${cotacao.tipoplano}`;
+                      const corpo = `Cotação recebida:\n\nOperadora: ${cotacao.operadora}\nTipo: ${cotacao.tipoplano}\nVidas: ${cotacao.numeroVidas}\nValor: R$ ${cotacao.valor}\nValidade: ${new Date(cotacao.validade).toLocaleDateString('pt-BR')}`;
+                      const url = `mailto:?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+                      window.location.href = url;
+                      showNotification('Abrindo cliente de email...', 'success');
+                    }}
+                    onDownload={() => {
+                      const dadosCotacao = {
+                        id: cotacao.id,
+                        operadora: cotacao.operadora,
+                        tipoplano: cotacao.tipoplano,
+                        numeroVidas: cotacao.numeroVidas,
+                        valor: cotacao.valor,
+                        validade: cotacao.validade,
+                        dataEnvio: cotacao.dataEnvio
+                      };
+                      const dataStr = JSON.stringify(dadosCotacao, null, 2);
+                      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                      const url = URL.createObjectURL(dataBlob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `cotacao-${cotacao.id}.json`;
+                      link.click();
+                      showNotification('Cotação baixada com sucesso!', 'success');
+                    }}
+                    onExternalLink={() => {
+                      showNotification('Funcionalidade de link externo será implementada', 'info');
+                    }}
+                    onShare={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: `Cotação ${cotacao.operadora}`,
+                          text: `Cotação ${cotacao.operadora} - ${cotacao.tipoplano} - R$ ${cotacao.valor}`,
+                          url: window.location.href
+                        });
+                      } else {
+                        navigator.clipboard.writeText(`Cotação ${cotacao.operadora} - ${cotacao.tipoplano} - R$ ${cotacao.valor}`);
+                        showNotification('Cotação copiada para área de transferência!', 'success');
+                      }
+                    }}
+                    onMessage={() => setShowInternalMessage(true)}
+                    userRole="client"
+                  />
                 </div>
               </div>
-            );
-          })()}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Preencher Nova Proposta</h3>
-        <p className="text-gray-600 mb-4">
-          Você tem uma nova proposta para preencher? Clique no botão abaixo para começar.
-        </p>
-        <button 
-          onClick={() => setActiveTab('documents')}
-          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-        >
-          Preencher Formulário
-        </button>
+        {/* Internal Message Modal */}
+        {showInternalMessage && (
+          <InternalMessage 
+            isOpen={showInternalMessage}
+            onClose={() => setShowInternalMessage(false)}
+            currentUser={{
+              name: user.name,
+              role: 'client'
+            }}
+          />
+        )}
       </div>
     </div>
   );
@@ -583,15 +546,15 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="border-b border-gray-200">
             <nav className="flex space-x-8 px-6">
               <button
-                onClick={() => setActiveTab('proposals')}
+                onClick={() => setActiveTab('cotacoes')}
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'proposals'
+                  activeTab === 'cotacoes'
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
                 <FileText className="w-4 h-4 mr-2" />
-                Propostas
+                Minhas Cotações
               </button>
               <button
                 onClick={() => setActiveTab('documents')}
@@ -621,7 +584,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
         {/* Tab Content */}
         <div>
-          {activeTab === 'proposals' && renderProposalsTab()}
+          {activeTab === 'cotacoes' && renderCotacoesTab()}
           {activeTab === 'profile' && renderProfileTab()}
           {activeTab === 'documents' && renderDocumentsTab()}
         </div>
