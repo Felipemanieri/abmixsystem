@@ -284,13 +284,31 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   const salvarCotacao = () => {
-    if (!quotationData.operadora) {
-      showNotification('Por favor, selecione uma operadora', 'error');
+    if (!novaCotacao.operadora || !novaCotacao.tipoplano || !novaCotacao.valor) {
+      showNotification('Preencha todos os campos obrigatórios da cotação', 'error');
       return;
     }
+
+    const cotacao: Cotacao = {
+      ...novaCotacao,
+      id: Date.now().toString(),
+    };
+
+    setCotacoes(prev => [...prev, cotacao]);
     
-    showNotification('Cotação salva com sucesso!', 'success');
-    // Aqui você pode implementar a lógica para salvar a cotação
+    // Limpar formulário após salvar
+    setNovaCotacao({
+      id: '',
+      operadora: '',
+      tipoplano: '',
+      numeroVidas: 1,
+      valor: '',
+      validade: '',
+      dataEnvio: new Date().toISOString().split('T')[0],
+      arquivos: []
+    });
+    
+    showNotification('Cotação adicionada com sucesso!', 'success');
   };
 
   const limparFormulario = () => {
@@ -569,45 +587,266 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
         </div>
 
-        {/* Seção de Anexar Arquivos */}
+        {/* Seção Adicionar Nova Cotação */}
         <div className="border-t border-gray-200 pt-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Anexar Nova Cotação</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Adicionar Nova Cotação</h3>
           
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Selecionar Arquivos
-            </label>
-            <input
-              type="file"
-              multiple
-              onChange={handleAnexarArquivo}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (máx. 10MB por arquivo)
-            </p>
+          {/* Campos da Nova Cotação */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* Operadora */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Operadora *
+              </label>
+              <select
+                value={novaCotacao.operadora}
+                onChange={(e) => setNovaCotacao(prev => ({ ...prev, operadora: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Selecione a operadora</option>
+                <option value="Amil">Amil</option>
+                <option value="Bradesco">Bradesco</option>
+                <option value="Sulamérica">Sulamérica</option>
+                <option value="Porto Seguro">Porto Seguro</option>
+                <option value="Omint">Omint</option>
+                <option value="Careplus">Careplus</option>
+                <option value="Hapvida">Hapvida</option>
+                <option value="Alice">Alice</option>
+                <option value="Seguros Unimed">Seguros Unimed</option>
+              </select>
+            </div>
+
+            {/* Tipo do Plano */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tipo do Plano *
+              </label>
+              <select
+                value={novaCotacao.tipoplano}
+                onChange={(e) => setNovaCotacao(prev => ({ ...prev, tipoplano: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Selecione o tipo</option>
+                <option value="Empresarial">Empresarial</option>
+                <option value="Individual">Individual</option>
+                <option value="Adesão">Adesão</option>
+                <option value="Familiar">Familiar</option>
+              </select>
+            </div>
+
+            {/* Número de Vidas */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Número de Vidas *
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={novaCotacao.numeroVidas}
+                onChange={(e) => setNovaCotacao(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="1"
+              />
+            </div>
+
+            {/* Valor */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Valor (R$) *
+              </label>
+              <input
+                type="text"
+                value={novaCotacao.valor}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^\d.,]/g, '');
+                  setNovaCotacao(prev => ({ ...prev, valor: value }));
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Ex: 1.250,00"
+              />
+            </div>
+
+            {/* Validade da Cotação */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Validade da Cotação *
+              </label>
+              <input
+                type="date"
+                value={novaCotacao.validade}
+                onChange={(e) => setNovaCotacao(prev => ({ ...prev, validade: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Data de Envio */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Data de Envio *
+              </label>
+              <input
+                type="date"
+                value={novaCotacao.dataEnvio}
+                onChange={(e) => setNovaCotacao(prev => ({ ...prev, dataEnvio: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
-          {/* Lista de Arquivos Anexados */}
-          {arquivosAnexados.length > 0 && (
-            <div className="mt-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Arquivos Anexados:</h4>
+          {/* Anexar Cotação */}
+          <div className="mb-6">
+            <h4 className="text-sm font-medium text-gray-700 mb-4">Anexar Cotação</h4>
+            
+            {/* Área de Upload com Drag & Drop */}
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+              <input
+                type="file"
+                multiple
+                onChange={handleAnexarArquivo}
+                className="hidden"
+                id="file-upload-cotacao"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              />
+              <label htmlFor="file-upload-cotacao" className="cursor-pointer">
+                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-lg font-medium text-gray-700 mb-2">
+                  Arraste arquivos aqui ou escolha uma opção
+                </p>
+                <p className="text-sm text-gray-500">
+                  Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
+                </p>
+              </label>
+            </div>
+
+            {/* Botões de Upload */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+                <FileText className="w-8 h-8 text-blue-600 mb-2" />
+                <span className="text-sm font-medium text-blue-600">Escolher Arquivo</span>
+                <span className="text-xs text-blue-500">Do computador/celular</span>
+              </label>
+
+              <button
+                onClick={tirarFoto}
+                className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
+              >
+                <Camera className="w-8 h-8 text-green-600 mb-2" />
+                <span className="text-sm font-medium text-green-600">Tirar Foto</span>
+                <span className="text-xs text-green-500">Câmera do dispositivo</span>
+              </button>
+
+              <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center p-6 bg-purple-50 border-2 border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleAnexarArquivo}
+                  className="hidden"
+                  id="gallery-upload"
+                />
+                <Image className="w-8 h-8 text-purple-600 mb-2" />
+                <span className="text-sm font-medium text-purple-600">Da Galeria</span>
+                <span className="text-xs text-purple-500">Fotos salvas</span>
+              </label>
+            </div>
+
+            {/* Arquivos anexados */}
+            {novaCotacao.arquivos.length > 0 && (
               <div className="space-y-2">
-                {arquivosAnexados.map((arquivo, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                    <div className="flex items-center space-x-2">
-                      <FileText className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm text-gray-700">{arquivo.name}</span>
-                      <span className="text-xs text-gray-500">({formatFileSize(arquivo.size)})</span>
+                <p className="text-sm font-medium text-gray-700">
+                  Arquivos Anexados ({novaCotacao.arquivos.length})
+                </p>
+                <div className="space-y-2">
+                  {novaCotacao.arquivos.map((arquivo, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center">
+                        <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                        <span className="text-sm text-gray-700">{arquivo.name}</span>
+                      </div>
+                      <button
+                        onClick={() => removerArquivoCotacao('', index)}
+                        className="text-red-600 hover:text-red-800 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
-                    <button 
-                      onClick={() => removerArquivo(index)}
-                      className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
-                      title="Remover arquivo"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Botão Adicionar Cotação */}
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={salvarCotacao}
+                className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Cotação
+              </button>
+            </div>
+          </div>
+
+          {/* Seção Cotações Cadastradas */}
+          {cotacoes.length > 0 && (
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Cotações Cadastradas ({cotacoes.length})
+              </h3>
+
+              <div className="space-y-4">
+                {cotacoes.map((cotacao) => (
+                  <div key={cotacao.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Operadora</span>
+                        <p className="text-sm text-gray-900">{cotacao.operadora}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
+                        <p className="text-sm text-gray-900">{cotacao.tipoplano}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
+                        <p className="text-sm text-gray-900">{cotacao.numeroVidas}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Valor</span>
+                        <p className="text-sm text-gray-900">R$ {cotacao.valor}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Validade</span>
+                        <p className="text-sm text-gray-900">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Data de Envio</span>
+                        <p className="text-sm text-gray-900">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Arquivos Anexados</span>
+                        <p className="text-sm text-gray-900">{cotacao.arquivos.length} arquivo(s)</p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end space-x-3">
+                      <button
+                        onClick={() => enviarWhatsAppCotacao(cotacao)}
+                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-1" />
+                        WhatsApp
+                      </button>
+                      <button
+                        onClick={() => removerCotacao(cotacao.id)}
+                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Remover
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
