@@ -65,7 +65,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     aproveitamentoCongenere: false,
   });
 
-  const [titular, setTitular] = useState<PersonData>({
+  const [titulares, setTitulares] = useState<PersonData[]>([{
     id: '1',
     nomeCompleto: '',
     cpf: '',
@@ -83,7 +83,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     cep: '',
     enderecoCompleto: '',
     dadosReembolso: ''
-  });
+  }]);
 
   const [dependentes, setDependentes] = useState<PersonData[]>([]);
 
@@ -114,6 +114,35 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     'Plano Familiar'
   ];
 
+  const adicionarTitular = () => {
+    const newTitular: PersonData = {
+      id: `tit_${Date.now()}`,
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    };
+    setTitulares([...titulares, newTitular]);
+  };
+
+  const removerTitular = (id: string) => {
+    if (titulares.length > 1) {
+      setTitulares(titulares.filter(tit => tit.id !== id));
+    }
+  };
+
   const adicionarDependente = () => {
     const newDependente: PersonData = {
       id: `dep_${Date.now()}`,
@@ -140,6 +169,18 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
 
   const removerDependente = (id: string) => {
     setDependentes(dependentes.filter(dep => dep.id !== id));
+  };
+
+  const updateTitular = (index: number, field: keyof PersonData, value: string) => {
+    const newTitulares = [...titulares];
+    newTitulares[index] = { ...newTitulares[index], [field]: value };
+    setTitulares(newTitulares);
+  };
+
+  const updateDependente = (index: number, field: keyof PersonData, value: string) => {
+    const newDependentes = [...dependentes];
+    newDependentes[index] = { ...newDependentes[index], [field]: value };
+    setDependentes(newDependentes);
   };
 
   const handleFileUpload = (files: FileList | null) => {
@@ -189,7 +230,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
       inicioVigencia: '',
       aproveitamentoCongenere: false,
     });
-    setTitular({
+    setTitulares([{
       id: '1',
       nomeCompleto: '',
       cpf: '',
@@ -207,7 +248,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
       cep: '',
       enderecoCompleto: '',
       dadosReembolso: ''
-    });
+    }]);
     setDependentes([]);
     setInternalData({
       reuniao: false,
@@ -223,16 +264,16 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     setGeneratedLink('');
   };
 
-  const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index?: number) => (
+  const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index: number) => (
     <div key={person.id} className="bg-gray-50 p-6 rounded-lg space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center">
           <User className="w-5 h-5 mr-2" />
-          {type === 'titular' ? 'Dados do Titular' : `Dependente ${index! + 1}`}
+          {type === 'titular' ? `Titular ${index + 1}` : `Dependente ${index + 1}`}
         </h3>
-        {type === 'dependente' && (
+        {(type === 'dependente' || (type === 'titular' && titulares.length > 1)) && (
           <button
-            onClick={() => removerDependente(person.id)}
+            onClick={() => type === 'titular' ? removerTitular(person.id) : removerDependente(person.id)}
             className="text-red-600 hover:text-red-800 transition-colors"
           >
             <Trash2 className="w-4 h-4" />
@@ -250,11 +291,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.nomeCompleto}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, nomeCompleto: e.target.value }));
+                updateTitular(index, 'nomeCompleto', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].nomeCompleto = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'nomeCompleto', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -271,11 +310,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.cpf}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, cpf: e.target.value }));
+                updateTitular(index, 'cpf', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].cpf = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'cpf', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -292,11 +329,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.rg}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, rg: e.target.value }));
+                updateTitular(index, 'rg', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].rg = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'rg', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -313,11 +348,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.dataNascimento}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, dataNascimento: e.target.value }));
+                updateTitular(index, 'dataNascimento', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].dataNascimento = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'dataNascimento', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -331,11 +364,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             </label>
             <select
               value={person.parentesco || ''}
-              onChange={(e) => {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].parentesco = e.target.value;
-                setDependentes(newDependentes);
-              }}
+              onChange={(e) => updateDependente(index, 'parentesco', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Selecione</option>
@@ -357,11 +386,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.nomeMae}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, nomeMae: e.target.value }));
+                updateTitular(index, 'nomeMae', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].nomeMae = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'nomeMae', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -377,11 +404,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.sexo}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, sexo: e.target.value as 'masculino' | 'feminino' | '' }));
+                updateTitular(index, 'sexo', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].sexo = e.target.value as 'masculino' | 'feminino' | '';
-                setDependentes(newDependentes);
+                updateDependente(index, 'sexo', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -400,11 +425,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.estadoCivil}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, estadoCivil: e.target.value }));
+                updateTitular(index, 'estadoCivil', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].estadoCivil = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'estadoCivil', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -426,11 +449,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.peso}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, peso: e.target.value }));
+                updateTitular(index, 'peso', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].peso = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'peso', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -447,11 +468,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.altura}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, altura: e.target.value }));
+                updateTitular(index, 'altura', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].altura = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'altura', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -468,11 +487,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.emailPessoal}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, emailPessoal: e.target.value }));
+                updateTitular(index, 'emailPessoal', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].emailPessoal = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'emailPessoal', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -489,11 +506,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.telefonePessoal}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, telefonePessoal: e.target.value }));
+                updateTitular(index, 'telefonePessoal', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].telefonePessoal = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'telefonePessoal', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -510,11 +525,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.emailEmpresa}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, emailEmpresa: e.target.value }));
+                updateTitular(index, 'emailEmpresa', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].emailEmpresa = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'emailEmpresa', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -531,11 +544,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.telefoneEmpresa}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, telefoneEmpresa: e.target.value }));
+                updateTitular(index, 'telefoneEmpresa', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].telefoneEmpresa = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'telefoneEmpresa', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -552,11 +563,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.cep}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, cep: e.target.value }));
+                updateTitular(index, 'cep', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].cep = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'cep', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -573,11 +582,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.enderecoCompleto}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, enderecoCompleto: e.target.value }));
+                updateTitular(index, 'enderecoCompleto', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].enderecoCompleto = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'enderecoCompleto', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -593,11 +600,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             value={person.dadosReembolso}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, dadosReembolso: e.target.value }));
+                updateTitular(index, 'dadosReembolso', e.target.value);
               } else {
-                const newDependentes = [...dependentes];
-                newDependentes[index!].dadosReembolso = e.target.value;
-                setDependentes(newDependentes);
+                updateDependente(index, 'dadosReembolso', e.target.value);
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -853,15 +858,29 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Dados do Titular */}
+          {/* Dados dos Titulares */}
           <div>
-            <div className="flex items-center mb-4">
-              <User className="w-5 h-5 text-green-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">
-                Dados Pessoais
-              </h2>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <User className="w-5 h-5 text-green-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Dados dos Titulares
+                </h2>
+              </div>
+              <button
+                onClick={adicionarTitular}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Titular
+              </button>
             </div>
-            {renderPersonForm(titular, 'titular')}
+            
+            <div className="space-y-4">
+              {titulares.map((titular, index) => 
+                renderPersonForm(titular, 'titular', index)
+              )}
+            </div>
           </div>
 
           {/* Dependentes */}
