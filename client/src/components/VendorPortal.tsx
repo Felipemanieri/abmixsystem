@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare, MessageCircle, Trash2 } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare, MessageCircle, Trash2, Camera, Upload, Paperclip } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -54,6 +54,7 @@ interface Cotacao {
   numeroVidas: number;
   valor: string;
   validade: string;
+  dataEnvio: string;
   arquivos: File[];
   clienteId?: string;
   proposalId?: string;
@@ -83,8 +84,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     numeroVidas: 1,
     valor: '',
     validade: '',
+    dataEnvio: new Date().toISOString().split('T')[0],
     arquivos: []
   });
+  const [dragActive, setDragActive] = useState(false);
   const { getClientDocuments } = useGoogleDrive();
 
   // Notificações simuladas
@@ -309,7 +312,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
   // Funções para gerenciar cotações
   const adicionarCotacao = () => {
-    if (!novaCotacao.operadora || !novaCotacao.tipoplano || !novaCotacao.valor || !novaCotacao.validade) {
+    if (!novaCotacao.operadora || !novaCotacao.tipoplano || !novaCotacao.valor || !novaCotacao.validade || !novaCotacao.dataEnvio) {
       showNotification('Por favor, preencha todos os campos obrigatórios', 'error');
       return;
     }
@@ -327,6 +330,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       numeroVidas: 1,
       valor: '',
       validade: '',
+      dataEnvio: new Date().toISOString().split('T')[0],
       arquivos: []
     });
     showNotification('Cotação adicionada com sucesso!', 'success');
@@ -349,6 +353,50 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     }
   };
 
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const novosArquivos = Array.from(e.dataTransfer.files);
+      setNovaCotacao(prev => ({
+        ...prev,
+        arquivos: [...prev.arquivos, ...novosArquivos]
+      }));
+      showNotification(`${novosArquivos.length} arquivo(s) anexado(s) via drag & drop!`, 'success');
+    }
+  };
+
+  const tirarFoto = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment'; // Usa câmera traseira no mobile
+    input.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      if (files) {
+        const novosArquivos = Array.from(files);
+        setNovaCotacao(prev => ({
+          ...prev,
+          arquivos: [...prev.arquivos, ...novosArquivos]
+        }));
+        showNotification('Foto capturada com sucesso!', 'success');
+      }
+    };
+    input.click();
+  };
+
   const removerArquivoCotacao = (cotacaoId: string, arquivoIndex: number) => {
     if (cotacaoId === '') {
       // Removendo arquivo da nova cotação
@@ -368,7 +416,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   const enviarWhatsAppCotacao = (cotacao: Cotacao) => {
-    const mensagem = `Olá! Segue cotação:\n\nOperadora: ${cotacao.operadora}\nTipo: ${cotacao.tipoplano}\nNº de vidas: ${cotacao.numeroVidas}\nValor: R$ ${cotacao.valor}\nValidade: ${new Date(cotacao.validade).toLocaleDateString('pt-BR')}\n\nQualquer dúvida, estou à disposição!`;
+    const mensagem = `Olá! Segue cotação:\n\nOperadora: ${cotacao.operadora}\nTipo: ${cotacao.tipoplano}\nNº de vidas: ${cotacao.numeroVidas}\nValor: R$ ${cotacao.valor}\nValidade: ${new Date(cotacao.validade).toLocaleDateString('pt-BR')}\nData de Envio: ${new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}\nArquivos: ${cotacao.arquivos.length} anexo(s)\n\nQualquer dúvida, estou à disposição!`;
     
     // Para demonstração, vamos usar um número padrão
     const numeroWhatsApp = '5511999999999';
@@ -713,21 +761,87 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             />
           </div>
 
-          {/* Upload de Arquivos */}
+          {/* Data de Envio */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Anexar Cotação
+              Data de Envio *
             </label>
             <input
-              type="file"
-              multiple
-              onChange={handleArquivoCotacao}
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              type="date"
+              value={novaCotacao.dataEnvio}
+              onChange={(e) => setNovaCotacao(prev => ({ ...prev, dataEnvio: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              PDF, DOC, DOCX, JPG, PNG (máx. 10MB)
+          </div>
+        </div>
+
+        {/* Upload de Arquivos Avançado */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-4">
+            Anexar Cotação
+          </label>
+          
+          {/* Área de Drag & Drop */}
+          <div
+            className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              dragActive 
+                ? 'border-blue-500 bg-blue-50' 
+                : 'border-gray-300 hover:border-gray-400'
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Arraste arquivos aqui ou escolha uma opção
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
             </p>
+
+            {/* Botões de Upload */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Escolher Arquivo */}
+              <label className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg cursor-pointer transition-colors">
+                <Paperclip className="w-6 h-6 text-blue-600 mb-2" />
+                <span className="text-sm font-medium text-blue-700">Escolher Arquivo</span>
+                <span className="text-xs text-blue-600">Do computador/celular</span>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleArquivoCotacao}
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                />
+              </label>
+
+              {/* Tirar Foto */}
+              <button
+                type="button"
+                onClick={tirarFoto}
+                className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+              >
+                <Camera className="w-6 h-6 text-green-600 mb-2" />
+                <span className="text-sm font-medium text-green-700">Tirar Foto</span>
+                <span className="text-xs text-green-600">Câmera do dispositivo</span>
+              </button>
+
+              {/* Upload da Galeria */}
+              <label className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg cursor-pointer transition-colors">
+                <Image className="w-6 h-6 text-purple-600 mb-2" />
+                <span className="text-sm font-medium text-purple-700">Da Galeria</span>
+                <span className="text-xs text-purple-600">Fotos salvas</span>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleArquivoCotacao}
+                  className="hidden"
+                  accept="image/*"
+                />
+              </label>
+            </div>
           </div>
         </div>
 
@@ -803,11 +917,17 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Validade</label>
                     <p className="text-sm text-gray-900">
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Data de Envio</label>
+                    <p className="text-sm text-gray-900">
+                      {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
