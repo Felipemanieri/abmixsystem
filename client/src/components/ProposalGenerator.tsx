@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar } from 'lucide-react';
+import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 
 interface ProposalGeneratorProps {
@@ -50,6 +50,12 @@ interface InternalData {
   desconto: string;
   autorizadorDesconto: string;
   observacoesFinanceiras: string;
+}
+
+interface QuotationData {
+  numeroVidas: number;
+  operadora: string;
+  idades: number[];
 }
 
 
@@ -103,6 +109,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
   const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
+
+  // Estados para cotação
+  const [quotationData, setQuotationData] = useState<QuotationData>({
+    numeroVidas: 1,
+    operadora: '',
+    idades: [25]
+  });
+  const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
 
 
 
@@ -266,9 +280,94 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     setAttachments([]);
     setIsSubmitted(false);
     setGeneratedLink('');
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      idades: [25]
+    });
+    setArquivosAnexados([]);
   };
 
+  // Funções para cotação
+  const addIdade = () => {
+    setQuotationData(prev => ({
+      ...prev,
+      idades: [...prev.idades, 25]
+    }));
+  };
 
+  const removeIdade = (index: number) => {
+    if (quotationData.idades.length > 1) {
+      setQuotationData(prev => ({
+        ...prev,
+        idades: prev.idades.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const updateIdade = (index: number, value: number) => {
+    setQuotationData(prev => ({
+      ...prev,
+      idades: prev.idades.map((idade, i) => i === index ? value : idade)
+    }));
+  };
+
+  const handleAnexarArquivo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const novosArquivos = Array.from(files);
+      setArquivosAnexados(prev => [...prev, ...novosArquivos]);
+      showNotification(`${novosArquivos.length} arquivo(s) anexado(s)!`, 'success');
+    }
+  };
+
+  const removerArquivo = (index: number) => {
+    setArquivosAnexados(prev => prev.filter((_, i) => i !== index));
+    showNotification('Arquivo removido!', 'success');
+  };
+
+  const generateQuotation = () => {
+    if (!quotationData.operadora || quotationData.idades.length === 0) {
+      showNotification('Preencha todos os campos da cotação', 'error');
+      return;
+    }
+
+    const baseValue = 150;
+    const ageMultiplier = quotationData.idades.reduce((acc, idade) => {
+      if (idade < 30) return acc + 1;
+      if (idade < 50) return acc + 1.5;
+      return acc + 2;
+    }, 0);
+    
+    const totalValue = baseValue * ageMultiplier * quotationData.numeroVidas;
+    showNotification(`Cotação gerada: R$ ${totalValue.toFixed(2)}`, 'success');
+  };
+
+  const limparFormulario = () => {
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      idades: [25]
+    });
+    setArquivosAnexados([]);
+    showNotification('Formulário de cotação limpo!', 'success');
+  };
+
+  const salvarCotacao = () => {
+    if (!quotationData.operadora || quotationData.idades.length === 0) {
+      showNotification('Preencha todos os campos da cotação', 'error');
+      return;
+    }
+    showNotification('Cotação salva com sucesso!', 'success');
+  };
+
+  const downloadQuotation = () => {
+    if (!quotationData.operadora || quotationData.idades.length === 0) {
+      showNotification('Preencha todos os campos da cotação', 'error');
+      return;
+    }
+    showNotification('Download da cotação iniciado!', 'success');
+  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -1140,6 +1239,170 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             </div>
           </div>
 
+          {/* Seção de Acrescentar Cotação */}
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+            <div className="flex items-center mb-6">
+              <Calculator className="w-5 h-5 text-blue-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Acrescentar Cotação
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Número de Vidas
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={quotationData.numeroVidas}
+                  onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Operadora
+                </label>
+                <select
+                  value={quotationData.operadora}
+                  onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Selecione a operadora</option>
+                  <option value="Amil">Amil</option>
+                  <option value="Bradesco">Bradesco</option>
+                  <option value="Sulamérica">Sulamérica</option>
+                  <option value="Porto Seguro">Porto Seguro</option>
+                  <option value="Omint">Omint</option>
+                  <option value="Careplus">Careplus</option>
+                  <option value="Hapvida">Hapvida</option>
+                  <option value="Alice">Alice</option>
+                  <option value="Seguros Unimed">Seguros Unimed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Idades dos Beneficiários
+                </label>
+                <button
+                  onClick={addIdade}
+                  className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Adicionar Idade
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {quotationData.idades.map((idade, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={idade}
+                      onChange={(e) => updateIdade(index, parseInt(e.target.value) || 0)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Idade"
+                    />
+                    {quotationData.idades.length > 1 && (
+                      <button
+                        onClick={() => removeIdade(index)}
+                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Upload de Arquivos de Cotação */}
+            <div className="border-t border-blue-200 pt-6">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Selecionar Arquivos de Cotação
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleAnexarArquivo}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (máx. 10MB por arquivo)
+                </p>
+              </div>
+
+              {arquivosAnexados.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    Arquivos de Cotação ({arquivosAnexados.length})
+                  </p>
+                  <div className="space-y-2">
+                    {arquivosAnexados.map((arquivo, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">{arquivo.name}</span>
+                          <span className="text-xs text-gray-500 ml-2">({formatFileSize(arquivo.size)})</span>
+                        </div>
+                        <button
+                          onClick={() => removerArquivo(index)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Botões de Ação da Cotação */}
+            <div className="flex justify-end space-x-4 mt-6">
+              <button
+                onClick={limparFormulario}
+                className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Limpar
+              </button>
+
+              <button
+                onClick={generateQuotation}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                <Calculator className="w-4 h-4 mr-2" />
+                Gerar Cotação
+              </button>
+
+              <button
+                onClick={salvarCotacao}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Salvar Cotação
+              </button>
+              
+              <button
+                onClick={downloadQuotation}
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Baixar Cotação
+              </button>
+            </div>
+          </div>
 
           {/* Botões de Ação */}
           <div className="flex justify-between">
