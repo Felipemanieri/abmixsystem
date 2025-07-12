@@ -1512,19 +1512,43 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
           </div>
 
           {/* Seção Cotações Cadastradas */}
-          {cotacoesCadastradas.length > 0 && (
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">
                 Cotações Cadastradas ({cotacoesCadastradas.length})
               </h3>
+              {cotacoesCadastradas.length > 0 && (
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                  {cotacoesCadastradas.length} cotação{cotacoesCadastradas.length > 1 ? 'ões' : ''}
+                </span>
+              )}
+            </div>
 
+            {cotacoesCadastradas.length === 0 ? (
+              <div className="text-center py-8">
+                <Calculator className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500 text-sm">
+                  Nenhuma cotação cadastrada ainda.
+                </p>
+                <p className="text-gray-400 text-xs mt-1">
+                  Use o formulário acima para adicionar cotações à proposta.
+                </p>
+              </div>
+            ) : (
               <div className="space-y-4">
-                {cotacoesCadastradas.map((cotacao) => (
-                  <div key={cotacao.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                {cotacoesCadastradas.map((cotacao, index) => (
+                  <div key={cotacao.id} className="bg-gray-50 p-5 rounded-lg border border-gray-200 relative">
+                    {/* Número da cotação */}
+                    <div className="absolute top-3 right-3">
+                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+                        #{index + 1}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
                         <span className="text-sm font-medium text-gray-600">Operadora</span>
-                        <p className="text-sm font-medium text-gray-900">{cotacao.operadora}</p>
+                        <p className="text-sm font-bold text-gray-900">{cotacao.operadora}</p>
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
@@ -1532,11 +1556,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
-                        <p className="text-sm font-medium text-gray-900">{cotacao.numeroVidas}</p>
+                        <p className="text-sm font-bold text-gray-900">{cotacao.numeroVidas}</p>
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Valor</span>
-                        <p className="text-sm font-bold text-green-600">R$ {cotacao.valor}</p>
+                        <p className="text-lg font-bold text-green-600">R$ {cotacao.valor}</p>
                       </div>
                     </div>
 
@@ -1551,31 +1575,36 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Arquivos Anexados</span>
-                        <p className="text-sm text-gray-900">{cotacao.arquivos} arquivo(s)</p>
+                        <p className="text-sm text-gray-900">
+                          <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs font-medium">
+                            <FileText className="w-3 h-3 mr-1" />
+                            {cotacao.arquivos} arquivo(s)
+                          </span>
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex justify-end space-x-3">
+                    <div className="flex justify-end space-x-3 pt-3 border-t border-gray-200">
                       <button
                         onClick={() => enviarWhatsApp(cotacao)}
-                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                       >
-                        <Phone className="w-4 h-4 mr-1" />
+                        <Phone className="w-4 h-4 mr-2" />
                         WhatsApp
                       </button>
                       <button
                         onClick={() => removerCotacao(cotacao.id)}
-                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
                       >
-                        <Trash2 className="w-4 h-4 mr-1" />
+                        <Trash2 className="w-4 h-4 mr-2" />
                         Remover
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Botões de Ação */}
           <div className="flex justify-between">
