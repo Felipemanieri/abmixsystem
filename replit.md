@@ -184,6 +184,19 @@ The application provides role-based portals with specific functionality:
   - Removed ProposalForm component imports and references
   - Streamlined vendor portal navigation for better user experience
 
+- **Cotação Integration into Nova Proposta (Jan 12, 2025)**:
+  - Transferred complete quotation module into ProposalGenerator component
+  - Added "Anexar Cotação" section with all original functionality:
+    - Number of lives input field
+    - Insurance operator selection dropdown
+    - Dynamic age management (add/remove beneficiaries)
+    - Quotation file upload with format validation
+    - Generate quotation calculation button
+    - Clear quotation form functionality
+  - Updated vendor portal Quick Actions to 2 columns (Nova Proposta + Acompanhar)
+  - Removed standalone "Gerar Cotação" button from dashboard
+  - Enhanced "Nova Proposta" description to include quotation capability
+
 - **Form Features Implemented**:
   - All required fields from user specifications (CPF, RG, birth date, complete address, etc.)
   - Expandable dependents with parentesco field

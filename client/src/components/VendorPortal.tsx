@@ -15,7 +15,7 @@ interface VendorPortalProps {
   onLogout: () => void;
 }
 
-type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation' | 'cotacoes';
+type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'cotacoes';
 
 interface Proposal {
   id: string;
@@ -1018,8 +1018,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
-      case 'quotation':
-        return renderQuotationModule();
       case 'cotacoes':
         return renderCotacoesModule();
       default:
@@ -1054,7 +1052,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
@@ -1065,22 +1063,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Nova Proposta</h3>
-                    <p className="text-sm text-gray-500">Criar proposta</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveView('quotation')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <Calculator className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Gerar Cotação</h3>
-                    <p className="text-sm text-gray-500">Calcular valores</p>
+                    <p className="text-sm text-gray-500">Criar proposta com cotação</p>
                   </div>
                 </div>
               </button>

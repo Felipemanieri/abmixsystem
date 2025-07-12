@@ -52,6 +52,12 @@ interface InternalData {
   observacoesFinanceiras: string;
 }
 
+interface QuotationData {
+  numeroVidas: number;
+  operadora: string;
+  idades: number[];
+}
+
 const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
   const [contractData, setContractData] = useState<ContractData>({
     nomeEmpresa: '',
@@ -101,6 +107,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
   const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
+
+  // Estados para cotação
+  const [quotationData, setQuotationData] = useState<QuotationData>({
+    numeroVidas: 1,
+    operadora: '',
+    idades: [25]
+  });
+  const [quotationFiles, setQuotationFiles] = useState<File[]>([]);
 
   const planosDisponiveis = [
     'Plano Básico Ambulatorial',
@@ -262,6 +276,72 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     setAttachments([]);
     setIsSubmitted(false);
     setGeneratedLink('');
+  };
+
+  // Funções para cotação
+  const addIdade = () => {
+    setQuotationData(prev => ({
+      ...prev,
+      idades: [...prev.idades, 25]
+    }));
+  };
+
+  const removeIdade = (index: number) => {
+    setQuotationData(prev => ({
+      ...prev,
+      idades: prev.idades.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateIdade = (index: number, value: number) => {
+    setQuotationData(prev => ({
+      ...prev,
+      idades: prev.idades.map((idade, i) => i === index ? value : idade)
+    }));
+  };
+
+  const handleQuotationFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newFiles = Array.from(files);
+      setQuotationFiles(prev => [...prev, ...newFiles]);
+      showNotification(`${newFiles.length} arquivo(s) de cotação anexado(s)!`, 'success');
+    }
+  };
+
+  const removeQuotationFile = (index: number) => {
+    setQuotationFiles(prev => prev.filter((_, i) => i !== index));
+    showNotification('Arquivo de cotação removido!', 'success');
+  };
+
+  const generateQuotation = () => {
+    const baseValue = 150;
+    const ageMultiplier = quotationData.idades.reduce((acc, idade) => {
+      if (idade < 30) return acc + 1;
+      if (idade < 50) return acc + 1.5;
+      return acc + 2;
+    }, 0);
+    
+    const totalValue = baseValue * ageMultiplier * quotationData.numeroVidas;
+    showNotification(`Cotação gerada: R$ ${totalValue.toFixed(2)}`, 'success');
+  };
+
+  const clearQuotationForm = () => {
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      idades: [25]
+    });
+    setQuotationFiles([]);
+    showNotification('Formulário de cotação limpo!', 'success');
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index: number) => (
@@ -1123,6 +1203,155 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Seção de Cotação */}
+          <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+            <div className="flex items-center mb-6">
+              <DollarSign className="w-5 h-5 text-green-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Anexar Cotação
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Número de Vidas
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={quotationData.numeroVidas}
+                  onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Operadora
+                </label>
+                <select
+                  value={quotationData.operadora}
+                  onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="">Selecione a operadora</option>
+                  <option value="Amil">Amil</option>
+                  <option value="Bradesco">Bradesco</option>
+                  <option value="Sulamérica">Sulamérica</option>
+                  <option value="Porto Seguro">Porto Seguro</option>
+                  <option value="Omint">Omint</option>
+                  <option value="Careplus">Careplus</option>
+                  <option value="Hapvida">Hapvida</option>
+                  <option value="Alice">Alice</option>
+                  <option value="Seguros Unimed">Seguros Unimed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Idades dos Beneficiários
+                </label>
+                <button
+                  onClick={addIdade}
+                  className="flex items-center px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Adicionar Idade
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {quotationData.idades.map((idade, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={idade}
+                      onChange={(e) => updateIdade(index, parseInt(e.target.value) || 0)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="Idade"
+                    />
+                    {quotationData.idades.length > 1 && (
+                      <button
+                        onClick={() => removeIdade(index)}
+                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Upload de Arquivos de Cotação */}
+            <div className="border-t border-green-200 pt-6">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Arquivos de Cotação
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleQuotationFileUpload}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (máx. 10MB por arquivo)
+                </p>
+              </div>
+
+              {quotationFiles.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    Arquivos de Cotação ({quotationFiles.length})
+                  </p>
+                  <div className="space-y-2">
+                    {quotationFiles.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">{file.name}</span>
+                          <span className="text-xs text-gray-500 ml-2">({formatFileSize(file.size)})</span>
+                        </div>
+                        <button
+                          onClick={() => removeQuotationFile(index)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Botões de Ação da Cotação */}
+            <div className="flex justify-end space-x-4 mt-6">
+              <button
+                onClick={clearQuotationForm}
+                className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Limpar
+              </button>
+
+              <button
+                onClick={generateQuotation}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                <DollarSign className="w-4 h-4 mr-2" />
+                Gerar Cotação
+              </button>
             </div>
           </div>
 
