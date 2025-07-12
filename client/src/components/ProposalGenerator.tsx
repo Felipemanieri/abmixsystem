@@ -125,6 +125,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     idades: [25]
   });
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
+  const [cotacoesCadastradas, setCotacoesCadastradas] = useState<any[]>([]);
 
 
 
@@ -370,11 +371,51 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
   };
 
   const salvarCotacao = () => {
-    if (!quotationData.operadora || quotationData.idades.length === 0) {
-      showNotification('Preencha todos os campos da cotação', 'error');
+    if (!quotationData.operadora || !quotationData.tipoPlano || !quotationData.valor) {
+      showNotification('Preencha todos os campos obrigatórios da cotação', 'error');
       return;
     }
+
+    const novaCotacao = {
+      id: Date.now().toString(),
+      operadora: quotationData.operadora,
+      tipoPlano: quotationData.tipoPlano,
+      numeroVidas: quotationData.numeroVidas,
+      valor: quotationData.valor,
+      validade: quotationData.validade || '',
+      dataEnvio: quotationData.dataEnvio || new Date().toISOString().split('T')[0],
+      arquivos: arquivosAnexados.length
+    };
+
+    setCotacoesCadastradas(prev => [...prev, novaCotacao]);
+    
+    // Limpar formulário após salvar
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      tipoPlano: '',
+      valor: '',
+      validade: '',
+      dataEnvio: new Date().toISOString().split('T')[0],
+      idades: [25]
+    });
+    setArquivosAnexados([]);
+    
     showNotification('Cotação salva com sucesso!', 'success');
+  };
+
+  const removerCotacao = (id: string) => {
+    setCotacoesCadastradas(prev => prev.filter(cotacao => cotacao.id !== id));
+    showNotification('Cotação removida!', 'success');
+  };
+
+  const enviarWhatsApp = (cotacao: any) => {
+    const mensagem = `Olá! Segue cotação:\n\nOperadora: ${cotacao.operadora}\nTipo: ${cotacao.tipoPlano}\nNº de vidas: ${cotacao.numeroVidas}\nValor: R$ ${cotacao.valor}\nValidade: ${cotacao.validade}\nData de Envio: ${cotacao.dataEnvio}\nArquivos: ${cotacao.arquivos} anexo(s)\n\nQualquer dúvida, estou à disposição!`;
+    
+    const numeroWhatsApp = '5511999999999';
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+    showNotification('Redirecionando para WhatsApp...', 'success');
   };
 
   const downloadQuotation = () => {
@@ -1470,6 +1511,72 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
               </button>
             </div>
           </div>
+
+          {/* Seção Cotações Cadastradas */}
+          {cotacoesCadastradas.length > 0 && (
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Cotações Cadastradas ({cotacoesCadastradas.length})
+              </h3>
+
+              <div className="space-y-4">
+                {cotacoesCadastradas.map((cotacao) => (
+                  <div key={cotacao.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Operadora</span>
+                        <p className="text-sm text-gray-900">{cotacao.operadora}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
+                        <p className="text-sm text-gray-900">{cotacao.tipoPlano}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
+                        <p className="text-sm text-gray-900">{cotacao.numeroVidas}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Valor</span>
+                        <p className="text-sm text-gray-900">R$ {cotacao.valor}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Validade</span>
+                        <p className="text-sm text-gray-900">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Data de Envio</span>
+                        <p className="text-sm text-gray-900">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">Arquivos Anexados</span>
+                        <p className="text-sm text-gray-900">{cotacao.arquivos} arquivo(s)</p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end space-x-3">
+                      <button
+                        onClick={() => enviarWhatsApp(cotacao)}
+                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+                      >
+                        <Phone className="w-4 h-4 mr-1" />
+                        WhatsApp
+                      </button>
+                      <button
+                        onClick={() => removerCotacao(cotacao.id)}
+                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Botões de Ação */}
           <div className="flex justify-between">
