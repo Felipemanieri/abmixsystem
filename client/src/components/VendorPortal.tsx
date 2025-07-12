@@ -7,6 +7,7 @@ import NotificationCenter from './NotificationCenter';
 import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 import QuotationPanel from './QuotationPanel';
+import ProgressBar from './ProgressBar';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
@@ -1388,14 +1389,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
-                              <div 
-                                className="bg-green-600 h-2 rounded-full transition-all duration-300" 
-                                style={{ width: `${proposal.progress}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-sm text-gray-600">{proposal.progress}%</span>
+                          <div className="w-48">
+                            <ProgressBar 
+                              proposal={proposal}
+                              className="w-full"
+                            />
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

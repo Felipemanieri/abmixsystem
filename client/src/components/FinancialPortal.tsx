@@ -6,6 +6,7 @@ import InternalMessage from './InternalMessage';
 import FinancialAutomationModal from './FinancialAutomationModal';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
+import ProgressBar from './ProgressBar';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 
@@ -248,6 +249,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
               </tr>
@@ -272,6 +274,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       {proposal.status === 'approved' ? 'Aprovada' : 
                        proposal.status === 'pending' ? 'Pendente' : 'Em Análise'}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="w-48">
+                      <ProgressBar 
+                        proposal={proposal}
+                        className="w-full"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(proposal.date).toLocaleDateString('pt-BR')}

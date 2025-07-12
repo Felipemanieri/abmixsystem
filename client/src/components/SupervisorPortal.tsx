@@ -4,6 +4,7 @@ import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
+import ProgressBar from './ProgressBar';
 import { showNotification } from '../utils/notifications';
 
 interface SupervisorPortalProps {
@@ -604,6 +605,9 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Taxa Conversão
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Progresso Médio
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Receita
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -640,6 +644,19 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                               ></div>
                             </div>
                             <span className="text-sm text-gray-600">{vendor.conversionRate}%</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="w-40">
+                            <ProgressBar 
+                              proposal={{
+                                id: `vendor-${vendor.id}`,
+                                status: vendor.conversionRate > 80 ? 'completed' : 
+                                       vendor.conversionRate > 50 ? 'processing' : 'pending_validation',
+                                progress: vendor.conversionRate
+                              }}
+                              className="w-full"
+                            />
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
