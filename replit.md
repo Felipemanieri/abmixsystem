@@ -162,6 +162,21 @@ The application provides role-based portals with specific functionality:
   - Multi-method document upload: drag-drop, camera capture, file browser
   - Save draft and generate client link functionality
 
+- **Multiple Titulares System (Jan 12, 2025)**:
+  - Added multiple titulares functionality identical to dependents structure
+  - "+" button to add new titulares with proper numbering (Titular 1, Titular 2, etc.)
+  - Remove button available when more than one titular exists
+  - All form fields working correctly for each titular
+  - Consistent behavior between titulares and dependents
+
+- **Client Portal Integration (Jan 12, 2025)**:
+  - New "Completar Proposta" tab in client portal
+  - Contract data appears pre-filled from vendor (read-only with lock icon)
+  - Identical form structure to vendor with multiple titulares and dependents
+  - Separate document upload sections (vendor attachments + client attachments)
+  - Form validation and submission with success confirmation
+  - Removed redundant "Formulário" tab for cleaner navigation
+
 - **Form Features Implemented**:
   - All required fields from user specifications (CPF, RG, birth date, complete address, etc.)
   - Expandable dependents with parentesco field
@@ -175,3 +190,4 @@ The application provides role-based portals with specific functionality:
   - Maintained consistent "Cotações" terminology across portals
   - Generated unique client links for completing personal data
   - Client and vendor workflows properly separated
+  - Real-time data synchronization between vendor and client portals

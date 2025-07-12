@@ -42,7 +42,7 @@ interface ChatMessage {
 }
 
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents' | 'complete-proposal'>('cotacoes');
+  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'complete-proposal'>('cotacoes');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
@@ -470,11 +470,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     </div>
   );
 
-  const renderDocumentsTab = () => (
-    <div className="space-y-6">
-      <ClientForm />
-    </div>
-  );
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
@@ -569,18 +565,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <Check className="w-4 h-4 mr-2" />
                 Completar Proposta
               </button>
-
-              <button
-                onClick={() => setActiveTab('documents')}
-                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'documents'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Formulário
-              </button>
               <button
                 onClick={() => setActiveTab('profile')}
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
@@ -627,7 +611,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             />
           )}
           {activeTab === 'profile' && renderProfileTab()}
-          {activeTab === 'documents' && renderDocumentsTab()}
         </div>
       </main>
 
