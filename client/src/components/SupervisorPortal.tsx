@@ -5,6 +5,7 @@ import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProgressBar from './ProgressBar';
+import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification } from '../utils/notifications';
 
 interface SupervisorPortalProps {
