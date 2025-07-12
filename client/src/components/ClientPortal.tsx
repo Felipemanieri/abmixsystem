@@ -7,6 +7,7 @@ import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import ProposalForm from './ProposalForm';
 import ProgressBar from './ProgressBar';
+import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification as utilShowNotification } from '../utils/notifications';
 
 interface ClientPortalProps {

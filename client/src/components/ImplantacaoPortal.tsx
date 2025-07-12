@@ -397,6 +397,58 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
   const renderProposalsTab = () => (
     <div className="space-y-6">
+      {/* Barra de Progresso Independente */}
+      <ProposalProgressTracker
+        contractData={{
+          nomeEmpresa: 'Empresa Exemplo Ltda',
+          cnpj: '98.765.432/0001-12',
+          planoContratado: 'Plano Familiar Premium',
+          valor: '890,00',
+          inicioVigencia: '2024-03-01'
+        }}
+        titulares={[{
+          id: '1',
+          nomeCompleto: 'Maria Oliveira Santos',
+          cpf: '987.654.321-00',
+          rg: '98.765.432-1',
+          dataNascimento: '1982-07-20',
+          nomeMae: 'Ana Oliveira',
+          sexo: 'feminino',
+          estadoCivil: 'casada',
+          peso: '65',
+          altura: '1.68',
+          emailPessoal: 'maria@email.com',
+          telefonePessoal: '(11) 88888-8888',
+          emailEmpresa: 'maria@empresa.com',
+          telefoneEmpresa: '(11) 2222-2222',
+          cep: '04567-890',
+          enderecoCompleto: 'Av. Paulista, 456 - Bela Vista - São Paulo/SP',
+          dadosReembolso: 'Caixa Econômica - Ag: 5678 - Conta: 12345-6'
+        }]}
+        dependentes={[{
+          id: '2',
+          nomeCompleto: 'Pedro Santos Oliveira',
+          cpf: '456.789.123-00',
+          rg: '45.678.912-3',
+          dataNascimento: '2010-12-10',
+          parentesco: 'filho',
+          nomeMae: 'Maria Oliveira Santos',
+          sexo: 'masculino',
+          estadoCivil: 'solteiro',
+          peso: '40',
+          altura: '1.45',
+          emailPessoal: '',
+          telefonePessoal: '',
+          emailEmpresa: '',
+          telefoneEmpresa: '',
+          cep: '04567-890',
+          enderecoCompleto: 'Av. Paulista, 456 - Bela Vista - São Paulo/SP',
+          dadosReembolso: ''
+        }]}
+        attachments={[]}
+        className="mb-6"
+      />
+      
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

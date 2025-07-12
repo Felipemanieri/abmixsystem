@@ -7,6 +7,7 @@ import FinancialAutomationModal from './FinancialAutomationModal';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import ProgressBar from './ProgressBar';
+import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 
@@ -238,6 +239,39 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   const renderProposals = () => (
     <div className="space-y-6">
+      {/* Barra de Progresso Independente */}
+      <ProposalProgressTracker
+        contractData={{
+          nomeEmpresa: 'Tech Solutions Ltda',
+          cnpj: '12.345.678/0001-90',
+          planoContratado: 'Plano Empresarial',
+          valor: '1.250,00',
+          inicioVigencia: '2024-02-01'
+        }}
+        titulares={[{
+          id: '1',
+          nomeCompleto: 'João Silva Santos',
+          cpf: '123.456.789-00',
+          rg: '12.345.678-9',
+          dataNascimento: '1985-03-15',
+          nomeMae: 'Maria Silva',
+          sexo: 'masculino',
+          estadoCivil: 'casado',
+          peso: '75',
+          altura: '1.75',
+          emailPessoal: 'joao@email.com',
+          telefonePessoal: '(11) 99999-9999',
+          emailEmpresa: 'joao@techsolutions.com',
+          telefoneEmpresa: '(11) 3333-3333',
+          cep: '01234-567',
+          enderecoCompleto: 'Rua das Flores, 123 - Centro - São Paulo/SP',
+          dadosReembolso: 'Banco do Brasil - Ag: 1234 - Conta: 56789-0'
+        }]}
+        dependentes={[]}
+        attachments={[]}
+        className="mb-6"
+      />
+      
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">Propostas em Andamento</h3>

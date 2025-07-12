@@ -252,6 +252,39 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
 
   const renderReportsView = () => (
     <div className="space-y-6">
+      {/* Barra de Progresso Independente */}
+      <ProposalProgressTracker
+        contractData={{
+          nomeEmpresa: 'Corporação ABC Ltda',
+          cnpj: '11.222.333/0001-44',
+          planoContratado: 'Plano Executivo',
+          valor: '2.150,00',
+          inicioVigencia: '2024-01-15'
+        }}
+        titulares={[{
+          id: '1',
+          nomeCompleto: 'Carlos Eduardo Silva',
+          cpf: '111.222.333-44',
+          rg: '11.222.333-4',
+          dataNascimento: '1978-11-05',
+          nomeMae: 'Helena Silva',
+          sexo: 'masculino',
+          estadoCivil: 'casado',
+          peso: '82',
+          altura: '1.80',
+          emailPessoal: 'carlos@email.com',
+          telefonePessoal: '(11) 77777-7777',
+          emailEmpresa: 'carlos@corporacao.com',
+          telefoneEmpresa: '(11) 4444-4444',
+          cep: '01310-100',
+          enderecoCompleto: 'Rua Augusta, 789 - Consolação - São Paulo/SP',
+          dadosReembolso: 'Itaú - Ag: 9999 - Conta: 88888-9'
+        }]}
+        dependentes={[]}
+        attachments={[]}
+        className="mb-6"
+      />
+      
       <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">Relatórios Gerenciais</h1>
         <p className="text-blue-100">Análises detalhadas e relatórios customizados</p>

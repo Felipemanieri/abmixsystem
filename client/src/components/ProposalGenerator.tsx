@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
+import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ProposalGeneratorProps {
   onBack: () => void;
@@ -874,6 +875,15 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             Preencha todos os dados para gerar uma proposta completa
           </p>
         </div>
+
+        {/* Barra de Progresso */}
+        <ProposalProgressTracker
+          contractData={contractData}
+          titulares={titulares}
+          dependentes={dependentes}
+          attachments={attachments}
+          className="mb-6"
+        />
 
         <div className="space-y-8">
           {/* Dados do Contrato */}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building, FileText, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Upload, Camera, Save, Send, Info, Users, Lock, Check } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
+import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ContractData {
   nomeEmpresa: string;
@@ -615,6 +616,15 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             }
           </p>
         </div>
+
+        {/* Barra de Progresso */}
+        <ProposalProgressTracker
+          contractData={contractData}
+          titulares={titulares}
+          dependentes={dependentes}
+          attachments={clientAttachments}
+          className="mb-6"
+        />
 
         <div className="space-y-8">
           {/* Dados do Contrato - Read Only para Cliente */}
