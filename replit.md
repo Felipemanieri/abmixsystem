@@ -151,3 +151,27 @@ The application provides role-based portals with specific functionality:
 - Stateless server design enables horizontal scaling
 - External file storage reduces server storage requirements
 - Component-based architecture supports feature modularity
+
+## Recent Changes
+
+### Complete Digital Health Plan Proposal Form (Jan 12, 2025)
+- **Rebuilt ProposalGenerator with comprehensive form structure**:
+  - Contract data section with company information and plan details
+  - Complete personal data forms for titular and unlimited dependents
+  - Vendor-only internal controls (meeting data, discount authorization, financial notes)
+  - Multi-method document upload: drag-drop, camera capture, file browser
+  - Save draft and generate client link functionality
+
+- **Form Features Implemented**:
+  - All required fields from user specifications (CPF, RG, birth date, complete address, etc.)
+  - Expandable dependents with parentesco field
+  - Large, responsive buttons and intuitive interface
+  - Proper field validation and error handling
+  - File attachment management with preview and removal
+  - Internal vendor fields toggle (show/hide with eye icon)
+
+- **Integration Completed**:
+  - Form integrated into existing VendorPortal "Nova Proposta" workflow
+  - Maintained consistent "Cotações" terminology across portals
+  - Generated unique client links for completing personal data
+  - Client and vendor workflows properly separated

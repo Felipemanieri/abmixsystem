@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Building, FileText, DollarSign, Check, Copy } from 'lucide-react';
+import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar } from 'lucide-react';
+import { showNotification } from '../utils/notifications';
 
 interface ProposalGeneratorProps {
   onBack: () => void;
@@ -9,12 +10,46 @@ interface ContractData {
   nomeEmpresa: string;
   cnpj: string;
   planoContratado: string;
-  odontoConjugado: boolean;
   valor: string;
-  periodoVigencia: string;
+  periodoVigencia: {
+    inicio: string;
+    fim: string;
+  };
+  odontoConjugado: boolean;
   compulsorio: boolean;
   inicioVigencia: string;
   aproveitamentoCongenere: boolean;
+}
+
+interface PersonData {
+  id: string;
+  nomeCompleto: string;
+  cpf: string;
+  rg: string;
+  dataNascimento: string;
+  parentesco?: string;
+  nomeMae: string;
+  sexo: 'masculino' | 'feminino' | '';
+  estadoCivil: string;
+  peso: string;
+  altura: string;
+  emailPessoal: string;
+  telefonePessoal: string;
+  emailEmpresa: string;
+  telefoneEmpresa: string;
+  cep: string;
+  enderecoCompleto: string;
+  dadosReembolso: string;
+}
+
+interface InternalData {
+  reuniao: boolean;
+  nomeReuniao: string;
+  vendaDupla: boolean;
+  nomeVendaDupla: string;
+  desconto: string;
+  autorizadorDesconto: string;
+  observacoesFinanceiras: string;
 }
 
 const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
@@ -22,45 +57,124 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     nomeEmpresa: '',
     cnpj: '',
     planoContratado: '',
-    odontoConjugado: false,
     valor: '',
-    periodoVigencia: '',
+    periodoVigencia: { inicio: '', fim: '' },
+    odontoConjugado: false,
     compulsorio: false,
     inicioVigencia: '',
     aproveitamentoCongenere: false,
   });
 
+  const [titular, setTitular] = useState<PersonData>({
+    id: '1',
+    nomeCompleto: '',
+    cpf: '',
+    rg: '',
+    dataNascimento: '',
+    nomeMae: '',
+    sexo: '',
+    estadoCivil: '',
+    peso: '',
+    altura: '',
+    emailPessoal: '',
+    telefonePessoal: '',
+    emailEmpresa: '',
+    telefoneEmpresa: '',
+    cep: '',
+    enderecoCompleto: '',
+    dadosReembolso: ''
+  });
+
+  const [dependentes, setDependentes] = useState<PersonData[]>([]);
+
+  const [internalData, setInternalData] = useState<InternalData>({
+    reuniao: false,
+    nomeReuniao: '',
+    vendaDupla: false,
+    nomeVendaDupla: '',
+    desconto: '',
+    autorizadorDesconto: '',
+    observacoesFinanceiras: ''
+  });
+
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
 
-  const planOptions = [
-    'Plano Individual',
-    'Plano Família Básico',
-    'Plano Família Premium',
+  const planosDisponiveis = [
+    'Plano Básico Ambulatorial',
+    'Plano Hospitalar com Obstetrícia',
+    'Plano Referência',
+    'Plano Master',
+    'Plano Executivo',
+    'Plano Premium',
     'Plano Empresarial',
-    'Plano Empresarial Premium',
+    'Plano Individual',
+    'Plano Familiar'
   ];
 
-  const handleInputChange = (field: keyof ContractData, value: string | boolean) => {
-    setContractData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
+  const adicionarDependente = () => {
+    const newDependente: PersonData = {
+      id: `dep_${Date.now()}`,
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      parentesco: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    };
+    setDependentes([...dependentes, newDependente]);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Gerar ID único para a proposta
-    const proposalId = `VEND${Math.floor(Math.random() * 1000)}-PROP${Math.floor(Math.random() * 10000)}`;
-    const link = `${window.location.origin}/cliente/${proposalId}`;
+  const removerDependente = (id: string) => {
+    setDependentes(dependentes.filter(dep => dep.id !== id));
+  };
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (files) {
+      const newFiles = Array.from(files);
+      setAttachments(prev => [...prev, ...newFiles]);
+      showNotification(`${newFiles.length} arquivo(s) adicionado(s)`, 'success');
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSave = () => {
+    showNotification('Proposta salva como rascunho', 'success');
+  };
+
+  const handleSend = () => {
+    if (!contractData.nomeEmpresa || !contractData.cnpj || !contractData.planoContratado) {
+      showNotification('Preencha os campos obrigatórios do contrato', 'error');
+      return;
+    }
+
+    const proposalId = `PROP${Date.now()}`;
+    const link = `${window.location.origin}/cliente/proposta/${proposalId}`;
     
     setGeneratedLink(link);
     setIsSubmitted(true);
+    showNotification('Link da proposta gerado com sucesso!', 'success');
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generatedLink);
+    showNotification('Link copiado para a área de transferência', 'success');
   };
 
   const resetForm = () => {
@@ -68,16 +182,432 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
       nomeEmpresa: '',
       cnpj: '',
       planoContratado: '',
-      odontoConjugado: false,
       valor: '',
-      periodoVigencia: '',
+      periodoVigencia: { inicio: '', fim: '' },
+      odontoConjugado: false,
       compulsorio: false,
       inicioVigencia: '',
       aproveitamentoCongenere: false,
     });
+    setTitular({
+      id: '1',
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    });
+    setDependentes([]);
+    setInternalData({
+      reuniao: false,
+      nomeReuniao: '',
+      vendaDupla: false,
+      nomeVendaDupla: '',
+      desconto: '',
+      autorizadorDesconto: '',
+      observacoesFinanceiras: ''
+    });
+    setAttachments([]);
     setIsSubmitted(false);
     setGeneratedLink('');
   };
+
+  const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index?: number) => (
+    <div key={person.id} className="bg-gray-50 p-6 rounded-lg space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+          <User className="w-5 h-5 mr-2" />
+          {type === 'titular' ? 'Dados do Titular' : `Dependente ${index! + 1}`}
+        </h3>
+        {type === 'dependente' && (
+          <button
+            onClick={() => removerDependente(person.id)}
+            className="text-red-600 hover:text-red-800 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="md:col-span-2 lg:col-span-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nome Completo *
+          </label>
+          <input
+            type="text"
+            value={person.nomeCompleto}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, nomeCompleto: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].nomeCompleto = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Nome completo sem abreviações"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            CPF *
+          </label>
+          <input
+            type="text"
+            value={person.cpf}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, cpf: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].cpf = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="000.000.000-00"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            RG *
+          </label>
+          <input
+            type="text"
+            value={person.rg}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, rg: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].rg = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="00.000.000-0"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Data de Nascimento *
+          </label>
+          <input
+            type="date"
+            value={person.dataNascimento}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, dataNascimento: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].dataNascimento = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {type === 'dependente' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Parentesco *
+            </label>
+            <select
+              value={person.parentesco || ''}
+              onChange={(e) => {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].parentesco = e.target.value;
+                setDependentes(newDependentes);
+              }}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Selecione</option>
+              <option value="cônjuge">Cônjuge</option>
+              <option value="filho(a)">Filho(a)</option>
+              <option value="pai">Pai</option>
+              <option value="mãe">Mãe</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        )}
+
+        <div className="md:col-span-2 lg:col-span-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nome da Mãe *
+          </label>
+          <input
+            type="text"
+            value={person.nomeMae}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, nomeMae: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].nomeMae = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Nome completo da mãe"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Sexo *
+          </label>
+          <select
+            value={person.sexo}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, sexo: e.target.value as 'masculino' | 'feminino' | '' }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].sexo = e.target.value as 'masculino' | 'feminino' | '';
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Selecione</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Estado Civil *
+          </label>
+          <select
+            value={person.estadoCivil}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, estadoCivil: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].estadoCivil = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Selecione</option>
+            <option value="solteiro">Solteiro(a)</option>
+            <option value="casado">Casado(a)</option>
+            <option value="divorciado">Divorciado(a)</option>
+            <option value="viuvo">Viúvo(a)</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Peso (kg)
+          </label>
+          <input
+            type="text"
+            value={person.peso}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, peso: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].peso = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Ex: 70"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Altura (cm)
+          </label>
+          <input
+            type="text"
+            value={person.altura}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, altura: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].altura = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Ex: 170"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email Pessoal *
+          </label>
+          <input
+            type="email"
+            value={person.emailPessoal}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, emailPessoal: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].emailPessoal = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="email@exemplo.com"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Telefone Pessoal *
+          </label>
+          <input
+            type="tel"
+            value={person.telefonePessoal}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, telefonePessoal: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].telefonePessoal = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="(00) 00000-0000"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email Empresa
+          </label>
+          <input
+            type="email"
+            value={person.emailEmpresa}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, emailEmpresa: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].emailEmpresa = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="email@empresa.com"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Telefone Empresa
+          </label>
+          <input
+            type="tel"
+            value={person.telefoneEmpresa}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, telefoneEmpresa: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].telefoneEmpresa = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="(00) 0000-0000"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            CEP *
+          </label>
+          <input
+            type="text"
+            value={person.cep}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, cep: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].cep = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="00000-000"
+          />
+        </div>
+
+        <div className="md:col-span-2 lg:col-span-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Endereço Completo *
+          </label>
+          <input
+            type="text"
+            value={person.enderecoCompleto}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, enderecoCompleto: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].enderecoCompleto = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Rua, número, complemento, bairro, cidade, estado"
+          />
+        </div>
+
+        <div className="md:col-span-2 lg:col-span-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Dados para Reembolso
+          </label>
+          <textarea
+            value={person.dadosReembolso}
+            onChange={(e) => {
+              if (type === 'titular') {
+                setTitular(prev => ({ ...prev, dadosReembolso: e.target.value }));
+              } else {
+                const newDependentes = [...dependentes];
+                newDependentes[index!].dadosReembolso = e.target.value;
+                setDependentes(newDependentes);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            rows={3}
+            placeholder="Banco, agência, conta, PIX..."
+          />
+        </div>
+      </div>
+    </div>
+  );
 
   if (isSubmitted) {
     return (
@@ -107,7 +637,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
               <strong>Plano:</strong> {contractData.planoContratado}
             </p>
             <p className="text-sm text-gray-700">
-              <strong>Valor:</strong> {contractData.valor}
+              <strong>Valor:</strong> R$ {contractData.valor}
             </p>
           </div>
 
@@ -131,12 +661,18 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             </div>
           </div>
 
-          <div className="flex space-x-4 justify-center">
+          <div className="flex space-x-4">
             <button
               onClick={resetForm}
-              className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors"
+              className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               Nova Proposta
+            </button>
+            <button
+              onClick={onBack}
+              className="flex-1 border border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            >
+              Voltar ao Dashboard
             </button>
           </div>
         </div>
@@ -145,7 +681,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <button
         onClick={onBack}
         className="flex items-center text-gray-600 hover:text-gray-800 mb-6 transition-colors"
@@ -154,163 +690,443 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
         Voltar ao Dashboard
       </button>
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white mb-6">
-        <h1 className="text-2xl font-bold mb-2">Nova Proposta de Plano de Saúde</h1>
-        <p className="text-green-100">Preencha os dados do contrato que serão fixos para o cliente</p>
-      </div>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Nova Proposta de Plano de Saúde
+          </h1>
+          <p className="text-gray-600">
+            Preencha todos os dados para gerar uma proposta completa
+          </p>
+        </div>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="space-y-6">
-          <div className="flex items-center mb-6">
-            <Building className="w-6 h-6 text-green-600 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">Dados da Empresa</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Nome da Empresa *</label>
-              <input
-                type="text"
-                required
-                value={contractData.nomeEmpresa}
-                onChange={(e) => handleInputChange('nomeEmpresa', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Ex: Empresa ABC Ltda"
-              />
+        <div className="space-y-8">
+          {/* Dados do Contrato */}
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <Building className="w-5 h-5 text-blue-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Dados do Contrato
+              </h2>
             </div>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">CNPJ *</label>
-              <input
-                type="text"
-                required
-                value={contractData.cnpj}
-                onChange={(e) => handleInputChange('cnpj', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="00.000.000/0000-00"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nome da Empresa *
+                </label>
+                <input
+                  type="text"
+                  value={contractData.nomeEmpresa}
+                  onChange={(e) => setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ex: Empresa ABC Ltda"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  CNPJ *
+                </label>
+                <input
+                  type="text"
+                  value={contractData.cnpj}
+                  onChange={(e) => setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="00.000.000/0000-00"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Plano Contratado *
+                </label>
+                <select
+                  value={contractData.planoContratado}
+                  onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Selecione um plano</option>
+                  {planosDisponiveis.map((plano) => (
+                    <option key={plano} value={plano}>
+                      {plano}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Valor Mensal (R$) *
+                </label>
+                <input
+                  type="text"
+                  value={contractData.valor}
+                  onChange={(e) => setContractData(prev => ({ ...prev, valor: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="0,00"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Início da Vigência *
+                </label>
+                <input
+                  type="date"
+                  value={contractData.inicioVigencia}
+                  onChange={(e) => setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Vigência - Início *
+                </label>
+                <input
+                  type="date"
+                  value={contractData.periodoVigencia.inicio}
+                  onChange={(e) => setContractData(prev => ({ 
+                    ...prev, 
+                    periodoVigencia: { ...prev.periodoVigencia, inicio: e.target.value }
+                  }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Vigência - Fim *
+                </label>
+                <input
+                  type="date"
+                  value={contractData.periodoVigencia.fim}
+                  onChange={(e) => setContractData(prev => ({ 
+                    ...prev, 
+                    periodoVigencia: { ...prev.periodoVigencia, fim: e.target.value }
+                  }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              
+              <div className="md:col-span-2 space-y-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="odontoConjugado"
+                    checked={contractData.odontoConjugado}
+                    onChange={(e) => setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700">
+                    Inclui cobertura odontológica
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="compulsorio"
+                    checked={contractData.compulsorio}
+                    onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
+                    Adesão compulsória
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="aproveitamentoCongenere"
+                    checked={contractData.aproveitamentoCongenere}
+                    onChange={(e) => setContractData(prev => ({ ...prev, aproveitamentoCongenere: e.target.checked }))}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700">
+                    Aproveitamento de carência congênere
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center mb-6 pt-6 border-t border-gray-200">
-            <FileText className="w-6 h-6 text-green-600 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">Detalhes do Plano</h2>
+          {/* Dados do Titular */}
+          <div>
+            <div className="flex items-center mb-4">
+              <User className="w-5 h-5 text-green-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Dados Pessoais
+              </h2>
+            </div>
+            {renderPersonForm(titular, 'titular')}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Plano Contratado *</label>
-              <select
-                required
-                value={contractData.planoContratado}
-                onChange={(e) => handleInputChange('planoContratado', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+
+          {/* Dependentes */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 text-purple-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Dependentes
+                </h2>
+              </div>
+              <button
+                onClick={adicionarDependente}
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
-                <option value="">Selecione o plano</option>
-                {planOptions.map((plan) => (
-                  <option key={plan} value={plan}>{plan}</option>
-                ))}
-              </select>
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Dependente
+              </button>
             </div>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Valor Mensal *</label>
-              <input
-                type="text"
-                required
-                value={contractData.valor}
-                onChange={(e) => handleInputChange('valor', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="R$ 0,00"
-              />
+            {dependentes.length === 0 ? (
+              <div className="bg-gray-50 p-6 rounded-lg text-center">
+                <p className="text-gray-500">Nenhum dependente adicionado</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Clique em "Adicionar Dependente" para incluir familiares
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {dependentes.map((dependente, index) => 
+                  renderPersonForm(dependente, 'dependente', index)
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Controles Internos do Vendedor */}
+          <div className="bg-orange-50 p-6 rounded-lg">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Settings className="w-5 h-5 text-orange-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Controles Internos
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowInternalFields(!showInternalFields)}
+                className="flex items-center text-orange-600 hover:text-orange-800 transition-colors"
+              >
+                {showInternalFields ? (
+                  <>
+                    <EyeOff className="w-4 h-4 mr-1" />
+                    Ocultar
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4 mr-1" />
+                    Mostrar
+                  </>
+                )}
+              </button>
+            </div>
+
+            {showInternalFields && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="reuniao"
+                    checked={internalData.reuniao}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, reuniao: e.target.checked }))}
+                    className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                  />
+                  <label htmlFor="reuniao" className="ml-2 text-sm text-gray-700">
+                    Venda em reunião
+                  </label>
+                </div>
+
+                {internalData.reuniao && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nome da Reunião
+                    </label>
+                    <input
+                      type="text"
+                      value={internalData.nomeReuniao}
+                      onChange={(e) => setInternalData(prev => ({ ...prev, nomeReuniao: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      placeholder="Nome da reunião"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="vendaDupla"
+                    checked={internalData.vendaDupla}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, vendaDupla: e.target.checked }))}
+                    className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                  />
+                  <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-700">
+                    Venda dupla
+                  </label>
+                </div>
+
+                {internalData.vendaDupla && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nome do Parceiro
+                    </label>
+                    <input
+                      type="text"
+                      value={internalData.nomeVendaDupla}
+                      onChange={(e) => setInternalData(prev => ({ ...prev, nomeVendaDupla: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      placeholder="Nome do vendedor parceiro"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Desconto (%)
+                  </label>
+                  <input
+                    type="text"
+                    value={internalData.desconto}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, desconto: e.target.value }))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="0"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Autorizador do Desconto
+                  </label>
+                  <input
+                    type="text"
+                    value={internalData.autorizadorDesconto}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, autorizadorDesconto: e.target.value }))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="Nome do autorizador"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Observações Financeiras
+                  </label>
+                  <textarea
+                    value={internalData.observacoesFinanceiras}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, observacoesFinanceiras: e.target.value }))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    rows={3}
+                    placeholder="Observações para o setor financeiro..."
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Upload de Documentos */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <FileText className="w-5 h-5 text-gray-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Documentos
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleFileUpload(e.target.files)}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-lg font-medium text-gray-700 mb-2">
+                    Clique para adicionar documentos
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    ou arraste e solte os arquivos aqui
+                  </p>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <label htmlFor="camera-upload" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="camera-upload"
+                  />
+                  <Camera className="w-5 h-5 text-gray-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Tirar Foto</span>
+                </label>
+
+                <label htmlFor="file-browse" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="file"
+                    multiple
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="file-browse"
+                  />
+                  <FileText className="w-5 h-5 text-gray-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Buscar Arquivos</span>
+                </label>
+              </div>
+
+              {attachments.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    Arquivos Anexados ({attachments.length})
+                  </p>
+                  <div className="space-y-2">
+                    {attachments.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">{file.name}</span>
+                        </div>
+                        <button
+                          onClick={() => removeAttachment(index)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Período de Vigência *</label>
-              <input
-                type="text"
-                required
-                value={contractData.periodoVigencia}
-                onChange={(e) => handleInputChange('periodoVigencia', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Ex: 12 meses"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Início da Vigência *</label>
-              <input
-                type="date"
-                required
-                value={contractData.inicioVigencia}
-                onChange={(e) => handleInputChange('inicioVigencia', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
-            </div>
-          </div>
+          {/* Botões de Ação */}
+          <div className="flex justify-between">
+            <button
+              onClick={handleSave}
+              className="flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              Salvar Rascunho
+            </button>
 
-          <div className="flex items-center mb-6 pt-6 border-t border-gray-200">
-            <DollarSign className="w-6 h-6 text-green-600 mr-3" />
-            <h2 className="text-lg font-semibold text-gray-900">Configurações Adicionais</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="odontoConjugado"
-                checked={contractData.odontoConjugado}
-                onChange={(e) => handleInputChange('odontoConjugado', e.target.checked)}
-                className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-              />
-              <label htmlFor="odontoConjugado" className="ml-2 text-sm font-medium text-gray-700">
-                Odonto Conjugado
-              </label>
-            </div>
-            
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="compulsorio"
-                checked={contractData.compulsorio}
-                onChange={(e) => handleInputChange('compulsorio', e.target.checked)}
-                className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-              />
-              <label htmlFor="compulsorio" className="ml-2 text-sm font-medium text-gray-700">
-                Compulsório
-              </label>
-            </div>
-            
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="aproveitamentoCongenere"
-                checked={contractData.aproveitamentoCongenere}
-                onChange={(e) => handleInputChange('aproveitamentoCongenere', e.target.checked)}
-                className="rounded border-gray-300 text-green-600 focus:ring-green-500"
-              />
-              <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm font-medium text-gray-700">
-                Aproveitamento Congênere
-              </label>
-            </div>
+            <button
+              onClick={handleSend}
+              className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              <Send className="w-4 h-4 mr-2" />
+              Gerar Link para Cliente
+            </button>
           </div>
         </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end pt-6 border-t border-gray-200 mt-8">
-          <button
-            type="submit"
-            className="flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors"
-          >
-            <FileText className="w-4 h-4 mr-2" />
-            Gerar Link para Cliente
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };

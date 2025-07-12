@@ -42,9 +42,7 @@ interface ChatMessage {
 }
 
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents' | 'proposal-form'>('cotacoes');
-  const [showProposalForm, setShowProposalForm] = useState(false);
-  const [proposalData, setProposalData] = useState(null);
+  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents'>('cotacoes');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
@@ -560,33 +558,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 Minhas Cotações
               </button>
               
-              <button
-                onClick={() => {
-                  setActiveTab('proposal-form');
-                  // Simular dados pré-preenchidos pelo vendedor
-                  setProposalData({
-                    contract: {
-                      nomeEmpresa: 'Empresa Exemplo Ltda',
-                      cnpj: '12.345.678/0001-90',
-                      planoContratado: 'Plano Empresarial Premium',
-                      valor: '1.250,00',
-                      periodoVigencia: { inicio: '2024-02-01', fim: '2025-02-01' },
-                      odontoConjugado: true,
-                      compulsorio: false,
-                      inicioVigencia: '2024-02-01',
-                      aproveitamentoCongenere: true
-                    }
-                  });
-                }}
-                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'proposal-form'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <Check className="w-4 h-4 mr-2" />
-                Preencher Proposta
-              </button>
+
               <button
                 onClick={() => setActiveTab('documents')}
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
@@ -616,24 +588,6 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         {/* Tab Content */}
         <div>
           {activeTab === 'cotacoes' && renderCotacoesTab()}
-          {activeTab === 'proposal-form' && (
-            <div className="space-y-6">
-              <div className="bg-blue-50 p-4 rounded-lg mb-6">
-                <h3 className="text-lg font-semibold text-blue-900 mb-2">Proposta Pré-preenchida</h3>
-                <p className="text-blue-700">
-                  Seu vendedor já preencheu os dados do contrato. Complete suas informações pessoais e anexe os documentos necessários.
-                </p>
-              </div>
-              <ProposalForm 
-                isVendor={false}
-                prefilledData={proposalData}
-                onSave={(data) => {
-                  console.log('Dados do cliente salvos:', data);
-                  showNotification('Seus dados foram salvos com sucesso!', 'success');
-                }}
-              />
-            </div>
-          )}
           {activeTab === 'profile' && renderProfileTab()}
           {activeTab === 'documents' && renderDocumentsTab()}
         </div>

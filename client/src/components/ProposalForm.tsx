@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Save, Send, Plus, Trash2, Upload, Camera, FileText, Calendar, DollarSign, Building, Users, User, Phone, Mail, MapPin, Eye, EyeOff } from 'lucide-react';
+import { Save, Send, Plus, Trash2, Upload, Camera, FileText, Calendar, DollarSign, Building, Users, User, Phone, Mail, MapPin, Eye, EyeOff, Settings } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 
 interface ContractData {
