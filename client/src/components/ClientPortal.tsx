@@ -77,7 +77,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     },
   ]);
 
-  // Dados de cotações criadas pelo vendedor (espelham as cotações do VendorPortal)
+  // Dados de cotações criadas pelo vendedor (sincronizadas do ProposalGenerator)
   const cotacoes: Cotacao[] = [
     {
       id: '1',
@@ -91,7 +91,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     },
     {
       id: '2',
-      operadora: 'Bradesco',
+      operadora: 'Bradesco Saúde',
       tipoplano: 'Familiar',
       numeroVidas: 4,
       valor: '850,00',
@@ -107,6 +107,26 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       valor: '420,00',
       validade: '2024-03-25',
       dataEnvio: '2024-01-20',
+      arquivos: []
+    },
+    {
+      id: '4',
+      operadora: 'Porto Seguro',
+      tipoplano: 'Empresarial',
+      numeroVidas: 8,
+      valor: '980,00',
+      validade: '2024-04-01',
+      dataEnvio: '2024-01-22',
+      arquivos: []
+    },
+    {
+      id: '5',
+      operadora: 'Hapvida',
+      tipoplano: 'Adesão',
+      numeroVidas: 12,
+      valor: '720,00',
+      validade: '2024-04-10',
+      dataEnvio: '2024-01-25',
       arquivos: []
     }
   ];
@@ -239,7 +259,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Operadora</label>
-                    <p className="text-sm text-gray-900 mt-1">{cotacao.operadora}</p>
+                    <p className="text-sm text-gray-900 mt-1 font-medium">{cotacao.operadora}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Tipo do Plano</label>
@@ -247,14 +267,14 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Número de Vidas</label>
-                    <p className="text-sm text-gray-900 mt-1">{cotacao.numeroVidas}</p>
+                    <p className="text-sm text-gray-900 mt-1 font-medium">{cotacao.numeroVidas}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Valor</label>
-                    <p className="text-lg font-semibold text-green-600 mt-1">R$ {cotacao.valor}</p>
+                    <p className="text-lg font-bold text-green-600 mt-1">R$ {cotacao.valor}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Validade da Cotação</label>
@@ -262,7 +282,63 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Arquivos Anexados</label>
+                    <p className="text-sm text-gray-900 mt-1">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <FileText className="w-3 h-3 mr-1" />
+                        {cotacao.arquivos.length} arquivo(s)
+                      </span>
+                    </p>
+                  </div>
                 </div>
+
+                {/* Simulação de arquivos anexados para demonstração */}
+                {cotacao.id === '1' && (
+                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Documentos da Cotação:</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-2 bg-white rounded border">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">Cotacao_Amil_Empresarial.pdf</span>
+                          <span className="text-xs text-gray-500 ml-2">(245 KB)</span>
+                        </div>
+                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded border">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">Tabela_Precos_2024.xlsx</span>
+                          <span className="text-xs text-gray-500 ml-2">(89 KB)</span>
+                        </div>
+                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {cotacao.id === '2' && (
+                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Documentos da Cotação:</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-2 bg-white rounded border">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">Proposta_Bradesco_Familiar.pdf</span>
+                          <span className="text-xs text-gray-500 ml-2">(312 KB)</span>
+                        </div>
+                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Ações - Mesmos ícones do ActionButtons */}
                 <div className="flex justify-end border-t border-gray-200 pt-4">

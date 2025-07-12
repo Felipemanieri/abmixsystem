@@ -1257,10 +1257,6 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
-      case 'quotation':
-        return renderQuotationModule();
-      case 'cotacoes':
-        return renderCotacoesModule();
       default:
         return (
           <div className="space-y-6">
