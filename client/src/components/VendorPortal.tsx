@@ -62,6 +62,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     operadora: '',
     idades: [25]
   });
+  const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
   const { getClientDocuments } = useGoogleDrive();
 
   // Notificações simuladas
@@ -242,6 +243,48 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     showNotification('Cotação baixada com sucesso!', 'success');
   };
 
+  const handleAnexarArquivo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const novosArquivos = Array.from(files);
+      setArquivosAnexados(prev => [...prev, ...novosArquivos]);
+      showNotification(`${novosArquivos.length} arquivo(s) anexado(s) com sucesso!`, 'success');
+    }
+  };
+
+  const removerArquivo = (index: number) => {
+    setArquivosAnexados(prev => prev.filter((_, i) => i !== index));
+    showNotification('Arquivo removido com sucesso!', 'success');
+  };
+
+  const salvarCotacao = () => {
+    if (!quotationData.operadora) {
+      showNotification('Por favor, selecione uma operadora', 'error');
+      return;
+    }
+    
+    showNotification('Cotação salva com sucesso!', 'success');
+    // Aqui você pode implementar a lógica para salvar a cotação
+  };
+
+  const limparFormulario = () => {
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      idades: [25]
+    });
+    setArquivosAnexados([]);
+    showNotification('Formulário limpo com sucesso!', 'success');
+  };
+
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
   const handleMarkAsRead = (id: string) => {
     setNotifications(prev => 
       prev.map(notification => 
@@ -385,18 +428,81 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
         </div>
 
-        <div className="flex space-x-4">
+        {/* Seção de Anexar Arquivos */}
+        <div className="border-t border-gray-200 pt-6 mt-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Anexar Nova Cotação</h3>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Selecionar Arquivos
+            </label>
+            <input
+              type="file"
+              multiple
+              onChange={handleAnexarArquivo}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (máx. 10MB por arquivo)
+            </p>
+          </div>
+
+          {/* Lista de Arquivos Anexados */}
+          {arquivosAnexados.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">Arquivos Anexados:</h4>
+              <div className="space-y-2">
+                {arquivosAnexados.map((arquivo, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <div className="flex items-center space-x-2">
+                      <FileText className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm text-gray-700">{arquivo.name}</span>
+                      <span className="text-xs text-gray-500">({formatFileSize(arquivo.size)})</span>
+                    </div>
+                    <button 
+                      onClick={() => removerArquivo(index)}
+                      className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                      title="Remover arquivo"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Botões de Ação */}
+        <div className="flex justify-end space-x-4 mt-8">
+          <button
+            onClick={limparFormulario}
+            className="flex items-center px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+          >
+            <X className="w-4 h-4 mr-2" />
+            Limpar Formulário
+          </button>
+
           <button
             onClick={generateQuotation}
-            className="flex items-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Calculator className="w-4 h-4 mr-2" />
             Gerar Cotação
           </button>
+
+          <button
+            onClick={salvarCotacao}
+            className="flex items-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+          >
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Salvar Cotação
+          </button>
           
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
           >
             <Download className="w-4 h-4 mr-2" />
             Baixar Cotação
