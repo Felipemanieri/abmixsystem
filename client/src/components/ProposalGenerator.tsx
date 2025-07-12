@@ -1211,7 +1211,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             <div className="flex items-center mb-6">
               <DollarSign className="w-5 h-5 text-green-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">
-                Anexar Cotação
+                Cotação
               </h2>
             </div>
 
