@@ -19,7 +19,6 @@ const ProposalProgressTracker: React.FC<ProposalProgressTrackerProps> = ({
   onProgressChange
 }) => {
   const [progress, setProgress] = useState(0);
-  const [showCongrats, setShowCongrats] = useState(false);
 
   // Campos obrigatórios do contrato
   const requiredContractFields = [
@@ -107,24 +106,18 @@ const ProposalProgressTracker: React.FC<ProposalProgressTrackerProps> = ({
     if (onProgressChange) {
       onProgressChange(newProgress);
     }
-
-    // Mostrar parabéns quando atingir 100%
-    if (newProgress === 100 && progress < 100) {
-      setShowCongrats(true);
-      setTimeout(() => setShowCongrats(false), 4000);
-    }
   }, [contractData, titulares, dependentes, attachments]);
 
   const getProgressColor = () => {
-    if (progress <= 30) return 'bg-red-500';
-    if (progress <= 70) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (progress <= 30) return 'bg-gradient-to-r from-red-400 to-red-500';
+    if (progress <= 70) return 'bg-gradient-to-r from-amber-400 to-amber-500';
+    return 'bg-gradient-to-r from-emerald-400 to-emerald-500';
   };
 
   const getProgressTextColor = () => {
-    if (progress <= 30) return 'text-red-600';
-    if (progress <= 70) return 'text-yellow-600';
-    return 'text-green-600';
+    if (progress <= 30) return 'text-red-500';
+    if (progress <= 70) return 'text-amber-500';
+    return 'text-emerald-500';
   };
 
   return (
@@ -136,49 +129,21 @@ const ProposalProgressTracker: React.FC<ProposalProgressTrackerProps> = ({
         </span>
       </div>
       
-      <div className="w-full bg-gray-200 rounded-full h-3 relative overflow-hidden">
+      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
         <div 
-          className={`h-3 rounded-full transition-all duration-1000 ease-out ${getProgressColor()}`}
+          className={`h-2 rounded-full transition-all duration-700 ease-in-out ${getProgressColor()}`}
           style={{ width: `${progress}%` }}
         />
-        
-        {/* Animação de brilho */}
-        <div 
-          className="absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse"
-          style={{ 
-            transform: `translateX(${(progress / 100) * 100 - 20}%)`,
-            transition: 'transform 1s ease-out'
-          }}
-        />
       </div>
 
-      {/* Status textual */}
-      <div className="mt-2 text-xs text-gray-600">
-        {progress === 0 && 'Começe preenchendo os dados do contrato'}
-        {progress > 0 && progress <= 30 && 'Continue preenchendo os dados obrigatórios'}
-        {progress > 30 && progress <= 70 && 'Você está progredindo bem!'}
-        {progress > 70 && progress < 100 && 'Quase concluído! Preencha os campos restantes'}
-        {progress === 100 && 'Todos os dados obrigatórios preenchidos!'}
+      {/* Status textual discreto */}
+      <div className="mt-2 text-xs text-gray-500">
+        {progress === 0 && 'Dados pendentes de preenchimento'}
+        {progress > 0 && progress <= 30 && 'Iniciando preenchimento'}
+        {progress > 30 && progress <= 70 && 'Progresso em andamento'}
+        {progress > 70 && progress < 100 && 'Finalização pendente'}
+        {progress === 100 && 'Preenchimento concluído'}
       </div>
-
-      {/* Modal de Parabéns */}
-      {showCongrats && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-white rounded-xl p-8 max-w-sm w-full mx-4 text-center animate-bounceIn">
-            <div className="mb-4">
-              <Trophy className="w-16 h-16 text-yellow-500 mx-auto animate-bounce" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Parabéns!</h2>
-            <p className="text-gray-600 mb-4">
-              Proposta preenchida com sucesso! Todos os dados obrigatórios foram completados.
-            </p>
-            <div className="flex items-center justify-center text-green-600 font-semibold">
-              <CheckCircle className="w-5 h-5 mr-2" />
-              100% Concluído
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
