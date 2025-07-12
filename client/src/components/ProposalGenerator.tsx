@@ -1296,13 +1296,83 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Seção de Acrescentar Cotação */}
+          {/* Seção de Cotações */}
           <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-6">
-              Adicionar Nova Cotação
-            </h2>
+            <div className="flex items-center mb-6">
+              <Calculator className="w-5 h-5 text-blue-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Anexar Cotação
+              </h2>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* Área de Upload com Drag & Drop */}
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+              <input
+                type="file"
+                multiple
+                onChange={handleAnexarArquivo}
+                className="hidden"
+                id="file-upload-cotacao"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              />
+              <label htmlFor="file-upload-cotacao" className="cursor-pointer">
+                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-lg font-medium text-gray-700 mb-2">
+                  Arraste arquivos aqui ou escolha uma opção
+                </p>
+                <p className="text-sm text-gray-500">
+                  Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
+                </p>
+              </label>
+            </div>
+
+            {/* Botões de Upload */}
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleAnexarArquivo}
+                  className="hidden"
+                  id="escolher-arquivo"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                />
+                <FileText className="w-8 h-8 text-blue-600 mb-2" />
+                <span className="text-sm font-medium text-blue-700">Escolher Arquivo</span>
+                <span className="text-xs text-blue-600">Do computador/celular</span>
+              </label>
+
+              <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleAnexarArquivo}
+                  className="hidden"
+                  id="tirar-foto"
+                />
+                <Camera className="w-8 h-8 text-green-600 mb-2" />
+                <span className="text-sm font-medium text-green-700">Tirar Foto</span>
+                <span className="text-xs text-green-600">Câmera do dispositivo</span>
+              </label>
+
+              <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleAnexarArquivo}
+                  className="hidden"
+                  id="da-galeria"
+                />
+                <User className="w-8 h-8 text-purple-600 mb-2" />
+                <span className="text-sm font-medium text-purple-700">Da Galeria</span>
+                <span className="text-xs text-purple-600">Fotos salvas</span>
+              </label>
+            </div>
+
+            {/* Formulário de Cotação */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Operadora */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1403,108 +1473,37 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
               </div>
             </div>
 
-            {/* Anexar Cotação */}
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-4">Anexar Cotação</h3>
-              
-              {/* Área de Upload com Drag & Drop */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleAnexarArquivo}
-                  className="hidden"
-                  id="file-upload-cotacao"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                />
-                <label htmlFor="file-upload-cotacao" className="cursor-pointer">
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-gray-700 mb-2">
-                    Arraste arquivos aqui ou escolha uma opção
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
-                  </p>
-                </label>
-              </div>
-
-              {/* Botões de Upload */}
-              <div className="grid grid-cols-3 gap-4">
-                <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                  <input
-                    type="file"
-                    multiple
-                    onChange={handleAnexarArquivo}
-                    className="hidden"
-                    id="escolher-arquivo"
-                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                  />
-                  <FileText className="w-8 h-8 text-blue-600 mb-2" />
-                  <span className="text-sm font-medium text-blue-700">Escolher Arquivo</span>
-                  <span className="text-xs text-blue-600">Do computador/celular</span>
-                </label>
-
-                <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handleAnexarArquivo}
-                    className="hidden"
-                    id="tirar-foto"
-                  />
-                  <Camera className="w-8 h-8 text-green-600 mb-2" />
-                  <span className="text-sm font-medium text-green-700">Tirar Foto</span>
-                  <span className="text-xs text-green-600">Câmera do dispositivo</span>
-                </label>
-
-                <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleAnexarArquivo}
-                    className="hidden"
-                    id="da-galeria"
-                  />
-                  <User className="w-8 h-8 text-purple-600 mb-2" />
-                  <span className="text-sm font-medium text-purple-700">Da Galeria</span>
-                  <span className="text-xs text-purple-600">Fotos salvas</span>
-                </label>
-              </div>
-
-              {/* Lista de Arquivos Anexados */}
-              {arquivosAnexados.length > 0 && (
-                <div className="mt-6 space-y-2">
-                  <p className="text-sm font-medium text-gray-700">
-                    Arquivos Anexados ({arquivosAnexados.length})
-                  </p>
-                  <div className="space-y-2">
-                    {arquivosAnexados.map((arquivo, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-700">{arquivo.name}</span>
-                          <span className="text-xs text-gray-500 ml-2">({formatFileSize(arquivo.size)})</span>
-                        </div>
-                        <button
-                          onClick={() => removerArquivo(index)}
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+            {/* Lista de Arquivos Anexados */}
+            {arquivosAnexados.length > 0 && (
+              <div className="mb-6 space-y-2">
+                <p className="text-sm font-medium text-gray-700">
+                  Arquivos Anexados ({arquivosAnexados.length})
+                </p>
+                <div className="space-y-2">
+                  {arquivosAnexados.map((arquivo, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center">
+                        <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                        <span className="text-sm text-gray-700">{arquivo.name}</span>
+                        <span className="text-xs text-gray-500 ml-2">({formatFileSize(arquivo.size)})</span>
                       </div>
-                    ))}
-                  </div>
+                      <button
+                        onClick={() => removerArquivo(index)}
+                        className="text-red-600 hover:text-red-800 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Botão Adicionar Cotação */}
             <div className="flex justify-end">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -1515,7 +1514,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
           {/* Seção Cotações Cadastradas */}
           {cotacoesCadastradas.length > 0 && (
             <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">
                 Cotações Cadastradas ({cotacoesCadastradas.length})
               </h3>
 
@@ -1525,7 +1524,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
                       <div>
                         <span className="text-sm font-medium text-gray-600">Operadora</span>
-                        <p className="text-sm text-gray-900">{cotacao.operadora}</p>
+                        <p className="text-sm font-medium text-gray-900">{cotacao.operadora}</p>
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
@@ -1533,15 +1532,15 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
-                        <p className="text-sm text-gray-900">{cotacao.numeroVidas}</p>
+                        <p className="text-sm font-medium text-gray-900">{cotacao.numeroVidas}</p>
                       </div>
                       <div>
                         <span className="text-sm font-medium text-gray-600">Valor</span>
-                        <p className="text-sm text-gray-900">R$ {cotacao.valor}</p>
+                        <p className="text-sm font-bold text-green-600">R$ {cotacao.valor}</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                       <div>
                         <span className="text-sm font-medium text-gray-600">Validade</span>
                         <p className="text-sm text-gray-900">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
