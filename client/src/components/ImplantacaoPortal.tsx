@@ -6,6 +6,7 @@ import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProgressBar from './ProgressBar';
 import ProposalProgressTracker from './ProposalProgressTracker';
+import ImplantationProgressBar from './ImplantationProgressBar';
 import { showNotification } from '../utils/notifications';
 
 interface ImplantacaoPortalProps {
@@ -560,8 +561,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="w-48">
-                      <ProgressBar 
+                    <div className="w-64">
+                      <ImplantationProgressBar 
                         proposal={proposal}
                         className="w-full"
                       />
