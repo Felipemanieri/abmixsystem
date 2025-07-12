@@ -295,25 +295,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   </div>
                 </div>
 
-                {/* Barra de Progresso */}
-                <div className="mb-4 p-3 bg-white rounded-lg border border-gray-100">
-                  <ProgressBar 
-                    proposal={{
-                      client: 'Cliente Demo',
-                      plan: cotacao.tipoplano,
-                      value: cotacao.valor,
-                      empresa: 'Empresa Demo',
-                      cnpj: '12.345.678/0001-90',
-                      vendedor: 'Vendedor Demo',
-                      email: 'cliente@email.com',
-                      phone: '(11) 99999-9999',
-                      date: cotacao.dataEnvio,
-                      status: 'approved',
-                      documents: cotacao.arquivos.length
-                    }}
-                    className="w-full"
-                  />
-                </div>
+
 
                 {/* Simulação de arquivos anexados para demonstração */}
                 {cotacao.id === '1' && (
