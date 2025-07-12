@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare } from 'lucide-react';
+import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare, MessageCircle, Trash2 } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -14,7 +14,7 @@ interface VendorPortalProps {
   onLogout: () => void;
 }
 
-type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation';
+type VendorView = 'dashboard' | 'new-proposal' | 'tracker' | 'clients' | 'spreadsheet' | 'quotation' | 'cotacoes';
 
 interface Proposal {
   id: string;
@@ -47,6 +47,18 @@ interface QuotationData {
   idades: number[];
 }
 
+interface Cotacao {
+  id: string;
+  operadora: string;
+  tipoplano: string;
+  numeroVidas: number;
+  valor: string;
+  validade: string;
+  arquivos: File[];
+  clienteId?: string;
+  proposalId?: string;
+}
+
 const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [activeView, setActiveView] = useState<VendorView>('dashboard');
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
@@ -63,6 +75,16 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     idades: [25]
   });
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
+  const [cotacoes, setCotacoes] = useState<Cotacao[]>([]);
+  const [novaCotacao, setNovaCotacao] = useState<Cotacao>({
+    id: '',
+    operadora: '',
+    tipoplano: '',
+    numeroVidas: 1,
+    valor: '',
+    validade: '',
+    arquivos: []
+  });
   const { getClientDocuments } = useGoogleDrive();
 
   // Notificações simuladas
@@ -283,6 +305,76 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Funções para gerenciar cotações
+  const adicionarCotacao = () => {
+    if (!novaCotacao.operadora || !novaCotacao.tipoplano || !novaCotacao.valor || !novaCotacao.validade) {
+      showNotification('Por favor, preencha todos os campos obrigatórios', 'error');
+      return;
+    }
+
+    const cotacao: Cotacao = {
+      ...novaCotacao,
+      id: Date.now().toString(),
+    };
+
+    setCotacoes(prev => [...prev, cotacao]);
+    setNovaCotacao({
+      id: '',
+      operadora: '',
+      tipoplano: '',
+      numeroVidas: 1,
+      valor: '',
+      validade: '',
+      arquivos: []
+    });
+    showNotification('Cotação adicionada com sucesso!', 'success');
+  };
+
+  const removerCotacao = (id: string) => {
+    setCotacoes(prev => prev.filter(cotacao => cotacao.id !== id));
+    showNotification('Cotação removida com sucesso!', 'success');
+  };
+
+  const handleArquivoCotacao = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const novosArquivos = Array.from(files);
+      setNovaCotacao(prev => ({
+        ...prev,
+        arquivos: [...prev.arquivos, ...novosArquivos]
+      }));
+      showNotification(`${novosArquivos.length} arquivo(s) anexado(s)!`, 'success');
+    }
+  };
+
+  const removerArquivoCotacao = (cotacaoId: string, arquivoIndex: number) => {
+    if (cotacaoId === '') {
+      // Removendo arquivo da nova cotação
+      setNovaCotacao(prev => ({
+        ...prev,
+        arquivos: prev.arquivos.filter((_, i) => i !== arquivoIndex)
+      }));
+    } else {
+      // Removendo arquivo de cotação existente
+      setCotacoes(prev => prev.map(cotacao => 
+        cotacao.id === cotacaoId 
+          ? { ...cotacao, arquivos: cotacao.arquivos.filter((_, i) => i !== arquivoIndex) }
+          : cotacao
+      ));
+    }
+    showNotification('Arquivo removido!', 'success');
+  };
+
+  const enviarWhatsAppCotacao = (cotacao: Cotacao) => {
+    const mensagem = `Olá! Segue cotação:\n\nOperadora: ${cotacao.operadora}\nTipo: ${cotacao.tipoplano}\nNº de vidas: ${cotacao.numeroVidas}\nValor: R$ ${cotacao.valor}\nValidade: ${new Date(cotacao.validade).toLocaleDateString('pt-BR')}\n\nQualquer dúvida, estou à disposição!`;
+    
+    // Para demonstração, vamos usar um número padrão
+    const numeroWhatsApp = '5511999999999';
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+    showNotification('Redirecionando para WhatsApp...', 'success');
   };
 
   const handleMarkAsRead = (id: string) => {
@@ -512,6 +604,267 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     </div>
   );
 
+  // Módulo de Cotações
+  const renderCotacoesModule = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Cotações</h1>
+          <p className="text-gray-600">Gerencie cotações para suas propostas</p>
+        </div>
+        <button
+          onClick={() => setActiveView('dashboard')}
+          className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Voltar
+        </button>
+      </div>
+
+      {/* Formulário para Nova Cotação */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Adicionar Nova Cotação</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Operadora */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Operadora *
+            </label>
+            <select
+              value={novaCotacao.operadora}
+              onChange={(e) => setNovaCotacao(prev => ({ ...prev, operadora: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Selecione a operadora</option>
+              <option value="Amil">Amil</option>
+              <option value="Bradesco">Bradesco</option>
+              <option value="Sulamérica">Sulamérica</option>
+              <option value="Porto Seguro">Porto Seguro</option>
+              <option value="Omint">Omint</option>
+              <option value="Careplus">Careplus</option>
+              <option value="Hapvida">Hapvida</option>
+              <option value="Alice">Alice</option>
+              <option value="Seguros Unimed">Seguros Unimed</option>
+            </select>
+          </div>
+
+          {/* Tipo do Plano */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tipo do Plano *
+            </label>
+            <select
+              value={novaCotacao.tipoplano}
+              onChange={(e) => setNovaCotacao(prev => ({ ...prev, tipoplano: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Selecione o tipo</option>
+              <option value="Empresarial">Empresarial</option>
+              <option value="Individual">Individual</option>
+              <option value="Adesão">Adesão</option>
+              <option value="Familiar">Familiar</option>
+            </select>
+          </div>
+
+          {/* Número de Vidas */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Número de Vidas *
+            </label>
+            <input
+              type="number"
+              min="1"
+              value={novaCotacao.numeroVidas}
+              onChange={(e) => setNovaCotacao(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ex: 10"
+            />
+          </div>
+
+          {/* Valor */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Valor (R$) *
+            </label>
+            <input
+              type="text"
+              value={novaCotacao.valor}
+              onChange={(e) => {
+                // Permitir apenas números e vírgula/ponto
+                const value = e.target.value.replace(/[^\d.,]/g, '');
+                setNovaCotacao(prev => ({ ...prev, valor: value }));
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Ex: 1.250,00"
+            />
+          </div>
+
+          {/* Validade */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Validade da Cotação *
+            </label>
+            <input
+              type="date"
+              value={novaCotacao.validade}
+              onChange={(e) => setNovaCotacao(prev => ({ ...prev, validade: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Upload de Arquivos */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Anexar Cotação
+            </label>
+            <input
+              type="file"
+              multiple
+              onChange={handleArquivoCotacao}
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              PDF, DOC, DOCX, JPG, PNG (máx. 10MB)
+            </p>
+          </div>
+        </div>
+
+        {/* Arquivos Anexados na Nova Cotação */}
+        {novaCotacao.arquivos.length > 0 && (
+          <div className="mt-6">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Arquivos Anexados:</h4>
+            <div className="space-y-2">
+              {novaCotacao.arquivos.map((arquivo, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-700">{arquivo.name}</span>
+                    <span className="text-xs text-gray-500">({formatFileSize(arquivo.size)})</span>
+                  </div>
+                  <button 
+                    onClick={() => removerArquivoCotacao('', index)}
+                    className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                    title="Remover arquivo"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Botão Adicionar */}
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={adicionarCotacao}
+            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Adicionar Cotação
+          </button>
+        </div>
+      </div>
+
+      {/* Lista de Cotações */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-900">
+          Cotações Cadastradas ({cotacoes.length})
+        </h2>
+        
+        {cotacoes.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma cotação cadastrada</h3>
+            <p className="text-gray-600">Adicione sua primeira cotação usando o formulário acima.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {cotacoes.map((cotacao) => (
+              <div key={cotacao.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Operadora</label>
+                    <p className="text-sm text-gray-900">{cotacao.operadora}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Tipo do Plano</label>
+                    <p className="text-sm text-gray-900">{cotacao.tipoplano}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Nº de Vidas</label>
+                    <p className="text-sm text-gray-900">{cotacao.numeroVidas}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Valor</label>
+                    <p className="text-sm text-gray-900">R$ {cotacao.valor}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Validade</label>
+                    <p className="text-sm text-gray-900">
+                      {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Arquivos Anexados</label>
+                    <p className="text-sm text-gray-900">{cotacao.arquivos.length} arquivo(s)</p>
+                  </div>
+                </div>
+
+                {/* Arquivos da Cotação */}
+                {cotacao.arquivos.length > 0 && (
+                  <div className="mb-4">
+                    <div className="space-y-2">
+                      {cotacao.arquivos.map((arquivo, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                          <div className="flex items-center space-x-2">
+                            <FileText className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-700">{arquivo.name}</span>
+                            <span className="text-xs text-gray-500">({formatFileSize(arquivo.size)})</span>
+                          </div>
+                          <button 
+                            onClick={() => removerArquivoCotacao(cotacao.id, index)}
+                            className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                            title="Remover arquivo"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Botões de Ação */}
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => enviarWhatsAppCotacao(cotacao)}
+                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    WhatsApp
+                  </button>
+                  <button
+                    onClick={() => removerCotacao(cotacao.id)}
+                    className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Remover
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'client_filling':
@@ -546,6 +899,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
       case 'quotation':
         return renderQuotationModule();
+      case 'cotacoes':
+        return renderCotacoesModule();
       default:
         return (
           <div className="space-y-6">
@@ -625,6 +980,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </button>
 
               <button
+                onClick={() => setActiveView('cotacoes')}
                 className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
@@ -632,8 +988,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     <FileText className="w-6 h-6 text-orange-600" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Relatórios</h3>
-                    <p className="text-sm text-gray-500">Análises</p>
+                    <h3 className="text-lg font-medium text-gray-900">Cotações</h3>
+                    <p className="text-sm text-gray-500">Gerenciar cotações</p>
                   </div>
                 </div>
               </button>
