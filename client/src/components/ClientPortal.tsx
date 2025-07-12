@@ -6,7 +6,7 @@ import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import ProposalForm from './ProposalForm';
-import { showNotification } from '../utils/notifications';
+import { showNotification as utilShowNotification } from '../utils/notifications';
 
 interface ClientPortalProps {
   user: any;
@@ -42,7 +42,7 @@ interface ChatMessage {
 }
 
 const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents'>('cotacoes');
+  const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'documents' | 'complete-proposal'>('cotacoes');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
@@ -558,6 +558,17 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 Minhas Cotações
               </button>
               
+              <button
+                onClick={() => setActiveTab('complete-proposal')}
+                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'complete-proposal'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Check className="w-4 h-4 mr-2" />
+                Completar Proposta
+              </button>
 
               <button
                 onClick={() => setActiveTab('documents')}
@@ -588,6 +599,33 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         {/* Tab Content */}
         <div>
           {activeTab === 'cotacoes' && renderCotacoesTab()}
+          {activeTab === 'complete-proposal' && (
+            <ProposalForm 
+              isVendor={false}
+              prefilledData={{
+                contractData: {
+                  nomeEmpresa: 'Tech Solutions Ltda',
+                  cnpj: '12.345.678/0001-90',
+                  planoContratado: 'Plano Empresarial',
+                  valor: '1.250,00',
+                  periodoVigencia: { inicio: '2024-02-01', fim: '2025-01-31' },
+                  odontoConjugado: true,
+                  compulsorio: false,
+                  inicioVigencia: '2024-02-01',
+                  aproveitamentoCongenere: true,
+                },
+                attachments: []
+              }}
+              onSave={(data) => {
+                console.log('Dados salvos:', data);
+                utilShowNotification('Dados salvos com sucesso!', 'success');
+              }}
+              onSend={(data) => {
+                console.log('Proposta enviada:', data);
+                utilShowNotification('Proposta enviada com sucesso!', 'success');
+              }}
+            />
+          )}
           {activeTab === 'profile' && renderProfileTab()}
           {activeTab === 'documents' && renderDocumentsTab()}
         </div>

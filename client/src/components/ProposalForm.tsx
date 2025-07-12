@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Save, Send, Plus, Trash2, Upload, Camera, FileText, Calendar, DollarSign, Building, Users, User, Phone, Mail, MapPin, Eye, EyeOff, Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Building, FileText, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Upload, Camera, Save, Send, Info, Users, Lock, Check } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 
 interface ContractData {
@@ -23,7 +23,7 @@ interface PersonData {
   cpf: string;
   rg: string;
   dataNascimento: string;
-  parentesco?: string; // Apenas para dependentes
+  parentesco?: string;
   nomeMae: string;
   sexo: 'masculino' | 'feminino' | '';
   estadoCivil: string;
@@ -38,22 +38,15 @@ interface PersonData {
   dadosReembolso: string;
 }
 
-interface InternalData {
-  reuniao: boolean;
-  nomeReuniao: string;
-  vendaDupla: boolean;
-  nomeVendaDupla: string;
-  desconto: string;
-  autorizadorDesconto: string;
-  observacoesFinanceiras: string;
-}
-
 interface ProposalFormProps {
-  isVendor: boolean; // Define se é vendedor ou cliente
-  proposalId?: string; // ID da proposta para carregar dados existentes
+  isVendor: boolean;
+  proposalId?: string;
   onSave?: (data: any) => void;
   onSend?: (data: any) => void;
-  prefilledData?: any; // Dados pré-preenchidos para o cliente
+  prefilledData?: {
+    contractData?: ContractData;
+    attachments?: File[];
+  };
 }
 
 const ProposalForm: React.FC<ProposalFormProps> = ({ 
@@ -63,19 +56,20 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
   onSend, 
   prefilledData 
 }) => {
-  const [contractData, setContractData] = useState<ContractData>(prefilledData?.contract || {
-    nomeEmpresa: '',
-    cnpj: '',
-    planoContratado: '',
-    valor: '',
-    periodoVigencia: { inicio: '', fim: '' },
-    odontoConjugado: false,
+  // Dados do contrato (preenchidos pelo vendedor, read-only para cliente)
+  const [contractData, setContractData] = useState<ContractData>({
+    nomeEmpresa: 'Tech Solutions Ltda',
+    cnpj: '12.345.678/0001-90',
+    planoContratado: 'Plano Empresarial',
+    valor: '1.250,00',
+    periodoVigencia: { inicio: '2024-02-01', fim: '2025-01-31' },
+    odontoConjugado: true,
     compulsorio: false,
-    inicioVigencia: '',
-    aproveitamentoCongenere: false
+    inicioVigencia: '2024-02-01',
+    aproveitamentoCongenere: true,
   });
 
-  const [titular, setTitular] = useState<PersonData>(prefilledData?.titular || {
+  const [titulares, setTitulares] = useState<PersonData[]>([{
     id: '1',
     nomeCompleto: '',
     cpf: '',
@@ -93,38 +87,59 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
     cep: '',
     enderecoCompleto: '',
     dadosReembolso: ''
-  });
+  }]);
 
-  const [dependentes, setDependentes] = useState<PersonData[]>(prefilledData?.dependentes || []);
+  const [dependentes, setDependentes] = useState<PersonData[]>([]);
+  
+  // Arquivos anexados pelo vendedor (read-only para cliente)
+  const [vendorAttachments] = useState<File[]>([]);
+  
+  // Arquivos do cliente
+  const [clientAttachments, setClientAttachments] = useState<File[]>([]);
+  
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [internalData, setInternalData] = useState<InternalData>(prefilledData?.internal || {
-    reuniao: false,
-    nomeReuniao: '',
-    vendaDupla: false,
-    nomeVendaDupla: '',
-    desconto: '',
-    autorizadorDesconto: '',
-    observacoesFinanceiras: ''
-  });
+  // Carregar dados pré-preenchidos quando for cliente
+  useEffect(() => {
+    if (!isVendor && prefilledData) {
+      if (prefilledData.contractData) {
+        setContractData(prefilledData.contractData);
+      }
+    }
+  }, [isVendor, prefilledData]);
 
-  const [attachments, setAttachments] = useState<File[]>(prefilledData?.attachments || []);
-  const [showInternalFields, setShowInternalFields] = useState(false);
+  const adicionarTitular = () => {
+    const newTitular: PersonData = {
+      id: `tit_${Date.now()}`,
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    };
+    setTitulares([...titulares, newTitular]);
+  };
 
-  const planosDisponiveis = [
-    'Plano Básico Ambulatorial',
-    'Plano Hospitalar com Obstetrícia',
-    'Plano Referência',
-    'Plano Master',
-    'Plano Executivo',
-    'Plano Premium',
-    'Plano Empresarial',
-    'Plano Individual',
-    'Plano Familiar'
-  ];
+  const removerTitular = (id: string) => {
+    if (titulares.length > 1) {
+      setTitulares(titulares.filter(tit => tit.id !== id));
+    }
+  };
 
-  const handleAddDependente = () => {
+  const adicionarDependente = () => {
     const newDependente: PersonData = {
-      id: Date.now().toString(),
+      id: `dep_${Date.now()}`,
       nomeCompleto: '',
       cpf: '',
       rg: '',
@@ -146,230 +161,88 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
     setDependentes([...dependentes, newDependente]);
   };
 
-  const handleRemoveDependente = (id: string) => {
+  const removerDependente = (id: string) => {
     setDependentes(dependentes.filter(dep => dep.id !== id));
+  };
+
+  const updateTitular = (index: number, field: keyof PersonData, value: string) => {
+    const newTitulares = [...titulares];
+    newTitulares[index] = { ...newTitulares[index], [field]: value };
+    setTitulares(newTitulares);
+  };
+
+  const updateDependente = (index: number, field: keyof PersonData, value: string) => {
+    const newDependentes = [...dependentes];
+    newDependentes[index] = { ...newDependentes[index], [field]: value };
+    setDependentes(newDependentes);
   };
 
   const handleFileUpload = (files: FileList | null) => {
     if (files) {
       const newFiles = Array.from(files);
-      setAttachments(prev => [...prev, ...newFiles]);
+      setClientAttachments(prev => [...prev, ...newFiles]);
       showNotification(`${newFiles.length} arquivo(s) adicionado(s)`, 'success');
     }
   };
 
-  const handleRemoveFile = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
-    showNotification('Arquivo removido', 'info');
+  const removeClientAttachment = (index: number) => {
+    setClientAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = () => {
     const formData = {
-      contract: contractData,
-      titular,
+      contractData,
+      titulares,
       dependentes,
-      internal: isVendor ? internalData : undefined,
-      attachments
+      clientAttachments
     };
-    
-    if (onSave) {
-      onSave(formData);
-    }
-    showNotification('Proposta salva com sucesso!', 'success');
+    onSave?.(formData);
+    showNotification('Dados salvos com sucesso!', 'success');
   };
 
-  const handleSendToClient = () => {
-    if (!isVendor) return;
+  const handleSubmit = () => {
+    // Validação básica
+    const hasIncompleteTitular = titulares.some(t => 
+      !t.nomeCompleto || !t.cpf || !t.rg || !t.dataNascimento || !t.emailPessoal || !t.telefonePessoal
+    );
     
+    if (hasIncompleteTitular) {
+      showNotification('Preencha todos os campos obrigatórios dos titulares', 'error');
+      return;
+    }
+
+    const hasIncompleteDependente = dependentes.some(d => 
+      !d.nomeCompleto || !d.cpf || !d.rg || !d.dataNascimento || !d.parentesco
+    );
+    
+    if (hasIncompleteDependente) {
+      showNotification('Preencha todos os campos obrigatórios dos dependentes', 'error');
+      return;
+    }
+
     const formData = {
-      contract: contractData,
-      titular,
+      contractData,
+      titulares,
       dependentes,
-      internal: internalData,
-      attachments
+      clientAttachments
     };
     
-    if (onSend) {
-      onSend(formData);
-    }
-    
-    // Simular geração de link único
-    const uniqueLink = `${window.location.origin}/proposta/${Date.now()}`;
-    navigator.clipboard.writeText(uniqueLink);
-    showNotification('Link da proposta copiado! Envie para o cliente.', 'success');
+    setIsSubmitted(true);
+    onSend?.(formData);
+    showNotification('Proposta enviada com sucesso!', 'success');
   };
 
-  const renderContractSection = () => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-        <Building className="w-5 h-5 mr-2 text-blue-600" />
-        Dados do Contrato
-        {!isVendor && <span className="ml-2 text-sm text-gray-500">(somente leitura)</span>}
-      </h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nome da Empresa <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={contractData.nomeEmpresa}
-            onChange={(e) => setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
-            disabled={!isVendor}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
-              !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-            }`}
-            placeholder="Nome da empresa contratante"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            CNPJ <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={contractData.cnpj}
-            onChange={(e) => setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
-            disabled={!isVendor}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
-              !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-            }`}
-            placeholder="00.000.000/0000-00"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Plano Contratado <span className="text-red-500">*</span>
-          </label>
-          <select
-            value={contractData.planoContratado}
-            onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
-            disabled={!isVendor}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
-              !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-            }`}
-          >
-            <option value="">Selecione um plano</option>
-            {planosDisponiveis.map(plano => (
-              <option key={plano} value={plano}>{plano}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Valor <span className="text-red-500">*</span>
-          </label>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              value={contractData.valor}
-              onChange={(e) => setContractData(prev => ({ ...prev, valor: e.target.value }))}
-              disabled={!isVendor}
-              className={`w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md ${
-                !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-              }`}
-              placeholder="0,00"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Início da Vigência <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="date"
-            value={contractData.inicioVigencia}
-            onChange={(e) => setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
-            disabled={!isVendor}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
-              !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-            }`}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Fim da Vigência <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="date"
-            value={contractData.periodoVigencia.fim}
-            onChange={(e) => setContractData(prev => ({ 
-              ...prev, 
-              periodoVigencia: { ...prev.periodoVigencia, fim: e.target.value }
-            }))}
-            disabled={!isVendor}
-            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
-              !isVendor ? 'bg-gray-50 cursor-not-allowed' : 'focus:outline-none focus:ring-2 focus:ring-blue-500'
-            }`}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="odontoConjugado"
-            checked={contractData.odontoConjugado}
-            onChange={(e) => setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
-            disabled={!isVendor}
-            className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700">
-            Odonto Conjugado
-          </label>
-        </div>
-
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="compulsorio"
-            checked={contractData.compulsorio}
-            onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
-            disabled={!isVendor}
-            className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
-            Compulsório
-          </label>
-        </div>
-
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="aproveitamentoCongenere"
-            checked={contractData.aproveitamentoCongenere}
-            onChange={(e) => setContractData(prev => ({ ...prev, aproveitamentoCongenere: e.target.checked }))}
-            disabled={!isVendor}
-            className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700">
-            Aproveitamento Congênere
-          </label>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index?: number) => (
-    <div key={person.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-      <div className="flex items-center justify-between mb-4">
+  const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index: number) => (
+    <div key={person.id} className="bg-gray-50 p-6 rounded-lg space-y-4">
+      <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-          <User className="w-5 h-5 mr-2 text-green-600" />
-          {type === 'titular' ? 'Dados do Titular' : `Dependente ${(index || 0) + 1}`}
-          <span className="ml-2 text-sm text-red-500">* Campos obrigatórios</span>
+          <User className="w-5 h-5 mr-2" />
+          {type === 'titular' ? `Titular ${index + 1}` : `Dependente ${index + 1}`}
         </h3>
-        {type === 'dependente' && (
+        {(type === 'dependente' || (type === 'titular' && titulares.length > 1)) && (
           <button
-            onClick={() => handleRemoveDependente(person.id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={() => type === 'titular' ? removerTitular(person.id) : removerDependente(person.id)}
+            className="text-red-600 hover:text-red-800 transition-colors"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -377,152 +250,134 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2 lg:col-span-3">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nome Completo <span className="text-red-500">*</span>
+            Nome Completo *
           </label>
           <input
             type="text"
             value={person.nomeCompleto}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, nomeCompleto: e.target.value }));
+                updateTitular(index, 'nomeCompleto', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, nomeCompleto: e.target.value } : dep
-                ));
+                updateDependente(index, 'nomeCompleto', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Nome completo"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Nome completo sem abreviações"
           />
         </div>
 
-        {type === 'dependente' && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Parentesco <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={person.parentesco || ''}
-              onChange={(e) => {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, parentesco: e.target.value } : dep
-                ));
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Selecione</option>
-              <option value="conjuge">Cônjuge</option>
-              <option value="filho">Filho(a)</option>
-              <option value="pai">Pai</option>
-              <option value="mae">Mãe</option>
-              <option value="sogro">Sogro(a)</option>
-              <option value="neto">Neto(a)</option>
-              <option value="outro">Outro</option>
-            </select>
-          </div>
-        )}
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            CPF <span className="text-red-500">*</span>
+            CPF *
           </label>
           <input
             type="text"
             value={person.cpf}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, cpf: e.target.value }));
+                updateTitular(index, 'cpf', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, cpf: e.target.value } : dep
-                ));
+                updateDependente(index, 'cpf', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="000.000.000-00"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            RG <span className="text-red-500">*</span>
+            RG *
           </label>
           <input
             type="text"
             value={person.rg}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, rg: e.target.value }));
+                updateTitular(index, 'rg', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, rg: e.target.value } : dep
-                ));
+                updateDependente(index, 'rg', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="00.000.000-0"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Data de Nascimento <span className="text-red-500">*</span>
+            Data de Nascimento *
           </label>
           <input
             type="date"
             value={person.dataNascimento}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, dataNascimento: e.target.value }));
+                updateTitular(index, 'dataNascimento', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, dataNascimento: e.target.value } : dep
-                ));
+                updateDependente(index, 'dataNascimento', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
-        <div>
+        {type === 'dependente' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Parentesco *
+            </label>
+            <select
+              value={person.parentesco || ''}
+              onChange={(e) => updateDependente(index, 'parentesco', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Selecione</option>
+              <option value="cônjuge">Cônjuge</option>
+              <option value="filho(a)">Filho(a)</option>
+              <option value="pai">Pai</option>
+              <option value="mãe">Mãe</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        )}
+
+        <div className="md:col-span-2 lg:col-span-3">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nome da Mãe <span className="text-red-500">*</span>
+            Nome da Mãe *
           </label>
           <input
             type="text"
             value={person.nomeMae}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, nomeMae: e.target.value }));
+                updateTitular(index, 'nomeMae', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, nomeMae: e.target.value } : dep
-                ));
+                updateDependente(index, 'nomeMae', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Nome completo da mãe"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Sexo <span className="text-red-500">*</span>
+            Sexo *
           </label>
           <select
             value={person.sexo}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, sexo: e.target.value as 'masculino' | 'feminino' }));
+                updateTitular(index, 'sexo', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, sexo: e.target.value as 'masculino' | 'feminino' } : dep
-                ));
+                updateDependente(index, 'sexo', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="masculino">Masculino</option>
@@ -532,27 +387,24 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Estado Civil
+            Estado Civil *
           </label>
           <select
             value={person.estadoCivil}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, estadoCivil: e.target.value }));
+                updateTitular(index, 'estadoCivil', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, estadoCivil: e.target.value } : dep
-                ));
+                updateDependente(index, 'estadoCivil', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="solteiro">Solteiro(a)</option>
             <option value="casado">Casado(a)</option>
             <option value="divorciado">Divorciado(a)</option>
             <option value="viuvo">Viúvo(a)</option>
-            <option value="uniao_estavel">União Estável</option>
           </select>
         </div>
 
@@ -561,19 +413,17 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             Peso (kg)
           </label>
           <input
-            type="number"
+            type="text"
             value={person.peso}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, peso: e.target.value }));
+                updateTitular(index, 'peso', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, peso: e.target.value } : dep
-                ));
+                updateDependente(index, 'peso', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="70"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Ex: 70"
           />
         </div>
 
@@ -582,61 +432,55 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             Altura (cm)
           </label>
           <input
-            type="number"
+            type="text"
             value={person.altura}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, altura: e.target.value }));
+                updateTitular(index, 'altura', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, altura: e.target.value } : dep
-                ));
+                updateDependente(index, 'altura', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="170"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Ex: 170"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email Pessoal <span className="text-red-500">*</span>
+            Email Pessoal *
           </label>
           <input
             type="email"
             value={person.emailPessoal}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, emailPessoal: e.target.value }));
+                updateTitular(index, 'emailPessoal', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, emailPessoal: e.target.value } : dep
-                ));
+                updateDependente(index, 'emailPessoal', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="email@exemplo.com"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Telefone Pessoal <span className="text-red-500">*</span>
+            Telefone Pessoal *
           </label>
           <input
             type="tel"
             value={person.telefonePessoal}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, telefonePessoal: e.target.value }));
+                updateTitular(index, 'telefonePessoal', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, telefonePessoal: e.target.value } : dep
-                ));
+                updateDependente(index, 'telefonePessoal', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="(11) 99999-9999"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="(00) 00000-0000"
           />
         </div>
 
@@ -649,14 +493,12 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             value={person.emailEmpresa}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, emailEmpresa: e.target.value }));
+                updateTitular(index, 'emailEmpresa', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, emailEmpresa: e.target.value } : dep
-                ));
+                updateDependente(index, 'emailEmpresa', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="email@empresa.com"
           />
         </div>
@@ -670,61 +512,55 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             value={person.telefoneEmpresa}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, telefoneEmpresa: e.target.value }));
+                updateTitular(index, 'telefoneEmpresa', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, telefoneEmpresa: e.target.value } : dep
-                ));
+                updateDependente(index, 'telefoneEmpresa', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="(11) 3333-3333"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="(00) 0000-0000"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            CEP <span className="text-red-500">*</span>
+            CEP *
           </label>
           <input
             type="text"
             value={person.cep}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, cep: e.target.value }));
+                updateTitular(index, 'cep', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, cep: e.target.value } : dep
-                ));
+                updateDependente(index, 'cep', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="00000-000"
           />
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2 lg:col-span-3">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Endereço Completo <span className="text-red-500">*</span>
+            Endereço Completo *
           </label>
           <input
             type="text"
             value={person.enderecoCompleto}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, enderecoCompleto: e.target.value }));
+                updateTitular(index, 'enderecoCompleto', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, enderecoCompleto: e.target.value } : dep
-                ));
+                updateDependente(index, 'enderecoCompleto', e.target.value);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Rua, número, complemento, bairro, cidade, estado"
           />
         </div>
 
-        <div className="lg:col-span-3">
+        <div className="md:col-span-2 lg:col-span-3">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Dados para Reembolso
           </label>
@@ -732,267 +568,364 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             value={person.dadosReembolso}
             onChange={(e) => {
               if (type === 'titular') {
-                setTitular(prev => ({ ...prev, dadosReembolso: e.target.value }));
+                updateTitular(index, 'dadosReembolso', e.target.value);
               } else {
-                setDependentes(prev => prev.map(dep => 
-                  dep.id === person.id ? { ...dep, dadosReembolso: e.target.value } : dep
-                ));
+                updateDependente(index, 'dadosReembolso', e.target.value);
               }
             }}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Banco, agência, conta corrente, PIX, etc."
+            placeholder="Banco, agência, conta, PIX..."
           />
         </div>
       </div>
     </div>
   );
 
-  const renderAttachmentsSection = () => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-        <Upload className="w-5 h-5 mr-2 text-purple-600" />
-        Documentos e Anexos
-      </h3>
-
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
-        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h4 className="text-lg font-medium text-gray-900 mb-2">Adicionar Documentos</h4>
-        <p className="text-gray-600 mb-4">Arraste e solte arquivos aqui ou use as opções abaixo</p>
-        
-        <div className="flex flex-wrap justify-center gap-3">
-          <label className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
-            <FileText className="w-4 h-4 mr-2" />
-            Buscar Arquivos
-            <input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
-              onChange={(e) => handleFileUpload(e.target.files)}
-              className="hidden"
-            />
-          </label>
-          
-          <label className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer transition-colors">
-            <Camera className="w-4 h-4 mr-2" />
-            Tirar Foto
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={(e) => handleFileUpload(e.target.files)}
-              className="hidden"
-            />
-          </label>
-        </div>
-      </div>
-
-      {attachments.length > 0 && (
-        <div>
-          <h4 className="font-medium text-gray-900 mb-3">Arquivos Anexados ({attachments.length})</h4>
-          <div className="space-y-2">
-            {attachments.map((file, index) => (
-              <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                <div className="flex items-center">
-                  <FileText className="w-5 h-5 text-gray-500 mr-3" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                    <p className="text-xs text-gray-500">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleRemoveFile(index)}
-                  className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderInternalSection = () => {
-    if (!isVendor) return null;
-
+  if (isSubmitted) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-            <Settings className="w-5 h-5 mr-2 text-orange-600" />
-            Campos Internos do Vendedor
-          </h3>
-          <button
-            onClick={() => setShowInternalFields(!showInternalFields)}
-            className="flex items-center text-sm text-gray-600 hover:text-gray-900"
-          >
-            {showInternalFields ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-            {showInternalFields ? 'Ocultar' : 'Mostrar'}
-          </button>
-        </div>
-
-        {showInternalFields && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="reuniao"
-                checked={internalData.reuniao}
-                onChange={(e) => setInternalData(prev => ({ ...prev, reuniao: e.target.checked }))}
-                className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="reuniao" className="ml-2 text-sm text-gray-700">
-                Reunião
-              </label>
-            </div>
-
-            {internalData.reuniao && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome da Reunião
-                </label>
-                <input
-                  type="text"
-                  value={internalData.nomeReuniao}
-                  onChange={(e) => setInternalData(prev => ({ ...prev, nomeReuniao: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Nome ou descrição da reunião"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="vendaDupla"
-                checked={internalData.vendaDupla}
-                onChange={(e) => setInternalData(prev => ({ ...prev, vendaDupla: e.target.checked }))}
-                className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-700">
-                Venda Dupla
-              </label>
-            </div>
-
-            {internalData.vendaDupla && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome da Venda Dupla
-                </label>
-                <input
-                  type="text"
-                  value={internalData.nomeVendaDupla}
-                  onChange={(e) => setInternalData(prev => ({ ...prev, nomeVendaDupla: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Nome do segundo vendedor"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Desconto (%)
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                value={internalData.desconto}
-                onChange={(e) => setInternalData(prev => ({ ...prev, desconto: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Autorizador do Desconto
-              </label>
-              <input
-                type="text"
-                value={internalData.autorizadorDesconto}
-                onChange={(e) => setInternalData(prev => ({ ...prev, autorizadorDesconto: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nome do autorizador"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Observações Financeiras
-              </label>
-              <textarea
-                value={internalData.observacoesFinanceiras}
-                onChange={(e) => setInternalData(prev => ({ ...prev, observacoesFinanceiras: e.target.value }))}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Observações internas sobre a proposta"
-              />
-            </div>
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-green-600" />
           </div>
-        )}
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Proposta Enviada com Sucesso!</h2>
+          <p className="text-gray-600 mb-6">
+            Seus dados foram enviados e serão analisados pela nossa equipe.
+          </p>
+          <p className="text-sm text-gray-500">
+            Em breve você receberá um retorno sobre sua proposta.
+          </p>
+        </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          {isVendor ? 'Nova Proposta de Plano de Saúde' : 'Revisar Proposta de Plano de Saúde'}
-        </h1>
-        <p className="text-gray-600">
-          {isVendor 
-            ? 'Preencha todos os campos e envie para o cliente revisar e anexar documentos'
-            : 'Revise os dados pré-preenchidos, complete as informações que faltam e anexe os documentos necessários'
-          }
-        </p>
-      </div>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            {isVendor ? 'Nova Proposta de Plano de Saúde' : 'Complete seus Dados Pessoais'}
+          </h1>
+          <p className="text-gray-600">
+            {isVendor 
+              ? 'Preencha todos os dados para gerar uma proposta completa'
+              : 'Preencha seus dados pessoais para finalizar a proposta'
+            }
+          </p>
+        </div>
 
-      {renderContractSection()}
-      
-      {renderPersonForm(titular, 'titular')}
+        <div className="space-y-8">
+          {/* Dados do Contrato - Read Only para Cliente */}
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <Building className="w-5 h-5 text-blue-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Dados do Contrato
+              </h2>
+              {!isVendor && (
+                <div className="ml-auto flex items-center text-sm text-gray-500">
+                  <Lock className="w-4 h-4 mr-1" />
+                  Preenchido pelo vendedor
+                </div>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nome da Empresa
+                </label>
+                <input
+                  type="text"
+                  value={contractData.nomeEmpresa}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  CNPJ
+                </label>
+                <input
+                  type="text"
+                  value={contractData.cnpj}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
 
-      {dependentes.map((dependente, index) => 
-        renderPersonForm(dependente, 'dependente', index)
-      )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Plano Contratado
+                </label>
+                <input
+                  type="text"
+                  value={contractData.planoContratado}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Valor Mensal (R$)
+                </label>
+                <input
+                  type="text"
+                  value={contractData.valor}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Início da Vigência
+                </label>
+                <input
+                  type="date"
+                  value={contractData.inicioVigencia}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
 
-      <div className="flex justify-center mb-6">
-        <button
-          onClick={handleAddDependente}
-          className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Adicionar Dependente
-        </button>
-      </div>
+              <div className="md:col-span-2 space-y-2">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={contractData.odontoConjugado}
+                    readOnly={!isVendor}
+                    disabled={!isVendor}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label className="ml-2 text-sm text-gray-700">
+                    Inclui cobertura odontológica
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={contractData.compulsorio}
+                    readOnly={!isVendor}
+                    disabled={!isVendor}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label className="ml-2 text-sm text-gray-700">
+                    Adesão compulsória
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={contractData.aproveitamentoCongenere}
+                    readOnly={!isVendor}
+                    disabled={!isVendor}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label className="ml-2 text-sm text-gray-700">
+                    Aproveitamento de carência congênere
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      {renderAttachmentsSection()}
+          {/* Dados dos Titulares */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <User className="w-5 h-5 text-green-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Dados dos Titulares
+                </h2>
+              </div>
+              <button
+                onClick={adicionarTitular}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Titular
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {titulares.map((titular, index) => 
+                renderPersonForm(titular, 'titular', index)
+              )}
+            </div>
+          </div>
 
-      {renderInternalSection()}
+          {/* Dependentes */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 text-purple-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Dependentes
+                </h2>
+              </div>
+              <button
+                onClick={adicionarDependente}
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Dependente
+              </button>
+            </div>
+            
+            {dependentes.length === 0 ? (
+              <div className="bg-gray-50 p-6 rounded-lg text-center">
+                <p className="text-gray-500">Nenhum dependente adicionado</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Clique em "Adicionar Dependente" para incluir familiares
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {dependentes.map((dependente, index) => 
+                  renderPersonForm(dependente, 'dependente', index)
+                )}
+              </div>
+            )}
+          </div>
 
-      <div className="flex flex-wrap gap-4 justify-end">
-        <button
-          onClick={handleSave}
-          className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Save className="w-5 h-5 mr-2" />
-          Salvar {isVendor ? 'Proposta' : 'Alterações'}
-        </button>
+          {/* Documentos anexados pelo vendedor */}
+          {!isVendor && vendorAttachments.length > 0 && (
+            <div className="bg-teal-50 p-6 rounded-lg">
+              <div className="flex items-center mb-4">
+                <FileText className="w-5 h-5 text-teal-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Documentos do Vendedor
+                </h2>
+              </div>
+              <div className="space-y-2">
+                {vendorAttachments.map((file, index) => (
+                  <div key={index} className="flex items-center p-3 bg-white border border-teal-200 rounded-lg">
+                    <FileText className="w-4 h-4 text-teal-500 mr-2" />
+                    <span className="text-sm text-gray-700">{file.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {isVendor && (
-          <button
-            onClick={handleSendToClient}
-            className="flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-          >
-            <Send className="w-5 h-5 mr-2" />
-            Enviar para Cliente
-          </button>
-        )}
+          {/* Upload de Documentos do Cliente */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <FileText className="w-5 h-5 text-gray-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Seus Documentos
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleFileUpload(e.target.files)}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-lg font-medium text-gray-700 mb-2">
+                    Clique para adicionar seus documentos
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    ou arraste e solte os arquivos aqui
+                  </p>
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <label htmlFor="camera-upload" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="camera-upload"
+                  />
+                  <Camera className="w-5 h-5 text-gray-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Tirar Foto</span>
+                </label>
+
+                <label htmlFor="file-browse" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="file"
+                    multiple
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="file-browse"
+                  />
+                  <FileText className="w-5 h-5 text-gray-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Buscar Arquivos</span>
+                </label>
+              </div>
+
+              {clientAttachments.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    Seus Arquivos ({clientAttachments.length})
+                  </p>
+                  <div className="space-y-2">
+                    {clientAttachments.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-sm text-gray-700">{file.name}</span>
+                        </div>
+                        <button
+                          onClick={() => removeClientAttachment(index)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Botões de Ação */}
+          <div className="flex justify-between">
+            <button
+              onClick={handleSave}
+              className="flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              Salvar Dados
+            </button>
+
+            <button
+              onClick={handleSubmit}
+              className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              <Send className="w-4 h-4 mr-2" />
+              {isVendor ? 'Gerar Link para Cliente' : 'Enviar Proposta'}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
