@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download } from 'lucide-react';
+import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
@@ -1210,24 +1210,39 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                     placeholder="Observações para o setor financeiro..."
                   />
                 </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Observações do Cliente
-                  </label>
-                  <textarea
-                    value={internalData.observacoesCliente}
-                    onChange={(e) => setInternalData(prev => ({ ...prev, observacoesCliente: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={3}
-                    placeholder="Observações importantes que aparecerão para o cliente sobre documentos ou processo..."
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Este texto aparecerá na seção "Observações do Vendedor" quando o cliente acessar o formulário.
-                  </p>
-                </div>
               </div>
             )}
+          </div>
+
+          {/* Observações para o Cliente */}
+          <div className="bg-green-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <Info className="w-5 h-5 text-green-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Observações para o Cliente
+              </h2>
+            </div>
+            
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                Escreva instruções específicas que aparecerão para o cliente ao completar a proposta.
+              </p>
+              
+              <textarea
+                value={internalData.observacoesCliente}
+                onChange={(e) => setInternalData(prev => ({ ...prev, observacoesCliente: e.target.value }))}
+                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                rows={4}
+                placeholder="Exemplo: Lembre-se de enviar todos os documentos em boa qualidade. Para dúvidas específicas, entre em contato através do chat..."
+              />
+              
+              <div className="flex items-start space-x-2 p-3 bg-green-100 rounded-lg">
+                <Info className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-green-700">
+                  <strong>Estas observações aparecerão</strong> na seção "Observações do Vendedor" quando o cliente acessar o formulário de preenchimento de dados.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Seção de Cotações */}
