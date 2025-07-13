@@ -916,7 +916,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="md:col-span-2">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Plano Contratado *
                 </label>
