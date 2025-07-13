@@ -112,7 +112,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
   });
 
-  const [attachments, setAttachments] = useState<File[]>([]);
+
   const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
@@ -211,18 +211,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     const newDependentes = [...dependentes];
     newDependentes[index] = { ...newDependentes[index], [field]: value };
     setDependentes(newDependentes);
-  };
-
-  const handleFileUpload = (files: FileList | null) => {
-    if (files) {
-      const newFiles = Array.from(files);
-      setAttachments(prev => [...prev, ...newFiles]);
-      showNotification(`${newFiles.length} arquivo(s) adicionado(s)`, 'success');
-    }
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = () => {
@@ -883,7 +871,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
           contractData={contractData}
           titulares={titulares}
           dependentes={dependentes}
-          attachments={attachments}
+          attachments={[]}
           className="mb-6"
         />
 
@@ -1240,88 +1228,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Upload de Documentos */}
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <div className="flex items-center mb-4">
-              <FileText className="w-5 h-5 text-gray-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">
-                Documentos
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <input
-                  type="file"
-                  multiple
-                  onChange={(e) => handleFileUpload(e.target.files)}
-                  className="hidden"
-                  id="file-upload"
-                />
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-gray-700 mb-2">
-                    Clique para adicionar documentos
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    ou arraste e solte os arquivos aqui
-                  </p>
-                </label>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <label htmlFor="camera-upload" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={(e) => handleFileUpload(e.target.files)}
-                    className="hidden"
-                    id="camera-upload"
-                  />
-                  <Camera className="w-5 h-5 text-gray-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Tirar Foto</span>
-                </label>
-
-                <label htmlFor="file-browse" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(e) => handleFileUpload(e.target.files)}
-                    className="hidden"
-                    id="file-browse"
-                  />
-                  <FileText className="w-5 h-5 text-gray-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Buscar Arquivos</span>
-                </label>
-              </div>
-
-              {attachments.length > 0 && (
-                <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">
-                    Arquivos Anexados ({attachments.length})
-                  </p>
-                  <div className="space-y-2">
-                    {attachments.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-700">{file.name}</span>
-                        </div>
-                        <button
-                          onClick={() => removeAttachment(index)}
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
 
           {/* Seção de Cotações */}
