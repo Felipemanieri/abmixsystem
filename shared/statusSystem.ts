@@ -20,50 +20,50 @@ export const STATUS_CONFIG: Record<ProposalStatus, StatusConfig> = {
   pending_validation: {
     label: 'Aguardando Validação',
     color: 'border-yellow-500',
-    bgColor: 'bg-yellow-50',
-    textColor: 'text-yellow-700',
+    bgColor: 'bg-yellow-100',
+    textColor: 'text-yellow-800',
     description: 'Proposta aguardando validação inicial'
   },
   validated: {
     label: 'Validado',
     color: 'border-blue-500',
-    bgColor: 'bg-blue-50',
-    textColor: 'text-blue-700',
+    bgColor: 'bg-blue-100',
+    textColor: 'text-blue-800',
     description: 'Proposta validada e aprovada'
   },
   sent_to_automation: {
     label: 'Enviado para Automação',
     color: 'border-purple-500',
-    bgColor: 'bg-purple-50',
-    textColor: 'text-purple-700',
+    bgColor: 'bg-purple-100',
+    textColor: 'text-purple-800',
     description: 'Em processo de automação'
   },
   processing: {
     label: 'Em Processamento',
     color: 'border-orange-500',
-    bgColor: 'bg-orange-50',
-    textColor: 'text-orange-700',
+    bgColor: 'bg-orange-100',
+    textColor: 'text-orange-800',
     description: 'Sendo processado pela equipe'
   },
   completed: {
     label: 'Concluído',
     color: 'border-green-500',
-    bgColor: 'bg-green-50',
-    textColor: 'text-green-700',
+    bgColor: 'bg-green-100',
+    textColor: 'text-green-800',
     description: 'Processo totalmente concluído'
   },
   rejected: {
     label: 'Rejeitado',
     color: 'border-red-500',
-    bgColor: 'bg-red-50',
-    textColor: 'text-red-700',
+    bgColor: 'bg-red-100',
+    textColor: 'text-red-800',
     description: 'Proposta rejeitada ou cancelada'
   },
   on_hold: {
     label: 'Em Espera',
     color: 'border-gray-500',
-    bgColor: 'bg-gray-50',
-    textColor: 'text-gray-700',
+    bgColor: 'bg-gray-100',
+    textColor: 'text-gray-800',
     description: 'Processo pausado temporariamente'
   }
 };

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProgressBar from './ProgressBar';
+import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification } from '../utils/notifications';
+import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface SupervisorPortalProps {
   user: any;
@@ -21,6 +23,40 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
+  const [statusManager] = useState(() => StatusManager.getInstance());
+  const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+
+  // Inicializar status e escutar mudanças
+  useEffect(() => {
+    const mockProposals = [
+      { id: 'VEND001-PROP123' },
+      { id: 'VEND002-PROP124' },
+      { id: 'VEND001-PROP125' },
+      { id: 'VEND003-PROP126' },
+      { id: 'VEND002-PROP127' },
+      { id: 'VEND001-PROP128' }
+    ];
+
+    const initializeStatuses = () => {
+      const statusMap = new Map<string, ProposalStatus>();
+      mockProposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      });
+      setProposalStatuses(statusMap);
+    };
+
+    initializeStatuses();
+
+    const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+      setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
+    };
+
+    statusManager.subscribe(handleStatusChange);
+
+    return () => {
+      statusManager.unsubscribe(handleStatusChange);
+    };
+  }, [statusManager]);
 
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -719,6 +755,167 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Propostas Ativas - Com Status Badges */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Propostas Ativas</h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID Proposta
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Cliente
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Vendedor
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Valor
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Data
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND001-PROP123
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Empresa ABC Ltda</div>
+                        <div className="text-sm text-gray-500">Plano Empresarial</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Ana Caroline
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP123') || 'pending_validation'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 2.850,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        12/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND002-PROP124
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Tech Solutions SA</div>
+                        <div className="text-sm text-gray-500">Plano Corporativo</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Carlos Silva
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND002-PROP124') || 'validated'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 4.200,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        11/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND001-PROP125
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Startup XYZ</div>
+                        <div className="text-sm text-gray-500">Plano Startup</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Ana Caroline
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP125') || 'sent_to_automation'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 1.750,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        10/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND003-PROP126
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Consultoria ABC</div>
+                        <div className="text-sm text-gray-500">Plano Premium</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Diana Santos
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND003-PROP126') || 'processing'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 3.450,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        09/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND002-PROP127
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Indústria Moderna</div>
+                        <div className="text-sm text-gray-500">Plano Industrial</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Carlos Silva
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND002-PROP127') || 'completed'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 5.800,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        08/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                        VEND001-PROP128
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Loja Digital 360</div>
+                        <div className="text-sm text-gray-500">Plano E-commerce</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Ana Caroline
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP128') || 'rejected'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 2.150,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        07/01/2025
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
