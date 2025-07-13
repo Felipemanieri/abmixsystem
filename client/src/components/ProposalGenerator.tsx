@@ -240,6 +240,56 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     showNotification('Link copiado para a área de transferência', 'success');
   };
 
+  const shareByEmail = () => {
+    const subject = `Proposta de Plano de Saúde - ${contractData.nomeEmpresa}`;
+    const body = `Olá!\n\nSegue o link para preenchimento da proposta de plano de saúde:\n\nEmpresa: ${contractData.nomeEmpresa}\nPlano: ${contractData.planoContratado}\nValor: R$ ${contractData.valor}\n\nLink: ${generatedLink}\n\nPor favor, acesse o link e preencha todos os dados solicitados.\n\nQualquer dúvida, estou à disposição.\n\nAtenciosamente,`;
+    
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
+    showNotification('Abrindo cliente de e-mail...', 'success');
+  };
+
+  const shareByWhatsApp = () => {
+    const mensagem = `🏥 *Proposta de Plano de Saúde*\n\n📋 *Empresa:* ${contractData.nomeEmpresa}\n📊 *Plano:* ${contractData.planoContratado}\n💰 *Valor:* R$ ${contractData.valor}\n\n🔗 *Link para preenchimento:*\n${generatedLink}\n\nPor favor, acesse o link e preencha todos os dados solicitados. Qualquer dúvida, estou aqui para ajudar! 😊`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+    window.open(whatsappUrl, '_blank');
+    showNotification('Abrindo WhatsApp...', 'success');
+  };
+
+  const shareByInternalMessage = () => {
+    showNotification('Funcionalidade de mensagem interna será implementada em breve', 'info');
+  };
+
+  const generateSameLinkProposal = () => {
+    // Manter os dados do contrato e link, limpar apenas dados pessoais
+    setTitulares([{
+      id: '1',
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    }]);
+    
+    setDependentes([]);
+    setVendorObservations('Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.');
+    setIsSubmitted(false);
+    
+    showNotification('Nova proposta iniciada para o mesmo link!', 'success');
+  };
+
   const resetForm = () => {
     setContractData({
       nomeEmpresa: '',
@@ -815,32 +865,66 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
             <p className="text-sm text-teal-700 mb-2">
               <strong>Link para o Cliente:</strong>
             </p>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 mb-3">
               <input
                 type="text"
                 value={generatedLink}
                 readOnly
                 className="flex-1 px-3 py-2 border border-teal-300 rounded-md text-sm bg-white"
               />
+            </div>
+            
+            {/* Botões de Compartilhamento */}
+            <div className="flex flex-wrap gap-2 justify-center">
               <button
                 onClick={copyToClipboard}
-                className="px-3 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+                className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
               >
-                <Copy className="w-4 h-4" />
+                <Copy className="w-4 h-4 mr-1" />
+                Copiar Link
+              </button>
+              <button
+                onClick={shareByEmail}
+                className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+              >
+                <Mail className="w-4 h-4 mr-1" />
+                E-mail
+              </button>
+              <button
+                onClick={shareByWhatsApp}
+                className="flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+              >
+                <Phone className="w-4 h-4 mr-1" />
+                WhatsApp
+              </button>
+              <button
+                onClick={shareByInternalMessage}
+                className="flex items-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm"
+              >
+                <Send className="w-4 h-4 mr-1" />
+                Painel
               </button>
             </div>
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex flex-col space-y-3">
             <button
               onClick={resetForm}
-              className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               Nova Proposta
             </button>
+            
+            <button
+              onClick={generateSameLinkProposal}
+              className="w-full bg-teal-600 text-white py-3 px-6 rounded-lg hover:bg-teal-700 transition-colors font-medium"
+            >
+              Gerar Proposta para o Mesmo Link
+            </button>
+            
             <button
               onClick={onBack}
-              className="flex-1 border border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               Voltar ao Dashboard
             </button>

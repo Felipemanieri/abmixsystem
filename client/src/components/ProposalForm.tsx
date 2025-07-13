@@ -730,7 +730,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={contractData.periodoMinimo}
+                  value={contractData.periodoMinimo || ''}
                   readOnly={!isVendor}
                   className={`w-full p-3 border border-gray-300 rounded-lg ${
                     !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
