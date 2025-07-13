@@ -14,7 +14,9 @@ interface ContractData {
   };
   odontoConjugado: boolean;
   compulsorio: boolean;
+  livreAdesao: boolean;
   inicioVigencia: string;
+  periodoMinimo: string;
   aproveitamentoCongenere: boolean;
 }
 
@@ -67,7 +69,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
     periodoVigencia: { inicio: '2024-02-01', fim: '2025-01-31' },
     odontoConjugado: true,
     compulsorio: false,
+    livreAdesao: true,
     inicioVigencia: '2024-02-01',
+    periodoMinimo: '12 meses',
     aproveitamentoCongenere: true,
   });
 
@@ -720,6 +724,20 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Período mínimo de vigência
+                </label>
+                <input
+                  type="text"
+                  value={contractData.periodoMinimo}
+                  readOnly={!isVendor}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
+                />
+              </div>
+
               <div className="md:col-span-2 space-y-2">
                 <div className="flex items-center">
                   <input
@@ -734,17 +752,32 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   </label>
                 </div>
                 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={contractData.compulsorio}
-                    readOnly={!isVendor}
-                    disabled={!isVendor}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label className="ml-2 text-sm text-gray-700">
-                    Adesão compulsória
-                  </label>
+                <div className="flex items-center space-x-8">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={contractData.livreAdesao}
+                      readOnly={!isVendor}
+                      disabled={!isVendor}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label className="ml-2 text-sm text-gray-700">
+                      Livre adesão
+                    </label>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={contractData.compulsorio}
+                      readOnly={!isVendor}
+                      disabled={!isVendor}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label className="ml-2 text-sm text-gray-700">
+                      Compulsório
+                    </label>
+                  </div>
                 </div>
                 
                 <div className="flex items-center">

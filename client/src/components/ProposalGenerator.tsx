@@ -18,7 +18,9 @@ interface ContractData {
   };
   odontoConjugado: boolean;
   compulsorio: boolean;
+  livreAdesao: boolean;
   inicioVigencia: string;
+  periodoMinimo: string;
   aproveitamentoCongenere: boolean;
 }
 
@@ -75,7 +77,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     periodoVigencia: { inicio: '', fim: '' },
     odontoConjugado: false,
     compulsorio: false,
+    livreAdesao: false,
     inicioVigencia: '',
+    periodoMinimo: '',
     aproveitamentoCongenere: false,
   });
 
@@ -949,6 +953,23 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Período mínimo de vigência *
+                </label>
+                <select
+                  value={contractData.periodoMinimo || ''}
+                  onChange={(e) => setContractData(prev => ({ ...prev, periodoMinimo: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Selecione o período</option>
+                  <option value="01 mês">01 mês</option>
+                  <option value="12 meses">12 meses</option>
+                  <option value="24 meses">24 meses</option>
+                  <option value="36 meses">36 meses</option>
+                </select>
+              </div>
               
               <div className="md:col-span-2 space-y-4">
                 <div className="flex items-center">
@@ -964,17 +985,32 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                   </label>
                 </div>
                 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="compulsorio"
-                    checked={contractData.compulsorio}
-                    onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
-                    Adesão compulsória
-                  </label>
+                <div className="flex items-center space-x-8">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="livreAdesao"
+                      checked={contractData.livreAdesao}
+                      onChange={(e) => setContractData(prev => ({ ...prev, livreAdesao: e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700">
+                      Livre adesão
+                    </label>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="compulsorio"
+                      checked={contractData.compulsorio}
+                      onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
+                      Compulsório
+                    </label>
+                  </div>
                 </div>
                 
                 <div className="flex items-center">
