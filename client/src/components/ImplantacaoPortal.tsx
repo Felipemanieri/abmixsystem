@@ -45,7 +45,7 @@ interface AutomationRule {
 }
 
 const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout }) => {
-  const [selectedStatus, setSelectedStatus] = useState('pending_validation');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
   const [observations, setObservations] = useState('');
   const [showChat, setShowChat] = useState(false);
@@ -449,11 +449,17 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="all">Todos os Status</option>
-              <option value="pending_validation">Aguardando Validação</option>
-              <option value="validated">Validadas</option>
-              <option value="sent_to_automation">Enviadas p/ Automação</option>
-              <option value="processing">Em Processamento</option>
-              <option value="completed">Concluídas</option>
+              <option value="observacao">OBSERVAÇÃO</option>
+              <option value="analise">ANALISE</option>
+              <option value="assinatura_ds">ASSINATURA DS</option>
+              <option value="expirado">EXPIRADO</option>
+              <option value="implantado">IMPLANTADO</option>
+              <option value="aguar_pagamento">AGUAR PAGAMENTO</option>
+              <option value="assinatura_proposta">ASSINATURA PROPOSTA</option>
+              <option value="aguar_selecao_vigencia">AGUAR SELEÇÃO DE VIGENCIA</option>
+              <option value="pendencia">PENDÊNCIA</option>
+              <option value="declinado">DECLINADO</option>
+              <option value="aguar_vigencia">AGUAR VIGÊNCIA</option>
             </select>
           </div>
           <div className="flex items-center space-x-2">
@@ -480,7 +486,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Proposta
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Cliente
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Vendedor
@@ -511,6 +520,14 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProposals.map((proposal) => (
                 <tr key={proposal.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button 
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id.replace('VEND', 'ABM').slice(0, 6)}`, '_blank')}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                    >
+                      {proposal.id.replace('VEND', 'ABM').slice(0, 6)}
+                    </button>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>

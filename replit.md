@@ -154,6 +154,30 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Complete Status System Overhaul with ID Column Integration (Jan 13, 2025)
+- **Implemented comprehensive status system with 11 specific status types**:
+  - Status types: OBSERVAÇÃO (azul claro), ANALISE (verde claro), ASSINATURA DS (amarelo escuro), EXPIRADO (azul forte), IMPLANTADO (verde forte), AGUAR PAGAMENTO (rosa), ASSINATURA PROPOSTA (amarelo claro), AGUAR SELEÇÃO DE VIGENCIA (laranja), PENDÊNCIA (vermelho), DECLINADO (roxo), AGUAR VIGÊNCIA (azul claro)
+  - Exact color mapping with specific Tailwind CSS classes for precise color matching
+  - Centralized status management in shared/statusSystem.ts with real-time synchronization
+
+- **Added ID column integration across all portals**:
+  - ID column placed before CLIENTE column in all tables (SupervisorPortal, VendorPortal, FinancialPortal, ImplantacaoPortal)
+  - Clickable ID buttons that open Google Drive/Sheets folders automatically
+  - ID format: ABM001, ABM002, etc. (converted from proposal IDs)
+  - Integration ready for Google Drive automation workflows
+
+- **Status control and real-time updates**:
+  - Only ImplantacaoPortal can edit status through dropdown selection
+  - All other portals (Vendor, Client, Financial, Supervisor) show read-only status badges
+  - Real-time status synchronization across all modules using StatusManager
+  - Status changes immediately reflect in all connected portals
+
+- **Enhanced portal functionality**:
+  - Updated all status filtering dropdowns with new status options
+  - Maintained existing functionality while integrating new status system
+  - Status badges with proper color coding matching user specifications
+  - Progress tracking systems preserved and working with new status structure
+
 ### Complete Digital Health Plan Proposal Form (Jan 12, 2025)
 - **Rebuilt ProposalGenerator with comprehensive form structure**:
   - Contract data section with company information and plan details

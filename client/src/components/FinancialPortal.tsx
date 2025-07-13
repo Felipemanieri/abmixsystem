@@ -216,6 +216,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
@@ -227,6 +228,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredTransactions.map((transaction) => (
                 <tr key={transaction.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button 
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${transaction.id.replace('TXN', 'ABM').slice(0, 6)}`, '_blank')}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                    >
+                      {transaction.id.replace('TXN', 'ABM').slice(0, 6)}
+                    </button>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{transaction.client}</div>
                   </td>

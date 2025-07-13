@@ -1,12 +1,16 @@
 // Sistema centralizado de status para propostas
 export type ProposalStatus = 
-  | 'pending_validation'     // Aguardando Validação (amarelo)
-  | 'validated'             // Validado (azul) 
-  | 'sent_to_automation'    // Enviado para Automação (roxo)
-  | 'processing'            // Em Processamento (laranja)
-  | 'completed'             // Concluído (verde)
-  | 'rejected'              // Rejeitado (vermelho)
-  | 'on_hold'               // Em Espera (cinza)
+  | 'observacao'               // OBSERVAÇÃO (azul claro)
+  | 'analise'                  // ANALISE (verde claro)
+  | 'assinatura_ds'            // ASSINATURA DS (amarelo escuro)
+  | 'expirado'                 // EXPIRADO (azul forte)
+  | 'implantado'               // IMPLANTADO (verde forte)
+  | 'aguar_pagamento'          // AGUAR PAGAMENTO (rosa)
+  | 'assinatura_proposta'      // ASSINATURA PROPOSTA (amarelo claro)
+  | 'aguar_selecao_vigencia'   // AGUAR SELEÇÃO DE VIGENCIA (laranja)
+  | 'pendencia'                // PENDÊNCIA (vermelho)
+  | 'declinado'                // DECLINADO (roxo)
+  | 'aguar_vigencia'           // AGUAR VIGÊNCIA (azul claro)
 
 export interface StatusConfig {
   label: string;
@@ -17,54 +21,82 @@ export interface StatusConfig {
 }
 
 export const STATUS_CONFIG: Record<ProposalStatus, StatusConfig> = {
-  pending_validation: {
-    label: 'Aguardando Validação',
-    color: 'border-yellow-500',
-    bgColor: 'bg-yellow-100',
-    textColor: 'text-yellow-800',
-    description: 'Proposta aguardando validação inicial'
+  observacao: {
+    label: 'OBSERVAÇÃO',
+    color: 'border-sky-400',
+    bgColor: 'bg-sky-100',
+    textColor: 'text-sky-700',
+    description: 'Proposta com observações pendentes'
   },
-  validated: {
-    label: 'Validado',
-    color: 'border-blue-500',
+  analise: {
+    label: 'ANALISE',
+    color: 'border-emerald-400',
+    bgColor: 'bg-emerald-100',
+    textColor: 'text-emerald-700',
+    description: 'Proposta em análise técnica'
+  },
+  assinatura_ds: {
+    label: 'ASSINATURA DS',
+    color: 'border-amber-600',
+    bgColor: 'bg-amber-100',
+    textColor: 'text-amber-800',
+    description: 'Aguardando assinatura digital'
+  },
+  expirado: {
+    label: 'EXPIRADO',
+    color: 'border-blue-700',
     bgColor: 'bg-blue-100',
     textColor: 'text-blue-800',
-    description: 'Proposta validada e aprovada'
+    description: 'Proposta expirada'
   },
-  sent_to_automation: {
-    label: 'Enviado para Automação',
-    color: 'border-purple-500',
-    bgColor: 'bg-purple-100',
-    textColor: 'text-purple-800',
-    description: 'Em processo de automação'
-  },
-  processing: {
-    label: 'Em Processamento',
-    color: 'border-orange-500',
-    bgColor: 'bg-orange-100',
-    textColor: 'text-orange-800',
-    description: 'Sendo processado pela equipe'
-  },
-  completed: {
-    label: 'Concluído',
-    color: 'border-green-500',
+  implantado: {
+    label: 'IMPLANTADO',
+    color: 'border-green-600',
     bgColor: 'bg-green-100',
     textColor: 'text-green-800',
-    description: 'Processo totalmente concluído'
+    description: 'Processo completamente implantado'
   },
-  rejected: {
-    label: 'Rejeitado',
+  aguar_pagamento: {
+    label: 'AGUAR PAGAMENTO',
+    color: 'border-pink-500',
+    bgColor: 'bg-pink-100',
+    textColor: 'text-pink-700',
+    description: 'Aguardando confirmação de pagamento'
+  },
+  assinatura_proposta: {
+    label: 'ASSINATURA PROPOSTA',
+    color: 'border-yellow-400',
+    bgColor: 'bg-yellow-100',
+    textColor: 'text-yellow-700',
+    description: 'Aguardando assinatura da proposta'
+  },
+  aguar_selecao_vigencia: {
+    label: 'AGUAR SELEÇÃO DE VIGENCIA',
+    color: 'border-orange-500',
+    bgColor: 'bg-orange-100',
+    textColor: 'text-orange-700',
+    description: 'Aguardando seleção de vigência'
+  },
+  pendencia: {
+    label: 'PENDÊNCIA',
     color: 'border-red-500',
     bgColor: 'bg-red-100',
-    textColor: 'text-red-800',
-    description: 'Proposta rejeitada ou cancelada'
+    textColor: 'text-red-700',
+    description: 'Proposta com pendências'
   },
-  on_hold: {
-    label: 'Em Espera',
-    color: 'border-gray-500',
-    bgColor: 'bg-gray-100',
-    textColor: 'text-gray-800',
-    description: 'Processo pausado temporariamente'
+  declinado: {
+    label: 'DECLINADO',
+    color: 'border-purple-600',
+    bgColor: 'bg-purple-100',
+    textColor: 'text-purple-700',
+    description: 'Proposta declinada'
+  },
+  aguar_vigencia: {
+    label: 'AGUAR VIGÊNCIA',
+    color: 'border-cyan-400',
+    bgColor: 'bg-cyan-100',
+    textColor: 'text-cyan-700',
+    description: 'Aguardando definição de vigência'
   }
 };
 
@@ -83,16 +115,20 @@ class StatusManager {
 
   // Inicializar com dados mock
   constructor() {
-    this.statusData.set('VEND001-PROP123', 'pending_validation');
-    this.statusData.set('VEND002-PROP124', 'pending_validation');
-    this.statusData.set('VEND001-PROP125', 'validated');
-    this.statusData.set('VEND003-PROP126', 'sent_to_automation');
-    this.statusData.set('VEND002-PROP127', 'processing');
-    this.statusData.set('VEND001-PROP128', 'completed');
+    this.statusData.set('VEND001-PROP123', 'observacao');
+    this.statusData.set('VEND002-PROP124', 'analise');
+    this.statusData.set('VEND001-PROP125', 'assinatura_ds');
+    this.statusData.set('VEND003-PROP126', 'expirado');
+    this.statusData.set('VEND002-PROP127', 'implantado');
+    this.statusData.set('VEND001-PROP128', 'aguar_pagamento');
+    this.statusData.set('VEND003-PROP129', 'assinatura_proposta');
+    this.statusData.set('VEND004-PROP130', 'aguar_selecao_vigencia');
+    this.statusData.set('VEND002-PROP131', 'pendencia');
+    this.statusData.set('VEND001-PROP132', 'declinado');
   }
 
   public getStatus(proposalId: string): ProposalStatus {
-    return this.statusData.get(proposalId) || 'pending_validation';
+    return this.statusData.get(proposalId) || 'observacao';
   }
 
   public updateStatus(proposalId: string, newStatus: ProposalStatus): void {

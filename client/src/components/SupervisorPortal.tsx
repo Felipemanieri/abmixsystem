@@ -29,18 +29,22 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   // Inicializar status e escutar mudanças
   useEffect(() => {
     const mockProposals = [
-      { id: 'VEND001-PROP123' },
-      { id: 'VEND002-PROP124' },
-      { id: 'VEND001-PROP125' },
-      { id: 'VEND003-PROP126' },
-      { id: 'VEND002-PROP127' },
-      { id: 'VEND001-PROP128' }
+      { id: 'ABM001', proposal: 'VEND001-PROP123' },
+      { id: 'ABM002', proposal: 'VEND002-PROP124' },
+      { id: 'ABM003', proposal: 'VEND001-PROP125' },
+      { id: 'ABM004', proposal: 'VEND003-PROP126' },
+      { id: 'ABM005', proposal: 'VEND002-PROP127' },
+      { id: 'ABM006', proposal: 'VEND001-PROP128' },
+      { id: 'ABM007', proposal: 'VEND003-PROP129' },
+      { id: 'ABM008', proposal: 'VEND004-PROP130' },
+      { id: 'ABM009', proposal: 'VEND002-PROP131' },
+      { id: 'ABM010', proposal: 'VEND001-PROP132' }
     ];
 
     const initializeStatuses = () => {
       const statusMap = new Map<string, ProposalStatus>();
       mockProposals.forEach(proposal => {
-        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+        statusMap.set(proposal.proposal, statusManager.getStatus(proposal.proposal));
       });
       setProposalStatuses(statusMap);
     };
@@ -770,7 +774,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        ID Proposta
+                        ID
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Cliente
@@ -791,8 +795,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND001-PROP123
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM001', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM001
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Empresa ABC Ltda</div>
@@ -802,7 +811,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Ana Caroline
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP123') || 'pending_validation'} />
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP123') || 'observacao'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 2.850,00
@@ -812,8 +821,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND002-PROP124
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM002', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM002
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Tech Solutions SA</div>
@@ -823,7 +837,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Carlos Silva
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND002-PROP124') || 'validated'} />
+                        <StatusBadge status={proposalStatuses.get('VEND002-PROP124') || 'analise'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 4.200,00
@@ -833,8 +847,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND001-PROP125
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM003', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM003
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Startup XYZ</div>
@@ -844,7 +863,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Ana Caroline
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP125') || 'sent_to_automation'} />
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP125') || 'assinatura_ds'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 1.750,00
@@ -854,8 +873,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND003-PROP126
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM004', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM004
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Consultoria ABC</div>
@@ -865,7 +889,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Diana Santos
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND003-PROP126') || 'processing'} />
+                        <StatusBadge status={proposalStatuses.get('VEND003-PROP126') || 'expirado'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 3.450,00
@@ -875,8 +899,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND002-PROP127
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM005', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM005
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Indústria Moderna</div>
@@ -886,7 +915,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Carlos Silva
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND002-PROP127') || 'completed'} />
+                        <StatusBadge status={proposalStatuses.get('VEND002-PROP127') || 'implantado'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 5.800,00
@@ -896,8 +925,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                        VEND001-PROP128
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM006', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM006
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">Loja Digital 360</div>
@@ -907,13 +941,117 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Ana Caroline
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP128') || 'rejected'} />
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP128') || 'aguar_pagamento'} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         R$ 2.150,00
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         07/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM007', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM007
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Distribuidora Nacional</div>
+                        <div className="text-sm text-gray-500">Plano Executivo</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Diana Santos
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND003-PROP129') || 'assinatura_proposta'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 7.200,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        06/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM008', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM008
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Rede Farmácias Plus</div>
+                        <div className="text-sm text-gray-500">Plano Comercial</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Marcos Oliveira
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND004-PROP130') || 'aguar_selecao_vigencia'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 3.900,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        05/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM009', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM009
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Construtora Horizonte</div>
+                        <div className="text-sm text-gray-500">Plano Master</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Carlos Silva
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND002-PROP131') || 'pendencia'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 6.450,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        04/01/2025
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button 
+                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM010', '_blank')}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                        >
+                          ABM010
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">Clínica Bem Estar</div>
+                        <div className="text-sm text-gray-500">Plano Médico</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Ana Caroline
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={proposalStatuses.get('VEND001-PROP132') || 'declinado'} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ 1.890,00
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        03/01/2025
                       </td>
                     </tr>
                   </tbody>

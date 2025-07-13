@@ -1383,6 +1383,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Cliente
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -1406,6 +1409,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     {recentProposals.map((proposal) => (
                       <tr key={proposal.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
+                          <button 
+                            onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id.replace('VEND', 'ABM').slice(0, 6)}`, '_blank')}
+                            className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                          >
+                            {proposal.id.replace('VEND', 'ABM').slice(0, 6)}
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div>
                               <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
@@ -1418,7 +1429,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <StatusBadge 
-                            status={proposalStatuses.get(proposal.id) || 'pending_validation'}
+                            status={proposalStatuses.get(proposal.id) || 'observacao'}
                           />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
