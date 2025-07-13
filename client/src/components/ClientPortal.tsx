@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell, MessageSquare } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
@@ -7,8 +7,10 @@ import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import ProposalForm from './ProposalForm';
 import ProgressBar from './ProgressBar';
+import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification as utilShowNotification } from '../utils/notifications';
+import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface ClientPortalProps {
   user: any;
@@ -48,6 +50,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
+  const [statusManager] = useState(() => StatusManager.getInstance());
+  const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -58,6 +62,35 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   ]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedProposal, setSelectedProposal] = useState<string | null>(null);
+  
+  // Inicializar status e escutar mudanças
+  useEffect(() => {
+    const mockProposals = [
+      { id: 'VEND001-PROP123' },
+      { id: 'PROP-001' },
+      { id: 'PROP-002' }
+    ];
+
+    const initializeStatuses = () => {
+      const statusMap = new Map<string, ProposalStatus>();
+      mockProposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      });
+      setProposalStatuses(statusMap);
+    };
+
+    initializeStatuses();
+
+    const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+      setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
+    };
+
+    statusManager.subscribe(handleStatusChange);
+
+    return () => {
+      statusManager.unsubscribe(handleStatusChange);
+    };
+  }, [statusManager]);
   
   // Notificações simuladas
   const [notifications, setNotifications] = useState([

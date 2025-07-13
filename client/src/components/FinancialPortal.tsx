@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
@@ -7,9 +7,11 @@ import FinancialAutomationModal from './FinancialAutomationModal';
 import NotificationCenter from './NotificationCenter';
 import ClientForm from './ClientForm';
 import ProgressBar from './ProgressBar';
+import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
+import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface FinancialPortalProps {
   user: any;
@@ -38,7 +40,41 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [showFinancialArea, setShowFinancialArea] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusManager] = useState(() => StatusManager.getInstance());
+  const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const { getClientDocuments } = useGoogleDrive();
+
+  // Inicializar status e escutar mudanças
+  useEffect(() => {
+    const mockProposals = [
+      { id: 'VEND001-PROP123' },
+      { id: 'VEND002-PROP124' },
+      { id: 'VEND001-PROP125' },
+      { id: 'VEND003-PROP126' },
+      { id: 'VEND002-PROP127' },
+      { id: 'VEND001-PROP128' }
+    ];
+
+    const initializeStatuses = () => {
+      const statusMap = new Map<string, ProposalStatus>();
+      mockProposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      });
+      setProposalStatuses(statusMap);
+    };
+
+    initializeStatuses();
+
+    const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+      setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
+    };
+
+    statusManager.subscribe(handleStatusChange);
+
+    return () => {
+      statusManager.unsubscribe(handleStatusChange);
+    };
+  }, [statusManager]);
 
   const mockTransactions: Transaction[] = [
     { id: '1', client: 'Empresa ABC', plan: 'Plano Premium', value: 'R$ 15.000', type: 'income', date: '2024-01-15', status: 'completed', category: 'subscription' },
@@ -298,16 +334,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      proposal.status === 'approved' 
-                        ? 'bg-green-100 text-green-800'
-                        : proposal.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-blue-100 text-blue-800'
-                    }`}>
-                      {proposal.status === 'approved' ? 'Aprovada' : 
-                       proposal.status === 'pending' ? 'Pendente' : 'Em Análise'}
-                    </span>
+                    <StatusBadge 
+                      status={proposalStatuses.get(proposal.id) || 'pending_validation'}
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="w-48">

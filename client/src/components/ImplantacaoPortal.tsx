@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProgressBar from './ProgressBar';
+import StatusBadge from './StatusBadge';
 import { showNotification } from '../utils/notifications';
+import StatusManager, { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
 
 interface ImplantacaoPortalProps {
   user: any;
@@ -51,6 +53,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [activeTab, setActiveTab] = useState<'proposals' | 'automation'>('proposals');
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusManager] = useState(() => StatusManager.getInstance());
+  const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -89,6 +93,34 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
+
+  // Inicializar status dos proposals e escutar mudanças
+  useEffect(() => {
+    const initializeStatuses = () => {
+      const statusMap = new Map<string, ProposalStatus>();
+      proposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      });
+      setProposalStatuses(statusMap);
+    };
+
+    initializeStatuses();
+
+    const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+      setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
+      showNotification(`Status da proposta ${proposalId} alterado para: ${STATUS_CONFIG[newStatus].label}`, 'success');
+    };
+
+    statusManager.subscribe(handleStatusChange);
+
+    return () => {
+      statusManager.unsubscribe(handleStatusChange);
+    };
+  }, [statusManager]);
+
+  const handleStatusUpdate = (proposalId: string, newStatus: ProposalStatus) => {
+    statusManager.updateStatus(proposalId, newStatus);
+  };
 
   const [proposals, setProposals] = useState<Proposal[]>([
     {
@@ -502,9 +534,17 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
-                      {getStatusText(proposal.status)}
-                    </span>
+                    <select
+                      value={proposalStatuses.get(proposal.id) || proposal.status}
+                      onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
+                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500"
+                    >
+                      {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                        <option key={key} value={key}>
+                          {config.label}
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="w-48">

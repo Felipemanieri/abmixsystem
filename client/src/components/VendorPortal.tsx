@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare, MessageCircle, Trash2, Camera, Upload, Paperclip } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
@@ -8,9 +8,11 @@ import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 import QuotationPanel from './QuotationPanel';
 import ProgressBar from './ProgressBar';
+import StatusBadge from './StatusBadge';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
+import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface VendorPortalProps {
   user: any;
@@ -73,6 +75,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [showCelebration, setShowCelebration] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
+  const [statusManager] = useState(() => StatusManager.getInstance());
+  const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const [quotationData, setQuotationData] = useState<QuotationData>({
     numeroVidas: 1,
     operadora: '',
@@ -92,6 +96,35 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   });
   const [dragActive, setDragActive] = useState(false);
   const { getClientDocuments } = useGoogleDrive();
+
+  // Inicializar status e escutar mudanças
+  useEffect(() => {
+    const mockProposals = [
+      { id: 'VEND001-PROP123' },
+      { id: 'VEND001-PROP124' },
+      { id: 'VEND001-PROP125' }
+    ];
+
+    const initializeStatuses = () => {
+      const statusMap = new Map<string, ProposalStatus>();
+      mockProposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      });
+      setProposalStatuses(statusMap);
+    };
+
+    initializeStatuses();
+
+    const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+      setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
+    };
+
+    statusManager.subscribe(handleStatusChange);
+
+    return () => {
+      statusManager.unsubscribe(handleStatusChange);
+    };
+  }, [statusManager]);
 
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -1384,9 +1417,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           <div className="text-sm text-gray-900">{proposal.plan}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(proposal.status)}`}>
-                            {getStatusText(proposal.status)}
-                          </span>
+                          <StatusBadge 
+                            status={proposalStatuses.get(proposal.id) || 'pending_validation'}
+                          />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="w-48">
