@@ -916,18 +916,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Plano Contratado *
                 </label>
-                <select
+                <input
+                  type="text"
                   value={contractData.planoContratado}
                   onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Selecione um plano</option>
-                  {planosDisponiveis.map((plano) => (
-                    <option key={plano} value={plano}>
-                      {plano}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Ex: Plano Empresarial Premium - Cobertura Nacional"
+                />
               </div>
               
               <div>
