@@ -633,7 +633,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   inicioVigencia: '2024-02-01',
                   aproveitamentoCongenere: true,
                 },
-                attachments: []
+                attachments: [],
+                vendorObservations: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat. Certifique-se de que todos os documentos estejam legíveis e dentro da validade.'
               }}
               onSave={(data) => {
                 console.log('Dados salvos:', data);

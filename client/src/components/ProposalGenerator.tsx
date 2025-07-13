@@ -51,6 +51,7 @@ interface InternalData {
   desconto: string;
   autorizadorDesconto: string;
   observacoesFinanceiras: string;
+  observacoesCliente: string;
 }
 
 interface QuotationData {
@@ -107,7 +108,8 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     nomeVendaDupla: '',
     desconto: '',
     autorizadorDesconto: '',
-    observacoesFinanceiras: ''
+    observacoesFinanceiras: '',
+    observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
   });
 
   const [attachments, setAttachments] = useState<File[]>([]);
@@ -1219,6 +1221,22 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                     rows={3}
                     placeholder="Observações para o setor financeiro..."
                   />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Observações do Cliente
+                  </label>
+                  <textarea
+                    value={internalData.observacoesCliente}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, observacoesCliente: e.target.value }))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows={3}
+                    placeholder="Observações importantes que aparecerão para o cliente sobre documentos ou processo..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Este texto aparecerá na seção "Observações do Vendedor" quando o cliente acessar o formulário.
+                  </p>
                 </div>
               </div>
             )}

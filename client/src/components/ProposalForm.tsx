@@ -47,6 +47,7 @@ interface ProposalFormProps {
   prefilledData?: {
     contractData?: ContractData;
     attachments?: File[];
+    vendorObservations?: string;
   };
 }
 
@@ -108,6 +109,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
     if (!isVendor && prefilledData) {
       if (prefilledData.contractData) {
         setContractData(prefilledData.contractData);
+      }
+      if (prefilledData.vendorObservations) {
+        setVendorObservations(prefilledData.vendorObservations);
       }
     }
   }, [isVendor, prefilledData]);
