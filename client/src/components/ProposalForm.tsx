@@ -859,49 +859,69 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             </div>
 
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+              {/* Área de Upload com Drag & Drop */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
                 <input
                   type="file"
                   multiple
                   onChange={(e) => handleFileUpload(e.target.files)}
                   className="hidden"
-                  id="file-upload"
+                  id="file-upload-cliente"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
-                <label htmlFor="file-upload" className="cursor-pointer">
+                <label htmlFor="file-upload-cliente" className="cursor-pointer">
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-lg font-medium text-gray-700 mb-2">
-                    Clique para adicionar documentos
+                    Arraste arquivos aqui ou escolha uma opção
                   </p>
                   <p className="text-sm text-gray-500">
-                    ou arraste e solte os arquivos aqui
+                    Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                   </p>
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <label htmlFor="camera-upload" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+              {/* Botões de Upload */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <label htmlFor="escolher-arquivo-cliente" className="flex flex-col items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+                  <input
+                    type="file"
+                    multiple
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="escolher-arquivo-cliente"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  />
+                  <FileText className="w-8 h-8 text-blue-600 mb-2" />
+                  <span className="text-sm font-medium text-blue-700">Escolher Arquivo</span>
+                  <span className="text-xs text-blue-600">Do computador/celular</span>
+                </label>
+
+                <label htmlFor="tirar-foto-cliente" className="flex flex-col items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
                   <input
                     type="file"
                     accept="image/*"
                     capture="environment"
                     onChange={(e) => handleFileUpload(e.target.files)}
                     className="hidden"
-                    id="camera-upload"
+                    id="tirar-foto-cliente"
                   />
-                  <Camera className="w-5 h-5 text-gray-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Tirar Foto</span>
+                  <Camera className="w-8 h-8 text-green-600 mb-2" />
+                  <span className="text-sm font-medium text-green-700">Tirar Foto</span>
+                  <span className="text-xs text-green-600">Câmera do dispositivo</span>
                 </label>
 
-                <label htmlFor="file-browse" className="flex items-center justify-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label htmlFor="da-galeria-cliente" className="flex flex-col items-center justify-center p-4 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
                   <input
                     type="file"
                     multiple
+                    accept="image/*"
                     onChange={(e) => handleFileUpload(e.target.files)}
                     className="hidden"
-                    id="file-browse"
+                    id="da-galeria-cliente"
                   />
-                  <FileText className="w-5 h-5 text-gray-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">Buscar Arquivos</span>
+                  <User className="w-8 h-8 text-purple-600 mb-2" />
+                  <span className="text-sm font-medium text-purple-700">Da Galeria</span>
+                  <span className="text-xs text-purple-600">Fotos salvas</span>
                 </label>
               </div>
 
