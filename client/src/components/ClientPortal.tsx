@@ -297,52 +297,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
 
 
-                {/* Simulação de arquivos anexados para demonstração */}
-                {cotacao.id === '1' && (
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Documentos da Cotação:</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between p-2 bg-white rounded border">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-700">Cotacao_Amil_Empresarial.pdf</span>
-                          <span className="text-xs text-gray-500 ml-2">(245 KB)</span>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between p-2 bg-white rounded border">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-700">Tabela_Precos_2024.xlsx</span>
-                          <span className="text-xs text-gray-500 ml-2">(89 KB)</span>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
-                {cotacao.id === '2' && (
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Documentos da Cotação:</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between p-2 bg-white rounded border">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-700">Proposta_Bradesco_Familiar.pdf</span>
-                          <span className="text-xs text-gray-500 ml-2">(312 KB)</span>
-                        </div>
-                        <button className="text-blue-600 hover:text-blue-800 transition-colors">
-                          <Download className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 {/* Ações - Mesmos ícones do ActionButtons */}
                 <div className="flex justify-end border-t border-gray-200 pt-4">
