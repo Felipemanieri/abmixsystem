@@ -756,7 +756,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   <div className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={contractData.livreAdesao}
+                      checked={contractData.livreAdesao || false}
                       readOnly={!isVendor}
                       disabled={!isVendor}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
