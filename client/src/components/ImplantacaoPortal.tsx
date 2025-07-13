@@ -554,10 +554,40 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <select
                       value={proposalStatuses.get(proposal.id) || proposal.status}
                       onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
-                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500"
+                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
+                      style={{
+                        background: proposalStatuses.get(proposal.id) ? STATUS_CONFIG[proposalStatuses.get(proposal.id)!]?.bgColor.replace('bg-', '').split('-').join(' ') : 'white'
+                      }}
                     >
                       {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                        <option key={key} value={key}>
+                        <option 
+                          key={key} 
+                          value={key}
+                          style={{
+                            backgroundColor: config.bgColor.includes('sky') ? '#e0f2fe' :
+                                           config.bgColor.includes('emerald') ? '#d1fae5' :
+                                           config.bgColor.includes('amber') ? '#fef3c7' :
+                                           config.bgColor.includes('blue') ? '#dbeafe' :
+                                           config.bgColor.includes('green') ? '#dcfce7' :
+                                           config.bgColor.includes('pink') ? '#fce7f3' :
+                                           config.bgColor.includes('yellow') ? '#fef7cd' :
+                                           config.bgColor.includes('orange') ? '#fed7aa' :
+                                           config.bgColor.includes('red') ? '#fee2e2' :
+                                           config.bgColor.includes('purple') ? '#f3e8ff' :
+                                           config.bgColor.includes('cyan') ? '#cffafe' : '#f9fafb',
+                            color: config.textColor.includes('sky') ? '#0369a1' :
+                                   config.textColor.includes('emerald') ? '#047857' :
+                                   config.textColor.includes('amber') ? '#92400e' :
+                                   config.textColor.includes('blue') ? '#1e40af' :
+                                   config.textColor.includes('green') ? '#166534' :
+                                   config.textColor.includes('pink') ? '#be185d' :
+                                   config.textColor.includes('yellow') ? '#a16207' :
+                                   config.textColor.includes('orange') ? '#c2410c' :
+                                   config.textColor.includes('red') ? '#dc2626' :
+                                   config.textColor.includes('purple') ? '#7c3aed' :
+                                   config.textColor.includes('cyan') ? '#0891b2' : '#374151'
+                          }}
+                        >
                           {config.label}
                         </option>
                       ))}
