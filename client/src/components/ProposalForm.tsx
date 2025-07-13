@@ -98,6 +98,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
   // Arquivos do cliente
   const [clientAttachments, setClientAttachments] = useState<File[]>([]);
   
+  // Observações do vendedor
+  const [vendorObservations, setVendorObservations] = useState<string>('Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.');
+  
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Carregar dados pré-preenchidos quando for cliente
@@ -840,8 +843,15 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             <div className="flex items-center mb-4">
               <FileText className="w-5 h-5 text-gray-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">
-                Seus Documentos
+                Documentos
               </h2>
+            </div>
+
+            {/* Texto discreto dos documentos necessários */}
+            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+              <p className="text-xs text-gray-600 leading-relaxed">
+                <span className="font-medium text-gray-700">Documentos necessários:</span> CNPJ • Contrato social • RG/CPF de todos (pode ser CNH) • Certidão de Nascimento para menores de 12 anos • Relatório de alta / Declaração de saúde pediátrica (até 3 anos) • Certidão de casamento • Comprovante de residência do(s) titular(es) • Carteirinhas do plano atual • Carta de permanência • Analítico do plano atual
+              </p>
             </div>
 
             <div className="space-y-4">
@@ -856,7 +866,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 <label htmlFor="file-upload" className="cursor-pointer">
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-lg font-medium text-gray-700 mb-2">
-                    Clique para adicionar seus documentos
+                    Clique para adicionar documentos
                   </p>
                   <p className="text-sm text-gray-500">
                     ou arraste e solte os arquivos aqui
@@ -894,7 +904,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               {clientAttachments.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-gray-700">
-                    Seus Arquivos ({clientAttachments.length})
+                    Arquivos Anexados ({clientAttachments.length})
                   </p>
                   <div className="space-y-2">
                     {clientAttachments.map((file, index) => (
@@ -915,6 +925,44 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Campo de Observações do Vendedor */}
+          <div className="bg-orange-50 p-6 rounded-lg">
+            <div className="flex items-center mb-4">
+              <Info className="w-5 h-5 text-orange-600 mr-2" />
+              <h2 className="text-xl font-semibold text-gray-900">
+                Observações do Vendedor
+              </h2>
+              {!isVendor && (
+                <div className="ml-auto flex items-center text-sm text-gray-500">
+                  <Lock className="w-4 h-4 mr-1" />
+                  Somente leitura
+                </div>
+              )}
+            </div>
+            
+            {isVendor ? (
+              <textarea
+                value={vendorObservations}
+                onChange={(e) => setVendorObservations(e.target.value)}
+                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                rows={4}
+                placeholder="Adicione observações importantes para o cliente sobre os documentos ou processo..."
+              />
+            ) : (
+              <div className="bg-white p-4 rounded-lg border border-orange-200 min-h-[100px]">
+                {vendorObservations ? (
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    {vendorObservations}
+                  </p>
+                ) : (
+                  <p className="text-gray-500 italic">
+                    Nenhuma observação específica do vendedor para esta proposta.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Botões de Ação */}
