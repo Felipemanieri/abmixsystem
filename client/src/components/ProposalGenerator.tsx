@@ -949,36 +949,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Vigência - Início *
-                </label>
-                <input
-                  type="date"
-                  value={contractData.periodoVigencia.inicio}
-                  onChange={(e) => setContractData(prev => ({ 
-                    ...prev, 
-                    periodoVigencia: { ...prev.periodoVigencia, inicio: e.target.value }
-                  }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Vigência - Fim *
-                </label>
-                <input
-                  type="date"
-                  value={contractData.periodoVigencia.fim}
-                  onChange={(e) => setContractData(prev => ({ 
-                    ...prev, 
-                    periodoVigencia: { ...prev.periodoVigencia, fim: e.target.value }
-                  }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
               
               <div className="md:col-span-2 space-y-4">
                 <div className="flex items-center">
