@@ -66,169 +66,141 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [notifications, setNotifications] = useState([
     {
       id: '1',
-      title: 'Nova proposta criada',
-      message: 'Ana Caroline criou uma nova proposta para Empresa ABC Ltda',
-      type: 'document',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
+      title: 'Meta Atingida',
+      message: 'Ana Caroline atingiu 120% da meta mensal',
+      type: 'approval',
+      timestamp: new Date(Date.now() - 30 * 60 * 1000),
       read: false,
+      link: '/supervisor/team'
     },
     {
       id: '2',
-      title: 'Meta atingida',
-      message: 'Bruna Garcia atingiu 100% da meta mensal de vendas',
-      type: 'approval',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 horas atrás
+      title: 'Proposta Aprovada',
+      message: 'Proposta ABM001 foi aprovada pelo financeiro',
+      type: 'document',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
       read: false,
+      link: '/supervisor/proposals'
     },
     {
       id: '3',
-      title: 'Relatório mensal disponível',
-      message: 'O relatório gerencial de Abril/2024 está disponível para análise',
-      type: 'document',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 dia atrás
-      read: false,
+      title: 'Nova Mensagem',
+      message: 'Carlos Silva enviou relatório de vendas',
+      type: 'message',
+      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+      read: true,
+      link: '/supervisor/messages'
     },
     {
       id: '4',
-      title: 'Alerta de conversão',
-      message: 'A taxa de conversão caiu 5% na última semana',
+      title: 'Alerta de Performance',
+      message: 'Diana Santos está 30% abaixo da meta',
       type: 'alert',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48), // 2 dias atrás
-      read: true,
-    },
-    {
-      id: '5',
-      title: 'Nova mensagem',
-      message: 'Carlos Silva enviou uma mensagem sobre a equipe de vendas',
-      type: 'message',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 72), // 3 dias atrás
-      read: true,
-    },
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
+      read: false,
+      link: '/supervisor/team'
+    }
   ]);
 
-  const supervisorStats = [
-    {
-      name: 'Total de Propostas',
-      value: '156',
-      change: '+12% este mês',
-      changeType: 'positive',
-      icon: FileText,
-      color: 'blue',
-    },
-    {
-      name: 'Taxa de Conversão',
-      value: '68%',
-      change: '+5% vs mês anterior',
-      changeType: 'positive',
-      icon: TrendingUp,
-      color: 'green',
-    },
-    {
-      name: 'Receita Total',
-      value: 'R$ 89.450',
-      change: '+18% este mês',
-      changeType: 'positive',
-      icon: DollarSign,
-      color: 'purple',
-    },
-    {
-      name: 'Vendedores Ativos',
-      value: '8',
-      change: '2 novos este mês',
-      changeType: 'positive',
-      icon: Users,
-      color: 'orange',
-    },
-  ];
+  const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
+    // Supervisor não pode alterar status - apenas visualizar
+    showNotification('Apenas o portal de Implantação pode alterar status', 'info');
+  };
 
-  const vendorPerformance = [
-    {
-      id: '1',
-      name: 'Ana Caroline',
-      proposals: 45,
-      converted: 32,
-      revenue: 'R$ 28.500',
-      conversionRate: 71,
+  const handleMarkAsRead = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.map(notif => 
+        notif.id === notificationId ? { ...notif, read: true } : notif
+      )
+    );
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+  };
+
+  const handleViewVendor = (vendorId: string) => {
+    setSelectedVendor(vendorId);
+    showNotification(`Visualizando detalhes do vendedor ${vendorId}`, 'success');
+  };
+
+  // Dados simulados para KPIs
+  const kpiData = {
+    totalRevenue: 'R$ 245.780',
+    totalProposals: '42',
+    conversionRate: '76%',
+    averageTicket: 'R$ 5.850'
+  };
+
+  // Dados dos vendedores
+  const vendorData = [
+    { 
+      id: '1', 
+      name: 'Ana Caroline', 
       email: 'ana@abmix.com',
-      phone: '11999999999',
+      phone: '11999888777',
+      proposals: 15, 
+      revenue: 'R$ 85.500', 
+      conversionRate: 85,
+      target: 'R$ 80.000',
+      performance: 'above'
     },
-    {
-      id: '2',
-      name: 'Bruna Garcia',
-      proposals: 38,
-      converted: 24,
-      revenue: 'R$ 22.100',
-      conversionRate: 63,
-      email: 'bruna@abmix.com',
-      phone: '11888888888',
-    },
-    {
-      id: '3',
-      name: 'Carlos Silva',
-      proposals: 42,
-      converted: 29,
-      revenue: 'R$ 25.800',
-      conversionRate: 69,
+    { 
+      id: '2', 
+      name: 'Carlos Silva', 
       email: 'carlos@abmix.com',
-      phone: '11777777777',
+      phone: '11888777666',
+      proposals: 12, 
+      revenue: 'R$ 72.300', 
+      conversionRate: 75,
+      target: 'R$ 70.000',
+      performance: 'above'
     },
-    {
-      id: '4',
-      name: 'Diana Santos',
-      proposals: 31,
-      converted: 18,
-      revenue: 'R$ 13.050',
-      conversionRate: 58,
+    { 
+      id: '3', 
+      name: 'Diana Santos', 
       email: 'diana@abmix.com',
-      phone: '11666666666',
+      phone: '11777666555',
+      proposals: 8, 
+      revenue: 'R$ 45.200', 
+      conversionRate: 60,
+      target: 'R$ 65.000',
+      performance: 'below'
     },
+    { 
+      id: '4', 
+      name: 'Marcos Oliveira', 
+      email: 'marcos@abmix.com',
+      phone: '11666555444',
+      proposals: 7, 
+      revenue: 'R$ 42.780', 
+      conversionRate: 70,
+      target: 'R$ 60.000',
+      performance: 'below'
+    }
   ];
 
+  // Atividade recente
   const recentActivity = [
-    {
-      id: '1',
-      type: 'proposal_created',
-      vendor: 'Ana Caroline',
-      client: 'Empresa ABC Ltda',
-      timestamp: '2 horas atrás',
-      status: 'success',
-    },
-    {
-      id: '2',
-      type: 'proposal_validated',
-      vendor: 'Carlos Silva',
-      client: 'Tech Solutions SA',
-      timestamp: '4 horas atrás',
-      status: 'success',
-    },
-    {
-      id: '3',
-      type: 'proposal_rejected',
-      vendor: 'Diana Santos',
-      client: 'Startup XYZ',
-      timestamp: '6 horas atrás',
-      status: 'error',
-    },
-    {
-      id: '4',
-      type: 'proposal_completed',
-      vendor: 'Bruna Garcia',
-      client: 'Consultoria ABC',
-      timestamp: '8 horas atrás',
-      status: 'success',
-    },
+    { id: '1', vendor: 'Ana Caroline', client: 'Empresa ABC', type: 'proposal_sent', timestamp: '10 min atrás', status: 'success' },
+    { id: '2', vendor: 'Carlos Silva', client: 'Tech Solutions', type: 'meeting_scheduled', timestamp: '25 min atrás', status: 'success' },
+    { id: '3', vendor: 'Diana Santos', client: 'Startup XYZ', type: 'proposal_rejected', timestamp: '1 hora atrás', status: 'error' },
+    { id: '4', vendor: 'Marcos Oliveira', client: 'Indústria Metal', type: 'contract_signed', timestamp: '2 horas atrás', status: 'success' },
+    { id: '5', vendor: 'Ana Caroline', client: 'Escola Premium', type: 'follow_up', timestamp: '3 horas atrás', status: 'success' }
   ];
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'proposal_created':
+      case 'proposal_sent':
         return <FileText className="w-4 h-4 text-blue-600" />;
-      case 'proposal_validated':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'meeting_scheduled':
+        return <Calendar className="w-4 h-4 text-green-600" />;
       case 'proposal_rejected':
-        return <AlertCircle className="w-4 h-4 text-red-600" />;
-      case 'proposal_completed':
-        return <TrendingUp className="w-4 h-4 text-purple-600" />;
+        return <X className="w-4 h-4 text-red-600" />;
+      case 'contract_signed':
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'follow_up':
+        return <MessageSquare className="w-4 h-4 text-orange-600" />;
       default:
         return <FileText className="w-4 h-4 text-gray-600" />;
     }
@@ -236,431 +208,116 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
 
   const getActivityText = (type: string) => {
     switch (type) {
-      case 'proposal_created':
-        return 'criou uma proposta para';
-      case 'proposal_validated':
-        return 'validou a proposta de';
+      case 'proposal_sent':
+        return 'enviou proposta para';
+      case 'meeting_scheduled':
+        return 'agendou reunião com';
       case 'proposal_rejected':
-        return 'rejeitou a proposta de';
-      case 'proposal_completed':
-        return 'finalizou a proposta de';
+        return 'teve proposta rejeitada por';
+      case 'contract_signed':
+        return 'fechou contrato com';
+      case 'follow_up':
+        return 'fez follow-up com';
       default:
         return 'interagiu com';
     }
   };
 
-  const handleMarkAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
-
-  const handleMarkAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
-    );
-  };
-
-  const exportReport = () => {
-    const reportData = {
-      periodo: selectedPeriod,
-      stats: supervisorStats,
-      vendedores: vendorPerformance,
-      atividades: recentActivity,
-      dataGeracao: new Date().toLocaleDateString('pt-BR')
-    };
-    
-    const dataStr = JSON.stringify(reportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `relatorio-supervisor-${selectedPeriod}.json`;
-    link.click();
-    
-    showNotification('Relatório exportado com sucesso!', 'success');
-  };
-
-  const handleViewVendor = (vendorId: string) => {
-    const vendor = vendorPerformance.find(v => v.id === vendorId);
-    if (vendor) {
-      setSelectedVendor(vendorId);
-      showNotification(`Visualizando detalhes de ${vendor.name}`, 'info');
-    }
-  };
-
-  const renderReportsView = () => (
-    <div className="space-y-6">
-      {/* Barra de Progresso Independente */}
-      <ProposalProgressTracker
-        contractData={{
-          nomeEmpresa: 'Corporação ABC Ltda',
-          cnpj: '11.222.333/0001-44',
-          planoContratado: 'Plano Executivo',
-          valor: '2.150,00',
-          inicioVigencia: '2024-01-15'
-        }}
-        titulares={[{
-          id: '1',
-          nomeCompleto: 'Carlos Eduardo Silva',
-          cpf: '111.222.333-44',
-          rg: '11.222.333-4',
-          dataNascimento: '1978-11-05',
-          nomeMae: 'Helena Silva',
-          sexo: 'masculino',
-          estadoCivil: 'casado',
-          peso: '82',
-          altura: '1.80',
-          emailPessoal: 'carlos@email.com',
-          telefonePessoal: '(11) 77777-7777',
-          emailEmpresa: 'carlos@corporacao.com',
-          telefoneEmpresa: '(11) 4444-4444',
-          cep: '01310-100',
-          enderecoCompleto: 'Rua Augusta, 789 - Consolação - São Paulo/SP',
-          dadosReembolso: 'Itaú - Ag: 9999 - Conta: 88888-9'
-        }]}
-        dependentes={[]}
-        attachments={[]}
-        className="mb-6"
-      />
-      
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Relatórios Gerenciais</h1>
-        <p className="text-blue-100">Análises detalhadas e relatórios customizados</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-blue-100 rounded-full">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Relatório de Vendas</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Performance de vendas por período e vendedor</p>
-          <button 
-            onClick={() => showNotification('Gerando relatório de vendas...', 'info')}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Gerar Relatório
-          </button>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-green-100 rounded-full">
-              <TrendingUp className="w-6 h-6 text-green-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Análise de Conversão</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Taxa de conversão e funil de vendas</p>
-          <button 
-            onClick={() => showNotification('Gerando análise de conversão...', 'info')}
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Gerar Análise
-          </button>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer">
-          <div className="flex items-center mb-4">
-            <div className="p-3 bg-purple-100 rounded-full">
-              <DollarSign className="w-6 h-6 text-purple-600" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 ml-4">Relatório Financeiro</h3>
-          </div>
-          <p className="text-gray-600 mb-4">Receitas, comissões e análise financeira</p>
-          <button 
-            onClick={() => showNotification('Gerando relatório financeiro...', 'info')}
-            className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Gerar Relatório
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderAnalyticsView = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Analytics Avançado</h1>
-        <p className="text-purple-100">Métricas avançadas e insights de negócio</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Funil de Conversão</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Propostas Criadas</span>
-              <span className="font-semibold">156</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-blue-600 h-2 rounded-full" style={{ width: '100%' }}></div>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Clientes Preenchendo</span>
-              <span className="font-semibold">89</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-yellow-600 h-2 rounded-full" style={{ width: '57%' }}></div>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Propostas Finalizadas</span>
-              <span className="font-semibold">106</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div className="bg-green-600 h-2 rounded-full" style={{ width: '68%' }}></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance por Plano</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Planos Empresariais</span>
-              <span className="font-semibold text-green-600">R$ 45.200</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Planos Familiares</span>
-              <span className="font-semibold text-blue-600">R$ 28.800</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Planos Individuais</span>
-              <span className="font-semibold text-purple-600">R$ 15.450</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderTeamView = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Gestão de Equipe</h1>
-        <p className="text-green-100">Gerencie vendedores, metas e performance</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {vendorPerformance.map((vendor) => (
-          <div key={vendor.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                <Users className="w-6 h-6 text-orange-600" />
-              </div>
-              <div className="ml-3">
-                <h3 className="font-semibold text-gray-900">{vendor.name}</h3>
-                <p className="text-sm text-gray-500">{vendor.email}</p>
-              </div>
-            </div>
-            
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Propostas:</span>
-                <span className="font-medium">{vendor.proposals}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Convertidas:</span>
-                <span className="font-medium text-green-600">{vendor.converted}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Taxa:</span>
-                <span className="font-medium">{vendor.conversionRate}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Receita:</span>
-                <span className="font-medium text-blue-600">{vendor.revenue}</span>
-              </div>
-            </div>
-            
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => handleViewVendor(vendor.id)}
-                className="flex-1 bg-orange-600 text-white py-2 px-3 rounded-lg hover:bg-orange-700 transition-colors text-sm"
-              >
-                Ver Detalhes
-              </button>
-              <button 
-                onClick={() => showNotification(`Definindo meta para ${vendor.name}`, 'info')}
-                className="flex-1 bg-gray-600 text-white py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-              >
-                Definir Meta
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderSettingsView = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-gray-500 to-gray-600 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Configurações do Sistema</h1>
-        <p className="text-gray-100">Gerencie configurações e permissões</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Configurações Gerais</h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Notificações por Email</span>
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Relatórios Automáticos</span>
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Backup Automático</span>
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Permissões de Acesso</h3>
-          <div className="space-y-4">
-            <button 
-              onClick={() => showNotification('Gerenciando permissões de vendedores...', 'info')}
-              className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <span className="font-medium">Vendedores</span>
-              <p className="text-sm text-gray-600">Gerenciar acesso dos vendedores</p>
-            </button>
-            <button 
-              onClick={() => showNotification('Gerenciando permissões financeiras...', 'info')}
-              className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <span className="font-medium">Financeiro</span>
-              <p className="text-sm text-gray-600">Controle de acesso financeiro</p>
-            </button>
-            <button 
-              onClick={() => showNotification('Gerenciando permissões de implantação...', 'info')}
-              className="w-full text-left p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <span className="font-medium">Implantação</span>
-              <p className="text-sm text-gray-600">Acesso à área de implantação</p>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderContent = () => {
+  const renderDashboard = () => {
     switch (activeView) {
-      case 'reports':
-        return renderReportsView();
-      case 'analytics':
-        return renderAnalyticsView();
-      case 'team':
-        return renderTeamView();
-      case 'settings':
-        return renderSettingsView();
-      default:
+      case 'dashboard':
         return (
           <div className="space-y-6">
-            {/* Stats Grid */}
+            {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {supervisorStats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.name} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                        <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                      </div>
-                      <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
-                        <Icon className={`w-6 h-6 text-${stat.color}-600`} />
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center">
-                      <span className="text-sm font-medium text-green-600">
-                        {stat.change}
-                      </span>
-                    </div>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Receita Total</p>
+                    <p className="text-2xl font-bold text-gray-900">{kpiData.totalRevenue}</p>
                   </div>
-                );
-              })}
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-green-600" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                    <span className="text-sm text-green-600">+12.5% vs mês anterior</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total de Propostas</p>
+                    <p className="text-2xl font-bold text-gray-900">{kpiData.totalProposals}</p>
+                  </div>
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                    <span className="text-sm text-green-600">+8.2% vs mês anterior</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Taxa de Conversão</p>
+                    <p className="text-2xl font-bold text-gray-900">{kpiData.conversionRate}</p>
+                  </div>
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Target className="w-6 h-6 text-purple-600" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                    <span className="text-sm text-green-600">+3.1% vs mês anterior</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Ticket Médio</p>
+                    <p className="text-2xl font-bold text-gray-900">{kpiData.averageTicket}</p>
+                  </div>
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <Calculator className="w-6 h-6 text-orange-600" />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="flex items-center">
+                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                    <span className="text-sm text-green-600">+5.7% vs mês anterior</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <button
-                onClick={() => setActiveView('reports')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Relatórios</h3>
-                    <p className="text-sm text-gray-500">Gerar relatórios</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveView('analytics')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
-                    <PieChart className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Analytics</h3>
-                    <p className="text-sm text-gray-500">Análises avançadas</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveView('team')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                    <Users className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Equipe</h3>
-                    <p className="text-sm text-gray-500">Gerenciar vendedores</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveView('settings')}
-                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
-                    <Settings className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">Configurações</h3>
-                    <p className="text-sm text-gray-500">Sistema</p>
-                  </div>
-                </div>
-              </button>
-            </div>
-
-            {/* Vendor Performance */}
+            {/* Performance dos Vendedores */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-              <div className="px-6 py-4 border-b border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">Performance dos Vendedores</h2>
+                <div className="flex items-center space-x-2">
+                  <select
+                    value={selectedPeriod}
+                    onChange={(e) => setSelectedPeriod(e.target.value)}
+                    className="text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="week">Esta Semana</option>
+                    <option value="month">Este Mês</option>
+                    <option value="quarter">Este Trimestre</option>
+                  </select>
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -673,16 +330,10 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         Propostas
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Convertidas
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Taxa Conversão
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Progresso Médio
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Receita
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Conversão
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Ações
@@ -690,14 +341,16 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {vendorPerformance.map((vendor) => (
+                    {vendorData.map((vendor) => (
                       <tr key={vendor.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                              <Users className="w-4 h-4 text-orange-600" />
+                            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                              <span className="text-sm font-medium text-blue-600">
+                                {vendor.name.split(' ').map(n => n[0]).join('')}
+                              </span>
                             </div>
-                            <div className="ml-3">
+                            <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{vendor.name}</div>
                               <div className="text-sm text-gray-500">{vendor.email}</div>
                             </div>
@@ -705,23 +358,14 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">{vendor.proposals}</div>
+                          <div className="text-sm text-gray-500">propostas</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{vendor.converted}</div>
+                          <div className="text-sm font-medium text-gray-900">{vendor.revenue}</div>
+                          <div className="text-sm text-gray-500">Meta: {vendor.target}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
-                              <div 
-                                className="bg-orange-600 h-2 rounded-full" 
-                                style={{ width: `${vendor.conversionRate}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-sm text-gray-600">{vendor.conversionRate}%</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="w-40">
+                          <div className="w-48">
                             <ProgressBar 
                               proposal={{
                                 id: `vendor-${vendor.id}`,
@@ -732,9 +376,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                               className="w-full"
                             />
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{vendor.revenue}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <ActionButtons 
@@ -759,301 +400,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Propostas Ativas - Com Status Badges */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Propostas Ativas</h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Cliente
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Vendedor
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Valor
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Data
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM001', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM001
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Empresa ABC Ltda</div>
-                        <div className="text-sm text-gray-500">Plano Empresarial</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Ana Caroline
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP123') || 'observacao'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 2.850,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        12/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM002', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM002
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Tech Solutions SA</div>
-                        <div className="text-sm text-gray-500">Plano Corporativo</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Carlos Silva
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND002-PROP124') || 'analise'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 4.200,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        11/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM003', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM003
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Startup XYZ</div>
-                        <div className="text-sm text-gray-500">Plano Startup</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Ana Caroline
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP125') || 'assinatura_ds'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 1.750,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        10/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM004', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM004
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Consultoria ABC</div>
-                        <div className="text-sm text-gray-500">Plano Premium</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Diana Santos
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND003-PROP126') || 'expirado'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 3.450,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        09/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM005', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM005
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Indústria Moderna</div>
-                        <div className="text-sm text-gray-500">Plano Industrial</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Carlos Silva
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND002-PROP127') || 'implantado'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 5.800,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        08/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM006', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM006
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Loja Digital 360</div>
-                        <div className="text-sm text-gray-500">Plano E-commerce</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Ana Caroline
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP128') || 'aguar_pagamento'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 2.150,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        07/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM007', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM007
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Distribuidora Nacional</div>
-                        <div className="text-sm text-gray-500">Plano Executivo</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Diana Santos
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND003-PROP129') || 'assinatura_proposta'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 7.200,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        06/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM008', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM008
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Rede Farmácias Plus</div>
-                        <div className="text-sm text-gray-500">Plano Comercial</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Marcos Oliveira
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND004-PROP130') || 'aguar_selecao_vigencia'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 3.900,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        05/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM009', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM009
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Construtora Horizonte</div>
-                        <div className="text-sm text-gray-500">Plano Master</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Carlos Silva
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND002-PROP131') || 'pendencia'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 6.450,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        04/01/2025
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button 
-                          onClick={() => window.open('https://drive.google.com/drive/folders/ABM010', '_blank')}
-                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                        >
-                          ABM010
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">Clínica Bem Estar</div>
-                        <div className="text-sm text-gray-500">Plano Médico</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Ana Caroline
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <StatusBadge status={proposalStatuses.get('VEND001-PROP132') || 'declinado'} />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ 1.890,00
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        03/01/2025
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -1097,6 +443,56 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
             </div>
           </div>
         );
+
+      case 'reports':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Relatórios de Vendas</h2>
+              <p className="text-gray-600">Funcionalidade de relatórios em desenvolvimento...</p>
+            </div>
+          </div>
+        );
+
+      case 'analytics':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Analytics Avançado</h2>
+              <p className="text-gray-600">Dashboard de analytics em desenvolvimento...</p>
+            </div>
+          </div>
+        );
+
+      case 'team':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Gestão da Equipe</h2>
+              <p className="text-gray-600">Funcionalidade de gestão da equipe em desenvolvimento...</p>
+            </div>
+          </div>
+        );
+
+      case 'settings':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Configurações</h2>
+              <p className="text-gray-600">Painel de configurações em desenvolvimento...</p>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Dashboard</h2>
+              <p className="text-gray-600">Bem-vindo ao painel do supervisor!</p>
+            </div>
+          </div>
+        );
     }
   };
 
@@ -1107,59 +503,49 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
-                <AbmixLogo size={40} className="mr-3" />
-                <div className="flex items-center">
-                  <span className="ml-3 text-xl font-bold text-gray-900">Portal Supervisor</span>
-                </div>
+              <AbmixLogo className="h-8 w-auto" />
+              <div className="ml-4">
+                <h1 className="text-xl font-semibold text-gray-900">Portal do Supervisor</h1>
+                <p className="text-sm text-gray-500">Bem-vindo, {user?.name}</p>
               </div>
             </div>
-
+            
             <div className="flex items-center space-x-4">
-              {/* Navigation */}
-              {activeView !== 'dashboard' && (
+              {/* Notificações */}
+              <div className="relative">
                 <button
-                  onClick={() => setActiveView('dashboard')}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 text-gray-400 hover:text-gray-500 relative"
                 >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Dashboard
+                  <Bell className="w-6 h-6" />
+                  {notifications.some(n => !n.read) && (
+                    <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-400"></span>
+                  )}
                 </button>
-              )}
-              
-              <button 
-                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
-                onClick={() => setShowNotifications(!showNotifications)}
-              >
-                <Bell className="w-5 h-5" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.filter(n => !n.read).length}
-                  </span>
+                
+                {showNotifications && (
+                  <NotificationCenter
+                    notifications={notifications}
+                    onMarkAsRead={handleMarkAsRead}
+                    onMarkAllAsRead={handleMarkAllAsRead}
+                    onClose={() => setShowNotifications(false)}
+                    userRole="supervisor"
+                  />
                 )}
-              </button>
-              
-              {showNotifications && (
-                <NotificationCenter 
-                  notifications={notifications}
-                  onMarkAsRead={handleMarkAsRead}
-                  onMarkAllAsRead={handleMarkAllAsRead}
-                  onClose={() => setShowNotifications(false)}
-                />
-              )}
-              
+              </div>
+
+              {/* Mensagens Internas */}
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-500"
               >
-                <MessageSquare className="w-5 h-5" />
+                <MessageSquare className="w-6 h-6" />
               </button>
-              
-              <span className="text-sm text-gray-600">Olá, {user.name}</span>
 
+              {/* Logout */}
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+                className="flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1169,135 +555,50 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeView === 'dashboard' && (
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Supervisor</h1>
-                <p className="text-gray-600">Supervisão e relatórios gerenciais da equipe</p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <select
-                  value={selectedPeriod}
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="week">Esta Semana</option>
-                  <option value="month">Este Mês</option>
-                  <option value="quarter">Este Trimestre</option>
-                  <option value="year">Este Ano</option>
-                </select>
+      {/* Navigation */}
+      <nav className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex space-x-8">
+            {[
+              { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+              { id: 'reports', label: 'Relatórios', icon: FileText },
+              { id: 'analytics', label: 'Analytics', icon: PieChart },
+              { id: 'team', label: 'Equipe', icon: Users },
+              { id: 'settings', label: 'Configurações', icon: Settings }
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
                 <button
-                  onClick={exportReport}
-                  className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+                  key={item.id}
+                  onClick={() => setActiveView(item.id as SupervisorView)}
+                  className={`flex items-center px-1 py-4 border-b-2 text-sm font-medium ${
+                    activeView === item.id
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  Exportar Relatório
+                  <Icon className="w-4 h-4 mr-2" />
+                  {item.label}
                 </button>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {renderContent()}
-      </main>
-
-      {/* Vendor Detail Modal */}
-      {selectedVendor && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Detalhes do Vendedor
-                </h3>
-                <button 
-                  onClick={() => setSelectedVendor(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              
-              {(() => {
-                const vendor = vendorPerformance.find(v => v.id === selectedVendor);
-                if (!vendor) return null;
-                
-                return (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium text-gray-700">Nome:</span>
-                        <span className="ml-2">{vendor.name}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Email:</span>
-                        <span className="ml-2">{vendor.email}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Telefone:</span>
-                        <span className="ml-2">{vendor.phone}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-gray-700">Taxa de Conversão:</span>
-                        <span className="ml-2">{vendor.conversionRate}%</span>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-gray-900 mb-2">Performance</h4>
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold text-blue-600">{vendor.proposals}</div>
-                          <div className="text-sm text-gray-600">Propostas</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-green-600">{vendor.converted}</div>
-                          <div className="text-sm text-gray-600">Convertidas</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-purple-600">{vendor.revenue}</div>
-                          <div className="text-sm text-gray-600">Receita</div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex justify-end space-x-4">
-                      <button
-                        onClick={() => setSelectedVendor(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                      >
-                        Fechar
-                      </button>
-                      <button
-                        onClick={() => {
-                          showNotification(`Definindo meta para ${vendor.name}`, 'info');
-                          setSelectedVendor(null);
-                        }}
-                        className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700"
-                      >
-                        Definir Meta
-                      </button>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
+              );
+            })}
           </div>
         </div>
-      )}
+      </nav>
 
-      {/* Internal Message Modal */}
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          {renderDashboard()}
+        </div>
+      </main>
+
+      {/* Modais */}
       {showInternalMessage && (
         <InternalMessage 
           isOpen={showInternalMessage}
           onClose={() => setShowInternalMessage(false)}
-          currentUser={{
-            name: user.name,
-            role: 'supervisor'
-          }}
+          currentUser={{ name: user?.name || 'Supervisor', role: 'supervisor' }}
         />
       )}
     </div>

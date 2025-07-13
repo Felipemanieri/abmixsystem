@@ -190,6 +190,13 @@ The application provides role-based portals with specific functionality:
   - Status changes in Implementation portal instantly reflect in all other portals
   - Proper ID column integration with clickable links to Google Drive folders
 
+### SupervisorPortal Cleanup (Jan 13, 2025)
+- **Removed "Propostas Ativas" section from SupervisorPortal**:
+  - Cleaned up dashboard to focus on team performance and KPIs
+  - Removed redundant proposal listing as requested by user
+  - Maintained vendor performance tracking and recent activity sections
+  - Simplified interface for better supervisor workflow focus
+
 ### Complete Digital Health Plan Proposal Form (Jan 12, 2025)
 - **Rebuilt ProposalGenerator with comprehensive form structure**:
   - Contract data section with company information and plan details
