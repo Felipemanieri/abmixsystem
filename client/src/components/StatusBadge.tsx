@@ -7,7 +7,15 @@ interface StatusBadgeProps {
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className = '' }) => {
-  const config = STATUS_CONFIG[status];
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG['observacao']; // Fallback para observacao se status não existir
+  
+  if (!config) {
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-300 ${className}`}>
+        {status || 'N/A'}
+      </span>
+    );
+  }
   
   return (
     <span 

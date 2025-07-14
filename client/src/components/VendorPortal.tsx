@@ -77,7 +77,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   
   // Hook para propostas do vendedor
   const { proposals: realProposals, isLoading: proposalsLoading } = useVendorProposals(user?.id || 0);
-  useRealTimeProposals(); // Ativa a atualização em tempo real
+  useRealTimeProposals(user?.id); // Ativa a atualização em tempo real para este vendedor
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
@@ -1388,120 +1388,175 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             {/* Recent Proposals */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">Propostas Recentes</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Propostas Recentes ({realProposals?.length || 0})</h2>
+                <div className="text-sm text-gray-500">
+                  Atualização em tempo real • Suas propostas exclusivas
+                </div>
               </div>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Cliente
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Plano
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Progresso
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Data
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Ações
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {realProposals?.map((proposal) => (
-                      <tr key={proposal.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button 
-                            onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                            className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                          >
-                            {proposal.abmId}
-                          </button>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
-                              <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{proposal.plano}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <StatusBadge 
-                            status={proposal.status}
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="w-48">
-                            <ProgressBar 
-                              proposal={proposal}
-                              className="w-full"
-                            />
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <ActionButtons 
-                            onView={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                            onCopyLink={() => {
-                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
-                              navigator.clipboard.writeText(link);
-                              showNotification('Link copiado para área de transferência', 'success');
-                            }}
-                            onWhatsApp={() => {
-                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
-                              const message = `🏥 *Proposta de Plano de Saúde*\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\n🔗 Link: ${link}`;
-                              window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-                            }}
-                            onEmail={() => {
-                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
-                              const subject = `Proposta de Plano - ${proposal.cliente}`;
-                              const body = `Olá!\n\nSegue a proposta de plano de saúde:\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\nLink: ${link}`;
-                              window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-                            }}
-                            onMessage={() => setShowInternalMessage(true)}
-                           onEdit={() => showNotification(`Editando proposta ${proposal.abmId}...`, 'info')}
-                           onDelete={() => {
-                             if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.abmId}?`)) {
-                               showNotification('Proposta excluída com sucesso', 'success');
-                             }
-                           }}
-                            onExternalLink={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                            onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
-                           onShare={() => {
-                             const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
-                             navigator.clipboard.writeText(link);
-                             showNotification('Link de compartilhamento copiado!', 'success');
-                           }}
-                           onSend={() => {
-                             if (proposal.status === 'docs_pending') {
-                               showNotification('Enviando lembrete para o cliente...', 'success');
-                             } else {
-                               showNotification('Enviando proposta para o financeiro...', 'success');
-                             }
-                           }}
-                          />
-                        </td>
+                {realProposals?.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta criada</h3>
+                    <p className="text-gray-600 mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
+                    <button
+                      onClick={() => setActiveView('new-proposal')}
+                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Nova Proposta
+                    </button>
+                  </div>
+                ) : (
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          ID Único
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Cliente
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Plano
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Data
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Progresso
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Ações
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {realProposals?.map((proposal) => (
+                        <tr key={proposal.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <button 
+                              onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                              className="text-sm font-bold text-blue-600 hover:text-blue-800 underline bg-blue-50 px-2 py-1 rounded"
+                              title="Abrir pasta no Google Drive"
+                            >
+                              {proposal.abmId}
+                            </button>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                                <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{proposal.plano}</div>
+                            <div className="text-sm text-gray-500">R$ {proposal.valor}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <StatusBadge 
+                              status={proposal.status}
+                            />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="text-sm text-gray-900">
+                              {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {new Date(proposal.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="w-full">
+                              <div className="flex items-center justify-between text-sm mb-1">
+                                <span className="text-gray-600">Preenchimento</span>
+                                <span className="font-medium text-gray-900">{proposal.progresso}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-3">
+                                <div 
+                                  className={`h-3 rounded-full transition-all duration-300 ${
+                                    proposal.progresso === 100 
+                                      ? 'bg-green-500' 
+                                      : proposal.progresso >= 75 
+                                        ? 'bg-blue-500' 
+                                        : proposal.progresso >= 50 
+                                          ? 'bg-yellow-500' 
+                                          : 'bg-red-500'
+                                  }`}
+                                  style={{ width: `${proposal.progresso}%` }}
+                                ></div>
+                              </div>
+                              <div className="text-xs text-gray-500 mt-1">
+                                {proposal.clientCompleted ? 'Cliente finalizou' : 'Cliente preenchendo'}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <ActionButtons 
+                              onView={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                              onCopyLink={() => {
+                                const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                                navigator.clipboard.writeText(link);
+                                showNotification('Link copiado para área de transferência', 'success');
+                              }}
+                              onWhatsApp={() => {
+                                const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                                const message = `🏥 *Proposta de Plano de Saúde*\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\n🔗 Link: ${link}`;
+                                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                              }}
+                              onEmail={() => {
+                                const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                                const subject = `Proposta de Plano - ${proposal.cliente}`;
+                                const body = `Olá!\n\nSegue a proposta de plano de saúde:\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\nLink: ${link}`;
+                                window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                              }}
+                              onMessage={() => setShowInternalMessage(true)}
+                             onEdit={() => showNotification(`Editando proposta ${proposal.abmId}...`, 'info')}
+                             onDelete={() => {
+                               if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.abmId}?`)) {
+                                 showNotification('Proposta excluída com sucesso', 'success');
+                               }
+                             }}
+                              onExternalLink={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                              onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
+                             onShare={() => {
+                               const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                               navigator.clipboard.writeText(link);
+                               showNotification('Link de compartilhamento copiado!', 'success');
+                             }}
+                             onSend={() => {
+                               if (proposal.status === 'docs_pending') {
+                                 showNotification('Enviando lembrete para o cliente...', 'success');
+                               } else {
+                                 showNotification('Enviando proposta para o financeiro...', 'success');
+                               }
+                             }}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
+              {realProposals?.length > 0 && (
+                <div className="px-6 py-3 bg-gray-50 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span>
+                      Mostrando {realProposals.length} proposta{realProposals.length !== 1 ? 's' : ''} sua{realProposals.length !== 1 ? 's' : ''}
+                    </span>
+                    <span className="flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                      Atualização automática ativa
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );

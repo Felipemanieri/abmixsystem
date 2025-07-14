@@ -89,16 +89,26 @@ export function useVendorProposals(vendorId: number) {
   
   const { data: proposals = [], isLoading, error } = useQuery({
     queryKey: ['/api/proposals/vendor', vendorId],
+    queryFn: async () => {
+      const response = await fetch(`/api/proposals/vendor/${vendorId}`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar propostas do vendedor');
+      }
+      return response.json();
+    },
     select: (data: any[]) => {
+      console.log(`Propostas do vendedor ${vendorId}:`, data);
       return data.map((proposal): ProposalData => ({
         ...proposal,
         cliente: proposal.contractData?.nomeEmpresa || 'N/A',
         plano: proposal.contractData?.planoContratado || 'N/A',
         valor: proposal.contractData?.valor || '0',
-        progresso: calculateProgress(proposal)
+        progresso: calculateProgress(proposal),
+        priority: proposal.priority || 'medium'
       }));
     },
-    refetchInterval: 5000, // Atualizar a cada 5 segundos
+    refetchInterval: 2000, // Atualizar a cada 2 segundos para tempo real
+    enabled: vendorId > 0, // Só fazer a consulta se o vendorId for válido
   });
 
   return {
@@ -128,18 +138,25 @@ function calculateProgress(proposal: any): number {
 }
 
 // Hook para atualização em tempo real via polling
-export function useRealTimeProposals() {
+export function useRealTimeProposals(vendorId?: number) {
   const [lastUpdate, setLastUpdate] = useState(Date.now());
   const queryClient = useQueryClient();
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // Invalidar consultas gerais
       queryClient.invalidateQueries({ queryKey: ['/api/proposals'] });
+      
+      // Se for um vendedor específico, invalidar também suas propostas
+      if (vendorId) {
+        queryClient.invalidateQueries({ queryKey: ['/api/proposals/vendor', vendorId] });
+      }
+      
       setLastUpdate(Date.now());
-    }, 3000); // Atualizar a cada 3 segundos
+    }, 2000); // Atualizar a cada 2 segundos para tempo real
 
     return () => clearInterval(interval);
-  }, [queryClient]);
+  }, [queryClient, vendorId]);
 
   return { lastUpdate };
 }
