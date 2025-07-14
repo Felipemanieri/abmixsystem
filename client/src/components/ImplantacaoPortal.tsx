@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink, Phone } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink, Phone, ArrowUp, ArrowDown } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -60,6 +60,17 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+
+  // Estados para filtros avançados do setor Implantação
+  const [selectedVendor, setSelectedVendor] = useState('all');
+  const [selectedPriority, setSelectedPriority] = useState('all');
+  const [selectedDateRange, setSelectedDateRange] = useState('all');
+  const [selectedValueRange, setSelectedValueRange] = useState('all');
+  const [selectedPlan, setSelectedPlan] = useState('all');
+  const [selectedDocuments, setSelectedDocuments] = useState('all');
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [sortBy, setSortBy] = useState('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   
   // Hook para propostas com sincronização em tempo real
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
@@ -493,128 +504,485 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Usar propostas reais sempre que possível
   const proposalsToShow = realProposals || [];
 
+  // Sistema de filtros avançados para o setor de Implantação
   const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
+    const matchesVendor = selectedVendor === 'all' || (proposal.vendedor || '').toLowerCase().includes(selectedVendor.toLowerCase());
+    const matchesPriority = selectedPriority === 'all' || proposal.priority === selectedPriority;
+    const matchesPlan = selectedPlan === 'all' || (proposal.plano || '').toLowerCase().includes(selectedPlan.toLowerCase());
+    
+    // Filtro por valor
+    let matchesValue = true;
+    if (selectedValueRange !== 'all') {
+      const value = parseFloat((proposal.valor || '0').replace(/[^\d.,]/g, '').replace(',', '.'));
+      switch (selectedValueRange) {
+        case 'low': matchesValue = value < 500; break;
+        case 'medium': matchesValue = value >= 500 && value < 1000; break;
+        case 'high': matchesValue = value >= 1000; break;
+      }
+    }
+    
+    // Filtro por data
+    let matchesDate = true;
+    if (selectedDateRange !== 'all') {
+      const proposalDate = new Date(proposal.createdAt);
+      const today = new Date();
+      const daysDiff = Math.floor((today.getTime() - proposalDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      switch (selectedDateRange) {
+        case 'today': matchesDate = daysDiff === 0; break;
+        case 'week': matchesDate = daysDiff <= 7; break;
+        case 'month': matchesDate = daysDiff <= 30; break;
+        case 'quarter': matchesDate = daysDiff <= 90; break;
+      }
+    }
+    
+    // Filtro por quantidade de documentos
+    let matchesDocuments = true;
+    if (selectedDocuments !== 'all') {
+      const docCount = proposal.clientAttachments?.length || 0;
+      switch (selectedDocuments) {
+        case 'none': matchesDocuments = docCount === 0; break;
+        case 'partial': matchesDocuments = docCount > 0 && docCount < 5; break;
+        case 'complete': matchesDocuments = docCount >= 5; break;
+      }
+    }
+    
     const matchesSearch = (proposal.cliente || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (proposal.abmId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (proposal.vendedor || '').toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
+                         (proposal.vendedor || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (proposal.plano || '').toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesStatus && matchesVendor && matchesPriority && matchesPlan && 
+           matchesValue && matchesDate && matchesDocuments && matchesSearch;
+  }).sort((a, b) => {
+    let aValue: any, bValue: any;
+    
+    switch (sortBy) {
+      case 'date':
+        aValue = new Date(a.createdAt);
+        bValue = new Date(b.createdAt);
+        break;
+      case 'client':
+        aValue = a.cliente || '';
+        bValue = b.cliente || '';
+        break;
+      case 'value':
+        aValue = parseFloat((a.valor || '0').replace(/[^\d.,]/g, '').replace(',', '.'));
+        bValue = parseFloat((b.valor || '0').replace(/[^\d.,]/g, '').replace(',', '.'));
+        break;
+      case 'progress':
+        aValue = a.progresso || 0;
+        bValue = b.progresso || 0;
+        break;
+      default:
+        aValue = a.abmId || '';
+        bValue = b.abmId || '';
+    }
+    
+    if (sortOrder === 'asc') {
+      return aValue > bValue ? 1 : -1;
+    } else {
+      return aValue < bValue ? 1 : -1;
+    }
   }) || [];
+
+  // Listas únicas para filtros
+  const uniqueVendors = [...new Set(proposalsToShow.map(p => p.vendedor || 'Não informado'))];
+  const uniquePlans = [...new Set(proposalsToShow.map(p => p.plano || 'Não informado'))];
+
+  // Função para limpar todos os filtros
+  const clearAllFilters = () => {
+    setSelectedStatus('all');
+    setSelectedVendor('all');
+    setSelectedPriority('all');
+    setSelectedDateRange('all');
+    setSelectedValueRange('all');
+    setSelectedPlan('all');
+    setSelectedDocuments('all');
+    setSearchTerm('');
+    setSortBy('date');
+    setSortOrder('desc');
+  };
 
   const renderProposalsTab = () => (
     <div className="space-y-6">
-      {/* Filters */}
+      {/* Filtros Avançados para Implantação */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Buscar propostas..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-            </div>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="observacao">OBSERVAÇÃO</option>
-              <option value="analise">ANALISE</option>
-              <option value="assinatura_ds">ASSINATURA DS</option>
-              <option value="expirado">EXPIRADO</option>
-              <option value="implantado">IMPLANTADO</option>
-              <option value="aguar_pagamento">AGUAR PAGAMENTO</option>
-              <option value="assinatura_proposta">ASSINATURA PROPOSTA</option>
-              <option value="aguar_selecao_vigencia">AGUAR SELEÇÃO DE VIGENCIA</option>
-              <option value="pendencia">PENDÊNCIA</option>
-              <option value="declinado">DECLINADO</option>
-              <option value="aguar_vigencia">AGUAR VIGÊNCIA</option>
-            </select>
-          </div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Filtros de Propostas</h3>
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => showNotification('Exportando relatório...', 'info')}
-              className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className="flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
             >
-              <Download className="w-4 h-4 mr-2" />
-              Exportar
+              <Filter className="w-4 h-4 mr-2" />
+              {showAdvancedFilters ? 'Filtros Básicos' : 'Filtros Avançados'}
             </button>
+            <button
+              onClick={clearAllFilters}
+              className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        {/* Filtros Básicos */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Buscar propostas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">Todos os Status</option>
+            <option value="observacao">OBSERVAÇÃO</option>
+            <option value="analise">ANALISE</option>
+            <option value="assinatura_ds">ASSINATURA DS</option>
+            <option value="expirado">EXPIRADO</option>
+            <option value="implantado">IMPLANTADO</option>
+            <option value="aguar_pagamento">AGUAR PAGAMENTO</option>
+            <option value="assinatura_proposta">ASSINATURA PROPOSTA</option>
+            <option value="aguar_selecao_vigencia">AGUAR SELEÇÃO DE VIGENCIA</option>
+            <option value="pendencia">PENDÊNCIA</option>
+            <option value="declinado">DECLINADO</option>
+            <option value="aguar_vigencia">AGUAR VIGÊNCIA</option>
+          </select>
+
+          <select
+            value={selectedPriority}
+            onChange={(e) => setSelectedPriority(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">Todas as Prioridades</option>
+            <option value="high">Alta</option>
+            <option value="medium">Média</option>
+            <option value="low">Baixa</option>
+          </select>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="date">Ordenar por Data</option>
+            <option value="client">Ordenar por Cliente</option>
+            <option value="value">Ordenar por Valor</option>
+            <option value="progress">Ordenar por Progresso</option>
+          </select>
+        </div>
+
+        {/* Filtros Avançados */}
+        {showAdvancedFilters && (
+          <div className="border-t pt-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <select
+                value={selectedVendor}
+                onChange={(e) => setSelectedVendor(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">Todos os Vendedores</option>
+                {uniqueVendors.map(vendor => (
+                  <option key={vendor} value={vendor}>{vendor}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedPlan}
+                onChange={(e) => setSelectedPlan(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">Todos os Planos</option>
+                {uniquePlans.map(plan => (
+                  <option key={plan} value={plan}>{plan}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedValueRange}
+                onChange={(e) => setSelectedValueRange(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">Todas as Faixas de Valor</option>
+                <option value="low">Até R$ 500</option>
+                <option value="medium">R$ 500 - R$ 1.000</option>
+                <option value="high">Acima de R$ 1.000</option>
+              </select>
+
+              <select
+                value={selectedDateRange}
+                onChange={(e) => setSelectedDateRange(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">Todas as Datas</option>
+                <option value="today">Hoje</option>
+                <option value="week">Última Semana</option>
+                <option value="month">Último Mês</option>
+                <option value="quarter">Último Trimestre</option>
+              </select>
+
+              <select
+                value={selectedDocuments}
+                onChange={(e) => setSelectedDocuments(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">Todos os Documentos</option>
+                <option value="none">Sem Documentos</option>
+                <option value="partial">Documentos Parciais</option>
+                <option value="complete">Documentos Completos</option>
+              </select>
+
+              <button
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                className="flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                {sortOrder === 'asc' ? (
+                  <>
+                    <ArrowUp className="w-4 h-4 mr-2" />
+                    Crescente
+                  </>
+                ) : (
+                  <>
+                    <ArrowDown className="w-4 h-4 mr-2" />
+                    Decrescente
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Estatísticas dos Filtros */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t">
+          <p className="text-sm text-gray-600">
+            Mostrando {filteredProposals.length} de {proposalsToShow.length} propostas
+          </p>
+          <div className="flex items-center space-x-4 text-sm text-gray-600">
+            <span>Filtros ativos: {[
+              selectedStatus !== 'all' && 'Status',
+              selectedVendor !== 'all' && 'Vendedor',
+              selectedPriority !== 'all' && 'Prioridade',
+              selectedPlan !== 'all' && 'Plano',
+              selectedValueRange !== 'all' && 'Valor',
+              selectedDateRange !== 'all' && 'Data',
+              selectedDocuments !== 'all' && 'Documentos',
+              searchTerm && 'Busca'
+            ].filter(Boolean).length}</span>
           </div>
         </div>
       </div>
 
-      {/* Proposals Cards */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Propostas ({filteredProposals.length})
-          </h2>
-        </div>
-        <div className="p-6 space-y-4">
-          {filteredProposals.map((proposal) => (
-            <div key={proposal.id} className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-              <div className="flex items-start gap-6">
-                {/* Progress Bar Vertical */}
-                <div className="flex flex-col items-center">
-                  <div className="w-4 h-24 bg-gray-200 rounded-full relative overflow-hidden">
-                    <div 
-                      className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-full transition-all duration-300"
-                      style={{ height: `${proposal.progresso}%` }}
-                    ></div>
+      {/* Lista de Propostas */}
+      <div className="space-y-4">
+        {proposalsLoading ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Carregando propostas...</p>
+          </div>
+        ) : filteredProposals.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta encontrada</h3>
+            <p className="text-gray-600">Tente ajustar os filtros ou limpar a busca.</p>
+          </div>
+        ) : (
+          filteredProposals.map((proposal) => (
+            <div key={proposal.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-center justify-between">
+                {/* Barra de progresso vertical na esquerda */}
+                <div className="flex items-center space-x-6">
+                  <div className="flex flex-col items-center">
+                    <div className="w-3 h-24 bg-gray-200 rounded-full relative">
+                      <div 
+                        className="w-3 bg-gradient-to-t from-blue-500 to-green-500 rounded-full transition-all duration-500"
+                        style={{ height: `${proposal.progresso}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-gray-600 mt-1">{proposal.progresso}%</span>
                   </div>
-                  <span className="text-xs font-medium text-gray-600 mt-2">{proposal.progresso}%</span>
-                </div>
 
-                {/* Client Info */}
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">ID</label>
                         <button 
                           onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                          className="text-lg font-bold text-blue-600 hover:text-blue-800 underline"
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
                         >
                           {proposal.abmId}
                         </button>
-                        <div className="flex items-center gap-2">
-                          <select
-                            value={proposal.priority}
-                            onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
-                            className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-2 py-1"
-                            style={{
-                              backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
-                                             proposal.priority === 'medium' ? '#fef3c7' :
-                                             proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
-                              color: proposal.priority === 'high' ? '#dc2626' :
-                                     proposal.priority === 'medium' ? '#a16207' :
-                                     proposal.priority === 'low' ? '#166534' : '#374151'
-                            }}
-                          >
-                            <option value="low" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>Baixa</option>
-                            <option value="medium" style={{ backgroundColor: '#fef3c7', color: '#a16207' }}>Média</option>
-                            <option value="high" style={{ backgroundColor: '#fee2e2', color: '#dc2626' }}>Alta</option>
-                          </select>
-                        </div>
                       </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-1">{proposal.cliente}</h3>
-                      <p className="text-sm text-gray-500 mb-2">CNPJ: {proposal.contractData?.cnpj}</p>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <User className="w-4 h-4" />
-                          <span>{proposal.vendedor}</span>
-                        </div>
-                        <div>Plano: {proposal.plano}</div>
-                        <div className="font-medium">R$ {proposal.valor}</div>
-                        <div>{new Date(proposal.createdAt).toLocaleDateString('pt-BR')}</div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Cliente</label>
+                        <p className="text-sm text-gray-900">{proposal.cliente}</p>
+                        <p className="text-xs text-gray-500">CNPJ: {proposal.contractData?.cnpj}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Vendedor</label>
+                        <p className="text-sm text-gray-900">{proposal.vendedor}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Plano</label>
+                        <p className="text-sm text-gray-900">{proposal.plano}</p>
                       </div>
                     </div>
 
-                    {/* Status */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Valor</label>
+                        <p className="text-sm text-gray-900">R$ {proposal.valor}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Status</label>
+                        <StatusBadge status={proposal.status} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Prioridade</label>
+                        <select
+                          value={proposal.priority || 'medium'}
+                          onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
+                          className={`text-xs px-2 py-1 rounded-full font-medium border-0 ${
+                            proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
+                            proposal.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
+                          }`}
+                        >
+                          <option value="low">Baixa</option>
+                          <option value="medium">Média</option>
+                          <option value="high">Alta</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Data</label>
+                        <p className="text-sm text-gray-900">
+                          {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Ações da Implantação */}
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      <ActionButtons
+                        onView={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                        onEdit={() => handleSelectProposal(proposal.id)}
+                        onAutomate={() => showNotification('Iniciando automação...', 'info')}
+                        onExternalLink={() => window.open(`https://docs.google.com/spreadsheets/d/1NQYQFJ9TFMH5zJKQQWXW2S9F8JSTM9-SHEETS-${proposal.abmId}`, '_blank')}
+                        onCopyLink={() => {
+                          const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                          navigator.clipboard.writeText(link);
+                          showNotification('Link copiado!', 'success');
+                        }}
+                        onWhatsApp={() => {
+                          const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                          const message = `🏥 *Proposta de Plano de Saúde*\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\n🔗 Link: ${link}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                        }}
+                        onEmail={() => {
+                          const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                          const subject = `Proposta de Plano - ${proposal.cliente}`;
+                          const body = `Olá!\n\nSegue a proposta de plano de saúde:\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\nLink: ${link}`;
+                          window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                        }}
+                        onDownload={() => showNotification('Baixando documentos...', 'success')}
+                        onDelete={() => {
+                          if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.abmId}?`)) {
+                            showNotification('Proposta excluída com sucesso', 'success');
+                          }
+                        }}
+                        onMessage={() => setShowInternalMessage(true)}
+                        onApprove={() => showNotification('Proposta aprovada!', 'success')}
+                        onReject={() => showNotification('Proposta rejeitada', 'error')}
+                        onForward={() => showNotification('Proposta encaminhada', 'info')}
+                        onShare={() => {
+                          const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                          navigator.clipboard.writeText(link);
+                          showNotification('Link de compartilhamento copiado!', 'success');
+                        }}
+                        onSend={() => showNotification('Notificação enviada ao cliente', 'success')}
+                        userRole="implementation"
+                        className="flex flex-wrap gap-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+
+  const renderAutomationTab = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-lg font-semibold text-gray-900">Regras de Automação</h2>
+          <button
+            onClick={() => showNotification('Nova regra criada!', 'success')}
+            className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Nova Regra
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {automationRules.map((rule) => (
+            <div key={rule.id} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3">
+                    <h3 className="text-sm font-medium text-gray-900">{rule.name}</h3>
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                      rule.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {rule.status === 'active' ? 'Ativo' : 'Inativo'}
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm text-gray-600">
+                    <span className="font-medium">Gatilho:</span> {rule.trigger}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium">Ação:</span> {rule.action}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-2">
+                    Última execução: {rule.lastRun}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => showNotification('Regra editada!', 'info')}
+                    className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => showNotification('Regra removida!', 'error')}
+                    className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
                     <div className="text-right">
                       <select
                         value={proposal.status}
