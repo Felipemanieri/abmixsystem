@@ -1178,6 +1178,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <th className="text-left py-3 px-4 font-medium">VALOR</th>
                 <th className="text-left py-3 px-4 font-medium">STATUS</th>
                 <th className="text-left py-3 px-4 font-medium">PROGRESSO</th>
+                <th className="text-left py-3 px-4 font-medium">AÇÕES</th>
               </tr>
             </thead>
             <tbody>
@@ -1232,14 +1233,42 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </select>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex-1">
-                          <div className="text-xs text-gray-500 mb-1">Progresso</div>
-                          <SimpleProgressBar percentage={progress} showLabel={false} />
+                      <div className="flex flex-col space-y-1">
+                        <div className="text-xs text-gray-500">Progresso</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-20 bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full ${
+                                progress >= 80 ? 'bg-green-500' :
+                                progress >= 60 ? 'bg-yellow-500' :
+                                progress >= 40 ? 'bg-orange-500' :
+                                'bg-red-500'
+                              }`}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-xs text-gray-600 font-medium">
+                            {progress}%
+                          </span>
                         </div>
-                        <span className="text-xs text-gray-600 font-medium min-w-[35px]">
-                          {progress}%
-                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
+                          className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                          title="Ver Drive"
+                        >
+                          <Eye size={14} />
+                        </button>
+                        <button
+                          onClick={() => window.open(`/client/${proposal.clientToken}`, '_blank')}
+                          className="p-1 text-green-600 hover:bg-green-50 rounded"
+                          title="Link do Cliente"
+                        >
+                          <ExternalLink size={14} />
+                        </button>
                       </div>
                     </td>
                   </tr>
