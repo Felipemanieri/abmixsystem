@@ -690,7 +690,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   disabled={titulares.length >= 10}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Titular
+                  + Adicionar Titular
                 </button>
               </div>
               
