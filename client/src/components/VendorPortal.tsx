@@ -4,7 +4,7 @@ import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
-import SimpleProposalForm from './SimpleProposalForm';
+import ProposalGenerator from './ProposalGenerator';
 import ProposalTracker from './ProposalTracker';
 import QuotationPanel from './QuotationPanel';
 import ProgressBar from './ProgressBar';
@@ -1289,7 +1289,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'new-proposal':
-        return <SimpleProposalForm 
+        return <ProposalGenerator 
           onBack={() => setActiveView('dashboard')} 
           currentVendor={{
             id: user.id,

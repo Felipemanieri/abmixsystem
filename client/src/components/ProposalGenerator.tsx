@@ -3,6 +3,10 @@ import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, U
 import { showNotification } from '../utils/notifications';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
+interface ProposalGeneratorProps {
+  onBack: () => void;
+}
+
 interface ContractData {
   nomeEmpresa: string;
   cnpj: string;
@@ -61,6 +65,8 @@ interface QuotationData {
   dataEnvio?: string;
   idades: number[];
 }
+
+
 
 interface ProposalGeneratorProps {
   onBack: () => void;
@@ -245,8 +251,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         attachments: vendorAttachments
       };
 
-      console.log('Enviando dados da proposta:', proposalData);
-
       const response = await fetch('/api/proposals', {
         method: 'POST',
         headers: {
@@ -255,23 +259,18 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         body: JSON.stringify(proposalData)
       });
 
-      console.log('Resposta do servidor:', response.status, response.statusText);
-
       if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Erro na resposta:', errorData);
-        throw new Error(`Erro ao criar proposta: ${response.status}`);
+        throw new Error('Erro ao criar proposta');
       }
 
       const result = await response.json();
-      console.log('Resultado recebido:', result);
       
       setGeneratedLink(result.clientLink);
       setIsSubmitted(true);
       showNotification('Link exclusivo da proposta gerado com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao gerar proposta:', error);
-      showNotification(`Erro ao gerar link da proposta: ${error.message}`, 'error');
+      showNotification('Erro ao gerar link da proposta', 'error');
     }
   };
 
