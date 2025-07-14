@@ -142,6 +142,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   });
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
   const [cotacoesCadastradas, setCotacoesCadastradas] = useState<any[]>([]);
+  const [vendorAttachments, setVendorAttachments] = useState<any[]>([]);
 
 
 
