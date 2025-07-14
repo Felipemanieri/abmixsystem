@@ -10,6 +10,7 @@ import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSyst
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient as queryClientInstance } from '@/lib/queryClient';
 import { showNotification } from '@/utils/notifications';
+import { realTimeSync } from '@/utils/realTimeSync';
 
 interface SupervisorPortalProps {
   user: any;
@@ -23,6 +24,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
+  
+  // Ativar sincronização em tempo real
+  useEffect(() => {
+    realTimeSync.enableAggressivePolling();
+  }, []);
   
   // Estados para filtros
   const [filterVendor, setFilterVendor] = useState('');
@@ -47,8 +53,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     queryFn: () => apiRequest('/api/proposals'),
   });
 
-  // Debug console log
-  console.log('Propostas no SupervisorPortal:', proposals);
+
 
   // Buscar vendedores
   const { data: vendors = [], isLoading: vendorsLoading } = useQuery({

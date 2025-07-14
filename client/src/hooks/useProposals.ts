@@ -63,7 +63,7 @@ export function useProposals() {
         priority: proposal.priority || 'medium' // Garantir que priority existe
       }));
     },
-    refetchInterval: 3000, // Atualizar a cada 3 segundos
+    refetchInterval: 1000, // Atualizar a cada 1 segundo para tempo real
   });
 
   const { data: vendors = [] } = useQuery({
@@ -107,7 +107,7 @@ export function useVendorProposals(vendorId: number) {
         priority: proposal.priority || 'medium'
       }));
     },
-    refetchInterval: 2000, // Atualizar a cada 2 segundos para tempo real
+    refetchInterval: 1000, // Atualizar a cada 1 segundo para tempo real
     enabled: vendorId > 0, // Só fazer a consulta se o vendorId for válido
   });
 
@@ -153,7 +153,7 @@ export function useRealTimeProposals(vendorId?: number) {
       }
       
       setLastUpdate(Date.now());
-    }, 2000); // Atualizar a cada 2 segundos para tempo real
+    }, 1000); // Atualizar a cada 1 segundo para tempo real
 
     return () => clearInterval(interval);
   }, [queryClient, vendorId]);

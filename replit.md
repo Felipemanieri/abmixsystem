@@ -154,6 +154,25 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Sistema de Sincronização em Tempo Real para Propagação Instantânea (Jan 14, 2025)
+- **Implementado sistema completo de sincronização em tempo real**:
+  - Criado realTimeSync.ts para forçar atualizações instantâneas entre todos os portais
+  - Integrado ao ProposalGenerator para notificar criação de propostas em tempo real
+  - Ativado polling agressivo (1 segundo) em todos os portais para máxima responsividade
+  - Sistema força invalidação e refetch imediato quando vendedor gera link do cliente
+
+- **Correção completa das informações das propostas no SupervisorPortal**:
+  - Dados das propostas agora exibem informações completas (nome empresa, CNPJ, vendedor, plano, valor)
+  - Campos extraídos corretamente da estrutura contractData da API
+  - Filtro de vendedores usa dados reais do banco de dados
+  - Links direcionam corretamente para Google Drive e portal do cliente
+
+- **Garantia de propagação instantânea entre portais**:
+  - Quando vendedor gera link, dados aparecem instantaneamente em Vendor, Implementation, Supervisor e Financial
+  - Sistema de notificações em tempo real com logging para debug
+  - Intervalo de atualização reduzido para 1 segundo para máxima responsividade
+  - Invalidação inteligente de cache com refetch forçado
+
 ### Enhanced Implementation Portal with Additional Actions (Jan 14, 2025)
 - **Added 13 new action buttons to Implementation Portal**:
   - Preserved all original actions: Ver Drive, Editar, Automação, Sheets, Link Cliente, Notificar

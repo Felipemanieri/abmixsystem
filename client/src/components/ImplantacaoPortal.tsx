@@ -10,6 +10,7 @@ import ProposalSelector from './ProposalSelector';
 import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
+import { realTimeSync } from '../utils/realTimeSync';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 
 interface ImplantacaoPortalProps {
@@ -53,6 +54,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [observations, setObservations] = useState('');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // Ativar sincronização em tempo real
+  useEffect(() => {
+    realTimeSync.enableAggressivePolling();
+  }, []);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [activeTab, setActiveTab] = useState<'proposals' | 'automation' | 'editor'>('proposals');
   const [showProposalSelector, setShowProposalSelector] = useState(false);

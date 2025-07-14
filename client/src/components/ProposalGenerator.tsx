@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info, Lock } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
+import { useRealTimeNotifications } from '../utils/realTimeSync';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ProposalGeneratorProps {
@@ -78,6 +79,9 @@ interface ProposalGeneratorProps {
 }
 
 const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVendor }) => {
+  // Hook para notificações em tempo real
+  const { notifyCreated } = useRealTimeNotifications();
+  
   const [contractData, setContractData] = useState<ContractData>({
     nomeEmpresa: '',
     cnpj: '',
@@ -273,6 +277,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
       const result = await response.json();
       console.log('Resultado da API:', result);
+      
+      // Notificar criação da proposta para atualização em tempo real
+      if (currentVendor?.id) {
+        console.log('🚀 Notificando criação da proposta para atualização em tempo real');
+        notifyCreated(currentVendor.id);
+      }
       
       setGeneratedLink(result.clientLink);
       setIsSubmitted(true);

@@ -12,6 +12,7 @@ import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
+import { realTimeSync } from '../utils/realTimeSync';
 import StatusManager, { ProposalStatus } from '@shared/statusSystem';
 
 interface FinancialPortalProps {
@@ -43,6 +44,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+  
+  // Ativar sincronização em tempo real
+  useEffect(() => {
+    realTimeSync.enableAggressivePolling();
+  }, []);
   // Usar propostas reais da API
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   const { getClientDocuments } = useGoogleDrive();
