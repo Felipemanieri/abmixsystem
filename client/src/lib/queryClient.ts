@@ -1,26 +1,32 @@
 import { QueryClient } from '@tanstack/react-query';
 
+// Create query client
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: false,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-export async function apiRequest(url: string, options: RequestInit = {}) {
-  const response = await fetch(url, {
+// API request function
+export async function apiRequest(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const url = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  
+  const config: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
     },
     ...options,
-  });
+  };
 
+  const response = await fetch(url, config);
+  
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || `${response.status}: ${response.statusText}`);
+    const error = await response.text();
+    throw new Error(`${response.status}: ${error}`);
   }
 
   return response.json();
