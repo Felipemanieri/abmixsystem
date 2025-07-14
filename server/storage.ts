@@ -16,11 +16,11 @@ export interface IStorage {
   deleteVendor(id: number): Promise<void>;
   
   // Proposal operations
-  createProposal(proposal: InsertProposal): Promise<Proposal>;
-  getProposal(id: string): Promise<Proposal | undefined>;
-  getProposalByToken(token: string): Promise<Proposal | undefined>;
-  updateProposal(id: string, proposal: Partial<InsertProposal>): Promise<Proposal>;
-  getVendorProposals(vendorId: number): Promise<Proposal[]>;
+  createProposal(proposal: any): Promise<any>;
+  getProposal(id: string): Promise<any>;
+  getProposalByToken(token: string): Promise<any>;
+  updateProposal(id: string, proposal: any): Promise<any>;
+  getVendorProposals(vendorId: number): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -82,25 +82,25 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Proposal operations
-  async createProposal(insertProposal: InsertProposal): Promise<Proposal> {
+  async createProposal(proposalData: any): Promise<any> {
     const [proposal] = await db
       .insert(proposals)
-      .values(insertProposal)
+      .values(proposalData)
       .returning();
     return proposal;
   }
 
-  async getProposal(id: string): Promise<Proposal | undefined> {
+  async getProposal(id: string): Promise<any> {
     const [proposal] = await db.select().from(proposals).where(eq(proposals.id, id));
     return proposal || undefined;
   }
 
-  async getProposalByToken(token: string): Promise<Proposal | undefined> {
+  async getProposalByToken(token: string): Promise<any> {
     const [proposal] = await db.select().from(proposals).where(eq(proposals.clientToken, token));
     return proposal || undefined;
   }
 
-  async updateProposal(id: string, proposalData: Partial<InsertProposal>): Promise<Proposal> {
+  async updateProposal(id: string, proposalData: any): Promise<any> {
     const [proposal] = await db
       .update(proposals)
       .set({ ...proposalData, updatedAt: new Date() })
@@ -109,7 +109,7 @@ export class DatabaseStorage implements IStorage {
     return proposal;
   }
 
-  async getVendorProposals(vendorId: number): Promise<Proposal[]> {
+  async getVendorProposals(vendorId: number): Promise<any[]> {
     return await db.select().from(proposals).where(eq(proposals.vendorId, vendorId));
   }
 }

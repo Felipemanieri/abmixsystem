@@ -120,13 +120,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const proposal = await storage.createProposal({
         id: proposalId,
         vendorId: proposalData.vendorId,
+        clientToken: clientToken,
         contractData: proposalData.contractData,
         titulares: proposalData.titulares || [],
         dependentes: proposalData.dependentes || [],
-        internalData: proposalData.internalData,
-        attachments: proposalData.attachments || [],
-        status: "draft",
-        clientToken: clientToken
+        internalData: proposalData.internalData || {},
+        vendorAttachments: proposalData.attachments || [],
+        clientAttachments: [],
+        clientCompleted: false,
+        status: "draft"
       });
 
       res.json({
@@ -168,8 +170,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const updatedProposal = await storage.updateProposal(existingProposal.id, {
-        ...updateData,
-        status: "completed"
+        titulares: updateData.titulares,
+        dependentes: updateData.dependentes,
+        clientAttachments: updateData.clientAttachments || [],
+        clientCompleted: true,
+        status: "client_completed"
       });
 
       res.json(updatedProposal);
