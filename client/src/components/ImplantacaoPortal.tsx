@@ -548,81 +548,85 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         </div>
       </div>
 
-      {/* Proposals Cards */}
+      {/* Proposals Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             Propostas ({filteredProposals.length})
           </h2>
         </div>
-        <div className="p-6 space-y-4">
-          {filteredProposals.map((proposal) => (
-            <div key={proposal.id} className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-              <div className="flex items-start gap-6">
-                {/* Progress Bar Vertical */}
-                <div className="flex flex-col items-center">
-                  <div className="w-4 h-24 bg-gray-200 rounded-full relative overflow-hidden">
-                    <div 
-                      className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-full transition-all duration-300"
-                      style={{ height: `${proposal.progresso}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs font-medium text-gray-600 mt-2">{proposal.progresso}%</span>
-                </div>
-
-                {/* Client Info */}
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <button 
-                          onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                          className="text-lg font-bold text-blue-600 hover:text-blue-800 underline"
-                        >
-                          {proposal.abmId}
-                        </button>
-                        <div className="flex items-center gap-2">
-                          <select
-                            value={proposal.priority}
-                            onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
-                            className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-2 py-1"
-                            style={{
-                              backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
-                                             proposal.priority === 'medium' ? '#fef3c7' :
-                                             proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
-                              color: proposal.priority === 'high' ? '#dc2626' :
-                                     proposal.priority === 'medium' ? '#a16207' :
-                                     proposal.priority === 'low' ? '#166534' : '#374151'
-                            }}
-                          >
-                            <option value="low" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>Baixa</option>
-                            <option value="medium" style={{ backgroundColor: '#fef3c7', color: '#a16207' }}>Média</option>
-                            <option value="high" style={{ backgroundColor: '#fee2e2', color: '#dc2626' }}>Alta</option>
-                          </select>
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-1">{proposal.cliente}</h3>
-                      <p className="text-sm text-gray-500 mb-2">CNPJ: {proposal.contractData?.cnpj}</p>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <User className="w-4 h-4" />
-                          <span>{proposal.vendedor}</span>
-                        </div>
-                        <div>Plano: {proposal.plano}</div>
-                        <div className="font-medium">R$ {proposal.valor}</div>
-                        <div>{new Date(proposal.createdAt).toLocaleDateString('pt-BR')}</div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Cliente
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Vendedor
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Plano
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Valor
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Progresso
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Prioridade
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredProposals.map((proposal) => (
+                <tr key={proposal.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button 
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                    >
+                      {proposal.abmId}
+                    </button>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                        <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                       </div>
                     </div>
-
-                    {/* Status */}
-                    <div className="text-right">
-                      <select
-                        value={proposal.status}
-                        onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
-                        className="text-sm font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2 mb-2"
-                        style={{
-                          backgroundColor: (() => {
-                            const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <User className="w-4 h-4 text-gray-400 mr-2" />
+                      <div className="text-sm text-gray-900">{proposal.vendedor}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{proposal.plano}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={proposal.status}
+                      onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
+                      className="text-sm font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
+                      style={{
+                        backgroundColor: (() => {
+                          const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
                             const config = STATUS_CONFIG[currentStatus as ProposalStatus];
                             if (!config) return '#ffffff';
                             
@@ -692,19 +696,38 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                           </option>
                         ))}
                       </select>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {/* Ações Originais */}
-                    <button
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
-                      title="Ver no Google Drive"
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <ProgressBar proposal={proposal} className="w-32" />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={proposal.priority}
+                      onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
+                      className="text-sm font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
+                      style={{
+                        backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
+                                       proposal.priority === 'medium' ? '#fef3c7' :
+                                       proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
+                        color: proposal.priority === 'high' ? '#dc2626' :
+                               proposal.priority === 'medium' ? '#a16207' :
+                               proposal.priority === 'low' ? '#166534' : '#374151'
+                      }}
                     >
-                      <Eye className="w-4 h-4" />
-                    </button>
+                      <option value="low">Baixa</option>
+                      <option value="medium">Média</option>
+                      <option value="high">Alta</option>
+                    </select>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                        className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                        title="Ver no Google Drive"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
                     <button
                       onClick={() => setEditingProposalId(proposal.id)}
                       className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
@@ -832,11 +855,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     >
                       <MessageSquare className="w-4 h-4" />
                     </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
