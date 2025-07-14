@@ -67,11 +67,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
     setIsLoading(true);
     setErrorMessage('');
 
-    // Verificar credenciais para o supervisor - agora aceita o email felipe@abmix.com.br
-    if (portal === 'supervisor' && 
-        ((email === 'supervisao@abmix.com.br' && password === '123456') || 
-         (email === 'felipe@abmix.com.br' && password === '123456'))) {
-      setTimeout(() => {
+    try {
+      if (portal === 'vendor') {
+        // Autenticação real para vendedores
+        const response = await fetch('/api/vendor/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const vendorData = await response.json();
+          const user = {
+            id: vendorData.id,
+            name: vendorData.name,
+            email: vendorData.email,
+            role: vendorData.role,
+          };
+          onLogin(user);
+        } else {
+          const errorData = await response.json();
+          setErrorMessage(errorData.error || 'Credenciais inválidas');
+        }
+      } else if (portal === 'supervisor' && 
+          ((email === 'supervisao@abmix.com.br' && password === '123456') || 
+           (email === 'felipe@abmix.com.br' && password === '123456'))) {
+        // Login do supervisor
         const user = {
           id: '1',
           name: 'Felipe Abmix',
@@ -79,25 +102,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
           role: portal,
         };
         onLogin(user);
-        setIsLoading(false);
-      }, 1000);
-    } else {
-      // Para fins de demonstração, permitir qualquer login para outros portais
-      setTimeout(() => {
-        if (portal === 'supervisor') {
-          setErrorMessage('Credenciais inválidas para o portal do supervisor');
-          setIsLoading(false);
-        } else {
-          const user = {
-            id: '1',
-            name: 'Usuário Teste',
-            email,
-            role: portal,
-          };
-          onLogin(user);
-          setIsLoading(false);
-        }
-      }, 1000);
+      } else if (portal === 'supervisor') {
+        setErrorMessage('Credenciais inválidas para o portal do supervisor');
+      } else {
+        // Para outros portais, manter login simples
+        const user = {
+          id: '1',
+          name: 'Usuário Teste',
+          email,
+          role: portal,
+        };
+        onLogin(user);
+      }
+    } catch (error) {
+      setErrorMessage('Erro de conexão. Tente novamente.');
+    } finally {
+      setIsLoading(false);
     }
   };
 

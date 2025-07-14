@@ -1491,7 +1491,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <AbmixLogo size={40} className="mr-3" />
-                <span className="text-xl font-bold text-gray-900">Portal Vendedor</span>
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">Portal Vendedor</h1>
+                  <p className="text-sm text-gray-600">
+                    Bem-vinda(o), <span className="font-medium text-teal-600">{user?.name || 'Vendedor'}</span>
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">

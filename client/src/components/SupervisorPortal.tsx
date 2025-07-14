@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X, UserPlus, Trash2, Edit3 } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -9,6 +9,8 @@ import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
+import { apiRequest, queryClient } from '../lib/queryClient';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface SupervisorPortalProps {
   user: any;
@@ -25,6 +27,9 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+  const [showAddVendorForm, setShowAddVendorForm] = useState(false);
+  const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
+  const queryClientInstance = useQueryClient();
 
   // Inicializar status e escutar mudanças
   useEffect(() => {
@@ -122,6 +127,256 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const handleViewVendor = (vendorId: string) => {
     setSelectedVendor(vendorId);
     showNotification(`Visualizando detalhes do vendedor ${vendorId}`, 'success');
+  };
+
+  // Buscar todos os vendedores
+  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
+    queryKey: ['/api/vendors'],
+    retry: false,
+  });
+
+  // Mutation para criar vendedor
+  const createVendorMutation = useMutation({
+    mutationFn: async (vendorData: { name: string; email: string; password: string; role: string; active: boolean }) => {
+      return apiRequest('/api/vendors', {
+        method: 'POST',
+        body: JSON.stringify(vendorData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      setShowAddVendorForm(false);
+      setNewVendorData({ name: '', email: '' });
+      showNotification('Vendedor adicionado com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao adicionar vendedor', 'error');
+    },
+  });
+
+  // Mutation para deletar vendedor
+  const deleteVendorMutation = useMutation({
+    mutationFn: async (vendorId: number) => {
+      return apiRequest(`/api/vendors/${vendorId}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      showNotification('Vendedor removido com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao remover vendedor', 'error');
+    },
+  });
+
+  const handleAddVendor = () => {
+    if (!newVendorData.name || !newVendorData.email) {
+      showNotification('Nome e email são obrigatórios', 'error');
+      return;
+    }
+
+    createVendorMutation.mutate({
+      name: newVendorData.name,
+      email: newVendorData.email,
+      password: '120784',
+      role: 'vendor',
+      active: true,
+    });
+  };
+
+  const handleDeleteVendor = (vendorId: number, vendorName: string) => {
+    if (confirm(`Tem certeza que deseja remover o vendedor ${vendorName}?`)) {
+      deleteVendorMutation.mutate(vendorId);
+    }
+  };
+
+  const renderTeamManagement = () => {
+    if (vendorsLoading) {
+      return (
+        <div className="space-y-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+              <div className="space-y-2">
+                <div className="h-4 bg-gray-200 rounded"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        {/* Header com botões de ação */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-semibold text-gray-900">Gestão da Equipe</h2>
+            <button
+              onClick={() => setShowAddVendorForm(true)}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <UserPlus className="w-4 h-4 mr-2" />
+              Adicionar Vendedor
+            </button>
+          </div>
+
+          {/* Lista de vendedores */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Nome
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Data de Cadastro
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Ações
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {vendors.map((vendor: any) => (
+                  <tr key={vendor.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-sm font-medium text-blue-800">
+                              {vendor.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{vendor.name}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{vendor.email}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        vendor.active 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {vendor.active ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {vendor.createdAt ? new Date(vendor.createdAt).toLocaleDateString('pt-BR') : '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
+                        className="text-red-600 hover:text-red-900 flex items-center"
+                        disabled={deleteVendorMutation.isPending}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Remover
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {vendors.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                Nenhum vendedor cadastrado ainda.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Modal para adicionar vendedor */}
+        {showAddVendorForm && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+              <div className="mt-3">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">Adicionar Novo Vendedor</h3>
+                  <button
+                    onClick={() => setShowAddVendorForm(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nome Completo
+                    </label>
+                    <input
+                      type="text"
+                      value={newVendorData.name}
+                      onChange={(e) => setNewVendorData(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Ex: Ana Caroline Terto"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={newVendorData.email}
+                      onChange={(e) => setNewVendorData(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Ex: comercial@abmix.com.br"
+                    />
+                  </div>
+
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <p className="text-sm text-gray-600">
+                      <strong>Senha padrão:</strong> 120784
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      O vendedor poderá alterar a senha após o primeiro login
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex space-x-3 mt-6">
+                  <button
+                    onClick={handleAddVendor}
+                    disabled={createVendorMutation.isPending}
+                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {createVendorMutation.isPending ? 'Adicionando...' : 'Adicionar Vendedor'}
+                  </button>
+                  <button
+                    onClick={() => setShowAddVendorForm(false)}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   // Dados simulados para KPIs
@@ -465,14 +720,7 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
         );
 
       case 'team':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Gestão da Equipe</h2>
-              <p className="text-gray-600">Funcionalidade de gestão da equipe em desenvolvimento...</p>
-            </div>
-          </div>
-        );
+        return renderTeamManagement();
 
       case 'settings':
         return (
