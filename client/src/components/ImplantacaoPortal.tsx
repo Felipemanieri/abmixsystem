@@ -64,7 +64,55 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Hook para propostas com sincronização em tempo real
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   useRealTimeProposals();
-  
+
+  // Debug: Log das propostas
+  console.log('Propostas no ImplantacaoPortal:', realProposals);
+
+  // Função para atualizar status
+  const handleStatusUpdate = async (proposalId: string, newStatus: ProposalStatus) => {
+    try {
+      const response = await fetch(`/api/proposals/${proposalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        statusManager.updateStatus(proposalId, newStatus);
+        showNotification(`Status atualizado para ${STATUS_CONFIG[newStatus]?.label}`, 'success');
+      } else {
+        showNotification('Erro ao atualizar status', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
+      showNotification('Erro ao atualizar status', 'error');
+    }
+  };
+
+  // Função para atualizar prioridade
+  const handlePriorityUpdate = async (proposalId: string, newPriority: 'low' | 'medium' | 'high') => {
+    try {
+      const response = await fetch(`/api/proposals/${proposalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priority: newPriority }),
+      });
+
+      if (response.ok) {
+        showNotification(`Prioridade atualizada para ${newPriority === 'high' ? 'Alta' : newPriority === 'medium' ? 'Média' : 'Baixa'}`, 'success');
+      } else {
+        showNotification('Erro ao atualizar prioridade', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar prioridade:', error);
+      showNotification('Erro ao atualizar prioridade', 'error');
+    }
+  };
+
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
     {
@@ -126,19 +174,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       statusManager.unsubscribe(handleStatusChange);
     };
   }, [statusManager]);
-
-  const handleStatusUpdate = (proposalId: string, newStatus: ProposalStatus) => {
-    statusManager.updateStatus(proposalId, newStatus);
-  };
-
-  const handlePriorityUpdate = (proposalId: string, newPriority: 'low' | 'medium' | 'high') => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { ...proposal, priority: newPriority }
-        : proposal
-    ));
-    showNotification(`Prioridade da proposta ${proposalId} alterada para: ${getPriorityText(newPriority)}`, 'success');
-  };
 
   const handleSelectProposal = (proposalId: string) => {
     console.log('Selecionando proposta:', proposalId);
@@ -711,50 +746,34 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       </option>
                     </select>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <ProgressBar proposal={proposal} />
-                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <ActionButtons 
-                      onView={() => setSelectedProposal(proposal.id)}
-                      onEdit={() => handleSelectProposal(proposal.id)}
-                      onCopyLink={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/implantacao/proposta/${proposal.id}`);
-                        showNotification('Link copiado para a área de transferência!', 'success');
-                      }}
-                      onMessage={() => setShowInternalMessage(true)}
-                      onDownload={() => showNotification('Baixando documentos...', 'success')}
-                      onWhatsApp={() => window.open(`https://wa.me/55${proposal.vendor.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id} do cliente ${proposal.client}...`)}`)}
-                      onEmail={() => window.open(`mailto:${proposal.vendor.toLowerCase().replace(/\s/g, '.')}@abmix.com.br?subject=Proposta ${proposal.id}`)}
-                      onExternalLink={() => window.open(`${window.location.origin}/implantacao/proposta/${proposal.id}`, '_blank')}
-                      onSend={() => {
-                        if (proposal.status === 'validated') {
-                          sendToAutomation(proposal.id);
-                       } else if (proposal.status === 'pending_validation') {
-                         validateProposal(proposal.id);
-                        } else {
-                          showNotification('Esta proposta não está pronta para ser enviada', 'error');
-                        }
-                      }}
-                     onDelete={() => {
-                       if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.id}?`)) {
-                         showNotification('Proposta excluída com sucesso', 'success');
-                       }
-                     }}
-                     onShare={() => {
-                       navigator.clipboard.writeText(`${window.location.origin}/implantacao/compartilhar/${proposal.id}`);
-                       showNotification('Link de compartilhamento copiado!', 'success');
-                     }}
-                     onApprove={proposal.status === 'pending_validation' ? () => validateProposal(proposal.id) : undefined}
-                     onReject={proposal.status === 'pending_validation' ? () => {
-                       if (confirm(`Tem certeza que deseja rejeitar a proposta ${proposal.id}?`)) {
-                         showNotification('Proposta rejeitada. Notificação enviada ao vendedor.', 'error');
-                       }
-                     } : undefined}
-                    />
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                        className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                        title="Ver no Google Drive"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditingProposalId(proposal.id)}
+                        className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                        title="Editar Proposta"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Enviando para automação...', 'info')}
+                        className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
+                        title="Enviar para Automação"
+                      >
+                        <Zap className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
