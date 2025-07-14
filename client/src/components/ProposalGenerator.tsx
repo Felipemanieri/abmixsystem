@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
-import ProposalManager from '../services/proposalManager';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ProposalGeneratorProps {
@@ -130,7 +129,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
-  const [isContractLocked, setIsContractLocked] = useState(false);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -144,8 +142,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   });
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
   const [cotacoesCadastradas, setCotacoesCadastradas] = useState<any[]>([]);
-  const [vendorAttachments, setVendorAttachments] = useState<any[]>([]);
-  const [proposalManager] = useState(() => ProposalManager.getInstance());
 
 
 
@@ -276,14 +272,6 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       const result = await response.json();
       console.log('Resultado da API:', result);
       
-      // Sincronizar com ProposalManager para atualizar todos os painéis
-      const proposalId = await proposalManager.syncFromAPI({
-        ...result,
-        vendorName: user?.name || 'Vendedor'
-      });
-      
-      console.log('Proposta sincronizada com ID:', proposalId);
-      
       setGeneratedLink(result.clientLink);
       setIsSubmitted(true);
       showNotification('Link exclusivo da proposta gerado com sucesso!', 'success');
@@ -343,15 +331,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     }]);
     
     setDependentes([]);
-    setInternalData({
-      ...internalData,
-      observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
-    });
-    setVendorAttachments([]);
+    setVendorObservations('Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.');
     setIsSubmitted(false);
-    setIsContractLocked(true); // Bloquear edição dos dados do contrato
     
-    showNotification('Nova proposta iniciada para o mesmo link! Os dados do contrato estão bloqueados.', 'success');
+    showNotification('Nova proposta iniciada para o mesmo link!', 'success');
   };
 
   const resetForm = () => {
@@ -1029,121 +1012,87 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
         <div className="space-y-8">
           {/* Dados do Contrato */}
-          <div className={`p-6 rounded-lg ${isContractLocked ? 'bg-gray-100' : 'bg-blue-50'}`}>
+          <div className="bg-blue-50 p-6 rounded-lg">
             <div className="flex items-center mb-4">
               <Building className="w-5 h-5 text-blue-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">
                 Dados do Contrato
-                {isContractLocked && (
-                  <span className="ml-2 text-sm text-orange-600 font-normal">
-                    (Bloqueado - Reutilizando contrato existente)
-                  </span>
-                )}
               </h2>
             </div>
             
-            {isContractLocked && (
-              <div className="mb-4 p-3 bg-orange-100 border border-orange-300 rounded-lg">
-                <div className="flex items-center">
-                  <Info className="w-4 h-4 text-orange-600 mr-2" />
-                  <p className="text-sm text-orange-800">
-                    Os dados do contrato estão bloqueados. Este formulário será salvo no mesmo link e pasta do Google Drive.
-                  </p>
-                </div>
-              </div>
-            )}
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Nome da Empresa *
                 </label>
                 <input
                   type="text"
                   value={contractData.nomeEmpresa}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
-                  placeholder="Nome da empresa contratante"
+                  onChange={(e) => setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ex: Empresa ABC Ltda"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   CNPJ *
                 </label>
                 <input
                   type="text"
                   value={contractData.cnpj}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
+                  onChange={(e) => setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="00.000.000/0000-00"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Plano Contratado *
                 </label>
                 <input
                   type="text"
                   value={contractData.planoContratado}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
-                  placeholder="Ex: Plano Empresarial Premium"
+                  onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ex: Plano Empresarial Premium - Cobertura Nacional"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Valor Mensal (R$) *
                 </label>
                 <input
                   type="text"
                   value={contractData.valor}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, valor: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
+                  onChange={(e) => setContractData(prev => ({ ...prev, valor: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="0,00"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Início da Vigência *
                 </label>
                 <input
                   type="date"
                   value={contractData.inicioVigencia}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
+                  onChange={(e) => setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Período mínimo de vigência *
                 </label>
                 <select
                   value={contractData.periodoMinimo || ''}
-                  onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, periodoMinimo: e.target.value }))}
-                  disabled={isContractLocked}
-                  className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isContractLocked ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
+                  onChange={(e) => setContractData(prev => ({ ...prev, periodoMinimo: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Selecione o período</option>
                   <option value="01 mês">01 mês</option>
@@ -1159,15 +1108,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     type="checkbox"
                     id="odontoConjugado"
                     checked={contractData.odontoConjugado}
-                    onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
-                    disabled={isContractLocked}
-                    className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
-                      isContractLocked ? 'cursor-not-allowed' : ''
-                    }`}
+                    onChange={(e) => setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="odontoConjugado" className={`ml-2 text-sm ${
-                    isContractLocked ? 'text-gray-400' : 'text-gray-700'
-                  }`}>
+                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700">
                     Inclui cobertura odontológica
                   </label>
                 </div>
@@ -1178,15 +1122,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       type="checkbox"
                       id="livreAdesao"
                       checked={contractData.livreAdesao}
-                      onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, livreAdesao: e.target.checked }))}
-                      disabled={isContractLocked}
-                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
-                        isContractLocked ? 'cursor-not-allowed' : ''
-                      }`}
+                      onChange={(e) => setContractData(prev => ({ ...prev, livreAdesao: e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <label htmlFor="livreAdesao" className={`ml-2 text-sm ${
-                      isContractLocked ? 'text-gray-400' : 'text-gray-700'
-                    }`}>
+                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700">
                       Livre adesão
                     </label>
                   </div>
@@ -1196,15 +1135,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       type="checkbox"
                       id="compulsorio"
                       checked={contractData.compulsorio}
-                      onChange={(e) => !isContractLocked && setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
-                      disabled={isContractLocked}
-                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
-                        isContractLocked ? 'cursor-not-allowed' : ''
-                      }`}
+                      onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <label htmlFor="compulsorio" className={`ml-2 text-sm ${
-                      isContractLocked ? 'text-gray-400' : 'text-gray-700'
-                    }`}>
+                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
                       Compulsório
                     </label>
                   </div>

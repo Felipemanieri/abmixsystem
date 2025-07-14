@@ -10,7 +10,6 @@ import ProposalSelector from './ProposalSelector';
 import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
-import ProposalManager, { ProposalData } from '../services/proposalManager';
 
 interface ImplantacaoPortalProps {
   user: any;
@@ -60,8 +59,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
-  const [proposalManager] = useState(() => ProposalManager.getInstance());
-  const [allProposals, setAllProposals] = useState<ProposalData[]>([]);
   
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -101,29 +98,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   ]);
   const [newMessage, setNewMessage] = useState('');
 
-  // Sincronizar propostas em tempo real
-  useEffect(() => {
-    const updateAllProposals = () => {
-      const proposals = proposalManager.getAllProposals();
-      setAllProposals(proposals);
-    };
-
-    // Carregar propostas iniciais
-    updateAllProposals();
-
-    // Subscribir para mudanças
-    proposalManager.subscribe(updateAllProposals);
-
-    return () => {
-      proposalManager.unsubscribe(updateAllProposals);
-    };
-  }, [proposalManager]);
-
   // Inicializar status dos proposals e escutar mudanças
   useEffect(() => {
     const initializeStatuses = () => {
       const statusMap = new Map<string, ProposalStatus>();
-      allProposals.forEach(proposal => {
+      proposals.forEach(proposal => {
         statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
       });
       setProposalStatuses(statusMap);
@@ -141,7 +120,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     return () => {
       statusManager.unsubscribe(handleStatusChange);
     };
-  }, [statusManager, allProposals]);
+  }, [statusManager]);
 
   const handleStatusUpdate = (proposalId: string, newStatus: ProposalStatus) => {
     statusManager.updateStatus(proposalId, newStatus);
@@ -569,20 +548,20 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {allProposals.map((proposal) => (
+              {filteredProposals.map((proposal) => (
                 <tr key={proposal.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button 
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id.replace('VEND', 'ABM').slice(0, 6)}`, '_blank')}
                       className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
                     >
-                      {proposal.id}
+                      {proposal.id.replace('VEND', 'ABM').slice(0, 6)}
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{proposal.clientName}</div>
-                      <div className="text-sm text-gray-500">{proposal.clientToken}</div>
+                      <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                      <div className="text-sm text-gray-500">{proposal.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -599,7 +578,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="text-sm text-gray-900">{proposal.plan}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">R$ {proposal.value}</div>
+                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
@@ -680,18 +659,17 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${proposal.progress}%` }}
-                      ></div>
+                    <div className="w-48">
+                      <ProgressBar 
+                        proposal={proposal}
+                        className="w-full"
+                      />
                     </div>
-                    <span className="text-xs text-gray-500 mt-1">{proposal.progress}%</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
-                      value="medium"
-                      onChange={(e) => showNotification(`Prioridade alterada para ${e.target.value}`, 'success')}
+                      value={proposal.priority}
+                      onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
                       className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
                       style={{
                         backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
