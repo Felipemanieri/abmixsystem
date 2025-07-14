@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X, UserPlus, Trash2, Edit3 } from 'lucide-react';
+import { LogOut, BarChart3, Users, FileText, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Download, Calendar, Filter, Search, Bell, Settings, Target, PieChart, Calculator, MessageSquare, X, UserPlus, Trash2, Edit3, ChevronDown } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -32,9 +32,36 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
   const queryClientInstance = useQueryClient();
   
+  // Estados para filtros
+  const [filterVendor, setFilterVendor] = useState<string>('');
+  const [filterStatus, setFilterStatus] = useState<string>('');
+  const [filterDate, setFilterDate] = useState<string>('');
+  
   // Hook para propostas com sincronização em tempo real
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   useRealTimeProposals();
+
+  // Filtrar propostas
+  const filteredProposals = realProposals.filter((proposal) => {
+    // Transformar dados para filtros
+    const vendedor = 'Ana Caroline'; // Mock data conforme imagem
+    const status = proposal.status === 'draft' ? 'draft' : 
+                  proposal.status === 'completed' ? 'implantado' : 
+                  proposal.status === 'analise' ? 'analise' : 'observacao';
+    const date = new Date(proposal.createdAt).toISOString().split('T')[0];
+
+    // Aplicar filtros
+    if (filterVendor && !vendedor.toLowerCase().includes(filterVendor.toLowerCase())) {
+      return false;
+    }
+    if (filterStatus && status !== filterStatus) {
+      return false;
+    }
+    if (filterDate && date !== filterDate) {
+      return false;
+    }
+    return true;
+  });
 
   // Inicializar status e escutar mudanças
   useEffect(() => {
@@ -521,110 +548,157 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
             {/* Acompanhamento de Vendas */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Acompanhamento de Vendas ({realProposals.length})
-                </h2>
-              </div>
-              <div className="p-6 space-y-4">
-                {realProposals.map((proposal) => {
-                  // Transformar dados para formato compatível
-                  const transformedProposal = {
-                    ...proposal,
-                    cliente: proposal.contractData?.nomeEmpresa || 'Cliente não informado',
-                    plano: proposal.contractData?.planoContratado || 'N/A',
-                    valor: proposal.contractData?.valor || '0',
-                    progresso: proposal.clientCompleted ? 80 : 20,
-                    vendedor: 'Vendedor',
-                    priority: 'medium' as const
-                  };
-
-                  return (
-                    <div key={proposal.id} className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-                      <div className="flex items-start gap-6">
-                        {/* Progress Bar Vertical */}
-                        <div className="flex flex-col items-center">
-                          <div className="w-4 h-24 bg-gray-200 rounded-full relative overflow-hidden">
-                            <div 
-                              className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-full transition-all duration-300"
-                              style={{ height: `${transformedProposal.progresso}%` }}
-                            ></div>
-                          </div>
-                          <span className="text-xs font-medium text-gray-600 mt-2">{transformedProposal.progresso}%</span>
-                        </div>
-
-                        {/* Client Info */}
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <div className="flex items-center gap-3 mb-2">
-                                <button 
-                                  onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                                  className="text-lg font-bold text-blue-600 hover:text-blue-800 underline"
-                                >
-                                  {proposal.abmId || `ID-${proposal.id.slice(-6)}`}
-                                </button>
-                                <div className="flex items-center gap-2">
-                                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Prioridade Média
-                                  </span>
-                                </div>
-                              </div>
-                              <h3 className="text-xl font-semibold text-gray-900 mb-1">{transformedProposal.cliente}</h3>
-                              <p className="text-sm text-gray-500 mb-2">CNPJ: {proposal.contractData?.cnpj || 'Não informado'}</p>
-                              <div className="flex items-center gap-4 text-sm text-gray-600">
-                                <div className="flex items-center gap-2">
-                                  <Users className="w-4 h-4" />
-                                  <span>{transformedProposal.vendedor}</span>
-                                </div>
-                                <div>Plano: {transformedProposal.plano}</div>
-                                <div className="font-medium">R$ {transformedProposal.valor}</div>
-                                <div>{new Date(proposal.createdAt).toLocaleDateString('pt-BR')}</div>
-                              </div>
-                            </div>
-
-                            {/* Status - Read Only */}
-                            <div className="text-right">
-                              <div className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-700 border">
-                                {proposal.status === 'draft' ? 'RASCUNHO' : 
-                                 proposal.status === 'completed' ? 'FINALIZADO' : 
-                                 proposal.status?.toUpperCase() || 'PROCESSANDO'}
-                              </div>
-                              <p className="text-xs text-gray-500 mt-1">Somente leitura</p>
-                            </div>
-                          </div>
-
-                          {/* View Only Actions */}
-                          <div className="flex flex-wrap gap-2 mt-4">
-                            <button
-                              onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
-                              title="Ver no Google Drive"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                              className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
-                              title="Link do Cliente"
-                            >
-                              <FileText className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => showNotification('Visualizando relatório...', 'info')}
-                              className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
-                              title="Relatório"
-                            >
-                              <BarChart3 className="w-4 h-4" />
-                            </button>
-                            <span className="inline-flex items-center px-3 py-1 text-xs text-gray-500 bg-gray-100 rounded-md">
-                              Apenas visualização
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Propostas ({filteredProposals.length})
+                  </h2>
+                  
+                  {/* Filtros */}
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium text-gray-600">Vendedor:</label>
+                      <select 
+                        value={filterVendor}
+                        onChange={(e) => setFilterVendor(e.target.value)}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">Todos</option>
+                        <option value="Ana Caroline">Ana Caroline</option>
+                        <option value="Bruna Garcia">Bruna Garcia</option>
+                        <option value="Carlos Silva">Carlos Silva</option>
+                        <option value="Diana Santos">Diana Santos</option>
+                      </select>
                     </div>
-                  );
-                })}
+                    
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium text-gray-600">Status:</label>
+                      <select 
+                        value={filterStatus}
+                        onChange={(e) => setFilterStatus(e.target.value)}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">Todos</option>
+                        <option value="observacao">OBSERVAÇÃO</option>
+                        <option value="analise">ANÁLISE</option>
+                        <option value="assinatura_ds">ASSINATURA DS</option>
+                        <option value="implantado">IMPLANTADO</option>
+                        <option value="pendencia">PENDÊNCIA</option>
+                        <option value="draft">RASCUNHO</option>
+                      </select>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium text-gray-600">Data:</label>
+                      <input 
+                        type="date" 
+                        value={filterDate}
+                        onChange={(e) => setFilterDate(e.target.value)}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tabela de Propostas */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        CLIENTE
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        VENDEDOR
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        PLANO
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        VALOR
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        STATUS
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        PROGRESSO
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredProposals.map((proposal) => {
+                      // Transformar dados para formato compatível
+                      const transformedProposal = {
+                        ...proposal,
+                        cliente: proposal.contractData?.nomeEmpresa || 'Cliente não informado',
+                        plano: proposal.contractData?.planoContratado || 'N/A',
+                        valor: proposal.contractData?.valor || '0',
+                        progresso: proposal.clientCompleted ? 80 : 20,
+                        vendedor: 'Ana Caroline', // Mock data conforme imagem
+                        priority: 'medium' as const
+                      };
+
+                      return (
+                        <tr key={proposal.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <button 
+                              onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                              className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                            >
+                              {proposal.abmId || `ABM${proposal.id.slice(-3)}`}
+                            </button>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{transformedProposal.cliente}</div>
+                              <div className="text-sm text-gray-500">VEND001-PROP123</div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                                <Users className="w-4 h-4 text-teal-600" />
+                              </div>
+                              <div className="ml-3">
+                                <div className="text-sm text-gray-900">{transformedProposal.vendedor}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{transformedProposal.plano}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">R$ {transformedProposal.valor}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-md bg-sky-100 text-sky-800 border">
+                              {proposal.status === 'draft' ? 'OBSERVAÇÃO' : 
+                               proposal.status === 'completed' ? 'IMPLANTADO' : 
+                               proposal.status === 'analise' ? 'ANÁLISE' :
+                               'OBSERVAÇÃO'}
+                              <ChevronDown className="w-4 h-4 ml-1" />
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex flex-col items-start">
+                              <div className="text-sm font-medium text-gray-900 mb-1">Progresso</div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-gradient-to-r from-orange-400 to-orange-500 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${transformedProposal.progresso}%` }}
+                                ></div>
+                              </div>
+                              <div className="text-xs text-gray-500 mt-1">Progresso em andamento</div>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
 
