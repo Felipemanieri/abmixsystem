@@ -999,26 +999,31 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Ações Rápidas</h3>
-            <div className="flex space-x-3">
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 mb-6">
+            <h3 className="text-sm font-semibold text-gray-700 mb-4">Ações Rápidas</h3>
+            <div className="flex space-x-4">
               <button
                 onClick={() => setShowProposalSelector(true)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                className="group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02]"
               >
-                <Search className="w-4 h-4 mr-2" />
-                Selecionar Proposta
+                <div className="absolute inset-0 bg-blue-700 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <Search className="w-4 h-4 mr-2 relative z-10" />
+                <span className="relative z-10">Selecionar Proposta</span>
               </button>
+              
               <button
                 onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
-                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
+                className={`group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] ${
                   editingProposalId 
-                    ? 'bg-purple-600 hover:bg-purple-700 focus:ring-purple-500' 
-                    : 'bg-gray-600 hover:bg-gray-700 focus:ring-gray-500'
+                    ? 'bg-purple-600 hover:bg-purple-700' 
+                    : 'bg-gray-600 hover:bg-gray-700'
                 }`}
               >
-                <FileText className="w-4 h-4 mr-2" />
-                Google Drive
+                <div className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity ${
+                  editingProposalId ? 'bg-purple-700' : 'bg-gray-700'
+                }`}></div>
+                <FileText className="w-4 h-4 mr-2 relative z-10" />
+                <span className="relative z-10">Google Drive</span>
               </button>
             </div>
           </div>
