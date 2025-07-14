@@ -67,6 +67,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
   // Debug: Log das propostas
   console.log('Propostas no ImplantacaoPortal:', realProposals);
+  console.log('Loading status:', proposalsLoading);
 
   // Função para atualizar status
   const handleStatusUpdate = async (proposalId: string, newStatus: ProposalStatus) => {
@@ -489,7 +490,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     }
   };
 
-  const filteredProposals = realProposals?.filter(proposal => {
+  // Use propostas simuladas se as reais estiverem vazias (para demonstração)
+  const proposalsToShow = realProposals && realProposals.length > 0 ? realProposals : proposals;
+
+  const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
     const matchesSearch = proposal.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          proposal.abmId?.toLowerCase().includes(searchTerm.toLowerCase()) ||

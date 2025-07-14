@@ -46,12 +46,14 @@ export function useProposals() {
   const { data: proposals = [], isLoading, error } = useQuery({
     queryKey: ['/api/proposals'],
     select: (data: any[]) => {
+      console.log('Dados recebidos da API:', data);
       return data.map((proposal): ProposalData => ({
         ...proposal,
         cliente: proposal.contractData?.nomeEmpresa || 'N/A',
         plano: proposal.contractData?.planoContratado || 'N/A',
         valor: proposal.contractData?.valor || '0',
-        progresso: calculateProgress(proposal)
+        progresso: calculateProgress(proposal),
+        priority: proposal.priority || 'medium' // Garantir que priority existe
       }));
     },
     refetchInterval: 5000, // Atualizar a cada 5 segundos
