@@ -1463,103 +1463,101 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
       </header>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-sm min-h-screen">
-          <nav className="p-4">
-            <div className="space-y-2">
-              <button
-                onClick={() => setActiveView('dashboard')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'dashboard' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <BarChart3 size={18} className="mr-3" />
-                Dashboard
-              </button>
-              
-              <button
-                onClick={() => setActiveView('metas')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'metas' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Target size={18} className="mr-3" />
-                Metas
-              </button>
-              
-              <button
-                onClick={() => setActiveView('premiacao')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'premiacao' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Award size={18} className="mr-3" />
-                Premiação
-              </button>
-              
-              <button
-                onClick={() => setActiveView('analytics')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'analytics' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <PieChart size={18} className="mr-3" />
-                Analytics
-              </button>
-              
-              <button
-                onClick={() => setActiveView('team')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'team' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Users size={18} className="mr-3" />
-                Equipe
-              </button>
-              
-              <button
-                onClick={() => setActiveView('propostas')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'propostas' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <FileText size={18} className="mr-3" />
-                Propostas
-              </button>
-              
-              <button
-                onClick={() => setActiveView('relatorios')}
-                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                  activeView === 'relatorios' 
-                    ? 'bg-blue-100 text-blue-700' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Calculator size={18} className="mr-3" />
-                Relatórios
-              </button>
-            </div>
-          </nav>
-        </aside>
+      {/* Navigation Tabs */}
+      <nav className="bg-white border-b shadow-sm">
+        <div className="px-6">
+          <div className="flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveView('dashboard')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'dashboard' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <BarChart3 size={18} className="mr-2" />
+              Dashboard
+            </button>
+            
+            <button
+              onClick={() => setActiveView('metas')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'metas' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Target size={18} className="mr-2" />
+              Metas
+            </button>
+            
+            <button
+              onClick={() => setActiveView('premiacao')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'premiacao' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Award size={18} className="mr-2" />
+              Premiação
+            </button>
+            
+            <button
+              onClick={() => setActiveView('analytics')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'analytics' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <PieChart size={18} className="mr-2" />
+              Analytics
+            </button>
+            
+            <button
+              onClick={() => setActiveView('team')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'team' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Users size={18} className="mr-2" />
+              Equipe
+            </button>
+            
+            <button
+              onClick={() => setActiveView('propostas')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'propostas' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <FileText size={18} className="mr-2" />
+              Propostas
+            </button>
+            
+            <button
+              onClick={() => setActiveView('relatorios')}
+              className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                activeView === 'relatorios' 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Calculator size={18} className="mr-2" />
+              Relatórios
+            </button>
+          </div>
+        </div>
+      </nav>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {renderContent()}
-        </main>
-      </div>
+      {/* Main Content */}
+      <main className="p-6">
+        {renderContent()}
+      </main>
 
       {/* Modals */}
       {showNotifications && (
