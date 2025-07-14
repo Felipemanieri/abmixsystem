@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink, Phone } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -755,7 +755,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-1">
+                    <div className="flex flex-wrap gap-1">
+                      {/* Ações Originais */}
                       <button
                         onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
                         className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
@@ -763,6 +764,43 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       >
                         <Eye className="w-4 h-4" />
                       </button>
+                      <button
+                        onClick={() => setEditingProposalId(proposal.id)}
+                        className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                        title="Editar Proposta"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Enviando para automação...', 'info')}
+                        className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
+                        title="Enviar para Automação"
+                      >
+                        <Zap className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
+                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                        title="Sincronizar Google Sheets"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                        className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                        title="Link do Cliente"
+                      >
+                        <Link className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Enviando notificação...', 'info')}
+                        className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
+                        title="Notificar Cliente"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                      </button>
+                      
+                      {/* Novas Ações Adicionadas */}
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
@@ -778,10 +816,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                           const message = `Olá! Sua proposta está disponível em: ${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
                           window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
                         }}
-                        className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
                         title="Enviar via WhatsApp"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <Send className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => {
@@ -796,17 +834,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       </button>
                       <button
                         onClick={() => showNotification('Download iniciado...', 'info')}
-                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                        className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
                         title="Download de Documentos"
                       >
                         <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setEditingProposalId(proposal.id)}
-                        className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
-                        title="Editar Proposta"
-                      >
-                        <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => showNotification('Proposta removida!', 'success')}
@@ -823,22 +854,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         <ExternalLink className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => showNotification('Enviando para automação...', 'info')}
-                        className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
-                        title="Enviar para Automação"
-                      >
-                        <Send className="w-4 h-4" />
-                      </button>
-                      <button
                         onClick={() => showNotification('Proposta aprovada!', 'success')}
-                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
+                        className="p-2 text-lime-600 hover:text-lime-800 hover:bg-lime-50 rounded-md transition-colors"
                         title="Aprovar Proposta"
                       >
                         <CheckCircle className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => showNotification('Alerta enviado!', 'warning')}
-                        className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                        className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
                         title="Alerta"
                       >
                         <AlertCircle className="w-4 h-4" />
@@ -862,7 +886,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       </button>
                       <button
                         onClick={() => setShowInternalMessage(true)}
-                        className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
+                        className="p-2 text-violet-600 hover:text-violet-800 hover:bg-violet-50 rounded-md transition-colors"
                         title="Mensagem Interna"
                       >
                         <MessageSquare className="w-4 h-4" />
