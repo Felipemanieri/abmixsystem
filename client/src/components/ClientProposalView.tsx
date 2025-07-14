@@ -535,48 +535,116 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
 
           {/* Contract Data - Read Only */}
           <div className="p-6 border-b bg-gray-50">
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-6">
               <Building className="h-6 w-6 text-blue-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">Dados do Contrato</h2>
               <Lock className="h-4 w-4 text-gray-500 ml-2" />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Nome da Empresa *</label>
                 <input
                   type="text"
                   value={proposal.contractData.nomeEmpresa}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                  placeholder="Ex: Empresa ABC Ltda"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
                   readOnly
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">CNPJ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">CNPJ *</label>
                 <input
                   type="text"
                   value={proposal.contractData.cnpj}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                  placeholder="00.000.000/0000-00"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
                   readOnly
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Plano Contratado</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Plano Contratado *</label>
                 <input
                   type="text"
                   value={proposal.contractData.planoContratado}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                  placeholder="Ex: Plano Empresarial Premium - Cobertura"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
                   readOnly
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Valor</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Valor Mensal (R$) *</label>
                 <input
                   type="text"
-                  value={proposal.contractData.valor?.includes('R$') ? proposal.contractData.valor : `R$ ${proposal.contractData.valor}`}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                  value={proposal.contractData.valor?.toString() || "0,00"}
+                  placeholder="0,00"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
                   readOnly
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Início da Vigência *</label>
+                <input
+                  type="text"
+                  value={proposal.contractData.inicioVigencia}
+                  placeholder="dd/mm/aaaa"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  readOnly
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Período mínimo de vigência *</label>
+                <input
+                  type="text"
+                  value={proposal.contractData.periodoMinimo || "Selecione o período"}
+                  placeholder="Selecione o período"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  readOnly
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-3">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={proposal.contractData.odontoConjugado}
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                  disabled
+                />
+                <label className="text-sm text-gray-700">Inclui cobertura odontológica</label>
+              </div>
+              
+              <div className="flex items-center space-x-6">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={proposal.contractData.livreAdesao}
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                    disabled
+                  />
+                  <label className="text-sm text-gray-700">Livre adesão</label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={proposal.contractData.compulsorio}
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                    disabled
+                  />
+                  <label className="text-sm text-gray-700">Compulsório</label>
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={proposal.contractData.aproveitamentoCongenere}
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                  disabled
+                />
+                <label className="text-sm text-gray-700">Aproveitamento de carência congênere</label>
               </div>
             </div>
           </div>
