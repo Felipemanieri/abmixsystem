@@ -1467,7 +1467,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Sidebar */}
         <aside className="w-64 bg-white shadow-sm min-h-screen">
           <nav className="p-4">
-            <div className="space-y-1">
+            <div className="space-y-2">
               <button
                 onClick={() => setActiveView('dashboard')}
                 className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
