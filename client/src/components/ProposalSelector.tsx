@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { X, Search, Filter, User, Calendar, FileText, Eye } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import { ProposalStatus } from '../../../shared/statusSystem';
+import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '../lib/queryClient';
 
 interface ProposalSelectorProps {
   isOpen: boolean;
@@ -29,12 +31,19 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [vendorFilter, setVendorFilter] = useState('all');
 
+  // Buscar vendedores reais do banco de dados
+  const { data: vendors = [] } = useQuery({
+    queryKey: ['/api/vendors'],
+    queryFn: () => apiRequest('/api/vendors'),
+    retry: false,
+  });
+
   const mockProposals: ProposalItem[] = [
     {
       id: 'VEND001-PROP123',
       abmId: 'ABM001',
       client: 'Tech Solutions Ltda',
-      vendor: 'Carlos Vendedor',
+      vendor: 'Ana Caroline Terto',
       plan: 'Plano Empresarial Premium',
       value: 'R$ 1.250,00',
       status: 'analise',
@@ -47,7 +56,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       id: 'VEND002-PROP124',
       abmId: 'ABM002',
       client: 'Inovação Digital Corp',
-      vendor: 'Ana Vendedora',
+      vendor: 'Bruna Garcia',
       plan: 'Plano Família Premium',
       value: 'R$ 890,00',
       status: 'pendencia',
@@ -60,7 +69,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       id: 'VEND003-PROP125',
       abmId: 'ABM003',
       client: 'Construtora Alpha',
-      vendor: 'Roberto Silva',
+      vendor: 'Fabiana Ferreira',
       plan: 'Plano Individual Plus',
       value: 'R$ 450,00',
       status: 'implantado',
@@ -73,7 +82,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       id: 'VEND004-PROP126',
       abmId: 'ABM004',
       client: 'Startup Moderna',
-      vendor: 'Diana Santos',
+      vendor: 'Gabrielle Fernandes',
       plan: 'Plano Empresarial Standard',
       value: 'R$ 780,00',
       status: 'assinatura_proposta',
@@ -86,7 +95,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       id: 'VEND005-PROP127',
       abmId: 'ABM005',
       client: 'Consultoria Avançada',
-      vendor: 'Eduardo Lima',
+      vendor: 'Isabela Velasquez',
       plan: 'Plano Família Standard',
       value: 'R$ 650,00',
       status: 'aguar_pagamento',
@@ -110,7 +119,11 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
     }
   ];
 
-  const vendors = Array.from(new Set(mockProposals.map(p => p.vendor)));
+  // Obter lista única de vendedores das propostas + vendedores do banco de dados
+  const allVendorNames = Array.from(new Set([
+    ...mockProposals.map(p => p.vendor),
+    ...vendors.map((v: any) => v.name)
+  ]));
 
   const filteredProposals = mockProposals.filter(proposal => {
     const matchesSearch = 
@@ -227,8 +240,8 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">Todos os Vendedores</option>
-                  {vendors.map(vendor => (
-                    <option key={vendor} value={vendor}>{vendor}</option>
+                  {allVendorNames.map(vendorName => (
+                    <option key={vendorName} value={vendorName}>{vendorName}</option>
                   ))}
                 </select>
               </div>

@@ -136,11 +136,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   };
 
   const handleSelectProposal = (proposalId: string) => {
-    console.log('Selecionando proposta para edição:', proposalId);
     setEditingProposalId(proposalId);
     setActiveTab('editor');
     setShowProposalSelector(false); // Fechar o modal
-    showNotification(`Abrindo proposta ${proposalId} para edição completa...`, 'info');
+    // Removida mensagem sobre Google Sheets - agora apenas abre o editor silenciosamente
   };
 
   const handleBackFromEditor = () => {

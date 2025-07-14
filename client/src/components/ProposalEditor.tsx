@@ -212,7 +212,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
     // Simular carregamento dos dados do Google Sheets
     setTimeout(() => {
       setIsLoading(false);
-      showNotification(`Dados da proposta ${proposalId} carregados do Google Sheets`, 'success');
+      // Dados carregados silenciosamente - sem notificação
     }, 1500);
   }, [proposalId]);
 
