@@ -518,6 +518,116 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
               </div>
             </div>
 
+            {/* Acompanhamento de Vendas */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Acompanhamento de Vendas ({realProposals.length})
+                </h2>
+              </div>
+              <div className="p-6 space-y-4">
+                {realProposals.map((proposal) => {
+                  // Transformar dados para formato compatível
+                  const transformedProposal = {
+                    ...proposal,
+                    cliente: proposal.contractData?.nomeEmpresa || 'Cliente não informado',
+                    plano: proposal.contractData?.planoContratado || 'N/A',
+                    valor: proposal.contractData?.valor || '0',
+                    progresso: proposal.clientCompleted ? 80 : 20,
+                    vendedor: 'Vendedor',
+                    priority: 'medium' as const
+                  };
+
+                  return (
+                    <div key={proposal.id} className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+                      <div className="flex items-start gap-6">
+                        {/* Progress Bar Vertical */}
+                        <div className="flex flex-col items-center">
+                          <div className="w-4 h-24 bg-gray-200 rounded-full relative overflow-hidden">
+                            <div 
+                              className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-full transition-all duration-300"
+                              style={{ height: `${transformedProposal.progresso}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-xs font-medium text-gray-600 mt-2">{transformedProposal.progresso}%</span>
+                        </div>
+
+                        {/* Client Info */}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <div className="flex items-center gap-3 mb-2">
+                                <button 
+                                  onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                                  className="text-lg font-bold text-blue-600 hover:text-blue-800 underline"
+                                >
+                                  {proposal.abmId || `ID-${proposal.id.slice(-6)}`}
+                                </button>
+                                <div className="flex items-center gap-2">
+                                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Prioridade Média
+                                  </span>
+                                </div>
+                              </div>
+                              <h3 className="text-xl font-semibold text-gray-900 mb-1">{transformedProposal.cliente}</h3>
+                              <p className="text-sm text-gray-500 mb-2">CNPJ: {proposal.contractData?.cnpj || 'Não informado'}</p>
+                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                                <div className="flex items-center gap-2">
+                                  <Users className="w-4 h-4" />
+                                  <span>{transformedProposal.vendedor}</span>
+                                </div>
+                                <div>Plano: {transformedProposal.plano}</div>
+                                <div className="font-medium">R$ {transformedProposal.valor}</div>
+                                <div>{new Date(proposal.createdAt).toLocaleDateString('pt-BR')}</div>
+                              </div>
+                            </div>
+
+                            {/* Status - Read Only */}
+                            <div className="text-right">
+                              <div className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-700 border">
+                                {proposal.status === 'draft' ? 'RASCUNHO' : 
+                                 proposal.status === 'completed' ? 'FINALIZADO' : 
+                                 proposal.status?.toUpperCase() || 'PROCESSANDO'}
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">Somente leitura</p>
+                            </div>
+                          </div>
+
+                          {/* View Only Actions */}
+                          <div className="flex flex-wrap gap-2 mt-4">
+                            <button
+                              onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                              title="Ver no Google Drive"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                              className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                              title="Link do Cliente"
+                            >
+                              <FileText className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => showNotification('Visualizando relatório...', 'info')}
+                              className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                              title="Relatório"
+                            >
+                              <BarChart3 className="w-4 h-4" />
+                            </button>
+                            <span className="inline-flex items-center px-3 py-1 text-xs text-gray-500 bg-gray-100 rounded-md">
+                              Apenas visualização
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Performance dos Vendedores */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">

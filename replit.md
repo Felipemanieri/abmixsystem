@@ -177,6 +177,14 @@ The application provides role-based portals with specific functionality:
   - Copy link functionality with success notifications
   - Document download and sharing capabilities
 
+- **Added Sales Tracking to Supervisor Portal**:
+  - Integrated visual sales tracking similar to Implementation portal layout
+  - Vertical card layout with progress bars showing completion percentage
+  - Read-only view - no editing capabilities for status or priority
+  - Real-time synchronization with database proposals
+  - Limited action buttons: View Drive, Client Link, and Reports only
+  - Clear "Somente leitura" (Read Only) indicators throughout interface
+
 ### Individual Vendor Authentication System Implementation (Jan 14, 2025)
 - **Implemented complete individual vendor authentication**:
   - Email-based login system for each vendor with personalized access
