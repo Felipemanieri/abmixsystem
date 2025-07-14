@@ -246,6 +246,218 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === VENDOR TARGETS ROUTES ===
+  
+  // Get all vendor targets
+  app.get("/api/vendor-targets", async (req, res) => {
+    try {
+      const targets = await storage.getAllVendorTargets();
+      res.json(targets);
+    } catch (error) {
+      console.error("Erro ao buscar metas dos vendedores:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get vendor targets by vendor ID
+  app.get("/api/vendor-targets/:vendorId", async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const targets = await storage.getVendorTargets(vendorId);
+      res.json(targets);
+    } catch (error) {
+      console.error("Erro ao buscar metas do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create vendor target
+  app.post("/api/vendor-targets", async (req, res) => {
+    try {
+      const { insertVendorTargetSchema } = await import("@shared/schema");
+      const validatedData = insertVendorTargetSchema.parse(req.body);
+      const target = await storage.createVendorTarget(validatedData);
+      res.json(target);
+    } catch (error) {
+      console.error("Erro ao criar meta do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update vendor target
+  app.put("/api/vendor-targets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updatedTarget = await storage.updateVendorTarget(id, req.body);
+      res.json(updatedTarget);
+    } catch (error) {
+      console.error("Erro ao atualizar meta do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Delete vendor target
+  app.delete("/api/vendor-targets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteVendorTarget(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Erro ao deletar meta do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // === TEAM TARGETS ROUTES ===
+  
+  // Get all team targets
+  app.get("/api/team-targets", async (req, res) => {
+    try {
+      const targets = await storage.getAllTeamTargets();
+      res.json(targets);
+    } catch (error) {
+      console.error("Erro ao buscar metas da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create team target
+  app.post("/api/team-targets", async (req, res) => {
+    try {
+      const { insertTeamTargetSchema } = await import("@shared/schema");
+      const validatedData = insertTeamTargetSchema.parse(req.body);
+      const target = await storage.createTeamTarget(validatedData);
+      res.json(target);
+    } catch (error) {
+      console.error("Erro ao criar meta da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update team target
+  app.put("/api/team-targets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updatedTarget = await storage.updateTeamTarget(id, req.body);
+      res.json(updatedTarget);
+    } catch (error) {
+      console.error("Erro ao atualizar meta da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Delete team target
+  app.delete("/api/team-targets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteTeamTarget(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Erro ao deletar meta da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // === AWARDS ROUTES ===
+  
+  // Get all awards
+  app.get("/api/awards", async (req, res) => {
+    try {
+      const awards = await storage.getAllAwards();
+      res.json(awards);
+    } catch (error) {
+      console.error("Erro ao buscar premiações:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get awards by vendor ID
+  app.get("/api/awards/:vendorId", async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const awards = await storage.getVendorAwards(vendorId);
+      res.json(awards);
+    } catch (error) {
+      console.error("Erro ao buscar premiações do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create award
+  app.post("/api/awards", async (req, res) => {
+    try {
+      const { insertAwardSchema } = await import("@shared/schema");
+      const validatedData = insertAwardSchema.parse(req.body);
+      const award = await storage.createAward(validatedData);
+      res.json(award);
+    } catch (error) {
+      console.error("Erro ao criar premiação:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update award
+  app.put("/api/awards/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updatedAward = await storage.updateAward(id, req.body);
+      res.json(updatedAward);
+    } catch (error) {
+      console.error("Erro ao atualizar premiação:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Delete award
+  app.delete("/api/awards/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteAward(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Erro ao deletar premiação:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // === ANALYTICS ROUTES ===
+  
+  // Get vendor statistics
+  app.get("/api/analytics/vendor/:vendorId", async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const { month, year } = req.query;
+      
+      const stats = await storage.getVendorStats(
+        vendorId,
+        month ? parseInt(month as string) : undefined,
+        year ? parseInt(year as string) : undefined
+      );
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Erro ao buscar estatísticas do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get team statistics
+  app.get("/api/analytics/team", async (req, res) => {
+    try {
+      const { month, year } = req.query;
+      
+      const stats = await storage.getTeamStats(
+        month ? parseInt(month as string) : undefined,
+        year ? parseInt(year as string) : undefined
+      );
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Erro ao buscar estatísticas da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

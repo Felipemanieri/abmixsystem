@@ -58,3 +58,51 @@ export const proposals = pgTable("proposals", {
 export const insertProposalSchema = createInsertSchema(proposals);
 export type InsertProposal = z.infer<typeof insertProposalSchema>;
 export type Proposal = typeof proposals.$inferSelect;
+
+// Metas individuais dos vendedores
+export const vendorTargets = pgTable("vendor_targets", {
+  id: serial("id").primaryKey(),
+  vendorId: integer("vendor_id").references(() => vendors.id),
+  month: integer("month").notNull(),
+  year: integer("year").notNull(),
+  targetValue: text("target_value").notNull(),
+  targetProposals: integer("target_proposals").notNull(),
+  bonus: text("bonus").default("0"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Metas de equipe
+export const teamTargets = pgTable("team_targets", {
+  id: serial("id").primaryKey(),
+  month: integer("month").notNull(),
+  year: integer("year").notNull(),
+  targetValue: text("target_value").notNull(),
+  targetProposals: integer("target_proposals").notNull(),
+  teamBonus: text("team_bonus").default("0"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Premiações e incentivos
+export const awards = pgTable("awards", {
+  id: serial("id").primaryKey(),
+  vendorId: integer("vendor_id").references(() => vendors.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  value: text("value").notNull(),
+  type: text("type").notNull(), // 'monetary', 'recognition', 'bonus'
+  dateAwarded: timestamp("date_awarded").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertVendorTargetSchema = createInsertSchema(vendorTargets);
+export const insertTeamTargetSchema = createInsertSchema(teamTargets);
+export const insertAwardSchema = createInsertSchema(awards);
+
+export type InsertVendorTarget = z.infer<typeof insertVendorTargetSchema>;
+export type VendorTarget = typeof vendorTargets.$inferSelect;
+export type InsertTeamTarget = z.infer<typeof insertTeamTargetSchema>;
+export type TeamTarget = typeof teamTargets.$inferSelect;
+export type InsertAward = z.infer<typeof insertAwardSchema>;
+export type Award = typeof awards.$inferSelect;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
-import ProgressBar from './ProgressBar';
+import SimpleProgressBar from './SimpleProgressBar';
 import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
@@ -17,13 +17,49 @@ interface SupervisorPortalProps {
   onLogout: () => void;
 }
 
-type SupervisorView = 'dashboard' | 'reports' | 'analytics' | 'team' | 'settings';
+type SupervisorView = 'dashboard' | 'metas' | 'premiacao' | 'analytics' | 'team' | 'propostas' | 'relatorios';
+
+interface VendorTarget {
+  id: number;
+  vendorId: number;
+  month: number;
+  year: number;
+  targetValue: string;
+  targetProposals: number;
+  bonus: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface TeamTarget {
+  id: number;
+  month: number;
+  year: number;
+  targetValue: string;
+  targetProposals: number;
+  teamBonus: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Award {
+  id: number;
+  vendorId: number;
+  title: string;
+  description: string;
+  value: string;
+  type: 'monetary' | 'recognition' | 'bonus';
+  dateAwarded: string;
+  createdAt: string;
+}
 
 export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [activeView, setActiveView] = useState<SupervisorView>('dashboard');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   
   // Ativar sincronização em tempo real
   useEffect(() => {
@@ -38,28 +74,67 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
-
-  // Dados KPI
-  const kpiData = {
-    totalRevenue: 'R$ 2.847.320',
-    totalProposals: '847',
-    conversionRate: '68.2%',
-    averageTicket: 'R$ 3.360'
-  };
+  
+  // Estados para metas
+  const [showAddTargetForm, setShowAddTargetForm] = useState(false);
+  const [showAddTeamTargetForm, setShowAddTeamTargetForm] = useState(false);
+  const [editingTarget, setEditingTarget] = useState<VendorTarget | null>(null);
+  const [newTargetData, setNewTargetData] = useState({
+    vendorId: 0,
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
+    targetValue: '',
+    targetProposals: 0,
+    bonus: '0'
+  });
+  
+  // Estados para premiações
+  const [showAddAwardForm, setShowAddAwardForm] = useState(false);
+  const [editingAward, setEditingAward] = useState<Award | null>(null);
+  const [newAwardData, setNewAwardData] = useState({
+    vendorId: 0,
+    title: '',
+    description: '',
+    value: '',
+    type: 'recognition' as const
+  });
 
   // Buscar propostas
   const { data: proposals = [], isLoading: proposalsLoading } = useQuery({
     queryKey: ['/api/proposals'],
     queryFn: () => apiRequest('/api/proposals'),
+    refetchInterval: 1000,
   });
-
-
 
   // Buscar vendedores
   const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
     queryKey: ['/api/vendors'],
     queryFn: () => apiRequest('/api/vendors'),
     retry: false,
+  });
+
+  // Buscar metas dos vendedores
+  const { data: vendorTargets = [], isLoading: targetsLoading } = useQuery({
+    queryKey: ['/api/vendor-targets'],
+    queryFn: () => apiRequest('/api/vendor-targets'),
+  });
+
+  // Buscar metas da equipe
+  const { data: teamTargets = [], isLoading: teamTargetsLoading } = useQuery({
+    queryKey: ['/api/team-targets'],
+    queryFn: () => apiRequest('/api/team-targets'),
+  });
+
+  // Buscar premiações
+  const { data: awards = [], isLoading: awardsLoading } = useQuery({
+    queryKey: ['/api/awards'],
+    queryFn: () => apiRequest('/api/awards'),
+  });
+
+  // Buscar estatísticas da equipe
+  const { data: teamStats = {}, isLoading: teamStatsLoading } = useQuery({
+    queryKey: ['/api/analytics/team', selectedMonth, selectedYear],
+    queryFn: () => apiRequest(`/api/analytics/team?month=${selectedMonth}&year=${selectedYear}`),
   });
 
   // Mutation para criar vendedor
@@ -77,777 +152,1371 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
       setShowAddVendorForm(false);
       setNewVendorData({ name: '', email: '' });
-      showNotification('Login criado com sucesso!', 'success');
+      showNotification('Vendedor adicionado com sucesso!', 'success');
     },
     onError: (error: any) => {
-      showNotification(error.message || 'Erro ao criar login', 'error');
+      showNotification(error.message || 'Erro ao adicionar vendedor', 'error');
     },
   });
 
-  // Mutation para deletar vendedor
-  const deleteVendorMutation = useMutation({
-    mutationFn: async (vendorId: number) => {
-      return apiRequest(`/api/vendors/${vendorId}`, {
+  // Mutation para criar meta de vendedor
+  const addTargetMutation = useMutation({
+    mutationFn: async (targetData: any) => {
+      return apiRequest('/api/vendor-targets', {
+        method: 'POST',
+        body: JSON.stringify(targetData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendor-targets'] });
+      setShowAddTargetForm(false);
+      setNewTargetData({
+        vendorId: 0,
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
+        targetValue: '',
+        targetProposals: 0,
+        bonus: '0'
+      });
+      showNotification('Meta criada com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao criar meta', 'error');
+    },
+  });
+
+  // Mutation para criar meta da equipe
+  const addTeamTargetMutation = useMutation({
+    mutationFn: async (teamTargetData: any) => {
+      return apiRequest('/api/team-targets', {
+        method: 'POST',
+        body: JSON.stringify(teamTargetData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/team-targets'] });
+      setShowAddTeamTargetForm(false);
+      showNotification('Meta da equipe criada com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao criar meta da equipe', 'error');
+    },
+  });
+
+  // Mutation para criar premiação
+  const addAwardMutation = useMutation({
+    mutationFn: async (awardData: any) => {
+      return apiRequest('/api/awards', {
+        method: 'POST',
+        body: JSON.stringify(awardData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/awards'] });
+      setShowAddAwardForm(false);
+      setNewAwardData({
+        vendorId: 0,
+        title: '',
+        description: '',
+        value: '',
+        type: 'recognition'
+      });
+      showNotification('Premiação criada com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao criar premiação', 'error');
+    },
+  });
+
+  // Mutation para deletar meta
+  const deleteTargetMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/vendor-targets/${id}`, {
         method: 'DELETE',
       });
     },
     onSuccess: () => {
-      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
-      showNotification('Login removido com sucesso!', 'success');
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendor-targets'] });
+      showNotification('Meta removida com sucesso!', 'success');
     },
     onError: (error: any) => {
-      showNotification(error.message || 'Erro ao remover login', 'error');
+      showNotification(error.message || 'Erro ao remover meta', 'error');
+    },
+  });
+
+  // Mutation para deletar premiação
+  const deleteAwardMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/awards/${id}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/awards'] });
+      showNotification('Premiação removida com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao remover premiação', 'error');
     },
   });
 
   const handleAddVendor = () => {
-    if (!newVendorData.name || !newVendorData.email) {
-      showNotification('Nome e email são obrigatórios', 'error');
-      return;
-    }
-
-    addVendorMutation.mutate({
-      name: newVendorData.name,
-      email: newVendorData.email,
-      password: '120784',
-      role: 'vendor',
-      active: true,
-    });
-  };
-
-  const handleDeleteVendor = (vendorId: number, vendorName: string) => {
-    if (confirm(`Tem certeza que deseja remover o vendedor ${vendorName}?`)) {
-      deleteVendorMutation.mutate(vendorId);
+    if (newVendorData.name && newVendorData.email) {
+      addVendorMutation.mutate({
+        name: newVendorData.name,
+        email: newVendorData.email,
+        password: "120784",
+        role: "vendor",
+        active: true
+      });
     }
   };
 
-  // Filtrar propostas
+  const handleAddTarget = () => {
+    if (newTargetData.vendorId && newTargetData.targetValue && newTargetData.targetProposals) {
+      addTargetMutation.mutate(newTargetData);
+    }
+  };
+
+  const handleAddTeamTarget = () => {
+    const teamTargetData = {
+      month: selectedMonth,
+      year: selectedYear,
+      targetValue: newTargetData.targetValue,
+      targetProposals: newTargetData.targetProposals,
+      teamBonus: newTargetData.bonus
+    };
+    addTeamTargetMutation.mutate(teamTargetData);
+  };
+
+  const handleAddAward = () => {
+    if (newAwardData.vendorId && newAwardData.title && newAwardData.value) {
+      addAwardMutation.mutate(newAwardData);
+    }
+  };
+
+  const formatCurrency = (value: string) => {
+    if (!value || value === '0') return 'R$ 0,00';
+    const numValue = parseFloat(value.replace(/[^\d]/g, '')) / 100;
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(numValue);
+  };
+
+  const getVendorName = (vendorId: number) => {
+    const vendor = vendors.find(v => v.id === vendorId);
+    return vendor ? vendor.name : 'Vendedor não encontrado';
+  };
+
+  const getMonthName = (month: number) => {
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    return months[month - 1];
+  };
+
+  const getVendorStats = (vendorId: number) => {
+    const vendorProposals = proposals.filter(p => p.vendorId === vendorId);
+    const totalProposals = vendorProposals.length;
+    const totalValue = vendorProposals.reduce((sum, p) => {
+      const value = p.contractData?.valor || "R$ 0";
+      const numericValue = parseInt(value.replace(/[^\d]/g, "")) || 0;
+      return sum + numericValue;
+    }, 0);
+    return { totalProposals, totalValue };
+  };
+
+  const calculateProgress = (vendorId: number, target: VendorTarget) => {
+    const stats = getVendorStats(vendorId);
+    const valueProgress = (stats.totalValue / parseInt(target.targetValue.replace(/[^\d]/g, ""))) * 100;
+    const proposalProgress = (stats.totalProposals / target.targetProposals) * 100;
+    return Math.min(Math.max((valueProgress + proposalProgress) / 2, 0), 100);
+  };
+
   const filteredProposals = proposals.filter(proposal => {
-    if (filterVendor && proposal.vendedor !== filterVendor) return false;
-    if (filterStatus && proposal.status !== filterStatus) return false;
-    if (filterDate) {
-      const proposalDate = new Date(proposal.createdAt || proposal.submissionDate).toISOString().split('T')[0];
-      if (proposalDate !== filterDate) return false;
-    }
-    return true;
+    const vendorMatch = !filterVendor || proposal.vendorId?.toString() === filterVendor;
+    const statusMatch = !filterStatus || proposal.status === filterStatus;
+    const dateMatch = !filterDate || new Date(proposal.createdAt).toDateString() === new Date(filterDate).toDateString();
+    return vendorMatch && statusMatch && dateMatch;
   });
 
-  // Notificações
-  const [notifications, setNotifications] = useState([
-    {
-      id: '1',
-      title: 'Nova Proposta',
-      message: 'Ana Caroline enviou nova proposta para TechCorp',
-      type: 'message' as const,
-      timestamp: new Date(Date.now() - 30 * 60 * 1000),
-      read: false,
-      link: '/supervisor/proposals'
-    },
-    {
-      id: '2',
-      title: 'Meta Atingida',
-      message: 'Bruna Garcia atingiu 100% da meta mensal',
-      type: 'approval' as const,
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      read: false,
-      link: '/supervisor/team'
-    },
-    {
-      id: '3',
-      title: 'Documento Aprovado',
-      message: 'Proposta ABM234 foi aprovada pela área financeira',
-      type: 'document' as const,
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      read: true,
-      link: '/supervisor/messages'
-    },
-    {
-      id: '4',
-      title: 'Alerta de Performance',
-      message: 'Diana Santos está 30% abaixo da meta',
-      type: 'alert' as const,
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-      read: false,
-      link: '/supervisor/team'
-    }
-  ]);
-
-  const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
-    showNotification('Apenas o portal de Implantação pode alterar status', 'info');
-  };
-
-  const handleMarkAsRead = (notificationId: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === notificationId ? { ...notif, read: true } : notif
-      )
-    );
-  };
-
-  const handleMarkAllAsRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
-  };
-
-  // Atividade recente
-  const recentActivity = [
-    {
-      id: '1',
-      vendor: 'Ana Caroline',
-      action: 'proposal_sent',
-      client: 'TechCorp',
-      timestamp: 'há 15 minutos',
-      status: 'success'
-    },
-    {
-      id: '2',
-      vendor: 'Bruna Garcia',
-      action: 'meeting_scheduled',
-      client: 'MedCenter',
-      timestamp: 'há 1 hora',
-      status: 'success'
-    },
-    {
-      id: '3',
-      vendor: 'Carlos Silva',
-      action: 'contract_signed',
-      client: 'FinanceFlow',
-      timestamp: 'há 2 horas',
-      status: 'success'
-    },
-    {
-      id: '4',
-      vendor: 'Diana Santos',
-      action: 'follow_up',
-      client: 'StartupXYZ',
-      timestamp: 'há 3 horas',
-      status: 'success'
-    }
-  ];
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'proposal_sent':
-        return <FileText className="w-4 h-4 text-blue-600" />;
-      case 'meeting_scheduled':
-        return <Calendar className="w-4 h-4 text-green-600" />;
-      case 'proposal_rejected':
-        return <X className="w-4 h-4 text-red-600" />;
-      case 'contract_signed':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'follow_up':
-        return <MessageSquare className="w-4 h-4 text-orange-600" />;
-      default:
-        return <FileText className="w-4 h-4 text-gray-600" />;
-    }
-  };
-
-  const getActivityText = (type: string) => {
-    switch (type) {
-      case 'proposal_sent':
-        return 'enviou proposta para';
-      case 'meeting_scheduled':
-        return 'agendou reunião com';
-      case 'proposal_rejected':
-        return 'teve proposta rejeitada por';
-      case 'contract_signed':
-        return 'fechou contrato com';
-      case 'follow_up':
-        return 'fez follow-up com';
-      default:
-        return 'interagiu com';
-    }
-  };
-
-  const renderTeamManagement = () => {
-    if (vendorsLoading) {
-      return (
-        <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-              <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
-              </div>
+  const renderDashboard = () => (
+    <div className="space-y-6">
+      {/* KPIs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Faturamento Total</p>
+              <p className="text-2xl font-bold text-green-600">{formatCurrency(teamStats.totalValue?.toString() || '0')}</p>
             </div>
+            <DollarSign className="h-8 w-8 text-green-600" />
           </div>
         </div>
-      );
-    }
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Total Propostas</p>
+              <p className="text-2xl font-bold text-blue-600">{teamStats.totalProposals || 0}</p>
+            </div>
+            <FileText className="h-8 w-8 text-blue-600" />
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Ticket Médio</p>
+              <p className="text-2xl font-bold text-purple-600">{formatCurrency(teamStats.averageValue?.toString() || '0')}</p>
+            </div>
+            <TrendingUp className="h-8 w-8 text-purple-600" />
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Vendedores Ativos</p>
+              <p className="text-2xl font-bold text-orange-600">{teamStats.totalVendors || 0}</p>
+            </div>
+            <Users className="h-8 w-8 text-orange-600" />
+          </div>
+        </div>
+      </div>
 
-    return (
-      <div className="space-y-6">
-        {/* Lista de Vendedores */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Vendedores Cadastrados</h2>
+      {/* Performance por Vendedor */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Performance por Vendedor</h3>
+        <div className="space-y-4">
+          {vendors.map(vendor => {
+            const stats = getVendorStats(vendor.id);
+            const target = vendorTargets.find(t => t.vendorId === vendor.id && t.month === selectedMonth && t.year === selectedYear);
+            const progress = target ? calculateProgress(vendor.id, target) : 0;
+            
+            return (
+              <div key={vendor.id} className="border rounded-lg p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium">{vendor.name}</span>
+                  <span className="text-sm text-gray-600">{stats.totalProposals} propostas</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-600">Faturamento: {formatCurrency(stats.totalValue.toString())}</span>
+                  <span className="text-sm font-medium">{progress.toFixed(1)}% da meta</span>
+                </div>
+                <SimpleProgressBar percentage={progress} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderMetas = () => (
+    <div className="space-y-6">
+      {/* Controles */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Gerenciar Metas</h3>
+          <div className="flex space-x-2">
             <button
-              onClick={() => setShowAddVendorForm(true)}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              onClick={() => setShowAddTargetForm(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
             >
-              <UserPlus className="w-4 h-4 mr-2" />
-              Adicionar login
+              <Plus size={16} />
+              Meta Individual
+            </button>
+            <button
+              onClick={() => setShowAddTeamTargetForm(true)}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2"
+            >
+              <Plus size={16} />
+              Meta da Equipe
             </button>
           </div>
+        </div>
+        
+        {/* Filtros */}
+        <div className="flex space-x-4 mb-6">
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+            className="border rounded-lg px-3 py-2"
+          >
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {getMonthName(i + 1)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value={2024}>2024</option>
+            <option value={2025}>2025</option>
+            <option value={2026}>2026</option>
+          </select>
+        </div>
+      </div>
 
-          {/* Lista formatada */}
-          <div className="space-y-3">
-            {vendors.map((vendor: any) => (
-              <div key={vendor.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
-                <div className="flex-1 text-sm">
-                  <span className="font-medium text-gray-900 w-48 inline-block">{vendor.name}</span>
-                  <span className="text-gray-600 mx-2">|</span>
-                  <span className="text-gray-700 w-56 inline-block">{vendor.email}</span>
-                  <span className="text-gray-600 mx-2">|</span>
-                  <span className="text-gray-700">Senha: <span className="font-mono bg-yellow-100 px-2 py-1 rounded">120784</span></span>
-                </div>
-                <button
-                  onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
-                  className="ml-4 px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
-                  disabled={deleteVendorMutation.isPending}
+      {/* Metas dos Vendedores */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Metas Individuais</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">Vendedor</th>
+                <th className="text-left py-2">Período</th>
+                <th className="text-left py-2">Meta Valor</th>
+                <th className="text-left py-2">Meta Propostas</th>
+                <th className="text-left py-2">Bônus</th>
+                <th className="text-left py-2">Progresso</th>
+                <th className="text-left py-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vendorTargets.map(target => (
+                <tr key={target.id} className="border-b">
+                  <td className="py-2">{getVendorName(target.vendorId)}</td>
+                  <td className="py-2">{getMonthName(target.month)}/{target.year}</td>
+                  <td className="py-2">{formatCurrency(target.targetValue)}</td>
+                  <td className="py-2">{target.targetProposals}</td>
+                  <td className="py-2">{formatCurrency(target.bonus)}</td>
+                  <td className="py-2">
+                    <div className="w-24">
+                      <SimpleProgressBar percentage={calculateProgress(target.vendorId, target)} />
+                    </div>
+                  </td>
+                  <td className="py-2">
+                    <button
+                      onClick={() => deleteTargetMutation.mutate(target.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Metas da Equipe */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Metas da Equipe</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">Período</th>
+                <th className="text-left py-2">Meta Valor</th>
+                <th className="text-left py-2">Meta Propostas</th>
+                <th className="text-left py-2">Bônus da Equipe</th>
+                <th className="text-left py-2">Progresso</th>
+                <th className="text-left py-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teamTargets.map(target => {
+                const teamProgress = teamStats.totalValue && teamStats.totalProposals 
+                  ? ((teamStats.totalValue / parseInt(target.targetValue.replace(/[^\d]/g, ""))) * 50) + 
+                    ((teamStats.totalProposals / target.targetProposals) * 50)
+                  : 0;
+                
+                return (
+                  <tr key={target.id} className="border-b">
+                    <td className="py-2">{getMonthName(target.month)}/{target.year}</td>
+                    <td className="py-2">{formatCurrency(target.targetValue)}</td>
+                    <td className="py-2">{target.targetProposals}</td>
+                    <td className="py-2">{formatCurrency(target.teamBonus)}</td>
+                    <td className="py-2">
+                      <div className="w-24">
+                        <SimpleProgressBar percentage={Math.min(teamProgress, 100)} />
+                      </div>
+                    </td>
+                    <td className="py-2">
+                      <button
+                        onClick={() => console.log('Delete team target', target.id)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modal para adicionar meta individual */}
+      {showAddTargetForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Nova Meta Individual</h3>
+              <button
+                onClick={() => setShowAddTargetForm(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Vendedor</label>
+                <select
+                  value={newTargetData.vendorId}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
+                  className="w-full border rounded-lg px-3 py-2"
                 >
-                  Remover login
+                  <option value={0}>Selecione um vendedor</option>
+                  {vendors.map(vendor => (
+                    <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Mês</label>
+                  <select
+                    value={newTargetData.month}
+                    onChange={(e) => setNewTargetData(prev => ({ ...prev, month: parseInt(e.target.value) }))}
+                    className="w-full border rounded-lg px-3 py-2"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i + 1} value={i + 1}>{getMonthName(i + 1)}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Ano</label>
+                  <select
+                    value={newTargetData.year}
+                    onChange={(e) => setNewTargetData(prev => ({ ...prev, year: parseInt(e.target.value) }))}
+                    className="w-full border rounded-lg px-3 py-2"
+                  >
+                    <option value={2024}>2024</option>
+                    <option value={2025}>2025</option>
+                    <option value={2026}>2026</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Meta de Valor (R$)</label>
+                <input
+                  type="text"
+                  value={newTargetData.targetValue}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
+                  placeholder="Ex: 50000"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Meta de Propostas</label>
+                <input
+                  type="number"
+                  value={newTargetData.targetProposals}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
+                  placeholder="Ex: 10"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Bônus (R$)</label>
+                <input
+                  type="text"
+                  value={newTargetData.bonus}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
+                  placeholder="Ex: 5000"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => setShowAddTargetForm(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleAddTarget}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Salvar Meta
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para adicionar meta da equipe */}
+      {showAddTeamTargetForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Nova Meta da Equipe</h3>
+              <button
+                onClick={() => setShowAddTeamTargetForm(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Mês</label>
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                    className="w-full border rounded-lg px-3 py-2"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i + 1} value={i + 1}>{getMonthName(i + 1)}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-1">Ano</label>
+                  <select
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                    className="w-full border rounded-lg px-3 py-2"
+                  >
+                    <option value={2024}>2024</option>
+                    <option value={2025}>2025</option>
+                    <option value={2026}>2026</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Meta de Valor (R$)</label>
+                <input
+                  type="text"
+                  value={newTargetData.targetValue}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
+                  placeholder="Ex: 500000"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Meta de Propostas</label>
+                <input
+                  type="number"
+                  value={newTargetData.targetProposals}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
+                  placeholder="Ex: 100"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Bônus da Equipe (R$)</label>
+                <input
+                  type="text"
+                  value={newTargetData.bonus}
+                  onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
+                  placeholder="Ex: 20000"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => setShowAddTeamTargetForm(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleAddTeamTarget}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
+                Salvar Meta
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderPremiacao = () => (
+    <div className="space-y-6">
+      {/* Controles */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Sistema de Premiação</h3>
+          <button
+            onClick={() => setShowAddAwardForm(true)}
+            className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 flex items-center gap-2"
+          >
+            <Award size={16} />
+            Nova Premiação
+          </button>
+        </div>
+      </div>
+
+      {/* Lista de Premiações */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Premiações Concedidas</h3>
+        <div className="space-y-4">
+          {awards.map(award => (
+            <div key={award.id} className="border rounded-lg p-4 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className={`p-2 rounded-full ${
+                  award.type === 'monetary' ? 'bg-green-100 text-green-600' :
+                  award.type === 'bonus' ? 'bg-yellow-100 text-yellow-600' :
+                  'bg-blue-100 text-blue-600'
+                }`}>
+                  <Award size={20} />
+                </div>
+                <div>
+                  <h4 className="font-medium">{award.title}</h4>
+                  <p className="text-sm text-gray-600">{getVendorName(award.vendorId)}</p>
+                  <p className="text-sm text-gray-500">{award.description}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-medium">{formatCurrency(award.value)}</p>
+                <p className="text-sm text-gray-500">{new Date(award.dateAwarded).toLocaleDateString('pt-BR')}</p>
+                <button
+                  onClick={() => deleteAwardMutation.mutate(award.id)}
+                  className="text-red-600 hover:text-red-800 mt-2"
+                >
+                  <Trash2 size={16} />
                 </button>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
-            {vendors.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                Nenhum vendedor cadastrado ainda.
+      {/* Modal para adicionar premiação */}
+      {showAddAwardForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Nova Premiação</h3>
+              <button
+                onClick={() => setShowAddAwardForm(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Vendedor</label>
+                <select
+                  value={newAwardData.vendorId}
+                  onChange={(e) => setNewAwardData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
+                  className="w-full border rounded-lg px-3 py-2"
+                >
+                  <option value={0}>Selecione um vendedor</option>
+                  {vendors.map(vendor => (
+                    <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
+                  ))}
+                </select>
               </div>
-            )}
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Tipo de Premiação</label>
+                <select
+                  value={newAwardData.type}
+                  onChange={(e) => setNewAwardData(prev => ({ ...prev, type: e.target.value as 'monetary' | 'recognition' | 'bonus' }))}
+                  className="w-full border rounded-lg px-3 py-2"
+                >
+                  <option value="recognition">Reconhecimento</option>
+                  <option value="monetary">Monetária</option>
+                  <option value="bonus">Bônus</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Título</label>
+                <input
+                  type="text"
+                  value={newAwardData.title}
+                  onChange={(e) => setNewAwardData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Ex: Vendedor do Mês"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Descrição</label>
+                <textarea
+                  value={newAwardData.description}
+                  onChange={(e) => setNewAwardData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Detalhes da premiação..."
+                  rows={3}
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Valor (R$)</label>
+                <input
+                  type="text"
+                  value={newAwardData.value}
+                  onChange={(e) => setNewAwardData(prev => ({ ...prev, value: e.target.value }))}
+                  placeholder="Ex: 1000"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => setShowAddAwardForm(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleAddAward}
+                className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
+              >
+                Conceder Premiação
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderAnalytics = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Análise de Performance</h3>
+        
+        {/* Filtros */}
+        <div className="flex space-x-4 mb-6">
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value={0}>Todos os meses</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {getMonthName(i + 1)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value={2024}>2024</option>
+            <option value={2025}>2025</option>
+            <option value={2026}>2026</option>
+          </select>
+        </div>
+
+        {/* Métricas da Equipe */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="bg-blue-50 rounded-lg p-4">
+            <h4 className="font-medium text-blue-800">Total de Propostas</h4>
+            <p className="text-2xl font-bold text-blue-600">{teamStats.totalProposals || 0}</p>
+          </div>
+          <div className="bg-green-50 rounded-lg p-4">
+            <h4 className="font-medium text-green-800">Faturamento Total</h4>
+            <p className="text-2xl font-bold text-green-600">{formatCurrency(teamStats.totalValue?.toString() || '0')}</p>
+          </div>
+          <div className="bg-purple-50 rounded-lg p-4">
+            <h4 className="font-medium text-purple-800">Ticket Médio</h4>
+            <p className="text-2xl font-bold text-purple-600">{formatCurrency(teamStats.averageValue?.toString() || '0')}</p>
+          </div>
+          <div className="bg-orange-50 rounded-lg p-4">
+            <h4 className="font-medium text-orange-800">Vendedores Ativos</h4>
+            <p className="text-2xl font-bold text-orange-600">{teamStats.totalVendors || 0}</p>
           </div>
         </div>
 
-        {/* Modal para adicionar vendedor */}
-        {showAddVendorForm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="mt-3">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Adicionar Login</h3>
-                  <button
-                    onClick={() => setShowAddVendorForm(false)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
+        {/* Performance Individual */}
+        <div className="space-y-4">
+          <h4 className="font-medium">Performance Individual</h4>
+          {vendors.map(vendor => {
+            const stats = getVendorStats(vendor.id);
+            const target = vendorTargets.find(t => t.vendorId === vendor.id && t.month === selectedMonth && t.year === selectedYear);
+            
+            return (
+              <div key={vendor.id} className="border rounded-lg p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium">{vendor.name}</span>
+                  <span className="text-sm text-gray-600">{vendor.email}</span>
                 </div>
-
-                <form onSubmit={(e) => { e.preventDefault(); handleAddVendor(); }}>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nome do Vendedor
-                    </label>
-                    <input
-                      type="text"
-                      value={newVendorData.name}
-                      onChange={(e) => setNewVendorData({ ...newVendorData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ex: Ana Caroline Terto"
-                      required
-                    />
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-600">Propostas:</span>
+                    <span className="font-medium ml-2">{stats.totalProposals}</span>
                   </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={newVendorData.email}
-                      onChange={(e) => setNewVendorData({ ...newVendorData, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ex: ana@abmix.com.br"
-                      required
-                    />
+                  <div>
+                    <span className="text-gray-600">Faturamento:</span>
+                    <span className="font-medium ml-2">{formatCurrency(stats.totalValue.toString())}</span>
                   </div>
-
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Senha (Automática)
-                    </label>
-                    <input
-                      type="text"
-                      value="120784"
-                      disabled
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Senha padrão para todos os vendedores</p>
+                  <div>
+                    <span className="text-gray-600">Meta:</span>
+                    <span className="font-medium ml-2">
+                      {target ? `${calculateProgress(vendor.id, target).toFixed(1)}%` : 'Não definida'}
+                    </span>
                   </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 
-                  <div className="flex justify-end space-x-3">
+  const renderTeam = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Gerenciar Equipe</h3>
+          <button
+            onClick={() => setShowAddVendorForm(true)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+          >
+            <UserPlus size={16} />
+            Adicionar Vendedor
+          </button>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">Nome</th>
+                <th className="text-left py-2">Email</th>
+                <th className="text-left py-2">Senha</th>
+                <th className="text-left py-2">Status</th>
+                <th className="text-left py-2">Data de Criação</th>
+                <th className="text-left py-2">Propostas</th>
+                <th className="text-left py-2">Faturamento</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vendors.map(vendor => {
+                const stats = getVendorStats(vendor.id);
+                return (
+                  <tr key={vendor.id} className="border-b">
+                    <td className="py-2 font-medium">{vendor.name}</td>
+                    <td className="py-2">{vendor.email}</td>
+                    <td className="py-2 text-sm text-gray-600">120784</td>
+                    <td className="py-2">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        vendor.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {vendor.active ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </td>
+                    <td className="py-2 text-sm text-gray-600">
+                      {new Date(vendor.createdAt).toLocaleDateString('pt-BR')}
+                    </td>
+                    <td className="py-2">{stats.totalProposals}</td>
+                    <td className="py-2">{formatCurrency(stats.totalValue.toString())}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modal para adicionar vendedor */}
+      {showAddVendorForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Adicionar Vendedor</h3>
+              <button
+                onClick={() => setShowAddVendorForm(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Nome</label>
+                <input
+                  type="text"
+                  value={newVendorData.name}
+                  onChange={(e) => setNewVendorData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Nome completo"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  value={newVendorData.email}
+                  onChange={(e) => setNewVendorData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="email@exemplo.com"
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Senha</label>
+                <input
+                  type="text"
+                  value="120784"
+                  disabled
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600"
+                />
+                <p className="text-xs text-gray-500 mt-1">Senha padrão para todos os vendedores</p>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => setShowAddVendorForm(false)}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleAddVendor}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderPropostas = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h3 className="text-lg font-semibold mb-4">Acompanhamento de Propostas</h3>
+        
+        {/* Filtros */}
+        <div className="flex space-x-4 mb-6">
+          <select
+            value={filterVendor}
+            onChange={(e) => setFilterVendor(e.target.value)}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value="">Todos os vendedores</option>
+            {vendors.map(vendor => (
+              <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
+            ))}
+          </select>
+          
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="border rounded-lg px-3 py-2"
+          >
+            <option value="">Todos os status</option>
+            {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+              <option key={key} value={key}>{config.label}</option>
+            ))}
+          </select>
+          
+          <input
+            type="date"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
+            className="border rounded-lg px-3 py-2"
+          />
+        </div>
+
+        {/* Lista de propostas */}
+        <div className="space-y-4">
+          {filteredProposals.map(proposal => {
+            const contractData = proposal.contractData || {};
+            const progress = Math.floor(Math.random() * 100);
+            const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus] || STATUS_CONFIG.observacao;
+            
+            return (
+              <div key={proposal.id} className="border rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-2 h-16 bg-blue-500 rounded-full"></div>
+                    <div>
+                      <h4 className="font-medium">{proposal.id}</h4>
+                      <p className="text-sm text-gray-600">{contractData.nomeEmpresa || 'Empresa não informada'}</p>
+                      <p className="text-sm text-gray-500">CNPJ: {contractData.cnpj || 'Não informado'}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-medium">{contractData.valor || 'Valor não informado'}</p>
+                    <p className="text-sm text-gray-600">{getVendorName(proposal.vendorId)}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}>
+                    {statusConfig.label}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
+                  </span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex-1 mr-4">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Progresso</span>
+                      <span>{progress}%</span>
+                    </div>
+                    <SimpleProgressBar percentage={progress} />
+                  </div>
+                  <div className="flex space-x-2">
                     <button
-                      type="button"
-                      onClick={() => setShowAddVendorForm(false)}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                      title="Ver Drive"
                     >
-                      Cancelar
+                      <Eye size={16} />
                     </button>
                     <button
-                      type="submit"
-                      disabled={addVendorMutation.isPending}
-                      className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 disabled:opacity-50"
+                      onClick={() => window.open(`/client/${proposal.clientToken}`, '_blank')}
+                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                      title="Link do Cliente"
                     >
-                      {addVendorMutation.isPending ? 'Adicionando...' : 'Adicionar'}
+                      <ExternalLink size={16} />
                     </button>
                   </div>
-                </form>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRelatorios = () => (
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Relatórios Gerenciais</h3>
+          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2">
+            <Download size={16} />
+            Exportar
+          </button>
+        </div>
+        
+        {/* Resumo Executivo */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          <div className="bg-blue-50 rounded-lg p-4">
+            <h4 className="font-medium text-blue-800 mb-2">Resumo do Mês</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm">Propostas:</span>
+                <span className="font-medium">{teamStats.totalProposals || 0}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Faturamento:</span>
+                <span className="font-medium">{formatCurrency(teamStats.totalValue?.toString() || '0')}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Meta:</span>
+                <span className="font-medium">85%</span>
               </div>
             </div>
           </div>
-        )}
+          
+          <div className="bg-green-50 rounded-lg p-4">
+            <h4 className="font-medium text-green-800 mb-2">Top Performers</h4>
+            <div className="space-y-2">
+              {vendors.slice(0, 3).map((vendor, index) => {
+                const stats = getVendorStats(vendor.id);
+                return (
+                  <div key={vendor.id} className="flex justify-between">
+                    <span className="text-sm">{index + 1}. {vendor.name}</span>
+                    <span className="font-medium">{stats.totalProposals}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="bg-yellow-50 rounded-lg p-4">
+            <h4 className="font-medium text-yellow-800 mb-2">Premiações</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm">Concedidas:</span>
+                <span className="font-medium">{awards.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm">Valor Total:</span>
+                <span className="font-medium">
+                  {formatCurrency(awards.reduce((sum, award) => sum + parseInt(award.value.replace(/[^\d]/g, "")), 0).toString())}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Gráficos e Tabelas */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="border rounded-lg p-4">
+            <h4 className="font-medium mb-4">Performance por Vendedor</h4>
+            <div className="space-y-3">
+              {vendors.map(vendor => {
+                const stats = getVendorStats(vendor.id);
+                const maxValue = Math.max(...vendors.map(v => getVendorStats(v.id).totalValue));
+                const percentage = maxValue > 0 ? (stats.totalValue / maxValue) * 100 : 0;
+                
+                return (
+                  <div key={vendor.id}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>{vendor.name}</span>
+                      <span>{formatCurrency(stats.totalValue.toString())}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full" 
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          <div className="border rounded-lg p-4">
+            <h4 className="font-medium mb-4">Status das Propostas</h4>
+            <div className="space-y-3">
+              {Object.entries(STATUS_CONFIG).map(([status, config]) => {
+                const count = proposals.filter(p => p.status === status).length;
+                const percentage = proposals.length > 0 ? (count / proposals.length) * 100 : 0;
+                
+                return (
+                  <div key={status}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>{config.label}</span>
+                      <span>{count}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full ${config.bgColor.replace('bg-', 'bg-')}`}
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
-    );
-  };
+    </div>
+  );
 
-  const renderDashboard = () => {
+  const renderContent = () => {
     switch (activeView) {
       case 'dashboard':
-        return (
-          <div className="space-y-6">
-            {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Receita Total</p>
-                    <p className="text-2xl font-bold text-gray-900">{kpiData.totalRevenue}</p>
-                  </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-green-600" />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="flex items-center">
-                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-600">+12.5% vs mês anterior</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Total de Propostas</p>
-                    <p className="text-2xl font-bold text-gray-900">{kpiData.totalProposals}</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-blue-600" />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="flex items-center">
-                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-600">+8.2% vs mês anterior</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Taxa de Conversão</p>
-                    <p className="text-2xl font-bold text-gray-900">{kpiData.conversionRate}</p>
-                  </div>
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Target className="w-6 h-6 text-purple-600" />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="flex items-center">
-                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-600">+3.1% vs mês anterior</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Ticket Médio</p>
-                    <p className="text-2xl font-bold text-gray-900">{kpiData.averageTicket}</p>
-                  </div>
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <Calculator className="w-6 h-6 text-orange-600" />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="flex items-center">
-                    <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-600">+5.7% vs mês anterior</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Acompanhamento de Vendas */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Propostas ({filteredProposals.length})
-                  </h2>
-                  
-                  {/* Filtros */}
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <label className="text-sm font-medium text-gray-600">Vendedor:</label>
-                      <select 
-                        value={filterVendor}
-                        onChange={(e) => setFilterVendor(e.target.value)}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      >
-                        <option value="">Todos</option>
-                        {vendors.map((vendor: any) => (
-                          <option key={vendor.id} value={vendor.name}>
-                            {vendor.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <label className="text-sm font-medium text-gray-600">Status:</label>
-                      <select 
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      >
-                        <option value="">Todos</option>
-                        <option value="observacao">OBSERVAÇÃO</option>
-                        <option value="analise">ANÁLISE</option>
-                        <option value="assinatura_ds">ASSINATURA DS</option>
-                        <option value="expirado">EXPIRADO</option>
-                        <option value="implantado">IMPLANTADO</option>
-                        <option value="aguar_pagamento">AGUARDANDO PAGAMENTO</option>
-                        <option value="assinatura_proposta">ASSINATURA PROPOSTA</option>
-                        <option value="aguar_selecao_vigencia">AGUARDAR SELEÇÃO VIGÊNCIA</option>
-                        <option value="pendencia">PENDÊNCIA</option>
-                        <option value="declinado">DECLINADO</option>
-                        <option value="aguar_vigencia">AGUARDAR VIGÊNCIA</option>
-                      </select>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <label className="text-sm font-medium text-gray-600">Data:</label>
-                      <input 
-                        type="date"
-                        value={filterDate}
-                        onChange={(e) => setFilterDate(e.target.value)}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {proposalsLoading ? (
-                <div className="p-6">
-                  <div className="animate-pulse space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="h-16 bg-gray-200 rounded"></div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendedor</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredProposals.map((proposal: any) => {
-                        const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus];
-                        
-                        return (
-                          <tr key={proposal.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <button 
-                                className="text-sm font-medium text-blue-600 hover:text-blue-800"
-                                onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                              >
-                                {proposal.abmId}
-                              </button>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">{proposal.cliente || proposal.contractData?.nomeEmpresa || 'N/A'}</div>
-                              <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj || 'N/A'}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {proposal.vendedor || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {proposal.plano || proposal.contractData?.planoContratado || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              R$ {proposal.valor || proposal.contractData?.valor || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span 
-                                className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${statusConfig?.bgColor} ${statusConfig?.textColor}`}
-                              >
-                                {statusConfig?.label || proposal.status}
-                              </span>
-                              <div className="text-xs text-gray-500 mt-1">
-                                Somente leitura
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <ProgressBar proposal={proposal} className="w-full" />
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              <ActionButtons
-                                onView={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                                onExternalLink={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                                userRole="supervisor"
-                                className="flex gap-1"
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-
-                  {filteredProposals.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      {proposals.length === 0 ? 'Nenhuma proposta encontrada.' : 'Nenhuma proposta corresponde aos filtros aplicados.'}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Performance dos Vendedores */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Performance dos Vendedores</h2>
-                <div className="space-y-4">
-                  {[
-                    { name: 'Ana Caroline', target: 100, current: 125, color: 'green' },
-                    { name: 'Bruna Garcia', target: 100, current: 100, color: 'blue' },
-                    { name: 'Carlos Silva', target: 100, current: 85, color: 'yellow' },
-                    { name: 'Diana Santos', target: 100, current: 70, color: 'red' }
-                  ].map((vendor) => (
-                    <div key={vendor.name} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900">{vendor.name}</p>
-                        <p className="text-sm text-gray-500">{vendor.current}% da meta</p>
-                      </div>
-                      <div className="w-32">
-                        <div className="bg-gray-200 rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full ${
-                              vendor.color === 'green' ? 'bg-green-500' :
-                              vendor.color === 'blue' ? 'bg-blue-500' :
-                              vendor.color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
-                            }`}
-                            style={{ width: `${Math.min(vendor.current, 100)}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Atividade Recente */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Atividade Recente</h2>
-                <div className="space-y-4">
-                  {recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        {getActivityIcon(activity.action)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-900">
-                          <span className="font-medium">{activity.vendor}</span>
-                          {' '}
-                          {getActivityText(activity.action)}
-                          {' '}
-                          <span className="font-medium">{activity.client}</span>
-                        </p>
-                        <p className="text-sm text-gray-500">{activity.timestamp}</p>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                          activity.status === 'success' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {activity.status === 'success' ? 'Sucesso' : 'Erro'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'reports':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Relatórios de Vendas</h2>
-              <p className="text-gray-600">Funcionalidade de relatórios em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-
+        return renderDashboard();
+      case 'metas':
+        return renderMetas();
+      case 'premiacao':
+        return renderPremiacao();
       case 'analytics':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Analytics Avançado</h2>
-              <p className="text-gray-600">Dashboard de analytics em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-
+        return renderAnalytics();
       case 'team':
-        return renderTeamManagement();
-
-      case 'settings':
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Configurações</h2>
-              <p className="text-gray-600">Painel de configurações em desenvolvimento...</p>
-            </div>
-          </div>
-        );
-
+        return renderTeam();
+      case 'propostas':
+        return renderPropostas();
+      case 'relatorios':
+        return renderRelatorios();
       default:
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Dashboard</h2>
-              <p className="text-gray-600">Bem-vindo ao painel do supervisor!</p>
-            </div>
-          </div>
-        );
+        return renderDashboard();
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <AbmixLogo className="h-8 w-auto" />
-              <div className="ml-4">
-                <h1 className="text-xl font-semibold text-gray-900">Portal do Supervisor</h1>
-                <p className="text-sm text-gray-500">Bem-vindo, {user?.name}</p>
-              </div>
+      <header className="bg-white shadow-sm border-b">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center space-x-4">
+            <AbmixLogo className="h-8 w-8" />
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">Portal Supervisor</h1>
+              <p className="text-sm text-gray-600">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
             </div>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg relative"
+            >
+              <Bell size={20} />
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                3
+              </span>
+            </button>
             
-            <div className="flex items-center space-x-4">
-              {/* Notificações */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  className="p-2 text-gray-400 hover:text-gray-500 relative"
-                >
-                  <Bell className="w-6 h-6" />
-                  {notifications.some(n => !n.read) && (
-                    <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-400"></span>
-                  )}
-                </button>
-                
-                {showNotifications && (
-                  <NotificationCenter
-                    notifications={notifications}
-                    onMarkAsRead={handleMarkAsRead}
-                    onMarkAllAsRead={handleMarkAllAsRead}
-                    onClose={() => setShowNotifications(false)}
-                    userRole="supervisor"
-                  />
-                )}
-              </div>
-
-              {/* Mensagens Internas */}
-              <button
-                onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-400 hover:text-gray-500"
-              >
-                <MessageSquare className="w-6 h-6" />
-              </button>
-
-              {/* Logout */}
-              <button
-                onClick={onLogout}
-                className="flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sair
-              </button>
-            </div>
+            <button
+              onClick={() => setShowInternalMessage(!showInternalMessage)}
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            >
+              <MessageSquare size={20} />
+            </button>
+            
+            <button
+              onClick={onLogout}
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+            >
+              <LogOut size={20} />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-              { id: 'reports', label: 'Relatórios', icon: FileText },
-              { id: 'analytics', label: 'Analytics', icon: PieChart },
-              { id: 'team', label: 'Equipe', icon: Users },
-              { id: 'settings', label: 'Configurações', icon: Settings }
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveView(item.id as SupervisorView)}
-                  className={`flex items-center px-1 py-4 border-b-2 text-sm font-medium ${
-                    activeView === item.id
-                      ? 'border-teal-500 text-teal-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <Icon className="w-4 h-4 mr-2" />
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white shadow-sm min-h-screen">
+          <nav className="p-4">
+            <div className="space-y-1">
+              <button
+                onClick={() => setActiveView('dashboard')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'dashboard' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <BarChart3 size={18} className="mr-3" />
+                Dashboard
+              </button>
+              
+              <button
+                onClick={() => setActiveView('metas')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'metas' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <Target size={18} className="mr-3" />
+                Metas
+              </button>
+              
+              <button
+                onClick={() => setActiveView('premiacao')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'premiacao' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <Award size={18} className="mr-3" />
+                Premiação
+              </button>
+              
+              <button
+                onClick={() => setActiveView('analytics')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'analytics' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <PieChart size={18} className="mr-3" />
+                Analytics
+              </button>
+              
+              <button
+                onClick={() => setActiveView('team')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'team' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <Users size={18} className="mr-3" />
+                Equipe
+              </button>
+              
+              <button
+                onClick={() => setActiveView('propostas')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'propostas' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <FileText size={18} className="mr-3" />
+                Propostas
+              </button>
+              
+              <button
+                onClick={() => setActiveView('relatorios')}
+                className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
+                  activeView === 'relatorios' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                <Calculator size={18} className="mr-3" />
+                Relatórios
+              </button>
+            </div>
+          </nav>
+        </aside>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {renderDashboard()}
-      </main>
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          {renderContent()}
+        </main>
+      </div>
 
-      {/* Mensagem Interna Modal */}
+      {/* Modals */}
+      {showNotifications && (
+        <NotificationCenter onClose={() => setShowNotifications(false)} />
+      )}
+      
       {showInternalMessage && (
-        <InternalMessage
-          isOpen={showInternalMessage}
-          onClose={() => setShowInternalMessage(false)}
-          currentUser={{
-            name: user?.name || 'Supervisor',
-            role: 'supervisor'
-          }}
-        />
+        <InternalMessage onClose={() => setShowInternalMessage(false)} />
       )}
     </div>
   );
