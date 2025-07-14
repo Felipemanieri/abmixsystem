@@ -1019,12 +1019,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 }}
                 className={`group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] ${
                   editingProposalId 
-                    ? 'bg-purple-600 hover:bg-purple-700' 
+                    ? 'bg-green-600 hover:bg-green-700' 
                     : 'bg-gray-600 hover:bg-gray-700'
                 }`}
               >
                 <div className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity ${
-                  editingProposalId ? 'bg-purple-700' : 'bg-gray-700'
+                  editingProposalId ? 'bg-green-700' : 'bg-gray-700'
                 }`}></div>
                 <FileText className="w-4 h-4 mr-2 relative z-10" />
                 <span className="relative z-10">Google Drive {editingProposalId ? '(Ativo)' : ''}</span>
