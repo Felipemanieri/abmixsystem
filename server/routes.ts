@@ -107,63 +107,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Proposal routes
-  app.post('/api/proposals', async (req, res) => {
-    try {
-      const proposal = await storage.createProposal(req.body);
-      res.json(proposal);
-    } catch (error) {
-      console.error("Error creating proposal:", error);
-      res.status(500).json({ message: "Failed to create proposal" });
-    }
-  });
-
-  app.get('/api/proposals/link/:clientLink', async (req, res) => {
-    try {
-      const proposal = await storage.getProposalByLink(req.params.clientLink);
-      if (!proposal) {
-        return res.status(404).json({ message: "Proposal not found" });
-      }
-      res.json(proposal);
-    } catch (error) {
-      console.error("Error fetching proposal by link:", error);
-      res.status(500).json({ message: "Failed to fetch proposal" });
-    }
-  });
-
-  // Additional proposal routes
-  app.put('/api/proposals/:id', async (req, res) => {
-    try {
-      const proposal = await storage.updateProposal(req.params.id, req.body);
-      res.json(proposal);
-    } catch (error) {
-      console.error("Error updating proposal:", error);
-      res.status(500).json({ message: "Failed to update proposal" });
-    }
-  });
-
-  app.post('/api/proposals/:proposalId/people', async (req, res) => {
-    try {
-      const person = await storage.addProposalPerson({
-        ...req.body,
-        proposalId: req.params.proposalId,
-      });
-      res.json(person);
-    } catch (error) {
-      console.error("Error adding person:", error);
-      res.status(500).json({ message: "Failed to add person" });
-    }
-  });
-
-  app.get('/api/proposals/:proposalId/people', async (req, res) => {
-    try {
-      const people = await storage.getProposalPeople(req.params.proposalId);
-      res.json(people);
-    } catch (error) {
-      console.error("Error fetching people:", error);
-      res.status(500).json({ message: "Failed to fetch people" });
-    }
-  });
+  // use storage to perform CRUD operations on the storage interface
+  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
 
   const httpServer = createServer(app);
 

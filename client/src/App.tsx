@@ -1,34 +1,15 @@
-import { useState } from 'react';
-import { Route, Switch } from 'wouter';
-import { 
-  Users, 
-  FileText, 
-  DollarSign, 
-  Shield, 
-  Zap, 
-  ArrowRight, 
-  CheckCircle, 
-  Lock,
-  MessageCircle,
-  Bot,
-  X,
-  Send
-} from 'lucide-react';
-
-// Import components
+import React, { useState } from 'react';
+import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
 import FinancialPortal from './components/FinancialPortal';
 import ImplantacaoPortal from './components/ImplantacaoPortal';
 import SupervisorPortal from './components/SupervisorPortal';
-import ClientLinkPortal from './components/ClientLinkPortal';
-
-// Import RestrictedAreaPortal
 import RestrictedAreaPortal from './components/RestrictedAreaPortal';
+import { Lock } from 'lucide-react';
 
 type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor' | 'restricted';
-
 type User = {
   id: string;
   name: string;
@@ -43,22 +24,14 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-// Client Link Page Component
-function ClientLinkPage() {
-  const clientLink = window.location.pathname.split('/cliente/')[1] || '';
-  
-  return <ClientLinkPortal clientLink={clientLink} />;
-}
-
-// Home Page Component
-function HomePage() {
+function App() {
   const [currentPortal, setCurrentPortal] = useState<Portal>('home');
   const [currentUser, setCurrentUser] = useState<User>(null);
   const [showChat, setShowChat] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: 'Olá! Sou o assistente virtual da Abmix. Como posso ajudá-lo hoje?',
+     text: 'Olá! Sou o assistente virtual do sistema. Como posso ajudá-lo hoje?',
       isBot: true,
       timestamp: new Date()
     }
@@ -67,6 +40,9 @@ function HomePage() {
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
+    if (user) {
+      setCurrentPortal(user.role);
+    }
   };
 
   const handleLogout = () => {
@@ -325,7 +301,7 @@ function HomePage() {
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-orange-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Shield className="w-8 h-8 text-orange-600" />
+                <Zap className="w-8 h-8 text-orange-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-orange-600 transition-colors">Portal Supervisor</h3>
               <p className="text-gray-600 mb-6 leading-relaxed font-medium">
@@ -339,44 +315,179 @@ function HomePage() {
           </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Zap className="w-8 h-8 text-teal-600" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-700 mb-2">Processo Ágil</h3>
-            <p className="text-gray-600 font-medium">Automatização completa do fluxo de propostas</p>
+        {/* Features Section */}
+        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-700 mb-4">Por que escolher nossa plataforma?</h2>
+            <p className="text-gray-600 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
-          <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-8 h-8 text-blue-600" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-teal-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Processo Ágil</h3>
+              <p className="text-gray-600 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
             </div>
-            <h3 className="text-xl font-bold text-gray-700 mb-2">100% Digital</h3>
-            <p className="text-gray-600 font-medium">Documentos e assinaturas eletrônicas válidas</p>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Máxima Segurança</h3>
+              <p className="text-gray-600 font-medium">Criptografia avançada e conformidade total com LGPD</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
+              <p className="text-gray-600 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Security Notice */}
+        <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-3xl p-12 border border-teal-200">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-2xl font-bold text-gray-700">Segurança e Privacidade</h3>
+              <p className="text-gray-600 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
+            </div>
           </div>
           
-          <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-green-600" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-8">
+            <div>
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Shield className="w-6 h-6 text-teal-600" />
+              </div>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Dados Protegidos</h4>
+              <p className="text-gray-600 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
             </div>
-            <h3 className="text-xl font-bold text-gray-700 mb-2">Máxima Segurança</h3>
-            <p className="text-gray-600 font-medium">Criptografia avançada e conformidade total com LGPD</p>
-          </div>
-          
-          <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-purple-600" />
+            <div>
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Users className="w-6 h-6 text-teal-600" />
+              </div>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Acesso Controlado</h4>
+              <p className="text-gray-600 font-medium">Permissões granulares e autenticação multifator</p>
             </div>
-            <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
-            <p className="text-gray-600 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
+            <div>
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <FileText className="w-6 h-6 text-teal-600" />
+              </div>
+              <h4 className="font-bold text-gray-700 mb-2 text-lg">Conformidade LGPD</h4>
+              <p className="text-gray-600 font-medium">100% em conformidade com a legislação brasileira</p>
+            </div>
           </div>
         </div>
       </main>
       
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Logo */}
+            <div className="flex items-center">
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-24 w-auto"
+              />
+            </div>
+            
+            {/* Contato */}
+            <div>
+              <h3 className="font-bold mb-4">Contato</h3>
+              <div className="space-y-2 text-gray-400">
+                <div className="flex items-center">
+                  <Phone className="w-4 h-4 mr-2" />
+                  <span>(11) 99999-9999</span>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="w-4 h-4 mr-2" />
+                  <span>contato@abmix.com.br</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  <span>Rua das Flores, 123 - Centro</span>
+                </div>
+                <p className="ml-6">São Paulo, SP</p>
+                <div className="flex items-center">
+                  <Globe className="w-4 h-4 mr-2" />
+                  <span>www.abmix.com.br</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* WhatsApp */}
+            <div>
+              <h3 className="font-bold mb-4">WhatsApp</h3>
+              <div className="space-y-2 text-gray-400">
+                <div className="flex items-center">
+                  <MessageCircle className="w-4 h-4 mr-2 text-green-400" />
+                  <span>(11) 98888-8888</span>
+                </div>
+                <p className="text-sm">Atendimento 24/7</p>
+                <button 
+                  onClick={() => window.open('https://wa.me/5511988888888?text=Olá! Gostaria de mais informações.', '_blank')}
+                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mt-3"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Falar no WhatsApp
+                </button>
+              </div>
+            </div>
+            
+            {/* Redes Sociais */}
+            <div>
+              <h3 className="font-bold mb-4">Redes Sociais</h3>
+              <div className="space-y-2 text-gray-400">
+                <p className="mb-4">Siga-nos nas redes sociais</p>
+                <div className="flex space-x-4">
+                  <button 
+                    onClick={() => window.open('https://facebook.com/abmix', '_blank')}
+                    className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => window.open('https://instagram.com/abmix', '_blank')}
+                    className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.781c-.49 0-.928-.175-1.297-.49-.367-.315-.49-.753-.49-1.243 0-.49.123-.928.49-1.243.369-.367.807-.49 1.297-.49s.928.123 1.297.49c.367.315.49.753.49 1.243 0 .49-.123.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => window.open('https://linkedin.com/company/abmix', '_blank')}
+                    className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 pt-8 flex items-center justify-between">
+            <div className="text-gray-400 text-xl">
+              <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       {/* Chatbot */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="chatbot-container">
         {showChat ? (
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
             {/* Chat Header */}
@@ -448,16 +559,6 @@ function HomePage() {
         )}
       </div>
     </div>
-  );
-}
-
-// Main App component with routing
-function App() {
-  return (
-    <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/cliente/:clientLink" component={ClientLinkPage} />
-    </Switch>
   );
 }
 

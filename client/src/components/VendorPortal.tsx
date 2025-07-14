@@ -1289,7 +1289,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'new-proposal':
-        return <ProposalGenerator vendorId={user?.id || 1} vendorName={user?.name || 'Vendedor'} />;
+        return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
       case 'quotations':
