@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info } from 'lucide-react';
+import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info, Lock } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
@@ -130,6 +130,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
   const [vendorAttachments, setVendorAttachments] = useState<File[]>([]);
+  const [contractFieldsReadOnly, setContractFieldsReadOnly] = useState(false);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -310,7 +311,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   };
 
   const generateSameLinkProposal = () => {
-    // Manter APENAS os dados do contrato inalterados, limpar dados pessoais e anexos
+    // Manter APENAS os dados do contrato inalterados e torná-los somente leitura
     setTitulares([{
       id: '1',
       nomeCompleto: '',
@@ -361,9 +362,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       idades: [25]
     });
     
+    // Tornar campos do contrato somente leitura
+    setContractFieldsReadOnly(true);
     setIsSubmitted(false);
     
-    showNotification('Nova proposta iniciada! Os dados do contrato foram mantidos.', 'success');
+    showNotification('Nova proposta iniciada! Os dados do contrato foram mantidos como somente leitura.', 'success');
   };
 
   const resetForm = () => {
@@ -1042,11 +1045,21 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         <div className="space-y-8">
           {/* Dados do Contrato */}
           <div className="bg-blue-50 p-6 rounded-lg">
-            <div className="flex items-center mb-4">
-              <Building className="w-5 h-5 text-blue-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">
-                Dados do Contrato
-              </h2>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Building className="w-5 h-5 text-blue-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Dados do Contrato
+                </h2>
+              </div>
+              {contractFieldsReadOnly && (
+                <div className="flex items-center px-3 py-1 bg-yellow-100 border border-yellow-300 rounded-lg">
+                  <Lock className="w-4 h-4 text-yellow-600 mr-2" />
+                  <span className="text-sm text-yellow-700 font-medium">
+                    Dados fixos - não editáveis
+                  </span>
+                </div>
+              )}
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1058,7 +1071,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   type="text"
                   value={contractData.nomeEmpresa}
                   onChange={(e) => setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  readOnly={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                   placeholder="Ex: Empresa ABC Ltda"
                 />
               </div>
@@ -1071,7 +1089,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   type="text"
                   value={contractData.cnpj}
                   onChange={(e) => setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  readOnly={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                   placeholder="00.000.000/0000-00"
                 />
               </div>
@@ -1084,7 +1107,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   type="text"
                   value={contractData.planoContratado}
                   onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  readOnly={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                   placeholder="Ex: Plano Empresarial Premium - Cobertura Nacional"
                 />
               </div>
@@ -1097,7 +1125,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   type="text"
                   value={contractData.valor}
                   onChange={(e) => setContractData(prev => ({ ...prev, valor: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  readOnly={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                   placeholder="0,00"
                 />
               </div>
@@ -1110,7 +1143,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   type="date"
                   value={contractData.inicioVigencia}
                   onChange={(e) => setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  readOnly={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                 />
               </div>
 
@@ -1121,7 +1159,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 <select
                   value={contractData.periodoMinimo || ''}
                   onChange={(e) => setContractData(prev => ({ ...prev, periodoMinimo: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={contractFieldsReadOnly}
+                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                    contractFieldsReadOnly 
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
+                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  }`}
                 >
                   <option value="">Selecione o período</option>
                   <option value="01 mês">01 mês</option>
@@ -1138,7 +1181,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="odontoConjugado"
                     checked={contractData.odontoConjugado}
                     onChange={(e) => setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    disabled={contractFieldsReadOnly}
+                    className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                      contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                   />
                   <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700">
                     Inclui cobertura odontológica
@@ -1152,7 +1198,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       id="livreAdesao"
                       checked={contractData.livreAdesao}
                       onChange={(e) => setContractData(prev => ({ ...prev, livreAdesao: e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      disabled={contractFieldsReadOnly}
+                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                        contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     />
                     <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700">
                       Livre adesão
@@ -1165,7 +1214,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       id="compulsorio"
                       checked={contractData.compulsorio}
                       onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      disabled={contractFieldsReadOnly}
+                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                        contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     />
                     <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
                       Compulsório
@@ -1179,7 +1231,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="aproveitamentoCongenere"
                     checked={contractData.aproveitamentoCongenere}
                     onChange={(e) => setContractData(prev => ({ ...prev, aproveitamentoCongenere: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    disabled={contractFieldsReadOnly}
+                    className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                      contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                   />
                   <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700">
                     Aproveitamento de carência congênere
