@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
 import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
+import ProposalSelector from './ProposalSelector';
+import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
 
@@ -51,7 +53,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
-  const [activeTab, setActiveTab] = useState<'proposals' | 'automation'>('proposals');
+  const [activeTab, setActiveTab] = useState<'proposals' | 'automation' | 'editor'>('proposals');
+  const [showProposalSelector, setShowProposalSelector] = useState(false);
+  const [editingProposalId, setEditingProposalId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
@@ -129,6 +133,21 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         : proposal
     ));
     showNotification(`Prioridade da proposta ${proposalId} alterada para: ${getPriorityText(newPriority)}`, 'success');
+  };
+
+  const handleSelectProposal = (proposalId: string) => {
+    setEditingProposalId(proposalId);
+    setActiveTab('editor');
+    showNotification(`Carregando proposta ${proposalId} para edição...`, 'info');
+  };
+
+  const handleBackFromEditor = () => {
+    setEditingProposalId(null);
+    setActiveTab('proposals');
+  };
+
+  const handleSaveProposal = (data: any) => {
+    showNotification('Proposta salva e sincronizada com Google Sheets!', 'success');
   };
 
   const [proposals, setProposals] = useState<Proposal[]>([
@@ -694,12 +713,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <ActionButtons 
                       onView={() => setSelectedProposal(proposal.id)}
+                      onEdit={() => handleSelectProposal(proposal.id)}
                       onCopyLink={() => {
                         navigator.clipboard.writeText(`${window.location.origin}/implantacao/proposta/${proposal.id}`);
                         showNotification('Link copiado para a área de transferência!', 'success');
                       }}
                       onMessage={() => setShowInternalMessage(true)}
-                      onEdit={() => showNotification('Editando proposta...', 'info')}
                       onDownload={() => showNotification('Baixando documentos...', 'success')}
                       onWhatsApp={() => window.open(`https://wa.me/55${proposal.vendor.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id} do cliente ${proposal.client}...`)}`)}
                       onEmail={() => window.open(`mailto:${proposal.vendor.toLowerCase().replace(/\s/g, '.')}@abmix.com.br?subject=Proposta ${proposal.id}`)}
@@ -978,6 +997,34 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             })}
           </div>
 
+          {/* Quick Actions */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => setShowProposalSelector(true)}
+                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                <Search className="w-5 h-5 mr-2" />
+                Selecionar Proposta
+              </button>
+              <button
+                onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
+                className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                Sincronizar Sheets
+              </button>
+              <button
+                onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
+                className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+              >
+                <FileText className="w-5 h-5 mr-2" />
+                Abrir Google Drive
+              </button>
+            </div>
+          </div>
+
           {/* Navigation Tabs */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="border-b border-gray-200">
@@ -1008,6 +1055,14 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             <div className="p-6">
               {activeTab === 'proposals' && renderProposalsTab()}
               {activeTab === 'automation' && renderAutomationTab()}
+              {activeTab === 'editor' && editingProposalId && (
+                <ProposalEditor
+                  proposalId={editingProposalId}
+                  onBack={handleBackFromEditor}
+                  onSave={handleSaveProposal}
+                  user={user}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -1109,6 +1164,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </div>
         </div>
       )}
+
+      {/* Proposal Selector Modal */}
+      <ProposalSelector
+        isOpen={showProposalSelector}
+        onClose={() => setShowProposalSelector(false)}
+        onSelectProposal={handleSelectProposal}
+      />
 
       {/* Internal Message Modal */}
       {showInternalMessage && (
