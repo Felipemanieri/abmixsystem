@@ -50,6 +50,11 @@ function App() {
     }
   }, []);
 
+  // Set correct page title
+  useEffect(() => {
+    document.title = "Abmix Consultoria em Benefícios";
+  }, [currentPortal]);
+
   const handleLogin = (user: User) => {
     setCurrentUser(user);
     if (user) {
