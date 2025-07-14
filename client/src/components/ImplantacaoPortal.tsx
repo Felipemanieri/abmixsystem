@@ -136,6 +136,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   };
 
   const handleSelectProposal = (proposalId: string) => {
+    console.log('Selecionando proposta:', proposalId);
     setEditingProposalId(proposalId);
     setActiveTab('editor');
     setShowProposalSelector(false); // Fechar o modal
@@ -1012,7 +1013,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               </button>
               
               <button
-                onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
+                onClick={() => {
+                  console.log('Google Drive clicado. editingProposalId:', editingProposalId);
+                  window.open('https://drive.google.com/drive/folders/proposals', '_blank');
+                }}
                 className={`group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] ${
                   editingProposalId 
                     ? 'bg-purple-600 hover:bg-purple-700' 
@@ -1023,7 +1027,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   editingProposalId ? 'bg-purple-700' : 'bg-gray-700'
                 }`}></div>
                 <FileText className="w-4 h-4 mr-2 relative z-10" />
-                <span className="relative z-10">Google Drive</span>
+                <span className="relative z-10">Google Drive {editingProposalId ? '(Ativo)' : ''}</span>
               </button>
             </div>
           </div>
