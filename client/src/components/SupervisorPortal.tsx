@@ -1426,12 +1426,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-6">
-            <AbmixLogo className="h-10 w-10 flex-shrink-0" />
-            <div className="flex flex-col">
-              <h1 className="text-xl font-semibold text-gray-900 leading-tight">Portal Supervisor</h1>
-              <p className="text-sm text-gray-600 mt-1">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
+        <div className="flex items-start justify-between px-6 py-4">
+          <div className="flex items-start space-x-4">
+            <AbmixLogo className="h-12 w-12 flex-shrink-0 mt-1" />
+            <div className="flex flex-col pt-1">
+              <h1 className="text-xl font-semibold text-gray-900">Portal Supervisor</h1>
+              <p className="text-sm text-gray-600">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
             </div>
           </div>
           
