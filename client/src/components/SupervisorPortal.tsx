@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
-import { ProgressBar } from './ProgressBar';
+import ProgressBar from './ProgressBar';
 import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
@@ -844,3 +844,5 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     </div>
   );
 }
+
+export default SupervisorPortal;
