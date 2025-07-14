@@ -1013,19 +1013,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               </button>
               
               <button
-                onClick={() => {
-                  console.log('Google Drive clicado. editingProposalId:', editingProposalId);
-                  window.open('https://drive.google.com/drive/folders/proposals', '_blank');
-                }}
-                className={`group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02] ${
-                  editingProposalId 
-                    ? 'bg-green-600 hover:bg-green-700' 
-                    : 'bg-gray-600 hover:bg-gray-700'
-                }`}
+                onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
+                className="group relative inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.02]"
               >
-                <div className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity ${
-                  editingProposalId ? 'bg-green-700' : 'bg-gray-700'
-                }`}></div>
+                <div className="absolute inset-0 bg-green-700 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
                 <FileText className="w-4 h-4 mr-2 relative z-10" />
                 <span className="relative z-10">Google Drive</span>
               </button>
