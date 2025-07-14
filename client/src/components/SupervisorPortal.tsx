@@ -1200,10 +1200,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </button>
                     </td>
                     <td className="py-3 px-4">
-                      <div>
-                        <div className="font-medium">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
-                        <div className="text-sm text-gray-600">VENDEDOR: PROP123</div>
-                      </div>
+                      <div className="font-medium">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
@@ -1222,35 +1219,26 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       {contractData.valor || 'R$ 0,00'}
                     </td>
                     <td className="py-3 px-4">
-                      <select
-                        value={proposal.status || 'observacao'}
-                        disabled
-                        className={`px-2 py-1 rounded text-xs font-medium border-0 ${statusConfig.bgColor} ${statusConfig.textColor}`}
-                      >
-                        <option value={proposal.status || 'observacao'}>
-                          {statusConfig.label}
-                        </option>
-                      </select>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}>
+                        {statusConfig.label}
+                      </span>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex flex-col space-y-1">
-                        <div className="text-xs text-gray-500">Progresso</div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-20 bg-gray-200 rounded-full h-2">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                progress >= 80 ? 'bg-green-500' :
-                                progress >= 60 ? 'bg-yellow-500' :
-                                progress >= 40 ? 'bg-orange-500' :
-                                'bg-red-500'
-                              }`}
-                              style={{ width: `${progress}%` }}
-                            ></div>
-                          </div>
-                          <span className="text-xs text-gray-600 font-medium">
-                            {progress}%
-                          </span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                          <div 
+                            className={`h-1.5 rounded-full ${
+                              progress >= 80 ? 'bg-green-500' :
+                              progress >= 60 ? 'bg-yellow-500' :
+                              progress >= 40 ? 'bg-orange-500' :
+                              'bg-red-500'
+                            }`}
+                            style={{ width: `${progress}%` }}
+                          ></div>
                         </div>
+                        <span className="text-xs text-gray-600 font-medium min-w-[30px]">
+                          {progress}%
+                        </span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
