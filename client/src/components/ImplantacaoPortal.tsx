@@ -999,23 +999,50 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => setShowProposalSelector(true)}
-                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                <Search className="w-5 h-5 mr-2" />
-                Selecionar Proposta
-              </button>
-              <button
-                onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
-                className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
-              >
-                <FileText className="w-5 h-5 mr-2" />
-                Abrir Google Drive
-              </button>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl shadow-lg border border-blue-100 p-8 mb-6">
+            <div className="flex items-center mb-6">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+              <h2 className="text-xl font-bold text-gray-800">Ações Rápidas</h2>
+              <div className="ml-auto">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse delay-75"></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-150"></div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Selecionar Proposta */}
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                <button
+                  onClick={() => setShowProposalSelector(true)}
+                  className="relative w-full flex items-center justify-center px-8 py-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold"
+                >
+                  <div className="flex flex-col items-center">
+                    <Search className="w-8 h-8 mb-2 drop-shadow-sm" />
+                    <span className="text-lg">Selecionar Proposta</span>
+                    <span className="text-xs text-blue-100 mt-1">Escolher proposta para edição</span>
+                  </div>
+                </button>
+              </div>
+
+              {/* Google Drive - Muda cor quando proposta está aberta */}
+              <div className="group relative">
+                <div className={`absolute inset-0 ${editingProposalId ? 'bg-gradient-to-r from-purple-600 to-purple-700' : 'bg-gradient-to-r from-emerald-600 to-emerald-700'} rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm`}></div>
+                <button
+                  onClick={() => window.open('https://drive.google.com/drive/folders/proposals', '_blank')}
+                  className={`relative w-full flex items-center justify-center px-8 py-6 ${editingProposalId ? 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800' : 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800'} text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
+                >
+                  <div className="flex flex-col items-center">
+                    <FileText className="w-8 h-8 mb-2 drop-shadow-sm" />
+                    <span className="text-lg">Google Drive</span>
+                    <span className={`text-xs mt-1 ${editingProposalId ? 'text-purple-100' : 'text-emerald-100'}`}>
+                      {editingProposalId ? 'Proposta Ativa' : 'Acessar documentos'}
+                    </span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
 
