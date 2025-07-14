@@ -1130,7 +1130,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const renderPropostas = () => (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Acompanhamento de Propostas</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Propostas ({filteredProposals.length})</h3>
+        </div>
         
         {/* Filtros */}
         <div className="flex space-x-4 mb-6">
@@ -1164,68 +1166,94 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           />
         </div>
 
-        {/* Lista de propostas */}
-        <div className="space-y-4">
-          {filteredProposals.map(proposal => {
-            const contractData = proposal.contractData || {};
-            const progress = Math.floor(Math.random() * 100);
-            const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus] || STATUS_CONFIG.observacao;
-            
-            return (
-              <div key={proposal.id} className="border rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-2 h-16 bg-blue-500 rounded-full"></div>
-                    <div>
-                      <h4 className="font-medium">{proposal.id}</h4>
-                      <p className="text-sm text-gray-600">{contractData.nomeEmpresa || 'Empresa não informada'}</p>
-                      <p className="text-sm text-gray-500">CNPJ: {contractData.cnpj || 'Não informado'}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">{contractData.valor || 'Valor não informado'}</p>
-                    <p className="text-sm text-gray-600">{getVendorName(proposal.vendorId)}</p>
-                  </div>
-                </div>
+        {/* Tabela de propostas */}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b bg-gray-50">
+                <th className="text-left py-3 px-4 font-medium">ID</th>
+                <th className="text-left py-3 px-4 font-medium">CLIENTE</th>
+                <th className="text-left py-3 px-4 font-medium">VENDEDOR</th>
+                <th className="text-left py-3 px-4 font-medium">PLANO</th>
+                <th className="text-left py-3 px-4 font-medium">VALOR</th>
+                <th className="text-left py-3 px-4 font-medium">STATUS</th>
+                <th className="text-left py-3 px-4 font-medium">PROGRESSO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProposals.map(proposal => {
+                const contractData = proposal.contractData || {};
+                const progress = Math.floor(Math.random() * 100);
+                const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus] || STATUS_CONFIG.observacao;
+                const abmId = proposal.abmId || `ABM${proposal.id.slice(-3)}`;
                 
-                <div className="flex items-center justify-between mb-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}>
-                    {statusConfig.label}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 mr-4">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Progresso</span>
-                      <span>{progress}%</span>
-                    </div>
-                    <SimpleProgressBar percentage={progress} />
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                      title="Ver Drive"
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      onClick={() => window.open(`/client/${proposal.clientToken}`, '_blank')}
-                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                      title="Link do Cliente"
-                    >
-                      <ExternalLink size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                return (
+                  <tr key={proposal.id} className="border-b hover:bg-gray-50">
+                    <td className="py-3 px-4">
+                      <button
+                        onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+                        title="Ver Drive"
+                      >
+                        {abmId}
+                      </button>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div>
+                        <div className="font-medium">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
+                        <div className="text-sm text-gray-600">VENDEDOR: PROP123</div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                          <span className="text-green-600 text-xs font-medium">
+                            {getVendorName(proposal.vendorId).charAt(0)}
+                          </span>
+                        </div>
+                        <span className="text-sm">{getVendorName(proposal.vendorId)}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-sm">
+                      {contractData.planoContratado || 'Plano não informado'}
+                    </td>
+                    <td className="py-3 px-4 font-medium">
+                      {contractData.valor || 'R$ 0,00'}
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={proposal.status || 'observacao'}
+                        disabled
+                        className={`px-2 py-1 rounded text-xs font-medium border-0 ${statusConfig.bgColor} ${statusConfig.textColor}`}
+                      >
+                        <option value={proposal.status || 'observacao'}>
+                          {statusConfig.label}
+                        </option>
+                      </select>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="flex-1">
+                          <div className="text-xs text-gray-500 mb-1">Progresso</div>
+                          <SimpleProgressBar percentage={progress} showLabel={false} />
+                        </div>
+                        <span className="text-xs text-gray-600 font-medium min-w-[35px]">
+                          {progress}%
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+        
+        {filteredProposals.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            Nenhuma proposta encontrada com os filtros aplicados.
+          </div>
+        )}
       </div>
     </div>
   );
