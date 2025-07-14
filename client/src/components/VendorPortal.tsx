@@ -1314,7 +1314,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       case 'new-proposal':
         return <ProposalGenerator 
           onBack={() => setActiveView('dashboard')} 
-          currentVendor={{
+          user={{
             id: user.id,
             name: user.name,
             email: user.email

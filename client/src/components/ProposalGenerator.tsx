@@ -4,10 +4,6 @@ import { showNotification } from '../utils/notifications';
 import ProposalManager from '../services/proposalManager';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
-interface ProposalGeneratorProps {
-  onBack: () => void;
-}
-
 interface ContractData {
   nomeEmpresa: string;
   cnpj: string;
@@ -71,14 +67,14 @@ interface QuotationData {
 
 interface ProposalGeneratorProps {
   onBack: () => void;
-  currentVendor?: {
+  user: {
     id: number;
     name: string;
     email: string;
   };
 }
 
-const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVendor }) => {
+const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, user }) => {
   const [contractData, setContractData] = useState<ContractData>({
     nomeEmpresa: '',
     cnpj: '',
