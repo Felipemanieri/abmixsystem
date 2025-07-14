@@ -649,6 +649,32 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             </div>
           </div>
 
+          {/* Vendor Observations */}
+          {(proposal.vendorObservations || proposal.internalData?.observacoesCliente) && (
+            <div className="p-6 border-b bg-yellow-50">
+              <div className="flex items-center mb-4">
+                <div className="flex items-center">
+                  <User className="h-6 w-6 text-blue-600 mr-2" />
+                  <h2 className="text-xl font-semibold text-gray-900">Observações do Vendedor</h2>
+                  <button
+                    onClick={() => setShowVendorObservations(!showVendorObservations)}
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showVendorObservations ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+              
+              {showVendorObservations && (
+                <div className="bg-white border border-yellow-200 rounded-lg p-4">
+                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                    {proposal.vendorObservations || proposal.internalData?.observacoesCliente}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Personal Data Form */}
           <div className="p-6">
             {/* Titulares */}
@@ -787,31 +813,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               </div>
             </div>
 
-            {/* Vendor Observations */}
-            {proposal.vendorObservations && (
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <div className="flex items-center">
-                    <User className="h-6 w-6 text-blue-600 mr-2" />
-                    <h2 className="text-xl font-semibold text-gray-900">Observações do Vendedor</h2>
-                    <button
-                      onClick={() => setShowVendorObservations(!showVendorObservations)}
-                      className="ml-2 text-gray-500 hover:text-gray-700"
-                    >
-                      {showVendorObservations ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
-                  </div>
-                </div>
-                
-                {showVendorObservations && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {proposal.vendorObservations}
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
+
 
             {/* Additional Contract Information */}
             <div className="mb-8">
