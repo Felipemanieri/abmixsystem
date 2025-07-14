@@ -1027,7 +1027,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   editingProposalId ? 'bg-green-700' : 'bg-gray-700'
                 }`}></div>
                 <FileText className="w-4 h-4 mr-2 relative z-10" />
-                <span className="relative z-10">Google Drive {editingProposalId ? '(Ativo)' : ''}</span>
+                <span className="relative z-10">Google Drive</span>
               </button>
             </div>
           </div>
