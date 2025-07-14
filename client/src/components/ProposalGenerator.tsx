@@ -310,7 +310,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   };
 
   const generateSameLinkProposal = () => {
-    // Manter os dados do contrato e link, limpar apenas dados pessoais
+    // Manter APENAS os dados do contrato inalterados, limpar dados pessoais e anexos
     setTitulares([{
       id: '1',
       nomeCompleto: '',
@@ -333,15 +333,37 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     
     setDependentes([]);
     
-    // Resetar observações do vendedor
-    setInternalData(prev => ({
-      ...prev,
+    // Resetar dados internos, mantendo apenas observações padrão
+    setInternalData({
+      reuniao: false,
+      nomeReuniao: '',
+      vendaDupla: false,
+      nomeVendaDupla: '',
+      desconto: '',
+      autorizadorDesconto: '',
+      observacoesFinanceiras: '',
       observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
-    }));
+    });
+    
+    // Limpar anexos
+    setVendorAttachments([]);
+    setArquivosAnexados([]);
+    setCotacoesCadastradas([]);
+    
+    // Resetar cotação
+    setQuotationData({
+      numeroVidas: 1,
+      operadora: '',
+      tipoPlano: '',
+      valor: '',
+      validade: '',
+      dataEnvio: new Date().toISOString().split('T')[0],
+      idades: [25]
+    });
     
     setIsSubmitted(false);
     
-    showNotification('Nova proposta iniciada para o mesmo link!', 'success');
+    showNotification('Nova proposta iniciada! Os dados do contrato foram mantidos.', 'success');
   };
 
   const resetForm = () => {

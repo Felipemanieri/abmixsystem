@@ -230,6 +230,32 @@ The application provides role-based portals with specific functionality:
   - Status changes in Implementation portal instantly reflect in all other portals
   - Proper ID column integration with clickable links to Google Drive folders
 
+### System Fixes and Real API Integration (Jan 14, 2025)
+- **Fixed useProposals Hook and Real Data Integration**:
+  - Corrected useProposals hook to properly load proposals from PostgreSQL database
+  - Replaced all simulated data with real API calls across all portals
+  - Implementation portal now shows actual proposals from database with real-time updates
+  - Financial portal integrated with authentic proposal data and working filters
+
+- **Enhanced Implementation Portal Actions**:
+  - Expanded from 3 to 6 actions per proposal: Ver Drive, Editar, Automação, Sync Sheets, Link Cliente, Notificar
+  - All action buttons functional with proper tooltips and visual feedback
+  - Color-coded action buttons for different functionalities
+  - Real-time synchronization between portals maintained
+
+- **"Gerar Proposta para o Mesmo Link" Button Fix**:
+  - Fixed setVendorObservations undefined error in ProposalGenerator
+  - Button now correctly maintains contract data while clearing personal data
+  - Preserves company information, CNPJ, plan details, and pricing
+  - Clears only titular/dependent data, internal notes, and attachments
+  - Maintains consistent behavior with user expectations
+
+- **Database Integration Improvements**:
+  - 8 total proposals in database with various statuses for testing
+  - All portals synchronized with real PostgreSQL data
+  - Status management working correctly across Implementation portal
+  - Proposal creation flow fully functional from Vendor to Implementation portal
+
 ### SupervisorPortal Cleanup (Jan 13, 2025)
 - **Removed "Propostas Ativas" section from SupervisorPortal**:
   - Cleaned up dashboard to focus on team performance and KPIs
