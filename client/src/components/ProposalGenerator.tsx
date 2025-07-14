@@ -332,7 +332,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     }]);
     
     setDependentes([]);
-    setVendorObservations('Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.');
+    
+    // Resetar observações do vendedor
+    setInternalData(prev => ({
+      ...prev,
+      observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
+    }));
+    
     setIsSubmitted(false);
     
     showNotification('Nova proposta iniciada para o mesmo link!', 'success');
