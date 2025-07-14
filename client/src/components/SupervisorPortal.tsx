@@ -41,6 +41,53 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   useRealTimeProposals();
 
+  // Hook para vendedores (Team Management)
+  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
+    queryKey: ['/api/vendors'],
+    retry: false
+  });
+
+  // Mutation para adicionar vendedor
+  const addVendorMutation = useMutation({
+    mutationFn: async (vendorData: { name: string; email: string }) => {
+      return await apiRequest('/api/vendors', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: vendorData.name,
+          email: vendorData.email,
+          password: '120784',
+          role: 'vendor',
+          active: true
+        })
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      setShowAddVendorForm(false);
+      setNewVendorData({ name: '', email: '' });
+      showNotification('Vendedor adicionado com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao adicionar vendedor', 'error');
+    }
+  });
+
+  // Mutation para remover vendedor
+  const deleteVendorMutation = useMutation({
+    mutationFn: async (vendorId: number) => {
+      return await apiRequest(`/api/vendors/${vendorId}`, {
+        method: 'DELETE'
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      showNotification('Vendedor removido com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao remover vendedor', 'error');
+    }
+  });
+
   // Filtrar propostas
   const filteredProposals = realProposals.filter((proposal) => {
     // Transformar dados para filtros
