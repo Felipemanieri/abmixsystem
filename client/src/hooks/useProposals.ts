@@ -29,6 +29,7 @@ export interface ProposalData {
   clientAttachments: any[];
   clientCompleted: boolean;
   status: string;
+  priority: string;
   createdAt: string;
   updatedAt: string;
   // Campos calculados
