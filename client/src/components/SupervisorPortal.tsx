@@ -130,10 +130,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   };
 
   // Buscar todos os vendedores
-  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
+  const { data: vendors = [], isLoading: vendorsLoading, error: vendorsError } = useQuery({
     queryKey: ['/api/vendors'],
+    queryFn: () => apiRequest('/api/vendors'),
     retry: false,
   });
+
+
 
   // Mutation para criar vendedor
   const createVendorMutation = useMutation({
