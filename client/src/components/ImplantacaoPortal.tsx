@@ -548,355 +548,295 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         </div>
       </div>
 
-      {/* Proposals Table */}
+      {/* Proposals Cards */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             Propostas ({filteredProposals.length})
           </h2>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  CLIENTE
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  VENDEDOR
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  PLANO
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  VALOR
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  STATUS
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  PROGRESSO
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  DATA
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  AÇÕES
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredProposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button 
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                      className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
-                    >
-                      {proposal.abmId}
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
-                      <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                        <User className="w-4 h-4 text-teal-600" />
-                      </div>
-                      <div className="ml-3">
-                        <div className="text-sm text-gray-900">{proposal.vendedor}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.plano}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <select
-                      value={proposal.status}
-                      onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
-                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
-                      style={{
-                        backgroundColor: (() => {
-                          const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
-                          const config = STATUS_CONFIG[currentStatus as ProposalStatus];
-                          if (!config) return '#ffffff';
-                          
-                          if (config.bgColor.includes('sky')) return '#e0f2fe';
-                          if (config.bgColor.includes('emerald')) return '#d1fae5';
-                          if (config.bgColor.includes('amber')) return '#fef3c7';
-                          if (config.bgColor.includes('blue-500')) return '#dbeafe';
-                          if (config.bgColor.includes('green-500')) return '#dcfce7';
-                          if (config.bgColor.includes('pink')) return '#fce7f3';
-                          if (config.bgColor.includes('yellow')) return '#fef7cd';
-                          if (config.bgColor.includes('orange')) return '#fed7aa';
-                          if (config.bgColor.includes('red')) return '#fee2e2';
-                          if (config.bgColor.includes('purple')) return '#f3e8ff';
-                          if (config.bgColor.includes('cyan')) return '#cffafe';
-                          return '#ffffff';
-                        })(),
-                        color: (() => {
-                          const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
-                          const config = STATUS_CONFIG[currentStatus as ProposalStatus];
-                          if (!config) return '#374151';
-                          
-                          if (config.textColor.includes('sky')) return '#0369a1';
-                          if (config.textColor.includes('emerald')) return '#047857';
-                          if (config.textColor.includes('amber')) return '#92400e';
-                          if (config.textColor.includes('blue-700')) return '#1e40af';
-                          if (config.textColor.includes('green-700')) return '#166534';
-                          if (config.textColor.includes('pink')) return '#be185d';
-                          if (config.textColor.includes('yellow')) return '#a16207';
-                          if (config.textColor.includes('orange')) return '#c2410c';
-                          if (config.textColor.includes('red')) return '#dc2626';
-                          if (config.textColor.includes('purple')) return '#7c3aed';
-                          if (config.textColor.includes('cyan')) return '#0891b2';
-                          return '#374151';
-                        })()
-                      }}
-                    >
-                      {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                        <option 
-                          key={key} 
-                          value={key}
-                          style={{
-                            backgroundColor: config.bgColor.includes('sky') ? '#e0f2fe' :
-                                           config.bgColor.includes('emerald') ? '#d1fae5' :
-                                           config.bgColor.includes('amber') ? '#fef3c7' :
-                                           config.bgColor.includes('blue-500') ? '#dbeafe' :
-                                           config.bgColor.includes('green-500') ? '#dcfce7' :
-                                           config.bgColor.includes('pink') ? '#fce7f3' :
-                                           config.bgColor.includes('yellow') ? '#fef7cd' :
-                                           config.bgColor.includes('orange') ? '#fed7aa' :
-                                           config.bgColor.includes('red') ? '#fee2e2' :
-                                           config.bgColor.includes('purple') ? '#f3e8ff' :
-                                           config.bgColor.includes('cyan') ? '#cffafe' : '#f9fafb',
-                            color: config.textColor.includes('sky') ? '#0369a1' :
-                                   config.textColor.includes('emerald') ? '#047857' :
-                                   config.textColor.includes('amber') ? '#92400e' :
-                                   config.textColor.includes('blue-700') ? '#1e40af' :
-                                   config.textColor.includes('green-700') ? '#166534' :
-                                   config.textColor.includes('pink') ? '#be185d' :
-                                   config.textColor.includes('yellow') ? '#a16207' :
-                                   config.textColor.includes('orange') ? '#c2410c' :
-                                   config.textColor.includes('red') ? '#dc2626' :
-                                   config.textColor.includes('purple') ? '#7c3aed' :
-                                   config.textColor.includes('cyan') ? '#0891b2' : '#374151'
-                          }}
-                        >
-                          {config.label}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="w-48">
-                      <ProgressBar 
-                        proposal={proposal}
-                        className="w-full"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <select
-                      value={proposal.priority}
-                      onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
-                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
-                      style={{
-                        backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
-                                       proposal.priority === 'medium' ? '#fef3c7' :
-                                       proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
-                        color: proposal.priority === 'high' ? '#dc2626' :
-                               proposal.priority === 'medium' ? '#a16207' :
-                               proposal.priority === 'low' ? '#166534' : '#374151'
-                      }}
-                    >
-                      <option 
-                        value="low"
-                        style={{
-                          backgroundColor: '#dcfce7',
-                          color: '#166534'
-                        }}
-                      >
-                        Baixa
-                      </option>
-                      <option 
-                        value="medium"
-                        style={{
-                          backgroundColor: '#fef3c7',
-                          color: '#a16207'
-                        }}
-                      >
-                        Média
-                      </option>
-                      <option 
-                        value="high"
-                        style={{
-                          backgroundColor: '#fee2e2',
-                          color: '#dc2626'
-                        }}
-                      >
-                        Alta
-                      </option>
-                    </select>
-                  </td>
+        <div className="p-6 space-y-4">
+          {filteredProposals.map((proposal) => (
+            <div key={proposal.id} className="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
+              <div className="flex items-start gap-6">
+                {/* Progress Bar Vertical */}
+                <div className="flex flex-col items-center">
+                  <div className="w-4 h-24 bg-gray-200 rounded-full relative overflow-hidden">
+                    <div 
+                      className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-full transition-all duration-300"
+                      style={{ height: `${proposal.progresso}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 mt-2">{proposal.progresso}%</span>
+                </div>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex flex-wrap gap-1">
-                      {/* Ações Originais */}
-                      <button
-                        onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                        className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
-                        title="Ver no Google Drive"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setEditingProposalId(proposal.id)}
-                        className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
-                        title="Editar Proposta"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Enviando para automação...', 'info')}
-                        className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
-                        title="Enviar para Automação"
-                      >
-                        <Zap className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
-                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
-                        title="Sincronizar Google Sheets"
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                        className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
-                        title="Link do Cliente"
-                      >
-                        <Link className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Enviando notificação...', 'info')}
-                        className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
-                        title="Notificar Cliente"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                      </button>
-                      
-                      {/* Novas Ações Adicionadas */}
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
-                          showNotification('Link copiado para área de transferência!', 'success');
-                        }}
-                        className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
-                        title="Copiar Link"
-                      >
-                        <Copy className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const message = `Olá! Sua proposta está disponível em: ${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
-                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-                        }}
-                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
-                        title="Enviar via WhatsApp"
-                      >
-                        <Send className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const subject = `Proposta de Plano de Saúde - ${proposal.cliente}`;
-                          const body = `Olá!\n\nSua proposta de plano de saúde está pronta e pode ser acessada através do link:\n${window.location.origin}/cliente/proposta/${proposal.clientToken}\n\nQualquer dúvida, estamos à disposição.\n\nAtenciosamente,\nEquipe Abmix`;
-                          window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
-                        }}
-                        className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
-                        title="Enviar por Email"
-                      >
-                        <Mail className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Download iniciado...', 'info')}
-                        className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
-                        title="Download de Documentos"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Proposta removida!', 'success')}
-                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                        title="Remover Proposta"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                        className="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-md transition-colors"
-                        title="Link Externo"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Proposta aprovada!', 'success')}
-                        className="p-2 text-lime-600 hover:text-lime-800 hover:bg-lime-50 rounded-md transition-colors"
-                        title="Aprovar Proposta"
-                      >
-                        <CheckCircle className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => showNotification('Alerta enviado!', 'warning')}
-                        className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
-                        title="Alerta"
-                      >
-                        <AlertCircle className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (navigator.share) {
-                            navigator.share({
-                              title: 'Proposta de Plano de Saúde',
-                              text: `Proposta para ${proposal.cliente}`,
-                              url: `${window.location.origin}/cliente/proposta/${proposal.clientToken}`
-                            });
-                          } else {
-                            showNotification('Compartilhamento não disponível neste dispositivo', 'info');
-                          }
-                        }}
-                        className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-colors"
-                        title="Compartilhar"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setShowInternalMessage(true)}
-                        className="p-2 text-violet-600 hover:text-violet-800 hover:bg-violet-50 rounded-md transition-colors"
-                        title="Mensagem Interna"
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                      </button>
+                {/* Client Info */}
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <button 
+                          onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                          className="text-lg font-bold text-blue-600 hover:text-blue-800 underline"
+                        >
+                          {proposal.abmId}
+                        </button>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={proposal.priority}
+                            onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
+                            className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-2 py-1"
+                            style={{
+                              backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
+                                             proposal.priority === 'medium' ? '#fef3c7' :
+                                             proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
+                              color: proposal.priority === 'high' ? '#dc2626' :
+                                     proposal.priority === 'medium' ? '#a16207' :
+                                     proposal.priority === 'low' ? '#166534' : '#374151'
+                            }}
+                          >
+                            <option value="low" style={{ backgroundColor: '#dcfce7', color: '#166534' }}>Baixa</option>
+                            <option value="medium" style={{ backgroundColor: '#fef3c7', color: '#a16207' }}>Média</option>
+                            <option value="high" style={{ backgroundColor: '#fee2e2', color: '#dc2626' }}>Alta</option>
+                          </select>
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-1">{proposal.cliente}</h3>
+                      <p className="text-sm text-gray-500 mb-2">CNPJ: {proposal.contractData?.cnpj}</p>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          <span>{proposal.vendedor}</span>
+                        </div>
+                        <div>Plano: {proposal.plano}</div>
+                        <div className="font-medium">R$ {proposal.valor}</div>
+                        <div>{new Date(proposal.createdAt).toLocaleDateString('pt-BR')}</div>
+                      </div>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+                    {/* Status */}
+                    <div className="text-right">
+                      <select
+                        value={proposal.status}
+                        onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
+                        className="text-sm font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2 mb-2"
+                        style={{
+                          backgroundColor: (() => {
+                            const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
+                            const config = STATUS_CONFIG[currentStatus as ProposalStatus];
+                            if (!config) return '#ffffff';
+                            
+                            if (config.bgColor.includes('sky')) return '#e0f2fe';
+                            if (config.bgColor.includes('emerald')) return '#d1fae5';
+                            if (config.bgColor.includes('amber')) return '#fef3c7';
+                            if (config.bgColor.includes('blue-500')) return '#dbeafe';
+                            if (config.bgColor.includes('green-500')) return '#dcfce7';
+                            if (config.bgColor.includes('pink')) return '#fce7f3';
+                            if (config.bgColor.includes('yellow')) return '#fef7cd';
+                            if (config.bgColor.includes('orange')) return '#fed7aa';
+                            if (config.bgColor.includes('red')) return '#fee2e2';
+                            if (config.bgColor.includes('purple')) return '#f3e8ff';
+                            if (config.bgColor.includes('cyan')) return '#cffafe';
+                            return '#ffffff';
+                          })(),
+                          color: (() => {
+                            const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
+                            const config = STATUS_CONFIG[currentStatus as ProposalStatus];
+                            if (!config) return '#374151';
+                            
+                            if (config.textColor.includes('sky')) return '#0369a1';
+                            if (config.textColor.includes('emerald')) return '#047857';
+                            if (config.textColor.includes('amber')) return '#92400e';
+                            if (config.textColor.includes('blue-700')) return '#1e40af';
+                            if (config.textColor.includes('green-700')) return '#166534';
+                            if (config.textColor.includes('pink')) return '#be185d';
+                            if (config.textColor.includes('yellow')) return '#a16207';
+                            if (config.textColor.includes('orange')) return '#c2410c';
+                            if (config.textColor.includes('red')) return '#dc2626';
+                            if (config.textColor.includes('purple')) return '#7c3aed';
+                            if (config.textColor.includes('cyan')) return '#0891b2';
+                            return '#374151';
+                          })()
+                        }}
+                      >
+                        {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                          <option 
+                            key={key} 
+                            value={key}
+                            style={{
+                              backgroundColor: config.bgColor.includes('sky') ? '#e0f2fe' :
+                                             config.bgColor.includes('emerald') ? '#d1fae5' :
+                                             config.bgColor.includes('amber') ? '#fef3c7' :
+                                             config.bgColor.includes('blue-500') ? '#dbeafe' :
+                                             config.bgColor.includes('green-500') ? '#dcfce7' :
+                                             config.bgColor.includes('pink') ? '#fce7f3' :
+                                             config.bgColor.includes('yellow') ? '#fef7cd' :
+                                             config.bgColor.includes('orange') ? '#fed7aa' :
+                                             config.bgColor.includes('red') ? '#fee2e2' :
+                                             config.bgColor.includes('purple') ? '#f3e8ff' :
+                                             config.bgColor.includes('cyan') ? '#cffafe' : '#f9fafb',
+                              color: config.textColor.includes('sky') ? '#0369a1' :
+                                     config.textColor.includes('emerald') ? '#047857' :
+                                     config.textColor.includes('amber') ? '#92400e' :
+                                     config.textColor.includes('blue-700') ? '#1e40af' :
+                                     config.textColor.includes('green-700') ? '#166534' :
+                                     config.textColor.includes('pink') ? '#be185d' :
+                                     config.textColor.includes('yellow') ? '#a16207' :
+                                     config.textColor.includes('orange') ? '#c2410c' :
+                                     config.textColor.includes('red') ? '#dc2626' :
+                                     config.textColor.includes('purple') ? '#7c3aed' :
+                                     config.textColor.includes('cyan') ? '#0891b2' : '#374151'
+                            }}
+                          >
+                            {config.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {/* Ações Originais */}
+                    <button
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                      title="Ver no Google Drive"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setEditingProposalId(proposal.id)}
+                      className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                      title="Editar Proposta"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Enviando para automação...', 'info')}
+                      className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
+                      title="Enviar para Automação"
+                    >
+                      <Zap className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
+                      className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                      title="Sincronizar Google Sheets"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                      className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                      title="Link do Cliente"
+                    >
+                      <Link className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Enviando notificação...', 'info')}
+                      className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
+                      title="Notificar Cliente"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                    </button>
+                    
+                    {/* Novas Ações Adicionadas */}
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
+                        showNotification('Link copiado para área de transferência!', 'success');
+                      }}
+                      className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
+                      title="Copiar Link"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        const message = `Olá! Sua proposta está disponível em: ${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                      }}
+                      className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
+                      title="Enviar via WhatsApp"
+                    >
+                      <Send className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        const subject = `Proposta de Plano de Saúde - ${proposal.cliente}`;
+                        const body = `Olá!\n\nSua proposta de plano de saúde está pronta e pode ser acessada através do link:\n${window.location.origin}/cliente/proposta/${proposal.clientToken}\n\nQualquer dúvida, estamos à disposição.\n\nAtenciosamente,\nEquipe Abmix`;
+                        window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+                      }}
+                      className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+                      title="Enviar por Email"
+                    >
+                      <Mail className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Download iniciado...', 'info')}
+                      className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
+                      title="Download de Documentos"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Proposta removida!', 'success')}
+                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                      title="Remover Proposta"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                      className="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-md transition-colors"
+                      title="Link Externo"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Proposta aprovada!', 'success')}
+                      className="p-2 text-lime-600 hover:text-lime-800 hover:bg-lime-50 rounded-md transition-colors"
+                      title="Aprovar Proposta"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => showNotification('Alerta enviado!', 'warning')}
+                      className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
+                      title="Alerta"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: 'Proposta de Plano de Saúde',
+                            text: `Proposta para ${proposal.cliente}`,
+                            url: `${window.location.origin}/cliente/proposta/${proposal.clientToken}`
+                          });
+                        } else {
+                          showNotification('Compartilhamento não disponível neste dispositivo', 'info');
+                        }
+                      }}
+                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-colors"
+                      title="Compartilhar"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setShowInternalMessage(true)}
+                      className="p-2 text-violet-600 hover:text-violet-800 hover:bg-violet-50 rounded-md transition-colors"
+                      title="Mensagem Interna"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

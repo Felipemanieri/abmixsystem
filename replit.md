@@ -159,8 +159,15 @@ The application provides role-based portals with specific functionality:
   - Preserved all original actions: Ver Drive, Editar, Automação, Sheets, Link Cliente, Notificar
   - Added new actions: Copiar Link, WhatsApp, Email, Download, Remover, Link Externo, Aprovar, Alerta, Compartilhar, Mensagem Interna
   - Total of 16 action buttons per proposal with unique colors and tooltips
-  - Used flex-wrap layout to accommodate all actions in table rows
   - Each action has functional implementation with real notifications and external integrations
+
+- **Converted table layout to vertical card layout with progress bars**:
+  - Changed from horizontal table to vertical card-based layout
+  - Clients displayed one below the other in individual cards
+  - Vertical progress bars on the left side of each card showing completion percentage
+  - Cards include all proposal information: ID, client name, CNPJ, vendor, plan, value, date
+  - Status and priority dropdowns remain functional with color coding
+  - All 16 action buttons displayed horizontally below each proposal card
 
 - **Maintained existing functionality while expanding capabilities**:
   - All original Implementation portal features preserved
