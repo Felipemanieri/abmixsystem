@@ -3,10 +3,6 @@ import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, U
 import { showNotification } from '../utils/notifications';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
-interface ProposalGeneratorProps {
-  onBack: () => void;
-}
-
 interface ContractData {
   nomeEmpresa: string;
   cnpj: string;
@@ -65,8 +61,6 @@ interface QuotationData {
   dataEnvio?: string;
   idades: number[];
 }
-
-
 
 interface ProposalGeneratorProps {
   onBack: () => void;
