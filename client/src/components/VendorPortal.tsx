@@ -1429,21 +1429,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
-                            <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
-                            {/* Barra de progresso horizontal - Como solicitado pelo usuário */}
-                            <div className="mt-2">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-xs text-gray-600">Progresso do Cliente</span>
-                                <span className="text-xs text-gray-600">{proposal.progresso}%</span>
-                              </div>
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div 
-                                  className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-500"
-                                  style={{ width: `${proposal.progresso}%` }}
-                                ></div>
-                              </div>
+                          <div className="flex items-center">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                              <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                             </div>
                           </div>
                         </td>

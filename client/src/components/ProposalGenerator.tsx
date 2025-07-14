@@ -378,9 +378,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       periodoVigencia: { inicio: '', fim: '' },
       odontoConjugado: false,
       compulsorio: false,
-      livreAdesao: false,
       inicioVigencia: '',
-      periodoMinimo: '',
       aproveitamentoCongenere: false,
     });
     setTitulares([{
@@ -410,22 +408,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       nomeVendaDupla: '',
       desconto: '',
       autorizadorDesconto: '',
-      observacoesFinanceiras: '',
-      observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
+      observacoesFinanceiras: ''
     });
-    setVendorAttachments([]);
-    setArquivosAnexados([]);
-    setCotacoesCadastradas([]);
-    setQuotationData({
-      numeroVidas: 1,
-      operadora: '',
-      tipoPlano: '',
-      valor: '',
-      validade: '',
-      dataEnvio: new Date().toISOString().split('T')[0],
-      idades: [25]
-    });
-    setContractFieldsReadOnly(false);
+    setAttachments([]);
     setIsSubmitted(false);
     setGeneratedLink('');
     setQuotationData({

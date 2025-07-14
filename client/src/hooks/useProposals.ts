@@ -84,17 +84,28 @@ export function useProposals() {
   };
 }
 
-// Hook específico para vendedores - filtra apenas propostas do vendedor logado
 export function useVendorProposals(vendorId: number) {
-  const { proposals: allProposals, isLoading, error } = useProposals();
+  const queryClient = useQueryClient();
   
-  // Filtrar apenas propostas do vendedor específico
-  const vendorProposals = allProposals.filter(proposal => proposal.vendorId === vendorId);
-  
-  return { 
-    proposals: vendorProposals, 
-    isLoading, 
-    error 
+  const { data: proposals = [], isLoading, error } = useQuery({
+    queryKey: ['/api/proposals/vendor', vendorId],
+    select: (data: any[]) => {
+      return data.map((proposal): ProposalData => ({
+        ...proposal,
+        cliente: proposal.contractData?.nomeEmpresa || 'N/A',
+        plano: proposal.contractData?.planoContratado || 'N/A',
+        valor: proposal.contractData?.valor || '0',
+        progresso: calculateProgress(proposal)
+      }));
+    },
+    refetchInterval: 5000, // Atualizar a cada 5 segundos
+  });
+
+  return {
+    proposals,
+    isLoading,
+    error,
+    refetch: () => queryClient.invalidateQueries({ queryKey: ['/api/proposals/vendor', vendorId] })
   };
 }
 
