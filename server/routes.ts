@@ -112,13 +112,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/proposals", async (req, res) => {
     try {
       const proposalData = req.body;
-      console.log("Dados recebidos:", JSON.stringify(proposalData, null, 2));
-      
       // Generate unique ID and client token
       const proposalId = `PROP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       const clientToken = `CLIENT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      console.log("IDs gerados:", { proposalId, clientToken });
       
       const dataToInsert = {
         id: proposalId,
@@ -134,18 +130,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "draft"
       };
       
-      console.log("Dados para inserir:", JSON.stringify(dataToInsert, null, 2));
-      
       const proposal = await storage.createProposal(dataToInsert);
-      
-      console.log("Proposta criada:", proposal);
 
       const response = {
         ...proposal,
         clientLink: `${req.protocol}://${req.hostname}/cliente/proposta/${clientToken}`
       };
-      
-      console.log("Resposta final:", response);
       res.json(response);
     } catch (error) {
       console.error("Erro ao criar proposta - detalhes:", error);

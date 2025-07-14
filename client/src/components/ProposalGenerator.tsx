@@ -251,6 +251,8 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         attachments: vendorAttachments
       };
 
+      console.log('Enviando dados da proposta:', proposalData);
+
       const response = await fetch('/api/proposals', {
         method: 'POST',
         headers: {
@@ -259,18 +261,23 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         body: JSON.stringify(proposalData)
       });
 
+      console.log('Resposta do servidor:', response.status, response.statusText);
+
       if (!response.ok) {
-        throw new Error('Erro ao criar proposta');
+        const errorData = await response.text();
+        console.error('Erro na resposta:', errorData);
+        throw new Error(`Erro ao criar proposta: ${response.status}`);
       }
 
       const result = await response.json();
+      console.log('Resultado recebido:', result);
       
       setGeneratedLink(result.clientLink);
       setIsSubmitted(true);
       showNotification('Link exclusivo da proposta gerado com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao gerar proposta:', error);
-      showNotification('Erro ao gerar link da proposta', 'error');
+      showNotification(`Erro ao gerar link da proposta: ${error.message}`, 'error');
     }
   };
 
