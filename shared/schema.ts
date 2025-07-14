@@ -1,4 +1,5 @@
 import { pgTable, text, serial, integer, boolean, timestamp, varchar, jsonb } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -40,13 +41,15 @@ export type Vendor = typeof vendors.$inferSelect;
 export const proposals = pgTable("proposals", {
   id: varchar("id").primaryKey().notNull(),
   vendorId: integer("vendor_id").references(() => vendors.id),
+  clientToken: varchar("client_token").unique().notNull(),
   contractData: jsonb("contract_data").notNull(),
-  titulares: jsonb("titulares").notNull(),
-  dependentes: jsonb("dependentes").notNull(),
-  internalData: jsonb("internal_data"),
-  attachments: jsonb("attachments"),
+  titulares: jsonb("titulares").default(sql`'[]'::jsonb`),
+  dependentes: jsonb("dependentes").default(sql`'[]'::jsonb`),
+  internalData: jsonb("internal_data").default(sql`'{}'::jsonb`),
+  vendorAttachments: jsonb("vendor_attachments").default(sql`'[]'::jsonb`),
+  clientAttachments: jsonb("client_attachments").default(sql`'[]'::jsonb`),
+  clientCompleted: boolean("client_completed").default(false),
   status: varchar("status").default("draft"),
-  clientToken: varchar("client_token").unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
