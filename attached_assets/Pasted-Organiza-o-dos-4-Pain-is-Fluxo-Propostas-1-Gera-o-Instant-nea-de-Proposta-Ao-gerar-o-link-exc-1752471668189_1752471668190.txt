@@ -1,0 +1,102 @@
+Organização dos 4 Painéis – Fluxo Propostas
+
+1. Geração Instantânea de Proposta
+
+Ao gerar o link exclusivo da proposta, criar automaticamente o ID do Cliente.
+
+Assim que o vendedor gera a proposta, as seguintes informações devem ser enviadas em tempo real para todos os painéis:
+
+ID
+
+Cliente
+
+Plano
+
+Valor
+
+Data
+
+Barra de progresso (preenchimento da documentação do cliente)
+
+Nome do vendedor (exceto no painel do próprio vendedor)
+
+2. Disposição das Tabelas – Exemplo Visual e Campos
+
+PAINEL VENDEDOR (imagem 1)
+Tabela: Propostas Recentes
+
+ID	CLIENTE	PLANO	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Empresarial Premium	OBSERVAÇÃO	[Barra Evolução] 100%	14/01/2024	...ícones...
+ABM002	Tech Solutions SA	Família Básico	OBSERVAÇÃO	[Barra Evolução] 100%	13/01/2024	...ícones...
+
+OBS: A barra de progresso deve evoluir em tempo real conforme o cliente preenche a documentação. NÃO remover nenhuma informação existente, apenas acrescente.
+
+Vendedor não precisa do próprio nome na tabela, pois é painel individual.
+
+PAINEL IMPLANTAÇÃO (imagem 2)
+Tabela: Propostas
+
+ID	CLIENTE	VENDEDOR	PLANO	VALOR	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Ana Caroline	Empresarial Premium	R$1.250,00	OBSERVAÇÃO	[Barra Evolução] 100%	14/01/2024	...ícones...
+ABM002	Tech Solutions SA	Bruna Garcia	Família Básico	R$650,00	ANALISE	[Barra Evolução]	13/01/2024	...ícones...
+
+Adicionar barra de progresso igual ao painel do vendedor, evolução em tempo real.
+
+Não apagar nada, apenas acrescente os campos faltantes.
+
+Sempre exibir o vendedor responsável.
+
+PAINEL SUPERVISOR (imagem 3)
+Tabela: Performance dos Vendedores
+
+VENDEDOR	PROPOSTAS	RECEITA	CONVERSÃO	AÇÕES
+Ana Caroline	15	R$85.500	[Barra Evolução] 9%	...ícones...
+Carlos Silva	12	R$72.300	[Barra Evolução] 9%	...ícones...
+
+Acrescentar: ID, Cliente, Plano, Valor, Data, Status, barra de progresso (preenchimento cliente).
+
+Barra de progresso em tempo real para acompanhamento do preenchimento dos clientes.
+
+Não remover campos atuais, só adicionar os necessários para padronizar.
+
+PAINEL FINANCEIRO (imagem 4)
+Tabela: Transações Recentes
+
+ID	CLIENTE	PLANO	VALOR	STATUS	DATA	AÇÕES
+1	Empresa ABC	Premium	R$15.000	Concluído	14/01/2024	...ícones...
+
+Acrescentar: Nome do vendedor, barra de progresso (igual aos outros painéis).
+
+Não apagar, só acrescentar campos faltantes.
+
+Barra de progresso em tempo real.
+
+REGRAS GERAIS
+
+NÃO APAGAR nenhuma informação já existente.
+
+APENAS ACRESCENTAR os campos faltantes e programar sincronização em tempo real.
+
+O ID deve ser gerado automaticamente assim que a proposta é criada pelo vendedor e enviado instantaneamente para todos os painéis.
+
+As barras de progresso de preenchimento do cliente devem aparecer em todos os painéis e serem atualizadas em tempo real.
+
+Todos os campos devem estar padronizados em todos os módulos.
+
+O campo "Nome do Vendedor" deve estar presente em todos os painéis exceto no próprio painel do vendedor.
+
+Qualquer alteração de status ou preenchimento deve atualizar imediatamente em todos os painéis (sincronização em tempo real).
+
+Resumo visual dos 4 painéis (conforme as imagens):
+
+Painel Vendedor: ID, Cliente, Plano, Status, Progresso (barra), Data, Ações.
+
+Painel Implantação: ID, Cliente, Vendedor, Plano, Valor, Status, Progresso (barra), Data, Ações.
+
+Painel Supervisor: Vendedor, ID, Cliente, Plano, Valor, Status, Progresso (barra), Data, Ações.
+
+Painel Financeiro: ID, Cliente, Vendedor, Plano, Valor, Status, Progresso (barra), Data, Ações.
+
+Reforço Final:
+Só acrescente, não apague nada. Padronize todos os campos e barras de progresso. Sincronize em tempo real em todos os painéis. O ID e as informações da proposta vão instantaneamente para todos os painéis ao gerar o link. O objetivo é total rastreabilidade e acompanhamento do processo de proposta.
+

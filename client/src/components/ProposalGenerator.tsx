@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
+import ProposalManager from '../services/proposalManager';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ProposalGeneratorProps {
@@ -144,6 +145,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
   const [cotacoesCadastradas, setCotacoesCadastradas] = useState<any[]>([]);
   const [vendorAttachments, setVendorAttachments] = useState<any[]>([]);
+  const [proposalManager] = useState(() => ProposalManager.getInstance());
 
 
 
@@ -273,6 +275,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
       const result = await response.json();
       console.log('Resultado da API:', result);
+      
+      // Sincronizar com ProposalManager para atualizar todos os painéis
+      const proposalId = await proposalManager.syncFromAPI({
+        ...result,
+        vendorName: user?.name || 'Vendedor'
+      });
+      
+      console.log('Proposta sincronizada com ID:', proposalId);
       
       setGeneratedLink(result.clientLink);
       setIsSubmitted(true);
