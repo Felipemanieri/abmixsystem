@@ -1,90 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { CheckCircle, Star } from 'lucide-react';
+import React from 'react';
+import { CheckCircle, Circle, Clock } from 'lucide-react';
 
 interface ProgressBarProps {
   proposal: any;
   className?: string;
+  detailed?: boolean;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ proposal, className = '' }) => {
-  const [progress, setProgress] = useState(0);
-
-  // Campos obrigatórios para calcular o progresso
-  const calculateProgress = (proposal: any) => {
-    const requiredFields = [
-      'client',      // Nome do cliente
-      'plan',        // Plano contratado
-      'value',       // Valor
-      'empresa',     // Nome da empresa
-      'cnpj',        // CNPJ
-      'vendedor',    // Vendedor responsável
-      'email',       // Email de contato
-      'phone',       // Telefone
-      'date',        // Data de criação
-      'status'       // Status da proposta
-    ];
-
-    let filledFields = 0;
-    requiredFields.forEach(field => {
-      if (proposal[field] && proposal[field].toString().trim() !== '') {
-        filledFields++;
-      }
-    });
-
-    // Considera documentos como campo adicional
-    if (proposal.documents && proposal.documents > 0) {
-      filledFields++;
+const ProgressBar: React.FC<ProgressBarProps> = ({ proposal, className = '', detailed = false }) => {
+  const calculateProgress = () => {
+    let progress = 20; // Base: proposta criada
+    
+    if (proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto) {
+      progress += 30; // Titulares preenchidos
     }
-
-    const totalFields = requiredFields.length + 1; // +1 para documentos
-    return Math.round((filledFields / totalFields) * 100);
+    
+    if (proposal.clientAttachments?.length > 0) {
+      progress += 30; // Documentos anexados
+    }
+    
+    if (proposal.clientCompleted) {
+      progress += 20; // Cliente completou
+    }
+    
+    return Math.min(progress, 100);
   };
 
-  useEffect(() => {
-    const newProgress = calculateProgress(proposal);
-    setProgress(newProgress);
-  }, [proposal]);
+  const progress = calculateProgress();
 
-  const getProgressColor = () => {
-    if (progress <= 30) return 'bg-gradient-to-r from-red-400 to-red-500';
-    if (progress <= 70) return 'bg-gradient-to-r from-amber-400 to-amber-500';
-    return 'bg-gradient-to-r from-emerald-400 to-emerald-500';
+  const getSteps = () => {
+    const steps = [
+      {
+        name: 'Proposta Criada',
+        completed: true,
+        icon: CheckCircle
+      },
+      {
+        name: 'Dados Pessoais',
+        completed: proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto,
+        icon: proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto ? CheckCircle : Clock
+      },
+      {
+        name: 'Documentos',
+        completed: proposal.clientAttachments?.length > 0,
+        icon: proposal.clientAttachments?.length > 0 ? CheckCircle : Clock
+      },
+      {
+        name: 'Finalizado',
+        completed: proposal.clientCompleted,
+        icon: proposal.clientCompleted ? CheckCircle : Clock
+      }
+    ];
+    return steps;
   };
 
-  const getProgressTextColor = () => {
-    if (progress <= 30) return 'text-red-500';
-    if (progress <= 70) return 'text-amber-500';
-    return 'text-emerald-500';
-  };
+  if (detailed) {
+    const steps = getSteps();
+    return (
+      <div className={`space-y-3 ${className}`}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-700">Progresso da Proposta</span>
+          <span className="text-sm text-gray-500">{progress}%</span>
+        </div>
+        
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-2 mt-3">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <div key={index} className="flex items-center space-x-2">
+                <Icon 
+                  className={`w-4 h-4 ${
+                    step.completed 
+                      ? 'text-green-500' 
+                      : 'text-gray-400'
+                  }`}
+                />
+                <span className={`text-xs ${
+                  step.completed 
+                    ? 'text-green-700 font-medium' 
+                    : 'text-gray-500'
+                }`}>
+                  {step.name}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={className}>
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-medium text-gray-600">Progresso</span>
-        <span className={`text-xs font-semibold ${getProgressTextColor()}`}>
+    <div className={`${className}`}>
+      <div className="flex items-center space-x-2">
+        <div className="flex-1 bg-gray-200 rounded-full h-2">
+          <div
+            className={`h-2 rounded-full transition-all duration-500 ${
+              progress < 30 ? 'bg-red-500' :
+              progress < 60 ? 'bg-yellow-500' :
+              progress < 90 ? 'bg-blue-500' :
+              'bg-green-500'
+            }`}
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <span className="text-xs text-gray-600 font-medium min-w-[35px]">
           {progress}%
         </span>
-      </div>
-      
-      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-        <div 
-          className={`h-2 rounded-full transition-all duration-500 ease-in-out ${getProgressColor()}`}
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      
-      <div className="mt-1">
-        <div className="text-xs text-gray-500">
-          {progress < 100 ? (
-            <span>
-              {progress <= 30 ? 'Dados básicos necessários' : 
-               progress <= 70 ? 'Progresso em andamento' : 
-               'Finalização pendente'}
-            </span>
-          ) : (
-            <span className="text-emerald-600">Todos os campos preenchidos</span>
-          )}
-        </div>
       </div>
     </div>
   );

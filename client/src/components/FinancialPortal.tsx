@@ -11,6 +11,7 @@ import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
+import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface FinancialPortalProps {
@@ -43,6 +44,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const { getClientDocuments } = useGoogleDrive();
+  
+  // Hook para propostas com sincronização em tempo real
+  const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
+  useRealTimeProposals();
 
   // Inicializar status e escutar mudanças
   useEffect(() => {

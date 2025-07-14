@@ -21,6 +21,8 @@ export interface IStorage {
   getProposalByToken(token: string): Promise<any>;
   updateProposal(id: string, proposal: any): Promise<any>;
   getVendorProposals(vendorId: number): Promise<any[]>;
+  getAllProposals(): Promise<any[]>;
+  getProposalCount(): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -111,6 +113,15 @@ export class DatabaseStorage implements IStorage {
 
   async getVendorProposals(vendorId: number): Promise<any[]> {
     return await db.select().from(proposals).where(eq(proposals.vendorId, vendorId));
+  }
+
+  async getAllProposals(): Promise<any[]> {
+    return await db.select().from(proposals);
+  }
+
+  async getProposalCount(): Promise<number> {
+    const result = await db.select().from(proposals);
+    return result.length;
   }
 }
 

@@ -9,6 +9,7 @@ import StatusBadge from './StatusBadge';
 import ProposalSelector from './ProposalSelector';
 import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
+import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
 
 interface ImplantacaoPortalProps {
@@ -59,6 +60,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+  
+  // Hook para propostas com sincronização em tempo real
+  const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
+  useRealTimeProposals();
   
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -449,13 +454,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     }
   };
 
-  const filteredProposals = proposals.filter(proposal => {
+  const filteredProposals = realProposals?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
-    const matchesSearch = proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         proposal.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         proposal.vendor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = proposal.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         proposal.abmId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         proposal.vendedor?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
-  });
+  }) || [];
 
   const renderProposalsTab = () => (
     <div className="space-y-6">
@@ -519,31 +524,28 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Cliente
+                  CLIENTE
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Vendedor
+                  VENDEDOR
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Plano
+                  PLANO
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Valor
+                  VALOR
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
+                  STATUS
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Progresso
+                  PROGRESSO
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Prioridade
+                  DATA
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Previsão
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
+                  AÇÕES
                 </th>
               </tr>
             </thead>
@@ -552,16 +554,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 <tr key={proposal.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button 
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id.replace('VEND', 'ABM').slice(0, 6)}`, '_blank')}
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
                       className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
                     >
-                      {proposal.id.replace('VEND', 'ABM').slice(0, 6)}
+                      {proposal.abmId}
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                      <div className="text-sm text-gray-500">{proposal.id}</div>
+                      <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                      <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -570,19 +572,19 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         <User className="w-4 h-4 text-teal-600" />
                       </div>
                       <div className="ml-3">
-                        <div className="text-sm text-gray-900">{proposal.vendor}</div>
+                        <div className="text-sm text-gray-900">{proposal.vendedor}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.plan}</div>
+                    <div className="text-sm text-gray-900">{proposal.plano}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
+                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
-                      value={proposalStatuses.get(proposal.id) || proposal.status}
+                      value={proposal.status}
                       onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
                       className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
                       style={{
@@ -709,8 +711,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       </option>
                     </select>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <ProgressBar proposal={proposal} />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}
+                    {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <ActionButtons 

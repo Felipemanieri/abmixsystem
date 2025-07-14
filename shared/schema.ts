@@ -40,6 +40,7 @@ export type Vendor = typeof vendors.$inferSelect;
 // Proposals table
 export const proposals = pgTable("proposals", {
   id: varchar("id").primaryKey().notNull(),
+  abmId: varchar("abm_id"),
   vendorId: integer("vendor_id").references(() => vendors.id),
   clientToken: varchar("client_token").unique().notNull(),
   contractData: jsonb("contract_data").notNull(),
@@ -49,7 +50,7 @@ export const proposals = pgTable("proposals", {
   vendorAttachments: jsonb("vendor_attachments").default(sql`'[]'::jsonb`),
   clientAttachments: jsonb("client_attachments").default(sql`'[]'::jsonb`),
   clientCompleted: boolean("client_completed").default(false),
-  status: varchar("status").default("draft"),
+  status: varchar("status").default("observacao"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

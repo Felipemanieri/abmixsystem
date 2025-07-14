@@ -12,6 +12,7 @@ import StatusBadge from './StatusBadge';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
+import { useVendorProposals, useRealTimeProposals } from '../hooks/useProposals';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 
 interface VendorPortalProps {
@@ -73,6 +74,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showCelebration, setShowCelebration] = useState(false);
+  
+  // Hook para propostas do vendedor
+  const { proposals: realProposals, isLoading: proposalsLoading } = useVendorProposals(user?.id || 0);
+  useRealTimeProposals(); // Ativa a atualização em tempo real
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
@@ -149,7 +154,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const stats = [
     {
       name: 'Propostas Ativas',
-      value: '23',
+      value: realProposals?.length?.toString() || '0',
       change: '+3 hoje',
       changeType: 'positive',
       icon: FileText,
@@ -157,7 +162,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     },
     {
       name: 'Clientes Preenchendo',
-      value: '8',
+      value: realProposals?.filter(p => !p.clientCompleted)?.length?.toString() || '0',
       change: 'Em andamento',
       changeType: 'neutral',
       icon: Users,
@@ -165,7 +170,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     },
     {
       name: 'Aguardando Documentos',
-      value: '5',
+      value: realProposals?.filter(p => p.clientAttachments?.length === 0)?.length?.toString() || '0',
       change: 'Pendente',
       changeType: 'warning',
       icon: Clock,
@@ -173,7 +178,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     },
     {
       name: 'Finalizadas',
-      value: '12',
+      value: realProposals?.filter(p => p.clientCompleted)?.length?.toString() || '0',
       change: '+2 hoje',
       changeType: 'positive',
       icon: CheckCircle,
@@ -1413,30 +1418,30 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {recentProposals.map((proposal) => (
+                    {realProposals?.map((proposal) => (
                       <tr key={proposal.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <button 
-                            onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id.replace('VEND', 'ABM').slice(0, 6)}`, '_blank')}
+                            onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
                             className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
                           >
-                            {proposal.id.replace('VEND', 'ABM').slice(0, 6)}
+                            {proposal.abmId}
                           </button>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                              <div className="text-sm text-gray-500">{proposal.id}</div>
+                              <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                              <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{proposal.plan}</div>
+                          <div className="text-sm text-gray-900">{proposal.plano}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <StatusBadge 
-                            status={proposalStatuses.get(proposal.id) || 'observacao'}
+                            status={proposal.status}
                           />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -1448,25 +1453,39 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(proposal.date).toLocaleDateString('pt-BR')}
+                          {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <ActionButtons 
-                            onView={() => handleViewProposal(proposal)}
-                            onCopyLink={() => handleCopyLink(proposal.link)}
-                            onWhatsApp={() => window.open(`https://wa.me/55${proposal.phone}?text=${encodeURIComponent(`Olá! Segue o link da proposta: ${proposal.link}`)}`)}
-                            onEmail={() => window.open(`mailto:${proposal.email}?subject=Proposta de Plano de Saúde&body=Olá! Segue o link da proposta: ${proposal.link}`)}
+                            onView={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                            onCopyLink={() => {
+                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                              navigator.clipboard.writeText(link);
+                              showNotification('Link copiado para área de transferência', 'success');
+                            }}
+                            onWhatsApp={() => {
+                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                              const message = `🏥 *Proposta de Plano de Saúde*\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\n🔗 Link: ${link}`;
+                              window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                            }}
+                            onEmail={() => {
+                              const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                              const subject = `Proposta de Plano - ${proposal.cliente}`;
+                              const body = `Olá!\n\nSegue a proposta de plano de saúde:\n\nEmpresa: ${proposal.cliente}\nPlano: ${proposal.plano}\nValor: R$ ${proposal.valor}\n\nLink: ${link}`;
+                              window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                            }}
                             onMessage={() => setShowInternalMessage(true)}
-                           onEdit={() => showNotification(`Editando proposta ${proposal.id}...`, 'info')}
+                           onEdit={() => showNotification(`Editando proposta ${proposal.abmId}...`, 'info')}
                            onDelete={() => {
-                             if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.id}?`)) {
+                             if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.abmId}?`)) {
                                showNotification('Proposta excluída com sucesso', 'success');
                              }
                            }}
-                            onExternalLink={() => window.open(proposal.link, '_blank')}
+                            onExternalLink={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
                             onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
                            onShare={() => {
-                             navigator.clipboard.writeText(`${window.location.origin}/compartilhar/${proposal.id}`);
+                             const link = `${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                             navigator.clipboard.writeText(link);
                              showNotification('Link de compartilhamento copiado!', 'success');
                            }}
                            onSend={() => {

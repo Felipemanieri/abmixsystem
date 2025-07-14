@@ -8,6 +8,7 @@ import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification } from '../utils/notifications';
+import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 import { apiRequest, queryClient } from '../lib/queryClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -30,6 +31,10 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
   const queryClientInstance = useQueryClient();
+  
+  // Hook para propostas com sincronização em tempo real
+  const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
+  useRealTimeProposals();
 
   // Inicializar status e escutar mudanças
   useEffect(() => {

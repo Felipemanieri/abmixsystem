@@ -114,7 +114,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const proposalData = req.body;
       console.log("Dados recebidos:", JSON.stringify(proposalData, null, 2));
       
-      // Generate unique ID and client token
+      // Generate unique ABM ID and client token
+      const abmCount = await storage.getProposalCount();
+      const abmId = `ABM${String(abmCount + 1).padStart(3, '0')}`;
       const proposalId = `PROP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       const clientToken = `CLIENT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       
@@ -122,6 +124,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const dataToInsert = {
         id: proposalId,
+        abmId: abmId,
         vendorId: proposalData.vendorId,
         clientToken: clientToken,
         contractData: proposalData.contractData,
@@ -131,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         vendorAttachments: proposalData.attachments || [],
         clientAttachments: [],
         clientCompleted: false,
-        status: "draft"
+        status: "observacao"
       };
       
       console.log("Dados para inserir:", JSON.stringify(dataToInsert, null, 2));
@@ -167,6 +170,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(proposal);
     } catch (error) {
       console.error("Erro ao buscar proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get all proposals (for portals)
+  app.get("/api/proposals", async (req, res) => {
+    try {
+      const proposals = await storage.getAllProposals();
+      res.json(proposals);
+    } catch (error) {
+      console.error("Erro ao buscar propostas:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get vendor proposals
+  app.get("/api/proposals/vendor/:vendorId", async (req, res) => {
+    try {
+      const vendorId = parseInt(req.params.vendorId);
+      const proposals = await storage.getVendorProposals(vendorId);
+      res.json(proposals);
+    } catch (error) {
+      console.error("Erro ao buscar propostas do vendedor:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
