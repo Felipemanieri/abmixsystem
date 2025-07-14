@@ -1185,7 +1185,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {filteredProposals.map(proposal => {
                 const contractData = proposal.contractData || {};
                 const progress = Math.floor(Math.random() * 100);
-                const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus] || STATUS_CONFIG.observacao;
+                const currentStatus = proposal.status as ProposalStatus;
+                const statusConfig = STATUS_CONFIG[currentStatus] || STATUS_CONFIG.observacao;
                 const abmId = proposal.abmId || `ABM${proposal.id.slice(-3)}`;
                 
                 return (
