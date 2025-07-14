@@ -11,6 +11,7 @@ import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 import { apiRequest, queryClient } from '../lib/queryClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import ProposalManager, { ProposalData } from '../services/proposalManager';
 
 interface SupervisorPortalProps {
   user: any;
@@ -30,42 +31,42 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
   const queryClientInstance = useQueryClient();
+  const [proposalManager] = useState(() => ProposalManager.getInstance());
+  const [realProposals, setRealProposals] = useState<ProposalData[]>([]);
 
-  // Inicializar status e escutar mudanças
+  // Inicializar propostas reais e escutar mudanças
   useEffect(() => {
-    const mockProposals = [
-      { id: 'ABM001', proposal: 'VEND001-PROP123' },
-      { id: 'ABM002', proposal: 'VEND002-PROP124' },
-      { id: 'ABM003', proposal: 'VEND001-PROP125' },
-      { id: 'ABM004', proposal: 'VEND003-PROP126' },
-      { id: 'ABM005', proposal: 'VEND002-PROP127' },
-      { id: 'ABM006', proposal: 'VEND001-PROP128' },
-      { id: 'ABM007', proposal: 'VEND003-PROP129' },
-      { id: 'ABM008', proposal: 'VEND004-PROP130' },
-      { id: 'ABM009', proposal: 'VEND002-PROP131' },
-      { id: 'ABM010', proposal: 'VEND001-PROP132' }
-    ];
-
-    const initializeStatuses = () => {
+    // Carregar propostas reais do ProposalManager
+    const loadRealProposals = () => {
+      const proposals = proposalManager.getAllProposals();
+      setRealProposals(proposals);
+      
+      // Inicializar status para as propostas reais
       const statusMap = new Map<string, ProposalStatus>();
-      mockProposals.forEach(proposal => {
-        statusMap.set(proposal.proposal, statusManager.getStatus(proposal.proposal));
+      proposals.forEach(proposal => {
+        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
       });
       setProposalStatuses(statusMap);
     };
 
-    initializeStatuses();
+    loadRealProposals();
 
     const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
       setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
     };
 
+    const handleProposalUpdate = () => {
+      loadRealProposals();
+    };
+
     statusManager.subscribe(handleStatusChange);
+    proposalManager.subscribe(handleProposalUpdate);
 
     return () => {
       statusManager.unsubscribe(handleStatusChange);
+      proposalManager.unsubscribe(handleProposalUpdate);
     };
-  }, [statusManager]);
+  }, [statusManager, proposalManager]);
 
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -334,13 +335,40 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
     );
   };
 
-  // Dados simulados para KPIs
-  const kpiData = {
-    totalRevenue: 'R$ 245.780',
-    totalProposals: '42',
-    conversionRate: '76%',
-    averageTicket: 'R$ 5.850'
+  // Cálculos baseados em propostas reais
+  const calculateRealKPIs = () => {
+    if (!realProposals.length) {
+      return {
+        totalRevenue: 'R$ 0',
+        totalProposals: '0',
+        conversionRate: '0%',
+        averageTicket: 'R$ 0'
+      };
+    }
+
+    const totalProposals = realProposals.length;
+    
+    // Calcular receita total das propostas
+    const totalRevenue = realProposals.reduce((sum, proposal) => {
+      const value = parseFloat(proposal.contractData.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0');
+      return sum + value;
+    }, 0);
+
+    // Calcular ticket médio
+    const averageTicket = totalProposals > 0 ? totalRevenue / totalProposals : 0;
+
+    // Simular taxa de conversão (aqui poderia vir de dados reais de fechamento)
+    const conversionRate = totalProposals > 0 ? Math.round((realProposals.filter(p => p.status !== 'draft').length / totalProposals) * 100) : 0;
+
+    return {
+      totalRevenue: `R$ ${totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+      totalProposals: totalProposals.toString(),
+      conversionRate: `${conversionRate}%`,
+      averageTicket: `R$ ${averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+    };
   };
+
+  const kpiData = calculateRealKPIs();
 
   // Dados dos vendedores
   const vendorData = [

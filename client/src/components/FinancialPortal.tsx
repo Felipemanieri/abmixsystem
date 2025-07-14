@@ -12,6 +12,7 @@ import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
+import ProposalManager, { ProposalData } from '../services/proposalManager';
 
 interface FinancialPortalProps {
   user: any;
@@ -43,38 +44,42 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const { getClientDocuments } = useGoogleDrive();
+  const [proposalManager] = useState(() => ProposalManager.getInstance());
+  const [realProposals, setRealProposals] = useState<ProposalData[]>([]);
 
-  // Inicializar status e escutar mudanças
+  // Inicializar propostas reais e escutar mudanças
   useEffect(() => {
-    const mockProposals = [
-      { id: 'VEND001-PROP123' },
-      { id: 'VEND002-PROP124' },
-      { id: 'VEND001-PROP125' },
-      { id: 'VEND003-PROP126' },
-      { id: 'VEND002-PROP127' },
-      { id: 'VEND001-PROP128' }
-    ];
-
-    const initializeStatuses = () => {
+    // Carregar propostas reais do ProposalManager
+    const loadRealProposals = () => {
+      const proposals = proposalManager.getAllProposals();
+      setRealProposals(proposals);
+      
+      // Inicializar status para as propostas reais
       const statusMap = new Map<string, ProposalStatus>();
-      mockProposals.forEach(proposal => {
+      proposals.forEach(proposal => {
         statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
       });
       setProposalStatuses(statusMap);
     };
 
-    initializeStatuses();
+    loadRealProposals();
 
     const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
       setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
     };
 
+    const handleProposalUpdate = () => {
+      loadRealProposals();
+    };
+
     statusManager.subscribe(handleStatusChange);
+    proposalManager.subscribe(handleProposalUpdate);
 
     return () => {
       statusManager.unsubscribe(handleStatusChange);
+      proposalManager.unsubscribe(handleProposalUpdate);
     };
-  }, [statusManager]);
+  }, [statusManager, proposalManager]);
 
   const mockTransactions: Transaction[] = [
     { id: '1', client: 'Empresa ABC', plan: 'Plano Premium', value: 'R$ 15.000', type: 'income', date: '2024-01-15', status: 'completed', category: 'subscription' },
@@ -101,13 +106,46 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     return matchesCategory && matchesSearch;
   });
 
-  const totalIncome = mockTransactions
-    .filter(t => t.type === 'income' && t.status === 'completed')
-    .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
+  // Cálculos baseados em propostas reais
+  const calculateRealFinancialData = () => {
+    if (!realProposals.length) {
+      return {
+        totalIncome: 0,
+        totalPending: 0,
+        totalProposals: 0,
+        completedProposals: 0
+      };
+    }
 
-  const totalPending = mockTransactions
-    .filter(t => t.status === 'pending')
-    .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
+    let totalIncome = 0;
+    let totalPending = 0;
+    let completedProposals = 0;
+
+    realProposals.forEach(proposal => {
+      const value = parseFloat(proposal.contractData.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0');
+      
+      // Propostas completadas (implantadas) contam como receita
+      if (proposal.status === 'implantado') {
+        totalIncome += value;
+        completedProposals++;
+      } 
+      // Propostas em andamento contam como pendente
+      else if (proposal.status !== 'draft' && proposal.status !== 'declinado') {
+        totalPending += value;
+      }
+    });
+
+    return {
+      totalIncome,
+      totalPending,
+      totalProposals: realProposals.length,
+      completedProposals
+    };
+  };
+
+  const realFinancialData = calculateRealFinancialData();
+  const totalIncome = realFinancialData.totalIncome;
+  const totalPending = realFinancialData.totalPending;
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
     setSelectedProposalForAutomation({ id: proposalId, client: clientName });
@@ -146,23 +184,23 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-gray-500">{mockTransactions.filter(t => t.status === 'pending').length} transações</span>
+            <span className="text-gray-500">{realProposals.filter(p => p.status !== 'draft' && p.status !== 'implantado' && p.status !== 'declinado').length} propostas</span>
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Clientes Ativos</p>
-              <p className="text-2xl font-bold text-gray-900">{mockClients.filter(c => c.status === 'active').length}</p>
+              <p className="text-sm font-medium text-gray-600">Propostas Ativas</p>
+              <p className="text-2xl font-bold text-gray-900">{realFinancialData.totalProposals}</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <Users className="h-6 w-6 text-blue-600" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600">+2</span>
-            <span className="text-gray-500 ml-1">novos este mês</span>
+            <span className="text-green-600">{realFinancialData.completedProposals}</span>
+            <span className="text-gray-500 ml-1">finalizadas</span>
           </div>
         </div>
 
@@ -170,7 +208,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Taxa de Conversão</p>
-              <p className="text-2xl font-bold text-gray-900">68%</p>
+              <p className="text-2xl font-bold text-gray-900">{realFinancialData.totalProposals > 0 ? Math.round((realFinancialData.completedProposals / realFinancialData.totalProposals) * 100) : 0}%</p>
             </div>
             <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-purple-600" />
