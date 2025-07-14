@@ -1426,11 +1426,41 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="flex items-center justify-between px-6 py-6">
-          <div className="flex items-center">
-            <AbmixLogo className="h-10 w-10 mr-6" />
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center space-x-8">
+            {/* Logo apenas icone */}
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10">
+                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M50 0C22.4 0 0 22.4 0 50h50V0Z" fill="url(#paint0_linear)" />
+                  <path d="M50 100C77.6 100 100 77.6 100 50H50V100Z" fill="url(#paint1_linear)" />
+                  <path d="M50 0C77.6 0 100 22.4 100 50H50V0Z" fill="url(#paint2_linear)" />
+                  <path d="M50 15C30.67 15 15 30.67 15 50H50V15Z" fill="white" />
+                  <path d="M50 85C69.33 85 85 69.33 85 50H50V85Z" fill="white" />
+                  <path d="M50 15C69.33 15 85 30.67 85 50H50V15Z" fill="white" />
+                  <defs>
+                    <linearGradient id="paint0_linear" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#0AB3B8" />
+                      <stop offset="1" stopColor="#0ACFB8" />
+                    </linearGradient>
+                    <linearGradient id="paint1_linear" x1="50" y1="50" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#0AB3B8" />
+                      <stop offset="1" stopColor="#0ABFB8" />
+                    </linearGradient>
+                    <linearGradient id="paint2_linear" x1="50" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#9CA3AF" />
+                      <stop offset="1" stopColor="#4B5563" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            
+            {/* Texto separado */}
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 mb-1">Portal Supervisor</h1>
+              <h1 className="text-xl font-semibold text-gray-900 leading-tight">
+                <span className="text-[#0AB3B8] font-bold">Ab</span><span className="text-gray-600">mix</span> Portal Supervisor
+              </h1>
               <p className="text-sm text-gray-600">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
             </div>
           </div>
