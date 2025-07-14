@@ -11,7 +11,6 @@ import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
 import { apiRequest, queryClient } from '../lib/queryClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import ProposalManager, { ProposalData } from '../services/proposalManager';
 
 interface SupervisorPortalProps {
   user: any;
@@ -31,42 +30,42 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
   const queryClientInstance = useQueryClient();
-  const [proposalManager] = useState(() => ProposalManager.getInstance());
-  const [realProposals, setRealProposals] = useState<ProposalData[]>([]);
 
-  // Inicializar propostas reais e escutar mudanças
+  // Inicializar status e escutar mudanças
   useEffect(() => {
-    // Carregar propostas reais do ProposalManager
-    const loadRealProposals = () => {
-      const proposals = proposalManager.getAllProposals();
-      setRealProposals(proposals);
-      
-      // Inicializar status para as propostas reais
+    const mockProposals = [
+      { id: 'ABM001', proposal: 'VEND001-PROP123' },
+      { id: 'ABM002', proposal: 'VEND002-PROP124' },
+      { id: 'ABM003', proposal: 'VEND001-PROP125' },
+      { id: 'ABM004', proposal: 'VEND003-PROP126' },
+      { id: 'ABM005', proposal: 'VEND002-PROP127' },
+      { id: 'ABM006', proposal: 'VEND001-PROP128' },
+      { id: 'ABM007', proposal: 'VEND003-PROP129' },
+      { id: 'ABM008', proposal: 'VEND004-PROP130' },
+      { id: 'ABM009', proposal: 'VEND002-PROP131' },
+      { id: 'ABM010', proposal: 'VEND001-PROP132' }
+    ];
+
+    const initializeStatuses = () => {
       const statusMap = new Map<string, ProposalStatus>();
-      proposals.forEach(proposal => {
-        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+      mockProposals.forEach(proposal => {
+        statusMap.set(proposal.proposal, statusManager.getStatus(proposal.proposal));
       });
       setProposalStatuses(statusMap);
     };
 
-    loadRealProposals();
+    initializeStatuses();
 
     const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
       setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
     };
 
-    const handleProposalUpdate = () => {
-      loadRealProposals();
-    };
-
     statusManager.subscribe(handleStatusChange);
-    proposalManager.subscribe(handleProposalUpdate);
 
     return () => {
       statusManager.unsubscribe(handleStatusChange);
-      proposalManager.unsubscribe(handleProposalUpdate);
     };
-  }, [statusManager, proposalManager]);
+  }, [statusManager]);
 
   // Notificações simuladas
   const [notifications, setNotifications] = useState([
@@ -335,40 +334,13 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
     );
   };
 
-  // Cálculos baseados em propostas reais
-  const calculateRealKPIs = () => {
-    if (!realProposals.length) {
-      return {
-        totalRevenue: 'R$ 0',
-        totalProposals: '0',
-        conversionRate: '0%',
-        averageTicket: 'R$ 0'
-      };
-    }
-
-    const totalProposals = realProposals.length;
-    
-    // Calcular receita total das propostas
-    const totalRevenue = realProposals.reduce((sum, proposal) => {
-      const value = parseFloat(proposal.contractData.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0');
-      return sum + value;
-    }, 0);
-
-    // Calcular ticket médio
-    const averageTicket = totalProposals > 0 ? totalRevenue / totalProposals : 0;
-
-    // Simular taxa de conversão (aqui poderia vir de dados reais de fechamento)
-    const conversionRate = totalProposals > 0 ? Math.round((realProposals.filter(p => p.status !== 'draft').length / totalProposals) * 100) : 0;
-
-    return {
-      totalRevenue: `R$ ${totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
-      totalProposals: totalProposals.toString(),
-      conversionRate: `${conversionRate}%`,
-      averageTicket: `R$ ${averageTicket.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
-    };
+  // Dados simulados para KPIs
+  const kpiData = {
+    totalRevenue: 'R$ 245.780',
+    totalProposals: '42',
+    conversionRate: '76%',
+    averageTicket: 'R$ 5.850'
   };
-
-  const kpiData = calculateRealKPIs();
 
   // Dados dos vendedores
   const vendorData = [
@@ -638,149 +610,6 @@ const SupervisorPortal: React.FC<SupervisorPortalProps> = ({ user, onLogout }) =
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Propostas Completas - Dados dos Portais Vendor + Implantação */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-              <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-gray-900">Propostas Completas - Vendor + Implantação</h2>
-                <div className="flex items-center space-x-4">
-                  <select
-                    value={selectedPeriod}
-                    onChange={(e) => setSelectedPeriod(e.target.value)}
-                    className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-                  >
-                    <option value="all">Todos os Status</option>
-                    <option value="observacao">OBSERVAÇÃO</option>
-                    <option value="analise">ANÁLISE</option>
-                    <option value="assinatura_ds">ASSINATURA DS</option>
-                    <option value="implantado">IMPLANTADO</option>
-                    <option value="pendencia">PENDÊNCIA</option>
-                  </select>
-                  <div className="relative">
-                    <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Buscar propostas..."
-                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendedor</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioridade</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Docs</th>
-                      <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {realProposals.map((proposal, index) => {
-                      const proposalId = `ABM${String(index + 1).padStart(3, '0')}`;
-                      const vendorName = vendors.find(v => v.id === proposal.vendorId)?.name || 'Vendedor';
-                      const clientName = proposal.titulares?.[0]?.nomeCompleto || proposal.contractData?.nomeEmpresa || 'Cliente';
-                      
-                      return (
-                        <tr key={proposal.id} className="hover:bg-gray-50">
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <button 
-                              onClick={() => window.open(`https://drive.google.com/drive/folders/${proposalId}`, '_blank')}
-                              className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium hover:bg-blue-200"
-                            >
-                              {proposalId}
-                            </button>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{clientName}</div>
-                            <div className="text-xs text-gray-500">{proposal.contractData?.nomeEmpresa}</div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{vendorName}</div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{proposal.contractData?.planoContratado}</div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
-                              R$ {parseFloat(proposal.contractData?.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0').toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <StatusBadge 
-                              status={proposalStatuses.get(proposal.id) || 'observacao'}
-                            />
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="w-20">
-                              <ProgressBar 
-                                proposal={{
-                                  id: proposal.id,
-                                  status: proposal.status,
-                                  progress: proposal.clientCompleted ? 100 : 50
-                                }}
-                                className="w-full"
-                              />
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                              Medium
-                            </span>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-xs text-gray-500">
-                              {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="text-xs text-gray-500">
-                              {(proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0)} docs
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <ActionButtons 
-                              onView={() => showNotification(`Visualizando proposta ${proposalId}`, 'info')}
-                              onCopyLink={() => {
-                                navigator.clipboard.writeText(proposal.clientLink || '');
-                                showNotification('Link copiado!', 'success');
-                              }}
-                              onWhatsApp={() => window.open(`https://wa.me/?text=Proposta ${proposalId}: ${proposal.clientLink}`)}
-                              onEmail={() => window.open(`mailto:?subject=Proposta ${proposalId}&body=Link da proposta: ${proposal.clientLink}`)}
-                              onDownload={() => showNotification('Baixando documentos...', 'success')}
-                              onExternalLink={() => window.open(`https://drive.google.com/drive/folders/${proposalId}`, '_blank')}
-                              onMessage={() => setShowInternalMessage(true)}
-                              onSend={() => showNotification('Enviando notificação...', 'info')}
-                              onShare={() => {
-                                navigator.clipboard.writeText(proposal.clientLink || '');
-                                showNotification('Link compartilhado!', 'success');
-                              }}
-                              userRole="supervisor"
-                              className="flex space-x-1"
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    {realProposals.length === 0 && (
-                      <tr>
-                        <td colSpan={11} className="px-6 py-8 text-center text-gray-500">
-                          Nenhuma proposta encontrada
-                        </td>
-                      </tr>
-                    )}
                   </tbody>
                 </table>
               </div>

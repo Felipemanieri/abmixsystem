@@ -12,7 +12,6 @@ import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
-import ProposalManager, { ProposalData } from '../services/proposalManager';
 
 interface FinancialPortalProps {
   user: any;
@@ -44,42 +43,38 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   const { getClientDocuments } = useGoogleDrive();
-  const [proposalManager] = useState(() => ProposalManager.getInstance());
-  const [realProposals, setRealProposals] = useState<ProposalData[]>([]);
 
-  // Inicializar propostas reais e escutar mudanças
+  // Inicializar status e escutar mudanças
   useEffect(() => {
-    // Carregar propostas reais do ProposalManager
-    const loadRealProposals = () => {
-      const proposals = proposalManager.getAllProposals();
-      setRealProposals(proposals);
-      
-      // Inicializar status para as propostas reais
+    const mockProposals = [
+      { id: 'VEND001-PROP123' },
+      { id: 'VEND002-PROP124' },
+      { id: 'VEND001-PROP125' },
+      { id: 'VEND003-PROP126' },
+      { id: 'VEND002-PROP127' },
+      { id: 'VEND001-PROP128' }
+    ];
+
+    const initializeStatuses = () => {
       const statusMap = new Map<string, ProposalStatus>();
-      proposals.forEach(proposal => {
+      mockProposals.forEach(proposal => {
         statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
       });
       setProposalStatuses(statusMap);
     };
 
-    loadRealProposals();
+    initializeStatuses();
 
     const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
       setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
     };
 
-    const handleProposalUpdate = () => {
-      loadRealProposals();
-    };
-
     statusManager.subscribe(handleStatusChange);
-    proposalManager.subscribe(handleProposalUpdate);
 
     return () => {
       statusManager.unsubscribe(handleStatusChange);
-      proposalManager.unsubscribe(handleProposalUpdate);
     };
-  }, [statusManager, proposalManager]);
+  }, [statusManager]);
 
   const mockTransactions: Transaction[] = [
     { id: '1', client: 'Empresa ABC', plan: 'Plano Premium', value: 'R$ 15.000', type: 'income', date: '2024-01-15', status: 'completed', category: 'subscription' },
@@ -106,46 +101,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     return matchesCategory && matchesSearch;
   });
 
-  // Cálculos baseados em propostas reais
-  const calculateRealFinancialData = () => {
-    if (!realProposals.length) {
-      return {
-        totalIncome: 0,
-        totalPending: 0,
-        totalProposals: 0,
-        completedProposals: 0
-      };
-    }
+  const totalIncome = mockTransactions
+    .filter(t => t.type === 'income' && t.status === 'completed')
+    .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
 
-    let totalIncome = 0;
-    let totalPending = 0;
-    let completedProposals = 0;
-
-    realProposals.forEach(proposal => {
-      const value = parseFloat(proposal.contractData.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0');
-      
-      // Propostas completadas (implantadas) contam como receita
-      if (proposal.status === 'implantado') {
-        totalIncome += value;
-        completedProposals++;
-      } 
-      // Propostas em andamento contam como pendente
-      else if (proposal.status !== 'draft' && proposal.status !== 'declinado') {
-        totalPending += value;
-      }
-    });
-
-    return {
-      totalIncome,
-      totalPending,
-      totalProposals: realProposals.length,
-      completedProposals
-    };
-  };
-
-  const realFinancialData = calculateRealFinancialData();
-  const totalIncome = realFinancialData.totalIncome;
-  const totalPending = realFinancialData.totalPending;
+  const totalPending = mockTransactions
+    .filter(t => t.status === 'pending')
+    .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
     setSelectedProposalForAutomation({ id: proposalId, client: clientName });
@@ -184,23 +146,23 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-gray-500">{realProposals.filter(p => p.status !== 'draft' && p.status !== 'implantado' && p.status !== 'declinado').length} propostas</span>
+            <span className="text-gray-500">{mockTransactions.filter(t => t.status === 'pending').length} transações</span>
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Propostas Ativas</p>
-              <p className="text-2xl font-bold text-gray-900">{realFinancialData.totalProposals}</p>
+              <p className="text-sm font-medium text-gray-600">Clientes Ativos</p>
+              <p className="text-2xl font-bold text-gray-900">{mockClients.filter(c => c.status === 'active').length}</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <Users className="h-6 w-6 text-blue-600" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600">{realFinancialData.completedProposals}</span>
-            <span className="text-gray-500 ml-1">finalizadas</span>
+            <span className="text-green-600">+2</span>
+            <span className="text-gray-500 ml-1">novos este mês</span>
           </div>
         </div>
 
@@ -208,7 +170,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Taxa de Conversão</p>
-              <p className="text-2xl font-bold text-gray-900">{realFinancialData.totalProposals > 0 ? Math.round((realFinancialData.completedProposals / realFinancialData.totalProposals) * 100) : 0}%</p>
+              <p className="text-2xl font-bold text-gray-900">68%</p>
             </div>
             <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-purple-600" />
@@ -355,149 +317,61 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         className="mb-6"
       />
       
-      {/* Propostas Completas - Dados dos Portais Vendor + Implantação */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-gray-900">Propostas Completas - Vendor + Implantação</h3>
-          <div className="flex items-center space-x-4">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="observacao">OBSERVAÇÃO</option>
-              <option value="analise">ANÁLISE</option>
-              <option value="assinatura_ds">ASSINATURA DS</option>
-              <option value="implantado">IMPLANTADO</option>
-              <option value="pendencia">PENDÊNCIA</option>
-            </select>
-            <div className="relative">
-              <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Buscar propostas..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-              />
-            </div>
-          </div>
+        <div className="p-6 border-b border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900">Propostas em Andamento</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendedor</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aprovação</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Docs</th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {realProposals.map((proposal, index) => {
-                const proposalId = `ABM${String(index + 1).padStart(3, '0')}`;
-                const vendorName = 'Vendedor'; // Buscar do banco se necessário
-                const clientName = proposal.titulares?.[0]?.nomeCompleto || proposal.contractData?.nomeEmpresa || 'Cliente';
-                
-                return (
-                  <tr key={proposal.id} className="hover:bg-gray-50">
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <button 
-                        onClick={() => window.open(`https://drive.google.com/drive/folders/${proposalId}`, '_blank')}
-                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium hover:bg-blue-200"
-                      >
-                        {proposalId}
-                      </button>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{clientName}</div>
-                      <div className="text-xs text-gray-500">{proposal.contractData?.nomeEmpresa}</div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{vendorName}</div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{proposal.contractData?.planoContratado}</div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
-                        R$ {parseFloat(proposal.contractData?.valor?.replace(/[^\d,]/g, '').replace(',', '.') || '0').toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <StatusBadge 
-                        status={proposalStatuses.get(proposal.id) || 'analise'}
+              {mockProposals.map((proposal) => (
+                <tr key={proposal.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <StatusBadge 
+                      status={proposalStatuses.get(proposal.id) || 'pending_validation'}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="w-48">
+                      <ProgressBar 
+                        proposal={proposal}
+                        className="w-full"
                       />
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="w-20">
-                        <ProgressBar 
-                          proposal={{
-                            id: proposal.id,
-                            status: proposal.status,
-                            progress: proposal.clientCompleted ? 100 : 50
-                          }}
-                          className="w-full"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="flex space-x-1">
-                        <button className="bg-green-100 text-green-700 p-1 rounded hover:bg-green-200">
-                          <CheckCircle className="h-4 w-4" />
-                        </button>
-                        <button className="bg-red-100 text-red-700 p-1 rounded hover:bg-red-200">
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-xs text-gray-500">
-                        {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <div className="text-xs text-gray-500">
-                        {(proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0)} docs
-                      </div>
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap">
-                      <ActionButtons 
-                        onView={() => showNotification(`Visualizando proposta ${proposalId}`, 'info')}
-                        onCopyLink={() => {
-                          navigator.clipboard.writeText(proposal.clientLink || '');
-                          showNotification('Link copiado!', 'success');
-                        }}
-                        onWhatsApp={() => window.open(`https://wa.me/?text=Proposta ${proposalId}: ${proposal.clientLink}`)}
-                        onEmail={() => window.open(`mailto:?subject=Proposta ${proposalId}&body=Link da proposta: ${proposal.clientLink}`)}
-                        onDownload={() => showNotification('Baixando documentos...', 'success')}
-                        onExternalLink={() => window.open(`https://drive.google.com/drive/folders/${proposalId}`, '_blank')}
-                        onApprove={() => showNotification('Proposta aprovada!', 'success')}
-                        onReject={() => showNotification('Proposta rejeitada!', 'error')}
-                        onAutomate={() => handleAutomateProposal(proposal.id, clientName)}
-                        onMessage={() => setShowInternalMessage(true)}
-                        userRole="financial"
-                        className="flex space-x-1"
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-              {realProposals.length === 0 && (
-                <tr>
-                  <td colSpan={11} className="px-6 py-8 text-center text-gray-500">
-                    Nenhuma proposta encontrada
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(proposal.date).toLocaleDateString('pt-BR')}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      onClick={() => handleAutomateProposal(proposal.id, proposal.client)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-xs mr-2"
+                    >
+                      <Zap className="h-3 w-3 inline mr-1" />
+                      Automatizar
+                    </button>
+                    <button className="text-blue-600 hover:text-blue-900">
+                      <Eye className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
