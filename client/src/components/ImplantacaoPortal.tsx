@@ -1362,36 +1362,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     </div>
   );
 
-  // Render automation tab content
-  const renderAutomationTab = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-lg font-semibold text-gray-900">Sistema de Automação</h2>
-          <button
-            onClick={() => showNotification('Acessando automação...', 'info')}
-            className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-          >
-            <Zap className="w-4 h-4 mr-2" />
-            Executar Automação
-          </button>
-        </div>
-        
-        <div className="text-center py-12">
-          <Zap className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Automação em Desenvolvimento</h3>
-          <p className="text-gray-500 mb-4">O sistema de automação será implementado em breve</p>
-          <button
-            onClick={() => showNotification('Configurações de automação em breve!', 'info')}
-            className="text-purple-600 hover:text-purple-800 font-medium"
-          >
-            Configurar Regras
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
   // Main component return
   return (
     <div className="min-h-screen bg-gray-50">
