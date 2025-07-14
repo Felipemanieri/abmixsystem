@@ -154,6 +154,46 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Individual Vendor Authentication System Implementation (Jan 14, 2025)
+- **Implemented complete individual vendor authentication**:
+  - Email-based login system for each vendor with personalized access
+  - Password authentication using default password 120784 for all vendors
+  - Individual vendor data isolation - each vendor sees only their own proposals/clients
+  - Real authentication API endpoint `/api/vendor/login` with proper validation
+
+- **12 Specific Vendors Registered in PostgreSQL Database**:
+  1. Ana Caroline Terto - comercial14@abmix.com.br - Password: 120784
+  2. Bruna Garcia - comercial10@abmix.com.br - Password: 120784
+  3. Fabiana Ferreira - comercial17@abmix.com.br - Password: 120784
+  4. Fabiana Godinho - comercial@abmix.com.br - Password: 120784
+  5. Fernanda Batista - comercial18@abmix.com.br - Password: 120784
+  6. Gabrielle Fernandes - comercial3@abmix.com.br - Password: 120784
+  7. Isabela Velasquez - comercial4@abmix.com.br - Password: 120784
+  8. Juliana Araujo - comercial6@abmix.com.br - Password: 120784
+  9. Lohainy Berlino - comercial15@abmix.com.br - Password: 120784
+  10. Luciana Velasquez - comercial21@abmix.com.br - Password: 120784
+  11. Monique Silva - comercial2@abmix.com.br - Password: 120784
+  12. Sara Mattos - comercial8@abmix.com.br - Password: 120784
+
+- **Enhanced SupervisorPortal Team Management**:
+  - Complete vendor listing with Name, Email, Password (120784), Status, and Creation Date
+  - Add/Remove vendor functionality for supervisor access
+  - Real-time vendor management using React Query for data synchronization
+  - Visual display of vendor passwords for supervisor reference
+  - Team management interface with proper CRUD operations
+
+- **Personalized VendorPortal Experience**:
+  - Welcome message displays "Bem-vinda(o), [Vendor Name]" in portal header
+  - Individual vendor session management with proper user context
+  - Each vendor portal restricted to their own data and proposals
+  - Real vendor name display throughout the interface
+
+- **Database Integration Completed**:
+  - PostgreSQL vendors table with all 12 vendors pre-populated
+  - Vendor authentication using Drizzle ORM and proper error handling
+  - Session management integrated with individual vendor logins
+  - Secure password validation with fallback to default password 120784
+
 ### Complete Status System Overhaul with ID Column Integration (Jan 13, 2025)
 - **Implemented comprehensive status system with 11 specific status types**:
   - Status types: OBSERVAÇÃO (azul claro), ANALISE (verde claro), ASSINATURA DS (amarelo escuro), EXPIRADO (azul forte), IMPLANTADO (verde forte), AGUAR PAGAMENTO (rosa), ASSINATURA PROPOSTA (amarelo claro), AGUAR SELEÇÃO DE VIGENCIA (laranja), PENDÊNCIA (vermelho), DECLINADO (roxo), AGUAR VIGÊNCIA (azul claro)
