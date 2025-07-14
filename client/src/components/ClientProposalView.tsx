@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Building, FileText, User, Upload, Camera, CheckCircle, Lock, Save, Download, Eye, EyeOff, Plus, Trash2, Users } from 'lucide-react';
+import { ArrowLeft, Building, FileText, User, Upload, Camera, CheckCircle, Lock, Save, Download, Eye, EyeOff, Plus, Trash2, Users, Phone, Mail, MapPin, Calendar, Shield, Check, Image } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 
 interface ClientProposalViewProps {
@@ -51,6 +51,7 @@ interface Proposal {
   dependentes: PersonData[];
   attachments: any[];
   status: string;
+  vendorObservations?: string;
 }
 
 const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
@@ -61,6 +62,8 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   const [clientAttachments, setClientAttachments] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showVendorObservations, setShowVendorObservations] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState<'file' | 'camera' | 'gallery'>('file');
 
   useEffect(() => {
     fetchProposal();
@@ -118,8 +121,10 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   });
 
   const addTitular = () => {
-    const newTitular = createEmptyPerson(`titular-${Date.now()}`);
-    setTitulares([...titulares, newTitular]);
+    if (titulares.length < 10) {
+      const newTitular = createEmptyPerson(`titular-${Date.now()}`);
+      setTitulares([...titulares, newTitular]);
+    }
   };
 
   const removeTitular = (id: string) => {
@@ -129,8 +134,10 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   };
 
   const addDependente = () => {
-    const newDependente = createEmptyPerson(`dependente-${Date.now()}`, 'Cônjuge');
-    setDependentes([...dependentes, newDependente]);
+    if (dependentes.length < 20) {
+      const newDependente = createEmptyPerson(`dependente-${Date.now()}`, 'Cônjuge');
+      setDependentes([...dependentes, newDependente]);
+    }
   };
 
   const removeDependente = (id: string) => {
@@ -151,16 +158,26 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
 
   const handleFileUpload = (files: FileList | null) => {
     if (files) {
-      const newFiles = Array.from(files);
-      setClientAttachments([...clientAttachments, ...newFiles]);
-      showNotification(`${newFiles.length} arquivo(s) adicionado(s)`, 'success');
+      const fileArray = Array.from(files);
+      const validFiles = fileArray.filter(file => {
+        const isValidType = file.type.includes('pdf') || file.type.includes('image');
+        const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
+        return isValidType && isValidSize;
+      });
+      
+      if (validFiles.length !== fileArray.length) {
+        showNotification('Alguns arquivos foram ignorados por não atenderem aos requisitos', 'warning');
+      }
+      
+      setClientAttachments(prev => [...prev, ...validFiles]);
+      if (validFiles.length > 0) {
+        showNotification(`${validFiles.length} arquivo(s) adicionado(s)`, 'success');
+      }
     }
   };
 
   const removeAttachment = (index: number) => {
-    const newAttachments = [...clientAttachments];
-    newAttachments.splice(index, 1);
-    setClientAttachments(newAttachments);
+    setClientAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -399,6 +416,70 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             required
           />
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            E-mail Empresa
+          </label>
+          <input
+            type="email"
+            value={person.emailEmpresa}
+            onChange={(e) => type === 'titular' ? updateTitular(index, 'emailEmpresa', e.target.value) : updateDependente(index, 'emailEmpresa', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Telefone Empresa
+          </label>
+          <input
+            type="tel"
+            value={person.telefoneEmpresa}
+            onChange={(e) => type === 'titular' ? updateTitular(index, 'telefoneEmpresa', e.target.value) : updateDependente(index, 'telefoneEmpresa', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="(11) 99999-9999"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Peso (kg)
+          </label>
+          <input
+            type="text"
+            value={person.peso}
+            onChange={(e) => type === 'titular' ? updateTitular(index, 'peso', e.target.value) : updateDependente(index, 'peso', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Ex: 70"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Altura (m)
+          </label>
+          <input
+            type="text"
+            value={person.altura}
+            onChange={(e) => type === 'titular' ? updateTitular(index, 'altura', e.target.value) : updateDependente(index, 'altura', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Ex: 1.70"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Dados para Reembolso
+          </label>
+          <textarea
+            value={person.dadosReembolso}
+            onChange={(e) => type === 'titular' ? updateTitular(index, 'dadosReembolso', e.target.value) : updateDependente(index, 'dadosReembolso', e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={2}
+            placeholder="Banco, agência, conta corrente, PIX, etc."
+          />
+        </div>
       </div>
     </div>
   );
@@ -492,7 +573,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Valor</label>
                 <input
                   type="text"
-                  value={`R$ ${proposal.contractData.valor}`}
+                  value={proposal.contractData.valor?.includes('R$') ? proposal.contractData.valor : `R$ ${proposal.contractData.valor}`}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
                   readOnly
                 />
@@ -512,6 +593,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <button
                   onClick={addTitular}
                   className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
+                  disabled={titulares.length >= 10}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Adicionar Titular
@@ -533,6 +615,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <button
                   onClick={addDependente}
                   className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center"
+                  disabled={dependentes.length >= 20}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Adicionar Dependente
@@ -544,34 +627,69 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               </div>
             </div>
 
-            {/* Document Upload */}
+            {/* Required Documents */}
             <div className="mb-8">
               <div className="flex items-center mb-4">
                 <FileText className="h-6 w-6 text-blue-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900">Documentos</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Documentos Necessários</h2>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <h3 className="font-medium text-blue-900 mb-2">Documentos obrigatórios para todos os beneficiários:</h3>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• RG (frente e verso)</li>
+                  <li>• CPF</li>
+                  <li>• Comprovante de residência (máx. 3 meses)</li>
+                  <li>• Comprovante de renda</li>
+                  <li>• Cartão de vacina (para dependentes menores)</li>
+                  <li>• Certidão de casamento ou nascimento (para dependentes)</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Document Upload */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <Upload className="h-6 w-6 text-blue-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">Enviar Documentos</h2>
               </div>
               
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-                <div className="text-center">
-                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-lg text-gray-600 mb-2">Envie seus documentos</p>
+                <div className="text-center mb-4">
+                  <p className="text-lg text-gray-600 mb-2">Escolha como enviar seus documentos</p>
                   <p className="text-sm text-gray-500 mb-4">
                     Aceitos: PDF, JPG, PNG (máx. 10MB cada)
                   </p>
-                  <input
-                    type="file"
-                    multiple
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={(e) => handleFileUpload(e.target.files)}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 cursor-pointer inline-block"
-                  >
-                    Selecionar Arquivos
-                  </label>
+                  
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <label className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 cursor-pointer inline-flex items-center">
+                      <Upload className="h-5 w-5 mr-2" />
+                      Escolher Arquivo
+                      <input
+                        type="file"
+                        multiple
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileUpload(e.target.files)}
+                        className="hidden"
+                      />
+                    </label>
+                    
+                    <button
+                      onClick={() => setUploadMethod('camera')}
+                      className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
+                    >
+                      <Camera className="h-5 w-5 mr-2" />
+                      Tirar Foto
+                    </button>
+                    
+                    <button
+                      onClick={() => setUploadMethod('gallery')}
+                      className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
+                    >
+                      <Image className="h-5 w-5 mr-2" />
+                      Da Galeria
+                    </button>
+                  </div>
                 </div>
                 
                 {clientAttachments.length > 0 && (
@@ -579,8 +697,14 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     <h4 className="font-medium text-gray-900 mb-2">Arquivos selecionados:</h4>
                     <ul className="space-y-2">
                       {clientAttachments.map((file, index) => (
-                        <li key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                          <span className="text-sm text-gray-700">{file.name}</span>
+                        <li key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded">
+                          <div className="flex items-center">
+                            <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                            <span className="text-sm text-gray-700">{file.name}</span>
+                            <span className="text-xs text-gray-500 ml-2">
+                              ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                            </span>
+                          </div>
                           <button
                             onClick={() => removeAttachment(index)}
                             className="text-red-600 hover:text-red-800"
@@ -592,6 +716,84 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     </ul>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Vendor Observations */}
+            {proposal.vendorObservations && (
+              <div className="mb-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex items-center">
+                    <User className="h-6 w-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl font-semibold text-gray-900">Observações do Vendedor</h2>
+                    <button
+                      onClick={() => setShowVendorObservations(!showVendorObservations)}
+                      className="ml-2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showVendorObservations ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+                </div>
+                
+                {showVendorObservations && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {proposal.vendorObservations}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Additional Contract Information */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <Shield className="h-6 w-6 text-blue-600 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900">Informações do Plano</h2>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-sm text-gray-700">
+                      Odonto Conjugado: {proposal.contractData.odontoConjugado ? 'Sim' : 'Não'}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-sm text-gray-700">
+                      Compulsório: {proposal.contractData.compulsorio ? 'Sim' : 'Não'}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-600 mr-2" />
+                    <span className="text-sm text-gray-700">
+                      Livre Adesão: {proposal.contractData.livreAdesao ? 'Sim' : 'Não'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Início de Vigência</label>
+                    <input
+                      type="text"
+                      value={proposal.contractData.inicioVigencia}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Período Mínimo</label>
+                    <input
+                      type="text"
+                      value={proposal.contractData.periodoMinimo || '12 meses'}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                      readOnly
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
