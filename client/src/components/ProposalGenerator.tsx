@@ -240,14 +240,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       return;
     }
 
-    if (!currentVendor) {
-      showNotification('Erro: Vendedor não identificado', 'error');
+    if (!user) {
+      showNotification('Erro: Usuário não identificado', 'error');
       return;
     }
 
     try {
       const proposalData = {
-        vendorId: currentVendor.id,
+        vendorId: user.id,
         contractData: contractData,
         titulares: titulares,
         dependentes: dependentes,
