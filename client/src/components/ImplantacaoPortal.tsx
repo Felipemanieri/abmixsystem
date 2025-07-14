@@ -136,9 +136,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   };
 
   const handleSelectProposal = (proposalId: string) => {
+    console.log('Selecionando proposta para edição:', proposalId);
     setEditingProposalId(proposalId);
     setActiveTab('editor');
-    showNotification(`Carregando proposta ${proposalId} para edição...`, 'info');
+    setShowProposalSelector(false); // Fechar o modal
+    showNotification(`Abrindo proposta ${proposalId} para edição completa...`, 'info');
   };
 
   const handleBackFromEditor = () => {
@@ -1049,12 +1051,33 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               {activeTab === 'proposals' && renderProposalsTab()}
               {activeTab === 'automation' && renderAutomationTab()}
               {activeTab === 'editor' && editingProposalId && (
-                <ProposalEditor
-                  proposalId={editingProposalId}
-                  onBack={handleBackFromEditor}
-                  onSave={handleSaveProposal}
-                  user={user}
-                />
+                <div className="h-full">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      Editor de Proposta - {editingProposalId}
+                    </h2>
+                    <button
+                      onClick={handleBackFromEditor}
+                      className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Voltar para Lista
+                    </button>
+                  </div>
+                  <ProposalEditor
+                    proposalId={editingProposalId}
+                    onBack={handleBackFromEditor}
+                    onSave={handleSaveProposal}
+                    user={user}
+                  />
+                </div>
+              )}
+              {activeTab === 'editor' && !editingProposalId && (
+                <div className="text-center py-12">
+                  <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta selecionada</h3>
+                  <p className="text-gray-600">Use o botão "Selecionar Proposta" para escolher uma proposta para edição.</p>
+                </div>
               )}
             </div>
           </div>
