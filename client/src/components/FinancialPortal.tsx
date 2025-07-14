@@ -358,14 +358,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                    <div className="text-sm font-medium text-gray-900">{proposal.contractData?.nomeEmpresa}</div>
                     <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.vendedor}</div>
+                    <div className="text-sm text-gray-900">{proposal.vendorName}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
+                    <div className="text-sm font-medium text-gray-900">R$ {proposal.contractData?.valor}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge 
@@ -385,7 +385,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button 
-                      onClick={() => handleAutomateProposal(proposal.id, proposal.cliente)}
+                      onClick={() => handleAutomateProposal(proposal.id, proposal.contractData?.nomeEmpresa)}
                       className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-xs mr-2"
                     >
                       <Zap className="h-3 w-3 inline mr-1" />
