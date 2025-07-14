@@ -122,6 +122,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     statusManager.updateStatus(proposalId, newStatus);
   };
 
+  const handlePriorityUpdate = (proposalId: string, newPriority: 'low' | 'medium' | 'high') => {
+    setProposals(prev => prev.map(proposal => 
+      proposal.id === proposalId 
+        ? { ...proposal, priority: newPriority }
+        : proposal
+    ));
+    showNotification(`Prioridade da proposta ${proposalId} alterada para: ${getPriorityText(newPriority)}`, 'success');
+  };
+
   const [proposals, setProposals] = useState<Proposal[]>([
     {
       id: 'VEND001-PROP123',
@@ -637,9 +646,47 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(proposal.priority)}`}>
-                      {getPriorityText(proposal.priority)}
-                    </span>
+                    <select
+                      value={proposal.priority}
+                      onChange={(e) => handlePriorityUpdate(proposal.id, e.target.value as 'low' | 'medium' | 'high')}
+                      className="text-xs font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
+                      style={{
+                        backgroundColor: proposal.priority === 'high' ? '#fee2e2' :
+                                       proposal.priority === 'medium' ? '#fef3c7' :
+                                       proposal.priority === 'low' ? '#dcfce7' : '#f9fafb',
+                        color: proposal.priority === 'high' ? '#dc2626' :
+                               proposal.priority === 'medium' ? '#a16207' :
+                               proposal.priority === 'low' ? '#166534' : '#374151'
+                      }}
+                    >
+                      <option 
+                        value="low"
+                        style={{
+                          backgroundColor: '#dcfce7',
+                          color: '#166534'
+                        }}
+                      >
+                        Baixa
+                      </option>
+                      <option 
+                        value="medium"
+                        style={{
+                          backgroundColor: '#fef3c7',
+                          color: '#a16207'
+                        }}
+                      >
+                        Média
+                      </option>
+                      <option 
+                        value="high"
+                        style={{
+                          backgroundColor: '#fee2e2',
+                          color: '#dc2626'
+                        }}
+                      >
+                        Alta
+                      </option>
+                    </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}
