@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
@@ -7,6 +7,7 @@ import FinancialPortal from './components/FinancialPortal';
 import ImplantacaoPortal from './components/ImplantacaoPortal';
 import SupervisorPortal from './components/SupervisorPortal';
 import RestrictedAreaPortal from './components/RestrictedAreaPortal';
+import ClientProposalView from './components/ClientProposalView';
 import { Lock } from 'lucide-react';
 
 type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor' | 'restricted';
@@ -27,6 +28,7 @@ interface ChatMessage {
 function App() {
   const [currentPortal, setCurrentPortal] = useState<Portal>('home');
   const [currentUser, setCurrentUser] = useState<User>(null);
+  const [clientProposalToken, setClientProposalToken] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
@@ -37,6 +39,16 @@ function App() {
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
+
+  // Check for client proposal token in URL
+  useEffect(() => {
+    const path = window.location.pathname;
+    const clientProposalMatch = path.match(/\/cliente\/proposta\/(.+)/);
+    
+    if (clientProposalMatch) {
+      setClientProposalToken(clientProposalMatch[1]);
+    }
+  }, []);
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
@@ -100,6 +112,11 @@ function App() {
     
     return 'Estou aqui para ajudar! Posso esclarecer sobre planos, preços, documentação, processo de contratação ou conectá-lo com nossa equipe especializada. Como posso auxiliá-lo?';
   };
+
+  // If accessing client proposal via direct link
+  if (clientProposalToken) {
+    return <ClientProposalView token={clientProposalToken} />;
+  }
 
   // Se não está logado e não está na home, mostrar login
   if (!currentUser && currentPortal !== 'home') {

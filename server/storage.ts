@@ -1,4 +1,4 @@
-import { users, vendors, type User, type InsertUser, type Vendor, type InsertVendor } from "@shared/schema";
+import { users, vendors, proposals, type User, type InsertUser, type Vendor, type InsertVendor, type Proposal, type InsertProposal } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -14,6 +14,13 @@ export interface IStorage {
   createVendor(vendor: InsertVendor): Promise<Vendor>;
   updateVendor(id: number, vendor: Partial<InsertVendor>): Promise<Vendor>;
   deleteVendor(id: number): Promise<void>;
+  
+  // Proposal operations
+  createProposal(proposal: InsertProposal): Promise<Proposal>;
+  getProposal(id: string): Promise<Proposal | undefined>;
+  getProposalByToken(token: string): Promise<Proposal | undefined>;
+  updateProposal(id: string, proposal: Partial<InsertProposal>): Promise<Proposal>;
+  getVendorProposals(vendorId: number): Promise<Proposal[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -72,6 +79,38 @@ export class DatabaseStorage implements IStorage {
       .update(vendors)
       .set({ active: false })
       .where(eq(vendors.id, id));
+  }
+
+  // Proposal operations
+  async createProposal(insertProposal: InsertProposal): Promise<Proposal> {
+    const [proposal] = await db
+      .insert(proposals)
+      .values(insertProposal)
+      .returning();
+    return proposal;
+  }
+
+  async getProposal(id: string): Promise<Proposal | undefined> {
+    const [proposal] = await db.select().from(proposals).where(eq(proposals.id, id));
+    return proposal || undefined;
+  }
+
+  async getProposalByToken(token: string): Promise<Proposal | undefined> {
+    const [proposal] = await db.select().from(proposals).where(eq(proposals.clientToken, token));
+    return proposal || undefined;
+  }
+
+  async updateProposal(id: string, proposalData: Partial<InsertProposal>): Promise<Proposal> {
+    const [proposal] = await db
+      .update(proposals)
+      .set({ ...proposalData, updatedAt: new Date() })
+      .where(eq(proposals.id, id))
+      .returning();
+    return proposal;
+  }
+
+  async getVendorProposals(vendorId: number): Promise<Proposal[]> {
+    return await db.select().from(proposals).where(eq(proposals.vendorId, vendorId));
   }
 }
 

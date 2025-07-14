@@ -107,8 +107,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // use storage to perform CRUD operations on the storage interface
-  // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+  // Proposal routes
+  app.post("/api/proposals", async (req, res) => {
+    try {
+      const proposalData = req.body;
+      
+      // Generate unique ID and client token
+      const proposalId = `PROP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const clientToken = `CLIENT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      const proposal = await storage.createProposal({
+        id: proposalId,
+        vendorId: proposalData.vendorId,
+        contractData: proposalData.contractData,
+        titulares: proposalData.titulares || [],
+        dependentes: proposalData.dependentes || [],
+        internalData: proposalData.internalData,
+        attachments: proposalData.attachments || [],
+        status: "draft",
+        clientToken: clientToken
+      });
+
+      res.json({
+        ...proposal,
+        clientLink: `${req.protocol}://${req.hostname}/cliente/proposta/${clientToken}`
+      });
+    } catch (error) {
+      console.error("Erro ao criar proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get proposal by token (for client access)
+  app.get("/api/proposals/client/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      const proposal = await storage.getProposalByToken(token);
+      
+      if (!proposal) {
+        return res.status(404).json({ error: "Proposta não encontrada" });
+      }
+
+      res.json(proposal);
+    } catch (error) {
+      console.error("Erro ao buscar proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update proposal by token (for client completion)
+  app.put("/api/proposals/client/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      const updateData = req.body;
+      
+      const existingProposal = await storage.getProposalByToken(token);
+      if (!existingProposal) {
+        return res.status(404).json({ error: "Proposta não encontrada" });
+      }
+
+      const updatedProposal = await storage.updateProposal(existingProposal.id, {
+        ...updateData,
+        status: "completed"
+      });
+
+      res.json(updatedProposal);
+    } catch (error) {
+      console.error("Erro ao atualizar proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
 
   const httpServer = createServer(app);
 

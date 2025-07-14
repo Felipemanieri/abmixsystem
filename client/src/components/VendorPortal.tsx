@@ -1289,7 +1289,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   const renderContent = () => {
     switch (activeView) {
       case 'new-proposal':
-        return <ProposalGenerator onBack={() => setActiveView('dashboard')} />;
+        return <ProposalGenerator 
+          onBack={() => setActiveView('dashboard')} 
+          currentVendor={{
+            id: user.id,
+            name: user.name,
+            email: user.email
+          }}
+        />;
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
       case 'quotations':

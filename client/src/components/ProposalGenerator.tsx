@@ -68,7 +68,16 @@ interface QuotationData {
 
 
 
-const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
+interface ProposalGeneratorProps {
+  onBack: () => void;
+  currentVendor?: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
+
+const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVendor }) => {
   const [contractData, setContractData] = useState<ContractData>({
     nomeEmpresa: '',
     cnpj: '',
@@ -221,18 +230,48 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack }) => {
     showNotification('Proposta salva como rascunho', 'success');
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!contractData.nomeEmpresa || !contractData.cnpj || !contractData.planoContratado) {
       showNotification('Preencha os campos obrigatórios do contrato', 'error');
       return;
     }
 
-    const proposalId = `PROP${Date.now()}`;
-    const link = `${window.location.origin}/cliente/proposta/${proposalId}`;
-    
-    setGeneratedLink(link);
-    setIsSubmitted(true);
-    showNotification('Link da proposta gerado com sucesso!', 'success');
+    if (!currentVendor) {
+      showNotification('Erro: Vendedor não identificado', 'error');
+      return;
+    }
+
+    try {
+      const proposalData = {
+        vendorId: currentVendor.id,
+        contractData: contractData,
+        titulares: titulares,
+        dependentes: dependentes,
+        internalData: internalData,
+        attachments: vendorAttachments
+      };
+
+      const response = await fetch('/api/proposals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(proposalData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao criar proposta');
+      }
+
+      const result = await response.json();
+      
+      setGeneratedLink(result.clientLink);
+      setIsSubmitted(true);
+      showNotification('Link exclusivo da proposta gerado com sucesso!', 'success');
+    } catch (error) {
+      console.error('Erro ao gerar proposta:', error);
+      showNotification('Erro ao gerar link da proposta', 'error');
+    }
   };
 
   const copyToClipboard = () => {
