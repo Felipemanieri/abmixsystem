@@ -1189,6 +1189,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 const statusConfig = STATUS_CONFIG[currentStatus] || STATUS_CONFIG.observacao;
                 const abmId = proposal.abmId || `ABM${proposal.id.slice(-3)}`;
                 
+
+                
                 return (
                   <tr key={proposal.id} className="border-b hover:bg-gray-50">
                     <td className="py-3 px-4">
@@ -1220,15 +1222,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       {contractData.valor || 'R$ 0,00'}
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}>
+                      <span 
+                        className={`px-2 py-1 rounded text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}
+                        title={`Status: ${statusConfig.label} - ${statusConfig.description}`}
+                      >
                         {statusConfig.label}
                       </span>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
-                        <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                        <div className="w-12 bg-gray-200 rounded-full h-1">
                           <div 
-                            className={`h-1.5 rounded-full ${
+                            className={`h-1 rounded-full ${
                               progress >= 80 ? 'bg-green-500' :
                               progress >= 60 ? 'bg-yellow-500' :
                               progress >= 40 ? 'bg-orange-500' :
@@ -1237,7 +1242,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                             style={{ width: `${progress}%` }}
                           ></div>
                         </div>
-                        <span className="text-xs text-gray-600 font-medium min-w-[30px]">
+                        <span className="text-xs text-gray-600 font-medium">
                           {progress}%
                         </span>
                       </div>
