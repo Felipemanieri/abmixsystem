@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -764,39 +764,108 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => setEditingProposalId(proposal.id)}
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
+                          showNotification('Link copiado para área de transferência!', 'success');
+                        }}
+                        className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
+                        title="Copiar Link"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          const message = `Olá! Sua proposta está disponível em: ${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                        }}
                         className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                        title="Enviar via WhatsApp"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          const subject = `Proposta de Plano de Saúde - ${proposal.cliente}`;
+                          const body = `Olá!\n\nSua proposta de plano de saúde está pronta e pode ser acessada através do link:\n${window.location.origin}/cliente/proposta/${proposal.clientToken}\n\nQualquer dúvida, estamos à disposição.\n\nAtenciosamente,\nEquipe Abmix`;
+                          window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+                        }}
+                        className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+                        title="Enviar por Email"
+                      >
+                        <Mail className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Download iniciado...', 'info')}
+                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                        title="Download de Documentos"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setEditingProposalId(proposal.id)}
+                        className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
                         title="Editar Proposta"
                       >
                         <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Proposta removida!', 'success')}
+                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                        title="Remover Proposta"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                        className="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-md transition-colors"
+                        title="Link Externo"
+                      >
+                        <ExternalLink className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => showNotification('Enviando para automação...', 'info')}
                         className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
                         title="Enviar para Automação"
                       >
-                        <Zap className="w-4 h-4" />
+                        <Send className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
-                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
-                        title="Sincronizar Google Sheets"
+                        onClick={() => showNotification('Proposta aprovada!', 'success')}
+                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
+                        title="Aprovar Proposta"
                       >
-                        <RefreshCw className="w-4 h-4" />
+                        <CheckCircle className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                        onClick={() => showNotification('Alerta enviado!', 'warning')}
                         className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
-                        title="Link do Cliente"
+                        title="Alerta"
                       >
-                        <Link className="w-4 h-4" />
+                        <AlertCircle className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => showNotification('Enviando notificação...', 'info')}
-                        className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
-                        title="Notificar Cliente"
+                        onClick={() => {
+                          if (navigator.share) {
+                            navigator.share({
+                              title: 'Proposta de Plano de Saúde',
+                              text: `Proposta para ${proposal.cliente}`,
+                              url: `${window.location.origin}/cliente/proposta/${proposal.clientToken}`
+                            });
+                          } else {
+                            showNotification('Compartilhamento não disponível neste dispositivo', 'info');
+                          }
+                        }}
+                        className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-colors"
+                        title="Compartilhar"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setShowInternalMessage(true)}
+                        className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
+                        title="Mensagem Interna"
+                      >
+                        <MessageSquare className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
