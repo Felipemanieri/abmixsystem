@@ -10,7 +10,7 @@ import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import { showNotification as utilShowNotification } from '../utils/notifications';
-import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
+import StatusManager, { ProposalStatus } from '@shared/statusSystem';
 
 interface ClientPortalProps {
   user: any;

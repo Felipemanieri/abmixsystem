@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Search, Filter, User, Calendar, FileText, Eye } from 'lucide-react';
 import StatusBadge from './StatusBadge';
-import { ProposalStatus } from '../../../shared/statusSystem';
+import { ProposalStatus } from '@shared/statusSystem';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '../lib/queryClient';
 

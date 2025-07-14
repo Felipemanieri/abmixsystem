@@ -10,7 +10,7 @@ import ProposalSelector from './ProposalSelector';
 import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
-import StatusManager, { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
+import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 
 interface ImplantacaoPortalProps {
   user: any;

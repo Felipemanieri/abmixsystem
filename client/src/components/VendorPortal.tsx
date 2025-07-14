@@ -13,7 +13,7 @@ import StatusBadge from './StatusBadge';
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { useVendorProposals, useRealTimeProposals } from '../hooks/useProposals';
-import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
+import StatusManager, { ProposalStatus } from '@shared/statusSystem';
 
 interface VendorPortalProps {
   user: any;

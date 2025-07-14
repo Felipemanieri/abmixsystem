@@ -12,7 +12,7 @@ import ProposalProgressTracker from './ProposalProgressTracker';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
-import StatusManager, { ProposalStatus } from '../../../shared/statusSystem';
+import StatusManager, { ProposalStatus } from '@shared/statusSystem';
 
 interface FinancialPortalProps {
   user: any;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProposalStatus, STATUS_CONFIG } from '../../../shared/statusSystem';
+import { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 
 interface StatusBadgeProps {
   status: ProposalStatus;
