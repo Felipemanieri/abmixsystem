@@ -68,6 +68,34 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Debug: Log das propostas
   console.log('Propostas no ImplantacaoPortal:', realProposals);
   console.log('Loading status:', proposalsLoading);
+  
+  // Atualizar prioridades das propostas criadas para demonstração
+  const updateExamplePriorities = async () => {
+    try {
+      await fetch('/api/proposals/PROP-1752477089882-6junhrn4n', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority: 'high' })
+      });
+      await fetch('/api/proposals/PROP-1752477157698-xzdww6ies', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority: 'medium' })
+      });
+      await fetch('/api/proposals/PROP-1752477165671-hw729n9yz', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priority: 'low' })
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar prioridades:', error);
+    }
+  };
+  
+  // Executar uma vez para configurar as prioridades
+  React.useEffect(() => {
+    updateExamplePriorities();
+  }, []);
 
   // Função para atualizar status
   const handleStatusUpdate = async (proposalId: string, newStatus: ProposalStatus) => {
@@ -495,9 +523,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
   const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
-    const matchesSearch = proposal.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         proposal.abmId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         proposal.vendedor?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (proposal.cliente || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (proposal.abmId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (proposal.vendedor || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
   }) || [];
 
