@@ -47,6 +47,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     queryFn: () => apiRequest('/api/proposals'),
   });
 
+  // Debug console log
+  console.log('Propostas no SupervisorPortal:', proposals);
+
   // Buscar vendedores
   const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
     queryKey: ['/api/vendors'],
@@ -115,10 +118,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Filtrar propostas
   const filteredProposals = proposals.filter(proposal => {
-    if (filterVendor && proposal.vendor !== filterVendor) return false;
+    if (filterVendor && proposal.vendedor !== filterVendor) return false;
     if (filterStatus && proposal.status !== filterStatus) return false;
     if (filterDate) {
-      const proposalDate = new Date(proposal.submissionDate).toISOString().split('T')[0];
+      const proposalDate = new Date(proposal.createdAt || proposal.submissionDate).toISOString().split('T')[0];
       if (proposalDate !== filterDate) return false;
     }
     return true;
@@ -492,10 +495,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         className="px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                       >
                         <option value="">Todos</option>
-                        <option value="Ana Caroline">Ana Caroline</option>
-                        <option value="Bruna Garcia">Bruna Garcia</option>
-                        <option value="Carlos Silva">Carlos Silva</option>
-                        <option value="Diana Santos">Diana Santos</option>
+                        {vendors.map((vendor: any) => (
+                          <option key={vendor.id} value={vendor.name}>
+                            {vendor.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     
@@ -560,29 +564,29 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredProposals.map((proposal: any) => {
                         const statusConfig = STATUS_CONFIG[proposal.status as ProposalStatus];
-                        const proposalId = `ABM${String(proposal.id).padStart(3, '0')}`;
                         
                         return (
                           <tr key={proposal.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap">
                               <button 
                                 className="text-sm font-medium text-blue-600 hover:text-blue-800"
-                                onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
+                                onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
                               >
-                                {proposalId}
+                                {proposal.abmId}
                               </button>
                             </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-900">{proposal.cliente || proposal.contractData?.nomeEmpresa || 'N/A'}</div>
+                              <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj || 'N/A'}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {proposal.vendedor || 'N/A'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {proposal.plano || proposal.contractData?.planoContratado || 'N/A'}
+                            </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {proposal.client}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {proposal.vendor}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {proposal.plan}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {proposal.value}
+                              R$ {proposal.valor || proposal.contractData?.valor || 'N/A'}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span 
@@ -599,8 +603,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                               <ActionButtons
-                                onView={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                                onExternalLink={() => window.open(`/proposal/${proposal.token}`, '_blank')}
+                                onView={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                                onExternalLink={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
                                 userRole="supervisor"
                                 className="flex gap-1"
                               />
