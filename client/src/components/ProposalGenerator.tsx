@@ -4,6 +4,10 @@ import { showNotification } from '../utils/notifications';
 import ProposalManager from '../services/proposalManager';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
+interface ProposalGeneratorProps {
+  onBack: () => void;
+}
+
 interface ContractData {
   nomeEmpresa: string;
   cnpj: string;
@@ -67,14 +71,14 @@ interface QuotationData {
 
 interface ProposalGeneratorProps {
   onBack: () => void;
-  user: {
+  currentVendor?: {
     id: number;
     name: string;
     email: string;
   };
 }
 
-const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, user }) => {
+const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVendor }) => {
   const [contractData, setContractData] = useState<ContractData>({
     nomeEmpresa: '',
     cnpj: '',
@@ -236,14 +240,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, user }) =
       return;
     }
 
-    if (!user) {
-      showNotification('Erro: Usuário não identificado', 'error');
+    if (!currentVendor) {
+      showNotification('Erro: Vendedor não identificado', 'error');
       return;
     }
 
     try {
       const proposalData = {
-        vendorId: user.id,
+        vendorId: currentVendor.id,
         contractData: contractData,
         titulares: titulares,
         dependentes: dependentes,
