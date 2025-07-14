@@ -43,7 +43,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
-  const { proposals: realProposals, isLoading } = useRealTimeProposals();
+  // Usar propostas reais da API
+  const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   const { getClientDocuments } = useGoogleDrive();
   
   // Hook para propostas com sincronização em tempo real

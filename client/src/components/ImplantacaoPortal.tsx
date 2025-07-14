@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft } from 'lucide-react';
+import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -68,34 +68,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Debug: Log das propostas
   console.log('Propostas no ImplantacaoPortal:', realProposals);
   console.log('Loading status:', proposalsLoading);
-  
-  // Atualizar prioridades das propostas criadas para demonstração
-  const updateExamplePriorities = async () => {
-    try {
-      await fetch('/api/proposals/PROP-1752477089882-6junhrn4n', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priority: 'high' })
-      });
-      await fetch('/api/proposals/PROP-1752477157698-xzdww6ies', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priority: 'medium' })
-      });
-      await fetch('/api/proposals/PROP-1752477165671-hw729n9yz', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priority: 'low' })
-      });
-    } catch (error) {
-      console.error('Erro ao atualizar prioridades:', error);
-    }
-  };
-  
-  // Executar uma vez para configurar as prioridades
-  React.useEffect(() => {
-    updateExamplePriorities();
-  }, []);
 
   // Função para atualizar status
   const handleStatusUpdate = async (proposalId: string, newStatus: ProposalStatus) => {
@@ -518,8 +490,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     }
   };
 
-  // Use propostas simuladas se as reais estiverem vazias (para demonstração)
-  const proposalsToShow = realProposals && realProposals.length > 0 ? realProposals : proposals;
+  // Usar propostas reais sempre que possível
+  const proposalsToShow = realProposals || [];
 
   const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
@@ -783,7 +755,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1">
                       <button
                         onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
                         className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
@@ -804,6 +776,27 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         title="Enviar para Automação"
                       >
                         <Zap className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
+                        className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                        title="Sincronizar Google Sheets"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                        className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                        title="Link do Cliente"
+                      >
+                        <Link className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => showNotification('Enviando notificação...', 'info')}
+                        className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
+                        title="Notificar Cliente"
+                      >
+                        <MessageCircle className="w-4 h-4" />
                       </button>
                     </div>
                   </td>

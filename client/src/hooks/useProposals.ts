@@ -45,6 +45,13 @@ export function useProposals() {
   
   const { data: proposals = [], isLoading, error } = useQuery({
     queryKey: ['/api/proposals'],
+    queryFn: async () => {
+      const response = await fetch('/api/proposals');
+      if (!response.ok) {
+        throw new Error('Erro ao carregar propostas');
+      }
+      return response.json();
+    },
     select: (data: any[]) => {
       console.log('Dados recebidos da API:', data);
       return data.map((proposal): ProposalData => ({
@@ -56,7 +63,7 @@ export function useProposals() {
         priority: proposal.priority || 'medium' // Garantir que priority existe
       }));
     },
-    refetchInterval: 5000, // Atualizar a cada 5 segundos
+    refetchInterval: 3000, // Atualizar a cada 3 segundos
   });
 
   const { data: vendors = [] } = useQuery({
