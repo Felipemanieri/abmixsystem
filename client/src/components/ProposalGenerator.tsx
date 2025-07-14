@@ -129,6 +129,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [showInternalFields, setShowInternalFields] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedLink, setGeneratedLink] = useState('');
+  const [vendorAttachments, setVendorAttachments] = useState<File[]>([]);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({

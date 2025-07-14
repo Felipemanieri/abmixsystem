@@ -43,11 +43,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+  const { proposals: realProposals, isLoading } = useRealTimeProposals();
   const { getClientDocuments } = useGoogleDrive();
   
   // Hook para propostas com sincronização em tempo real
-  const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
-  useRealTimeProposals();
 
   // Inicializar status e escutar mudanças
   useEffect(() => {
@@ -330,7 +329,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendedor</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progresso</th>
@@ -339,17 +340,29 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {mockProposals.map((proposal) => (
+              {realProposals?.slice(0, 10).map((proposal) => (
                 <tr key={proposal.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                    <button
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
+                      className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                    >
+                      {proposal.abmId}
+                    </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{proposal.value}</div>
+                    <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                    <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{proposal.vendedor}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge 
-                      status={proposalStatuses.get(proposal.id) || 'pending_validation'}
+                      status={proposal.status}
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -361,17 +374,20 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(proposal.date).toLocaleDateString('pt-BR')}
+                    {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button 
-                      onClick={() => handleAutomateProposal(proposal.id, proposal.client)}
+                      onClick={() => handleAutomateProposal(proposal.id, proposal.cliente)}
                       className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-xs mr-2"
                     >
                       <Zap className="h-3 w-3 inline mr-1" />
                       Automatizar
                     </button>
-                    <button className="text-blue-600 hover:text-blue-900">
+                    <button 
+                      onClick={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
                       <Eye className="h-4 w-4" />
                     </button>
                   </td>
