@@ -301,21 +301,43 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
         <div className="flex items-center space-x-2">
           {isEditing ? (
             <div className="flex-1 flex items-center space-x-2">
-              <input
-                type={type}
-                defaultValue={value}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                onBlur={(e) => handleFieldEdit(label, e.target.value, section)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleFieldEdit(label, e.currentTarget.value, section);
-                  }
-                  if (e.key === 'Escape') {
-                    setEditingField(null);
-                  }
-                }}
-                autoFocus
-              />
+              {label === 'Autorizador do Desconto' ? (
+                <select
+                  defaultValue={value}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onBlur={(e) => handleFieldEdit(label, e.target.value, section)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleFieldEdit(label, e.currentTarget.value, section);
+                    }
+                    if (e.key === 'Escape') {
+                      setEditingField(null);
+                    }
+                  }}
+                  autoFocus
+                >
+                  <option value="">Selecione o autorizador</option>
+                  <option value="Michelle Manieri">Michelle Manieri</option>
+                  <option value="Carol Almeida">Carol Almeida</option>
+                  <option value="Rod Ribas">Rod Ribas</option>
+                </select>
+              ) : (
+                <input
+                  type={type}
+                  defaultValue={value}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  onBlur={(e) => handleFieldEdit(label, e.target.value, section)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleFieldEdit(label, e.currentTarget.value, section);
+                    }
+                    if (e.key === 'Escape') {
+                      setEditingField(null);
+                    }
+                  }}
+                  autoFocus
+                />
+              )}
               <button
                 onClick={() => setEditingField(null)}
                 className="p-1 text-gray-400 hover:text-gray-600"

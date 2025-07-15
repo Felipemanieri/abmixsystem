@@ -154,6 +154,14 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Autorizador do Desconto convertido para dropdown (Jan 15, 2025)
+- **Campo "Autorizador do Desconto" atualizado para dropdown**:
+  - ProposalGenerator.tsx: Convertido de input text para select com 3 opções
+  - ProposalEditor.tsx: Função renderEditableField modificada para exibir dropdown ao editar
+  - Opções padronizadas: Michelle Manieri, Carol Almeida, Rod Ribas
+  - Mantida funcionalidade de edição em tempo real no ProposalEditor
+  - Interface consistente entre criação e edição de propostas
+
 ### Sistema Completo de Gestão de Metas e Premiações no SupervisorPortal (Jan 14, 2025)
 - **Implementado sistema completo de metas individuais e de equipe**:
   - Criadas tabelas vendor_targets, team_targets e awards no PostgreSQL
