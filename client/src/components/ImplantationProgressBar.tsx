@@ -36,7 +36,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
       id: 'implementation',
       name: 'Implantação',
       icon: Settings,
-      fields: ['observations', 'priority', 'estimatedCompletion'],
+      fields: ['observations', 'estimatedCompletion'],
       weight: 25
     }
   ];
