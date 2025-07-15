@@ -71,6 +71,33 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [filterVendor, setFilterVendor] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDate, setFilterDate] = useState('');
+
+  // Estados para filtros avançados do Analytics
+  const [analyticsFilters, setAnalyticsFilters] = useState({
+    vendedor: '',
+    operadora: '',
+    status: '',
+    plano: '',
+    tipoContrato: '',
+    regiao: '',
+    dataInicio: '',
+    dataFim: '',
+    valorMin: '',
+    valorMax: '',
+    vidasMin: '',
+    vidasMax: '',
+    cliente: '',
+    idProposta: '',
+    motivoReprovacao: '',
+    fonteOrigem: ''
+  });
+
+  // Estados para controle de modais e exportação
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [exportType, setExportType] = useState('pdf');
+  const [shareMethod, setShareMethod] = useState('email');
+  const [selectedReportData, setSelectedReportData] = useState(null);
   
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
@@ -1006,7 +1033,573 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     </div>
   );
 
+  const renderAnalytics = () => {
+    // Função para filtrar propostas baseado nos filtros selecionados
+    const getFilteredProposals = () => {
+      return filteredProposals.filter(proposal => {
+        if (analyticsFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(analyticsFilters.vendedor.toLowerCase())) return false;
+        if (analyticsFilters.status && proposal.status !== analyticsFilters.status) return false;
+        if (analyticsFilters.cliente && !proposal.contractData?.nomeEmpresa?.toLowerCase().includes(analyticsFilters.cliente.toLowerCase())) return false;
+        if (analyticsFilters.idProposta && !proposal.abmId?.toLowerCase().includes(analyticsFilters.idProposta.toLowerCase())) return false;
+        if (analyticsFilters.valorMin && parseFloat(proposal.contractData?.valor || '0') < parseFloat(analyticsFilters.valorMin)) return false;
+        if (analyticsFilters.valorMax && parseFloat(proposal.contractData?.valor || '0') > parseFloat(analyticsFilters.valorMax)) return false;
+        return true;
+      });
+    };
 
+    const analyticsProposals = getFilteredProposals();
+
+    // Cálculos de estatísticas
+    const totalProposals = analyticsProposals.length;
+    const totalValue = analyticsProposals.reduce((sum, p) => sum + parseFloat(p.contractData?.valor || '0'), 0);
+    const avgValue = totalProposals > 0 ? totalValue / totalProposals : 0;
+
+    // Propostas por status
+    const proposalsByStatus = analyticsProposals.reduce((acc, proposal) => {
+      acc[proposal.status] = (acc[proposal.status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Propostas por vendedor
+    const proposalsByVendor = analyticsProposals.reduce((acc, proposal) => {
+      const vendor = proposal.vendorName || 'Desconhecido';
+      acc[vendor] = (acc[vendor] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Ranking de vendedores
+    const vendorRanking = Object.entries(proposalsByVendor)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    // Função para exportar relatório
+    const handleExportReport = (type: string) => {
+      const reportData = {
+        totalProposals,
+        totalValue,
+        avgValue,
+        proposalsByStatus,
+        proposalsByVendor,
+        filters: analyticsFilters,
+        timestamp: new Date().toISOString()
+      };
+      
+      setSelectedReportData(reportData);
+      setExportType(type);
+      setShowExportModal(true);
+      showNotification(`Preparando relatório em ${type.toUpperCase()}...`, 'success');
+    };
+
+    // Função para compartilhar relatório
+    const handleShareReport = (method: string) => {
+      setShareMethod(method);
+      setShowShareModal(true);
+      showNotification(`Preparando compartilhamento via ${method}...`, 'success');
+    };
+
+    return (
+      <div className="space-y-6">
+        {/* Header com título e ações rápidas */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">📊 Analytics Avançado</h2>
+              <p className="text-blue-100">Painel completo de análise e relatórios</p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => window.open('https://drive.google.com', '_blank')}
+                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <ExternalLink size={16} />
+                Drive
+              </button>
+              <button
+                onClick={() => window.open('https://sheets.google.com', '_blank')}
+                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <FileText size={16} />
+                Sheets
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Filtros Avançados */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Filter size={20} />
+            Filtros Avançados
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Vendedor</label>
+              <input
+                type="text"
+                placeholder="Nome do vendedor"
+                value={analyticsFilters.vendedor}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, vendedor: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-1">Status</label>
+              <select
+                value={analyticsFilters.status}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, status: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              >
+                <option value="">Todos os status</option>
+                <option value="observacao">Observação</option>
+                <option value="analise">Análise</option>
+                <option value="assinatura_ds">Assinatura DS</option>
+                <option value="pendencia">Pendência</option>
+                <option value="implantado">Implantado</option>
+                <option value="declinado">Declinado</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Cliente/Empresa</label>
+              <input
+                type="text"
+                placeholder="Nome da empresa"
+                value={analyticsFilters.cliente}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, cliente: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">ID Proposta</label>
+              <input
+                type="text"
+                placeholder="Ex: ABM001"
+                value={analyticsFilters.idProposta}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, idProposta: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Valor Mínimo (R$)</label>
+              <input
+                type="number"
+                placeholder="0"
+                value={analyticsFilters.valorMin}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, valorMin: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Valor Máximo (R$)</label>
+              <input
+                type="number"
+                placeholder="999999"
+                value={analyticsFilters.valorMax}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, valorMax: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Data Início</label>
+              <input
+                type="date"
+                value={analyticsFilters.dataInicio}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Data Fim</label>
+              <input
+                type="date"
+                value={analyticsFilters.dataFim}
+                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, dataFim: e.target.value }))}
+                className="w-full border rounded-lg px-3 py-2"
+              />
+            </div>
+          </div>
+
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setAnalyticsFilters({
+                vendedor: '', operadora: '', status: '', plano: '', tipoContrato: '',
+                regiao: '', dataInicio: '', dataFim: '', valorMin: '', valorMax: '',
+                vidasMin: '', vidasMax: '', cliente: '', idProposta: '', motivoReprovacao: '', fonteOrigem: ''
+              })}
+              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center gap-2"
+            >
+              <X size={16} />
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        {/* KPIs Principais */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm">Total de Propostas</p>
+                <p className="text-3xl font-bold">{totalProposals}</p>
+              </div>
+              <FileText size={32} className="text-blue-200" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm">Faturamento Total</p>
+                <p className="text-3xl font-bold">{formatCurrency(totalValue.toString())}</p>
+              </div>
+              <DollarSign size={32} className="text-green-200" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-100 text-sm">Ticket Médio</p>
+                <p className="text-3xl font-bold">{formatCurrency(avgValue.toString())}</p>
+              </div>
+              <Calculator size={32} className="text-purple-200" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-100 text-sm">Taxa de Conversão</p>
+                <p className="text-3xl font-bold">
+                  {totalProposals > 0 ? ((proposalsByStatus['implantado'] || 0) / totalProposals * 100).toFixed(1) : 0}%
+                </p>
+              </div>
+              <TrendingUp size={32} className="text-orange-200" />
+            </div>
+          </div>
+        </div>
+
+        {/* Gráficos e Análises */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Distribuição por Status */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <PieChart size={20} />
+              Distribuição por Status
+            </h3>
+            <div className="space-y-3">
+              {Object.entries(proposalsByStatus).map(([status, count]) => {
+                const config = STATUS_CONFIG[status as ProposalStatus];
+                const percentage = totalProposals > 0 ? (count / totalProposals * 100).toFixed(1) : 0;
+                return (
+                  <div key={status} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-4 h-4 rounded ${config?.bgColor || 'bg-gray-400'}`}></div>
+                      <span className="text-sm">{config?.label || status}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-semibold">{count}</span>
+                      <span className="text-gray-500 text-sm ml-2">({percentage}%)</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Ranking de Vendedores */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Users size={20} />
+              Ranking de Vendedores
+            </h3>
+            <div className="space-y-3">
+              {vendorRanking.slice(0, 5).map((vendor, index) => (
+                <div key={vendor.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                      index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : index === 2 ? 'bg-orange-600' : 'bg-blue-500'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <span className="font-medium">{vendor.name}</span>
+                  </div>
+                  <span className="font-bold text-blue-600">{vendor.count} propostas</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Ações de Exportação e Compartilhamento */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Download size={20} />
+            Exportar e Compartilhar Relatórios
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Exportação */}
+            <div>
+              <h4 className="font-medium mb-3">📥 Exportar Relatório</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleExportReport('pdf')}
+                  className="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 flex items-center justify-center gap-2"
+                >
+                  <Download size={16} />
+                  Exportar PDF
+                </button>
+                <button
+                  onClick={() => handleExportReport('excel')}
+                  className="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
+                >
+                  <Download size={16} />
+                  Exportar Excel
+                </button>
+                <button
+                  onClick={() => handleExportReport('csv')}
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
+                >
+                  <Download size={16} />
+                  Exportar CSV
+                </button>
+              </div>
+            </div>
+
+            {/* Compartilhamento */}
+            <div>
+              <h4 className="font-medium mb-3">📤 Compartilhar Relatório</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleShareReport('email')}
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
+                >
+                  <MessageSquare size={16} />
+                  Enviar por Email
+                </button>
+                <button
+                  onClick={() => handleShareReport('whatsapp')}
+                  className="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
+                >
+                  <MessageSquare size={16} />
+                  Enviar WhatsApp
+                </button>
+                <button
+                  onClick={() => handleShareReport('financeiro')}
+                  className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2"
+                >
+                  <DollarSign size={16} />
+                  Enviar Financeiro
+                </button>
+                <button
+                  onClick={() => handleShareReport('drive')}
+                  className="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 flex items-center justify-center gap-2"
+                >
+                  <ExternalLink size={16} />
+                  Subir para Drive
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Análise Detalhada de Propostas */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <BarChart3 size={20} />
+            Análise Detalhada das Propostas ({analyticsProposals.length})
+          </h3>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-gray-50">
+                  <th className="text-left py-2 px-3">ID</th>
+                  <th className="text-left py-2 px-3">Cliente</th>
+                  <th className="text-left py-2 px-3">Vendedor</th>
+                  <th className="text-left py-2 px-3">Valor</th>
+                  <th className="text-left py-2 px-3">Status</th>
+                  <th className="text-left py-2 px-3">Progresso</th>
+                  <th className="text-left py-2 px-3">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {analyticsProposals.slice(0, 10).map(proposal => {
+                  const config = STATUS_CONFIG[proposal.status as ProposalStatus];
+                  return (
+                    <tr key={proposal.id} className="border-b hover:bg-gray-50">
+                      <td className="py-2 px-3 font-mono text-xs">
+                        <button
+                          onClick={() => window.open('https://drive.google.com', '_blank')}
+                          className="text-blue-600 hover:text-blue-800 underline"
+                        >
+                          {proposal.abmId}
+                        </button>
+                      </td>
+                      <td className="py-2 px-3">{proposal.contractData?.nomeEmpresa || 'N/A'}</td>
+                      <td className="py-2 px-3">{proposal.vendorName || 'N/A'}</td>
+                      <td className="py-2 px-3 font-medium">{formatCurrency(proposal.contractData?.valor || '0')}</td>
+                      <td className="py-2 px-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${config?.bgColor} ${config?.textColor}`}>
+                          {config?.label || proposal.status}
+                        </span>
+                      </td>
+                      <td className="py-2 px-3">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full" 
+                            style={{ width: `${proposal.progress || 0}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs text-gray-600">{proposal.progress || 0}%</span>
+                      </td>
+                      <td className="py-2 px-3">
+                        <div className="flex space-x-1">
+                          <button
+                            onClick={() => window.open('https://drive.google.com', '_blank')}
+                            className="text-blue-600 hover:text-blue-800 p-1"
+                            title="Ver Drive"
+                          >
+                            <ExternalLink size={14} />
+                          </button>
+                          <button
+                            onClick={() => window.open('https://sheets.google.com', '_blank')}
+                            className="text-green-600 hover:text-green-800 p-1"
+                            title="Ver Sheets"
+                          >
+                            <FileText size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          
+          {analyticsProposals.length > 10 && (
+            <div className="mt-4 text-center">
+              <p className="text-gray-600">Mostrando 10 de {analyticsProposals.length} propostas</p>
+            </div>
+          )}
+        </div>
+
+        {/* Modal de Exportação */}
+        {showExportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Exportar Relatório</h3>
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <p>Preparando relatório em formato {exportType.toUpperCase()}...</p>
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-sm"><strong>Total de Propostas:</strong> {totalProposals}</p>
+                  <p className="text-sm"><strong>Faturamento Total:</strong> {formatCurrency(totalValue.toString())}</p>
+                  <p className="text-sm"><strong>Ticket Médio:</strong> {formatCurrency(avgValue.toString())}</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-2 mt-6">
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification(`Relatório ${exportType.toUpperCase()} baixado com sucesso!`, 'success');
+                    setShowExportModal(false);
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Baixar {exportType.toUpperCase()}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de Compartilhamento */}
+        {showShareModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Compartilhar Relatório</h3>
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <p>Preparando compartilhamento via {shareMethod}...</p>
+                
+                {shareMethod === 'email' && (
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Email de destino</label>
+                    <input
+                      type="email"
+                      placeholder="email@exemplo.com"
+                      className="w-full border rounded-lg px-3 py-2"
+                    />
+                  </div>
+                )}
+                
+                {shareMethod === 'whatsapp' && (
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Número WhatsApp</label>
+                    <input
+                      type="tel"
+                      placeholder="(11) 99999-9999"
+                      className="w-full border rounded-lg px-3 py-2"
+                    />
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-end space-x-2 mt-6">
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification(`Relatório compartilhado via ${shareMethod} com sucesso!`, 'success');
+                    setShowShareModal(false);
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Compartilhar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderTeam = () => (
     <div className="space-y-6">

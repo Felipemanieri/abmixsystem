@@ -1,0 +1,96 @@
+ANÁLISE (ANALYTICS) – PAINEL DO SUPERVISOR
+Criar painel visual super completo, moderno, com gráficos interativos e filtros avançados.
+
+Permitir filtrar e cruzar dados por:
+
+Vendedor
+
+Operadora
+
+Status da proposta (criada, em andamento, aprovada, recusada, devolvida, pendente)
+
+Plano contratado
+
+Tipo de contratação (empresarial, adesão, familiar, individual)
+
+Região/UF/Cidade
+
+Data específica ou período (calendário para escolher de/até)
+
+Valor mínimo/máximo
+
+Número de vidas (faixa ou exato)
+
+Cliente
+
+Data de criação
+
+Data de atualização
+
+Data de aprovação/implantação
+
+ID da proposta
+
+Motivo da reprovação ou pendência
+
+Fonte de origem do cliente (indicação, site, telefone, etc.)
+
+Gerar dashboards e gráficos dinâmicos (barras, pizza, linhas, área, radar, mapa de calor).
+
+Exibir ranking de vendedores/operadoras/planos por resultado.
+
+Gráfico de conversão por etapa do funil (do início à implantação).
+
+Exibir histórico de propostas por mês, ano, vendedor, região, etc.
+
+Metas comparativas com o período anterior.
+
+Percentual de propostas perdidas por motivo.
+
+Mostrar quantidade de anexos/documentos pendentes e totalizados.
+
+Permitir visualizar dados detalhados ao clicar no gráfico.
+
+Visualizar relatórios retroativos (por mês, trimestre, semestre ou ano).
+
+Acesso rápido aos documentos vinculados no Drive/Sheets.
+
+Exportar visualização em PNG, PDF ou Excel.
+
+Não apagar, nem mexer em mais nada além dessa área.
+
+GERAR RELATÓRIOS
+Relatórios detalhados com todos filtros acima e mais:
+
+Filtro de data com calendário customizável (diário, semanal, mensal, trimestral, anual, retroativo)
+
+Buscar propostas por palavra-chave, ID, nome, e-mail, vendedor ou cliente
+
+Relatório por vendedor, operadora, plano, tipo de contrato, status, valor, região, quantidade de vidas
+
+Relatórios de produtividade (tempo médio para cada etapa)
+
+Relatórios de documentos pendentes, propostas devolvidas, reprovações, aprovações
+
+Relatório anual comparativo (por vendedor, operadora, status, motivo, valor total, ticket médio)
+
+Relatórios podem ser exportados para PDF, Excel, CSV.
+
+Botões para:
+
+Baixar
+
+Enviar por e-mail, WhatsApp, sistema interno, financeiro
+
+Compartilhar via Google Drive, Sheets ou Meet
+
+Pode puxar automaticamente dados históricos e atuais do Google Drive/Sheets (linkado).
+
+Permitir salvar filtros personalizados para relatórios frequentes.
+
+Deixar tudo funcional, sem mexer em outros módulos ou apagar qualquer campo ou filtro já existente.
+
+Obs:
+Capriche na usabilidade, aparência e desempenho.
+Só mexer no Analytics e Gerar Relatórios!
+Se quiser incluir mais filtros ou cruzamentos de dados, avise!
