@@ -73,6 +73,45 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
+  
+  // Estado para prioridades das propostas
+  const [proposalPriorities, setProposalPriorities] = useState<Record<string, 'alta' | 'media' | 'baixa'>>({});
+  
+  // Função para alterar prioridade
+  const handlePriorityChange = (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
+    setProposalPriorities(prev => ({
+      ...prev,
+      [proposalId]: priority
+    }));
+  };
+  
+  // Função para obter cor da prioridade
+  const getPriorityColor = (priority: 'alta' | 'media' | 'baixa') => {
+    switch (priority) {
+      case 'alta':
+        return 'bg-red-100 text-red-800';
+      case 'media':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'baixa':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+  
+  // Função para obter texto da prioridade
+  const getPriorityText = (priority: 'alta' | 'media' | 'baixa') => {
+    switch (priority) {
+      case 'alta':
+        return 'Alta';
+      case 'media':
+        return 'Média';
+      case 'baixa':
+        return 'Baixa';
+      default:
+        return 'Média';
+    }
+  };
   const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
   
   // Estados para metas
@@ -1210,6 +1249,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <th className="text-left py-3 px-4 font-medium">PLANO</th>
                 <th className="text-left py-3 px-4 font-medium">VALOR</th>
                 <th className="text-left py-3 px-4 font-medium">STATUS</th>
+                <th className="text-left py-3 px-4 font-medium">PRIORIDADE</th>
                 <th className="text-left py-3 px-4 font-medium">PROGRESSO</th>
                 <th className="text-left py-3 px-4 font-medium">AÇÕES</th>
               </tr>
@@ -1261,6 +1301,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       >
                         {statusConfig.label}
                       </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <select
+                        value={proposalPriorities[proposal.id] || 'media'}
+                        onChange={(e) => handlePriorityChange(proposal.id, e.target.value as 'alta' | 'media' | 'baixa')}
+                        className={`px-2 py-1 rounded text-xs font-medium border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          getPriorityColor(proposalPriorities[proposal.id] || 'media')
+                        }`}
+                      >
+                        <option value="alta">Alta</option>
+                        <option value="media">Média</option>
+                        <option value="baixa">Baixa</option>
+                      </select>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
