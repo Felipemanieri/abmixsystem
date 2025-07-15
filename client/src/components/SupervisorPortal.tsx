@@ -159,6 +159,22 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     },
   });
 
+  // Mutation para remover vendedor
+  const removeVendorMutation = useMutation({
+    mutationFn: async (vendorId: number) => {
+      return apiRequest(`/api/vendors/${vendorId}`, {
+        method: 'DELETE',
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      showNotification('Vendedor removido com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao remover vendedor', 'error');
+    },
+  });
+
   // Mutation para criar meta de vendedor
   const addTargetMutation = useMutation({
     mutationFn: async (targetData: any) => {
@@ -278,6 +294,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         role: "vendor",
         active: true
       });
+    }
+  };
+
+  const handleRemoveVendor = (vendorId: number) => {
+    const vendor = vendors.find(v => v.id === vendorId);
+    if (vendor && window.confirm(`Tem certeza que deseja remover o vendedor ${vendor.name}?`)) {
+      removeVendorMutation.mutate(vendorId);
     }
   };
 
@@ -1028,6 +1051,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <th className="text-left py-2">Data de Criação</th>
                 <th className="text-left py-2">Propostas</th>
                 <th className="text-left py-2">Faturamento</th>
+                <th className="text-left py-2">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -1050,6 +1074,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     </td>
                     <td className="py-2">{stats.totalProposals}</td>
                     <td className="py-2">{formatCurrency(stats.totalValue.toString())}</td>
+                    <td className="py-2">
+                      <button
+                        onClick={() => handleRemoveVendor(vendor.id)}
+                        className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1 rounded"
+                        title="Remover Vendedor"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
