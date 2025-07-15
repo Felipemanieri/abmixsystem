@@ -189,19 +189,29 @@ Abmix Consultoria em Benefícios`;
             </button>
           </div>
 
-          {/* Botão Nova Proposta para o Mesmo Link */}
+          {/* Botões Nova Proposta e Retornar ao Dashboard */}
           {onGenerateNewProposal && (
             <div className="mb-4">
-              <button
-                onClick={() => {
-                  onGenerateNewProposal();
-                  onClose();
-                }}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
-              >
-                <RefreshCw size={18} />
-                <span>Gerar Proposta para o Mesmo Link</span>
-              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => {
+                    onGenerateNewProposal();
+                    onClose();
+                  }}
+                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
+                >
+                  <RefreshCw size={18} />
+                  <span>Gerar Proposta para o Mesmo Link</span>
+                </button>
+                
+                <button
+                  onClick={onClose}
+                  className="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                >
+                  <CheckCircle size={18} />
+                  <span>Retornar ao Dashboard</span>
+                </button>
+              </div>
               <p className="text-xs text-gray-600 mt-2 text-center">
                 Mantém os dados da empresa e cria nova proposta com dados pessoais em branco
               </p>
