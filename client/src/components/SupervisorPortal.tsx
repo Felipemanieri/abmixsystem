@@ -1317,72 +1317,65 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
     return (
       <div className="space-y-6">
-        {/* Header Executivo Minimalista */}
-        <div className="bg-slate-50 border-l-4 border-blue-600 p-6 rounded-r-lg">
+        {/* Header discreto e profissional */}
+        <div className="border-b border-gray-200 pb-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-xl font-medium text-slate-800 mb-1">Analytics & Performance</h1>
-              <p className="text-slate-600 text-sm">Dados consolidados de {analyticsData.length} propostas</p>
+              <h2 className="text-2xl font-semibold text-gray-800">Analytics & Performance</h2>
+              <p className="text-gray-600 mt-1">Análise de {analyticsData.length} propostas</p>
             </div>
-            <div className="flex items-center gap-3 text-sm text-slate-600">
-              <span>{new Date().toLocaleDateString('pt-BR')}</span>
-              <button
-                onClick={refreshData}
-                className="p-2 hover:bg-slate-200 rounded-md transition-colors"
-                title="Atualizar dados"
-              >
-                <RefreshCw size={16} />
-              </button>
+            <div className="text-right">
+              <span className="text-sm text-gray-500">{new Date().toLocaleDateString('pt-BR')}</span>
             </div>
           </div>
         </div>
 
-        {/* Filtros Avançados */}
-        <div className="bg-white border border-slate-200">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-medium text-slate-800">Filtros</h2>
+        {/* Filtros */}
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-base font-medium text-gray-700">Filtros</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Vendedores */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
+                <label className="block text-sm text-gray-600 mb-2">Vendedores</label>
                 <select
                   value={selectedVendorForChart}
                   onChange={(e) => {
                     setSelectedVendorForChart(e.target.value);
-                    setShowChart(true); // Atualização instantânea
+                    setShowChart(true);
                   }}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Selecione um vendedor</option>
-                  <option value="all">Selecionar Todos os Vendedores</option>
+                  <option value="all">Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
                     <option key={vendor} value={vendor}>{vendor}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Período com Calendários */}
+              {/* Período */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Período</label>
+                <label className="block text-sm text-gray-600 mb-2">Período</label>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs text-slate-600 mb-1">Data Início</label>
+                    <label className="block text-xs text-gray-500 mb-1">Data Início</label>
                     <input
                       type="date"
                       value={dataInicio}
                       onChange={(e) => setDataInicio(e.target.value)}
-                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-600 mb-1">Data Fim</label>
+                    <label className="block text-xs text-gray-500 mb-1">Data Fim</label>
                     <input
                       type="date"
                       value={dataFim}
                       onChange={(e) => setDataFim(e.target.value)}
-                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -1390,17 +1383,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Status */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <label className="block text-sm text-gray-600 mb-2">Status</label>
                 <select
                   value={selectedStatusForChart}
                   onChange={(e) => {
                     setSelectedStatusForChart(e.target.value);
-                    setShowChart(true); // Atualização instantânea
+                    setShowChart(true);
                   }}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Selecione um status</option>
-                  <option value="all">Selecionar Todos os Status</option>
+                  <option value="all">Todos os Status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
                   ))}
@@ -1408,23 +1401,20 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             </div>
             
-            {/* Botões de Ação */}
-            <div className="mt-6 flex gap-4">
-              {(selectedVendorForChart || selectedStatusForChart || dataInicio || dataFim) && (
-                <button
-                  onClick={() => {
-                    setSelectedVendorForChart('');
-                    setSelectedStatusForChart('');
-                    setDataInicio('');
-                    setDataFim('');
-                    setShowChart(false);
-                  }}
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 border border-slate-300 rounded-lg hover:bg-slate-50"
-                >
-                  <X size={14} />
-                  Limpar Filtros
-                </button>
-              )}
+            {/* Botão Limpar Filtros */}
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => {
+                  setSelectedVendorForChart('');
+                  setSelectedStatusForChart('');
+                  setDataInicio('');
+                  setDataFim('');
+                  setShowChart(false);
+                }}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Limpar Filtros
+              </button>
             </div>
           </div>
         </div>
@@ -1798,34 +1788,33 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
     return (
       <div className="space-y-6">
-        {/* Header Relatórios */}
-        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl shadow-2xl p-8 text-white">
+        {/* Header discreto e profissional */}
+        <div className="border-b border-gray-200 pb-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-2">📋 Central de Relatórios</h2>
-              <p className="text-emerald-100 text-lg">Geração e exportação completa de relatórios personalizados</p>
+              <h2 className="text-2xl font-semibold text-gray-800">Relatórios</h2>
+              <p className="text-gray-600 mt-1">Geração e análise de relatórios</p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold">{filteredData.length}</p>
-              <p className="text-emerald-200">Registros</p>
+              <span className="text-sm text-gray-500">{filteredData.length} registros</span>
             </div>
           </div>
         </div>
 
         {/* Filtros de Relatório */}
-        <div className="bg-white border border-slate-200">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-medium text-slate-800">Filtros</h2>
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-base font-medium text-gray-700">Filtros</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Vendedores */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
+                <label className="block text-sm text-gray-600 mb-2">Vendedores</label>
                 <select
                   value={reportFilters.vendedor}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Selecione um vendedor</option>
                   {uniqueVendors.map(vendor => (
@@ -1836,24 +1825,24 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Período */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Período</label>
+                <label className="block text-sm text-gray-600 mb-2">Período</label>
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs text-slate-600 mb-1">Data Início</label>
+                    <label className="block text-xs text-gray-500 mb-1">Data Início</label>
                     <input
                       type="date"
                       value={reportFilters.dataInicio}
                       onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-600 mb-1">Data Fim</label>
+                    <label className="block text-xs text-gray-500 mb-1">Data Fim</label>
                     <input
                       type="date"
                       value={reportFilters.dataFim}
                       onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -1861,13 +1850,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Status */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <label className="block text-sm text-gray-600 mb-2">Status</label>
                 <select
                   value={reportFilters.status}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Selecionar Todos os Status</option>
+                  <option value="">Todos os Status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
                   ))}
@@ -1875,19 +1864,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             </div>
             
-            {/* Botões de Ação */}
-            <div className="mt-6 flex gap-4">
-              {(reportFilters.vendedor || reportFilters.status || reportFilters.dataInicio || reportFilters.dataFim) && (
-                <button
-                  onClick={() => setReportFilters({
-                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
-                  })}
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 border border-slate-300 rounded-lg hover:bg-slate-50"
-                >
-                  <X size={14} />
-                  Limpar Filtros
-                </button>
-              )}
+            {/* Botão Limpar Filtros */}
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setReportFilters({
+                  dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
+                })}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Limpar Filtros
+              </button>
             </div>
           </div>
         </div>
