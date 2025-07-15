@@ -177,6 +177,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
   const [dateRangeAnalytics, setDateRangeAnalytics] = useState('');
+  const [selectedStatusForChart, setSelectedStatusForChart] = useState('');
+  const [showChart, setShowChart] = useState(false);
 
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
   const [selectedPeriod, setSelectedPeriod] = useState('todos');
@@ -1096,20 +1098,43 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Analytics Moderno e Visual - Reformulação Completa
   const renderAnalytics = () => {
 
-    // Lista de vendedores únicos
-    const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
-    
-    // Cores para vendedores (sistema de cores fixas por vendedor)
-    const vendorColors = [
-      '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
-      '#06B6D4', '#84CC16', '#F97316', '#EC4899', '#6366F1',
-      '#14B8A6', '#F472B6'
+    // Lista de vendedores reais com cores únicas
+    const realVendors = [
+      'Ana Caroline Terto',
+      'Bruna Garcia', 
+      'Fabiana Ferreira',
+      'Fabiana Godinho',
+      'Fernanda Batista',
+      'Gabrielle Fernandes',
+      'Isabela Velasquez',
+      'Juliana Araujo',
+      'Lohainy Berlino',
+      'Luciana Velasquez',
+      'Monique Silva',
+      'Sara Mattos'
     ];
-    
+
+    // Cores únicas para cada vendedor real
     const getVendorColor = (vendor: string) => {
-      const index = uniqueVendors.indexOf(vendor) % vendorColors.length;
-      return vendorColors[index];
+      const vendorColors = {
+        'Ana Caroline Terto': '#3B82F6',
+        'Bruna Garcia': '#EF4444',
+        'Fabiana Ferreira': '#10B981',
+        'Fabiana Godinho': '#F59E0B',
+        'Fernanda Batista': '#8B5CF6',
+        'Gabrielle Fernandes': '#EC4899',
+        'Isabela Velasquez': '#6366F1',
+        'Juliana Araujo': '#F97316',
+        'Lohainy Berlino': '#14B8A6',
+        'Luciana Velasquez': '#84CC16',
+        'Monique Silva': '#F43F5E',
+        'Sara Mattos': '#8B5A2B'
+      };
+      return vendorColors[vendor as keyof typeof vendorColors] || '#6B7280';
     };
+    
+    // Lista de vendedores únicos (incluindo dados reais e do banco)
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];;
     
     // Lista de operadoras e tipos de plano únicos (mock data)
     const operadoras = ['SulAmérica', 'Bradesco', 'Amil', 'Unimed', 'NotreDame'];
@@ -1161,11 +1186,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
-    // Dados para gráfico pizza por vendedores (baseado nos status selecionados)
-    const vendorPieData = selectedStatuses.length > 0 ? 
+    // Dados para gráfico pizza por vendedores (baseado no status selecionado)
+    const vendorPieData = selectedStatusForChart ? 
       uniqueVendors.map(vendor => {
         const count = analyticsData.filter(p => 
-          selectedStatuses.includes(p.status) && p.vendorName === vendor
+          p.status === selectedStatusForChart && p.vendorName === vendor
         ).length;
         return {
           name: vendor,
@@ -1352,64 +1377,45 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Status */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
-                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedStatuses.length === Object.keys(STATUS_CONFIG).length}
-                      onChange={() => {
-                        if (selectedStatuses.length === Object.keys(STATUS_CONFIG).length) {
-                          setSelectedStatuses([]);
-                        } else {
-                          setSelectedStatuses(Object.keys(STATUS_CONFIG));
-                        }
-                      }}
-                      className="w-4 h-4 rounded border-slate-300"
-                    />
-                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
-                  </label>
-                  <hr className="border-slate-200" />
+                <select
+                  value={selectedStatusForChart}
+                  onChange={(e) => setSelectedStatusForChart(e.target.value)}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecione um status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                    <label key={key} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedStatuses.includes(key)}
-                        onChange={() => {
-                          if (selectedStatuses.includes(key)) {
-                            setSelectedStatuses(prev => prev.filter(s => s !== key));
-                          } else {
-                            setSelectedStatuses(prev => [...prev, key]);
-                          }
-                        }}
-                        className="w-4 h-4 rounded border-slate-300"
-                      />
-                      <div 
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: config.color }}
-                      ></div>
-                      <span className="text-sm text-slate-700">{config.label}</span>
-                    </label>
+                    <option key={key} value={key}>{config.label}</option>
                   ))}
-                </div>
+                </select>
               </div>
             </div>
             
-            {(selectedVendors.length > 0 || selectedStatuses.length > 0 || dataInicio || dataFim) && (
-              <div className="mt-4 pt-4 border-t border-slate-200">
+            {/* Botões de Ação */}
+            <div className="mt-6 flex gap-4">
+              <button
+                onClick={() => setShowChart(true)}
+                disabled={selectedVendors.length === 0 && !selectedStatusForChart}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                Visualizar Gráfico
+              </button>
+              
+              {(selectedVendors.length > 0 || selectedStatusForChart || dataInicio || dataFim) && (
                 <button
                   onClick={() => {
                     setSelectedVendors([]);
-                    setSelectedStatuses([]);
+                    setSelectedStatusForChart('');
                     setDataInicio('');
                     setDataFim('');
+                    setShowChart(false);
                   }}
-                  className="text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1"
+                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 border border-slate-300 rounded-lg hover:bg-slate-50"
                 >
                   <X size={14} />
-                  Limpar todos os filtros
+                  Limpar Filtros
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -1511,16 +1517,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Distribuição por Vendedores */}
-        {selectedStatuses.length > 0 && vendorPieData.length > 0 && (
+        {showChart && selectedStatusForChart && vendorPieData.length > 0 && (
           <div className="bg-white border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h2 className="text-lg font-medium text-slate-800">
-                Distribuição por Vendedores
-                {selectedStatuses.length > 0 && (
-                  <span className="text-sm text-slate-500 ml-2">
-                    ({selectedStatuses.map(s => STATUS_CONFIG[s as keyof typeof STATUS_CONFIG]?.label).join(', ')})
-                  </span>
-                )}
+                Distribuição por Vendedores - {STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}
               </h2>
             </div>
             <div className="p-6">
