@@ -140,7 +140,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         return 'Média';
     }
   };
-  const [newVendorData, setNewVendorData] = useState({ name: '', email: '' });
+  const [newVendorData, setNewVendorData] = useState({ name: '', email: '', password: '120784' });
   
   // Estados para metas
   const [showAddTargetForm, setShowAddTargetForm] = useState(false);
@@ -218,7 +218,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     onSuccess: () => {
       queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
       setShowAddVendorForm(false);
-      setNewVendorData({ name: '', email: '' });
+      setNewVendorData({ name: '', email: '', password: '120784' });
       showNotification('Vendedor adicionado com sucesso!', 'success');
     },
     onError: (error: any) => {
@@ -353,11 +353,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   });
 
   const handleAddVendor = () => {
-    if (newVendorData.name && newVendorData.email) {
+    if (newVendorData.name && newVendorData.email && newVendorData.password) {
       addVendorMutation.mutate({
         name: newVendorData.name,
         email: newVendorData.email,
-        password: "120784",
+        password: newVendorData.password,
         role: "vendor",
         active: true
       });
@@ -1116,14 +1116,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <th className="text-left py-2">Senha</th>
                 <th className="text-left py-2">Status</th>
                 <th className="text-left py-2">Data de Criação</th>
-                <th className="text-left py-2">Propostas</th>
-                <th className="text-left py-2">Faturamento</th>
                 <th className="text-left py-2">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendors.map(vendor => {
-                const stats = getVendorStats(vendor.id);
                 return (
                   <tr key={vendor.id} className="border-b">
                     <td className="py-2 font-medium">{vendor.name}</td>
@@ -1139,8 +1136,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <td className="py-2 text-sm text-gray-600">
                       {new Date(vendor.createdAt).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className="py-2">{stats.totalProposals}</td>
-                    <td className="py-2">{formatCurrency(stats.totalValue.toString())}</td>
                     <td className="py-2">
                       <button
                         onClick={() => handleRemoveVendor(vendor.id)}
@@ -1199,11 +1194,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <label className="block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="text"
-                  value="120784"
-                  disabled
-                  className="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600"
+                  value={newVendorData.password}
+                  onChange={(e) => setNewVendorData(prev => ({ ...prev, password: e.target.value }))}
+                  placeholder="Digite a senha"
+                  className="w-full border rounded-lg px-3 py-2"
                 />
-                <p className="text-xs text-gray-500 mt-1">Senha padrão para todos os vendedores</p>
+                <p className="text-xs text-gray-500 mt-1">Senha para o vendedor (editável)</p>
               </div>
             </div>
             
