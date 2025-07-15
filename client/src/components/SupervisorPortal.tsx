@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import SimpleProgressBar from './SimpleProgressBar';
+import ProgressBar from './ProgressBar';
 import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
@@ -1257,12 +1258,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <tbody>
               {filteredProposals.map(proposal => {
                 const contractData = proposal.contractData || {};
-                const progress = Math.floor(Math.random() * 100);
                 const currentStatus = proposal.status as ProposalStatus;
                 const statusConfig = STATUS_CONFIG[currentStatus] || STATUS_CONFIG.observacao;
                 const abmId = proposal.abmId || `ABM${proposal.id.slice(-3)}`;
-                
-
                 
                 return (
                   <tr key={proposal.id} className="border-b hover:bg-gray-50">
@@ -1316,22 +1314,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </select>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-12 bg-gray-200 rounded-full h-1">
-                          <div 
-                            className={`h-1 rounded-full ${
-                              progress >= 80 ? 'bg-green-500' :
-                              progress >= 60 ? 'bg-yellow-500' :
-                              progress >= 40 ? 'bg-orange-500' :
-                              'bg-red-500'
-                            }`}
-                            style={{ width: `${progress}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs text-gray-600 font-medium">
-                          {progress}%
-                        </span>
-                      </div>
+                      <ProgressBar 
+                        proposal={proposal} 
+                        size="sm" 
+                        orientation="horizontal"
+                        className="max-w-24"
+                      />
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">

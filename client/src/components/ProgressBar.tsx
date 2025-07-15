@@ -1,120 +1,127 @@
 import React from 'react';
-import { CheckCircle, Circle, Clock } from 'lucide-react';
+import { calculateProposalProgress, getProgressColor, getProgressText, getProgressDetails } from '@shared/progressCalculator';
 
 interface ProgressBarProps {
   proposal: any;
+  showDetails?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  orientation?: 'horizontal' | 'vertical';
   className?: string;
-  detailed?: boolean;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ proposal, className = '', detailed = false }) => {
-  const calculateProgress = () => {
-    let progress = 20; // Base: proposta criada
-    
-    if (proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto) {
-      progress += 30; // Titulares preenchidos
-    }
-    
-    if (proposal.clientAttachments?.length > 0) {
-      progress += 30; // Documentos anexados
-    }
-    
-    if (proposal.clientCompleted) {
-      progress += 20; // Cliente completou
-    }
-    
-    return Math.min(progress, 100);
+const ProgressBar: React.FC<ProgressBarProps> = ({ 
+  proposal, 
+  showDetails = false, 
+  size = 'md',
+  orientation = 'horizontal',
+  className = '' 
+}) => {
+  // Calcula o progresso baseado nos dados da proposta
+  const proposalData = {
+    titulares: proposal.titulares || [],
+    dependentes: proposal.dependentes || [],
+    clientAttachments: proposal.clientAttachments || [],
+    clientCompleted: proposal.clientCompleted || false
   };
 
-  const progress = calculateProgress();
+  const progress = calculateProposalProgress(proposalData);
+  const progressColor = getProgressColor(progress);
+  const progressText = getProgressText(progress, proposalData.clientCompleted);
+  const details = showDetails ? getProgressDetails(proposalData) : null;
 
-  const getSteps = () => {
-    const steps = [
-      {
-        name: 'Proposta Criada',
-        completed: true,
-        icon: CheckCircle
-      },
-      {
-        name: 'Dados Pessoais',
-        completed: proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto,
-        icon: proposal.titulares?.length > 0 && proposal.titulares[0]?.nomeCompleto ? CheckCircle : Clock
-      },
-      {
-        name: 'Documentos',
-        completed: proposal.clientAttachments?.length > 0,
-        icon: proposal.clientAttachments?.length > 0 ? CheckCircle : Clock
-      },
-      {
-        name: 'Finalizado',
-        completed: proposal.clientCompleted,
-        icon: proposal.clientCompleted ? CheckCircle : Clock
-      }
-    ];
-    return steps;
+  // Configurações de tamanho
+  const sizeConfig = {
+    sm: orientation === 'horizontal' ? 'h-2' : 'w-2 h-16',
+    md: orientation === 'horizontal' ? 'h-3' : 'w-3 h-20', 
+    lg: orientation === 'horizontal' ? 'h-4' : 'w-4 h-24'
   };
 
-  if (detailed) {
-    const steps = getSteps();
+  const textSize = {
+    sm: 'text-xs',
+    md: 'text-sm',
+    lg: 'text-base'
+  };
+
+  if (orientation === 'vertical') {
     return (
-      <div className={`space-y-3 ${className}`}>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Progresso da Proposta</span>
-          <span className="text-sm text-gray-500">{progress}%</span>
+      <div className={`flex flex-col items-center space-y-2 ${className}`}>
+        <div className={`bg-gray-200 rounded-full ${sizeConfig[size]} relative overflow-hidden`}>
+          <div 
+            className={`${progressColor} transition-all duration-300 ease-in-out rounded-full absolute bottom-0 left-0 right-0`}
+            style={{ height: `${progress}%` }}
+          />
         </div>
-        
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          ></div>
+        <div className={`${textSize[size]} font-medium text-center text-gray-700`}>
+          {progress}%
         </div>
-        
-        <div className="grid grid-cols-2 gap-2 mt-3">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div key={index} className="flex items-center space-x-2">
-                <Icon 
-                  className={`w-4 h-4 ${
-                    step.completed 
-                      ? 'text-green-500' 
-                      : 'text-gray-400'
-                  }`}
-                />
-                <span className={`text-xs ${
-                  step.completed 
-                    ? 'text-green-700 font-medium' 
-                    : 'text-gray-500'
-                }`}>
-                  {step.name}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        {showDetails && (
+          <div className={`${textSize[size]} text-center text-gray-500`}>
+            {progressText}
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className={`${className}`}>
-      <div className="flex items-center space-x-2">
-        <div className="flex-1 bg-gray-200 rounded-full h-2">
-          <div
-            className={`h-2 rounded-full transition-all duration-500 ${
-              progress < 30 ? 'bg-red-500' :
-              progress < 60 ? 'bg-yellow-500' :
-              progress < 90 ? 'bg-blue-500' :
-              'bg-green-500'
-            }`}
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-        <span className="text-xs text-gray-600 font-medium min-w-[35px]">
+    <div className={`space-y-2 ${className}`}>
+      <div className="flex justify-between items-center">
+        <span className={`${textSize[size]} font-medium text-gray-700`}>
           {progress}%
         </span>
+        <span className={`${textSize[size]} text-gray-500`}>
+          {progressText}
+        </span>
       </div>
+      
+      <div className={`bg-gray-200 rounded-full ${sizeConfig[size]} overflow-hidden`}>
+        <div 
+          className={`${progressColor} transition-all duration-500 ease-in-out rounded-full h-full`}
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      {showDetails && details && (
+        <div className="mt-3 space-y-2">
+          <div className={`${textSize[size]} text-gray-600`}>
+            <strong>Detalhes do Progresso:</strong>
+          </div>
+          
+          {details.titulares.length > 0 && (
+            <div className="space-y-1">
+              <div className={`${textSize[size]} font-medium text-gray-700`}>Titulares:</div>
+              {details.titulares.map((titular, index) => (
+                <div key={index} className={`${textSize[size]} text-gray-600 ml-2`}>
+                  • {titular.name || `Titular ${titular.index}`}: {titular.progress}%
+                </div>
+              ))}
+            </div>
+          )}
+
+          {details.dependentes.length > 0 && (
+            <div className="space-y-1">
+              <div className={`${textSize[size]} font-medium text-gray-700`}>Dependentes:</div>
+              {details.dependentes.map((dependente, index) => (
+                <div key={index} className={`${textSize[size]} text-gray-600 ml-2`}>
+                  • {dependente.name || `Dependente ${dependente.index}`}: {dependente.progress}%
+                </div>
+              ))}
+            </div>
+          )}
+
+          {details.isCompleted && (
+            <div className={`${textSize[size]} text-green-600 font-medium`}>
+              ✓ Proposta enviada pelo cliente
+            </div>
+          )}
+
+          {details.allFieldsFilled && !details.isCompleted && (
+            <div className={`${textSize[size]} text-blue-600 font-medium`}>
+              ✓ Todos os campos preenchidos - Aguardando envio
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

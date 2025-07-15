@@ -1472,29 +1472,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="w-full">
-                              <div className="flex items-center justify-between text-sm mb-1">
-                                <span className="text-gray-600">Preenchimento</span>
-                                <span className="font-medium text-gray-900">{proposal.progresso}%</span>
-                              </div>
-                              <div className="w-full bg-gray-200 rounded-full h-3">
-                                <div 
-                                  className={`h-3 rounded-full transition-all duration-300 ${
-                                    proposal.progresso === 100 
-                                      ? 'bg-green-500' 
-                                      : proposal.progresso >= 75 
-                                        ? 'bg-blue-500' 
-                                        : proposal.progresso >= 50 
-                                          ? 'bg-yellow-500' 
-                                          : 'bg-red-500'
-                                  }`}
-                                  style={{ width: `${proposal.progresso}%` }}
-                                ></div>
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                {proposal.clientCompleted ? 'Cliente finalizou' : 'Cliente preenchendo'}
-                              </div>
-                            </div>
+                            <ProgressBar 
+                              proposal={proposal} 
+                              size="md" 
+                              orientation="horizontal"
+                              showDetails={false}
+                              className="w-full"
+                            />
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <ActionButtons 
