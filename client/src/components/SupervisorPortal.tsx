@@ -177,6 +177,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
   const [dateRangeAnalytics, setDateRangeAnalytics] = useState('');
+  const [selectedStatusForChart, setSelectedStatusForChart] = useState('');
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
   const [selectedPeriod, setSelectedPeriod] = useState('todos');
   
@@ -1098,6 +1099,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     // Lista de vendedores únicos
     const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
     
+    // Cores para vendedores (sistema de cores fixas por vendedor)
+    const vendorColors = [
+      '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
+      '#06B6D4', '#84CC16', '#F97316', '#EC4899', '#6366F1',
+      '#14B8A6', '#F472B6'
+    ];
+    
+    const getVendorColor = (vendor: string) => {
+      const index = uniqueVendors.indexOf(vendor) % vendorColors.length;
+      return vendorColors[index];
+    };
+    
     // Lista de operadoras e tipos de plano únicos (mock data)
     const operadoras = ['SulAmérica', 'Bradesco', 'Amil', 'Unimed', 'NotreDame'];
     const tiposPlano = ['Individual', 'Familiar', 'Empresarial', 'PME'];
@@ -1147,6 +1160,20 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       color: config.color,
       fill: config.color
     })).filter(item => item.value > 0);
+
+    // Dados para gráfico pizza por vendedores (baseado no status selecionado)
+    const vendorPieData = selectedStatusForChart ? 
+      uniqueVendors.map(vendor => {
+        const count = analyticsData.filter(p => 
+          p.status === selectedStatusForChart && p.vendorName === vendor
+        ).length;
+        return {
+          name: vendor,
+          value: count,
+          color: getVendorColor(vendor),
+          fill: getVendorColor(vendor)
+        };
+      }).filter(item => item.value > 0) : [];
 
     // Dados para gráfico de barras por status
     const statusBarData = statusData.map(item => ({
@@ -1246,39 +1273,118 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           </div>
         </div>
 
-        {/* Filtros Discretos */}
-        <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200">
-          <select
-            value={selectedVendors[0] || ''}
-            onChange={(e) => setSelectedVendors(e.target.value ? [e.target.value] : [])}
-            className="border border-slate-300 rounded px-3 py-1 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option value="">Todos os vendedores</option>
-            {uniqueVendors.map(vendor => (
-              <option key={vendor} value={vendor}>{vendor}</option>
-            ))}
-          </select>
-          
-          <select
-            value={selectedStatuses[0] || ''}
-            onChange={(e) => setSelectedStatuses(e.target.value ? [e.target.value] : [])}
-            className="border border-slate-300 rounded px-3 py-1 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option value="">Todos os status</option>
-            {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-              <option key={key} value={key}>{config.label}</option>
-            ))}
-          </select>
-          
-          {(selectedVendors.length > 0 || selectedStatuses.length > 0) && (
-            <button
-              onClick={clearAllFilters}
-              className="text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 px-2 py-1"
-            >
-              <X size={12} />
-              Limpar
-            </button>
-          )}
+        {/* Filtros Avançados */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Filtros</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Seletor de Vendedores com Cores */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
+                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedVendors.length === uniqueVendors.length}
+                      onChange={() => {
+                        if (selectedVendors.length === uniqueVendors.length) {
+                          setSelectedVendors([]);
+                        } else {
+                          setSelectedVendors(uniqueVendors);
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
+                  </label>
+                  <hr className="border-slate-200" />
+                  {uniqueVendors.map(vendor => (
+                    <label key={vendor} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedVendors.includes(vendor)}
+                        onChange={() => {
+                          if (selectedVendors.includes(vendor)) {
+                            setSelectedVendors(prev => prev.filter(v => v !== vendor));
+                          } else {
+                            setSelectedVendors(prev => [...prev, vendor]);
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-slate-300"
+                      />
+                      <div 
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: getVendorColor(vendor) }}
+                      ></div>
+                      <span className="text-sm text-slate-700">{vendor}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Período com Calendários */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Período</label>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Data Início</label>
+                    <input
+                      type="date"
+                      value={dataInicio}
+                      onChange={(e) => setDataInicio(e.target.value)}
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Data Fim</label>
+                    <input
+                      type="date"
+                      value={dataFim}
+                      onChange={(e) => setDataFim(e.target.value)}
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Status para Gráfico Pizza */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Status (Gráfico Pizza)</label>
+                <select
+                  value={selectedStatusForChart}
+                  onChange={(e) => setSelectedStatusForChart(e.target.value)}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecione um status</option>
+                  {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                    <option key={key} value={key}>{config.label}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-slate-500 mt-1">
+                  Escolha um status para ver a distribuição por vendedores no gráfico
+                </p>
+              </div>
+            </div>
+            
+            {(selectedVendors.length > 0 || dataInicio || dataFim || selectedStatusForChart) && (
+              <div className="mt-4 pt-4 border-t border-slate-200">
+                <button
+                  onClick={() => {
+                    setSelectedVendors([]);
+                    setDataInicio('');
+                    setDataFim('');
+                    setSelectedStatusForChart('');
+                  }}
+                  className="text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1"
+                >
+                  <X size={14} />
+                  Limpar todos os filtros
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Métricas Principais */}
@@ -1377,6 +1483,72 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
         </div>
+
+        {/* Gráfico Pizza por Vendedores (baseado no status selecionado) */}
+        {selectedStatusForChart && vendorPieData.length > 0 && (
+          <div className="bg-white border border-slate-200">
+            <div className="px-6 py-4 border-b border-slate-200">
+              <h2 className="text-lg font-medium text-slate-800">
+                Distribuição por Vendedores - {STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}
+              </h2>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Gráfico Pizza */}
+                <div className="flex justify-center">
+                  <div className="w-80 h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RechartsPieChart>
+                        <Pie
+                          data={vendorPieData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={120}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {vendorPieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value: any, name: any) => [value, name]}
+                          labelStyle={{ color: '#374151' }}
+                        />
+                      </RechartsPieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Legenda */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-slate-700 mb-4">Legenda</h3>
+                  {vendorPieData.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div 
+                          className="w-4 h-4 rounded-full"
+                          style={{ backgroundColor: item.color }}
+                        ></div>
+                        <span className="text-sm text-slate-700">{item.name}</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium text-slate-800">{item.value}</div>
+                        <div className="text-xs text-slate-500">
+                          {vendorPieData.reduce((sum, d) => sum + d.value, 0) > 0 
+                            ? ((item.value / vendorPieData.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)
+                            : 0}%
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Modais */}
         {showExportModal && (
