@@ -105,6 +105,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estado para prioridades das propostas
   const [proposalPriorities, setProposalPriorities] = useState<Record<string, 'alta' | 'media' | 'baixa'>>({});
   
+  // Estados para Analytics (movidos para o nível do componente)
+  const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
+  const [dateRangeAnalytics, setDateRangeAnalytics] = useState('');
+  const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
+  const [selectedPeriod, setSelectedPeriod] = useState('todos');
+  
   // Função para alterar prioridade - versão simplificada
   const handlePriorityChange = async (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
     try {
@@ -1023,17 +1029,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Analytics Profissional com Filtros Avançados e Gráficos
   const renderAnalytics = () => {
-    const [selectedVendor, setSelectedVendor] = useState('');
-    const [dateRange, setDateRange] = useState('');
-    const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
-    const [selectedPeriod, setSelectedPeriod] = useState('todos');
 
     // Lista de vendedores únicos para atalhos
     const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
 
     // Aplicar filtros avançados
     const analyticsData = filteredProposals.filter(proposal => {
-      if (selectedVendor && proposal.vendorName !== selectedVendor) return false;
+      if (selectedVendorAnalytics && proposal.vendorName !== selectedVendorAnalytics) return false;
       if (analyticsFilters.status && proposal.status !== analyticsFilters.status) return false;
       
       // Filtro de data
@@ -1187,9 +1189,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <label className="block text-sm font-semibold text-gray-700 mb-3">🏆 Vendedores (clique para filtrar)</label>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setSelectedVendor('')}
+                onClick={() => setSelectedVendorAnalytics('')}
                 className={`px-4 py-2 rounded-lg border transition-all ${
-                  selectedVendor === '' 
+                  selectedVendorAnalytics === '' 
                     ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
                     : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
                 }`}
@@ -1199,9 +1201,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {uniqueVendors.map(vendor => (
                 <button
                   key={vendor}
-                  onClick={() => setSelectedVendor(vendor)}
+                  onClick={() => setSelectedVendorAnalytics(vendor)}
                   className={`px-4 py-2 rounded-lg border transition-all ${
-                    selectedVendor === vendor 
+                    selectedVendorAnalytics === vendor 
                       ? 'bg-green-500 text-white border-green-500 shadow-md' 
                       : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-green-50 hover:border-green-200'
                   }`}
@@ -1320,37 +1322,37 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Gráficos e Visualizações */}
-        {visualMode === 'individual' && selectedVendor ? (
+        {visualMode === 'individual' && selectedVendorAnalytics ? (
           // Análise Individual do Vendedor
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <User className="text-green-600" size={24} />
-                Análise Detalhada: {selectedVendor}
+                Análise Detalhada: {selectedVendorAnalytics}
               </h3>
               
-              {vendorAnalysis[selectedVendor] && (
+              {vendorAnalysis[selectedVendorAnalytics] && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                    <p className="text-3xl font-bold text-blue-600">{vendorAnalysis[selectedVendor].total}</p>
+                    <p className="text-3xl font-bold text-blue-600">{vendorAnalysis[selectedVendorAnalytics].total}</p>
                     <p className="text-blue-700 font-medium">Total Propostas</p>
                   </div>
                   <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                    <p className="text-3xl font-bold text-green-600">{vendorAnalysis[selectedVendor].convertidas}</p>
+                    <p className="text-3xl font-bold text-green-600">{vendorAnalysis[selectedVendorAnalytics].convertidas}</p>
                     <p className="text-green-700 font-medium">Convertidas</p>
-                    <p className="text-sm text-green-600 mt-1">{vendorAnalysis[selectedVendor].taxaConversao.toFixed(1)}%</p>
+                    <p className="text-sm text-green-600 mt-1">{vendorAnalysis[selectedVendorAnalytics].taxaConversao.toFixed(1)}%</p>
                   </div>
                   <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
-                    <p className="text-3xl font-bold text-red-600">{vendorAnalysis[selectedVendor].perdidas}</p>
+                    <p className="text-3xl font-bold text-red-600">{vendorAnalysis[selectedVendorAnalytics].perdidas}</p>
                     <p className="text-red-700 font-medium">Perdidas</p>
                   </div>
                   <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
                     <p className="text-2xl font-bold text-purple-600">
-                      {formatCurrency(vendorAnalysis[selectedVendor].faturamento.toString())}
+                      {formatCurrency(vendorAnalysis[selectedVendorAnalytics].faturamento.toString())}
                     </p>
                     <p className="text-purple-700 font-medium">Faturamento</p>
                     <p className="text-sm text-purple-600 mt-1">
-                      Média: {formatCurrency(vendorAnalysis[selectedVendor].ticketMedio.toString())}
+                      Média: {formatCurrency(vendorAnalysis[selectedVendorAnalytics].ticketMedio.toString())}
                     </p>
                   </div>
                 </div>
