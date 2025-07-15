@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Mail, MessageCircle, Share2, Check, Shield, Lock, CheckCircle } from 'lucide-react';
+import { Copy, Mail, MessageCircle, Share2, Check, Shield, Lock, CheckCircle, RefreshCw } from 'lucide-react';
 import { showNotification } from '@/utils/notifications';
 import abmixLogoPath from '@assets/6078b216-6252-4ede-8d9b-4c2164c3ed8f copy copy_1752598762645.png';
 
@@ -7,9 +7,10 @@ interface ProfessionalLinkShareProps {
   clientLink: string;
   clientName?: string;
   onClose: () => void;
+  onGenerateNewProposal?: () => void;
 }
 
-export default function ProfessionalLinkShare({ clientLink, clientName, onClose }: ProfessionalLinkShareProps) {
+export default function ProfessionalLinkShare({ clientLink, clientName, onClose, onGenerateNewProposal }: ProfessionalLinkShareProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -162,7 +163,7 @@ Abmix Consultoria em Benefícios`;
           </div>
 
           {/* Botões de compartilhamento */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4 mb-4">
             <button
               onClick={handleCopy}
               className="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
@@ -187,6 +188,25 @@ Abmix Consultoria em Benefícios`;
               <span className="font-medium">Email</span>
             </button>
           </div>
+
+          {/* Botão Nova Proposta para o Mesmo Link */}
+          {onGenerateNewProposal && (
+            <div className="mb-4">
+              <button
+                onClick={() => {
+                  onGenerateNewProposal();
+                  onClose();
+                }}
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium"
+              >
+                <RefreshCw size={18} />
+                <span>Gerar Proposta para o Mesmo Link</span>
+              </button>
+              <p className="text-xs text-gray-600 mt-2 text-center">
+                Mantém os dados da empresa e cria nova proposta com dados pessoais em branco
+              </p>
+            </div>
+          )}
 
           {/* Instruções adicionais */}
           <div className="mt-6 text-center">

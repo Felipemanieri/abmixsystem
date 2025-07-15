@@ -1708,6 +1708,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           clientLink={generatedLink}
           clientName={contractData.nomeEmpresa}
           onClose={() => setShowProfessionalModal(false)}
+          onGenerateNewProposal={generateSameLinkProposal}
         />
       )}
     </div>
