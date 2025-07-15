@@ -177,7 +177,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
   const [dateRangeAnalytics, setDateRangeAnalytics] = useState('');
-  const [selectedStatusForChart, setSelectedStatusForChart] = useState('');
+
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
   const [selectedPeriod, setSelectedPeriod] = useState('todos');
   
@@ -1161,11 +1161,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
-    // Dados para gráfico pizza por vendedores (baseado no status selecionado)
-    const vendorPieData = selectedStatusForChart ? 
+    // Dados para gráfico pizza por vendedores (baseado nos status selecionados)
+    const vendorPieData = selectedStatuses.length > 0 ? 
       uniqueVendors.map(vendor => {
         const count = analyticsData.filter(p => 
-          p.status === selectedStatusForChart && p.vendorName === vendor
+          selectedStatuses.includes(p.status) && p.vendorName === vendor
         ).length;
         return {
           name: vendor,
@@ -1349,33 +1349,59 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               </div>
 
-              {/* Status para Gráfico Pizza */}
+              {/* Status */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Status (Gráfico Pizza)</label>
-                <select
-                  value={selectedStatusForChart}
-                  onChange={(e) => setSelectedStatusForChart(e.target.value)}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                >
-                  <option value="">Selecione um status</option>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedStatuses.length === Object.keys(STATUS_CONFIG).length}
+                      onChange={() => {
+                        if (selectedStatuses.length === Object.keys(STATUS_CONFIG).length) {
+                          setSelectedStatuses([]);
+                        } else {
+                          setSelectedStatuses(Object.keys(STATUS_CONFIG));
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
+                  </label>
+                  <hr className="border-slate-200" />
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                    <option key={key} value={key}>{config.label}</option>
+                    <label key={key} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedStatuses.includes(key)}
+                        onChange={() => {
+                          if (selectedStatuses.includes(key)) {
+                            setSelectedStatuses(prev => prev.filter(s => s !== key));
+                          } else {
+                            setSelectedStatuses(prev => [...prev, key]);
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-slate-300"
+                      />
+                      <div 
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: config.color }}
+                      ></div>
+                      <span className="text-sm text-slate-700">{config.label}</span>
+                    </label>
                   ))}
-                </select>
-                <p className="text-xs text-slate-500 mt-1">
-                  Escolha um status para ver a distribuição por vendedores no gráfico
-                </p>
+                </div>
               </div>
             </div>
             
-            {(selectedVendors.length > 0 || dataInicio || dataFim || selectedStatusForChart) && (
+            {(selectedVendors.length > 0 || selectedStatuses.length > 0 || dataInicio || dataFim) && (
               <div className="mt-4 pt-4 border-t border-slate-200">
                 <button
                   onClick={() => {
                     setSelectedVendors([]);
+                    setSelectedStatuses([]);
                     setDataInicio('');
                     setDataFim('');
-                    setSelectedStatusForChart('');
                   }}
                   className="text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1"
                 >
@@ -1484,12 +1510,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           </div>
         </div>
 
-        {/* Gráfico Pizza por Vendedores (baseado no status selecionado) */}
-        {selectedStatusForChart && vendorPieData.length > 0 && (
+        {/* Distribuição por Vendedores */}
+        {selectedStatuses.length > 0 && vendorPieData.length > 0 && (
           <div className="bg-white border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h2 className="text-lg font-medium text-slate-800">
-                Distribuição por Vendedores - {STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}
+                Distribuição por Vendedores
+                {selectedStatuses.length > 0 && (
+                  <span className="text-sm text-slate-500 ml-2">
+                    ({selectedStatuses.map(s => STATUS_CONFIG[s as keyof typeof STATUS_CONFIG]?.label).join(', ')})
+                  </span>
+                )}
               </h2>
             </div>
             <div className="p-6">
