@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Clock, User } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import SimpleProgressBar from './SimpleProgressBar';
 import ProgressBar from './ProgressBar';
@@ -1019,189 +1019,359 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
 
 
-  // Nova seção Analytics com gráficos profissionais
+
+
+  // Analytics Profissional com Filtros Avançados e Gráficos
   const renderAnalytics = () => {
-    const analyticsProposals = filteredProposals.filter(proposal => {
-      if (analyticsFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(analyticsFilters.vendedor.toLowerCase())) return false;
+    const [selectedVendor, setSelectedVendor] = useState('');
+    const [dateRange, setDateRange] = useState('');
+    const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
+    const [selectedPeriod, setSelectedPeriod] = useState('todos');
+
+    // Lista de vendedores únicos para atalhos
+    const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
+
+    // Aplicar filtros avançados
+    const analyticsData = filteredProposals.filter(proposal => {
+      if (selectedVendor && proposal.vendorName !== selectedVendor) return false;
       if (analyticsFilters.status && proposal.status !== analyticsFilters.status) return false;
-      if (analyticsFilters.cliente && !proposal.contractData?.nomeEmpresa?.toLowerCase().includes(analyticsFilters.cliente.toLowerCase())) return false;
+      
+      // Filtro de data
+      if (selectedPeriod !== 'todos') {
+        const proposalDate = new Date(proposal.createdAt || Date.now());
+        const now = new Date();
+        
+        switch (selectedPeriod) {
+          case 'hoje':
+            if (proposalDate.toDateString() !== now.toDateString()) return false;
+            break;
+          case 'semana':
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            if (proposalDate < weekAgo) return false;
+            break;
+          case 'mes':
+            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            if (proposalDate < monthAgo) return false;
+            break;
+          case 'trimestre':
+            const quarterAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+            if (proposalDate < quarterAgo) return false;
+            break;
+        }
+      }
+      
       return true;
     });
 
-    // Dados para gráficos
-    const statusDistribution = analyticsProposals.reduce((acc, proposal) => {
-      const config = STATUS_CONFIG[proposal.status as ProposalStatus];
-      const label = config?.label || proposal.status;
-      acc[label] = (acc[label] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const vendorData = analyticsProposals.reduce((acc, proposal) => {
-      const vendor = proposal.vendorName || 'Desconhecido';
+    // Análise detalhada por vendedor
+    const vendorAnalysis = analyticsData.reduce((acc, proposal) => {
+      const vendor = proposal.vendorName || 'Não Identificado';
       if (!acc[vendor]) {
-        acc[vendor] = { proposals: 0, value: 0 };
+        acc[vendor] = {
+          total: 0,
+          convertidas: 0,
+          perdidas: 0,
+          pendentes: 0,
+          faturamento: 0,
+          ticketMedio: 0,
+          taxaConversao: 0
+        };
       }
-      acc[vendor].proposals += 1;
-      acc[vendor].value += parseFloat(proposal.contractData?.valor || '0');
+      
+      acc[vendor].total += 1;
+      const valor = parseFloat(proposal.contractData?.valor || '0');
+      acc[vendor].faturamento += valor;
+      
+      switch (proposal.status) {
+        case 'implantado':
+          acc[vendor].convertidas += 1;
+          break;
+        case 'declinado':
+        case 'expirado':
+          acc[vendor].perdidas += 1;
+          break;
+        default:
+          acc[vendor].pendentes += 1;
+      }
+      
       return acc;
-    }, {} as Record<string, { proposals: number; value: number }>);
+    }, {} as Record<string, any>);
 
-    const totalValue = analyticsProposals.reduce((sum, p) => sum + parseFloat(p.contractData?.valor || '0'), 0);
-    const avgValue = analyticsProposals.length > 0 ? totalValue / analyticsProposals.length : 0;
+    // Calcular métricas finais
+    Object.keys(vendorAnalysis).forEach(vendor => {
+      const data = vendorAnalysis[vendor];
+      data.ticketMedio = data.total > 0 ? data.faturamento / data.total : 0;
+      data.taxaConversao = data.total > 0 ? (data.convertidas / data.total) * 100 : 0;
+    });
+
+    // Dados agregados da equipe
+    const teamMetrics = {
+      totalPropostas: analyticsData.length,
+      totalFaturamento: analyticsData.reduce((sum, p) => sum + parseFloat(p.contractData?.valor || '0'), 0),
+      totalConvertidas: analyticsData.filter(p => p.status === 'implantado').length,
+      totalPerdidas: analyticsData.filter(p => ['declinado', 'expirado'].includes(p.status)).length,
+      totalPendentes: analyticsData.filter(p => !['implantado', 'declinado', 'expirado'].includes(p.status)).length,
+    };
+
+    teamMetrics.taxaConversao = teamMetrics.totalPropostas > 0 ? 
+      (teamMetrics.totalConvertidas / teamMetrics.totalPropostas) * 100 : 0;
+    teamMetrics.ticketMedio = teamMetrics.totalPropostas > 0 ? 
+      teamMetrics.totalFaturamento / teamMetrics.totalPropostas : 0;
+
+    // Atalhos rápidos para datas
+    const dateShortcuts = [
+      { label: 'Todos', value: 'todos' },
+      { label: 'Hoje', value: 'hoje' },
+      { label: 'Esta Semana', value: 'semana' },
+      { label: 'Este Mês', value: 'mes' },
+      { label: 'Trimestre', value: 'trimestre' }
+    ];
 
     return (
-      <div className="space-y-6">
-        {/* Header Analytics */}
-        <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl shadow-2xl p-8 text-white">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">📊 Analytics Avançado</h2>
-              <p className="text-indigo-100 text-lg">Análise visual completa de performance e vendas</p>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold">{analyticsProposals.length}</p>
-              <p className="text-indigo-200">Propostas Analisadas</p>
+      <div className="space-y-8">
+        {/* Header Moderno */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 rounded-2xl shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
+          <div className="relative p-8">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-4xl font-bold text-white mb-3">🚀 Analytics Pro</h1>
+                <p className="text-purple-100 text-lg mb-4">Análise visual inteligente de vendas e conversões</p>
+                <div className="flex gap-3">
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
+                    📊 {analyticsData.length} Propostas
+                  </span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
+                    💰 {formatCurrency(teamMetrics.totalFaturamento.toString())}
+                  </span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
+                    📈 {teamMetrics.taxaConversao.toFixed(1)}% Conversão
+                  </span>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setVisualMode('individual')}
+                  className={`px-4 py-2 rounded-lg transition-all ${
+                    visualMode === 'individual' 
+                      ? 'bg-white text-purple-600 shadow-lg' 
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  👤 Individual
+                </button>
+                <button
+                  onClick={() => setVisualMode('equipe')}
+                  className={`px-4 py-2 rounded-lg transition-all ${
+                    visualMode === 'equipe' 
+                      ? 'bg-white text-purple-600 shadow-lg' 
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  👥 Equipe
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Filtros Rápidos */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4">🔍 Filtros de Análise</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Vendedor</label>
-              <input
-                type="text"
-                placeholder="Buscar por vendedor..."
-                value={analyticsFilters.vendedor}
-                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Status</label>
-              <select
-                value={analyticsFilters.status}
-                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
+        {/* Filtros Inteligentes com Atalhos */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <Filter className="text-blue-600" size={24} />
+            Filtros Inteligentes
+          </h3>
+          
+          {/* Atalhos de Vendedores */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">🏆 Vendedores (clique para filtrar)</label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedVendor('')}
+                className={`px-4 py-2 rounded-lg border transition-all ${
+                  selectedVendor === '' 
+                    ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                }`}
               >
-                <option value="">Todos os status</option>
-                {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                  <option key={key} value={key}>{config.label}</option>
-                ))}
-              </select>
+                👥 Todos
+              </button>
+              {uniqueVendors.map(vendor => (
+                <button
+                  key={vendor}
+                  onClick={() => setSelectedVendor(vendor)}
+                  className={`px-4 py-2 rounded-lg border transition-all ${
+                    selectedVendor === vendor 
+                      ? 'bg-green-500 text-white border-green-500 shadow-md' 
+                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-green-50 hover:border-green-200'
+                  }`}
+                >
+                  {vendor}
+                </button>
+              ))}
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Cliente</label>
-              <input
-                type="text"
-                placeholder="Buscar por empresa..."
-                value={analyticsFilters.cliente}
-                onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, cliente: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              />
+          </div>
+
+          {/* Atalhos de Datas */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">📅 Período (atalhos rápidos)</label>
+            <div className="flex flex-wrap gap-2">
+              {dateShortcuts.map(shortcut => (
+                <button
+                  key={shortcut.value}
+                  onClick={() => setSelectedPeriod(shortcut.value)}
+                  className={`px-4 py-2 rounded-lg border transition-all ${
+                    selectedPeriod === shortcut.value 
+                      ? 'bg-purple-500 text-white border-purple-500 shadow-md' 
+                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
+                  }`}
+                >
+                  {shortcut.label}
+                </button>
+              ))}
             </div>
+          </div>
+
+          {/* Filtro de Status */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">📋 Status</label>
+            <select
+              value={analyticsFilters.status}
+              onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, status: e.target.value }))}
+              className="w-full max-w-xs border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Todos os Status</option>
+              {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                <option key={key} value={key}>{config.label}</option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* KPIs de Performance */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg p-6 text-white transform hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm uppercase tracking-wide">Propostas Totais</p>
-                <p className="text-4xl font-bold">{analyticsProposals.length}</p>
-              </div>
+        {/* KPIs Visuais Modernos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
+            <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-lg">
-                <FileText size={32} />
+                <CheckCircle size={28} />
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold">{teamMetrics.totalConvertidas}</p>
+                <p className="text-green-100 text-sm">Convertidas</p>
               </div>
             </div>
+            <div className="w-full bg-white/20 rounded-full h-2">
+              <div 
+                className="bg-white h-2 rounded-full transition-all duration-1000"
+                style={{ width: `${teamMetrics.taxaConversao}%` }}
+              ></div>
+            </div>
+            <p className="text-green-100 text-sm mt-2">{teamMetrics.taxaConversao.toFixed(1)}% de conversão</p>
           </div>
 
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg p-6 text-white transform hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm uppercase tracking-wide">Faturamento</p>
-                <p className="text-4xl font-bold">{formatCurrency(totalValue.toString())}</p>
-              </div>
+          <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
+            <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-lg">
-                <DollarSign size={32} />
+                <X size={28} />
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold">{teamMetrics.totalPerdidas}</p>
+                <p className="text-red-100 text-sm">Perdidas</p>
               </div>
             </div>
+            <div className="w-full bg-white/20 rounded-full h-2">
+              <div 
+                className="bg-white h-2 rounded-full transition-all duration-1000"
+                style={{ width: `${teamMetrics.totalPropostas > 0 ? (teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100 : 0}%` }}
+              ></div>
+            </div>
+            <p className="text-red-100 text-sm mt-2">
+              {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% perdas
+            </p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg p-6 text-white transform hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm uppercase tracking-wide">Ticket Médio</p>
-                <p className="text-4xl font-bold">{formatCurrency(avgValue.toString())}</p>
-              </div>
+          <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
+            <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-lg">
-                <TrendingUp size={32} />
+                <DollarSign size={28} />
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold">{formatCurrency(teamMetrics.totalFaturamento.toString())}</p>
+                <p className="text-blue-100 text-sm">Faturamento</p>
               </div>
             </div>
+            <p className="text-blue-100 text-sm">
+              Ticket médio: {formatCurrency(teamMetrics.ticketMedio.toString())}
+            </p>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-lg p-6 text-white transform hover:scale-105 transition-transform">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm uppercase tracking-wide">Conversão</p>
-                <p className="text-4xl font-bold">
-                  {analyticsProposals.length > 0 ? 
-                    ((analyticsProposals.filter(p => p.status === 'implantado').length / analyticsProposals.length) * 100).toFixed(1)
-                    : 0}%
-                </p>
-              </div>
+          <div className="bg-gradient-to-br from-orange-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
+            <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-lg">
-                <Target size={32} />
+                <Clock size={28} />
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold">{teamMetrics.totalPendentes}</p>
+                <p className="text-orange-100 text-sm">Pendentes</p>
               </div>
             </div>
+            <p className="text-orange-100 text-sm">Em andamento</p>
           </div>
         </div>
 
-        {/* Gráficos Principais */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Gráfico de Pizza - Status */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <PieChart size={20} className="text-blue-600" />
-              Distribuição por Status
-            </h3>
-            <div className="space-y-4">
-              {Object.entries(statusDistribution).map(([status, count]) => {
-                const percentage = analyticsProposals.length > 0 ? (count / analyticsProposals.length * 100).toFixed(1) : 0;
-                const config = Object.values(STATUS_CONFIG).find(c => c.label === status);
-                return (
-                  <div key={status} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-6 h-6 rounded-full ${config?.bgColor || 'bg-gray-400'}`}></div>
-                      <span className="font-medium">{status}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-2xl font-bold text-gray-900">{count}</span>
-                      <span className="text-gray-500 text-sm ml-2">({percentage}%)</span>
-                    </div>
+        {/* Gráficos e Visualizações */}
+        {visualMode === 'individual' && selectedVendor ? (
+          // Análise Individual do Vendedor
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <User className="text-green-600" size={24} />
+                Análise Detalhada: {selectedVendor}
+              </h3>
+              
+              {vendorAnalysis[selectedVendor] && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
+                    <p className="text-3xl font-bold text-blue-600">{vendorAnalysis[selectedVendor].total}</p>
+                    <p className="text-blue-700 font-medium">Total Propostas</p>
                   </div>
-                );
-              })}
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
+                    <p className="text-3xl font-bold text-green-600">{vendorAnalysis[selectedVendor].convertidas}</p>
+                    <p className="text-green-700 font-medium">Convertidas</p>
+                    <p className="text-sm text-green-600 mt-1">{vendorAnalysis[selectedVendor].taxaConversao.toFixed(1)}%</p>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                    <p className="text-3xl font-bold text-red-600">{vendorAnalysis[selectedVendor].perdidas}</p>
+                    <p className="text-red-700 font-medium">Perdidas</p>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
+                    <p className="text-2xl font-bold text-purple-600">
+                      {formatCurrency(vendorAnalysis[selectedVendor].faturamento.toString())}
+                    </p>
+                    <p className="text-purple-700 font-medium">Faturamento</p>
+                    <p className="text-sm text-purple-600 mt-1">
+                      Média: {formatCurrency(vendorAnalysis[selectedVendor].ticketMedio.toString())}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Ranking de Vendedores */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <Users size={20} className="text-green-600" />
-              Performance por Vendedor
+        ) : (
+          // Análise da Equipe
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <Users className="text-blue-600" size={24} />
+              Ranking da Equipe
             </h3>
+            
             <div className="space-y-4">
-              {Object.entries(vendorData)
-                .sort(([,a], [,b]) => b.proposals - a.proposals)
-                .slice(0, 5)
+              {Object.entries(vendorAnalysis)
+                .sort(([,a], [,b]) => b.taxaConversao - a.taxaConversao)
                 .map(([vendor, data], index) => (
-                <div key={vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
+                <div key={vendor} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
                       index === 0 ? 'bg-yellow-500' : 
                       index === 1 ? 'bg-gray-400' : 
                       index === 2 ? 'bg-orange-600' : 'bg-blue-500'
@@ -1209,59 +1379,53 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       #{index + 1}
                     </div>
                     <div>
-                      <p className="font-medium">{vendor}</p>
-                      <p className="text-sm text-gray-500">{formatCurrency(data.value.toString())}</p>
+                      <p className="font-bold text-gray-800">{vendor}</p>
+                      <p className="text-sm text-gray-600">
+                        {data.convertidas}/{data.total} conversões • {formatCurrency(data.faturamento.toString())}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-bold text-blue-600">{data.proposals}</span>
-                    <span className="text-gray-500 text-sm ml-1">propostas</span>
+                    <p className="text-2xl font-bold text-green-600">{data.taxaConversao.toFixed(1)}%</p>
+                    <p className="text-sm text-gray-600">Taxa de Conversão</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Análise Temporal */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Calendar size={20} className="text-purple-600" />
-            Análise Temporal
+        {/* Status Distribution Visual */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <PieChart className="text-purple-600" size={24} />
+            Distribuição por Status
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <p className="text-2xl font-bold text-blue-600">
-                {analyticsProposals.filter(p => {
-                  const date = new Date(p.createdAt || Date.now());
-                  const today = new Date();
-                  return date.toDateString() === today.toDateString();
-                }).length}
-              </p>
-              <p className="text-blue-700 font-medium">Hoje</p>
-            </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <p className="text-2xl font-bold text-green-600">
-                {analyticsProposals.filter(p => {
-                  const date = new Date(p.createdAt || Date.now());
-                  const weekAgo = new Date();
-                  weekAgo.setDate(weekAgo.getDate() - 7);
-                  return date >= weekAgo;
-                }).length}
-              </p>
-              <p className="text-green-700 font-medium">Esta Semana</p>
-            </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <p className="text-2xl font-bold text-purple-600">
-                {analyticsProposals.filter(p => {
-                  const date = new Date(p.createdAt || Date.now());
-                  const monthAgo = new Date();
-                  monthAgo.setMonth(monthAgo.getMonth() - 1);
-                  return date >= monthAgo;
-                }).length}
-              </p>
-              <p className="text-purple-700 font-medium">Este Mês</p>
-            </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Object.entries(STATUS_CONFIG).map(([status, config]) => {
+              const count = analyticsData.filter(p => p.status === status).length;
+              const percentage = analyticsData.length > 0 ? (count / analyticsData.length * 100) : 0;
+              
+              return (
+                <div key={status} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`w-4 h-4 rounded-full ${config.bgColor}`}></div>
+                    <span className="font-medium text-gray-800">{config.label}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-2xl font-bold text-gray-900">{count}</span>
+                    <span className="text-sm text-gray-600">{percentage.toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-1000 ${config.bgColor.replace('bg-', 'bg-opacity-75 bg-')}`}
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
