@@ -183,6 +183,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
   const [selectedPeriod, setSelectedPeriod] = useState('todos');
+
+  // Estados para Relatórios - movidos para nível principal
+  const [reportFilters, setReportFilters] = useState({
+    dataInicio: '',
+    dataFim: '',
+    vendedor: '',
+    status: '',
+    tipo: 'completo'
+  });
+  const [reportFormat, setReportFormat] = useState('pdf');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showExportOptions, setShowExportOptions] = useState(false);
   
   // Função para alterar prioridade - versão simplificada
   const handlePriorityChange = async (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
@@ -1721,17 +1733,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Nova seção Relatórios completa
   const renderReports = () => {
-    const [reportFilters, setReportFilters] = useState({
-      dataInicio: '',
-      dataFim: '',
-      vendedor: '',
-      status: '',
-      tipo: 'completo'
-    });
-
-    const [reportFormat, setReportFormat] = useState('pdf');
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [showExportOptions, setShowExportOptions] = useState(false);
 
     const filteredData = filteredProposals.filter(proposal => {
       if (reportFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
