@@ -79,11 +79,38 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [proposalPriorities, setProposalPriorities] = useState<Record<string, 'alta' | 'media' | 'baixa'>>({});
   
   // Função para alterar prioridade
-  const handlePriorityChange = (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
-    setProposalPriorities(prev => ({
-      ...prev,
-      [proposalId]: priority
-    }));
+  const handlePriorityChange = async (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
+    try {
+      // Converter para formato do backend ('alta' -> 'high', 'media' -> 'medium', 'baixa' -> 'low')
+      const backendPriority = priority === 'alta' ? 'high' : priority === 'media' ? 'medium' : 'low';
+      
+      // Atualizar no banco via API
+      const response = await fetch(`/api/proposals/${proposalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priority: backendPriority }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao atualizar prioridade');
+      }
+
+      // Atualizar estado local
+      setProposalPriorities(prev => ({
+        ...prev,
+        [proposalId]: priority
+      }));
+
+      // Forçar atualização em tempo real para todos os portais
+      realTimeSync.forceUpdate();
+      
+      showNotification(`Prioridade alterada para ${priority.toUpperCase()}`, 'success');
+    } catch (error) {
+      console.error('Erro ao alterar prioridade:', error);
+      showNotification('Erro ao alterar prioridade', 'error');
+    }
   };
   
   // Função para obter cor da prioridade

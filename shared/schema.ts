@@ -51,6 +51,7 @@ export const proposals = pgTable("proposals", {
   clientAttachments: jsonb("client_attachments").default(sql`'[]'::jsonb`),
   clientCompleted: boolean("client_completed").default(false),
   status: varchar("status").default("observacao"),
+  priority: varchar("priority").default("medium"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

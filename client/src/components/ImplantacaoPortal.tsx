@@ -566,11 +566,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Progresso
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Prioridade
+                </th>
+                <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Progresso
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Ações
@@ -686,10 +686,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         ))}
                       </select>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <ProgressBar proposal={proposal} className="w-32" />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-4 whitespace-nowrap">
                     <span 
                       className={`px-2 py-1 rounded text-xs font-medium ${
                         proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
@@ -701,6 +698,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       {proposal.priority === 'high' ? 'Alta' : 
                        proposal.priority === 'medium' ? 'Média' : 'Baixa'}
                     </span>
+                  </td>
+                  <td className="px-8 py-4 whitespace-nowrap">
+                    <ProgressBar proposal={proposal} className="w-32" />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
