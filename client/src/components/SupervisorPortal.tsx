@@ -177,7 +177,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
   const [dateRangeAnalytics, setDateRangeAnalytics] = useState('');
-  const [selectedStatusForChart, setSelectedStatusForChart] = useState('');
+  const [selectedStatusForChart, setSelectedStatusForChart] = useState<string>('');
+  const [selectedVendorForChart, setSelectedVendorForChart] = useState<string>('');
   const [showChart, setShowChart] = useState(false);
 
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
@@ -1186,24 +1187,45 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
-    // Dados para gráfico pizza por vendedores (baseado no status selecionado)
-    const vendorPieData = selectedStatusForChart ? 
-      uniqueVendors.map(vendor => {
-        let count = 0;
-        if (selectedStatusForChart === 'all') {
-          count = analyticsData.filter(p => p.vendorName === vendor).length;
-        } else {
-          count = analyticsData.filter(p => 
-            p.status === selectedStatusForChart && p.vendorName === vendor
-          ).length;
-        }
+    // Dados para gráfico pizza (baseado nos filtros selecionados)
+    const getChartData = () => {
+      if (!selectedStatusForChart && !selectedVendorForChart) return [];
+      
+      let filteredData = analyticsData;
+      
+      // Filtrar por status
+      if (selectedStatusForChart && selectedStatusForChart !== 'all') {
+        filteredData = filteredData.filter(p => p.status === selectedStatusForChart);
+      }
+      
+      // Filtrar por vendedor
+      if (selectedVendorForChart && selectedVendorForChart !== 'all') {
+        filteredData = filteredData.filter(p => p.vendorName === selectedVendorForChart);
+      }
+      
+      // Se vendedor específico selecionado, mostrar distribuição por status
+      if (selectedVendorForChart && selectedVendorForChart !== 'all') {
+        return Object.entries(STATUS_CONFIG).map(([key, config]) => ({
+          name: config.label,
+          value: filteredData.filter(p => p.status === key).length,
+          color: config.color,
+          fill: config.color
+        })).filter(item => item.value > 0);
+      }
+      
+      // Caso contrário, mostrar distribuição por vendedores
+      return uniqueVendors.map(vendor => {
+        const count = filteredData.filter(p => p.vendorName === vendor).length;
         return {
           name: vendor,
           value: count,
           color: getVendorColor(vendor),
           fill: getVendorColor(vendor)
         };
-      }).filter(item => item.value > 0) : [];
+      }).filter(item => item.value > 0);
+    };
+    
+    const chartData = getChartData();
 
     // Dados para gráfico de barras por status
     const statusBarData = statusData.map(item => ({
@@ -1310,48 +1332,23 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Seletor de Vendedores com Cores */}
+              {/* Vendedores */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
-                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedVendors.length === uniqueVendors.length}
-                      onChange={() => {
-                        if (selectedVendors.length === uniqueVendors.length) {
-                          setSelectedVendors([]);
-                        } else {
-                          setSelectedVendors(uniqueVendors);
-                        }
-                      }}
-                      className="w-4 h-4 rounded border-slate-300"
-                    />
-                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
-                  </label>
-                  <hr className="border-slate-200" />
+                <select
+                  value={selectedVendorForChart}
+                  onChange={(e) => {
+                    setSelectedVendorForChart(e.target.value);
+                    setShowChart(true); // Atualização instantânea
+                  }}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecione um vendedor</option>
+                  <option value="all">Selecionar Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
-                    <label key={vendor} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedVendors.includes(vendor)}
-                        onChange={() => {
-                          if (selectedVendors.includes(vendor)) {
-                            setSelectedVendors(prev => prev.filter(v => v !== vendor));
-                          } else {
-                            setSelectedVendors(prev => [...prev, vendor]);
-                          }
-                        }}
-                        className="w-4 h-4 rounded border-slate-300"
-                      />
-                      <div 
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: getVendorColor(vendor) }}
-                      ></div>
-                      <span className="text-sm text-slate-700">{vendor}</span>
-                    </label>
+                    <option key={vendor} value={vendor}>{vendor}</option>
                   ))}
-                </div>
+                </select>
               </div>
 
               {/* Período com Calendários */}
@@ -1384,7 +1381,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
                 <select
                   value={selectedStatusForChart}
-                  onChange={(e) => setSelectedStatusForChart(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedStatusForChart(e.target.value);
+                    setShowChart(true); // Atualização instantânea
+                  }}
                   className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                 >
                   <option value="">Selecione um status</option>
@@ -1398,18 +1398,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             {/* Botões de Ação */}
             <div className="mt-6 flex gap-4">
-              <button
-                onClick={() => setShowChart(true)}
-                disabled={!selectedStatusForChart}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                Visualizar Gráfico
-              </button>
-              
-              {(selectedVendors.length > 0 || selectedStatusForChart || dataInicio || dataFim) && (
+              {(selectedVendorForChart || selectedStatusForChart || dataInicio || dataFim) && (
                 <button
                   onClick={() => {
-                    setSelectedVendors([]);
+                    setSelectedVendorForChart('');
                     setSelectedStatusForChart('');
                     setDataInicio('');
                     setDataFim('');
@@ -1522,20 +1514,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           </div>
         </div>
 
-        {/* Distribuição por Vendedores */}
-        {showChart && selectedStatusForChart && (
+        {/* Gráfico de Distribuição */}
+        {showChart && (selectedStatusForChart || selectedVendorForChart) && (
           <div className="bg-white border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h2 className="text-lg font-medium text-slate-800">
-                Distribuição por Vendedores - {
-                  selectedStatusForChart === 'all' 
-                    ? 'Todos os Status' 
-                    : STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label
+                {selectedVendorForChart && selectedVendorForChart !== 'all' 
+                  ? `Distribuição de Status - ${selectedVendorForChart}`
+                  : selectedStatusForChart && selectedStatusForChart !== 'all'
+                  ? `Distribuição por Vendedores - ${STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}`
+                  : 'Distribuição Geral'
                 }
               </h2>
             </div>
             <div className="p-6">
-              {vendorPieData.length === 0 ? (
+              {chartData.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-slate-500">Nenhum dado encontrado para os filtros selecionados.</p>
                 </div>
@@ -1547,16 +1540,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsPieChart>
                         <Pie
-                          data={vendorPieData}
+                          data={chartData}
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          label={({ name, percent }) => `${name.length > 15 ? name.substring(0, 12) + '...' : name} ${(percent * 100).toFixed(0)}%`}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"
                         >
-                          {vendorPieData.map((entry, index) => (
+                          {chartData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
@@ -1572,7 +1565,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 {/* Legenda */}
                 <div className="space-y-3">
                   <h3 className="font-medium text-slate-700 mb-4">Legenda</h3>
-                  {vendorPieData.map((item, index) => (
+                  {chartData.map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div 
@@ -1584,8 +1577,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       <div className="text-right">
                         <div className="text-sm font-medium text-slate-800">{item.value}</div>
                         <div className="text-xs text-slate-500">
-                          {vendorPieData.reduce((sum, d) => sum + d.value, 0) > 0 
-                            ? ((item.value / vendorPieData.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)
+                          {chartData.reduce((sum, d) => sum + d.value, 0) > 0 
+                            ? ((item.value / chartData.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)
                             : 0}%
                         </div>
                       </div>
