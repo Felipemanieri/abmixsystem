@@ -1189,9 +1189,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     // Dados para gráfico pizza por vendedores (baseado no status selecionado)
     const vendorPieData = selectedStatusForChart ? 
       uniqueVendors.map(vendor => {
-        const count = analyticsData.filter(p => 
-          p.status === selectedStatusForChart && p.vendorName === vendor
-        ).length;
+        let count = 0;
+        if (selectedStatusForChart === 'all') {
+          count = analyticsData.filter(p => p.vendorName === vendor).length;
+        } else {
+          count = analyticsData.filter(p => 
+            p.status === selectedStatusForChart && p.vendorName === vendor
+          ).length;
+        }
         return {
           name: vendor,
           value: count,
@@ -1383,6 +1388,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                 >
                   <option value="">Selecione um status</option>
+                  <option value="all">Selecionar Todos os Status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
                   ))}
@@ -1394,7 +1400,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => setShowChart(true)}
-                disabled={selectedVendors.length === 0 && !selectedStatusForChart}
+                disabled={!selectedStatusForChart}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 Visualizar Gráfico
@@ -1517,14 +1523,23 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Distribuição por Vendedores */}
-        {showChart && selectedStatusForChart && vendorPieData.length > 0 && (
+        {showChart && selectedStatusForChart && (
           <div className="bg-white border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h2 className="text-lg font-medium text-slate-800">
-                Distribuição por Vendedores - {STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}
+                Distribuição por Vendedores - {
+                  selectedStatusForChart === 'all' 
+                    ? 'Todos os Status' 
+                    : STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label
+                }
               </h2>
             </div>
             <div className="p-6">
+              {vendorPieData.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-slate-500">Nenhum dado encontrado para os filtros selecionados.</p>
+                </div>
+              ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Gráfico Pizza */}
                 <div className="flex justify-center">
@@ -1578,6 +1593,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   ))}
                 </div>
               </div>
+              )}
             </div>
           </div>
         )}
