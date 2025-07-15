@@ -68,38 +68,105 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   useEffect(() => {
     realTimeSync.enableAggressivePolling();
   }, []);
+
+  // Funções auxiliares para Analytics
+  const toggleVendor = (vendor: string) => {
+    setSelectedVendors(prev => 
+      prev.includes(vendor) 
+        ? prev.filter(v => v !== vendor)
+        : [...prev, vendor]
+    );
+  };
+
+  const toggleStatus = (status: string) => {
+    setSelectedStatuses(prev => 
+      prev.includes(status) 
+        ? prev.filter(s => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  const selectAllVendors = () => {
+    const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
+    setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
+  };
+
+  const selectAllStatuses = () => {
+    const allStatuses = Object.keys(STATUS_CONFIG);
+    setSelectedStatuses(selectedStatuses.length === allStatuses.length ? [] : allStatuses);
+  };
+
+  const clearAllFilters = () => {
+    setSelectedVendors([]);
+    setSelectedStatuses([]);
+    setSelectedOperadora('');
+    setSelectedTipoPlano('');
+    setDataInicio('');
+    setDataFim('');
+    setValorMin('');
+    setValorMax('');
+    setSearchQuery('');
+    setCidade('');
+    setUf('');
+  };
+
+  const saveCurrentFilter = () => {
+    if (!filterName.trim()) return;
+    
+    const filter = {
+      id: Date.now(),
+      name: filterName,
+      selectedVendors,
+      selectedStatuses,
+      selectedOperadora,
+      selectedTipoPlano,
+      dataInicio,
+      dataFim,
+      valorMin,
+      valorMax,
+      searchQuery,
+      cidade,
+      uf
+    };
+    
+    setSavedFilters(prev => [...prev, filter]);
+    setFilterName('');
+    setShowSaveFilter(false);
+    showNotification('Filtro salvo com sucesso!', 'success');
+  };
+
+  const exportReport = () => {
+    showNotification(`Relatório exportado em ${exportFormat}!`, 'success');
+    setShowExportModal(false);
+  };
+
+  const refreshData = () => {
+    realTimeSync.forceRefresh();
+    showNotification('Dados atualizados!', 'success');
+  };
   
   // Estados para filtros
   const [filterVendor, setFilterVendor] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDate, setFilterDate] = useState('');
 
-  // Estados para filtros avançados do Analytics
-  const [analyticsFilters, setAnalyticsFilters] = useState({
-    vendedor: '',
-    operadora: '',
-    status: '',
-    plano: '',
-    tipoContrato: '',
-    regiao: '',
-    dataInicio: '',
-    dataFim: '',
-    valorMin: '',
-    valorMax: '',
-    vidasMin: '',
-    vidasMax: '',
-    cliente: '',
-    idProposta: '',
-    motivoReprovacao: '',
-    fonteOrigem: ''
-  });
-
-  // Estados para controle de modais e exportação
+  // Estados para Analytics - movidos para nível principal
+  const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedOperadora, setSelectedOperadora] = useState('');
+  const [selectedTipoPlano, setSelectedTipoPlano] = useState('');
+  const [dataInicio, setDataInicio] = useState('');
+  const [dataFim, setDataFim] = useState('');
+  const [valorMin, setValorMin] = useState('');
+  const [valorMax, setValorMax] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [uf, setUf] = useState('');
   const [showExportModal, setShowExportModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [exportType, setExportType] = useState('pdf');
-  const [shareMethod, setShareMethod] = useState('email');
-  const [selectedReportData, setSelectedReportData] = useState(null);
+  const [exportFormat, setExportFormat] = useState('PDF');
+  const [savedFilters, setSavedFilters] = useState<any[]>([]);
+  const [filterName, setFilterName] = useState('');
+  const [showSaveFilter, setShowSaveFilter] = useState(false);
   
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
@@ -1027,23 +1094,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Analytics Moderno e Visual - Reformulação Completa
   const renderAnalytics = () => {
-    // Estados para filtros avançados
-    const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
-    const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-    const [selectedOperadora, setSelectedOperadora] = useState('');
-    const [selectedTipoPlano, setSelectedTipoPlano] = useState('');
-    const [dataInicio, setDataInicio] = useState('');
-    const [dataFim, setDataFim] = useState('');
-    const [valorMin, setValorMin] = useState('');
-    const [valorMax, setValorMax] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [cidade, setCidade] = useState('');
-    const [uf, setUf] = useState('');
-    const [showExportModal, setShowExportModal] = useState(false);
-    const [exportFormat, setExportFormat] = useState('PDF');
-    const [savedFilters, setSavedFilters] = useState<any[]>([]);
-    const [filterName, setFilterName] = useState('');
-    const [showSaveFilter, setShowSaveFilter] = useState(false);
 
     // Lista de vendedores únicos
     const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
@@ -1172,80 +1222,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     teamMetrics.ticketMedio = teamMetrics.totalPropostas > 0 ? 
       teamMetrics.totalFaturamento / teamMetrics.totalPropostas : 0;
 
-    // Funções auxiliares
-    const toggleVendor = (vendor: string) => {
-      setSelectedVendors(prev => 
-        prev.includes(vendor) 
-          ? prev.filter(v => v !== vendor)
-          : [...prev, vendor]
-      );
-    };
 
-    const toggleStatus = (status: string) => {
-      setSelectedStatuses(prev => 
-        prev.includes(status) 
-          ? prev.filter(s => s !== status)
-          : [...prev, status]
-      );
-    };
-
-    const selectAllVendors = () => {
-      setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
-    };
-
-    const selectAllStatuses = () => {
-      const allStatuses = Object.keys(STATUS_CONFIG);
-      setSelectedStatuses(selectedStatuses.length === allStatuses.length ? [] : allStatuses);
-    };
-
-    const clearAllFilters = () => {
-      setSelectedVendors([]);
-      setSelectedStatuses([]);
-      setSelectedOperadora('');
-      setSelectedTipoPlano('');
-      setDataInicio('');
-      setDataFim('');
-      setValorMin('');
-      setValorMax('');
-      setSearchQuery('');
-      setCidade('');
-      setUf('');
-    };
-
-    const saveCurrentFilter = () => {
-      if (!filterName.trim()) return;
-      
-      const filter = {
-        id: Date.now(),
-        name: filterName,
-        selectedVendors,
-        selectedStatuses,
-        selectedOperadora,
-        selectedTipoPlano,
-        dataInicio,
-        dataFim,
-        valorMin,
-        valorMax,
-        searchQuery,
-        cidade,
-        uf
-      };
-      
-      setSavedFilters(prev => [...prev, filter]);
-      setFilterName('');
-      setShowSaveFilter(false);
-      showNotification('Filtro salvo com sucesso!', 'success');
-    };
-
-    const exportReport = () => {
-      showNotification(`Relatório exportado em ${exportFormat}!`, 'success');
-      setShowExportModal(false);
-    };
-
-    const refreshData = () => {
-      realTimeSync.forceRefresh();
-      showNotification('Dados atualizados!', 'success');
-    };
 
     return (
       <div className="space-y-8">
