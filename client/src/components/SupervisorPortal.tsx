@@ -141,7 +141,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   };
 
   const refreshData = () => {
-    realTimeSync.forceRefresh();
+    queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
     showNotification('Dados atualizados!', 'success');
   };
   
@@ -1225,466 +1225,155 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
 
     return (
-      <div className="space-y-8">
-        {/* Header Moderno */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 rounded-2xl shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
-          <div className="relative p-8">
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-4xl font-bold text-white mb-3 flex items-center gap-3">
-                  <Zap className="text-yellow-300" size={40} />
-                  Analytics Pro
-                </h1>
-                <p className="text-purple-100 text-lg mb-4">Análise visual inteligente de vendas e conversões</p>
-                <div className="flex gap-3 flex-wrap">
-                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
-                    📊 {analyticsData.length} Propostas Filtradas
-                  </span>
-                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
-                    💰 {formatCurrency(teamMetrics.totalFaturamento.toString())}
-                  </span>
-                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
-                    📈 {teamMetrics.taxaConversao.toFixed(1)}% Conversão
-                  </span>
-                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
-                    🎯 {formatCurrency(teamMetrics.ticketMedio.toString())} Ticket Médio
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={refreshData}
-                  className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all flex items-center gap-2"
-                >
-                  <RefreshCw size={16} />
-                  Atualizar
-                </button>
-                <button
-                  onClick={() => setShowExportModal(true)}
-                  className="px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-gray-100 transition-all flex items-center gap-2 font-medium"
-                >
-                  <Download size={16} />
-                  Exportar
-                </button>
-              </div>
+      <div className="space-y-6">
+        {/* Header Executivo Minimalista */}
+        <div className="bg-slate-50 border-l-4 border-blue-600 p-6 rounded-r-lg">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-xl font-medium text-slate-800 mb-1">Analytics & Performance</h1>
+              <p className="text-slate-600 text-sm">Dados consolidados de {analyticsData.length} propostas</p>
+            </div>
+            <div className="flex items-center gap-3 text-sm text-slate-600">
+              <span>{new Date().toLocaleDateString('pt-BR')}</span>
+              <button
+                onClick={refreshData}
+                className="p-2 hover:bg-slate-200 rounded-md transition-colors"
+                title="Atualizar dados"
+              >
+                <RefreshCw size={16} />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Filtros Avançados e Dinâmicos */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              <Filter className="text-blue-600" size={24} />
-              Filtros Avançados e Dinâmicos
-            </h3>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowSaveFilter(true)}
-                className="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 text-sm flex items-center gap-1"
-              >
-                <Heart size={14} />
-                Salvar Filtro
-              </button>
-              <button
-                onClick={clearAllFilters}
-                className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 text-sm"
-              >
-                Limpar Tudo
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Seleção de Vendedores */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                👥 Vendedores
-                <button
-                  onClick={selectAllVendors}
-                  className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
-                >
-                  {selectedVendors.length === uniqueVendors.length ? 'Desmarcar Todos' : 'Selecionar Todos'}
-                </button>
-              </label>
-              <div className="max-h-32 overflow-y-auto border rounded-lg p-2 space-y-1">
-                {uniqueVendors.map(vendor => (
-                  <label key={vendor} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded">
-                    <input
-                      type="checkbox"
-                      checked={selectedVendors.includes(vendor)}
-                      onChange={() => toggleVendor(vendor)}
-                      className="rounded"
-                    />
-                    <span>{vendor}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Seleção de Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                📋 Status
-                <button
-                  onClick={selectAllStatuses}
-                  className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
-                >
-                  {selectedStatuses.length === Object.keys(STATUS_CONFIG).length ? 'Desmarcar Todos' : 'Selecionar Todos'}
-                </button>
-              </label>
-              <div className="max-h-32 overflow-y-auto border rounded-lg p-2 space-y-1">
-                {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                  <label key={key} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded">
-                    <input
-                      type="checkbox"
-                      checked={selectedStatuses.includes(key)}
-                      onChange={() => toggleStatus(key)}
-                      className="rounded"
-                    />
-                    <div className={`w-3 h-3 rounded-full ${config.bgColor}`}></div>
-                    <span>{config.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Campo de Busca */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">🔍 Busca Global</label>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cliente, ID, CNPJ, plano..."
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* Operadora */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">🏢 Operadora</label>
-              <select
-                value={selectedOperadora}
-                onChange={(e) => setSelectedOperadora(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Todas as Operadoras</option>
-                {operadoras.map(op => (
-                  <option key={op} value={op}>{op}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Tipo de Plano */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">📋 Tipo de Plano</label>
-              <select
-                value={selectedTipoPlano}
-                onChange={(e) => setSelectedTipoPlano(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Todos os Tipos</option>
-                {tiposPlano.map(tipo => (
-                  <option key={tipo} value={tipo}>{tipo}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Período */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">📅 Período</label>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="date"
-                  value={dataInicio}
-                  onChange={(e) => setDataInicio(e.target.value)}
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="date"
-                  value={dataFim}
-                  onChange={(e) => setDataFim(e.target.value)}
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* Faixa de Valores */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">💰 Faixa de Valores (R$)</label>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="number"
-                  value={valorMin}
-                  onChange={(e) => setValorMin(e.target.value)}
-                  placeholder="Mínimo"
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="number"
-                  value={valorMax}
-                  onChange={(e) => setValorMax(e.target.value)}
-                  placeholder="Máximo"
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* Localização */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">📍 Localização</label>
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  value={cidade}
-                  onChange={(e) => setCidade(e.target.value)}
-                  placeholder="Cidade"
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="text"
-                  value={uf}
-                  onChange={(e) => setUf(e.target.value)}
-                  placeholder="UF"
-                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Filtros Salvos */}
-          {savedFilters.length > 0 && (
-            <div className="mt-6 pt-6 border-t">
-              <h4 className="text-sm font-semibold text-gray-700 mb-3">❤️ Filtros Favoritos</h4>
-              <div className="flex flex-wrap gap-2">
-                {savedFilters.map(filter => (
-                  <button
-                    key={filter.id}
-                    onClick={() => {
-                      setSelectedVendors(filter.selectedVendors);
-                      setSelectedStatuses(filter.selectedStatuses);
-                      setSelectedOperadora(filter.selectedOperadora);
-                      setSelectedTipoPlano(filter.selectedTipoPlano);
-                      setDataInicio(filter.dataInicio);
-                      setDataFim(filter.dataFim);
-                      setValorMin(filter.valorMin);
-                      setValorMax(filter.valorMax);
-                      setSearchQuery(filter.searchQuery);
-                      setCidade(filter.cidade);
-                      setUf(filter.uf);
-                    }}
-                    className="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 text-sm flex items-center gap-1"
-                  >
-                    <Heart size={12} />
-                    {filter.name}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Filtros Discretos */}
+        <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200">
+          <select
+            value={selectedVendors[0] || ''}
+            onChange={(e) => setSelectedVendors(e.target.value ? [e.target.value] : [])}
+            className="border border-slate-300 rounded px-3 py-1 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">Todos os vendedores</option>
+            {uniqueVendors.map(vendor => (
+              <option key={vendor} value={vendor}>{vendor}</option>
+            ))}
+          </select>
+          
+          <select
+            value={selectedStatuses[0] || ''}
+            onChange={(e) => setSelectedStatuses(e.target.value ? [e.target.value] : [])}
+            className="border border-slate-300 rounded px-3 py-1 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="">Todos os status</option>
+            {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+              <option key={key} value={key}>{config.label}</option>
+            ))}
+          </select>
+          
+          {(selectedVendors.length > 0 || selectedStatuses.length > 0) && (
+            <button
+              onClick={clearAllFilters}
+              className="text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 px-2 py-1"
+            >
+              <X size={12} />
+              Limpar
+            </button>
           )}
         </div>
 
-        {/* KPIs Visuais com Alertas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-white/20 p-3 rounded-lg">
-                <CheckCircle size={28} />
-              </div>
-              <div className="text-right">
-                <p className="text-3xl font-bold">{teamMetrics.totalConvertidas}</p>
-                <p className="text-green-100 text-sm">Convertidas</p>
-              </div>
-            </div>
-            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
-              <div 
-                className="bg-white h-2 rounded-full transition-all duration-1000"
-                style={{ width: `${Math.min(teamMetrics.taxaConversao, 100)}%` }}
-              ></div>
-            </div>
-            <p className="text-green-100 text-sm">{teamMetrics.taxaConversao.toFixed(1)}% de conversão</p>
-            {teamMetrics.taxaConversao > 80 && (
-              <p className="text-xs text-yellow-200 mt-1">🎉 Excelente performance!</p>
-            )}
+        {/* Métricas Principais */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Resumo Executivo</h2>
           </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-semibold text-slate-800 mb-1">{teamMetrics.totalConvertidas}</div>
+                <div className="text-sm text-slate-600 mb-2">Convertidas</div>
+                <div className="text-xs text-emerald-600 font-medium">{teamMetrics.taxaConversao.toFixed(1)}% conversão</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl font-semibold text-slate-800 mb-1">{teamMetrics.totalPerdidas}</div>
+                <div className="text-sm text-slate-600 mb-2">Perdidas</div>
+                <div className="text-xs text-slate-500">
+                  {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% do total
+                </div>
+              </div>
 
-          <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-white/20 p-3 rounded-lg">
-                <TrendingDown size={28} />
+              <div className="text-center">
+                <div className="text-xl font-semibold text-slate-800 mb-1">{formatCurrency(teamMetrics.totalFaturamento.toString())}</div>
+                <div className="text-sm text-slate-600 mb-2">Faturamento</div>
+                <div className="text-xs text-slate-500">Média: {formatCurrency(teamMetrics.ticketMedio.toString())}</div>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-bold">{teamMetrics.totalPerdidas}</p>
-                <p className="text-red-100 text-sm">Perdidas</p>
-              </div>
-            </div>
-            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
-              <div 
-                className="bg-white h-2 rounded-full transition-all duration-1000"
-                style={{ width: `${teamMetrics.totalPropostas > 0 ? (teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100 : 0}%` }}
-              ></div>
-            </div>
-            <p className="text-red-100 text-sm">
-              {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% perdas
-            </p>
-            {teamMetrics.totalPerdidas > 10 && (
-              <p className="text-xs text-yellow-200 mt-1 flex items-center gap-1">
-                <AlertTriangle size={12} />
-                Atenção às perdas!
-              </p>
-            )}
-          </div>
 
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-white/20 p-3 rounded-lg">
-                <DollarSign size={28} />
+              <div className="text-center">
+                <div className="text-2xl font-semibold text-slate-800 mb-1">{teamMetrics.totalPendentes}</div>
+                <div className="text-sm text-slate-600 mb-2">Em andamento</div>
+                <div className="text-xs text-slate-500">
+                  {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPendentes / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% ativas
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold">{formatCurrency(teamMetrics.totalFaturamento.toString())}</p>
-                <p className="text-blue-100 text-sm">Faturamento Total</p>
-              </div>
-            </div>
-            <p className="text-blue-100 text-sm">
-              Ticket médio: {formatCurrency(teamMetrics.ticketMedio.toString())}
-            </p>
-            <p className="text-blue-100 text-sm">
-              Valor médio: {formatCurrency((teamMetrics.totalFaturamento / Math.max(teamMetrics.totalPropostas, 1)).toString())}
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-white/20 p-3 rounded-lg">
-                <Clock size={28} />
-              </div>
-              <div className="text-right">
-                <p className="text-3xl font-bold">{teamMetrics.totalPendentes}</p>
-                <p className="text-orange-100 text-sm">Pendentes</p>
-              </div>
-            </div>
-            <p className="text-orange-100 text-sm">Em andamento</p>
-            <p className="text-orange-100 text-sm">
-              {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPendentes / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% do total
-            </p>
-          </div>
-        </div>
-
-        {/* Gráficos e Visualizações Modernas */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Gráfico de Pizza - Distribuição por Status */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <PieChart className="text-purple-600" size={24} />
-              Distribuição por Status
-            </h3>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsPieChart>
-                  <Pie
-                    data={statusData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  >
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </RechartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Gráfico de Barras - Total por Status */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <BarChart3 className="text-blue-600" size={24} />
-              Total de Propostas por Status
-            </h3>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsBarChart data={statusBarData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="status" angle={-45} textAnchor="end" height={80} />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="total" fill="#8884d8" />
-                </RechartsBarChart>
-              </ResponsiveContainer>
             </div>
           </div>
         </div>
 
-        {/* Ranking de Vendedores */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <Users className="text-green-600" size={24} />
-            Ranking de Vendedores
-          </h3>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Ranking por Quantidade */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-4">🏆 Por Quantidade de Propostas</h4>
-              <div className="space-y-3">
-                {vendorRankingData.slice(0, 5).map((vendor, index) => (
-                  <div key={vendor.vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                        index === 0 ? 'bg-yellow-500' : 
-                        index === 1 ? 'bg-gray-400' : 
-                        index === 2 ? 'bg-orange-600' : 'bg-blue-500'
-                      }`}>
-                        {index + 1}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-800">{vendor.vendor}</p>
-                        <p className="text-sm text-gray-600">{vendor.conversao.toFixed(1)}% conversão</p>
-                      </div>
+        {/* Distribuição por Status */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Distribuição por Status</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
+              {Object.entries(STATUS_CONFIG)
+                .filter(([status]) => analyticsData.filter(p => p.status === status).length > 0)
+                .map(([status, config]) => {
+                  const count = analyticsData.filter(p => p.status === status).length;
+                  const percentage = analyticsData.length > 0 ? (count / analyticsData.length * 100) : 0;
+                  
+                  return (
+                    <div key={status} className="text-center">
+                      <div className="text-lg font-semibold text-slate-800 mb-1">{count}</div>
+                      <div className="text-xs text-slate-600 mb-1">{config.label}</div>
+                      <div className="text-xs text-slate-500">{percentage.toFixed(0)}%</div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-blue-600">{vendor.total}</p>
-                      <p className="text-xs text-gray-500">propostas</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  );
+                })}
             </div>
+          </div>
+        </div>
 
-            {/* Ranking por Faturamento */}
-            <div>
-              <h4 className="text-lg font-semibold text-gray-700 mb-4">💰 Por Faturamento</h4>
-              <div className="space-y-3">
-                {vendorRankingData.sort((a, b) => b.faturamento - a.faturamento).slice(0, 5).map((vendor, index) => (
-                  <div key={vendor.vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                        index === 0 ? 'bg-yellow-500' : 
-                        index === 1 ? 'bg-gray-400' : 
-                        index === 2 ? 'bg-orange-600' : 'bg-blue-500'
-                      }`}>
-                        {index + 1}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-800">{vendor.vendor}</p>
-                        <p className="text-sm text-gray-600">{vendor.total} propostas</p>
-                      </div>
+        {/* Performance Individual */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Performance Individual</h2>
+          </div>
+          <div className="p-6">
+            <div className="space-y-4">
+              {Object.entries(vendorAnalysis)
+                .sort(([,a], [,b]) => b.total - a.total)
+                .slice(0, 6)
+                .map(([vendor, data], index) => (
+                <div key={vendor} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-1 bg-slate-300 rounded-full relative">
+                      <div 
+                        className="h-1 bg-blue-600 rounded-full absolute top-0 left-0"
+                        style={{ width: `${Math.min(data.taxaConversao, 100)}%` }}
+                      ></div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-green-600">{formatCurrency(vendor.faturamento.toString())}</p>
-                      <p className="text-xs text-gray-500">faturamento</p>
+                    <div>
+                      <div className="font-medium text-slate-800">{vendor}</div>
+                      <div className="text-sm text-slate-500">{data.total} propostas</div>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="text-right">
+                    <div className="font-medium text-slate-800">{data.taxaConversao.toFixed(1)}%</div>
+                    <div className="text-sm text-slate-500">{formatCurrency(data.faturamento.toString())}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
