@@ -53,6 +53,7 @@ interface InternalData {
   vendaDupla: boolean;
   nomeVendaDupla: string;
   desconto: string;
+  origemVenda: string;
   autorizadorDesconto: string;
   observacoesFinanceiras: string;
   observacoesCliente: string;
@@ -125,6 +126,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     vendaDupla: false,
     nomeVendaDupla: '',
     desconto: '',
+    origemVenda: '',
     autorizadorDesconto: '',
     observacoesFinanceiras: '',
     observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
@@ -353,6 +355,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       vendaDupla: false,
       nomeVendaDupla: '',
       desconto: '',
+      origemVenda: '',
       autorizadorDesconto: '',
       observacoesFinanceiras: '',
       observacoesCliente: 'Lembre-se de enviar todos os documentos solicitados em boa qualidade. Para dúvidas sobre documentos específicos, entre em contato através do chat.'
@@ -419,8 +422,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       vendaDupla: false,
       nomeVendaDupla: '',
       desconto: '',
+      origemVenda: '',
       autorizadorDesconto: '',
-      observacoesFinanceiras: ''
+      observacoesFinanceiras: '',
+      observacoesCliente: ''
     });
     setAttachments([]);
     setIsSubmitted(false);
@@ -1309,6 +1314,24 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     placeholder="0"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Origem da Venda
+                  </label>
+                  <select
+                    value={internalData.origemVenda}
+                    onChange={(e) => setInternalData(prev => ({ ...prev, origemVenda: e.target.value }))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  >
+                    <option value="">Selecione a origem</option>
+                    <option value="Base Abmix">Base Abmix</option>
+                    <option value="Lead Campanha">Lead Campanha</option>
+                    <option value="Lead Supervisor">Lead Supervisor</option>
+                    <option value="Indicação Pós Venda">Indicação Pós Venda</option>
+                    <option value="Indicação Cliente">Indicação Cliente</option>
+                  </select>
                 </div>
 
                 <div>

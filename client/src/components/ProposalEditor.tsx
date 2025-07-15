@@ -54,6 +54,7 @@ interface InternalData {
   vendaDupla: boolean;
   nomeVendaDupla: string;
   desconto: string;
+  origemVenda: string;
   autorizadorDesconto: string;
   observacoesFinanceiras: string;
   observacoesCliente: string;
@@ -142,6 +143,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
     vendaDupla: false,
     nomeVendaDupla: '',
     desconto: '5%',
+    origemVenda: 'Base Abmix',
     autorizadorDesconto: 'Gerente Regional',
     observacoesFinanceiras: 'Cliente com bom histórico de pagamento. Desconto autorizado.',
     observacoesCliente: 'Enviar todos os documentos digitalizados em boa qualidade.'
@@ -549,6 +551,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {renderEditableField('Desconto Aplicado', internalData.desconto, 'desconto', 'Controle Interno')}
+                {renderEditableField('Origem da Venda', internalData.origemVenda, 'origem-venda', 'Controle Interno')}
                 {renderEditableField('Autorizador do Desconto', internalData.autorizadorDesconto, 'autorizador', 'Controle Interno')}
                 {renderEditableField('Observações Financeiras', internalData.observacoesFinanceiras, 'obs-financeiras', 'Controle Interno')}
                 {renderEditableField('Observações para o Cliente', internalData.observacoesCliente, 'obs-cliente', 'Controle Interno')}
