@@ -1,0 +1,73 @@
+Quero que o painel Analytics seja totalmente reformulado, moderno e visual.
+
+REQUISITOS:
+
+Gráficos e Visualizações
+
+Gráfico de pizza (ou doughnut) mostrando a proporção de cada status (usando as cores exatas da imagem).
+
+Gráfico de barras exibindo o total de propostas por status, com opção de selecionar um, vários ou todos os status (caixa “Selecionar Todos”).
+
+Gráfico de linha mostrando evolução de propostas por status ao longo do tempo.
+
+Ranking de vendedores por quantidade de propostas (e valores), com seleção individual ou múltipla.
+
+Gráfico de conversão por vendedor (número de propostas concluídas vs. propostas abertas).
+
+Filtros Avançados e Dinâmicos
+
+Caixa de seleção para todos os status (com opção “Selecionar Todos”).
+
+Caixa de seleção para todos os vendedores (listar todos, opção múltipla e “Selecionar Todos”).
+
+Caixa para selecionar operadora e tipo de plano (se existir).
+
+Filtro por período (calendário para escolher datas de início e fim).
+
+Campo de busca (nome do cliente, ID, plano, e-mail, etc).
+
+Filtro por cidade/UF (se disponível nos dados).
+
+Filtro por valor do plano (faixa de valores).
+
+Funções Extras
+
+Exibir valores totais, valores médios e ticket médio por status/vendedor.
+
+Percentual de conversão por status e vendedor.
+
+Alertas visuais para status críticos (ex: pendência, expirado, declinado).
+
+Opção de salvar filtros personalizados como “favoritos”.
+
+Opção de exportar gráficos e tabelas em PDF, Excel e CSV.
+
+Botão para atualizar/refresh painel em tempo real.
+
+Exibir número total de propostas filtradas no topo.
+
+Animação nos gráficos ao filtrar dados.
+
+Relatórios e Exportações
+
+Permitir exportar relatórios anuais, mensais, retroativos, conforme seleção no calendário.
+
+Caixa para selecionar o formato do relatório (PDF, Excel, CSV).
+
+Botão para envio rápido dos relatórios: e-mail, WhatsApp, Google Drive, Google Sheets.
+
+Registro/log dos relatórios gerados para fácil auditoria.
+
+Design & Funcionalidade
+
+Visual moderno, responsivo, e fácil de usar.
+
+Manter as cores dos status exatamente como na imagem.
+
+Deixar todos os dados e gráficos atualizando em tempo real.
+
+NÃO remover nenhum filtro, função ou recurso já existente — apenas adicionar.
+
+Observação Importante:
+Mexer SOMENTE na aba Analytics, não modificar nenhuma outra parte do sistema.
+
