@@ -1186,11 +1186,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
-    // Dados para gráfico pizza por vendedores (baseado nos status selecionados)
-    const vendorPieData = selectedStatuses.length > 0 ? 
+    // Dados para gráfico pizza por vendedores (baseado no status selecionado)
+    const vendorPieData = selectedStatusForChart ? 
       uniqueVendors.map(vendor => {
         const count = analyticsData.filter(p => 
-          selectedStatuses.includes(p.status) && p.vendorName === vendor
+          p.status === selectedStatusForChart && p.vendorName === vendor
         ).length;
         return {
           name: vendor,
@@ -1305,31 +1305,48 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Seletor de Vendedores */}
+              {/* Seletor de Vendedores com Cores */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
-                <select
-                  value={selectedVendorAnalytics}
-                  onChange={(e) => {
-                    setSelectedVendorAnalytics(e.target.value);
-                    if (e.target.value === 'todos') {
-                      setSelectedVendors(uniqueVendors);
-                    } else if (e.target.value === '') {
-                      setSelectedVendors([]);
-                    } else {
-                      setSelectedVendors([e.target.value]);
-                    }
-                  }}
-                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                >
-                  <option value="">Selecione um vendedor</option>
-                  <option value="todos">Todos os Vendedores</option>
+                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedVendors.length === uniqueVendors.length}
+                      onChange={() => {
+                        if (selectedVendors.length === uniqueVendors.length) {
+                          setSelectedVendors([]);
+                        } else {
+                          setSelectedVendors(uniqueVendors);
+                        }
+                      }}
+                      className="w-4 h-4 rounded border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
+                  </label>
+                  <hr className="border-slate-200" />
                   {uniqueVendors.map(vendor => (
-                    <option key={vendor} value={vendor}>
-                      {vendor}
-                    </option>
+                    <label key={vendor} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedVendors.includes(vendor)}
+                        onChange={() => {
+                          if (selectedVendors.includes(vendor)) {
+                            setSelectedVendors(prev => prev.filter(v => v !== vendor));
+                          } else {
+                            setSelectedVendors(prev => [...prev, vendor]);
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-slate-300"
+                      />
+                      <div 
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: getVendorColor(vendor) }}
+                      ></div>
+                      <span className="text-sm text-slate-700">{vendor}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
               </div>
 
               {/* Período com Calendários */}
@@ -1360,45 +1377,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Status */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
-                <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 rounded-lg p-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedStatuses.length === Object.keys(STATUS_CONFIG).length}
-                      onChange={() => {
-                        if (selectedStatuses.length === Object.keys(STATUS_CONFIG).length) {
-                          setSelectedStatuses([]);
-                        } else {
-                          setSelectedStatuses(Object.keys(STATUS_CONFIG));
-                        }
-                      }}
-                      className="w-4 h-4 rounded border-slate-300"
-                    />
-                    <span className="text-sm font-medium text-slate-700">Selecionar Todos</span>
-                  </label>
-                  <hr className="border-slate-200" />
+                <select
+                  value={selectedStatusForChart}
+                  onChange={(e) => setSelectedStatusForChart(e.target.value)}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecione um status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                    <label key={key} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedStatuses.includes(key)}
-                        onChange={() => {
-                          if (selectedStatuses.includes(key)) {
-                            setSelectedStatuses(prev => prev.filter(s => s !== key));
-                          } else {
-                            setSelectedStatuses(prev => [...prev, key]);
-                          }
-                        }}
-                        className="w-4 h-4 rounded border-slate-300"
-                      />
-                      <div 
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: config.color }}
-                      ></div>
-                      <span className="text-sm text-slate-700">{config.label}</span>
-                    </label>
+                    <option key={key} value={key}>{config.label}</option>
                   ))}
-                </div>
+                </select>
               </div>
             </div>
             
@@ -1406,18 +1394,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => setShowChart(true)}
-                disabled={selectedVendors.length === 0 && selectedStatuses.length === 0}
+                disabled={selectedVendors.length === 0 && !selectedStatusForChart}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 Visualizar Gráfico
               </button>
               
-              {(selectedVendors.length > 0 || selectedStatuses.length > 0 || dataInicio || dataFim) && (
+              {(selectedVendors.length > 0 || selectedStatusForChart || dataInicio || dataFim) && (
                 <button
                   onClick={() => {
                     setSelectedVendors([]);
-                    setSelectedStatuses([]);
-                    setSelectedVendorAnalytics('');
+                    setSelectedStatusForChart('');
                     setDataInicio('');
                     setDataFim('');
                     setShowChart(false);
@@ -1530,16 +1517,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Distribuição por Vendedores */}
-        {showChart && selectedStatuses.length > 0 && vendorPieData.length > 0 && (
+        {showChart && selectedStatusForChart && vendorPieData.length > 0 && (
           <div className="bg-white border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h2 className="text-lg font-medium text-slate-800">
-                Distribuição por Vendedores
-                {selectedStatuses.length > 0 && (
-                  <span className="text-sm text-slate-500 ml-2">
-                    ({selectedStatuses.map(s => STATUS_CONFIG[s as keyof typeof STATUS_CONFIG]?.label).join(', ')})
-                  </span>
-                )}
+                Distribuição por Vendedores - {STATUS_CONFIG[selectedStatusForChart as keyof typeof STATUS_CONFIG]?.label}
               </h2>
             </div>
             <div className="p-6">
