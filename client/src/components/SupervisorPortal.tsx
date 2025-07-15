@@ -1794,86 +1794,115 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Filtros de Relatório */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Filtros</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Vendedores */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Vendedores</label>
+                <select
+                  value={reportFilters.vendedor}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecione um vendedor</option>
+                  {uniqueVendors.map(vendor => (
+                    <option key={vendor} value={vendor}>{vendor}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Período */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Período</label>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Data Início</label>
+                    <input
+                      type="date"
+                      value={reportFilters.dataInicio}
+                      onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-600 mb-1">Data Fim</label>
+                    <input
+                      type="date"
+                      value={reportFilters.dataFim}
+                      onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <select
+                  value={reportFilters.status}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
+                  className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="">Selecionar Todos os Status</option>
+                  {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                    <option key={key} value={key}>{config.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            {/* Botões de Ação */}
+            <div className="mt-6 flex gap-4">
+              {(reportFilters.vendedor || reportFilters.status || reportFilters.dataInicio || reportFilters.dataFim) && (
+                <button
+                  onClick={() => setReportFilters({
+                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
+                  })}
+                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 flex items-center gap-1 border border-slate-300 rounded-lg hover:bg-slate-50"
+                >
+                  <X size={14} />
+                  Limpar Filtros
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Tipo de Relatório e Geração */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Filter size={20} />
-            Filtros do Relatório
+            <FileText size={20} />
+            Configurações do Relatório
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium mb-1">Data Início</label>
-              <input
-                type="date"
-                value={reportFilters.dataInicio}
-                onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Data Fim</label>
-              <input
-                type="date"
-                value={reportFilters.dataFim}
-                onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Vendedor</label>
-              <input
-                type="text"
-                placeholder="Nome do vendedor"
-                value={reportFilters.vendedor}
-                onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Status</label>
-              <select
-                value={reportFilters.status}
-                onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
-              >
-                <option value="">Todos</option>
-                {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                  <option key={key} value={key}>{config.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Tipo</label>
+              <label className="block text-sm font-medium mb-2">Tipo de Relatório</label>
               <select
                 value={reportFilters.tipo}
                 onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                className="w-full border rounded-lg px-3 py-2"
+                className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
-                <option value="completo">Completo</option>
-                <option value="resumo">Resumo</option>
+                <option value="completo">Relatório Completo</option>
+                <option value="resumo">Resumo Executivo</option>
                 <option value="vendedores">Por Vendedor</option>
-                <option value="financeiro">Financeiro</option>
+                <option value="financeiro">Relatório Financeiro</option>
               </select>
             </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={() => setReportFilters({
-                dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
-              })}
-              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center gap-2"
-            >
-              <X size={16} />
-              Limpar
-            </button>
-            <button
-              onClick={() => setShowExportOptions(true)}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-            >
-              <Download size={16} />
-              Gerar Relatório
-            </button>
+            <div className="flex items-end">
+              <button
+                onClick={() => setShowExportOptions(true)}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              >
+                <Download size={16} />
+                Gerar Relatório
+              </button>
+            </div>
           </div>
         </div>
 
