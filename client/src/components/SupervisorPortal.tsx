@@ -111,18 +111,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       // Converter para formato do backend ('alta' -> 'high', 'media' -> 'medium', 'baixa' -> 'low')
       const backendPriority = priority === 'alta' ? 'high' : priority === 'media' ? 'medium' : 'low';
       
-      // Atualizar no banco via API
-      const response = await fetch(`/api/proposals/${proposalId}`, {
+      // Atualizar no banco via API usando apiRequest
+      await apiRequest(`/api/proposals/${proposalId}`, {
         method: 'PUT',
+        body: JSON.stringify({ priority: backendPriority }),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ priority: backendPriority }),
       });
-
-      if (!response.ok) {
-        throw new Error('Erro ao atualizar prioridade');
-      }
 
       // Atualizar estado local
       setProposalPriorities(prev => ({
@@ -130,10 +126,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         [proposalId]: priority
       }));
 
+      // Invalidar cache para sincronização
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
+
       // Forçar atualização em tempo real para todos os portais
       realTimeSync.forceUpdate();
       
-      showNotification(`Prioridade alterada para ${priority.toUpperCase()}`, 'success');
+      showNotification(`Prioridade alterada para ${getPriorityText(priority)}`, 'success');
     } catch (error) {
       console.error('Erro ao alterar prioridade:', error);
       showNotification('Erro ao alterar prioridade', 'error');
