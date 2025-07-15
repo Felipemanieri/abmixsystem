@@ -731,12 +731,16 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <h3 className="font-medium text-blue-900 mb-2">Documentos obrigatórios para todos os beneficiários:</h3>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• RG (frente e verso)</li>
-                  <li>• CPF</li>
-                  <li>• Comprovante de residência (máx. 3 meses)</li>
-                  <li>• Comprovante de renda</li>
-                  <li>• Cartão de vacina (para dependentes menores)</li>
-                  <li>• Certidão de casamento ou nascimento (para dependentes)</li>
+                  <li>• CNPJ</li>
+                  <li>• Contrato social</li>
+                  <li>• RG/CPF de todos (pode ser CNH)</li>
+                  <li>• Certidão de Nascimento para menores de 12 anos</li>
+                  <li>• Relatório de alta / Declaração de saúde pediátrica (até 3 anos)</li>
+                  <li>• Certidão de casamento</li>
+                  <li>• Comprovante de residência do(s) titular(es)</li>
+                  <li>• Carteirinhas do plano atual</li>
+                  <li>• Carta de permanência</li>
+                  <li>• Analítico do plano atual</li>
                 </ul>
               </div>
             </div>
