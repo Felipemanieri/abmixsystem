@@ -1733,6 +1733,24 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Nova seção Relatórios completa
   const renderReports = () => {
+    // Lista de vendedores reais do sistema
+    const realVendors = [
+      'Ana Caroline Terto',
+      'Bruna Garcia',
+      'Fabiana Ferreira',
+      'Fabiana Godinho',
+      'Fernanda Batista',
+      'Gabrielle Fernandes',
+      'Isabela Velasquez',
+      'Juliana Araujo',
+      'Lohainy Berlino',
+      'Luciana Velasquez',
+      'Monique Silva',
+      'Sara Mattos'
+    ];
+    
+    // Lista de vendedores únicos (incluindo dados reais e do banco)
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];
 
     const filteredData = filteredProposals.filter(proposal => {
       if (reportFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
