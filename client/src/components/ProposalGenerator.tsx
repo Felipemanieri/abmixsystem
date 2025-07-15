@@ -3,6 +3,7 @@ import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, U
 import { showNotification } from '../utils/notifications';
 import { useRealTimeNotifications } from '../utils/realTimeSync';
 import ProposalProgressTracker from './ProposalProgressTracker';
+import ProfessionalLinkShare from './ProfessionalLinkShare';
 
 interface ProposalGeneratorProps {
   onBack: () => void;
@@ -135,6 +136,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [generatedLink, setGeneratedLink] = useState('');
   const [vendorAttachments, setVendorAttachments] = useState<File[]>([]);
   const [contractFieldsReadOnly, setContractFieldsReadOnly] = useState(false);
+  const [showProfessionalModal, setShowProfessionalModal] = useState(false);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -285,7 +287,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       }
       
       setGeneratedLink(result.clientLink);
-      setIsSubmitted(true);
+      setShowProfessionalModal(true);
       showNotification('Link exclusivo da proposta gerado com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao gerar proposta:', error);
@@ -423,6 +425,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     setAttachments([]);
     setIsSubmitted(false);
     setGeneratedLink('');
+    setShowProfessionalModal(false);
     setQuotationData({
       numeroVidas: 1,
       operadora: '',
@@ -918,110 +921,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     </div>
   );
 
-  if (isSubmitted) {
-    return (
-      <div className="max-w-2xl mx-auto">
-        <button
-          onClick={onBack}
-          className="flex items-center text-gray-600 hover:text-gray-800 mb-6 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Voltar ao Dashboard
-        </button>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Proposta Criada com Sucesso!</h2>
-          <p className="text-gray-600 mb-6">
-            Link único gerado para o cliente preencher os dados pessoais.
-          </p>
-          
-          <div className="bg-gray-50 p-4 rounded-lg mb-6">
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>Empresa:</strong> {contractData.nomeEmpresa}
-            </p>
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>Plano:</strong> {contractData.planoContratado}
-            </p>
-            <p className="text-sm text-gray-700">
-              <strong>Valor:</strong> R$ {contractData.valor}
-            </p>
-          </div>
-
-          <div className="bg-teal-50 p-4 rounded-lg mb-6">
-            <p className="text-sm text-teal-700 mb-2">
-              <strong>Link para o Cliente:</strong>
-            </p>
-            <div className="flex items-center space-x-2 mb-3">
-              <input
-                type="text"
-                value={generatedLink}
-                readOnly
-                className="flex-1 px-3 py-2 border border-teal-300 rounded-md text-sm bg-white"
-              />
-            </div>
-            
-            {/* Botões de Compartilhamento */}
-            <div className="flex flex-wrap gap-2 justify-center">
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center px-3 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm"
-              >
-                <Copy className="w-4 h-4 mr-1" />
-                Copiar Link
-              </button>
-              <button
-                onClick={shareByEmail}
-                className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
-              >
-                <Mail className="w-4 h-4 mr-1" />
-                E-mail
-              </button>
-              <button
-                onClick={shareByWhatsApp}
-                className="flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
-              >
-                <Phone className="w-4 h-4 mr-1" />
-                WhatsApp
-              </button>
-              <button
-                onClick={shareByInternalMessage}
-                className="flex items-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm"
-              >
-                <Send className="w-4 h-4 mr-1" />
-                Painel
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col space-y-3">
-            <button
-              onClick={resetForm}
-              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Nova Proposta
-            </button>
-            
-            <button
-              onClick={generateSameLinkProposal}
-              className="w-full bg-teal-600 text-white py-3 px-6 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-            >
-              Gerar Proposta para o Mesmo Link
-            </button>
-            
-            <button
-              onClick={onBack}
-              className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Voltar ao Dashboard
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -1801,6 +1701,15 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
         </div>
       </div>
+
+      {/* Modal Profissional de Compartilhamento */}
+      {showProfessionalModal && (
+        <ProfessionalLinkShare
+          clientLink={generatedLink}
+          clientName={contractData.nomeEmpresa}
+          onClose={() => setShowProfessionalModal(false)}
+        />
+      )}
     </div>
   );
 };
