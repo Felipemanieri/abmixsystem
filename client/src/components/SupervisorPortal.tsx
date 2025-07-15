@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Clock, User } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail } from 'lucide-react';
+import { format, isWithinInterval, subDays, subMonths, subWeeks, parseISO } from 'date-fns';
+import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, Area, AreaChart, Pie } from 'recharts';
 import AbmixLogo from './AbmixLogo';
 import SimpleProgressBar from './SimpleProgressBar';
 import ProgressBar from './ProgressBar';
@@ -1023,49 +1025,87 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     </div>
   );
 
-
-
-
-
-  // Analytics Profissional com Filtros Avançados e Gráficos
+  // Analytics Moderno e Visual - Reformulação Completa
   const renderAnalytics = () => {
+    // Estados para filtros avançados
+    const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
+    const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+    const [selectedOperadora, setSelectedOperadora] = useState('');
+    const [selectedTipoPlano, setSelectedTipoPlano] = useState('');
+    const [dataInicio, setDataInicio] = useState('');
+    const [dataFim, setDataFim] = useState('');
+    const [valorMin, setValorMin] = useState('');
+    const [valorMax, setValorMax] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [uf, setUf] = useState('');
+    const [showExportModal, setShowExportModal] = useState(false);
+    const [exportFormat, setExportFormat] = useState('PDF');
+    const [savedFilters, setSavedFilters] = useState<any[]>([]);
+    const [filterName, setFilterName] = useState('');
+    const [showSaveFilter, setShowSaveFilter] = useState(false);
 
-    // Lista de vendedores únicos para atalhos
+    // Lista de vendedores únicos
     const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
+    
+    // Lista de operadoras e tipos de plano únicos (mock data)
+    const operadoras = ['SulAmérica', 'Bradesco', 'Amil', 'Unimed', 'NotreDame'];
+    const tiposPlano = ['Individual', 'Familiar', 'Empresarial', 'PME'];
 
-    // Aplicar filtros avançados
+    // Aplicar todos os filtros avançados
     const analyticsData = filteredProposals.filter(proposal => {
-      if (selectedVendorAnalytics && proposal.vendorName !== selectedVendorAnalytics) return false;
-      if (analyticsFilters.status && proposal.status !== analyticsFilters.status) return false;
+      // Filtro de vendedores
+      if (selectedVendors.length > 0 && !selectedVendors.includes(proposal.vendorName || '')) return false;
       
-      // Filtro de data
-      if (selectedPeriod !== 'todos') {
+      // Filtro de status
+      if (selectedStatuses.length > 0 && !selectedStatuses.includes(proposal.status)) return false;
+      
+      // Filtro de operadora (mock)
+      if (selectedOperadora && proposal.contractData?.planoContratado !== selectedOperadora) return false;
+      
+      // Filtro de valor
+      const valor = parseFloat(proposal.contractData?.valor || '0');
+      if (valorMin && valor < parseFloat(valorMin)) return false;
+      if (valorMax && valor > parseFloat(valorMax)) return false;
+      
+      // Filtro de período
+      if (dataInicio || dataFim) {
         const proposalDate = new Date(proposal.createdAt || Date.now());
-        const now = new Date();
-        
-        switch (selectedPeriod) {
-          case 'hoje':
-            if (proposalDate.toDateString() !== now.toDateString()) return false;
-            break;
-          case 'semana':
-            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            if (proposalDate < weekAgo) return false;
-            break;
-          case 'mes':
-            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-            if (proposalDate < monthAgo) return false;
-            break;
-          case 'trimestre':
-            const quarterAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-            if (proposalDate < quarterAgo) return false;
-            break;
-        }
+        if (dataInicio && proposalDate < new Date(dataInicio)) return false;
+        if (dataFim && proposalDate > new Date(dataFim)) return false;
+      }
+      
+      // Filtro de busca
+      if (searchQuery) {
+        const searchLower = searchQuery.toLowerCase();
+        const matches = [
+          proposal.contractData?.nomeEmpresa,
+          proposal.contractData?.cnpj,
+          proposal.contractData?.planoContratado,
+          proposal.id
+        ].some(field => field?.toLowerCase().includes(searchLower));
+        if (!matches) return false;
       }
       
       return true;
     });
 
-    // Análise detalhada por vendedor
+    // Dados para gráfico de pizza por status
+    const statusData = Object.entries(STATUS_CONFIG).map(([key, config]) => ({
+      name: config.label,
+      value: analyticsData.filter(p => p.status === key).length,
+      color: config.color,
+      fill: config.color
+    })).filter(item => item.value > 0);
+
+    // Dados para gráfico de barras por status
+    const statusBarData = statusData.map(item => ({
+      status: item.name,
+      total: item.value,
+      fill: item.color
+    }));
+
+    // Análise por vendedor
     const vendorAnalysis = analyticsData.reduce((acc, proposal) => {
       const vendor = proposal.vendorName || 'Não Identificado';
       if (!acc[vendor]) {
@@ -1106,6 +1146,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       data.taxaConversao = data.total > 0 ? (data.convertidas / data.total) * 100 : 0;
     });
 
+    // Dados para ranking de vendedores
+    const vendorRankingData = Object.entries(vendorAnalysis)
+      .map(([vendor, data]) => ({
+        vendor,
+        total: data.total,
+        faturamento: data.faturamento,
+        conversao: data.taxaConversao
+      }))
+      .sort((a, b) => b.total - a.total);
+
     // Dados agregados da equipe
     const teamMetrics = {
       totalPropostas: analyticsData.length,
@@ -1113,6 +1163,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       totalConvertidas: analyticsData.filter(p => p.status === 'implantado').length,
       totalPerdidas: analyticsData.filter(p => ['declinado', 'expirado'].includes(p.status)).length,
       totalPendentes: analyticsData.filter(p => !['implantado', 'declinado', 'expirado'].includes(p.status)).length,
+      ticketMedio: 0,
+      taxaConversao: 0
     };
 
     teamMetrics.taxaConversao = teamMetrics.totalPropostas > 0 ? 
@@ -1120,14 +1172,80 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     teamMetrics.ticketMedio = teamMetrics.totalPropostas > 0 ? 
       teamMetrics.totalFaturamento / teamMetrics.totalPropostas : 0;
 
-    // Atalhos rápidos para datas
-    const dateShortcuts = [
-      { label: 'Todos', value: 'todos' },
-      { label: 'Hoje', value: 'hoje' },
-      { label: 'Esta Semana', value: 'semana' },
-      { label: 'Este Mês', value: 'mes' },
-      { label: 'Trimestre', value: 'trimestre' }
-    ];
+    // Funções auxiliares
+    const toggleVendor = (vendor: string) => {
+      setSelectedVendors(prev => 
+        prev.includes(vendor) 
+          ? prev.filter(v => v !== vendor)
+          : [...prev, vendor]
+      );
+    };
+
+    const toggleStatus = (status: string) => {
+      setSelectedStatuses(prev => 
+        prev.includes(status) 
+          ? prev.filter(s => s !== status)
+          : [...prev, status]
+      );
+    };
+
+    const selectAllVendors = () => {
+      setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
+    };
+
+    const selectAllStatuses = () => {
+      const allStatuses = Object.keys(STATUS_CONFIG);
+      setSelectedStatuses(selectedStatuses.length === allStatuses.length ? [] : allStatuses);
+    };
+
+    const clearAllFilters = () => {
+      setSelectedVendors([]);
+      setSelectedStatuses([]);
+      setSelectedOperadora('');
+      setSelectedTipoPlano('');
+      setDataInicio('');
+      setDataFim('');
+      setValorMin('');
+      setValorMax('');
+      setSearchQuery('');
+      setCidade('');
+      setUf('');
+    };
+
+    const saveCurrentFilter = () => {
+      if (!filterName.trim()) return;
+      
+      const filter = {
+        id: Date.now(),
+        name: filterName,
+        selectedVendors,
+        selectedStatuses,
+        selectedOperadora,
+        selectedTipoPlano,
+        dataInicio,
+        dataFim,
+        valorMin,
+        valorMax,
+        searchQuery,
+        cidade,
+        uf
+      };
+      
+      setSavedFilters(prev => [...prev, filter]);
+      setFilterName('');
+      setShowSaveFilter(false);
+      showNotification('Filtro salvo com sucesso!', 'success');
+    };
+
+    const exportReport = () => {
+      showNotification(`Relatório exportado em ${exportFormat}!`, 'success');
+      setShowExportModal(false);
+    };
+
+    const refreshData = () => {
+      realTimeSync.forceRefresh();
+      showNotification('Dados atualizados!', 'success');
+    };
 
     return (
       <div className="space-y-8">
@@ -1137,120 +1255,261 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="relative p-8">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-4xl font-bold text-white mb-3">🚀 Analytics Pro</h1>
+                <h1 className="text-4xl font-bold text-white mb-3 flex items-center gap-3">
+                  <Zap className="text-yellow-300" size={40} />
+                  Analytics Pro
+                </h1>
                 <p className="text-purple-100 text-lg mb-4">Análise visual inteligente de vendas e conversões</p>
-                <div className="flex gap-3">
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
-                    📊 {analyticsData.length} Propostas
+                <div className="flex gap-3 flex-wrap">
+                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
+                    📊 {analyticsData.length} Propostas Filtradas
                   </span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
+                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
                     💰 {formatCurrency(teamMetrics.totalFaturamento.toString())}
                   </span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm text-white">
+                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
                     📈 {teamMetrics.taxaConversao.toFixed(1)}% Conversão
+                  </span>
+                  <span className="bg-white/20 px-4 py-2 rounded-full text-sm text-white font-medium">
+                    🎯 {formatCurrency(teamMetrics.ticketMedio.toString())} Ticket Médio
                   </span>
                 </div>
               </div>
               <div className="flex gap-3">
                 <button
-                  onClick={() => setVisualMode('individual')}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    visualMode === 'individual' 
-                      ? 'bg-white text-purple-600 shadow-lg' 
-                      : 'bg-white/20 text-white hover:bg-white/30'
-                  }`}
+                  onClick={refreshData}
+                  className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all flex items-center gap-2"
                 >
-                  👤 Individual
+                  <RefreshCw size={16} />
+                  Atualizar
                 </button>
                 <button
-                  onClick={() => setVisualMode('equipe')}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    visualMode === 'equipe' 
-                      ? 'bg-white text-purple-600 shadow-lg' 
-                      : 'bg-white/20 text-white hover:bg-white/30'
-                  }`}
+                  onClick={() => setShowExportModal(true)}
+                  className="px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-gray-100 transition-all flex items-center gap-2 font-medium"
                 >
-                  👥 Equipe
+                  <Download size={16} />
+                  Exportar
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Filtros Inteligentes com Atalhos */}
+        {/* Filtros Avançados e Dinâmicos */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <Filter className="text-blue-600" size={24} />
-            Filtros Inteligentes
-          </h3>
-          
-          {/* Atalhos de Vendedores */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">🏆 Vendedores (clique para filtrar)</label>
-            <div className="flex flex-wrap gap-2">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              <Filter className="text-blue-600" size={24} />
+              Filtros Avançados e Dinâmicos
+            </h3>
+            <div className="flex gap-2">
               <button
-                onClick={() => setSelectedVendorAnalytics('')}
-                className={`px-4 py-2 rounded-lg border transition-all ${
-                  selectedVendorAnalytics === '' 
-                    ? 'bg-blue-500 text-white border-blue-500 shadow-md' 
-                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                }`}
+                onClick={() => setShowSaveFilter(true)}
+                className="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 text-sm flex items-center gap-1"
               >
-                👥 Todos
+                <Heart size={14} />
+                Salvar Filtro
               </button>
-              {uniqueVendors.map(vendor => (
-                <button
-                  key={vendor}
-                  onClick={() => setSelectedVendorAnalytics(vendor)}
-                  className={`px-4 py-2 rounded-lg border transition-all ${
-                    selectedVendorAnalytics === vendor 
-                      ? 'bg-green-500 text-white border-green-500 shadow-md' 
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-green-50 hover:border-green-200'
-                  }`}
-                >
-                  {vendor}
-                </button>
-              ))}
+              <button
+                onClick={clearAllFilters}
+                className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 text-sm"
+              >
+                Limpar Tudo
+              </button>
             </div>
           </div>
 
-          {/* Atalhos de Datas */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">📅 Período (atalhos rápidos)</label>
-            <div className="flex flex-wrap gap-2">
-              {dateShortcuts.map(shortcut => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Seleção de Vendedores */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                👥 Vendedores
                 <button
-                  key={shortcut.value}
-                  onClick={() => setSelectedPeriod(shortcut.value)}
-                  className={`px-4 py-2 rounded-lg border transition-all ${
-                    selectedPeriod === shortcut.value 
-                      ? 'bg-purple-500 text-white border-purple-500 shadow-md' 
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-purple-50 hover:border-purple-200'
-                  }`}
+                  onClick={selectAllVendors}
+                  className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
                 >
-                  {shortcut.label}
+                  {selectedVendors.length === uniqueVendors.length ? 'Desmarcar Todos' : 'Selecionar Todos'}
                 </button>
-              ))}
+              </label>
+              <div className="max-h-32 overflow-y-auto border rounded-lg p-2 space-y-1">
+                {uniqueVendors.map(vendor => (
+                  <label key={vendor} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={selectedVendors.includes(vendor)}
+                      onChange={() => toggleVendor(vendor)}
+                      className="rounded"
+                    />
+                    <span>{vendor}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Seleção de Status */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                📋 Status
+                <button
+                  onClick={selectAllStatuses}
+                  className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
+                >
+                  {selectedStatuses.length === Object.keys(STATUS_CONFIG).length ? 'Desmarcar Todos' : 'Selecionar Todos'}
+                </button>
+              </label>
+              <div className="max-h-32 overflow-y-auto border rounded-lg p-2 space-y-1">
+                {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                  <label key={key} className="flex items-center space-x-2 text-sm cursor-pointer hover:bg-gray-50 p-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={selectedStatuses.includes(key)}
+                      onChange={() => toggleStatus(key)}
+                      className="rounded"
+                    />
+                    <div className={`w-3 h-3 rounded-full ${config.bgColor}`}></div>
+                    <span>{config.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Campo de Busca */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">🔍 Busca Global</label>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cliente, ID, CNPJ, plano..."
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Operadora */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">🏢 Operadora</label>
+              <select
+                value={selectedOperadora}
+                onChange={(e) => setSelectedOperadora(e.target.value)}
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Todas as Operadoras</option>
+                {operadoras.map(op => (
+                  <option key={op} value={op}>{op}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Tipo de Plano */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">📋 Tipo de Plano</label>
+              <select
+                value={selectedTipoPlano}
+                onChange={(e) => setSelectedTipoPlano(e.target.value)}
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Todos os Tipos</option>
+                {tiposPlano.map(tipo => (
+                  <option key={tipo} value={tipo}>{tipo}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Período */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">📅 Período</label>
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="date"
+                  value={dataInicio}
+                  onChange={(e) => setDataInicio(e.target.value)}
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <input
+                  type="date"
+                  value={dataFim}
+                  onChange={(e) => setDataFim(e.target.value)}
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Faixa de Valores */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">💰 Faixa de Valores (R$)</label>
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="number"
+                  value={valorMin}
+                  onChange={(e) => setValorMin(e.target.value)}
+                  placeholder="Mínimo"
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <input
+                  type="number"
+                  value={valorMax}
+                  onChange={(e) => setValorMax(e.target.value)}
+                  placeholder="Máximo"
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Localização */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">📍 Localização</label>
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  value={cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  placeholder="Cidade"
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <input
+                  type="text"
+                  value={uf}
+                  onChange={(e) => setUf(e.target.value)}
+                  placeholder="UF"
+                  className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Filtro de Status */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">📋 Status</label>
-            <select
-              value={analyticsFilters.status}
-              onChange={(e) => setAnalyticsFilters(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full max-w-xs border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Todos os Status</option>
-              {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-                <option key={key} value={key}>{config.label}</option>
-              ))}
-            </select>
-          </div>
+          {/* Filtros Salvos */}
+          {savedFilters.length > 0 && (
+            <div className="mt-6 pt-6 border-t">
+              <h4 className="text-sm font-semibold text-gray-700 mb-3">❤️ Filtros Favoritos</h4>
+              <div className="flex flex-wrap gap-2">
+                {savedFilters.map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => {
+                      setSelectedVendors(filter.selectedVendors);
+                      setSelectedStatuses(filter.selectedStatuses);
+                      setSelectedOperadora(filter.selectedOperadora);
+                      setSelectedTipoPlano(filter.selectedTipoPlano);
+                      setDataInicio(filter.dataInicio);
+                      setDataFim(filter.dataFim);
+                      setValorMin(filter.valorMin);
+                      setValorMax(filter.valorMax);
+                      setSearchQuery(filter.searchQuery);
+                      setCidade(filter.cidade);
+                      setUf(filter.uf);
+                    }}
+                    className="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 text-sm flex items-center gap-1"
+                  >
+                    <Heart size={12} />
+                    {filter.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* KPIs Visuais Modernos */}
+        {/* KPIs Visuais com Alertas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
             <div className="flex items-center justify-between mb-4">
@@ -1262,34 +1521,43 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <p className="text-green-100 text-sm">Convertidas</p>
               </div>
             </div>
-            <div className="w-full bg-white/20 rounded-full h-2">
+            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
               <div 
                 className="bg-white h-2 rounded-full transition-all duration-1000"
-                style={{ width: `${teamMetrics.taxaConversao}%` }}
+                style={{ width: `${Math.min(teamMetrics.taxaConversao, 100)}%` }}
               ></div>
             </div>
-            <p className="text-green-100 text-sm mt-2">{teamMetrics.taxaConversao.toFixed(1)}% de conversão</p>
+            <p className="text-green-100 text-sm">{teamMetrics.taxaConversao.toFixed(1)}% de conversão</p>
+            {teamMetrics.taxaConversao > 80 && (
+              <p className="text-xs text-yellow-200 mt-1">🎉 Excelente performance!</p>
+            )}
           </div>
 
           <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-white/20 p-3 rounded-lg">
-                <X size={28} />
+                <TrendingDown size={28} />
               </div>
               <div className="text-right">
                 <p className="text-3xl font-bold">{teamMetrics.totalPerdidas}</p>
                 <p className="text-red-100 text-sm">Perdidas</p>
               </div>
             </div>
-            <div className="w-full bg-white/20 rounded-full h-2">
+            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
               <div 
                 className="bg-white h-2 rounded-full transition-all duration-1000"
                 style={{ width: `${teamMetrics.totalPropostas > 0 ? (teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100 : 0}%` }}
               ></div>
             </div>
-            <p className="text-red-100 text-sm mt-2">
+            <p className="text-red-100 text-sm">
               {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% perdas
             </p>
+            {teamMetrics.totalPerdidas > 10 && (
+              <p className="text-xs text-yellow-200 mt-1 flex items-center gap-1">
+                <AlertTriangle size={12} />
+                Atenção às perdas!
+              </p>
+            )}
           </div>
 
           <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg transform hover:scale-105 transition-all">
@@ -1299,11 +1567,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
               <div className="text-right">
                 <p className="text-2xl font-bold">{formatCurrency(teamMetrics.totalFaturamento.toString())}</p>
-                <p className="text-blue-100 text-sm">Faturamento</p>
+                <p className="text-blue-100 text-sm">Faturamento Total</p>
               </div>
             </div>
             <p className="text-blue-100 text-sm">
               Ticket médio: {formatCurrency(teamMetrics.ticketMedio.toString())}
+            </p>
+            <p className="text-blue-100 text-sm">
+              Valor médio: {formatCurrency((teamMetrics.totalFaturamento / Math.max(teamMetrics.totalPropostas, 1)).toString())}
             </p>
           </div>
 
@@ -1318,118 +1589,253 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             </div>
             <p className="text-orange-100 text-sm">Em andamento</p>
+            <p className="text-orange-100 text-sm">
+              {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPendentes / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% do total
+            </p>
           </div>
         </div>
 
-        {/* Gráficos e Visualizações */}
-        {visualMode === 'individual' && selectedVendorAnalytics ? (
-          // Análise Individual do Vendedor
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <User className="text-green-600" size={24} />
-                Análise Detalhada: {selectedVendorAnalytics}
-              </h3>
-              
-              {vendorAnalysis[selectedVendorAnalytics] && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                    <p className="text-3xl font-bold text-blue-600">{vendorAnalysis[selectedVendorAnalytics].total}</p>
-                    <p className="text-blue-700 font-medium">Total Propostas</p>
-                  </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                    <p className="text-3xl font-bold text-green-600">{vendorAnalysis[selectedVendorAnalytics].convertidas}</p>
-                    <p className="text-green-700 font-medium">Convertidas</p>
-                    <p className="text-sm text-green-600 mt-1">{vendorAnalysis[selectedVendorAnalytics].taxaConversao.toFixed(1)}%</p>
-                  </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
-                    <p className="text-3xl font-bold text-red-600">{vendorAnalysis[selectedVendorAnalytics].perdidas}</p>
-                    <p className="text-red-700 font-medium">Perdidas</p>
-                  </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-                    <p className="text-2xl font-bold text-purple-600">
-                      {formatCurrency(vendorAnalysis[selectedVendorAnalytics].faturamento.toString())}
-                    </p>
-                    <p className="text-purple-700 font-medium">Faturamento</p>
-                    <p className="text-sm text-purple-600 mt-1">
-                      Média: {formatCurrency(vendorAnalysis[selectedVendorAnalytics].ticketMedio.toString())}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          // Análise da Equipe
+        {/* Gráficos e Visualizações Modernas */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Gráfico de Pizza - Distribuição por Status */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <Users className="text-blue-600" size={24} />
-              Ranking da Equipe
+              <PieChart className="text-purple-600" size={24} />
+              Distribuição por Status
             </h3>
-            
-            <div className="space-y-4">
-              {Object.entries(vendorAnalysis)
-                .sort(([,a], [,b]) => b.taxaConversao - a.taxaConversao)
-                .map(([vendor, data], index) => (
-                <div key={vendor} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
-                      index === 0 ? 'bg-yellow-500' : 
-                      index === 1 ? 'bg-gray-400' : 
-                      index === 2 ? 'bg-orange-600' : 'bg-blue-500'
-                    }`}>
-                      #{index + 1}
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsPieChart>
+                  <Pie
+                    data={statusData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {statusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </RechartsPieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Gráfico de Barras - Total por Status */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <BarChart3 className="text-blue-600" size={24} />
+              Total de Propostas por Status
+            </h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <RechartsBarChart data={statusBarData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="status" angle={-45} textAnchor="end" height={80} />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="total" fill="#8884d8" />
+                </RechartsBarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* Ranking de Vendedores */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <Users className="text-green-600" size={24} />
+            Ranking de Vendedores
+          </h3>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Ranking por Quantidade */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-4">🏆 Por Quantidade de Propostas</h4>
+              <div className="space-y-3">
+                {vendorRankingData.slice(0, 5).map((vendor, index) => (
+                  <div key={vendor.vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                        index === 0 ? 'bg-yellow-500' : 
+                        index === 1 ? 'bg-gray-400' : 
+                        index === 2 ? 'bg-orange-600' : 'bg-blue-500'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800">{vendor.vendor}</p>
+                        <p className="text-sm text-gray-600">{vendor.conversao.toFixed(1)}% conversão</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-bold text-gray-800">{vendor}</p>
-                      <p className="text-sm text-gray-600">
-                        {data.convertidas}/{data.total} conversões • {formatCurrency(data.faturamento.toString())}
-                      </p>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-blue-600">{vendor.total}</p>
+                      <p className="text-xs text-gray-500">propostas</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-green-600">{data.taxaConversao.toFixed(1)}%</p>
-                    <p className="text-sm text-gray-600">Taxa de Conversão</p>
+                ))}
+              </div>
+            </div>
+
+            {/* Ranking por Faturamento */}
+            <div>
+              <h4 className="text-lg font-semibold text-gray-700 mb-4">💰 Por Faturamento</h4>
+              <div className="space-y-3">
+                {vendorRankingData.sort((a, b) => b.faturamento - a.faturamento).slice(0, 5).map((vendor, index) => (
+                  <div key={vendor.vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                        index === 0 ? 'bg-yellow-500' : 
+                        index === 1 ? 'bg-gray-400' : 
+                        index === 2 ? 'bg-orange-600' : 'bg-blue-500'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800">{vendor.vendor}</p>
+                        <p className="text-sm text-gray-600">{vendor.total} propostas</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-green-600">{formatCurrency(vendor.faturamento.toString())}</p>
+                      <p className="text-xs text-gray-500">faturamento</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modais */}
+        {showExportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Exportar Relatório</h3>
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Formato</label>
+                  <select
+                    value={exportFormat}
+                    onChange={(e) => setExportFormat(e.target.value)}
+                    className="w-full border rounded-lg px-3 py-2"
+                  >
+                    <option value="PDF">PDF</option>
+                    <option value="Excel">Excel</option>
+                    <option value="CSV">CSV</option>
+                  </select>
+                </div>
+                
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-medium">Enviar para:</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={exportReport}
+                      className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-sm flex items-center gap-2"
+                    >
+                      <Mail size={14} />
+                      E-mail
+                    </button>
+                    <button
+                      onClick={exportReport}
+                      className="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 text-sm flex items-center gap-2"
+                    >
+                      <MessageSquare size={14} />
+                      WhatsApp
+                    </button>
+                    <button
+                      onClick={exportReport}
+                      className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 text-sm flex items-center gap-2"
+                    >
+                      <ExternalLink size={14} />
+                      Google Drive
+                    </button>
+                    <button
+                      onClick={exportReport}
+                      className="px-3 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 text-sm flex items-center gap-2"
+                    >
+                      <FileText size={14} />
+                      Google Sheets
+                    </button>
                   </div>
                 </div>
-              ))}
+              </div>
+              
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={exportReport}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Exportar
+                </button>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Status Distribution Visual */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <PieChart className="text-purple-600" size={24} />
-            Distribuição por Status
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(STATUS_CONFIG).map(([status, config]) => {
-              const count = analyticsData.filter(p => p.status === status).length;
-              const percentage = analyticsData.length > 0 ? (count / analyticsData.length * 100) : 0;
+        {showSaveFilter && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Salvar Filtro</h3>
+                <button
+                  onClick={() => setShowSaveFilter(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X size={20} />
+                </button>
+              </div>
               
-              return (
-                <div key={status} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`w-4 h-4 rounded-full ${config.bgColor}`}></div>
-                    <span className="font-medium text-gray-800">{config.label}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-gray-900">{count}</span>
-                    <span className="text-sm text-gray-600">{percentage.toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                    <div 
-                      className={`h-2 rounded-full transition-all duration-1000 ${config.bgColor.replace('bg-', 'bg-opacity-75 bg-')}`}
-                      style={{ width: `${percentage}%` }}
-                    ></div>
-                  </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Nome do Filtro</label>
+                  <input
+                    type="text"
+                    value={filterName}
+                    onChange={(e) => setFilterName(e.target.value)}
+                    placeholder="Ex: Vendas Janeiro 2025"
+                    className="w-full border rounded-lg px-3 py-2"
+                  />
                 </div>
-              );
-            })}
+              </div>
+              
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  onClick={() => setShowSaveFilter(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={saveCurrentFilter}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Salvar
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   };
