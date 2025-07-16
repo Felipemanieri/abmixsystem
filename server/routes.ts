@@ -44,6 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: vendor.id,
         name: vendor.name,
         email: vendor.email,
+        password: vendor.password, // Include password for admin management
         role: vendor.role,
         active: vendor.active,
         createdAt: vendor.createdAt

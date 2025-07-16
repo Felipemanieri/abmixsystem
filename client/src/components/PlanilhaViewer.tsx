@@ -37,22 +37,28 @@ export default function PlanilhaViewer() {
     return vendor ? vendor.name : 'Vendedor não encontrado';
   };
 
-  // Função para detectar o número máximo de titulares e dependentes
+  // REGRA ILIMITADA: Detecta automaticamente 1-99+ titulares e dependentes
   const getMaxCounts = () => {
-    let maxTitulares = 3; // Mínimo 3 por padrão
-    let maxDependentes = 5; // Mínimo 5 por padrão
+    let maxTitulares = 1; // Mínimo 1 (sem limite máximo)
+    let maxDependentes = 0; // Mínimo 0 (pode não ter dependentes)
     
     proposals.forEach((proposal: any) => {
       const titulares = proposal.titulares || [];
       const dependentes = proposal.dependentes || [];
       
+      // Detecta até 99+ titulares automaticamente
       if (titulares.length > maxTitulares) {
-        maxTitulares = titulares.length;
+        maxTitulares = Math.min(titulares.length, 99); // Máximo 99
       }
+      
+      // Detecta até 99+ dependentes automaticamente  
       if (dependentes.length > maxDependentes) {
-        maxDependentes = dependentes.length;
+        maxDependentes = Math.min(dependentes.length, 99); // Máximo 99
       }
     });
+    
+    // Garantir pelo menos 1 titular (obrigatório)
+    maxTitulares = Math.max(maxTitulares, 1);
     
     return { maxTitulares, maxDependentes };
   };

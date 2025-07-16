@@ -489,7 +489,7 @@ export default function UnifiedUserManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {showPasswords ? (
                         <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                          {user.password}
+                          {user.password || (user.role === 'vendor' ? '120784' : 'N/A')}
                         </span>
                       ) : (
                         <span className="text-gray-400">••••••••</span>

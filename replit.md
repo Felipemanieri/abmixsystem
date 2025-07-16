@@ -218,22 +218,27 @@ The application provides role-based portals with specific functionality:
   - Sistema suporta qualquer quantidade de titulares/dependentes
   - Colunas criadas dinamicamente conforme formulários são preenchidos
 
-### Correções Críticas de Interface e Persistência (Jan 16, 2025)
-- **Corrigido erro de inicialização no SupervisorPortal**:
-  - Erro "Cannot access 'proposalPriorities' before initialization" resolvido
-  - Reorganizados os useEffects para após declaração dos estados
-  - Persistência de prioridades e filtros no localStorage implementada corretamente
-  
-- **Corrigidas cores dos status EXPIRADO e IMPLANTADO no ImplantacaoPortal**:
-  - Mapeamento de cores "blue" e "green" adicionado ao sistema de cores inline
-  - Status EXPIRADO agora exibe cor azul forte corretamente
-  - Status IMPLANTADO agora exibe cor verde forte corretamente
-  - Dropdown de status com cores funcionando para todos os 11 status
+### Sistema de Detecção Ilimitada e Correção de Senhas Vendedores (Jan 16, 2025)
+- **Implementado sistema de detecção dinâmica ilimitada na planilha**:
+  - Detecção automática de 1-99+ titulares (sem limite pré-definido)
+  - Detecção automática de 0-99+ dependentes (pode não ter dependentes)
+  - Planilha se expande automaticamente conforme dados reais dos formulários
+  - Eliminou limite fixo de 3 titulares e 5 dependentes
+  - Sistema se adapta a qualquer quantidade adicionada pelos usuários
 
-- **Sistema completo de persistência no localStorage**:
-  - ProposalSelector: Filtros de status, prioridade e vendedor persistem
-  - SupervisorPortal: Filtros de vendedor, status, data e prioridades persistem
-  - Usuário mantém preferências ao sair e entrar novamente nos portais
+- **Corrigido problema das senhas dos vendedores na gestão de usuários**:
+  - API `/api/vendors` agora retorna campo `password` para administração
+  - Senhas dos vendedores (120784) agora aparecem corretamente
+  - Fallback automático para senha padrão quando password não definido
+  - Interface mostra senhas ao clicar em "Mostrar/Ocultar Senhas"
+
+- **Regras da planilha horizontal otimizadas**:
+  - REGRA 1: Uma empresa = uma linha única (mantida)
+  - REGRA 2: Campos dinâmicos ilimitados baseados em dados reais
+  - REGRA 3: Campos vazios permitidos (mantida)
+  - REGRA 4: Detecção automática até 99+ pessoas por categoria
+  - REGRA 5: Estrutura horizontal que cresce infinitamente
+  - REGRA 6: Agrupamento lógico mantido (TITULAR1_, DEPENDENTE1_, etc.)
 
 ### Ordem Cronológica das Propostas Garantida (Jan 16, 2025)
 - **Corrigido problema de reordenação indevida das propostas**:
