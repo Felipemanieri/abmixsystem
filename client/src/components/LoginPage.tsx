@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, FileText, DollarSign, Settings, Users } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 
@@ -14,6 +14,41 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const savedCredentials = localStorage.getItem(`abmix_credentials_${portal}`);
+    if (savedCredentials) {
+      try {
+        const { email: savedEmail, password: savedPassword, remember } = JSON.parse(savedCredentials);
+        if (remember) {
+          setEmail(savedEmail || '');
+          setPassword(savedPassword || '');
+          setRememberMe(true);
+        }
+      } catch (error) {
+        console.error('Error loading saved credentials:', error);
+      }
+    }
+  }, [portal]);
+
+  // Save or remove credentials based on "remember me" checkbox
+  const saveCredentials = (email: string, password: string, remember: boolean) => {
+    const storageKey = `abmix_credentials_${portal}`;
+    
+    if (remember) {
+      const credentialsData = {
+        email,
+        password,
+        remember: true,
+        savedAt: new Date().toISOString()
+      };
+      localStorage.setItem(storageKey, JSON.stringify(credentialsData));
+    } else {
+      localStorage.removeItem(storageKey);
+    }
+  };
 
   const portalConfig = {
     client: {
@@ -79,6 +114,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
       if (response.ok) {
         const userData = await response.json();
+        
+        // Save credentials if "remember me" is checked
+        saveCredentials(email, password, rememberMe);
+        
         const user = {
           id: userData.id,
           name: userData.name,
@@ -187,9 +226,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
               {/* Opções de login */}
               <div className="flex items-center justify-between">
-                <label className="flex items-center">
+                <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
                   />
                   <span className="ml-2 text-sm text-slate-600">Lembrar-me</span>

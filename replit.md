@@ -322,6 +322,11 @@ The application provides role-based portals with specific functionality:
   - Criação, edição e exclusão de usuários por tipo (system/vendor)
   - Gerador automático de senhas com 8 caracteres
   - Sincronização em tempo real entre gestão e portais
+  - **Funcionalidade "Lembrar-me"**: Checkbox que salva credenciais no localStorage por portal
+    - Credenciais são carregadas automaticamente no próximo acesso
+    - Armazenamento separado por portal (supervisor, financeiro, etc.)
+    - Dados incluem email, senha e timestamp de quando foram salvos
+    - Remoção automática das credenciais quando desmarcado
 
 ### Sistema de Sincronização em Tempo Real para Propagação Instantânea (Jan 14, 2025)
 - **Implementado sistema completo de sincronização em tempo real**:
