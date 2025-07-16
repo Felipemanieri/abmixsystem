@@ -45,39 +45,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
   
-  // Estado para relatórios recebidos do supervisor
-  const [receivedReports, setReceivedReports] = useState([
-    {
-      id: 'REL-001',
-      title: 'Relatório de Performance - Janeiro 2025',
-      receivedAt: new Date().toISOString(),
-      supervisor: 'Supervisor Geral',
-      status: 'received',
-      type: 'performance',
-      data: {
-        period: 'Janeiro 2025',
-        totalProposals: 45,
-        totalValue: 'R$ 1.250.000',
-        vendors: 12,
-        conversionRate: '72%'
-      }
-    },
-    {
-      id: 'REL-002', 
-      title: 'Análise de Metas - Dezembro 2024',
-      receivedAt: new Date(Date.now() - 86400000).toISOString(),
-      supervisor: 'Supervisor Geral',
-      status: 'processed',
-      type: 'targets',
-      data: {
-        period: 'Dezembro 2024',
-        totalProposals: 38,
-        totalValue: 'R$ 980.000',
-        vendors: 11,
-        conversionRate: '68%'
-      }
-    }
-  ]);
+  // Estado para relatórios recebidos do supervisor (inicia vazio)
+  const [receivedReports, setReceivedReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
   
   // Ativar sincronização em tempo real
   useEffect(() => {
@@ -204,6 +175,18 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     }
   };
 
+  // Função para visualizar relatório completo
+  const handleViewReport = (report: any) => {
+    setSelectedReport(report);
+    setShowReportModal(true);
+  };
+
+  // Função para simular recebimento de relatório do supervisor (para testes)
+  const simulateReportReceived = (reportData: any) => {
+    setReceivedReports(prev => [reportData, ...prev]);
+    showNotification('Novo relatório recebido do supervisor', 'success');
+  };
+
   const renderDashboard = () => (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -296,10 +279,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         
         <div className="p-6">
           {receivedReports.length === 0 ? (
-            <div className="text-center py-8">
-              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Nenhum relatório recebido ainda</p>
-              <p className="text-sm text-gray-400 mt-1">Os relatórios enviados pelo supervisor aparecerão aqui</p>
+            <div className="text-center py-12">
+              <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="h-8 w-8 text-gray-400" />
+              </div>
+              <h4 className="text-lg font-medium text-gray-900 mb-2">Aguardando Relatórios</h4>
+              <p className="text-gray-500 mb-1">Nenhum relatório recebido do supervisor ainda</p>
+              <p className="text-sm text-gray-400">Quando o supervisor enviar relatórios, eles aparecerão aqui para análise</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -321,30 +307,19 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                         Recebido em {new Date(report.receivedAt).toLocaleDateString('pt-BR')} às {new Date(report.receivedAt).toLocaleTimeString('pt-BR')}
                       </p>
                       
-                      {/* Resumo dos dados */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-500">Período</p>
-                          <p className="text-sm font-medium text-gray-900">{report.data.period}</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-500">Propostas</p>
-                          <p className="text-sm font-medium text-gray-900">{report.data.totalProposals}</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-500">Valor Total</p>
-                          <p className="text-sm font-medium text-gray-900">{report.data.totalValue}</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-500">Conversão</p>
-                          <p className="text-sm font-medium text-gray-900">{report.data.conversionRate}</p>
-                        </div>
-                      </div>
+                      {/* Botão para visualizar relatório completo */}
+                      <button
+                        onClick={() => handleViewReport(report)}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors mb-3"
+                      >
+                        <Eye className="h-4 w-4 mr-2" />
+                        Visualizar Relatório Completo
+                      </button>
                     </div>
                   </div>
                   
                   {/* Botões de Ação */}
-                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
                     <button
                       onClick={() => handleDownloadReport(report.id)}
                       className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
@@ -867,6 +842,159 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           proposalId={selectedProposalForAutomation.id}
           clientName={selectedProposalForAutomation.client}
         />
+      )}
+
+      {/* Report Visualization Modal */}
+      {showReportModal && selectedReport && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 text-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold">{selectedReport.title}</h3>
+                  <p className="text-blue-100 text-sm">
+                    Recebido em {new Date(selectedReport.receivedAt).toLocaleDateString('pt-BR')} às {new Date(selectedReport.receivedAt).toLocaleTimeString('pt-BR')}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowReportModal(false)}
+                  className="h-8 w-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors"
+                >
+                  <span className="text-white text-lg font-bold">×</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+              {/* Report Summary */}
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Resumo Executivo</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-blue-600 text-sm font-medium">Período</p>
+                        <p className="text-blue-900 text-lg font-bold">{selectedReport.data.period}</p>
+                      </div>
+                      <Calendar className="h-8 w-8 text-blue-500" />
+                    </div>
+                  </div>
+                  
+                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-green-600 text-sm font-medium">Total de Propostas</p>
+                        <p className="text-green-900 text-lg font-bold">{selectedReport.data.totalProposals}</p>
+                      </div>
+                      <FileText className="h-8 w-8 text-green-500" />
+                    </div>
+                  </div>
+                  
+                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-purple-600 text-sm font-medium">Valor Total</p>
+                        <p className="text-purple-900 text-lg font-bold">{selectedReport.data.totalValue}</p>
+                      </div>
+                      <DollarSign className="h-8 w-8 text-purple-500" />
+                    </div>
+                  </div>
+                  
+                  <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-orange-600 text-sm font-medium">Taxa de Conversão</p>
+                        <p className="text-orange-900 text-lg font-bold">{selectedReport.data.conversionRate}</p>
+                      </div>
+                      <TrendingUp className="h-8 w-8 text-orange-500" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Detailed Analysis Section */}
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Análise Detalhada</h4>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <p className="text-gray-700 mb-2">
+                    Este relatório apresenta uma análise completa do desempenho da equipe para o período de <strong>{selectedReport.data.period}</strong>.
+                  </p>
+                  <p className="text-gray-700 mb-2">
+                    Foram processadas <strong>{selectedReport.data.totalProposals} propostas</strong> com um valor total de <strong>{selectedReport.data.totalValue}</strong>, 
+                    resultando em uma taxa de conversão de <strong>{selectedReport.data.conversionRate}</strong>.
+                  </p>
+                  <p className="text-gray-700">
+                    Todos os dados foram coletados e validados automaticamente pelo sistema de gestão, 
+                    garantindo a precisão e confiabilidade das informações apresentadas.
+                  </p>
+                </div>
+              </div>
+
+              {/* Actions Section */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Ações Disponíveis</h4>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  <button
+                    onClick={() => {
+                      handleDownloadReport(selectedReport.id);
+                      setShowReportModal(false);
+                    }}
+                    className="flex flex-col items-center p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
+                  >
+                    <Download className="h-6 w-6 text-blue-600 mb-1" />
+                    <span className="text-blue-700 text-xs font-medium">Baixar</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      handleEmailReport(selectedReport.id);
+                      setShowReportModal(false);
+                    }}
+                    className="flex flex-col items-center p-3 bg-green-100 hover:bg-green-200 rounded-lg transition-colors"
+                  >
+                    <Mail className="h-6 w-6 text-green-600 mb-1" />
+                    <span className="text-green-700 text-xs font-medium">Email</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      handleViewInDrive(selectedReport.id);
+                      setShowReportModal(false);
+                    }}
+                    className="flex flex-col items-center p-3 bg-purple-100 hover:bg-purple-200 rounded-lg transition-colors"
+                  >
+                    <ExternalLink className="h-6 w-6 text-purple-600 mb-1" />
+                    <span className="text-purple-700 text-xs font-medium">Google Drive</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      handleViewInSheets(selectedReport.id);
+                      setShowReportModal(false);
+                    }}
+                    className="flex flex-col items-center p-3 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors"
+                  >
+                    <BarChart3 className="h-6 w-6 text-yellow-600 mb-1" />
+                    <span className="text-yellow-700 text-xs font-medium">Google Sheets</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      handleWhatsAppShare(selectedReport.id);
+                      setShowReportModal(false);
+                    }}
+                    className="flex flex-col items-center p-3 bg-emerald-100 hover:bg-emerald-200 rounded-lg transition-colors"
+                  >
+                    <MessageSquare className="h-6 w-6 text-emerald-600 mb-1" />
+                    <span className="text-emerald-700 text-xs font-medium">WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
