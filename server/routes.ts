@@ -7,6 +7,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
 
+  // ViaCEP proxy route (must be before other routes to avoid conflicts)
+  app.get("/api/cep/:cep", async (req, res) => {
+    try {
+      const { cep } = req.params;
+      
+      // Remove caracteres não numéricos
+      const cepLimpo = cep.replace(/\D/g, '');
+      
+      // Valida se tem 8 dígitos
+      if (cepLimpo.length !== 8) {
+        return res.status(400).json({ error: "CEP deve ter 8 dígitos" });
+      }
+      
+      // Busca na API ViaCEP
+      const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      
+      if (!response.ok) {
+        return res.status(502).json({ error: "Erro ao consultar ViaCEP" });
+      }
+      
+      const data = await response.json();
+      
+      // Verifica se houve erro
+      if (data.erro) {
+        return res.status(404).json({ error: "CEP não encontrado" });
+      }
+      
+      // Retorna os dados formatados
+      res.json({
+        cep: data.cep,
+        logradouro: data.logradouro,
+        complemento: data.complemento,
+        bairro: data.bairro,
+        localidade: data.localidade,
+        uf: data.uf,
+        enderecoCompleto: [
+          data.logradouro,
+          data.bairro,
+          data.localidade,
+          data.uf
+        ].filter(Boolean).join(', ')
+      });
+      
+    } catch (error) {
+      console.error("Erro no proxy ViaCEP:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   const { insertVendorSchema } = await import("@shared/schema");
 
   // Vendor authentication route
@@ -795,6 +844,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
+
+
 
   const httpServer = createServer(app);
 

@@ -35,18 +35,30 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
   }
   
   try {
-    const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+    console.log('Buscando CEP via ViaCEP direto:', cepLimpo);
+    
+    // Tentativa direta com ViaCEP usando fetch com configurações específicas
+    const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      // Remove mode: 'cors' para permitir requisições CORS simples
+    });
+    
+    console.log('Resposta ViaCEP:', response.status, response.ok);
     
     if (!response.ok) {
-      console.error('Erro na resposta da API ViaCEP:', response.status);
-      return null;
+      console.error('Erro na resposta ViaCEP:', response.status, response.statusText);
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
     }
     
     const data: ViaCepResponse = await response.json();
+    console.log('Dados ViaCEP recebidos:', data);
     
     // Verifica se houve erro na consulta
     if (data.erro) {
-      console.warn('CEP não encontrado:', cepLimpo);
+      console.warn('CEP não encontrado na ViaCEP:', cepLimpo);
       return null;
     }
     
@@ -58,6 +70,8 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
       data.uf
     ].filter(Boolean).join(', ');
     
+    console.log('Endereço montado:', enderecoCompleto);
+    
     return {
       endereco: data.logradouro || '',
       bairro: data.bairro || '',
@@ -67,7 +81,12 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
     };
     
   } catch (error) {
-    console.error('Erro ao buscar CEP:', error);
+    console.error('Erro ao buscar CEP na ViaCEP:', {
+      cep: cepLimpo,
+      erro: error,
+      message: error instanceof Error ? error.message : 'Erro desconhecido',
+      name: error instanceof Error ? error.name : 'UnknownError'
+    });
     return null;
   }
 };
