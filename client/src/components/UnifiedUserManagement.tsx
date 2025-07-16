@@ -105,12 +105,22 @@ export default function UnifiedUserManagement() {
   // Fetch all system users
   const { data: allUsers = [], isLoading, refetch } = useQuery({
     queryKey: ['/api/system-users'],
+    queryFn: async () => {
+      const response = await fetch('/api/system-users');
+      if (!response.ok) throw new Error('Failed to fetch system users');
+      return response.json();
+    },
     refetchInterval: 30000, // 30 seconds
   });
 
   // Fetch vendors separately
   const { data: vendors = [] } = useQuery({
     queryKey: ['/api/vendors'],
+    queryFn: async () => {
+      const response = await fetch('/api/vendors');
+      if (!response.ok) throw new Error('Failed to fetch vendors');
+      return response.json();
+    },
     refetchInterval: 30000,
   });
 
