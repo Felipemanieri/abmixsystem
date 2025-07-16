@@ -1081,6 +1081,24 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   </>
                 )}
               </button>
+
+              <button
+                onClick={handleClearDraft}
+                disabled={isClearingDraft}
+                className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+              >
+                {isClearingDraft ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Limpando...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-5 w-5 mr-2" />
+                    Limpar Rascunho
+                  </>
+                )}
+              </button>
               
               <button
                 onClick={handleSubmit}

@@ -1925,13 +1925,33 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
           {/* Botões de Ação */}
           <div className="flex justify-between">
-            <button
-              onClick={handleSave}
-              className="flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              Salvar Rascunho
-            </button>
+            <div className="flex space-x-3">
+              <button
+                onClick={handleSave}
+                className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                Salvar Rascunho
+              </button>
+
+              <button
+                onClick={handleClearDraft}
+                disabled={isClearingDraft}
+                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                {isClearingDraft ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Limpando...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Limpar Rascunho
+                  </>
+                )}
+              </button>
+            </div>
 
             <button
               onClick={handleSend}
