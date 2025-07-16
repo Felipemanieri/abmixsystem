@@ -81,11 +81,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     console.log('Gerando dados do relatório para:', filteredData.length, 'propostas');
     
     return filteredData.map(proposal => {
+      // Buscar o nome do vendedor pelos dados do vendorId
+      let vendorName = 'N/A';
+      if (proposal.vendorId && vendors?.length > 0) {
+        const vendor = vendors.find(v => v.id === proposal.vendorId);
+        vendorName = vendor?.name || 'N/A';
+      }
+      
       const reportItem = {
         abmId: proposal.abmId || proposal.id || 'N/A',
         cliente: proposal.contractData?.nomeEmpresa || 'Empresa não informada',
         cnpj: proposal.contractData?.cnpj || 'CNPJ não informado', 
-        vendedor: proposal.vendedor || proposal.contractData?.vendedor || 'N/A',
+        vendedor: vendorName,
         valor: proposal.contractData?.valor || proposal.valor || '0',
         plano: proposal.contractData?.planoContratado || proposal.plano || 'N/A',
         status: proposal.status || 'pendente',
@@ -98,92 +105,55 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     });
   };
 
+  // Estado para o modal de visualização
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportData, setReportData] = useState<any[]>([]);
+  const [reportObservations, setReportObservations] = useState<{[key: string]: string}>({});
+
   const showReportPreview = (data: any[]) => {
-    // Calcular valores totais corretos
-    const totalValue = data.reduce((sum, item) => {
-      const value = parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
-      return sum + value;
-    }, 0);
+    setReportData(data);
+    setShowReportModal(true);
+  };
+
+  const sendToFinanceiro = () => {
+    showNotification('Relatório enviado para o painel financeiro!', 'success');
+    setShowReportModal(false);
+  };
+
+  const sendViaWhatsApp = () => {
+    const message = `*Relatório de Propostas ABMIX*\n\nTotal: ${reportData.length} propostas\nFaturamento: R$ ${reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2)}\n\nDetalhes: ${window.location.origin}/relatorio`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    showNotification('Compartilhado via WhatsApp!', 'success');
+  };
+
+  const sendViaEmail = () => {
+    const subject = 'Relatório de Propostas ABMIX';
+    const body = `Relatório gerado em ${new Date().toLocaleString('pt-BR')}\n\nTotal de propostas: ${reportData.length}\nFaturamento total: R$ ${reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2)}`;
+    window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+    showNotification('Email preparado!', 'success');
+  };
+
+  const downloadReport = () => {
+    const csvContent = [
+      ['ID', 'Cliente', 'CNPJ', 'Vendedor', 'Valor', 'Plano', 'Status', 'Observações'].join(';'),
+      ...reportData.map(item => [
+        item.abmId,
+        item.cliente,
+        item.cnpj,
+        item.vendedor,
+        `R$ ${item.valor}`,
+        item.plano,
+        item.status.toUpperCase(),
+        reportObservations[item.abmId] || ''
+      ].join(';'))
+    ].join('\n');
     
-    const avgValue = data.length > 0 ? totalValue / data.length : 0;
-    
-    const reportWindow = window.open('', '_blank', 'width=1200,height=800');
-    if (reportWindow) {
-      reportWindow.document.write(`
-        <html>
-          <head>
-            <title>Visualizar Relatório - EXCEL</title>
-            <style>
-              body { font-family: Arial, sans-serif; margin: 20px; }
-              .header { display: flex; justify-content: space-between; margin-bottom: 20px; }
-              .info { margin-bottom: 10px; }
-              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-              th { background-color: #f2f2f2; }
-              .close-btn { position: absolute; top: 10px; right: 10px; background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-              .green { color: #22c55e; font-weight: bold; }
-            </style>
-          </head>
-          <body>
-            <button class="close-btn" onclick="window.close()">✕</button>
-            <h2>👁️ Visualizar Relatório - EXCEL</h2>
-            <div class="header">
-              <div>
-                <div class="info"><strong>Tipo de relatório:</strong> ${reportFilters.tipo}</div>
-                <div class="info"><strong>Total de Propostas:</strong> ${data.length}</div>
-                <div class="info"><strong>Faturamento Total:</strong> <span class="green">R$ ${totalValue.toFixed(2).replace('.', ',')}</span></div>
-                <div class="info"><strong>Bilhete Médio:</strong> R$ ${avgValue.toFixed(2).replace('.', ',')}</div>
-              </div>
-              <div>
-                <div class="info"><strong>Vendedores Incluídos:</strong> ${reportFilters.vendedor || 'Todos'}</div>
-                <div class="info"><strong>Data de Geração:</strong> ${new Date().toLocaleString('pt-BR')}</div>
-                <div class="info"><strong>Status Incluído:</strong> ${reportFilters.status || 'Todos'}</div>
-                <div class="info"><strong>Formato:</strong> SOBRESSAIR</div>
-                <div class="info"><strong>Período Início:</strong> ${reportFilters.dataInicio || '2025-06-16'}</div>
-                <div class="info"><strong>Campos Incluídos:</strong> 10 colunas</div>
-                <div class="info"><strong>Período Fim:</strong> ${reportFilters.dataFim || '2025-07-16'}</div>
-                <div class="info"><strong>Observações:</strong> 0 com dados</div>
-              </div>
-            </div>
-            <h3>Preview dos Dados (Primeiras ${Math.min(data.length, 5)} propostas)</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Cliente</th>
-                  <th>CNPJ</th>
-                  <th>Vendedor</th>
-                  <th>Valor</th>
-                  <th>Plano</th>
-                  <th>Status</th>
-                  <th>Desconto</th>
-                  <th>Observações</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${data.slice(0, 5).map(item => `
-                  <tr>
-                    <td>${item.abmId}</td>
-                    <td>${item.cliente}</td>
-                    <td>${item.cnpj}</td>
-                    <td>${item.vendedor}</td>
-                    <td>R$ ${item.valor}</td>
-                    <td>${item.plano}</td>
-                    <td>${item.status.toUpperCase()}</td>
-                    <td>${item.desconto}</td>
-                    <td>
-                      <button style="background: #f0f0f0; border: 1px solid #ccc; padding: 2px 6px; border-radius: 3px; font-size: 11px;">
-                        Adicionar comentário
-                      </button>
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </body>
-        </html>
-      `);
-    }
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `relatorio_abmix_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    showNotification('Relatório baixado!', 'success');
   };
 
   const exportToSheets = (data: any[]) => {
@@ -2867,6 +2837,155 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       <main className="p-6">
         {renderContent()}
       </main>
+
+      {/* Modal de Visualização de Relatório */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-7xl h-[90vh] overflow-y-auto">
+            {/* Header do Modal */}
+            <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">👁️</span>
+                <h2 className="text-xl font-bold">Visualizar Relatório - EXCEL</h2>
+              </div>
+              <button
+                onClick={() => setShowReportModal(false)}
+                className="text-white hover:text-gray-200"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="p-6">
+              {/* Informações do Relatório */}
+              <div className="grid grid-cols-2 gap-6 mb-6 bg-gray-50 p-4 rounded-lg">
+                <div>
+                  <div className="mb-2"><strong>Tipo de relatório:</strong> {reportFilters.tipo}</div>
+                  <div className="mb-2"><strong>Total de Propostas:</strong> {reportData.length}</div>
+                  <div className="mb-2">
+                    <strong>Faturamento Total:</strong> 
+                    <span className="text-green-600 font-bold ml-2">
+                      R$ {reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2).replace('.', ',')}
+                    </span>
+                  </div>
+                  <div className="mb-2">
+                    <strong>Bilhete Médio:</strong> 
+                    R$ {reportData.length > 0 ? (reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0) / reportData.length).toFixed(2).replace('.', ',') : '0,00'}
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-2"><strong>Vendedores Incluídos:</strong> {reportFilters.vendedor || 'Todos'}</div>
+                  <div className="mb-2"><strong>Data de Geração:</strong> {new Date().toLocaleString('pt-BR')}</div>
+                  <div className="mb-2"><strong>Status Incluído:</strong> {reportFilters.status || 'Todos'}</div>
+                  <div className="mb-2"><strong>Formato:</strong> SOBRESSAIR</div>
+                  <div className="mb-2"><strong>Período Início:</strong> {reportFilters.dataInicio || '2025-06-16'}</div>
+                  <div className="mb-2"><strong>Campos Incluídos:</strong> 10 colunas</div>
+                  <div className="mb-2"><strong>Período Fim:</strong> {reportFilters.dataFim || '2025-07-16'}</div>
+                  <div className="mb-2"><strong>Observações:</strong> {Object.keys(reportObservations).length} com dados</div>
+                </div>
+              </div>
+
+              {/* Tabela de Propostas */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-4">Preview dos Dados (Primeiras {Math.min(reportData.length, 5)} propostas)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">ID</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Cliente</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">CNPJ</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Vendedor</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Valor</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Plano</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Status</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Desconto</th>
+                        <th className="border border-gray-300 p-3 text-left font-semibold">Observações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reportData.slice(0, 5).map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="border border-gray-300 p-3">{item.abmId}</td>
+                          <td className="border border-gray-300 p-3">{item.cliente}</td>
+                          <td className="border border-gray-300 p-3">{item.cnpj}</td>
+                          <td className="border border-gray-300 p-3">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
+                              {item.vendedor}
+                            </span>
+                          </td>
+                          <td className="border border-gray-300 p-3 font-semibold">R$ {item.valor}</td>
+                          <td className="border border-gray-300 p-3">{item.plano}</td>
+                          <td className="border border-gray-300 p-3">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                              {item.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="border border-gray-300 p-3">{item.desconto}</td>
+                          <td className="border border-gray-300 p-3">
+                            <input
+                              type="text"
+                              value={reportObservations[item.abmId] || ''}
+                              onChange={(e) => setReportObservations(prev => ({
+                                ...prev,
+                                [item.abmId]: e.target.value
+                              }))}
+                              placeholder="Adicionar comentário"
+                              className="w-full px-2 py-1 text-xs border border-gray-300 rounded"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Botões de Ação */}
+              <div className="border-t pt-6">
+                <h4 className="text-lg font-semibold mb-4">Escolha como enviar ou compartilhar:</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <button
+                    onClick={sendToFinanceiro}
+                    className="flex flex-col items-center p-4 bg-blue-50 border-2 border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                  >
+                    <div className="text-2xl mb-2">💼</div>
+                    <span className="text-sm font-medium text-blue-700">Enviar para Financeiro</span>
+                    <span className="text-xs text-blue-600 mt-1">Sistema interno</span>
+                  </button>
+
+                  <button
+                    onClick={sendViaWhatsApp}
+                    className="flex flex-col items-center p-4 bg-green-50 border-2 border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+                  >
+                    <div className="text-2xl mb-2">📱</div>
+                    <span className="text-sm font-medium text-green-700">WhatsApp</span>
+                    <span className="text-xs text-green-600 mt-1">Compartilhar via WhatsApp</span>
+                  </button>
+
+                  <button
+                    onClick={sendViaEmail}
+                    className="flex flex-col items-center p-4 bg-purple-50 border-2 border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
+                  >
+                    <div className="text-2xl mb-2">📧</div>
+                    <span className="text-sm font-medium text-purple-700">Email</span>
+                    <span className="text-xs text-purple-600 mt-1">Enviar por email</span>
+                  </button>
+
+                  <button
+                    onClick={downloadReport}
+                    className="flex flex-col items-center p-4 bg-gray-50 border-2 border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="text-2xl mb-2">💾</div>
+                    <span className="text-sm font-medium text-gray-700">Baixar</span>
+                    <span className="text-xs text-gray-600 mt-1">Download CSV</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modals */}
       {showNotifications && (
