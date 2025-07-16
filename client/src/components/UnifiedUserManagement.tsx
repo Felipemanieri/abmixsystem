@@ -115,17 +115,29 @@ export default function UnifiedUserManagement() {
   });
 
   // Combine system users and vendors, filtering by active panel
-  const filteredUsers = [...allUsers, ...vendors.map((v: any) => ({
-    ...v,
-    panel: 'vendor',
-    role: 'vendor'
-  }))].filter((user: User) => {
+  const allCombinedUsers = [
+    ...allUsers,
+    ...vendors.map((v: any) => ({
+      ...v,
+      panel: 'vendor',
+      role: 'vendor'
+    }))
+  ];
+
+  const filteredUsers = allCombinedUsers.filter((user: User) => {
     const matchesPanel = user.panel === activePanel;
     const matchesSearch = searchTerm === '' || 
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesPanel && matchesSearch;
   });
+
+  // Debug: Log data to console
+  console.log('Active panel:', activePanel);
+  console.log('All users:', allUsers);
+  console.log('Vendors:', vendors);
+  console.log('Combined users:', allCombinedUsers);
+  console.log('Filtered users:', filteredUsers);
 
   // Create user mutation
   const createUserMutation = useMutation({
