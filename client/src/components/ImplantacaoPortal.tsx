@@ -502,6 +502,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Usar propostas reais sempre que possível
   const proposalsToShow = realProposals || [];
 
+  // Manter ordem original das propostas sem reordenação
   const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
     const matchesSearch = (proposal.cliente || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
