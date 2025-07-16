@@ -113,6 +113,40 @@ export default function PlanilhaViewer() {
         TOTAL_DEPENDENTES: dependentes.length,
         TOTAL_ANEXOS_VENDEDOR: vendorAttachments.length,
         TOTAL_ANEXOS_CLIENTE: clientAttachments.length,
+        
+        // === DADOS DE COTAÇÃO ===
+        COTACAO_VIDAS: contractData.cotacao?.numeroVidas || '',
+        COTACAO_OPERADORA: contractData.cotacao?.operadoraSeguro || '',
+        COTACAO_ARQUIVO: contractData.cotacao?.arquivoCotacao || '',
+        COTACAO_BENEFICIARIOS: contractData.cotacao?.beneficiarios ? JSON.stringify(contractData.cotacao.beneficiarios) : '',
+        
+        // === DADOS ADICIONAIS ===
+        FORMA_PAGAMENTO: contractData.formaPagamento || '',
+        OBSERVACOES_GERAIS: contractData.observacoesGerais || '',
+        CONDICOES_ESPECIAIS: contractData.condicoesEspeciais || '',
+        TIPO_CONTRATO: contractData.tipoContrato || '',
+        DESCONTO_APLICADO: contractData.descontoAplicado || '',
+        VALOR_ORIGINAL: contractData.valorOriginal || '',
+        VALOR_FINAL: contractData.valorFinal || '',
+        
+        // === DADOS DE CONTROLE AVANÇADO ===
+        SITUACAO_PROPOSTA: proposal.situacao || '',
+        MOTIVO_PENDENCIA: proposal.motivoPendencia || '',
+        DATA_APROVACAO: proposal.dataAprovacao || '',
+        DATA_ASSINATURA: proposal.dataAssinatura || '',
+        DATA_VIGENCIA_INICIO: proposal.dataVigenciaInicio || '',
+        DATA_VIGENCIA_FIM: proposal.dataVigenciaFim || '',
+        RESPONSAVEL_APROVACAO: proposal.responsavelAprovacao || '',
+        
+        // === ARQUIVOS E DOCUMENTOS ===
+        LISTA_ARQUIVOS_VENDEDOR: vendorAttachments.map(a => a.name || a.fileName || '').join('; '),
+        LISTA_ARQUIVOS_CLIENTE: clientAttachments.map(a => a.name || a.fileName || '').join('; '),
+        DOCUMENTOS_PENDENTES: proposal.documentosPendentes ? JSON.stringify(proposal.documentosPendentes) : '',
+        
+        // === LOGS E HISTÓRICO ===
+        HISTORICO_STATUS: proposal.historicoStatus ? JSON.stringify(proposal.historicoStatus) : '',
+        ULTIMA_INTERACAO: proposal.ultimaInteracao || '',
+        TOTAL_ALTERACOES: proposal.totalAlteracoes || 0,
       };
 
       // === TITULARES DINÂMICOS (CAMPOS BASEADOS NOS DADOS REAIS) ===
@@ -161,6 +195,55 @@ export default function PlanilhaViewer() {
           [`DEPENDENTE${i}_DADOS_REEMBOLSO`]: dependente.dadosReembolso || '',
         });
       }
+
+      // === CAMPOS EXTRAS DINÂMICOS ===
+      // Tentar extrair qualquer campo adicional que possa estar no objeto proposal
+      const extraFields = {};
+      
+      // Verificar se há dados adicionais no objeto principal
+      Object.keys(proposal).forEach(key => {
+        if (!['id', 'clientToken', 'contractData', 'vendorId', 'status', 'priority', 'createdAt', 'updatedAt', 'clientCompleted', 'progresso'].includes(key)) {
+          const value = proposal[key];
+          if (value !== null && value !== undefined) {
+            if (typeof value === 'object') {
+              extraFields[`EXTRA_${key.toUpperCase()}`] = JSON.stringify(value);
+            } else {
+              extraFields[`EXTRA_${key.toUpperCase()}`] = String(value);
+            }
+          }
+        }
+      });
+
+      // Verificar se há dados adicionais no contractData
+      Object.keys(contractData).forEach(key => {
+        if (!['nomeEmpresa', 'cnpj', 'planoContratado', 'valor', 'inicioVigencia', 'compulsorio', 'odontoConjugado', 'livreAdesao', 'periodoMinVigencia', 'cotacao'].includes(key)) {
+          const value = contractData[key];
+          if (value !== null && value !== undefined) {
+            if (typeof value === 'object') {
+              extraFields[`CONTRACT_${key.toUpperCase()}`] = JSON.stringify(value);
+            } else {
+              extraFields[`CONTRACT_${key.toUpperCase()}`] = String(value);
+            }
+          }
+        }
+      });
+
+      // Verificar se há dados adicionais no internalData
+      Object.keys(internalData).forEach(key => {
+        if (!['dataReuniao', 'observacoesVendedor', 'autorizadorDesconto', 'notasFinanceiras'].includes(key)) {
+          const value = internalData[key];
+          if (value !== null && value !== undefined) {
+            if (typeof value === 'object') {
+              extraFields[`INTERNAL_${key.toUpperCase()}`] = JSON.stringify(value);
+            } else {
+              extraFields[`INTERNAL_${key.toUpperCase()}`] = String(value);
+            }
+          }
+        }
+      });
+
+      // Adicionar todos os campos extras encontrados
+      Object.assign(linhaUnica, extraFields);
 
       return linhaUnica;
     });
@@ -292,23 +375,58 @@ export default function PlanilhaViewer() {
             <div className="bg-white rounded p-3 border">
               <div className="flex items-center gap-2 mb-2">
                 <Database className="w-4 h-4 text-orange-600" />
-                <span className="font-medium text-orange-900">Propostas Ativas</span>
+                <span className="font-medium text-orange-900">Campos Dinâmicos</span>
               </div>
-              <p className="text-2xl font-bold text-orange-600">{proposals.length}</p>
-              <p className="text-xs text-gray-600">linhas na planilha</p>
+              <p className="text-2xl font-bold text-orange-600">AUTO</p>
+              <p className="text-xs text-gray-600">detectados automaticamente</p>
             </div>
           </div>
+        </div>
 
-          <div className="mt-4 text-sm text-gray-700">
-            <div>
-              • <strong>Uma empresa = Uma linha</strong>
-              <br />• Campos para múltiplos titulares (TITULAR1_, TITULAR2_, etc.)
-              <br />• Campos para múltiplos dependentes (DEPENDENTE1_, DEPENDENTE2_, etc.)
+        {/* Detalhamento Completo dos Campos */}
+        <div className="bg-white border rounded-lg p-4 mb-6">
+          <h4 className="font-semibold text-gray-900 mb-3">🗂️ Campos Incluídos na Planilha (Total: {colunas.length})</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="space-y-2">
+              <div className="font-medium text-blue-800">📋 Campos Básicos (25)</div>
+              <div className="text-xs text-gray-600 space-y-1">
+                <div>• ID_COMPLETO, CLIENT_TOKEN</div>
+                <div>• EMPRESA, CNPJ, PLANO, VALOR</div>
+                <div>• VENDEDOR_ID, VENDEDOR</div>
+                <div>• STATUS, PRIORIDADE</div>
+                <div>• DATAS (Criação, Atualização, Vigência)</div>
+                <div>• CONFIGURAÇÕES (Compulsório, Odonto, etc.)</div>
+                <div>• DADOS INTERNOS (Reunião, Observações)</div>
+                <div>• STATUS COMPLETUDE, PROGRESSO</div>
+                <div>• CONTADORES (Titulares, Dependentes, Anexos)</div>
+              </div>
             </div>
-            <div>
-              • <strong>Campos vazios = [vazio]</strong>
-              <br />• Estrutura expansível horizontalmente
-              <br />• Compatível com Google Sheets
+
+            <div className="space-y-2">
+              <div className="font-medium text-purple-800">👥 Pessoas ({maxTitulares * 16 + maxDependentes * 17})</div>
+              <div className="text-xs text-gray-600 space-y-1">
+                <div>• <strong>Titulares ({maxTitulares} × 16 campos):</strong></div>
+                <div>  Nome, CPF, RG, Data Nascimento</div>
+                <div>  Nome Mãe, Sexo, Estado Civil</div>
+                <div>  Peso, Altura, Emails, Telefones</div>
+                <div>  CEP, Endereço, Dados Reembolso</div>
+                <div className="mt-2">• <strong>Dependentes ({maxDependentes} × 17 campos):</strong></div>
+                <div>  Todos os campos dos titulares +</div>
+                <div>  Parentesco (específico para dependentes)</div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="font-medium text-green-800">📊 Dados Extras (30+)</div>
+              <div className="text-xs text-gray-600 space-y-1">
+                <div>• <strong>Cotação (4):</strong> Vidas, Operadora, Arquivo, Beneficiários</div>
+                <div>• <strong>Financeiro (7):</strong> Forma Pagamento, Descontos, Valores</div>
+                <div>• <strong>Controle (7):</strong> Situação, Aprovação, Assinatura</div>
+                <div>• <strong>Documentos (3):</strong> Listas de Arquivos, Pendências</div>
+                <div>• <strong>Histórico (3):</strong> Status, Interações, Alterações</div>
+                <div>• <strong>Campos Dinâmicos:</strong> Detectados automaticamente</div>
+                <div>  dos dados reais (EXTRA_, CONTRACT_, INTERNAL_)</div>
+              </div>
             </div>
           </div>
         </div>
