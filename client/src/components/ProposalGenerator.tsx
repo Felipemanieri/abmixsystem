@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Building, FileText, DollarSign, Check, Copy, Plus, Trash2, Upload, Camera, User, Eye, EyeOff, Settings, Save, Send, Users, Phone, Mail, MapPin, Calendar, Calculator, CheckCircle, Download, Info, Lock } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
 import { useRealTimeNotifications } from '../utils/realTimeSync';
@@ -140,6 +140,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [vendorAttachments, setVendorAttachments] = useState<File[]>([]);
   const [contractFieldsReadOnly, setContractFieldsReadOnly] = useState(false);
   const [showProfessionalModal, setShowProfessionalModal] = useState(false);
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -154,6 +155,64 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [arquivosAnexados, setArquivosAnexados] = useState<File[]>([]);
   const [cotacoesCadastradas, setCotacoesCadastradas] = useState<any[]>([]);
 
+  // Carregar rascunho salvo quando o componente for montado
+  useEffect(() => {
+    if (currentVendor) {
+      const draftKey = `proposal_draft_${currentVendor.id}`;
+      const savedDraft = localStorage.getItem(draftKey);
+      
+      if (savedDraft) {
+        try {
+          const draftData = JSON.parse(savedDraft);
+          
+          // Restaurar dados do contrato
+          if (draftData.contractData) {
+            setContractData(draftData.contractData);
+          }
+          
+          // Restaurar titulares
+          if (draftData.titulares && draftData.titulares.length > 0) {
+            setTitulares(draftData.titulares);
+          }
+          
+          // Restaurar dependentes
+          if (draftData.dependentes) {
+            setDependentes(draftData.dependentes);
+          }
+          
+          // Restaurar dados internos
+          if (draftData.internalData) {
+            setInternalData(draftData.internalData);
+          }
+          
+          showNotification('Rascunho carregado automaticamente', 'info');
+        } catch (error) {
+          console.error('Erro ao carregar rascunho:', error);
+        }
+      }
+    }
+  }, [currentVendor]);
+
+  // Auto-save: salvar dados automaticamente a cada mudança
+  useEffect(() => {
+    if (currentVendor && !isSubmitted) {
+      const now = new Date().toISOString();
+      const draftData = {
+        vendorId: currentVendor.id,
+        contractData: contractData,
+        titulares: titulares,
+        dependentes: dependentes,
+        internalData: internalData,
+        attachments: vendorAttachments,
+        isDraft: true,
+        lastSaved: now
+      };
+
+      const draftKey = `proposal_draft_${currentVendor.id}`;
+      localStorage.setItem(draftKey, JSON.stringify(draftData));
+      setLastSaved(now);
+    }
+  }, [contractData, titulares, dependentes, internalData, currentVendor, isSubmitted]);
 
 
   const planosDisponiveis = [
@@ -237,8 +296,41 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     setDependentes(newDependentes);
   };
 
-  const handleSave = () => {
-    showNotification('Proposta salva como rascunho', 'success');
+  const handleClearDraft = () => {
+    if (!currentVendor) return;
+    
+    const draftKey = `proposal_draft_${currentVendor.id}`;
+    localStorage.removeItem(draftKey);
+    setLastSaved(null);
+    showNotification('Rascunho limpo com sucesso', 'success');
+  };
+
+  const handleSave = async () => {
+    if (!currentVendor) {
+      showNotification('Erro: Vendedor não identificado', 'error');
+      return;
+    }
+
+    try {
+      const draftData = {
+        vendorId: currentVendor.id,
+        contractData: contractData,
+        titulares: titulares,
+        dependentes: dependentes,
+        internalData: internalData,
+        attachments: vendorAttachments,
+        isDraft: true
+      };
+
+      // Salvar no localStorage para manter enquanto não finaliza
+      const draftKey = `proposal_draft_${currentVendor.id}`;
+      localStorage.setItem(draftKey, JSON.stringify(draftData));
+
+      showNotification('Proposta salva como rascunho com sucesso!', 'success');
+    } catch (error) {
+      console.error('Erro ao salvar rascunho:', error);
+      showNotification('Erro ao salvar rascunho', 'error');
+    }
   };
 
   const handleSend = async () => {
@@ -287,6 +379,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       if (currentVendor?.id) {
         console.log('🚀 Notificando criação da proposta para atualização em tempo real');
         notifyCreated(currentVendor.id);
+        
+        // Limpar rascunho salvo após envio bem-sucedido
+        const draftKey = `proposal_draft_${currentVendor.id}`;
+        localStorage.removeItem(draftKey);
       }
       
       setGeneratedLink(result.clientLink);
@@ -963,12 +1059,31 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Nova Proposta de Plano de Saúde
-          </h1>
-          <p className="text-gray-600">
-            Preencha todos os dados para gerar uma proposta completa
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Nova Proposta de Plano de Saúde
+              </h1>
+              <p className="text-gray-600">
+                Preencha todos os dados para gerar uma proposta completa
+              </p>
+            </div>
+            {lastSaved && (
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg border border-green-200">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  <span>Salvo automaticamente às {new Date(lastSaved).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+                <button
+                  onClick={handleClearDraft}
+                  className="text-sm text-gray-500 hover:text-red-600 px-2 py-1 rounded transition-colors"
+                  title="Limpar rascunho salvo"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Barra de Progresso */}
