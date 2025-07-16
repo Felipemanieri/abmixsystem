@@ -37,14 +37,17 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
 
   const queryClient = useQueryClient();
 
-  // Buscar todos os usuários do sistema
+  // Buscar todos os usuários do sistema com atualização em tempo real
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["/api/system-users"],
     queryFn: async () => {
       const response = await fetch("/api/system-users");
       if (!response.ok) throw new Error("Erro ao buscar usuários");
       return response.json();
-    }
+    },
+    refetchInterval: 1000, // Atualiza a cada 1 segundo
+    refetchOnWindowFocus: true,
+    staleTime: 0 // Sempre considera os dados como desatualizados
   });
 
   // Mutations
@@ -59,7 +62,12 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
       return response.json();
     },
     onSuccess: () => {
+      // Invalidação múltipla para sincronização instantânea
       queryClient.invalidateQueries({ queryKey: ["/api/system-users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/system-users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/auth/users"] });
+      
       setIsAddDialogOpen(false);
       setFormData({
         name: "",
@@ -69,6 +77,8 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
         panel: "",
         active: true
       });
+      
+      console.log("✅ Usuário criado e cache atualizado instantaneamente!");
       alert("Usuário criado com sucesso!");
     },
     onError: () => {
@@ -87,9 +97,16 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
       return response.json();
     },
     onSuccess: () => {
+      // Invalidação múltipla para sincronização instantânea
       queryClient.invalidateQueries({ queryKey: ["/api/system-users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/system-users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/auth/users"] });
+      
       setIsEditDialogOpen(false);
       setSelectedUser(null);
+      
+      console.log("✅ Usuário atualizado e cache sincronizado instantaneamente!");
       alert("Usuário atualizado com sucesso!");
     },
     onError: () => {
@@ -104,7 +121,13 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
       return response.json();
     },
     onSuccess: () => {
+      // Invalidação múltipla para sincronização instantânea
       queryClient.invalidateQueries({ queryKey: ["/api/system-users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/system-users"] });
+      queryClient.refetchQueries({ queryKey: ["/api/auth/users"] });
+      
+      console.log("✅ Usuário removido e cache sincronizado instantaneamente!");
       alert("Usuário removido com sucesso!");
     },
     onError: () => {

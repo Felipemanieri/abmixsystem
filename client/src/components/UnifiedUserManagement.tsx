@@ -103,7 +103,7 @@ export default function UnifiedUserManagement() {
     }
   };
 
-  // Fetch all users using unified API
+  // Fetch all users using unified API com atualização em tempo real
   const { data: allCombinedUsers = [], isLoading, refetch } = useQuery({
     queryKey: ['/api/auth/users'],
     queryFn: async () => {
@@ -111,7 +111,9 @@ export default function UnifiedUserManagement() {
       if (!response.ok) throw new Error('Failed to fetch users');
       return response.json();
     },
-    refetchInterval: 30000, // 30 seconds
+    refetchInterval: 1000, // Atualiza a cada 1 segundo para resposta instantânea
+    refetchOnWindowFocus: true,
+    staleTime: 0 // Sempre considera os dados como desatualizados
   });
 
   const filteredUsers = allCombinedUsers.filter((user: User) => {
@@ -141,9 +143,15 @@ export default function UnifiedUserManagement() {
       });
     },
     onSuccess: () => {
+      // Sincronização instantânea com múltiplas invalidações
       queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/system-users'] });
+      
       setShowUserModal(false);
       resetForm();
+      console.log("🚀 Usuário criado e todos os painéis sincronizados instantaneamente!");
     }
   });
 
@@ -159,10 +167,16 @@ export default function UnifiedUserManagement() {
       });
     },
     onSuccess: () => {
+      // Sincronização instantânea com múltiplas invalidações
       queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/system-users'] });
+      
       setShowUserModal(false);
       setEditingUser(null);
       resetForm();
+      console.log("🚀 Usuário atualizado e todos os painéis sincronizados instantaneamente!");
     }
   });
 
@@ -177,9 +191,14 @@ export default function UnifiedUserManagement() {
       });
     },
     onSuccess: () => {
-      // Force immediate refetch for instant UI update
-      refetch();
+      // Sincronização instantânea com múltiplas invalidações e refetch forçado
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
       queryClient.refetchQueries({ queryKey: ['/api/auth/users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/system-users'] });
+      refetch(); // Force immediate UI update
+      
+      console.log("🚀 Usuário removido e todos os painéis sincronizados instantaneamente!");
     }
   });
 
