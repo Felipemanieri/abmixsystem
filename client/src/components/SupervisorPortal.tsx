@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Share2, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail, FileX, Send } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Share2, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail } from 'lucide-react';
 import { format, isWithinInterval, subDays, subMonths, subWeeks, parseISO } from 'date-fns';
 import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, Area, AreaChart, Pie } from 'recharts';
 import AbmixLogo from './AbmixLogo';
@@ -180,10 +180,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [reportFormat, setReportFormat] = useState('pdf');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewData, setPreviewData] = useState<any>(null);
-  const [previewType, setPreviewType] = useState('');
-  const [editableObservations, setEditableObservations] = useState<{[key: string]: string}>({});
 
   // Salvar filtros no localStorage quando alterados
   useEffect(() => {
@@ -579,11 +575,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   };
 
   const selectAllVendors = () => {
-    const vendedors = filteredProposals.map(p => {
+    const vendorNames = filteredProposals.map(p => {
       const vendor = vendors.find(v => v.id === p.vendorId);
       return vendor ? vendor.name : null;
     }).filter(Boolean);
-    const uniqueVendors = [...new Set(vendedors)];
+    const uniqueVendors = [...new Set(vendorNames)];
     setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
   };
 
@@ -1199,7 +1195,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     };
     
     // Lista de vendedores únicos (incluindo dados reais e do banco)
-    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendedor).filter(Boolean)])];;
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];;
     
     // Lista de operadoras e tipos de plano únicos (mock data)
     const operadoras = ['SulAmérica', 'Bradesco', 'Amil', 'Unimed', 'NotreDame'];
@@ -1208,7 +1204,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     // Aplicar todos os filtros avançados
     const analyticsData = filteredProposals.filter(proposal => {
       // Filtro de vendedores
-      if (selectedVendors.length > 0 && !selectedVendors.includes(proposal.vendedor || '')) return false;
+      if (selectedVendors.length > 0 && !selectedVendors.includes(proposal.vendorName || '')) return false;
       
       // Filtro de status
       if (selectedStatuses.length > 0 && !selectedStatuses.includes(proposal.status)) return false;
@@ -1264,7 +1260,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       
       // Filtrar por vendedor
       if (selectedVendorForChart && selectedVendorForChart !== 'all') {
-        filteredData = filteredData.filter(p => p.vendedor === selectedVendorForChart);
+        filteredData = filteredData.filter(p => p.vendorName === selectedVendorForChart);
       }
       
       // Se vendedor específico selecionado, mostrar distribuição por status
@@ -1279,7 +1275,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       
       // Caso contrário, mostrar distribuição por vendedores
       return uniqueVendors.map(vendor => {
-        const count = filteredData.filter(p => p.vendedor === vendor).length;
+        const count = filteredData.filter(p => p.vendorName === vendor).length;
         return {
           name: vendor,
           value: count,
@@ -1300,7 +1296,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
     // Análise por vendedor
     const vendorAnalysis = analyticsData.reduce((acc, proposal) => {
-      const vendor = proposal.vendedor || 'Não Identificado';
+      const vendor = proposal.vendorName || 'Não Identificado';
       if (!acc[vendor]) {
         acc[vendor] = {
           total: 0,
@@ -1789,82 +1785,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     ];
     
     // Lista de vendedores únicos (incluindo dados reais e do banco)
-    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendedor).filter(Boolean)])];
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];
 
     const filteredData = filteredProposals.filter(proposal => {
-      if (reportFilters.vendedor && !proposal.vendedor?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
+      if (reportFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
       if (reportFilters.status && proposal.status !== reportFilters.status) return false;
       // Filtros de data seriam aplicados aqui
       return true;
     });
-
-    // Função para salvar observações editáveis
-    const saveObservations = async () => {
-      try {
-        const updates = Object.entries(editableObservations).map(async ([proposalId, observation]) => {
-          const response = await fetch(`/api/proposals/${proposalId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-              internalData: { 
-                observacoesSupervisor: observation 
-              } 
-            }),
-          });
-          return response.ok;
-        });
-
-        await Promise.all(updates);
-        showNotification('Observações salvas com sucesso!', 'success');
-        
-        // Forçar atualização dos dados
-        queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
-        
-      } catch (error) {
-        showNotification('Erro ao salvar observações', 'error');
-      }
-    };
-
-    const generatePreview = async (format: string) => {
-      setIsGenerating(true);
-      setPreviewType(format);
-      try {
-        // Simular geração de preview
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const preview = {
-          format,
-          totalPropostas: filteredData.length,
-          faturamento: reportData.faturamento,
-          vendedoresIncluidos: reportFilters.vendedor || 'Todos',
-          statusIncluidos: reportFilters.status || 'Todos',
-          periodoInicio: reportFilters.dataInicio || 'Não definido',
-          periodoFim: reportFilters.dataFim || 'Não definido',
-          tipoRelatorio: reportFilters.tipo,
-          dataGeracao: new Date().toLocaleString('pt-BR'),
-          dadosDetalhados: filteredData.slice(0, 5) // Primeiros 5 para preview
-        };
-        
-        // Inicializar observações editáveis com dados existentes
-        const initialObservations: {[key: string]: string} = {};
-        filteredData.slice(0, 5).forEach(proposal => {
-          initialObservations[proposal.id] = proposal.internalData?.observacoesSupervisor || 
-                                            proposal.internalData?.observacoesFinanceiras || 
-                                            proposal.internalData?.observacoesVendedor || '';
-        });
-        setEditableObservations(initialObservations);
-        
-        setPreviewData(preview);
-        setShowPreview(true);
-        showNotification('Preview gerado com sucesso! Revise antes de enviar.', 'success');
-      } catch (error) {
-        showNotification('Erro ao gerar preview', 'error');
-      } finally {
-        setIsGenerating(false);
-      }
-    };
 
     const generateReport = async (format: string, shareMethod?: string) => {
       setIsGenerating(true);
@@ -1873,16 +1801,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         await new Promise(resolve => setTimeout(resolve, 2000));
         
         if (shareMethod) {
-          showNotification(`Relatório enviado via ${shareMethod} com sucesso para o financeiro!`, 'success');
+          showNotification(`Relatório enviado via ${shareMethod} com sucesso!`, 'success');
         } else {
-          showNotification(`Relatório ${format.toUpperCase()} gerado e enviado para o financeiro!`, 'success');
+          showNotification(`Relatório ${format.toUpperCase()} gerado com sucesso!`, 'success');
         }
       } catch (error) {
         showNotification('Erro ao gerar relatório', 'error');
       } finally {
         setIsGenerating(false);
         setShowExportOptions(false);
-        setShowPreview(false);
       }
     };
 
@@ -1896,7 +1823,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         return acc;
       }, {} as Record<string, number>),
       porVendedor: filteredData.reduce((acc, p) => {
-        const vendor = p.vendedor || 'Desconhecido';
+        const vendor = p.vendorName || 'Desconhecido';
         if (!acc[vendor]) acc[vendor] = { count: 0, value: 0 };
         acc[vendor].count += 1;
         acc[vendor].value += parseFloat(p.contractData?.valor || '0');
@@ -1961,17 +1888,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
           <div className="p-6">
-            {/* Filtros Principais - Layout Horizontal Compacto */}
-            <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
               {/* Tipo de Relatório */}
-              <div className="col-span-2">
-                <label className="block text-xs font-medium text-gray-600 mb-1">Tipo de Relatório</label>
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
                 <select
                   value={reportFilters.tipo}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="completo">📊 Relatório Completo</option>
+                  <option value="executivo">📈 Resumo Executivo</option>
                   <option value="individual">👤 Por Vendedor Individual</option>
                   <option value="equipe">👥 Por Equipe</option>
                   <option value="financeiro">💰 Relatório Financeiro</option>
@@ -1981,28 +1908,28 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Vendedor */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Vendedor</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vendedor</label>
                 <select
                   value={reportFilters.vendedor}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
-                  <option value="">Todos</option>
+                  <option value="">Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
-                    <option key={vendor} value={vendor}>{vendor.split(' ')[0]}</option>
+                    <option key={vendor} value={vendor}>{vendor}</option>
                   ))}
                 </select>
               </div>
 
               {/* Status */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select
                   value={reportFilters.status}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
-                  <option value="">Todos</option>
+                  <option value="">Todos os Status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
                   ))}
@@ -2011,440 +1938,174 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Data Início */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Início</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Data Início</label>
                 <input
                   type="date"
                   value={reportFilters.dataInicio}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
 
               {/* Data Fim */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Fim</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Data Fim</label>
                 <input
                   type="date"
                   value={reportFilters.dataFim}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
             </div>
             
-            {/* Filtros Rápidos e Ações */}
-            <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 7), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                  className="px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded transition-colors"
-                >
-                  7 dias
-                </button>
-                <button
-                  onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 30), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                  className="px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded transition-colors"
-                >
-                  30 dias
-                </button>
-                <button
-                  onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subMonths(new Date(), 1), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                  className="px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded transition-colors"
-                >
-                  Mês atual
-                </button>
+            {/* Filtros Rápidos */}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 7), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Últimos 7 dias
+                  </button>
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 30), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Últimos 30 dias
+                  </button>
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subMonths(new Date(), 1), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Mês atual
+                  </button>
+                </div>
                 <button
                   onClick={() => setReportFilters({
                     dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                   })}
-                  className="px-2 py-1 text-xs bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded transition-colors flex items-center gap-1"
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-1"
                 >
-                  <X size={12} />
-                  Limpar
+                  <X size={14} />
+                  Limpar Filtros
                 </button>
-              </div>
-              <div className="text-xs text-gray-500">
-                {filteredData.length} registros encontrados
               </div>
             </div>
           </div>
         </div>
 
-        {/* Sistema de Geração de Relatórios com Preview */}
+        {/* Sistema de Exportação Profissional */}
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
-                <Eye size={18} />
-                Geração de Relatórios para Financeiro
-              </h3>
-              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-medium">
-                CRÍTICO - Sempre revisar antes de enviar
-              </span>
-            </div>
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <Download size={18} />
+              Exportação e Compartilhamento
+            </h3>
           </div>
           <div className="p-6">
-            {/* Botões de Preview Discretos */}
-            <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">1. Gerar Preview (Obrigatório antes de enviar)</h4>
-              <div className="flex flex-wrap gap-3">
+            {/* Exportação Principal */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <button
+                onClick={() => {
+                  generateReport('pdf');
+                  showNotification('Gerando relatório PDF...', 'success');
+                }}
+                disabled={isGenerating}
+                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors disabled:opacity-50"
+              >
+                <FileText size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar PDF</span>
+                  <p className="text-xs opacity-90">Relatório formatado</p>
+                </div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=xlsx', '_blank');
+                  showNotification('Baixando planilha Excel...', 'success');
+                }}
+                className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
+              >
+                <Download size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar Excel</span>
+                  <p className="text-xs opacity-90">Dados da planilha</p>
+                </div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=csv', '_blank');
+                  showNotification('Baixando arquivo CSV...', 'success');
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
+              >
+                <FileText size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar CSV</span>
+                  <p className="text-xs opacity-90">Dados tabulares</p>
+                </div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  window.open('https://drive.google.com/drive/folders/1your-folder-id', '_blank');
+                  showNotification('Abrindo Google Drive...', 'success');
+                }}
+                className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
+              >
+                <ExternalLink size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Abrir Drive</span>
+                  <p className="text-xs opacity-90">Ver documentos</p>
+                </div>
+              </button>
+            </div>
+
+            {/* Opções de Compartilhamento */}
+            <div className="pt-4 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-700 mb-3">Compartilhamento Rápido</h4>
+              <div className="grid grid-cols-3 gap-3">
                 <button
-                  onClick={() => generatePreview('pdf')}
-                  disabled={isGenerating}
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
+                  onClick={() => {
+                    const subject = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo}`);
+                    const body = encodeURIComponent(`Segue em anexo o relatório ${reportFilters.tipo} gerado em ${new Date().toLocaleDateString('pt-BR')}.`);
+                    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+                  }}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
                 >
-                  <Eye size={16} />
-                  {isGenerating && previewType === 'pdf' ? 'Gerando...' : 'Preview PDF'}
-                </button>
-                
-                <button
-                  onClick={() => generatePreview('excel')}
-                  disabled={isGenerating}
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
-                >
-                  <Eye size={16} />
-                  {isGenerating && previewType === 'excel' ? 'Gerando...' : 'Preview Excel'}
-                </button>
-                
-                <button
-                  onClick={() => generatePreview('financeiro')}
-                  disabled={isGenerating}
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
-                >
-                  <Eye size={16} />
-                  {isGenerating && previewType === 'financeiro' ? 'Gerando...' : 'Preview Financeiro'}
+                  <Mail size={16} />
+                  Email
                 </button>
                 
                 <button
                   onClick={() => {
-                    window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/edit', '_blank');
-                    showNotification('Abrindo planilha Google Sheets', 'info');
+                    const message = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo} disponível: ${window.location.href}`);
+                    window.open(`https://wa.me/?text=${message}`, '_blank');
                   }}
-                  className="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-300 px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors"
+                  className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
                 >
-                  <ExternalLink size={16} />
-                  Ver Planilha Original
+                  <MessageSquare size={16} />
+                  WhatsApp
+                </button>
+                
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    showNotification('Link copiado para a área de transferência', 'success');
+                  }}
+                  className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
+                >
+                  <Share size={16} />
+                  Copiar Link
                 </button>
               </div>
             </div>
-
-            {/* Ações Finais - Só aparecem após preview */}
-            {previewData && (
-              <div className="pt-4 border-t border-gray-200">
-                <h4 className="text-sm font-medium text-gray-700 mb-3">2. Enviar para Financeiro (Após revisão)</h4>
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={() => generateReport(previewData.format, 'email')}
-                    disabled={isGenerating}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
-                  >
-                    <Mail size={16} />
-                    {isGenerating ? 'Enviando...' : 'Enviar por Email'}
-                  </button>
-                  
-                  <button
-                    onClick={() => generateReport(previewData.format)}
-                    disabled={isGenerating}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
-                  >
-                    <Download size={16} />
-                    {isGenerating ? 'Gerando...' : 'Baixar Relatório'}
-                  </button>
-                  
-                  <button
-                    onClick={() => generateReport(previewData.format, 'whatsapp')}
-                    disabled={isGenerating}
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors disabled:opacity-50"
-                  >
-                    <MessageSquare size={16} />
-                    {isGenerating ? 'Enviando...' : 'Enviar WhatsApp'}
-                  </button>
-                  
-                  <button
-                    onClick={() => {
-                      setShowPreview(false);
-                      setPreviewData(null);
-                      showNotification('Preview cancelado', 'info');
-                    }}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm transition-colors"
-                  >
-                    <X size={16} />
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
-
-        {/* Modal de Preview */}
-        {showPreview && previewData && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="px-6 py-4 border-b border-gray-200 sticky top-0 bg-white">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Eye size={20} />
-                    Preview do Relatório - {previewData.format.toUpperCase()}
-                  </h3>
-                  <button
-                    onClick={() => setShowPreview(false)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <X size={24} />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                {/* Resumo do Relatório */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                  <h4 className="text-sm font-semibold text-yellow-800 mb-2">⚠️ REVISÃO OBRIGATÓRIA</h4>
-                  <p className="text-sm text-yellow-700">
-                    Este preview mostra exatamente o que será enviado para o financeiro. 
-                    Revise todos os dados antes de confirmar o envio.
-                  </p>
-                </div>
-
-                {/* Informações do Relatório */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Tipo de Relatório:</span>
-                      <span className="text-sm text-gray-900">{previewData.tipoRelatorio}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Total de Propostas:</span>
-                      <span className="text-sm text-gray-900 font-bold">{previewData.totalPropostas}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Faturamento Total:</span>
-                      <span className="text-sm text-gray-900 font-bold text-green-600">{formatCurrency(previewData.faturamento.toString())}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Ticket Médio:</span>
-                      <span className="text-sm text-gray-900">{formatCurrency((previewData.faturamento / (previewData.totalPropostas || 1)).toString())}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Vendedores Incluídos:</span>
-                      <span className="text-sm text-gray-900">{previewData.vendedoresIncluidos}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Status Incluídos:</span>
-                      <span className="text-sm text-gray-900">{previewData.statusIncluidos}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Período Início:</span>
-                      <span className="text-sm text-gray-900">{previewData.periodoInicio}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Período Fim:</span>
-                      <span className="text-sm text-gray-900">{previewData.periodoFim}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Data de Geração:</span>
-                      <span className="text-sm text-gray-900">{previewData.dataGeracao}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Formato:</span>
-                      <span className="text-sm text-gray-900 uppercase">{previewData.format}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Campos Incluídos:</span>
-                      <span className="text-sm text-gray-900">10 colunas</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Observações:</span>
-                      <span className="text-sm text-gray-900">{previewData.dadosDetalhados.filter((p: any) => p.internalData?.observacoesFinanceiras || p.internalData?.observacoesVendedor).length} com dados</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Preview dos Dados */}
-                <div className="border border-gray-200 rounded-lg">
-                  <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                    <h4 className="text-sm font-semibold text-gray-800">
-                      Preview dos Dados (Primeiras 5 propostas)
-                    </h4>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-3 py-2 text-left">ID</th>
-                          <th className="px-3 py-2 text-left">Cliente</th>
-                          <th className="px-3 py-2 text-left">CNPJ</th>
-                          <th className="px-3 py-2 text-left">Vendedor</th>
-                          <th className="px-3 py-2 text-left">Valor</th>
-                          <th className="px-3 py-2 text-left">Plano</th>
-                          <th className="px-3 py-2 text-left">Status</th>
-                          <th className="px-3 py-2 text-left">Desconto</th>
-                          <th className="px-3 py-2 text-left">Observações</th>
-                          <th className="px-3 py-2 text-left">Data</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {previewData.dadosDetalhados.map((proposal: any, index: number) => (
-                          <tr key={index} className="border-b border-gray-100">
-                            <td className="px-3 py-2 font-mono text-xs">{proposal.abmId}</td>
-                            <td className="px-3 py-2">
-                              {proposal.contractData?.nomeEmpresa || 
-                               proposal.titulares?.[0]?.nomeCompleto || 
-                               'Cliente não informado'}
-                            </td>
-                            <td className="px-3 py-2 text-xs">{proposal.contractData?.cnpj || 'N/A'}</td>
-                            <td className="px-3 py-2">{proposal.vendedor || 'N/A'}</td>
-                            <td className="px-3 py-2 font-medium">
-                              {formatCurrency(proposal.contractData?.valor || '0')}
-                            </td>
-                            <td className="px-3 py-2 text-xs">{proposal.contractData?.planoContratado || 'N/A'}</td>
-                            <td className="px-3 py-2">
-                              <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
-                                {STATUS_CONFIG[proposal.status as ProposalStatus]?.label || proposal.status}
-                              </span>
-                            </td>
-                            <td className="px-3 py-2 text-xs">
-                              {proposal.internalData?.desconto ? `${proposal.internalData.desconto}%` : '0%'}
-                            </td>
-                            <td className="px-3 py-2 text-xs max-w-32">
-                              <textarea
-                                value={editableObservations[proposal.id] || ''}
-                                onChange={(e) => setEditableObservations(prev => ({
-                                  ...prev,
-                                  [proposal.id]: e.target.value
-                                }))}
-                                placeholder="Adicionar observação..."
-                                className="w-full text-xs border border-gray-300 rounded px-2 py-1 resize-none"
-                                rows={2}
-                              />
-                            </td>
-                            <td className="px-3 py-2 text-xs">
-                              {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Observações Financeiras Específicas */}
-                <div className="mt-6 border border-orange-200 rounded-lg">
-                  <div className="px-4 py-3 bg-orange-50 border-b border-orange-200">
-                    <h4 className="text-sm font-semibold text-orange-800 flex items-center gap-2">
-                      <AlertTriangle size={16} />
-                      Observações Financeiras Críticas
-                    </h4>
-                  </div>
-                  <div className="p-4">
-                    <div className="space-y-3">
-                      {previewData.dadosDetalhados.map((proposal: any, index: number) => {
-                        const hasObservations = proposal.internalData?.observacoesFinanceiras || 
-                                              proposal.internalData?.desconto > 0 ||
-                                              proposal.internalData?.autorizadorDesconto;
-                        
-                        if (!hasObservations) return null;
-                        
-                        return (
-                          <div key={index} className="bg-gray-50 p-3 rounded border">
-                            <div className="flex justify-between items-start mb-2">
-                              <span className="font-medium text-sm">{proposal.abmId} - {proposal.contractData?.nomeEmpresa || 'Cliente'}</span>
-                              <span className="text-xs text-gray-500">{formatCurrency(proposal.contractData?.valor || '0')}</span>
-                            </div>
-                            <div className="space-y-1 text-xs text-gray-700">
-                              {proposal.internalData?.desconto > 0 && (
-                                <div className="flex justify-between">
-                                  <span>Desconto aplicado:</span>
-                                  <span className="font-medium text-red-600">{proposal.internalData.desconto}%</span>
-                                </div>
-                              )}
-                              {proposal.internalData?.autorizadorDesconto && (
-                                <div className="flex justify-between">
-                                  <span>Autorizado por:</span>
-                                  <span className="font-medium">{proposal.internalData.autorizadorDesconto}</span>
-                                </div>
-                              )}
-                              {proposal.internalData?.observacoesFinanceiras && (
-                                <div className="mt-2">
-                                  <span className="font-medium">Obs. Financeiras:</span>
-                                  <p className="text-gray-600 mt-1">{proposal.internalData.observacoesFinanceiras}</p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                      
-                      {previewData.dadosDetalhados.filter((p: any) => 
-                        p.internalData?.observacoesFinanceiras || 
-                        p.internalData?.desconto > 0 ||
-                        p.internalData?.autorizadorDesconto
-                      ).length === 0 && (
-                        <div className="text-center text-gray-500 py-4">
-                          <FileX size={24} className="mx-auto mb-2 opacity-50" />
-                          <p className="text-sm">Nenhuma observação financeira específica nas propostas selecionadas</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Confirmação */}
-                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="text-green-600 mt-0.5" size={16} />
-                    <div>
-                      <h4 className="text-sm font-semibold text-green-800">Confirmação Final</h4>
-                      <p className="text-sm text-green-700 mt-1">
-                        Os dados acima serão enviados para o departamento financeiro incluindo:
-                      </p>
-                      <ul className="text-xs text-green-600 mt-2 space-y-1">
-                        <li>• {previewData.totalPropostas} propostas com dados completos</li>
-                        <li>• Informações de clientes, valores e status atualizados</li>
-                        <li>• Observações financeiras e descontos aplicados</li>
-                        <li>• Dados dos vendedores responsáveis</li>
-                        <li>• Formato {previewData.format.toUpperCase()} pronto para análise financeira</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Botões de Ação */}
-                <div className="mt-6 flex justify-between items-center gap-4 pt-4 border-t border-gray-200">
-                  <button
-                    onClick={saveObservations}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <Save size={16} />
-                    Salvar Observações
-                  </button>
-                  
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setShowPreview(false)}
-                      className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                      Fechar Preview
-                    </button>
-                    <button
-                      onClick={() => generateReport(previewData.format, 'Email')}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      <Send size={16} />
-                      Enviar para Financeiro
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Dashboard Visual com Dados Google Sheets */}
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
