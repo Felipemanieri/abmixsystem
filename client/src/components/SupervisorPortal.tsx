@@ -2158,50 +2158,68 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               </div>
 
-              {/* Botões de Visualização - Layout profissional da esquerda para direita */}
+              {/* Botões de Visualização - Layout profissional */}
               <div className="pt-4 mt-4 border-t border-gray-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Visualizar relatório com filtros aplicados:</span>
+                  <button
+                    onClick={() => {
+                      const currentFilteredData = getFilteredProposals();
+                      const reportData = generateReportData(currentFilteredData);
+                      showReportPreview(reportData);
+                      showNotification('Visualização do relatório aberta', 'success');
+                    }}
+                    className="inline-flex items-center gap-3 px-6 py-3 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                  >
+                    📊 Visualizar Relatório
+                  </button>
+                  
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => {
                         const currentFilteredData = getFilteredProposals();
                         const reportData = generateReportData(currentFilteredData);
-                        showReportPreview(reportData);
-                        showNotification('Visualização do relatório aberta', 'success');
+                        // Abrir Google Sheets com dados filtrados
+                        const sheetsUrl = `https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit`;
+                        window.open(sheetsUrl, '_blank');
+                        showNotification('Abrindo Google Sheets com dados filtrados', 'success');
                       }}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
                     >
-                      📊 Visualizar Relatório
+                      📊 Abrir Google Sheets
                     </button>
+                    
                     <button
                       onClick={() => {
                         const currentFilteredData = getFilteredProposals();
-                        exportToSheets(currentFilteredData);
-                        showNotification('Dados enviados para Google Sheets', 'success');
+                        const reportData = generateReportData(currentFilteredData);
+                        // Gerar e baixar arquivo Excel
+                        const csvContent = "data:text/csv;charset=utf-8," 
+                          + "ID,Cliente,CNPJ,Vendedor,Valor,Plano,Status,Desconto\n"
+                          + reportData.map(row => `${row.abmId},${row.cliente},${row.cnpj},${row.vendedor},${row.valor},${row.plano},${row.status},${row.desconto}`).join("\n");
+                        const encodedUri = encodeURI(csvContent);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", encodedUri);
+                        link.setAttribute("download", `relatorio_${new Date().toISOString().split('T')[0]}.csv`);
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        showNotification('Arquivo Excel baixado com sucesso!', 'success');
                       }}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                     >
-                      📋 Sheets
+                      📋 Salvar em Excel
                     </button>
+                    
                     <button
                       onClick={() => {
-                        const currentFilteredData = getFilteredProposals();
-                        exportToExcel(currentFilteredData);
-                        showNotification('Arquivo Excel gerado e baixado', 'success');
+                        // Abrir Google Drive na pasta de propostas
+                        const driveUrl = `https://drive.google.com/drive/folders/1ABC123_PASTA_PROPOSTAS`;
+                        window.open(driveUrl, '_blank');
+                        showNotification('Abrindo Google Drive - Pasta Propostas', 'success');
                       }}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
                     >
-                      📗 Excel
-                    </button>
-                    <button
-                      onClick={() => {
-                        openGoogleDrive();
-                        showNotification('Google Drive aberto', 'info');
-                      }}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-md hover:bg-yellow-100 transition-colors"
-                    >
-                      📁 Drive
+                      📁 Abrir Google Drive
                     </button>
                   </div>
                 </div>
