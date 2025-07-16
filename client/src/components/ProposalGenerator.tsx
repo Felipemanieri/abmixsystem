@@ -142,6 +142,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [showProfessionalModal, setShowProfessionalModal] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
+  const [isClearingDraft, setIsClearingDraft] = useState(false);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -213,7 +214,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
   // Auto-save: salvar dados automaticamente a cada mudança com debounce
   useEffect(() => {
-    if (currentVendor && !isSubmitted && !isLoadingDraft) {
+    if (currentVendor && !isSubmitted && !isLoadingDraft && !isClearingDraft) {
       const timeoutId = setTimeout(() => {
         // Verificar se há dados realmente preenchidos antes de salvar
         const hasData = contractData.nomeEmpresa || 
@@ -236,14 +237,12 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           const draftKey = `proposal_draft_${currentVendor.id}`;
           localStorage.setItem(draftKey, JSON.stringify(draftData));
           setLastSaved(now);
-          
-
         }
       }, 500); // Debounce de 500ms
 
       return () => clearTimeout(timeoutId);
     }
-  }, [contractData, titulares, dependentes, internalData, vendorAttachments, currentVendor, isSubmitted, isLoadingDraft]);
+  }, [contractData, titulares, dependentes, internalData, vendorAttachments, currentVendor, isSubmitted, isLoadingDraft, isClearingDraft]);
 
 
   const planosDisponiveis = [
@@ -330,10 +329,68 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const handleClearDraft = () => {
     if (!currentVendor) return;
     
+    setIsClearingDraft(true);
+    
     const draftKey = `proposal_draft_${currentVendor.id}`;
     localStorage.removeItem(draftKey);
     setLastSaved(null);
+    
+    // Limpar todos os dados dos formulários
+    setContractData({
+      nomeEmpresa: '',
+      cnpj: '',
+      planoContratado: '',
+      valor: '',
+      periodoVigencia: { inicio: '', fim: '' },
+      odontoConjugado: false,
+      compulsorio: false,
+      livreAdesao: false,
+      inicioVigencia: '',
+      periodoMinimo: '',
+      aproveitamentoCongenere: false,
+    });
+    
+    setTitulares([{
+      id: '1',
+      nomeCompleto: '',
+      cpf: '',
+      rg: '',
+      dataNascimento: '',
+      nomeMae: '',
+      sexo: '',
+      estadoCivil: '',
+      peso: '',
+      altura: '',
+      emailPessoal: '',
+      telefonePessoal: '',
+      emailEmpresa: '',
+      telefoneEmpresa: '',
+      cep: '',
+      enderecoCompleto: '',
+      dadosReembolso: ''
+    }]);
+    
+    setDependentes([]);
+    
+    setInternalData({
+      reuniao: false,
+      nomeReuniao: '',
+      vendaDupla: false,
+      nomeVendaDupla: '',
+      desconto: '',
+      origemVenda: '',
+      autorizadorDesconto: '',
+      observacoesFinanceiras: '',
+      observacoesCliente: ''
+    });
+    
+    setVendorAttachments([]);
+    
     showNotification('Rascunho limpo com sucesso', 'success');
+    
+    setTimeout(() => {
+      setIsClearingDraft(false);
+    }, 1000);
   };
 
   const handleSave = async () => {
@@ -1102,21 +1159,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 Preencha todos os dados para gerar uma proposta completa
               </p>
             </div>
-            {lastSaved && (
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg border border-green-200">
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  <span>Salvo automaticamente às {new Date(lastSaved).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-                <button
-                  onClick={handleClearDraft}
-                  className="text-sm text-gray-500 hover:text-red-600 px-2 py-1 rounded transition-colors"
-                  title="Limpar rascunho salvo"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            )}
+
           </div>
         </div>
 
@@ -1908,6 +1951,25 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           onClose={() => setShowProfessionalModal(false)}
           onGenerateNewProposal={generateSameLinkProposal}
         />
+      )}
+
+      {/* Indicador de Salvamento Automático - Fixo no canto inferior direito */}
+      {lastSaved && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <div className="flex items-center space-x-2 bg-white shadow-lg border border-gray-200 rounded-lg px-3 py-2">
+            <div className="flex items-center text-xs text-green-600">
+              <CheckCircle className="w-3 h-3 mr-1" />
+              <span>Salvo às {new Date(lastSaved).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+            <button
+              onClick={handleClearDraft}
+              className="text-xs text-gray-500 hover:text-red-600 p-1 rounded transition-colors"
+              title="Limpar rascunho salvo"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
