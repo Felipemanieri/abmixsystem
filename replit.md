@@ -154,6 +154,17 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Ordem Cronológica das Propostas Garantida (Jan 16, 2025)
+- **Corrigido problema de reordenação indevida das propostas**:
+  - Backend: Adicionado orderBy(proposals.createdAt) em getAllProposals e getVendorProposals
+  - Frontend: Garantida ordenação cronológica após filtros em todos os portais
+  - ImplantacaoPortal: Adicionado sort por createdAt após filteredProposals
+  - SupervisorPortal: Adicionado sort por createdAt após filteredProposals  
+  - VendorPortal: Adicionado sort por createdAt na renderização das propostas
+  - FinancialPortal: Adicionado sort por createdAt na renderização das propostas
+  - Sistema agora mantém ordem original de criação independente de mudanças de status
+  - Propostas permanecem na mesma posição quando status é alterado
+
 ### Autorizador do Desconto convertido para dropdown (Jan 15, 2025)
 - **Campo "Autorizador do Desconto" atualizado para dropdown**:
   - ProposalGenerator.tsx: Convertido de input text para select com 3 opções

@@ -513,6 +513,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     const statusMatch = !filterStatus || proposal.status === filterStatus;
     const dateMatch = !filterDate || new Date(proposal.createdAt).toDateString() === new Date(filterDate).toDateString();
     return vendorMatch && statusMatch && dateMatch;
+  }).sort((a, b) => {
+    // Manter ordem cronológica de criação mesmo após filtros
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   });
 
   // Funções auxiliares para Analytics (definidas após filteredProposals)

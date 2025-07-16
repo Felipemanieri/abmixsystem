@@ -488,6 +488,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                          (proposal.abmId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (proposal.vendedor || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
+  }).sort((a, b) => {
+    // Manter ordem cronológica de criação mesmo após filtros
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   }) || [];
 
   const renderProposalsTab = () => (

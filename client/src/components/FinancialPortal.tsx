@@ -347,7 +347,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {realProposals?.slice(0, 10).map((proposal) => (
+              {realProposals?.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()).slice(0, 10).map((proposal) => (
                 <tr key={proposal.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button

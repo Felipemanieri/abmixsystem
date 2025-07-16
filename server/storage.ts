@@ -138,11 +138,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVendorProposals(vendorId: number): Promise<any[]> {
-    return await db.select().from(proposals).where(eq(proposals.vendorId, vendorId));
+    return await db.select().from(proposals)
+      .where(eq(proposals.vendorId, vendorId))
+      .orderBy(proposals.createdAt); // Manter ordem cronológica de criação
   }
 
   async getAllProposals(): Promise<any[]> {
-    return await db.select().from(proposals);
+    return await db.select().from(proposals)
+      .orderBy(proposals.createdAt); // Manter ordem cronológica de criação
   }
 
   async getProposalCount(): Promise<number> {
