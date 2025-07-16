@@ -145,6 +145,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [filterName, setFilterName] = useState('');
   const [showSaveFilter, setShowSaveFilter] = useState(false);
   
+  // Estados para sistema de relatórios
+  const [showPreview, setShowPreview] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [clientObservations, setClientObservations] = useState<Record<string, string>>({});
+  const [reportFilters, setReportFilters] = useState({
+    vendedor: '',
+    status: '',
+    dataInicio: '',
+    dataFim: '',
+    operadora: '',
+    plano: '',
+    valorMin: '',
+    valorMax: ''
+  });
+  
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   
@@ -169,26 +184,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [visualMode, setVisualMode] = useState<'individual' | 'equipe'>('equipe');
   const [selectedPeriod, setSelectedPeriod] = useState('todos');
 
-  // Estados para Relatórios - movidos para nível principal
-  const [reportFilters, setReportFilters] = useState({
-    dataInicio: '',
-    dataFim: '',
-    vendedor: '',
-    status: '',
-    tipo: 'completo',
-    operadora: '',
-    plano: '',
-    tipoContrato: '',
-    uf: '',
-    cidade: '',
-    valorMin: '',
-    valorMax: '',
-    vidasMin: '',
-    vidasMax: '',
-    searchQuery: ''
-  });
+  // Estados para Relatórios já definidos acima
   const [reportFormat, setReportFormat] = useState('pdf');
-  const [isGenerating, setIsGenerating] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
 
   // Salvar filtros no localStorage quando alterados
@@ -1778,10 +1775,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Sistema de Relatórios Profissional Completo
   const renderReports = () => {
-    // Estados para o sistema de relatórios
-    const [showPreview, setShowPreview] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [clientObservations, setClientObservations] = useState<Record<string, string>>({});
     
     // Lista de vendedores reais do sistema
     const realVendors = [
