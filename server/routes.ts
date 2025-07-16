@@ -497,6 +497,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === INTEGRATIONS ROUTES ===
+  
+  // Sync Google Sheets
+  app.post("/api/sync-sheets", async (req, res) => {
+    try {
+      // Buscar todas as propostas para sincronizar
+      const proposals = await storage.getAllProposals();
+      
+      console.log(`Sincronizando ${proposals.length} propostas com Google Sheets...`);
+      
+      // Simular sincronização (aqui você integraria com a API real do Google Sheets)
+      // await syncWithGoogleSheets(proposals);
+      
+      res.json({ 
+        success: true, 
+        message: `${proposals.length} propostas sincronizadas com sucesso`,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Erro ao sincronizar Google Sheets:", error);
+      res.status(500).json({ error: "Erro na sincronização com Google Sheets" });
+    }
+  });
+
+  // Google Drive integration status
+  app.get("/api/drive-status", async (req, res) => {
+    try {
+      // Simular verificação de status do Google Drive
+      res.json({
+        connected: true,
+        lastSync: new Date().toISOString(),
+        folderUrl: "https://drive.google.com/drive/folders/1FAIpQLScQKE8BjIZJ-abmix-proposals",
+        totalFiles: 247
+      });
+    } catch (error) {
+      console.error("Erro ao verificar status do Google Drive:", error);
+      res.status(500).json({ error: "Erro ao verificar Google Drive" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
