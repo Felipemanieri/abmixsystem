@@ -530,6 +530,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const { data: teamStats = {}, isLoading: teamStatsLoading } = useQuery({
     queryKey: ['/api/analytics/team', selectedMonth, selectedYear],
     queryFn: () => apiRequest(`/api/analytics/team?month=${selectedMonth}&year=${selectedYear}`),
+    refetchInterval: 1000,
   });
 
   // Mutation para criar vendedor
@@ -724,7 +725,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   const formatCurrency = (value: string) => {
     if (!value || value === '0') return 'R$ 0,00';
-    const numValue = parseFloat(value.replace(/[^\d]/g, '')) / 100;
+    const numValue = parseFloat(value.replace(/[^\d]/g, ''));
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'

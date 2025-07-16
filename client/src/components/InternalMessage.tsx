@@ -28,6 +28,8 @@ interface InternalMessageProps {
 }
 
 const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, currentUser }) => {
+  // Garantir que currentUser tenha valores padrão
+  const safeCurrentUser = currentUser || { name: 'Usuário', role: 'user' };
   const [activeTab, setActiveTab] = useState<'inbox' | 'sent' | 'compose'>('inbox');
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,8 +45,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       id: '1',
       sender: 'Ana Caroline',
       senderRole: 'vendor',
-      recipient: currentUser.name,
-      recipientRole: currentUser.role,
+      recipient: safeCurrentUser.name,
+      recipientRole: safeCurrentUser.role,
       subject: 'Proposta VEND001-PROP123',
       content: 'Olá! Precisamos verificar os documentos da proposta VEND001-PROP123. O cliente está com dúvidas sobre o processo de carência.',
       timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
@@ -54,8 +56,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       id: '2',
       sender: 'Carlos Silva',
       senderRole: 'financial',
-      recipient: currentUser.name,
-      recipientRole: currentUser.role,
+      recipient: safeCurrentUser.name,
+      recipientRole: safeCurrentUser.role,
       subject: 'Validação pendente',
       content: 'Por favor, verifique a proposta VEND002-PROP124 que está aguardando validação há 3 dias. Precisamos finalizar até amanhã.',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 horas atrás
@@ -65,8 +67,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       id: '3',
       sender: 'Bruna Garcia',
       senderRole: 'implantacao',
-      recipient: currentUser.name,
-      recipientRole: currentUser.role,
+      recipient: safeCurrentUser.name,
+      recipientRole: safeCurrentUser.role,
       subject: 'Documentação incompleta',
       content: 'A proposta VEND003-PROP126 está com documentação incompleta. Falta o comprovante de residência e a carteirinha do plano atual. Por favor, solicite ao cliente.',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 dia atrás
@@ -77,8 +79,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     },
     {
       id: '4',
-      sender: currentUser.name,
-      senderRole: currentUser.role,
+      sender: safeCurrentUser.name,
+      senderRole: safeCurrentUser.role,
       recipient: 'Ana Caroline',
       recipientRole: 'vendor',
       subject: 'Re: Proposta VEND001-PROP123',
@@ -90,8 +92,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
 
   const filteredMessages = messages.filter(message => {
     // Filtrar por caixa de entrada ou enviados
-    if (activeTab === 'inbox' && message.recipient !== currentUser.name) return false;
-    if (activeTab === 'sent' && message.sender !== currentUser.name) return false;
+    if (activeTab === 'inbox' && message.recipient !== safeCurrentUser.name) return false;
+    if (activeTab === 'sent' && message.sender !== safeCurrentUser.name) return false;
     
     // Filtrar por termo de busca
     if (searchTerm) {
