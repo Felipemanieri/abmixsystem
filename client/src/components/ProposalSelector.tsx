@@ -38,94 +38,41 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
     retry: false,
   });
 
-  const mockProposals: ProposalItem[] = [
-    {
-      id: 'VEND001-PROP123',
-      abmId: 'ABM001',
-      client: 'Tech Solutions Ltda',
-      vendor: 'Ana Caroline Terto',
-      plan: 'Plano Empresarial Premium',
-      value: 'R$ 1.250,00',
-      status: 'analise',
-      submissionDate: '2024-01-15',
-      documents: 8,
-      priority: 'high',
-      progress: 85
-    },
-    {
-      id: 'VEND002-PROP124',
-      abmId: 'ABM002',
-      client: 'Inovação Digital Corp',
-      vendor: 'Bruna Garcia',
-      plan: 'Plano Família Premium',
-      value: 'R$ 890,00',
-      status: 'pendencia',
-      submissionDate: '2024-01-14',
-      documents: 6,
-      priority: 'medium',
-      progress: 60
-    },
-    {
-      id: 'VEND003-PROP125',
-      abmId: 'ABM003',
-      client: 'Construtora Alpha',
-      vendor: 'Fabiana Ferreira',
-      plan: 'Plano Individual Plus',
-      value: 'R$ 450,00',
-      status: 'implantado',
-      submissionDate: '2024-01-13',
-      documents: 12,
-      priority: 'low',
-      progress: 100
-    },
-    {
-      id: 'VEND004-PROP126',
-      abmId: 'ABM004',
-      client: 'Startup Moderna',
-      vendor: 'Gabrielle Fernandes',
-      plan: 'Plano Empresarial Standard',
-      value: 'R$ 780,00',
-      status: 'assinatura_proposta',
-      submissionDate: '2024-01-12',
-      documents: 9,
-      priority: 'high',
-      progress: 75
-    },
-    {
-      id: 'VEND005-PROP127',
-      abmId: 'ABM005',
-      client: 'Consultoria Avançada',
-      vendor: 'Isabela Velasquez',
-      plan: 'Plano Família Standard',
-      value: 'R$ 650,00',
-      status: 'aguar_pagamento',
-      submissionDate: '2024-01-11',
-      documents: 7,
-      priority: 'medium',
-      progress: 90
-    },
-    {
-      id: 'VEND006-PROP128',
-      abmId: 'ABM006',
-      client: 'Mercado Central S/A',
-      vendor: 'Fernanda Costa',
-      plan: 'Plano Empresarial Premium',
-      value: 'R$ 1.400,00',
-      status: 'observacao',
-      submissionDate: '2024-01-10',
-      documents: 5,
-      priority: 'high',
-      progress: 45
-    }
-  ];
+  // Buscar propostas reais do banco de dados
+  const { data: apiProposals = [], isLoading } = useQuery({
+    queryKey: ['/api/proposals'],
+    queryFn: () => apiRequest('/api/proposals'),
+    retry: false,
+  });
+
+  // Converter propostas da API para formato do selector
+  const realProposals: ProposalItem[] = apiProposals.map((proposal: any) => {
+    const contractData = proposal.contractData || {};
+    const vendor = vendors.find((v: any) => v.id === proposal.vendorId);
+    const vendorName = vendor ? vendor.name : proposal.vendorName || 'Vendedor Não Identificado';
+    
+    return {
+      id: proposal.id,
+      abmId: proposal.abmId || `ABM${proposal.id.slice(-3)}`,
+      client: contractData.nomeEmpresa || 'Cliente Não Identificado',
+      vendor: vendorName,
+      plan: contractData.planoContratado || 'Plano Não Especificado',
+      value: contractData.valor ? `R$ ${parseFloat(contractData.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'Valor Não Definido',
+      status: proposal.status || 'observacao',
+      submissionDate: proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR'),
+      documents: (proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0),
+      priority: proposal.priority || 'medium',
+      progress: proposal.clientCompleted ? 100 : 20
+    };
+  });
 
   // Obter lista única de vendedores das propostas + vendedores do banco de dados
   const allVendorNames = Array.from(new Set([
-    ...mockProposals.map(p => p.vendor),
+    ...realProposals.map(p => p.vendor),
     ...vendors.map((v: any) => v.name)
   ]));
 
-  const filteredProposals = mockProposals.filter(proposal => {
+  const filteredProposals = realProposals.filter(proposal => {
     const matchesSearch = 
       proposal.abmId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       proposal.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -170,8 +117,8 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      <div className="absolute inset-y-0 right-0 max-w-full flex">
-        <div className="w-screen max-w-4xl">
+      <div className="absolute inset-0 flex">
+        <div className="w-full h-full">
           <div className="h-full flex flex-col bg-white shadow-xl">
             {/* Header */}
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
@@ -250,11 +197,20 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
             {/* Results */}
             <div className="flex-1 overflow-y-auto">
               <div className="px-6 py-4">
-                <div className="text-sm text-gray-600 mb-4">
-                  {filteredProposals.length} proposta(s) encontrada(s)
-                </div>
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600">Carregando propostas...</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-sm text-gray-600 mb-4">
+                      {filteredProposals.length} proposta(s) encontrada(s)
+                    </div>
 
-                <div className="space-y-4">
+                    <div className="space-y-4">
                   {filteredProposals.map((proposal) => (
                     <div
                       key={proposal.id}
@@ -324,14 +280,16 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                       </div>
                     </div>
                   ))}
-                </div>
+                    </div>
 
-                {filteredProposals.length === 0 && (
-                  <div className="text-center py-12">
-                    <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta encontrada</h3>
-                    <p className="text-gray-600">Tente ajustar os filtros de busca</p>
-                  </div>
+                    {filteredProposals.length === 0 && (
+                      <div className="text-center py-12">
+                        <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta encontrada</h3>
+                        <p className="text-gray-600">Tente ajustar os filtros de busca</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
