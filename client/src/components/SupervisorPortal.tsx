@@ -2535,7 +2535,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <h3 className="text-lg font-semibold">Propostas ({filteredProposals.length})</h3>
         </div>
         
-        {/* Filtros organizados - 3 por linha para economizar espaço */}
+        {/* Filtros compactos em linha única */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
@@ -2555,10 +2555,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </button>
           </div>
           
-          {/* Uma única linha com 3 filtros */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          {/* Três filtros em linha única - Vendedor, Status, Data */}
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Vendedor</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Vendedor</label>
               <select
                 value={filterVendor}
                 onChange={(e) => setFilterVendor(e.target.value)}
@@ -2572,7 +2572,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
@@ -2586,12 +2586,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
             
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Data</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Data</label>
               <input
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="dd/mm/aaaa"
               />
             </div>
           </div>
