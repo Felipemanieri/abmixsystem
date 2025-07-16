@@ -65,6 +65,39 @@ export default function PlanilhaViewer() {
 
   const { maxTitulares, maxDependentes } = getMaxCounts();
 
+  // Função para extrair TODOS os campos dinâmicos automaticamente
+  const extrairTodosCamposDinamicos = (obj: any, prefix: string = ''): any => {
+    const campos: any = {};
+    
+    if (!obj || typeof obj !== 'object') return campos;
+    
+    Object.keys(obj).forEach(key => {
+      const valor = obj[key];
+      const nomeCompleto = prefix ? `${prefix}_${key.toUpperCase()}` : key.toUpperCase();
+      
+      if (valor !== null && valor !== undefined) {
+        if (typeof valor === 'object' && !Array.isArray(valor)) {
+          // Expandir objetos aninhados
+          const camposAninhados = extrairTodosCamposDinamicos(valor, nomeCompleto);
+          Object.assign(campos, camposAninhados);
+        } else if (Array.isArray(valor)) {
+          // Arrays - contar quantidade e extrair dados
+          campos[`${nomeCompleto}_QUANTIDADE`] = valor.length;
+          if (valor.length > 0) {
+            campos[`${nomeCompleto}_LISTA`] = valor.map((item: any) => 
+              typeof item === 'object' ? JSON.stringify(item) : String(item)
+            ).join('; ');
+          }
+        } else {
+          // Valores primitivos
+          campos[nomeCompleto] = String(valor);
+        }
+      }
+    });
+    
+    return campos;
+  };
+
   const formatarDados = () => {
     return proposals.map((proposal: any) => {
       const contractData = proposal.contractData || {};
@@ -74,9 +107,9 @@ export default function PlanilhaViewer() {
       const vendorAttachments = proposal.vendorAttachments || [];
       const clientAttachments = proposal.clientAttachments || [];
 
-      // ESTRUTURA HORIZONTAL FIXA - UMA EMPRESA = UMA LINHA
+      // ESTRUTURA HORIZONTAL COMPLETA - UMA EMPRESA = UMA LINHA
       const linhaUnica = {
-        // === IDENTIFICAÇÃO ===
+        // === IDENTIFICAÇÃO BÁSICA ===
         ID: proposal.abmId || proposal.id?.substring(0, 8) || '',
         ID_COMPLETO: proposal.id || '',
         CLIENT_TOKEN: proposal.clientToken || '',
@@ -151,6 +184,7 @@ export default function PlanilhaViewer() {
         
         // === LOGS E HISTÓRICO ===
         HISTORICO_STATUS: proposal.historicoStatus ? JSON.stringify(proposal.historicoStatus) : '',
+        HISTORICO_MUDANCAS: proposal.historicoMudancas ? JSON.stringify(proposal.historicoMudancas) : '',
         ULTIMA_INTERACAO: proposal.ultimaInteracao || '',
         TOTAL_ALTERACOES: proposal.totalAlteracoes || 0,
       };
@@ -248,8 +282,14 @@ export default function PlanilhaViewer() {
         }
       });
 
-      // Adicionar todos os campos extras encontrados
-      Object.assign(linhaUnica, extraFields);
+      // === EXTRAÇÃO AUTOMÁTICA DE TODOS OS CAMPOS DINÂMICOS ===
+      // Usar a função de extração dinâmica para pegar TODOS os campos automaticamente
+      const camposContractData = extrairTodosCamposDinamicos(contractData, 'CONTRACT');
+      const camposInternalData = extrairTodosCamposDinamicos(internalData, 'INTERNAL');
+      const camposProposalExtra = extrairTodosCamposDinamicos(proposal, 'PROPOSAL');
+      
+      // Adicionar todos os campos extras e dinâmicos encontrados
+      Object.assign(linhaUnica, extraFields, camposContractData, camposInternalData, camposProposalExtra);
 
       return linhaUnica;
     });
@@ -394,7 +434,7 @@ export default function PlanilhaViewer() {
           <h4 className="font-semibold text-gray-900 mb-3">🗂️ Campos Incluídos na Planilha (Total: {colunas.length})</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="space-y-2">
-              <div className="font-medium text-blue-800">📋 Campos Básicos (25)</div>
+              <div className="font-medium text-blue-800">📋 Campos Básicos (30+)</div>
               <div className="text-xs text-gray-600 space-y-1">
                 <div>• ID_COMPLETO, CLIENT_TOKEN</div>
                 <div>• EMPRESA, CNPJ, PLANO, VALOR</div>
@@ -403,6 +443,8 @@ export default function PlanilhaViewer() {
                 <div>• DATAS (Criação, Atualização, Vigência)</div>
                 <div>• CONFIGURAÇÕES (Compulsório, Odonto, etc.)</div>
                 <div>• DADOS INTERNOS (Reunião, Observações)</div>
+                <div>• COTAÇÃO (Vidas, Operadora, Arquivo)</div>
+                <div>• FINANCEIRO (Pagamento, Descontos)</div>
                 <div>• STATUS COMPLETUDE, PROGRESSO</div>
                 <div>• CONTADORES (Titulares, Dependentes, Anexos)</div>
               </div>
