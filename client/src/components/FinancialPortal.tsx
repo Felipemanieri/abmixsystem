@@ -49,6 +49,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [receivedReports, setReceivedReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showReportsBox, setShowReportsBox] = useState(false);
+  const [reportDateFilter, setReportDateFilter] = useState('all');
   
   // Ativar sincronização em tempo real
   useEffect(() => {
@@ -258,7 +260,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
       {/* Caixa de Relatórios Recebidos do Supervisor */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
+        <div 
+          className="p-6 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => setShowReportsBox(!showReportsBox)}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -266,105 +271,140 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Relatórios do Supervisor</h3>
-                <p className="text-sm text-gray-500">Relatórios recebidos automaticamente</p>
+                <p className="text-sm text-gray-500">
+                  {receivedReports.length === 0 
+                    ? "Clique para acessar relatórios" 
+                    : `${receivedReports.length} relatório(s) disponível(eis)`
+                  }
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                {receivedReports.filter(r => r.status === 'received').length} Novos
-              </span>
+              {receivedReports.length > 0 && (
+                <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                  {receivedReports.filter(r => r.status === 'received').length} Novos
+                </span>
+              )}
+              <div className={`transform transition-transform ${showReportsBox ? 'rotate-180' : ''}`}>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
         
-        <div className="p-6">
-          {receivedReports.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-8 w-8 text-gray-400" />
+        {showReportsBox && (
+          <div className="p-6">
+            {/* Filtros de Data */}
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Filtros</h4>
+                <select
+                  value={reportDateFilter}
+                  onChange={(e) => setReportDateFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">Todos os períodos</option>
+                  <option value="today">Hoje</option>
+                  <option value="week">Esta semana</option>
+                  <option value="month">Este mês</option>
+                  <option value="quarter">Este trimestre</option>
+                </select>
               </div>
-              <h4 className="text-lg font-medium text-gray-900 mb-2">Aguardando Relatórios</h4>
-              <p className="text-gray-500 mb-1">Nenhum relatório recebido do supervisor ainda</p>
-              <p className="text-sm text-gray-400">Quando o supervisor enviar relatórios, eles aparecerão aqui para análise</p>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {receivedReports.map((report) => (
-                <div key={report.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h4 className="text-sm font-semibold text-gray-900">{report.title}</h4>
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                          report.status === 'received' 
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {report.status === 'received' ? 'Novo' : 'Processado'}
-                        </span>
+
+            {receivedReports.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-8 w-8 text-gray-400" />
+                </div>
+                <h4 className="text-lg font-medium text-gray-900 mb-2">Aguardando Relatórios</h4>
+                <p className="text-gray-500 mb-1">Nenhum relatório recebido do supervisor ainda</p>
+                <p className="text-sm text-gray-400">Quando o supervisor enviar relatórios, eles aparecerão aqui para análise</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {receivedReports.map((report) => (
+                  <div key={report.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h4 className="text-sm font-semibold text-gray-900">{report.title}</h4>
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                            report.status === 'received' 
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {report.status === 'received' ? 'Novo' : 'Processado'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mb-3">
+                          Recebido em {new Date(report.receivedAt).toLocaleDateString('pt-BR')} às {new Date(report.receivedAt).toLocaleTimeString('pt-BR')}
+                        </p>
+                        
+                        {/* Botão para visualizar relatório completo */}
+                        <button
+                          onClick={() => handleViewReport(report)}
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          Visualizar Relatório Completo
+                        </button>
                       </div>
-                      <p className="text-xs text-gray-500 mb-3">
-                        Recebido em {new Date(report.receivedAt).toLocaleDateString('pt-BR')} às {new Date(report.receivedAt).toLocaleTimeString('pt-BR')}
-                      </p>
-                      
-                      {/* Botão para visualizar relatório completo */}
-                      <button
-                        onClick={() => handleViewReport(report)}
-                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors mb-3"
-                      >
-                        <Eye className="h-4 w-4 mr-2" />
-                        Visualizar Relatório Completo
-                      </button>
+                    </div>
+                    
+                    {/* Ações do Relatório */}
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <h5 className="text-xs font-medium text-gray-700 mb-2">Ações do Relatório</h5>
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                        <button
+                          onClick={() => handleDownloadReport(report.id)}
+                          className="flex flex-col items-center p-2 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors"
+                        >
+                          <Download className="h-4 w-4 text-blue-600 mb-1" />
+                          <span className="text-blue-700 text-xs">Baixar</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleEmailReport(report.id)}
+                          className="flex flex-col items-center p-2 bg-green-100 hover:bg-green-200 rounded-md transition-colors"
+                        >
+                          <Mail className="h-4 w-4 text-green-600 mb-1" />
+                          <span className="text-green-700 text-xs">Email</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleViewInDrive(report.id)}
+                          className="flex flex-col items-center p-2 bg-purple-100 hover:bg-purple-200 rounded-md transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4 text-purple-600 mb-1" />
+                          <span className="text-purple-700 text-xs">Google Drive</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleViewInSheets(report.id)}
+                          className="flex flex-col items-center p-2 bg-yellow-100 hover:bg-yellow-200 rounded-md transition-colors"
+                        >
+                          <BarChart3 className="h-4 w-4 text-yellow-600 mb-1" />
+                          <span className="text-yellow-700 text-xs">Google Sheets</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleWhatsAppShare(report.id)}
+                          className="flex flex-col items-center p-2 bg-emerald-100 hover:bg-emerald-200 rounded-md transition-colors"
+                        >
+                          <MessageSquare className="h-4 w-4 text-emerald-600 mb-1" />
+                          <span className="text-emerald-700 text-xs">WhatsApp</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Botões de Ação */}
-                  <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-                    <button
-                      onClick={() => handleDownloadReport(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
-                    >
-                      <Download className="h-3 w-3 mr-1" />
-                      Baixar
-                    </button>
-                    
-                    <button
-                      onClick={() => handleEmailReport(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 transition-colors"
-                    >
-                      <Mail className="h-3 w-3 mr-1" />
-                      Email
-                    </button>
-                    
-                    <button
-                      onClick={() => handleViewInDrive(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-100 rounded-md hover:bg-purple-200 transition-colors"
-                    >
-                      <ExternalLink className="h-3 w-3 mr-1" />
-                      Google Drive
-                    </button>
-                    
-                    <button
-                      onClick={() => handleViewInSheets(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-md hover:bg-yellow-200 transition-colors"
-                    >
-                      <BarChart3 className="h-3 w-3 mr-1" />
-                      Google Sheets
-                    </button>
-                    
-                    <button
-                      onClick={() => handleWhatsAppShare(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 rounded-md hover:bg-emerald-200 transition-colors"
-                    >
-                      <MessageSquare className="h-3 w-3 mr-1" />
-                      WhatsApp
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Recent Transactions */}
