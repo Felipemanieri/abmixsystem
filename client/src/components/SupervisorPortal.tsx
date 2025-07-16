@@ -10,6 +10,7 @@ import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
+import StatusBadge from './StatusBadge';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient as queryClientInstance } from '@/lib/queryClient';
 import { showNotification } from '@/utils/notifications';
@@ -2692,12 +2693,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       {contractData.valor || 'R$ 0,00'}
                     </td>
                     <td className="py-3 px-4">
-                      <span 
-                        className={`px-2 py-1 rounded text-xs font-medium ${statusConfig.bgColor} ${statusConfig.textColor}`}
-                        title={`Status: ${statusConfig.label} - ${statusConfig.description}`}
-                      >
-                        {statusConfig.label}
-                      </span>
+                      <StatusBadge 
+                        status={currentStatus}
+                      />
                     </td>
                     <td className="py-3 px-4">
                       <select
@@ -3025,9 +3023,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           <td className="border border-gray-300 p-3 font-semibold">R$ {item.valor}</td>
                           <td className="border border-gray-300 p-3">{item.plano}</td>
                           <td className="border border-gray-300 p-3">
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                              {item.status.toUpperCase()}
-                            </span>
+                            <StatusBadge 
+                              status={item.status as ProposalStatus}
+                            />
                           </td>
                           <td className="border border-gray-300 p-3">{item.desconto}</td>
                           <td className="border border-gray-300 p-3">
