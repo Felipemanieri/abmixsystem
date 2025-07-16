@@ -198,10 +198,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             if (draftData.lastSaved) {
               setLastSaved(draftData.lastSaved);
             }
+          } else {
+            // Se não há rascunho, definir um lastSaved inicial para mostrar o botão
+            setLastSaved(new Date().toISOString());
             
 
-          } else {
-            localStorage.removeItem(draftKey);
           }
         } catch (error) {
           console.error('Erro ao carregar rascunho:', error);

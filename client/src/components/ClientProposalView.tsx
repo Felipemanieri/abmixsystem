@@ -154,8 +154,9 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             }
             
             setLastSaved(draftData.lastSaved);
-
           } else {
+            // Se não há rascunho, definir um lastSaved inicial para mostrar o botão
+            setLastSaved(new Date().toISOString());
             localStorage.removeItem(draftKey);
             initializeWithProposalData(proposalData);
           }
@@ -167,6 +168,8 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
       } else {
         // Inicializar com dados da proposta se não há rascunho
         initializeWithProposalData(proposalData);
+        // Definir um lastSaved inicial para mostrar o botão
+        setLastSaved(new Date().toISOString());
       }
       
       setIsLoadingDraft(false);
