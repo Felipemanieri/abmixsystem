@@ -185,6 +185,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             setInternalData(draftData.internalData);
           }
           
+          // Restaurar lastSaved
+          if (draftData.lastSaved) {
+            setLastSaved(draftData.lastSaved);
+          }
+          
           showNotification('Rascunho carregado automaticamente', 'info');
         } catch (error) {
           console.error('Erro ao carregar rascunho:', error);
@@ -312,6 +317,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     }
 
     try {
+      const now = new Date().toISOString();
       const draftData = {
         vendorId: currentVendor.id,
         contractData: contractData,
@@ -319,12 +325,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         dependentes: dependentes,
         internalData: internalData,
         attachments: vendorAttachments,
-        isDraft: true
+        isDraft: true,
+        lastSaved: now
       };
 
       // Salvar no localStorage para manter enquanto não finaliza
       const draftKey = `proposal_draft_${currentVendor.id}`;
       localStorage.setItem(draftKey, JSON.stringify(draftData));
+      setLastSaved(now);
 
       showNotification('Proposta salva como rascunho com sucesso!', 'success');
     } catch (error) {

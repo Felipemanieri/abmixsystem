@@ -349,6 +349,24 @@ The application provides role-based portals with specific functionality:
   - **Implementação em todos os formulários**: ProposalGenerator, ClientProposalView, ProposalForm
   - **Interface em português**: Todas as mensagens e notificações em português brasileiro
 
+### Sistema de Auto-Save Completo Implementado (Jan 16, 2025)
+- **Auto-save completo funcionando em ambos os formulários**:
+  - VendorPortal (ProposalGenerator): Auto-save automático a cada mudança nos dados
+  - ClientProposalView (formulário via link): Auto-save automático a cada mudança
+  - Ambos salvam automaticamente no localStorage com timestamp
+  - Indicadores visuais de salvamento no header de ambos os formulários
+  - Botão de lixeira para limpar rascunho em ambos os formulários
+  - Recuperação automática de rascunho ao retornar aos formulários
+  - Limpeza automática do rascunho após envio bem-sucedido
+
+- **Funcionalidades implementadas**:
+  - Auto-save imediato a cada alteração de campo (contractData, titulares, dependentes, internalData)
+  - Indicador visual "Salvo automaticamente às HH:MM" no header
+  - Botão de lixeira (Trash2) ao lado do indicador para limpar rascunho
+  - Carregamento automático do rascunho ao abrir o formulário
+  - Notificações de sucesso quando rascunho é carregado ou limpo
+  - Sistema funciona independentemente para cada vendedor e cada cliente (por token)
+
 - **Credenciais dos Portais**:
   - **Supervisor**: supervisao@abmix.com.br - Senha: 123456
   - **Financeiro**: financeiro@abmix.com.br - Senha: 123456
