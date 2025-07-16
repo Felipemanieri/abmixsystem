@@ -177,6 +177,30 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
     }
   };
 
+  const handleCameraCapture = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      handleFileUpload(files);
+    };
+    input.click();
+  };
+
+  const handleGallerySelect = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.onchange = (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      handleFileUpload(files);
+    };
+    input.click();
+  };
+
   const removeAttachment = (index: number) => {
     setClientAttachments(prev => prev.filter((_, i) => i !== index));
   };
@@ -810,7 +834,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     </label>
                     
                     <button
-                      onClick={() => setUploadMethod('camera')}
+                      onClick={handleCameraCapture}
                       className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
                     >
                       <Camera className="h-5 w-5 mr-2" />
@@ -818,7 +842,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     </button>
                     
                     <button
-                      onClick={() => setUploadMethod('gallery')}
+                      onClick={handleGallerySelect}
                       className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
                     >
                       <Image className="h-5 w-5 mr-2" />
