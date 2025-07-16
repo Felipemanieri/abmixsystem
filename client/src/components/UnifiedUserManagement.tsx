@@ -132,12 +132,15 @@ export default function UnifiedUserManagement() {
     return matchesPanel && matchesSearch;
   });
 
-  // Debug: Log data to console
-  console.log('Active panel:', activePanel);
-  console.log('All users:', allUsers);
-  console.log('Vendors:', vendors);
-  console.log('Combined users:', allCombinedUsers);
-  console.log('Filtered users:', filteredUsers);
+  // Calculate user counts for each panel
+  const getUserCountByPanel = (panelKey: string) => {
+    return allCombinedUsers.filter(user => user.panel === panelKey).length;
+  };
+
+  // Debug: Only log when data is loading
+  if (isLoading) {
+    console.log('Loading user data...');
+  }
 
   // Create user mutation
   const createUserMutation = useMutation({
@@ -196,8 +199,10 @@ export default function UnifiedUserManagement() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/vendors'] });
+      // Force immediate refetch for instant UI update
+      refetch();
+      queryClient.refetchQueries({ queryKey: ['/api/system-users'] });
+      queryClient.refetchQueries({ queryKey: ['/api/vendors'] });
     }
   });
 
@@ -325,7 +330,7 @@ export default function UnifiedUserManagement() {
               >
                 <Icon className="w-5 h-5 mx-auto mb-1" />
                 <div className="text-sm font-medium">{panel.name}</div>
-                <div className="text-xs opacity-75">{filteredUsers.length}</div>
+                <div className="text-xs opacity-75">{getUserCountByPanel(key)}</div>
               </button>
             );
           })}
