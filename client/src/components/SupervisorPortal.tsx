@@ -2869,32 +2869,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       <header className="bg-white shadow-sm border-b">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-8">
-            {/* Logo apenas icone */}
+            {/* Logo Abmix */}
             <div className="flex-shrink-0">
-              <div className="w-10 h-10">
-                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M50 0C22.4 0 0 22.4 0 50h50V0Z" fill="url(#paint0_linear)" />
-                  <path d="M50 100C77.6 100 100 77.6 100 50H50V100Z" fill="url(#paint1_linear)" />
-                  <path d="M50 0C77.6 0 100 22.4 100 50H50V0Z" fill="url(#paint2_linear)" />
-                  <path d="M50 15C30.67 15 15 30.67 15 50H50V15Z" fill="white" />
-                  <path d="M50 85C69.33 85 85 69.33 85 50H50V85Z" fill="white" />
-                  <path d="M50 15C69.33 15 85 30.67 85 50H50V15Z" fill="white" />
-                  <defs>
-                    <linearGradient id="paint0_linear" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#0AB3B8" />
-                      <stop offset="1" stopColor="#0ACFB8" />
-                    </linearGradient>
-                    <linearGradient id="paint1_linear" x1="50" y1="50" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#0AB3B8" />
-                      <stop offset="1" stopColor="#0ABFB8" />
-                    </linearGradient>
-                    <linearGradient id="paint2_linear" x1="50" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#9CA3AF" />
-                      <stop offset="1" stopColor="#4B5563" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-10 w-auto"
+              />
             </div>
             
             {/* Texto separado */}
