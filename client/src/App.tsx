@@ -39,6 +39,9 @@ function App() {
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
+  const [showClientPortal, setShowClientPortal] = useState(() => {
+    return localStorage.getItem('showClientPortal') !== 'false';
+  });
 
   // Check for client proposal token in URL
   useEffect(() => {
@@ -162,7 +165,15 @@ function App() {
                 />
               </div>
               <button
-                onClick={() => setCurrentPortal('restricted')}
+                onClick={() => {
+                  const restrictedUser: User = {
+                    id: 'admin',
+                    name: 'Administrador',
+                    role: 'restricted',
+                    email: 'admin@abmix.com.br'
+                  };
+                  handleLogin(restrictedUser);
+                }}
                 className="flex items-center px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition-colors shadow-sm"
               >
                 <Lock className="w-4 h-4 mr-2" />
@@ -225,12 +236,13 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16 px-4">
-          {/* Portal do Cliente */}
-          <div 
-            onClick={() => setCurrentPortal('client')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400"
-          >
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${showClientPortal ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-8 mb-16 px-4`}>
+          {/* Portal do Cliente - Condicional */}
+          {showClientPortal && (
+            <div 
+              onClick={() => setCurrentPortal('client')}
+              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400"
+            >
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
@@ -247,6 +259,7 @@ function App() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Portal Vendedor */}
           <div 
