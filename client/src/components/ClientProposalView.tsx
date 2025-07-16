@@ -67,27 +67,38 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   const [showVendorObservations, setShowVendorObservations] = useState(false);
   const [uploadMethod, setUploadMethod] = useState<'file' | 'camera' | 'gallery'>('file');
   const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [isLoadingDraft, setIsLoadingDraft] = useState(false);
 
   useEffect(() => {
     fetchProposal();
   }, [token]);
 
-  // Auto-save: salvar dados automaticamente a cada mudança
+  // Auto-save: salvar dados automaticamente a cada mudança com debounce
   useEffect(() => {
-    if (proposal && !loading && !isSubmitting) {
-      const now = new Date().toISOString();
-      const draftData = {
-        titulares: titulares,
-        dependentes: dependentes,
-        isDraft: true,
-        lastSaved: now
-      };
+    if (proposal && !loading && !isSubmitting && !isLoadingDraft) {
+      const timeoutId = setTimeout(() => {
+        // Verificar se há dados realmente preenchidos antes de salvar
+        const hasData = titulares.some(t => t.nomeCompleto) ||
+                        dependentes.some(d => d.nomeCompleto);
+        
+        if (hasData) {
+          const now = new Date().toISOString();
+          const draftData = {
+            titulares: titulares,
+            dependentes: dependentes,
+            isDraft: true,
+            lastSaved: now
+          };
 
-      const draftKey = `client_draft_${token}`;
-      localStorage.setItem(draftKey, JSON.stringify(draftData));
-      setLastSaved(now);
+          const draftKey = `client_draft_${token}`;
+          localStorage.setItem(draftKey, JSON.stringify(draftData));
+          setLastSaved(now);
+        }
+      }, 500); // Debounce de 500ms
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [titulares, dependentes, token, proposal, loading, isSubmitting]);
+  }, [titulares, dependentes, token, proposal, loading, isSubmitting, isLoadingDraft]);
 
   const initializeWithProposalData = (proposalData: any) => {
     if (proposalData.titulares && proposalData.titulares.length > 0) {
@@ -113,6 +124,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
       setProposal(proposalData);
       
       // Verificar se existe rascunho salvo no localStorage
+      setIsLoadingDraft(true);
       const draftKey = `client_draft_${token}`;
       const savedDraft = localStorage.getItem(draftKey);
       
@@ -120,23 +132,32 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
         try {
           const draftData = JSON.parse(savedDraft);
           
-          // Usar dados do rascunho se existirem
-          if (draftData.titulares && draftData.titulares.length > 0) {
-            setTitulares(draftData.titulares);
-          } else if (proposalData.titulares && proposalData.titulares.length > 0) {
-            setTitulares(proposalData.titulares);
+          // Verificar se há dados realmente preenchidos
+          const hasData = draftData.titulares?.some((t: any) => t.nomeCompleto) ||
+                          draftData.dependentes?.some((d: any) => d.nomeCompleto);
+          
+          if (hasData) {
+            // Usar dados do rascunho se existirem
+            if (draftData.titulares && draftData.titulares.length > 0) {
+              setTitulares(draftData.titulares);
+            } else if (proposalData.titulares && proposalData.titulares.length > 0) {
+              setTitulares(proposalData.titulares);
+            } else {
+              setTitulares([createEmptyPerson('1')]);
+            }
+            
+            if (draftData.dependentes) {
+              setDependentes(draftData.dependentes);
+            } else if (proposalData.dependentes) {
+              setDependentes(proposalData.dependentes);
+            }
+            
+            setLastSaved(draftData.lastSaved);
+            showNotification('Rascunho carregado automaticamente', 'info');
           } else {
-            setTitulares([createEmptyPerson('1')]);
+            localStorage.removeItem(draftKey);
+            initializeWithProposalData(proposalData);
           }
-          
-          if (draftData.dependentes) {
-            setDependentes(draftData.dependentes);
-          } else if (proposalData.dependentes) {
-            setDependentes(proposalData.dependentes);
-          }
-          
-          setLastSaved(draftData.lastSaved);
-          showNotification('Rascunho carregado automaticamente', 'info');
         } catch (error) {
           console.error('Erro ao carregar rascunho:', error);
           // Usar dados originais da proposta se o rascunho falhar
@@ -146,6 +167,8 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
         // Inicializar com dados da proposta se não há rascunho
         initializeWithProposalData(proposalData);
       }
+      
+      setIsLoadingDraft(false);
 
       setLoading(false);
     } catch (error) {
