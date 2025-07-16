@@ -319,7 +319,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const implantacaoStats = [
     {
       name: 'Aguardando Validação',
-      value: proposals.filter(p => p.status === 'pending_validation').length.toString(),
+      value: realProposals.filter(p => p.status === 'AGUARDANDO_VALIDACAO').length.toString(),
       change: 'Para revisar',
       changeType: 'warning',
       icon: AlertCircle,
@@ -327,7 +327,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Validadas',
-      value: proposals.filter(p => p.status === 'validated').length.toString(),
+      value: realProposals.filter(p => p.status === 'VALIDADO').length.toString(),
       change: 'Prontas para envio',
       changeType: 'positive',
       icon: CheckCircle,
@@ -335,7 +335,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Em Processamento',
-      value: proposals.filter(p => p.status === 'processing').length.toString(),
+      value: realProposals.filter(p => p.status === 'PROCESSAMENTO').length.toString(),
       change: 'Automação ativa',
       changeType: 'positive',
       icon: Settings,
@@ -343,7 +343,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Concluídas',
-      value: proposals.filter(p => p.status === 'completed').length.toString(),
+      value: realProposals.filter(p => p.status === 'IMPLANTADO').length.toString(),
       change: 'Finalizadas',
       changeType: 'positive',
       icon: TrendingUp,
