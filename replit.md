@@ -154,6 +154,15 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Planilha Única Horizontal - Estrutura Linear (Jan 16, 2025)
+- **Implementada nova estrutura de planilha única sem abas**:
+  - Uma empresa = Uma linha completa na planilha
+  - Campos para múltiplos titulares (TITULAR1_, TITULAR2_, TITULAR3_) na mesma linha
+  - Campos para múltiplos dependentes (DEPENDENTE1_, DEPENDENTE2_, etc.) na mesma linha
+  - Campos vazios permanecem [vazio] ao invés de criar linhas separadas
+  - Estrutura horizontal expansível conforme necessidade
+  - Sincronização automática com Google Sheets em formato linear
+
 ### Correções Críticas de Interface e Persistência (Jan 16, 2025)
 - **Corrigido erro de inicialização no SupervisorPortal**:
   - Erro "Cannot access 'proposalPriorities' before initialization" resolvido

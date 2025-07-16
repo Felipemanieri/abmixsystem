@@ -246,6 +246,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate horizontal sheet format for all proposals
+  app.get("/api/proposals/sheet", async (req, res) => {
+    try {
+      const { formatProposalsToSheet, getSheetHeaders } = await import("@shared/sheetsFormatter");
+      const proposals = await storage.getAllProposals();
+      
+      // Get headers and data in horizontal format
+      const headers = getSheetHeaders();
+      const sheetData = formatProposalsToSheet(proposals);
+      
+      res.json({
+        headers,
+        data: sheetData,
+        totalRows: sheetData.length
+      });
+    } catch (error) {
+      console.error("Erro ao gerar planilha horizontal:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   // === VENDOR TARGETS ROUTES ===
   
   // Get all vendor targets
