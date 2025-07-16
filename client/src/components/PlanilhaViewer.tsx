@@ -46,119 +46,224 @@ export default function PlanilhaViewer() {
       const vendorAttachments = proposal.vendorAttachments || [];
       const clientAttachments = proposal.clientAttachments || [];
 
-      // Dados básicos da empresa e proposta
-      const linhaBase = {
-        // Identificação
+      // ESTRUTURA HORIZONTAL FIXA - UMA EMPRESA = UMA LINHA
+      const linhaUnica = {
+        // === IDENTIFICAÇÃO ===
         ID: proposal.abmId || proposal.id?.substring(0, 8) || '',
         ID_COMPLETO: proposal.id || '',
         CLIENT_TOKEN: proposal.clientToken || '',
         
-        // Dados da empresa
+        // === DADOS EMPRESA ===
         EMPRESA: contractData.nomeEmpresa || '',
         CNPJ: contractData.cnpj || '',
         PLANO: contractData.planoContratado || '',
         VALOR: contractData.valor || '',
         
-        // Dados do vendedor e controle
+        // === CONTROLE ===
         VENDEDOR_ID: proposal.vendorId || '',
         VENDEDOR: getVendorName(proposal.vendorId),
         STATUS: proposal.status || '',
         PRIORIDADE: proposal.priority || '',
         
-        // Datas
+        // === DATAS ===
         DATA_CRIACAO: new Date(proposal.createdAt).toLocaleDateString('pt-BR'),
         DATA_ATUALIZACAO: new Date(proposal.updatedAt).toLocaleDateString('pt-BR'),
         INICIO_VIGENCIA: contractData.inicioVigencia || '',
         
-        // Configurações do plano
+        // === CONFIGURAÇÕES PLANO ===
         COMPULSORIO: contractData.compulsorio ? 'SIM' : 'NÃO',
         ODONTO_CONJUGADO: contractData.odontoConjugado ? 'SIM' : 'NÃO',
         LIVRE_ADESAO: contractData.livreAdesao ? 'SIM' : 'NÃO',
         PERIODO_MIN_VIGENCIA: contractData.periodoMinVigencia || '',
         
-        // Dados internos do vendedor
-        DATA_REUNIAO: internalData.dataReuniao || '[vazio]',
-        OBSERVACOES_VENDEDOR: internalData.observacoesVendedor || '[vazio]',
-        AUTORIZADOR_DESCONTO: internalData.autorizadorDesconto || '[vazio]',
-        NOTAS_FINANCEIRAS: internalData.notasFinanceiras || '[vazio]',
+        // === DADOS INTERNOS VENDEDOR ===
+        DATA_REUNIAO: internalData.dataReuniao || '',
+        OBSERVACOES_VENDEDOR: internalData.observacoesVendedor || '',
+        AUTORIZADOR_DESCONTO: internalData.autorizadorDesconto || '',
+        NOTAS_FINANCEIRAS: internalData.notasFinanceiras || '',
         
-        // Status de completude
+        // === STATUS COMPLETUDE ===
         CLIENTE_COMPLETOU: proposal.clientCompleted ? 'SIM' : 'NÃO',
         PROGRESSO_PERCENT: proposal.progresso || 0,
         
-        // Contadores
+        // === CONTADORES ===
         TOTAL_TITULARES: titulares.length,
         TOTAL_DEPENDENTES: dependentes.length,
         TOTAL_ANEXOS_VENDEDOR: vendorAttachments.length,
         TOTAL_ANEXOS_CLIENTE: clientAttachments.length,
       };
 
-      // Adicionar dados dos titulares (COMPLETOS)
-      for (let i = 0; i < Math.max(3, titulares.length); i++) {
-        const titular = titulares[i] || {};
-        const prefix = `TITULAR${i + 1}_`;
-        Object.assign(linhaBase, {
-          [`${prefix}NOME_COMPLETO`]: titular.nomeCompleto || '[vazio]',
-          [`${prefix}CPF`]: titular.cpf || '[vazio]',
-          [`${prefix}RG`]: titular.rg || '[vazio]',
-          [`${prefix}DATA_NASCIMENTO`]: titular.dataNascimento || '[vazio]',
-          [`${prefix}NOME_MAE`]: titular.nomeMae || '[vazio]',
-          [`${prefix}SEXO`]: titular.sexo || '[vazio]',
-          [`${prefix}ESTADO_CIVIL`]: titular.estadoCivil || '[vazio]',
-          [`${prefix}PESO`]: titular.peso || '[vazio]',
-          [`${prefix}ALTURA`]: titular.altura || '[vazio]',
-          [`${prefix}EMAIL_PESSOAL`]: titular.emailPessoal || '[vazio]',
-          [`${prefix}TELEFONE_PESSOAL`]: titular.telefonePessoal || '[vazio]',
-          [`${prefix}EMAIL_EMPRESA`]: titular.emailEmpresa || '[vazio]',
-          [`${prefix}TELEFONE_EMPRESA`]: titular.telefoneEmpresa || '[vazio]',
-          [`${prefix}CEP`]: titular.cep || '[vazio]',
-          [`${prefix}ENDERECO_COMPLETO`]: titular.enderecoCompleto || '[vazio]',
-          [`${prefix}DADOS_REEMBOLSO`]: titular.dadosReembolso || '[vazio]',
-        });
-      }
-
-      // Adicionar dados dos dependentes (COMPLETOS)
-      for (let i = 0; i < Math.max(5, dependentes.length); i++) {
-        const dependente = dependentes[i] || {};
-        const prefix = `DEPENDENTE${i + 1}_`;
-        Object.assign(linhaBase, {
-          [`${prefix}NOME_COMPLETO`]: dependente.nomeCompleto || '[vazio]',
-          [`${prefix}CPF`]: dependente.cpf || '[vazio]',
-          [`${prefix}RG`]: dependente.rg || '[vazio]',
-          [`${prefix}DATA_NASCIMENTO`]: dependente.dataNascimento || '[vazio]',
-          [`${prefix}PARENTESCO`]: dependente.parentesco || '[vazio]',
-          [`${prefix}NOME_MAE`]: dependente.nomeMae || '[vazio]',
-          [`${prefix}SEXO`]: dependente.sexo || '[vazio]',
-          [`${prefix}ESTADO_CIVIL`]: dependente.estadoCivil || '[vazio]',
-          [`${prefix}PESO`]: dependente.peso || '[vazio]',
-          [`${prefix}ALTURA`]: dependente.altura || '[vazio]',
-          [`${prefix}EMAIL_PESSOAL`]: dependente.emailPessoal || '[vazio]',
-          [`${prefix}TELEFONE_PESSOAL`]: dependente.telefonePessoal || '[vazio]',
-          [`${prefix}EMAIL_EMPRESA`]: dependente.emailEmpresa || '[vazio]',
-          [`${prefix}TELEFONE_EMPRESA`]: dependente.telefoneEmpresa || '[vazio]',
-          [`${prefix}CEP`]: dependente.cep || '[vazio]',
-          [`${prefix}ENDERECO_COMPLETO`]: dependente.enderecoCompleto || '[vazio]',
-          [`${prefix}DADOS_REEMBOLSO`]: dependente.dadosReembolso || '[vazio]',
-        });
-      }
-
-      // Adicionar informações de anexos
-      vendorAttachments.forEach((attachment: any, index: number) => {
-        const prefix = `ANEXO_VENDEDOR${index + 1}_`;
-        Object.assign(linhaBase, {
-          [`${prefix}NOME`]: attachment.name || '[vazio]',
-          [`${prefix}TIPO`]: attachment.type || '[vazio]',
-          [`${prefix}TAMANHO`]: attachment.size || '[vazio]',
-        });
+      // === TITULAR 1 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const titular1 = titulares[0] || {};
+      Object.assign(linhaUnica, {
+        TITULAR1_NOME_COMPLETO: titular1.nomeCompleto || '',
+        TITULAR1_CPF: titular1.cpf || '',
+        TITULAR1_RG: titular1.rg || '',
+        TITULAR1_DATA_NASCIMENTO: titular1.dataNascimento || '',
+        TITULAR1_NOME_MAE: titular1.nomeMae || '',
+        TITULAR1_SEXO: titular1.sexo || '',
+        TITULAR1_ESTADO_CIVIL: titular1.estadoCivil || '',
+        TITULAR1_PESO: titular1.peso || '',
+        TITULAR1_ALTURA: titular1.altura || '',
+        TITULAR1_EMAIL_PESSOAL: titular1.emailPessoal || '',
+        TITULAR1_TELEFONE_PESSOAL: titular1.telefonePessoal || '',
+        TITULAR1_EMAIL_EMPRESA: titular1.emailEmpresa || '',
+        TITULAR1_TELEFONE_EMPRESA: titular1.telefoneEmpresa || '',
+        TITULAR1_CEP: titular1.cep || '',
+        TITULAR1_ENDERECO_COMPLETO: titular1.enderecoCompleto || '',
+        TITULAR1_DADOS_REEMBOLSO: titular1.dadosReembolso || '',
       });
 
-      clientAttachments.forEach((attachment: any, index: number) => {
-        const prefix = `ANEXO_CLIENTE${index + 1}_`;
-        Object.assign(linhaBase, {
-          [`${prefix}NOME`]: attachment.name || '[vazio]',
-          [`${prefix}TIPO`]: attachment.type || '[vazio]',
-          [`${prefix}TAMANHO`]: attachment.size || '[vazio]',
-        });
+      // === TITULAR 2 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const titular2 = titulares[1] || {};
+      Object.assign(linhaUnica, {
+        TITULAR2_NOME_COMPLETO: titular2.nomeCompleto || '',
+        TITULAR2_CPF: titular2.cpf || '',
+        TITULAR2_RG: titular2.rg || '',
+        TITULAR2_DATA_NASCIMENTO: titular2.dataNascimento || '',
+        TITULAR2_NOME_MAE: titular2.nomeMae || '',
+        TITULAR2_SEXO: titular2.sexo || '',
+        TITULAR2_ESTADO_CIVIL: titular2.estadoCivil || '',
+        TITULAR2_PESO: titular2.peso || '',
+        TITULAR2_ALTURA: titular2.altura || '',
+        TITULAR2_EMAIL_PESSOAL: titular2.emailPessoal || '',
+        TITULAR2_TELEFONE_PESSOAL: titular2.telefonePessoal || '',
+        TITULAR2_EMAIL_EMPRESA: titular2.emailEmpresa || '',
+        TITULAR2_TELEFONE_EMPRESA: titular2.telefoneEmpresa || '',
+        TITULAR2_CEP: titular2.cep || '',
+        TITULAR2_ENDERECO_COMPLETO: titular2.enderecoCompleto || '',
+        TITULAR2_DADOS_REEMBOLSO: titular2.dadosReembolso || '',
+      });
+
+      // === TITULAR 3 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const titular3 = titulares[2] || {};
+      Object.assign(linhaUnica, {
+        TITULAR3_NOME_COMPLETO: titular3.nomeCompleto || '',
+        TITULAR3_CPF: titular3.cpf || '',
+        TITULAR3_RG: titular3.rg || '',
+        TITULAR3_DATA_NASCIMENTO: titular3.dataNascimento || '',
+        TITULAR3_NOME_MAE: titular3.nomeMae || '',
+        TITULAR3_SEXO: titular3.sexo || '',
+        TITULAR3_ESTADO_CIVIL: titular3.estadoCivil || '',
+        TITULAR3_PESO: titular3.peso || '',
+        TITULAR3_ALTURA: titular3.altura || '',
+        TITULAR3_EMAIL_PESSOAL: titular3.emailPessoal || '',
+        TITULAR3_TELEFONE_PESSOAL: titular3.telefonePessoal || '',
+        TITULAR3_EMAIL_EMPRESA: titular3.emailEmpresa || '',
+        TITULAR3_TELEFONE_EMPRESA: titular3.telefoneEmpresa || '',
+        TITULAR3_CEP: titular3.cep || '',
+        TITULAR3_ENDERECO_COMPLETO: titular3.enderecoCompleto || '',
+        TITULAR3_DADOS_REEMBOLSO: titular3.dadosReembolso || '',
+      });
+
+      // === DEPENDENTE 1 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const dependente1 = dependentes[0] || {};
+      Object.assign(linhaUnica, {
+        DEPENDENTE1_NOME_COMPLETO: dependente1.nomeCompleto || '',
+        DEPENDENTE1_CPF: dependente1.cpf || '',
+        DEPENDENTE1_RG: dependente1.rg || '',
+        DEPENDENTE1_DATA_NASCIMENTO: dependente1.dataNascimento || '',
+        DEPENDENTE1_PARENTESCO: dependente1.parentesco || '',
+        DEPENDENTE1_NOME_MAE: dependente1.nomeMae || '',
+        DEPENDENTE1_SEXO: dependente1.sexo || '',
+        DEPENDENTE1_ESTADO_CIVIL: dependente1.estadoCivil || '',
+        DEPENDENTE1_PESO: dependente1.peso || '',
+        DEPENDENTE1_ALTURA: dependente1.altura || '',
+        DEPENDENTE1_EMAIL_PESSOAL: dependente1.emailPessoal || '',
+        DEPENDENTE1_TELEFONE_PESSOAL: dependente1.telefonePessoal || '',
+        DEPENDENTE1_EMAIL_EMPRESA: dependente1.emailEmpresa || '',
+        DEPENDENTE1_TELEFONE_EMPRESA: dependente1.telefoneEmpresa || '',
+        DEPENDENTE1_CEP: dependente1.cep || '',
+        DEPENDENTE1_ENDERECO_COMPLETO: dependente1.enderecoCompleto || '',
+        DEPENDENTE1_DADOS_REEMBOLSO: dependente1.dadosReembolso || '',
+      });
+
+      // === DEPENDENTE 2 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const dependente2 = dependentes[1] || {};
+      Object.assign(linhaUnica, {
+        DEPENDENTE2_NOME_COMPLETO: dependente2.nomeCompleto || '',
+        DEPENDENTE2_CPF: dependente2.cpf || '',
+        DEPENDENTE2_RG: dependente2.rg || '',
+        DEPENDENTE2_DATA_NASCIMENTO: dependente2.dataNascimento || '',
+        DEPENDENTE2_PARENTESCO: dependente2.parentesco || '',
+        DEPENDENTE2_NOME_MAE: dependente2.nomeMae || '',
+        DEPENDENTE2_SEXO: dependente2.sexo || '',
+        DEPENDENTE2_ESTADO_CIVIL: dependente2.estadoCivil || '',
+        DEPENDENTE2_PESO: dependente2.peso || '',
+        DEPENDENTE2_ALTURA: dependente2.altura || '',
+        DEPENDENTE2_EMAIL_PESSOAL: dependente2.emailPessoal || '',
+        DEPENDENTE2_TELEFONE_PESSOAL: dependente2.telefonePessoal || '',
+        DEPENDENTE2_EMAIL_EMPRESA: dependente2.emailEmpresa || '',
+        DEPENDENTE2_TELEFONE_EMPRESA: dependente2.telefoneEmpresa || '',
+        DEPENDENTE2_CEP: dependente2.cep || '',
+        DEPENDENTE2_ENDERECO_COMPLETO: dependente2.enderecoCompleto || '',
+        DEPENDENTE2_DADOS_REEMBOLSO: dependente2.dadosReembolso || '',
+      });
+
+      // === DEPENDENTE 3 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const dependente3 = dependentes[2] || {};
+      Object.assign(linhaUnica, {
+        DEPENDENTE3_NOME_COMPLETO: dependente3.nomeCompleto || '',
+        DEPENDENTE3_CPF: dependente3.cpf || '',
+        DEPENDENTE3_RG: dependente3.rg || '',
+        DEPENDENTE3_DATA_NASCIMENTO: dependente3.dataNascimento || '',
+        DEPENDENTE3_PARENTESCO: dependente3.parentesco || '',
+        DEPENDENTE3_NOME_MAE: dependente3.nomeMae || '',
+        DEPENDENTE3_SEXO: dependente3.sexo || '',
+        DEPENDENTE3_ESTADO_CIVIL: dependente3.estadoCivil || '',
+        DEPENDENTE3_PESO: dependente3.peso || '',
+        DEPENDENTE3_ALTURA: dependente3.altura || '',
+        DEPENDENTE3_EMAIL_PESSOAL: dependente3.emailPessoal || '',
+        DEPENDENTE3_TELEFONE_PESSOAL: dependente3.telefonePessoal || '',
+        DEPENDENTE3_EMAIL_EMPRESA: dependente3.emailEmpresa || '',
+        DEPENDENTE3_TELEFONE_EMPRESA: dependente3.telefoneEmpresa || '',
+        DEPENDENTE3_CEP: dependente3.cep || '',
+        DEPENDENTE3_ENDERECO_COMPLETO: dependente3.enderecoCompleto || '',
+        DEPENDENTE3_DADOS_REEMBOLSO: dependente3.dadosReembolso || '',
+      });
+
+      // === DEPENDENTE 4 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const dependente4 = dependentes[3] || {};
+      Object.assign(linhaUnica, {
+        DEPENDENTE4_NOME_COMPLETO: dependente4.nomeCompleto || '',
+        DEPENDENTE4_CPF: dependente4.cpf || '',
+        DEPENDENTE4_RG: dependente4.rg || '',
+        DEPENDENTE4_DATA_NASCIMENTO: dependente4.dataNascimento || '',
+        DEPENDENTE4_PARENTESCO: dependente4.parentesco || '',
+        DEPENDENTE4_NOME_MAE: dependente4.nomeMae || '',
+        DEPENDENTE4_SEXO: dependente4.sexo || '',
+        DEPENDENTE4_ESTADO_CIVIL: dependente4.estadoCivil || '',
+        DEPENDENTE4_PESO: dependente4.peso || '',
+        DEPENDENTE4_ALTURA: dependente4.altura || '',
+        DEPENDENTE4_EMAIL_PESSOAL: dependente4.emailPessoal || '',
+        DEPENDENTE4_TELEFONE_PESSOAL: dependente4.telefonePessoal || '',
+        DEPENDENTE4_EMAIL_EMPRESA: dependente4.emailEmpresa || '',
+        DEPENDENTE4_TELEFONE_EMPRESA: dependente4.telefoneEmpresa || '',
+        DEPENDENTE4_CEP: dependente4.cep || '',
+        DEPENDENTE4_ENDERECO_COMPLETO: dependente4.enderecoCompleto || '',
+        DEPENDENTE4_DADOS_REEMBOLSO: dependente4.dadosReembolso || '',
+      });
+
+      // === DEPENDENTE 5 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
+      const dependente5 = dependentes[4] || {};
+      Object.assign(linhaUnica, {
+        DEPENDENTE5_NOME_COMPLETO: dependente5.nomeCompleto || '',
+        DEPENDENTE5_CPF: dependente5.cpf || '',
+        DEPENDENTE5_RG: dependente5.rg || '',
+        DEPENDENTE5_DATA_NASCIMENTO: dependente5.dataNascimento || '',
+        DEPENDENTE5_PARENTESCO: dependente5.parentesco || '',
+        DEPENDENTE5_NOME_MAE: dependente5.nomeMae || '',
+        DEPENDENTE5_SEXO: dependente5.sexo || '',
+        DEPENDENTE5_ESTADO_CIVIL: dependente5.estadoCivil || '',
+        DEPENDENTE5_PESO: dependente5.peso || '',
+        DEPENDENTE5_ALTURA: dependente5.altura || '',
+        DEPENDENTE5_EMAIL_PESSOAL: dependente5.emailPessoal || '',
+        DEPENDENTE5_TELEFONE_PESSOAL: dependente5.telefonePessoal || '',
+        DEPENDENTE5_EMAIL_EMPRESA: dependente5.emailEmpresa || '',
+        DEPENDENTE5_TELEFONE_EMPRESA: dependente5.telefoneEmpresa || '',
+        DEPENDENTE5_CEP: dependente5.cep || '',
+        DEPENDENTE5_ENDERECO_COMPLETO: dependente5.enderecoCompleto || '',
+        DEPENDENTE5_DADOS_REEMBOLSO: dependente5.dadosReembolso || '',
       });
 
       return linhaBase;
