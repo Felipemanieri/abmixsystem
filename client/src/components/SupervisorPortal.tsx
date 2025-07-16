@@ -2274,61 +2274,68 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     </h4>
                   </div>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full text-sm table-fixed">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-3 py-2 text-left">ID</th>
-                          <th className="px-3 py-2 text-left">Cliente</th>
-                          <th className="px-3 py-2 text-left">CNPJ</th>
-                          <th className="px-3 py-2 text-left">Vendedor</th>
-                          <th className="px-3 py-2 text-left">Valor</th>
-                          <th className="px-3 py-2 text-left">Plano</th>
-                          <th className="px-3 py-2 text-left">Status</th>
-                          <th className="px-3 py-2 text-left">Desconto</th>
-                          <th className="px-3 py-2 text-left">Observações</th>
-                          <th className="px-3 py-2 text-left">Data</th>
+                          <th className="w-16 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">ID</th>
+                          <th className="w-32 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Cliente</th>
+                          <th className="w-24 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">CNPJ</th>
+                          <th className="w-24 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Vendedor</th>
+                          <th className="w-20 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Valor</th>
+                          <th className="w-20 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Plano</th>
+                          <th className="w-24 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Status</th>
+                          <th className="w-16 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Desconto</th>
+                          <th className="w-32 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Observações</th>
+                          <th className="w-20 px-2 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-100">Data</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {previewData.dadosDetalhados.map((proposal: any, index: number) => (
-                          <tr key={index} className="border-b border-gray-100">
-                            <td className="px-3 py-2 font-mono text-xs">{proposal.abmId}</td>
-                            <td className="px-3 py-2">
-                              {proposal.contractData?.nomeEmpresa || 
-                               proposal.titulares?.[0]?.nomeCompleto || 
-                               'Cliente não informado'}
-                            </td>
-                            <td className="px-3 py-2 text-xs">{proposal.contractData?.cnpj || 'N/A'}</td>
-                            <td className="px-3 py-2">{proposal.vendedor || 'N/A'}</td>
-                            <td className="px-3 py-2 font-medium">
-                              {formatCurrency(proposal.contractData?.valor || '0')}
-                            </td>
-                            <td className="px-3 py-2 text-xs">{proposal.contractData?.planoContratado || 'N/A'}</td>
-                            <td className="px-3 py-2">
-                              <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
-                                {STATUS_CONFIG[proposal.status as ProposalStatus]?.label || proposal.status}
-                              </span>
-                            </td>
-                            <td className="px-3 py-2 text-xs">
-                              {proposal.internalData?.desconto ? `${proposal.internalData.desconto}%` : '0%'}
-                            </td>
-                            <td className="px-3 py-2 text-xs max-w-32">
-                              <textarea
-                                value={editableObservations[proposal.id] || ''}
-                                onChange={(e) => setEditableObservations(prev => ({
-                                  ...prev,
-                                  [proposal.id]: e.target.value
-                                }))}
-                                placeholder="Adicionar observação..."
-                                className="w-full text-xs border border-gray-300 rounded px-2 py-1 resize-none"
-                                rows={2}
-                              />
-                            </td>
-                            <td className="px-3 py-2 text-xs">
-                              {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
-                            </td>
-                          </tr>
-                        ))}
+                        {previewData.dadosDetalhados.map((proposal: any, index: number) => {
+                          // Buscar vendedor pelos dados do hook useProposals
+                          const vendorName = filteredProposals.find(p => p.id === proposal.id)?.vendedor || 'N/D';
+                          
+                          return (
+                            <tr key={index} className="border-b border-gray-100">
+                              <td className="w-16 px-2 py-2 font-mono text-xs truncate">{proposal.abmId}</td>
+                              <td className="w-32 px-2 py-2 text-xs truncate" title={proposal.contractData?.nomeEmpresa || proposal.titulares?.[0]?.nomeCompleto || 'Cliente não informado'}>
+                                {proposal.contractData?.nomeEmpresa || 
+                                 proposal.titulares?.[0]?.nomeCompleto || 
+                                 'Cliente não informado'}
+                              </td>
+                              <td className="w-24 px-2 py-2 text-xs truncate">{proposal.contractData?.cnpj || 'N/A'}</td>
+                              <td className="w-24 px-2 py-2 text-xs truncate" title={vendorName}>{vendorName}</td>
+                              <td className="w-20 px-2 py-2 text-xs font-medium truncate">
+                                {formatCurrency(proposal.contractData?.valor || '0')}
+                              </td>
+                              <td className="w-20 px-2 py-2 text-xs truncate" title={proposal.contractData?.planoContratado || 'N/A'}>
+                                {proposal.contractData?.planoContratado || 'N/A'}
+                              </td>
+                              <td className="w-24 px-2 py-2">
+                                <span className="px-1 py-0.5 text-xs rounded-full bg-gray-100 text-gray-800 truncate">
+                                  {STATUS_CONFIG[proposal.status as ProposalStatus]?.label || proposal.status}
+                                </span>
+                              </td>
+                              <td className="w-16 px-2 py-2 text-xs text-center">
+                                {proposal.internalData?.desconto ? `${proposal.internalData.desconto}%` : '0%'}
+                              </td>
+                              <td className="w-32 px-2 py-2">
+                                <textarea
+                                  value={editableObservations[proposal.id] || ''}
+                                  onChange={(e) => setEditableObservations(prev => ({
+                                    ...prev,
+                                    [proposal.id]: e.target.value
+                                  }))}
+                                  placeholder="Adicionar observação..."
+                                  className="w-full text-xs border border-gray-300 rounded px-1 py-0.5 resize-none"
+                                  rows={1}
+                                />
+                              </td>
+                              <td className="w-20 px-2 py-2 text-xs">
+                                {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
