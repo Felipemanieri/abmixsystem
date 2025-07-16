@@ -119,11 +119,24 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     };
   }, [statusManager]);
 
-  const mockTransactions: Transaction[] = [
-    { id: '1', client: 'Empresa ABC', plan: 'Plano Premium', value: 'R$ 15.000', type: 'income', date: '2024-01-15', status: 'completed', category: 'subscription' },
-    { id: '2', client: 'Tech Solutions', plan: 'Plano Básico', value: 'R$ 8.500', type: 'income', date: '2024-01-14', status: 'pending', category: 'subscription' },
-    { id: '3', client: 'StartupXYZ', plan: 'Consultoria', value: 'R$ 12.000', type: 'income', date: '2024-01-13', status: 'completed', category: 'consulting' },
-  ];
+  // Gerar transações reais baseadas nas propostas
+  const realTransactions: Transaction[] = (realProposals || []).map(proposal => {
+    const contractData = proposal.contractData || {};
+    const value = contractData.valor ? `R$ ${contractData.valor}` : 'R$ 0';
+    const isCompleted = proposal.status === 'implantado';
+    const isPending = ['aguar_pagamento', 'aguar_selecao_vigencia', 'aguar_vigencia'].includes(proposal.status);
+    
+    return {
+      id: proposal.id,
+      client: contractData.nomeEmpresa || 'Cliente não informado',
+      plan: contractData.planoContratado || 'Plano não informado',
+      value: value,
+      type: 'income' as const,
+      date: proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR'),
+      status: isCompleted ? 'completed' as const : isPending ? 'pending' as const : 'pending' as const,
+      category: 'subscription'
+    };
+  });
 
   const mockProposals = [
     { id: '1', client: 'Empresa ABC', value: 'R$ 25.000', status: 'approved', date: '2024-01-10' },
@@ -137,20 +150,33 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     { id: '3', name: 'StartupXYZ', plan: 'Consultoria', value: 'R$ 12.000/projeto', status: 'pending' },
   ];
 
-  const filteredTransactions = mockTransactions.filter(transaction => {
+  const filteredTransactions = realTransactions.filter(transaction => {
     const matchesCategory = selectedCategory === 'all' || transaction.category === selectedCategory;
     const matchesSearch = transaction.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          transaction.plan.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const totalIncome = mockTransactions
+  // Função para formatar moeda
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
+  const totalIncome = realTransactions
     .filter(t => t.type === 'income' && t.status === 'completed')
     .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
 
-  const totalPending = mockTransactions
+  const totalPending = realTransactions
     .filter(t => t.status === 'pending')
     .reduce((sum, t) => sum + parseFloat(t.value.replace('R$ ', '').replace('.', '').replace(',', '.')), 0);
+
+  // Calcular taxa de conversão real
+  const totalProposals = realTransactions.length;
+  const completedProposals = realTransactions.filter(t => t.status === 'completed').length;
+  const conversionRate = totalProposals > 0 ? Math.round((completedProposals / totalProposals) * 100) : 0;
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
     setSelectedProposalForAutomation({ id: proposalId, client: clientName });
@@ -246,7 +272,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Receita Total</p>
-              <p className="text-2xl font-bold text-gray-900">R$ {totalIncome.toLocaleString('pt-BR')}</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalIncome)}</p>
             </div>
             <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
               <DollarSign className="h-6 w-6 text-green-600" />
@@ -263,14 +289,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Pendente</p>
-              <p className="text-2xl font-bold text-gray-900">R$ {totalPending.toLocaleString('pt-BR')}</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalPending)}</p>
             </div>
             <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
               <AlertCircle className="h-6 w-6 text-yellow-600" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-gray-500">{mockTransactions.filter(t => t.status === 'pending').length} transações</span>
+            <span className="text-gray-500">{realTransactions.filter(t => t.status === 'pending').length} transações</span>
           </div>
         </div>
 
@@ -278,7 +304,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Clientes Ativos</p>
-              <p className="text-2xl font-bold text-gray-900">{mockClients.filter(c => c.status === 'active').length}</p>
+              <p className="text-2xl font-bold text-gray-900">{realTransactions.filter(t => t.status === 'completed').length}</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <Users className="h-6 w-6 text-blue-600" />
@@ -294,7 +320,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Taxa de Conversão</p>
-              <p className="text-2xl font-bold text-gray-900">68%</p>
+              <p className="text-2xl font-bold text-gray-900">{conversionRate}%</p>
             </div>
             <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-purple-600" />
