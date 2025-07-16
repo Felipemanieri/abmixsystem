@@ -70,9 +70,20 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     realTimeSync.enableAggressivePolling();
   }, []);
 
+  // Queries primeiro
+  const { data: vendors = [], isLoading: vendorsLoading, refetch: refetchVendors } = useQuery({
+    queryKey: ['/api/vendors'],
+    refetchInterval: 1000,
+  });
+
+  const { data: proposals = [], isLoading: proposalsLoading, refetch: refetchProposals } = useQuery({
+    queryKey: ['/api/proposals'],
+    refetchInterval: 1000,
+  });
+
   // Efeito para monitorar mudanças nos vendedores e atualizar gráfico
   useEffect(() => {
-    if (vendors.length > 0 && proposals.length > 0) {
+    if (vendors && vendors.length > 0 && proposals && proposals.length > 0) {
       // Forçar recálculo dos dados do gráfico quando vendedores ou propostas mudam
       console.log('Sincronizando dados: Vendedores atualizado:', vendors.length, 'Propostas:', proposals.length);
       
