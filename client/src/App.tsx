@@ -330,19 +330,23 @@ function App() {
           {/* Portal Supervisor */}
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-orange-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-orange-400"
+            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-500"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-orange-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-orange-300 rounded-3xl transition-all duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-400 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-orange-200 group-hover:to-orange-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Zap className="w-8 h-8 text-orange-600" />
+              <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-gray-200 group-hover:to-gray-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
+                <img 
+                  src="/e56c6d42-ff7e-4f8e-a4cc-bb304b9efeb6_1752651616701.png" 
+                  alt="Supervisor" 
+                  className="w-8 h-8 object-contain"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-orange-600 transition-colors">Portal Supervisor</h3>
+              <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-gray-600 transition-colors">Portal Supervisor</h3>
               <p className="text-gray-600 mb-6 leading-relaxed font-medium">
                 Supervisão e relatórios gerenciais
               </p>
-              <div className="flex items-center text-orange-700 font-bold group-hover:text-orange-800 transition-colors">
+              <div className="flex items-center text-gray-700 font-bold group-hover:text-gray-800 transition-colors">
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Acessar Portal
               </div>
