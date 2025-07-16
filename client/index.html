@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Abmix Consultoria em Benefícios</title>
-    <meta name="description" content="Abmix Consultoria em Benefícios - Sistema de gestão de propostas e planos de saúde" />
-    <meta property="og:title" content="Abmix Consultoria em Benefícios" />
-    <meta property="og:description" content="Sistema de gestão de propostas e planos de saúde" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
-    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
-  </body>
-</html>
+import express from "express";
+import path from "path";
+
+const app = express();
+
+// 🔥 Serve os arquivos estáticos do frontend (gerados pelo Vite)
+app.use(express.static(path.resolve("dist", "public")));
+
+// 🔥 Para qualquer rota, devolve sempre o index.html (SPA React)
+app.get("*", (_, res) => {
+  res.sendFile(path.resolve("dist", "public", "index.html"));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
