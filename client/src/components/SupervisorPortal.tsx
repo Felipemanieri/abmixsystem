@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Share2, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail } from 'lucide-react';
 import { format, isWithinInterval, subDays, subMonths, subWeeks, parseISO } from 'date-fns';
 import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, Area, AreaChart, Pie } from 'recharts';
 import AbmixLogo from './AbmixLogo';
@@ -1336,7 +1336,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <h3 className="text-base font-medium text-gray-700">Filtros</h3>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Vendedores */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2">Vendedores</label>
@@ -1356,29 +1356,26 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </select>
               </div>
 
-              {/* Período */}
+              {/* Data Início */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Período</label>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Data Início</label>
-                    <input
-                      type="date"
-                      value={dataInicio}
-                      onChange={(e) => setDataInicio(e.target.value)}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Data Fim</label>
-                    <input
-                      type="date"
-                      value={dataFim}
-                      onChange={(e) => setDataFim(e.target.value)}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
+                <label className="block text-sm text-gray-600 mb-2">Data Início</label>
+                <input
+                  type="date"
+                  value={dataInicio}
+                  onChange={(e) => setDataInicio(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Data Fim */}
+              <div>
+                <label className="block text-sm text-gray-600 mb-2">Data Fim</label>
+                <input
+                  type="date"
+                  value={dataFim}
+                  onChange={(e) => setDataFim(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
               </div>
 
               {/* Status */}
@@ -1807,7 +1804,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <h3 className="text-base font-medium text-gray-700">Filtros</h3>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Vendedores */}
               <div>
                 <label className="block text-sm text-gray-600 mb-2">Vendedores</label>
@@ -1823,29 +1820,26 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </select>
               </div>
 
-              {/* Período */}
+              {/* Data Início */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Período</label>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Data Início</label>
-                    <input
-                      type="date"
-                      value={reportFilters.dataInicio}
-                      onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Data Fim</label>
-                    <input
-                      type="date"
-                      value={reportFilters.dataFim}
-                      onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                </div>
+                <label className="block text-sm text-gray-600 mb-2">Data Início</label>
+                <input
+                  type="date"
+                  value={reportFilters.dataInicio}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Data Fim */}
+              <div>
+                <label className="block text-sm text-gray-600 mb-2">Data Fim</label>
+                <input
+                  type="date"
+                  value={reportFilters.dataFim}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
               </div>
 
               {/* Status */}
@@ -1912,59 +1906,107 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Preview dos Dados */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <BarChart3 size={20} />
-            Preview dos Dados ({filteredData.length} registros)
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <p className="text-sm text-blue-600 font-medium">TOTAL DE PROPOSTAS</p>
-              <p className="text-3xl font-bold text-blue-700">{reportData.total}</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <p className="text-sm text-green-600 font-medium">FATURAMENTO TOTAL</p>
-              <p className="text-3xl font-bold text-green-700">{formatCurrency(reportData.faturamento.toString())}</p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <p className="text-sm text-purple-600 font-medium">TICKET MÉDIO</p>
-              <p className="text-3xl font-bold text-purple-700">
-                {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
-              </p>
-            </div>
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-base font-medium text-gray-700 flex items-center gap-2">
+              <BarChart3 size={16} />
+              Preview dos Dados ({filteredData.length} registros)
+            </h3>
           </div>
-
-          {/* Resumo por Status */}
-          <div className="mb-6">
-            <h4 className="font-semibold mb-3">Distribuição por Status</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {Object.entries(reportData.porStatus).map(([status, count]) => (
-                <div key={status} className="bg-gray-50 p-3 rounded-lg text-center">
-                  <p className="text-sm text-gray-600">{status}</p>
-                  <p className="text-xl font-bold">{count}</p>
-                </div>
-              ))}
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="bg-gray-50 p-4 rounded-md">
+                <p className="text-sm text-gray-600 font-medium">TOTAL DE PROPOSTAS</p>
+                <p className="text-2xl font-semibold text-gray-800">{reportData.total}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <p className="text-sm text-gray-600 font-medium">FATURAMENTO TOTAL</p>
+                <p className="text-2xl font-semibold text-gray-800">{formatCurrency(reportData.faturamento.toString())}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <p className="text-sm text-gray-600 font-medium">TICKET MÉDIO</p>
+                <p className="text-2xl font-semibold text-gray-800">
+                  {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Resumo por Vendedor */}
-          <div>
-            <h4 className="font-semibold mb-3">Top 5 Vendedores</h4>
-            <div className="space-y-2">
-              {Object.entries(reportData.porVendedor)
-                .sort(([,a], [,b]) => b.count - a.count)
-                .slice(0, 5)
-                .map(([vendor, data]) => (
-                <div key={vendor} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-                  <span className="font-medium">{vendor}</span>
-                  <div className="text-right">
-                    <span className="font-bold">{data.count} propostas</span>
-                    <br />
-                    <span className="text-sm text-gray-600">{formatCurrency(data.value.toString())}</span>
+            {/* Resumo por Status */}
+            <div className="mb-6">
+              <h4 className="text-sm font-medium text-gray-700 mb-3">Distribuição por Status</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {Object.entries(reportData.porStatus).map(([status, count]) => (
+                  <div key={status} className="bg-gray-50 p-3 rounded-md text-center">
+                    <p className="text-xs text-gray-600 uppercase">{status}</p>
+                    <p className="text-lg font-semibold text-gray-800">{count}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Resumo por Vendedor */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 mb-3">Top 5 Vendedores</h4>
+              <div className="space-y-2">
+                {Object.entries(reportData.porVendedor)
+                  .sort(([,a], [,b]) => b.count - a.count)
+                  .slice(0, 5)
+                  .map(([vendor, data]) => (
+                  <div key={vendor} className="flex justify-between items-center bg-gray-50 p-3 rounded-md">
+                    <span className="text-sm font-medium text-gray-700">{vendor}</span>
+                    <div className="text-right">
+                      <span className="text-sm font-semibold text-gray-800">{data.count} propostas</span>
+                      <br />
+                      <span className="text-xs text-gray-600">{formatCurrency(data.value.toString())}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Exportação e Compartilhamento */}
+        <div className="bg-white border border-gray-200 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-base font-medium text-gray-700 flex items-center gap-2">
+              <Share2 size={16} />
+              Exportação e Compartilhamento
+            </h3>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                onClick={() => window.open('https://docs.google.com/spreadsheets', '_blank')}
+                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+              >
+                <FileText size={20} />
+                <span className="text-sm font-medium">Exportar PDF</span>
+              </button>
+              
+              <button
+                onClick={() => window.open('https://docs.google.com/spreadsheets', '_blank')}
+                className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+              >
+                <Download size={20} />
+                <span className="text-sm font-medium">Exportar Excel</span>
+              </button>
+              
+              <button
+                onClick={() => window.open('mailto:?subject=Relatório Abmix&body=Segue em anexo o relatório solicitado.', '_blank')}
+                className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+              >
+                <Mail size={20} />
+                <span className="text-sm font-medium">Enviar Email</span>
+              </button>
+              
+              <button
+                onClick={() => window.open('https://drive.google.com', '_blank')}
+                className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+              >
+                <ExternalLink size={20} />
+                <span className="text-sm font-medium">Subir Drive</span>
+              </button>
             </div>
           </div>
         </div>
