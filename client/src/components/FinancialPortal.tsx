@@ -9,6 +9,7 @@ import ClientForm from './ClientForm';
 import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
+import SystemFooter from './SystemFooter';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
@@ -1265,6 +1266,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           </div>
         </div>
       )}
+      
+      {/* System Footer */}
+      <SystemFooter />
     </div>
   );
 };

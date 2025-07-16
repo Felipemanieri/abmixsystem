@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut, Settings, TrendingUp, CheckCircle, AlertCircle, Eye, Send, Calendar, FileText, User, Bell, MessageCircle, MessageSquare, Bot, X, Send as SendIcon, Zap, Filter, Search, Download, Upload, Trash2, Edit, Plus, ArrowLeft, RefreshCw, Link, Copy, Mail, Share2, ExternalLink, Phone } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
+import SystemFooter from './SystemFooter';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
@@ -1358,6 +1359,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </button>
         )}
       </div>
+      
+      {/* System Footer */}
+      <SystemFooter />
     </div>
   );
 };

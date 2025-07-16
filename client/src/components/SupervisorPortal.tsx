@@ -9,6 +9,7 @@ import ProgressBar from './ProgressBar';
 import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
+import SystemFooter from './SystemFooter';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 import StatusBadge from './StatusBadge';
 import { apiRequest } from '@/lib/queryClient';
@@ -3186,6 +3187,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       {showInternalMessage && (
         <InternalMessage onClose={() => setShowInternalMessage(false)} />
       )}
+      
+      {/* System Footer */}
+      <SystemFooter />
     </div>
   );
 }

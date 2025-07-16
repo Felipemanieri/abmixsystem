@@ -9,6 +9,7 @@ import ProposalTracker from './ProposalTracker';
 import QuotationPanel from './QuotationPanel';
 import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
+import SystemFooter from './SystemFooter';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
@@ -1778,6 +1779,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           }}
         />
       )}
+      
+      {/* System Footer */}
+      <SystemFooter />
     </div>
   );
 };

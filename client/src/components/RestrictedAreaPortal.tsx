@@ -28,6 +28,7 @@ import {
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
 import UserManagementDashboard from './UserManagementDashboard';
+import SystemFooter from './SystemFooter';
 import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
@@ -843,6 +844,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           onClose={() => setShowUserManagementModal(false)} 
         />
       )}
+      
+      {/* System Footer */}
+      <SystemFooter />
     </div>
   );
 }
