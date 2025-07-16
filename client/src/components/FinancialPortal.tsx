@@ -51,6 +51,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [showReportModal, setShowReportModal] = useState(false);
   const [showReportsBox, setShowReportsBox] = useState(false);
   const [reportDateFilter, setReportDateFilter] = useState('all');
+  const [showExcelModal, setShowExcelModal] = useState(false);
+  const [excelReportData, setExcelReportData] = useState(null);
 
   // Carregar relatórios do localStorage ao inicializar
   useEffect(() => {
@@ -208,89 +210,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   // Função para visualizar relatório no formato Excel
   const handleViewExcel = (report: any) => {
-    // Criar uma janela modal com formato Excel
-    const excelContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Relatório Excel - ${report.title}</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          .excel-header { background: #217346; color: white; padding: 10px; text-align: center; font-weight: bold; }
-          .excel-table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-          .excel-table th, .excel-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-          .excel-table th { background: #f0f0f0; font-weight: bold; }
-          .excel-table tr:nth-child(even) { background: #f9f9f9; }
-          .summary-box { background: #e8f5e8; padding: 15px; border-left: 4px solid #217346; margin: 20px 0; }
-          .print-btn { background: #217346; color: white; padding: 10px 20px; border: none; margin: 10px 5px; cursor: pointer; }
-          .print-btn:hover { background: #1a5c37; }
-        </style>
-      </head>
-      <body>
-        <div class="excel-header">RELATÓRIO FINANCEIRO ABMIX - FORMATO EXCEL</div>
-        
-        <div class="summary-box">
-          <h3>📊 Resumo Executivo</h3>
-          <p><strong>Período:</strong> ${report.data.period}</p>
-          <p><strong>Total de Propostas:</strong> ${report.data.totalProposals}</p>
-          <p><strong>Valor Total:</strong> ${report.data.totalValue}</p>
-          <p><strong>Taxa de Conversão:</strong> ${report.data.conversionRate}</p>
-          <p><strong>Gerado em:</strong> ${new Date(report.receivedAt).toLocaleString('pt-BR')}</p>
-        </div>
-
-        <table class="excel-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>CLIENTE</th>
-              <th>CNPJ</th>
-              <th>VENDEDOR</th>
-              <th>VALOR</th>
-              <th>PLANO</th>
-              <th>STATUS</th>
-              <th>OBSERVAÇÕES</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${report.rawData ? report.rawData.map(item => `
-              <tr>
-                <td>${item.abmId}</td>
-                <td>${item.cliente}</td>
-                <td>${item.cnpj}</td>
-                <td>${item.vendedor}</td>
-                <td>${item.valor}</td>
-                <td>${item.plano}</td>
-                <td>${item.status.toUpperCase()}</td>
-                <td>${item.observacoes || ''}</td>
-              </tr>
-            `).join('') : '<tr><td colspan="8">Nenhum dado disponível</td></tr>'}
-          </tbody>
-        </table>
-
-        <div style="margin-top: 30px; text-align: center;">
-          <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
-          <button class="print-btn" onclick="downloadExcel()">📊 Baixar Excel</button>
-          <button class="print-btn" onclick="window.close()">❌ Fechar</button>
-        </div>
-
-        <script>
-          function downloadExcel() {
-            const table = document.querySelector('.excel-table');
-            const wb = XLSX.utils.table_to_book(table);
-            XLSX.writeFile(wb, 'relatorio_abmix_${Date.now()}.xlsx');
-          }
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-      </body>
-      </html>
-    `;
-
-    // Abrir em nova janela com formato Excel
-    const newWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=yes');
-    newWindow.document.write(excelContent);
-    newWindow.document.close();
-    
-    showNotification('Relatório aberto em formato Excel', 'success');
+    setExcelReportData(report);
+    setShowExcelModal(true);
+    showNotification('Relatório Excel aberto no painel', 'success');
   };
 
   // Função para simular recebimento de relatório do supervisor (para testes)
@@ -1171,6 +1093,150 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <span className="text-emerald-700 text-xs font-medium">WhatsApp</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Excel */}
+      {showExcelModal && excelReportData && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-7xl w-full max-h-[95vh] overflow-hidden">
+            {/* Header Excel */}
+            <div className="bg-green-700 text-white px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <FileText className="h-6 w-6" />
+                <h2 className="text-xl font-semibold">Relatório Excel - {excelReportData.title}</h2>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => {
+                    const printContent = document.getElementById('excel-content');
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                      <html><head><title>Relatório Excel</title>
+                      <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { border-collapse: collapse; width: 100%; }
+                        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                        th { background: #f0f0f0; font-weight: bold; }
+                        tr:nth-child(even) { background: #f9f9f9; }
+                      </style>
+                      </head><body>
+                      ${printContent.innerHTML}
+                      </body></html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm flex items-center gap-2"
+                >
+                  🖨️ Imprimir
+                </button>
+                <button
+                  onClick={() => {
+                    // Simular download Excel
+                    const csvData = [
+                      ['ID', 'CLIENTE', 'CNPJ', 'VENDEDOR', 'VALOR', 'PLANO', 'STATUS', 'OBSERVAÇÕES'],
+                      ...(excelReportData.rawData || []).map(item => [
+                        item.abmId, item.cliente, item.cnpj, item.vendedor, 
+                        item.valor, item.plano, item.status.toUpperCase(), item.observacoes || ''
+                      ])
+                    ].map(row => row.join(',')).join('\n');
+                    
+                    const blob = new Blob([csvData], { type: 'text/csv' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `relatorio_abmix_${Date.now()}.csv`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Relatório Excel baixado!', 'success');
+                  }}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded text-sm flex items-center gap-2"
+                >
+                  📊 Baixar Excel
+                </button>
+                <button
+                  onClick={() => setShowExcelModal(false)}
+                  className="text-white hover:text-gray-300 p-1"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Conteúdo Excel */}
+            <div className="p-6 overflow-y-auto max-h-[calc(95vh-100px)]" id="excel-content">
+              {/* Resumo Executivo */}
+              <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                <h3 className="text-lg font-semibold text-green-800 mb-3">📊 Resumo Executivo</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-700">Período:</span>
+                    <div className="text-green-700">{excelReportData.data.period}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Total Propostas:</span>
+                    <div className="text-green-700 font-bold">{excelReportData.data.totalProposals}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Valor Total:</span>
+                    <div className="text-green-700 font-bold">{excelReportData.data.totalValue}</div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Taxa Conversão:</span>
+                    <div className="text-green-700 font-bold">{excelReportData.data.conversionRate}</div>
+                  </div>
+                </div>
+                <div className="mt-3 text-xs text-gray-600">
+                  Gerado em: {new Date(excelReportData.receivedAt).toLocaleString('pt-BR')}
+                </div>
+              </div>
+
+              {/* Tabela Excel */}
+              <div className="border border-gray-300 rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">ID</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">CLIENTE</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">CNPJ</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">VENDEDOR</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">VALOR</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">PLANO</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">STATUS</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-xs font-bold text-gray-700 uppercase">OBSERVAÇÕES</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {excelReportData.rawData && excelReportData.rawData.length > 0 ? (
+                      excelReportData.rawData.map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">{item.abmId}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm font-medium">{item.cliente}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">{item.cnpj}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">{item.vendedor}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm font-bold">R$ {item.valor}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">{item.plano}</td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">
+                            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                              {item.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="border border-gray-300 px-3 py-2 text-sm">{item.observacoes || '-'}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" className="border border-gray-300 px-3 py-4 text-center text-gray-500">
+                          Nenhum dado disponível
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
