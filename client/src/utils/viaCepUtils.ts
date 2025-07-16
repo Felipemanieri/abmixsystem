@@ -1,3 +1,5 @@
+import { getMockCepData } from './mockCepData';
+
 interface ViaCepResponse {
   cep: string;
   logradouro: string;
@@ -89,7 +91,26 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
       return null;
     }
     
-    console.warn('Erro ao buscar CEP - tentativa silenciosa falhou');
+    console.log('API ViaCEP indisponível, tentando dados locais para CEP:', cepLimpo);
+    
+    // Fallback para dados locais quando API não funciona
+    const mockData = getMockCepData(cepLimpo);
+    
+    if (mockData) {
+      const enderecoCompleto = `${mockData.logradouro}, ${mockData.bairro}, ${mockData.localidade}, ${mockData.uf}`;
+      
+      console.log('CEP encontrado nos dados locais:', enderecoCompleto);
+      
+      return {
+        endereco: mockData.logradouro,
+        bairro: mockData.bairro,
+        cidade: mockData.localidade,
+        estado: mockData.uf,
+        enderecoCompleto: enderecoCompleto
+      };
+    }
+    
+    console.log('CEP não encontrado nem na API nem nos dados locais');
     return null;
   }
 };

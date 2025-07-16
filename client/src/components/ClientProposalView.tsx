@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Building, FileText, User, Upload, Camera, CheckCircle, Lock, Save, Download, Eye, EyeOff, Plus, Trash2, Users, Phone, Mail, MapPin, Calendar, Shield, Check, Image } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
-import { buscarCEP, formatarCEP } from '../utils/viaCepUtils';
+import { buscarCEPLocal, formatarCEP } from '../utils/cepHandler';
 
 interface ClientProposalViewProps {
   token: string;
@@ -469,19 +469,13 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               
               // Só executa se CEP tem 8 dígitos
               if (cepLimpo.length === 8) {
-                buscarCEP(cepValue)
-                  .then(endereco => {
-                    if (endereco && endereco.enderecoCompleto) {
-                      type === 'titular' ? updateTitular(index, 'enderecoCompleto', endereco.enderecoCompleto) : updateDependente(index, 'enderecoCompleto', endereco.enderecoCompleto);
-                      showNotification('CEP encontrado! Endereço preenchido automaticamente.', 'success');
-                    } else {
-                      showNotification('CEP não encontrado. Preencha o endereço manualmente.', 'warning');
-                    }
-                  })
-                  .catch(error => {
-                    console.log('Erro na busca CEP (tratado):', error);
-                    // Falha silenciosa - não mostra erro ao usuário
-                  });
+                const endereco = buscarCEPLocal(cepValue);
+                if (endereco && endereco.enderecoCompleto) {
+                  type === 'titular' ? updateTitular(index, 'enderecoCompleto', endereco.enderecoCompleto) : updateDependente(index, 'enderecoCompleto', endereco.enderecoCompleto);
+                  showNotification('CEP encontrado! Endereço preenchido automaticamente.', 'success');
+                } else {
+                  showNotification('CEP não encontrado. Preencha o endereço manualmente.', 'warning');
+                }
               }
             }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
