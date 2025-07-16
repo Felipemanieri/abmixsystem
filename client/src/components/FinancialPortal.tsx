@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail, Download, Share2, ExternalLink, Send, Copy } from 'lucide-react';
 import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -44,6 +44,40 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
+  
+  // Estado para relatórios recebidos do supervisor
+  const [receivedReports, setReceivedReports] = useState([
+    {
+      id: 'REL-001',
+      title: 'Relatório de Performance - Janeiro 2025',
+      receivedAt: new Date().toISOString(),
+      supervisor: 'Supervisor Geral',
+      status: 'received',
+      type: 'performance',
+      data: {
+        period: 'Janeiro 2025',
+        totalProposals: 45,
+        totalValue: 'R$ 1.250.000',
+        vendors: 12,
+        conversionRate: '72%'
+      }
+    },
+    {
+      id: 'REL-002', 
+      title: 'Análise de Metas - Dezembro 2024',
+      receivedAt: new Date(Date.now() - 86400000).toISOString(),
+      supervisor: 'Supervisor Geral',
+      status: 'processed',
+      type: 'targets',
+      data: {
+        period: 'Dezembro 2024',
+        totalProposals: 38,
+        totalValue: 'R$ 980.000',
+        vendors: 11,
+        conversionRate: '68%'
+      }
+    }
+  ]);
   
   // Ativar sincronização em tempo real
   useEffect(() => {
@@ -125,6 +159,51 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     setShowAutomationModal(true);
   };
 
+  // Funções para ações dos relatórios
+  const handleDownloadReport = (reportId: string) => {
+    showNotification('Download do relatório iniciado', 'success');
+    // Simular download
+    const report = receivedReports.find(r => r.id === reportId);
+    if (report) {
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${report.title}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  const handleEmailReport = (reportId: string) => {
+    showNotification('Email com relatório enviado', 'success');
+    // Aqui integraria com o SendGrid
+    const report = receivedReports.find(r => r.id === reportId);
+    if (report) {
+      const mailtoLink = `mailto:?subject=Relatório: ${report.title}&body=Segue em anexo o relatório solicitado.`;
+      window.open(mailtoLink);
+    }
+  };
+
+  const handleViewInDrive = (reportId: string) => {
+    showNotification('Abrindo no Google Drive', 'info');
+    window.open(`https://drive.google.com/drive/folders/reports/${reportId}`, '_blank');
+  };
+
+  const handleViewInSheets = (reportId: string) => {
+    showNotification('Abrindo no Google Sheets', 'info');
+    window.open(`https://docs.google.com/spreadsheets/d/reports_${reportId}`, '_blank');
+  };
+
+  const handleWhatsAppShare = (reportId: string) => {
+    showNotification('Compartilhando via WhatsApp', 'success');
+    const report = receivedReports.find(r => r.id === reportId);
+    if (report) {
+      const message = `*Relatório Financeiro*%0A%0A📊 ${report.title}%0A📅 Período: ${report.data.period}%0A💰 Valor Total: ${report.data.totalValue}%0A📈 Propostas: ${report.data.totalProposals}%0A🎯 Conversão: ${report.data.conversionRate}`;
+      window.open(`https://wa.me/?text=${message}`, '_blank');
+    }
+  };
+
   const renderDashboard = () => (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -191,6 +270,125 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             <span className="text-green-600">+5.2%</span>
             <span className="text-gray-500 ml-1">vs mês anterior</span>
           </div>
+        </div>
+      </div>
+
+      {/* Caixa de Relatórios Recebidos do Supervisor */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <FileText className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Relatórios do Supervisor</h3>
+                <p className="text-sm text-gray-500">Relatórios recebidos automaticamente</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                {receivedReports.filter(r => r.status === 'received').length} Novos
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-6">
+          {receivedReports.length === 0 ? (
+            <div className="text-center py-8">
+              <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500">Nenhum relatório recebido ainda</p>
+              <p className="text-sm text-gray-400 mt-1">Os relatórios enviados pelo supervisor aparecerão aqui</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {receivedReports.map((report) => (
+                <div key={report.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <h4 className="text-sm font-semibold text-gray-900">{report.title}</h4>
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                          report.status === 'received' 
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {report.status === 'received' ? 'Novo' : 'Processado'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 mb-3">
+                        Recebido em {new Date(report.receivedAt).toLocaleDateString('pt-BR')} às {new Date(report.receivedAt).toLocaleTimeString('pt-BR')}
+                      </p>
+                      
+                      {/* Resumo dos dados */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500">Período</p>
+                          <p className="text-sm font-medium text-gray-900">{report.data.period}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500">Propostas</p>
+                          <p className="text-sm font-medium text-gray-900">{report.data.totalProposals}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500">Valor Total</p>
+                          <p className="text-sm font-medium text-gray-900">{report.data.totalValue}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500">Conversão</p>
+                          <p className="text-sm font-medium text-gray-900">{report.data.conversionRate}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Botões de Ação */}
+                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+                    <button
+                      onClick={() => handleDownloadReport(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
+                    >
+                      <Download className="h-3 w-3 mr-1" />
+                      Baixar
+                    </button>
+                    
+                    <button
+                      onClick={() => handleEmailReport(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 rounded-md hover:bg-green-200 transition-colors"
+                    >
+                      <Mail className="h-3 w-3 mr-1" />
+                      Email
+                    </button>
+                    
+                    <button
+                      onClick={() => handleViewInDrive(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-100 rounded-md hover:bg-purple-200 transition-colors"
+                    >
+                      <ExternalLink className="h-3 w-3 mr-1" />
+                      Google Drive
+                    </button>
+                    
+                    <button
+                      onClick={() => handleViewInSheets(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-yellow-700 bg-yellow-100 rounded-md hover:bg-yellow-200 transition-colors"
+                    >
+                      <BarChart3 className="h-3 w-3 mr-1" />
+                      Google Sheets
+                    </button>
+                    
+                    <button
+                      onClick={() => handleWhatsAppShare(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 rounded-md hover:bg-emerald-200 transition-colors"
+                    >
+                      <MessageSquare className="h-3 w-3 mr-1" />
+                      WhatsApp
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
