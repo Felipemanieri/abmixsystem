@@ -1888,9 +1888,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
-              {/* Tipo de Relatório */}
-              <div className="lg:col-span-2">
+            {/* Filtros organizados em 2 por linha */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Primeira linha */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
                 <select
                   value={reportFilters.tipo}
@@ -1906,7 +1907,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </select>
               </div>
 
-              {/* Vendedor */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Vendedor</label>
                 <select
@@ -1921,7 +1921,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </select>
               </div>
 
-              {/* Status */}
+              {/* Segunda linha */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select
@@ -1936,7 +1936,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </select>
               </div>
 
-              {/* Data Início */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Data Início</label>
                 <input
@@ -1947,7 +1946,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 />
               </div>
 
-              {/* Data Fim */}
+              {/* Terceira linha */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Data Fim</label>
                 <input
@@ -1957,150 +1956,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
-            </div>
-            
-            {/* Filtros Rápidos */}
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 7), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
-                  >
-                    Últimos 7 dias
-                  </button>
-                  <button
-                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 30), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
-                  >
-                    Últimos 30 dias
-                  </button>
-                  <button
-                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subMonths(new Date(), 1), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
-                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
-                  >
-                    Mês atual
-                  </button>
-                </div>
+
+              <div className="flex items-end">
                 <button
                   onClick={() => setReportFilters({
                     dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                   })}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-1"
+                  className="w-full h-[42px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center gap-1"
                 >
                   <X size={14} />
                   Limpar Filtros
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sistema de Exportação Profissional */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
-              <Download size={18} />
-              Exportação e Compartilhamento
-            </h3>
-          </div>
-          <div className="p-6">
-            {/* Exportação Principal */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <button
-                onClick={() => {
-                  generateReport('pdf');
-                  showNotification('Gerando relatório PDF...', 'success');
-                }}
-                disabled={isGenerating}
-                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors disabled:opacity-50"
-              >
-                <FileText size={24} />
-                <div className="text-center">
-                  <span className="text-sm font-medium">Exportar PDF</span>
-                  <p className="text-xs opacity-90">Relatório formatado</p>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => {
-                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=xlsx', '_blank');
-                  showNotification('Baixando planilha Excel...', 'success');
-                }}
-                className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
-              >
-                <Download size={24} />
-                <div className="text-center">
-                  <span className="text-sm font-medium">Exportar Excel</span>
-                  <p className="text-xs opacity-90">Dados da planilha</p>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => {
-                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=csv', '_blank');
-                  showNotification('Baixando arquivo CSV...', 'success');
-                }}
-                className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
-              >
-                <FileText size={24} />
-                <div className="text-center">
-                  <span className="text-sm font-medium">Exportar CSV</span>
-                  <p className="text-xs opacity-90">Dados tabulares</p>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => {
-                  window.open('https://drive.google.com/drive/folders/1your-folder-id', '_blank');
-                  showNotification('Abrindo Google Drive...', 'success');
-                }}
-                className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
-              >
-                <ExternalLink size={24} />
-                <div className="text-center">
-                  <span className="text-sm font-medium">Abrir Drive</span>
-                  <p className="text-xs opacity-90">Ver documentos</p>
-                </div>
-              </button>
-            </div>
-
-            {/* Opções de Compartilhamento */}
-            <div className="pt-4 border-t border-gray-200">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Compartilhamento Rápido</h4>
-              <div className="grid grid-cols-3 gap-3">
-                <button
-                  onClick={() => {
-                    const subject = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo}`);
-                    const body = encodeURIComponent(`Segue em anexo o relatório ${reportFilters.tipo} gerado em ${new Date().toLocaleDateString('pt-BR')}.`);
-                    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
-                  }}
-                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
-                >
-                  <Mail size={16} />
-                  Email
-                </button>
-                
-                <button
-                  onClick={() => {
-                    const message = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo} disponível: ${window.location.href}`);
-                    window.open(`https://wa.me/?text=${message}`, '_blank');
-                  }}
-                  className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
-                >
-                  <MessageSquare size={16} />
-                  WhatsApp
-                </button>
-                
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    showNotification('Link copiado para a área de transferência', 'success');
-                  }}
-                  className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
-                >
-                  <Share size={16} />
-                  Copiar Link
                 </button>
               </div>
             </div>
