@@ -12,7 +12,7 @@ import StatusBadge from './StatusBadge';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
-import { useVendorProposals, useRealTimeProposals } from '../hooks/useProposals';
+import { useVendorProposals, useRealTimeProposals, useDeleteProposal } from '../hooks/useProposals';
 import StatusManager, { ProposalStatus } from '@shared/statusSystem';
 
 interface VendorPortalProps {
@@ -78,6 +78,26 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   // Hook para propostas do vendedor
   const { proposals: realProposals, isLoading: proposalsLoading } = useVendorProposals(user?.id || 0);
   useRealTimeProposals(user?.id); // Ativa a atualização em tempo real para este vendedor
+  
+  // Hook para exclusão de propostas
+  const deleteProposal = useDeleteProposal();
+
+  // Função para confirmar e excluir proposta
+  const handleDeleteProposal = async (proposalId: string, cliente: string) => {
+    const confirmed = window.confirm(
+      `Tem certeza que deseja excluir a proposta de ${cliente}?\n\nEsta ação não pode ser desfeita e os valores deixarão de ser considerados nas estatísticas.`
+    );
+    
+    if (confirmed) {
+      try {
+        await deleteProposal.mutateAsync(proposalId);
+        showNotification('Proposta excluída com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao excluir proposta:', error);
+        showNotification('Erro ao excluir proposta. Tente novamente.', 'error');
+      }
+    }
+  };
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
@@ -1501,11 +1521,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                               }}
                               onMessage={() => setShowInternalMessage(true)}
                              onEdit={() => showNotification(`Editando proposta ${proposal.abmId}...`, 'info')}
-                             onDelete={() => {
-                               if (confirm(`Tem certeza que deseja excluir a proposta ${proposal.abmId}?`)) {
-                                 showNotification('Proposta excluída com sucesso', 'success');
-                               }
-                             }}
+                             onDelete={() => handleDeleteProposal(proposal.id, proposal.cliente)}
                               onExternalLink={() => window.open(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`, '_blank')}
                               onDownload={() => showNotification('Baixando documentos da proposta...', 'success')}
                              onShare={() => {

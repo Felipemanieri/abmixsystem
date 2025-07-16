@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 
 export interface ProposalData {
@@ -159,4 +159,29 @@ export function useRealTimeProposals(vendorId?: number) {
   }, [queryClient, vendorId]);
 
   return { lastUpdate };
+}
+
+// Hook para deletar propostas
+export function useDeleteProposal() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (proposalId: string) => {
+      const response = await fetch(`/api/proposals/${proposalId}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erro ao excluir proposta');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidar todas as consultas de propostas para atualizar em tempo real
+      queryClient.invalidateQueries({ queryKey: ['/api/proposals'] });
+      // Invalidar também as consultas por vendedor
+      queryClient.invalidateQueries({ queryKey: ['/api/proposals/vendor'] });
+    },
+  });
 }

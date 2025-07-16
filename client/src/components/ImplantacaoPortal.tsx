@@ -9,7 +9,7 @@ import StatusBadge from './StatusBadge';
 import ProposalSelector from './ProposalSelector';
 import ProposalEditor from './ProposalEditor';
 import { showNotification } from '../utils/notifications';
-import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
+import { useProposals, useRealTimeProposals, useDeleteProposal } from '../hooks/useProposals';
 import { realTimeSync } from '../utils/realTimeSync';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 
@@ -70,6 +70,26 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Hook para propostas com sincronização em tempo real
   const { proposals: realProposals, isLoading: proposalsLoading } = useProposals();
   useRealTimeProposals();
+  
+  // Hook para exclusão de propostas
+  const deleteProposal = useDeleteProposal();
+
+  // Função para confirmar e excluir proposta
+  const handleDeleteProposal = async (proposalId: string, cliente: string) => {
+    const confirmed = window.confirm(
+      `Tem certeza que deseja excluir a proposta de ${cliente}?\n\nEsta ação não pode ser desfeita e os valores deixarão de ser considerados nas estatísticas.`
+    );
+    
+    if (confirmed) {
+      try {
+        await deleteProposal.mutateAsync(proposalId);
+        showNotification('Proposta excluída com sucesso!', 'success');
+      } catch (error) {
+        console.error('Erro ao excluir proposta:', error);
+        showNotification('Erro ao excluir proposta. Tente novamente.', 'error');
+      }
+    }
+  };
 
   // Debug: Log das propostas
   console.log('Propostas no ImplantacaoPortal:', realProposals);
@@ -790,11 +810,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       <Download className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => showNotification('Proposta removida!', 'success')}
+                      onClick={() => handleDeleteProposal(proposal.id, proposal.cliente)}
                       className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                      title="Remover Proposta"
+                      title="Excluir Proposta"
+                      disabled={deleteProposal.isPending}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className={`w-4 h-4 ${deleteProposal.isPending ? 'animate-spin' : ''}`} />
                     </button>
                     <button
                       onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}

@@ -246,6 +246,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete proposal (for implementation and vendor portals)
+  app.delete("/api/proposals/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      const existingProposal = await storage.getProposal(id);
+      if (!existingProposal) {
+        return res.status(404).json({ error: "Proposta não encontrada" });
+      }
+
+      await storage.deleteProposal(id);
+      res.json({ success: true, message: "Proposta excluída com sucesso" });
+    } catch (error) {
+      console.error("Erro ao excluir proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   // Generate horizontal sheet format for all proposals
   app.get("/api/proposals/sheet", async (req, res) => {
     try {

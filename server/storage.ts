@@ -20,6 +20,7 @@ export interface IStorage {
   getProposal(id: string): Promise<any>;
   getProposalByToken(token: string): Promise<any>;
   updateProposal(id: string, proposal: any): Promise<any>;
+  deleteProposal(id: string): Promise<void>;
   getVendorProposals(vendorId: number): Promise<any[]>;
   getAllProposals(): Promise<any[]>;
   getProposalCount(): Promise<number>;
@@ -135,6 +136,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(proposals.id, id))
       .returning();
     return proposal;
+  }
+
+  async deleteProposal(id: string): Promise<void> {
+    await db.delete(proposals).where(eq(proposals.id, id));
   }
 
   async getVendorProposals(vendorId: number): Promise<any[]> {
