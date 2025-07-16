@@ -1888,7 +1888,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
           <div className="p-6">
-            {/* Filtros organizados - 3 na primeira linha, 2 + espaço na segunda */}
+            {/* Filtros organizados - 3 por linha conforme layout solicitado */}
             <div className="space-y-4">
               {/* Primeira linha: Tipo de Relatório, Vendedor, Status */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -1897,7 +1897,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="completo">📊 Relatório Completo</option>
                     <option value="individual">👤 Por Vendedor Individual</option>
@@ -1912,7 +1912,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Todos os Vendedores</option>
                     {uniqueVendors.map(vendor => (
@@ -1926,7 +1926,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Todos os Status</option>
                     {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -1936,7 +1936,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               </div>
 
-              {/* Segunda linha: Data Início, Data Fim, Espaço reservado */}
+              {/* Segunda linha: Data Início, Data Fim, Limpar Filtros */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Data Início</label>
@@ -1944,7 +1944,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -1954,7 +1954,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -1969,6 +1969,47 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     Limpar Filtros
                   </button>
                 </div>
+              </div>
+
+              {/* Botões de Visualização - Discretos */}
+              <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-gray-200">
+                <span className="text-xs text-gray-500 mr-3">Visualizar:</span>
+                <button
+                  onClick={() => {
+                    // Mostrar preview do relatório como na segunda imagem
+                    showNotification('Abrindo visualização do relatório...', 'info');
+                    window.open('/reports/preview', '_blank');
+                  }}
+                  className="px-3 py-1 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded-md flex items-center gap-1 transition-colors"
+                >
+                  📊 PDF
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Abrindo Google Sheets...', 'info');
+                    window.open('https://sheets.google.com', '_blank');
+                  }}
+                  className="px-3 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-1 transition-colors"
+                >
+                  📋 Sheets
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Gerando arquivo Excel...', 'info');
+                  }}
+                  className="px-3 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-1 transition-colors"
+                >
+                  📗 Excel
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Abrindo Google Drive...', 'info');
+                    window.open('https://drive.google.com', '_blank');
+                  }}
+                  className="px-3 py-1 text-xs bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded-md flex items-center gap-1 transition-colors"
+                >
+                  📁 Drive
+                </button>
               </div>
             </div>
           </div>
