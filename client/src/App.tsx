@@ -10,7 +10,7 @@ import RestrictedAreaPortal from './components/RestrictedAreaPortal';
 import ClientProposalView from './components/ClientProposalView';
 import { Lock } from 'lucide-react';
 
-type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implantacao' | 'supervisor' | 'restricted';
+type Portal = 'home' | 'client' | 'vendor' | 'financial' | 'implementation' | 'supervisor' | 'restricted';
 type User = {
   id: string;
   name: string;
@@ -140,7 +140,7 @@ function App() {
         return <ClientPortal user={currentUser} onLogout={handleLogout} />;
       case 'financial':
         return <FinancialPortal user={currentUser} onLogout={handleLogout} />;
-      case 'implantacao':
+      case 'implementation':
         return <ImplantacaoPortal user={currentUser} onLogout={handleLogout} />;
       case 'supervisor':
         return <SupervisorPortal user={currentUser} onLogout={handleLogout} />;
@@ -277,7 +277,7 @@ function App() {
 
           {/* Portal Implantação */}
           <div 
-            onClick={() => setCurrentPortal('implantacao')}
+            onClick={() => setCurrentPortal('implementation')}
             className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-400"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>

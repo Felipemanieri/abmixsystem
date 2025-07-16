@@ -3,7 +3,7 @@ import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, Fi
 import AbmixLogo from './AbmixLogo';
 
 interface LoginPageProps {
-  portal: 'client' | 'vendor' | 'financial' | 'supervisor' | 'implantacao' | 'restricted';
+  portal: 'client' | 'vendor' | 'financial' | 'supervisor' | 'implementation' | 'restricted';
   onLogin: (user: any) => void;
   onBack: () => void;
 }
@@ -79,7 +79,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
       gradient: 'from-blue-500 via-teal-500 to-cyan-600',
       accent: 'slate',
     },
-    implantacao: {
+    implementation: {
       title: 'Portal de Implantação',
       subtitle: 'Gestão de implantação e automação de processos',
       icon: Settings,
