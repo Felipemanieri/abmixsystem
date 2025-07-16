@@ -175,7 +175,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     dataFim: '',
     vendedor: '',
     status: '',
-    tipo: 'completo'
+    tipo: 'completo',
+    operadora: '',
+    plano: '',
+    tipoContrato: '',
+    uf: '',
+    cidade: '',
+    valorMin: '',
+    valorMax: '',
+    vidasMin: '',
+    vidasMax: '',
+    searchQuery: ''
   });
   const [reportFormat, setReportFormat] = useState('pdf');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -1787,10 +1797,44 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     // Lista de vendedores únicos (incluindo dados reais e do banco)
     const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];
 
+    // Operadoras disponíveis
+    const operadoras = ['Unimed', 'Bradesco Saúde', 'SulAmérica', 'Porto Seguro', 'Hapvida', 'Amil', 'Seguros Unimed'];
+    const planosDisponiveis = ['Premium Familiar', 'Executivo Plus', 'Básico', 'Standard', 'Gold', 'Platinum'];
+    const tiposContrato = ['Empresarial', 'Individual', 'Adesão', 'Familiar'];
+    const ufsDisponiveis = ['SP', 'RJ', 'MG', 'RS', 'PR', 'SC', 'BA', 'GO', 'PE', 'CE', 'ES', 'DF'];
+
     const filteredData = filteredProposals.filter(proposal => {
       if (reportFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
       if (reportFilters.status && proposal.status !== reportFilters.status) return false;
-      // Filtros de data seriam aplicados aqui
+      if (reportFilters.operadora && !proposal.contractData?.operadora?.includes(reportFilters.operadora)) return false;
+      if (reportFilters.plano && !proposal.contractData?.planoContratado?.toLowerCase().includes(reportFilters.plano.toLowerCase())) return false;
+      if (reportFilters.tipoContrato && proposal.contractData?.tipoContrato !== reportFilters.tipoContrato) return false;
+      if (reportFilters.uf && proposal.contractData?.uf !== reportFilters.uf) return false;
+      if (reportFilters.cidade && !proposal.contractData?.cidade?.toLowerCase().includes(reportFilters.cidade.toLowerCase())) return false;
+      if (reportFilters.valorMin && parseFloat(proposal.contractData?.valor || '0') < parseFloat(reportFilters.valorMin)) return false;
+      if (reportFilters.valorMax && parseFloat(proposal.contractData?.valor || '0') > parseFloat(reportFilters.valorMax)) return false;
+      if (reportFilters.vidasMin && (proposal.contractData?.numeroVidas || 0) < parseInt(reportFilters.vidasMin)) return false;
+      if (reportFilters.vidasMax && (proposal.contractData?.numeroVidas || 0) > parseInt(reportFilters.vidasMax)) return false;
+      if (reportFilters.searchQuery) {
+        const query = reportFilters.searchQuery.toLowerCase();
+        if (!proposal.abmId?.toLowerCase().includes(query) && 
+            !proposal.cliente?.toLowerCase().includes(query) &&
+            !proposal.contractData?.cnpj?.includes(query) &&
+            !proposal.vendorName?.toLowerCase().includes(query)) return false;
+      }
+      
+      // Filtros de data
+      if (reportFilters.dataInicio) {
+        const dataInicio = new Date(reportFilters.dataInicio);
+        const proposalDate = new Date(proposal.createdAt);
+        if (proposalDate < dataInicio) return false;
+      }
+      if (reportFilters.dataFim) {
+        const dataFim = new Date(reportFilters.dataFim);
+        const proposalDate = new Date(proposal.createdAt);
+        if (proposalDate > dataFim) return false;
+      }
+      
       return true;
     });
 
@@ -1828,7 +1872,29 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         acc[vendor].count += 1;
         acc[vendor].value += parseFloat(p.contractData?.valor || '0');
         return acc;
-      }, {} as Record<string, { count: number; value: number }>)
+      }, {} as Record<string, { count: number; value: number }>),
+      porOperadora: filteredData.reduce((acc, p) => {
+        const operadora = p.contractData?.operadora || 'Não Informado';
+        if (!acc[operadora]) acc[operadora] = { count: 0, value: 0 };
+        acc[operadora].count += 1;
+        acc[operadora].value += parseFloat(p.contractData?.valor || '0');
+        return acc;
+      }, {} as Record<string, { count: number; value: number }>),
+      porTipoContrato: filteredData.reduce((acc, p) => {
+        const tipo = p.contractData?.tipoContrato || 'Não Informado';
+        acc[tipo] = (acc[tipo] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
+      porMes: filteredData.reduce((acc, p) => {
+        const data = new Date(p.createdAt);
+        const mesAno = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
+        if (!acc[mesAno]) acc[mesAno] = { count: 0, value: 0 };
+        acc[mesAno].count += 1;
+        acc[mesAno].value += parseFloat(p.contractData?.valor || '0');
+        return acc;
+      }, {} as Record<string, { count: number; value: number }>),
+      ticketMedio: filteredData.length > 0 ? filteredData.reduce((sum, p) => sum + parseFloat(p.contractData?.valor || '0'), 0) / filteredData.length : 0,
+      totalVidas: filteredData.reduce((sum, p) => sum + (p.contractData?.numeroVidas || 0), 0)
     };
 
     return (
@@ -1888,7 +1954,22 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+            {/* Barra de Pesquisa Global */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Busca Global</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                <input
+                  type="text"
+                  value={reportFilters.searchQuery}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
+                  placeholder="Buscar por ID, cliente, CNPJ, vendedor..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-6">
               {/* Tipo de Relatório */}
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
@@ -1903,6 +1984,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <option value="equipe">👥 Por Equipe</option>
                   <option value="financeiro">💰 Relatório Financeiro</option>
                   <option value="status">📋 Por Status</option>
+                  <option value="funil">🔄 Funil de Conversão</option>
+                  <option value="produtividade">⏱️ Produtividade</option>
                 </select>
               </div>
 
@@ -1917,6 +2000,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <option value="">Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
                     <option key={vendor} value={vendor}>{vendor}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Operadora */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Operadora</label>
+                <select
+                  value={reportFilters.operadora}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, operadora: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="">Todas as Operadoras</option>
+                  {operadoras.map(operadora => (
+                    <option key={operadora} value={operadora}>{operadora}</option>
                   ))}
                 </select>
               </div>
@@ -1958,6 +2056,117 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 />
               </div>
             </div>
+
+            {/* Filtros Avançados - Segunda Linha */}
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mb-6">
+              {/* Plano */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Plano</label>
+                <select
+                  value={reportFilters.plano}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, plano: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="">Todos os Planos</option>
+                  {planosDisponiveis.map(plano => (
+                    <option key={plano} value={plano}>{plano}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Tipo de Contrato */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Contrato</label>
+                <select
+                  value={reportFilters.tipoContrato}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, tipoContrato: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="">Todos os Tipos</option>
+                  {tiposContrato.map(tipo => (
+                    <option key={tipo} value={tipo}>{tipo}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* UF */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">UF</label>
+                <select
+                  value={reportFilters.uf}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, uf: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="">Todas as UFs</option>
+                  {ufsDisponiveis.map(uf => (
+                    <option key={uf} value={uf}>{uf}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Cidade */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Cidade</label>
+                <input
+                  type="text"
+                  value={reportFilters.cidade}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, cidade: e.target.value }))}
+                  placeholder="Digite a cidade"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+
+              {/* Valor Mínimo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Valor Mín (R$)</label>
+                <input
+                  type="number"
+                  value={reportFilters.valorMin}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, valorMin: e.target.value }))}
+                  placeholder="0"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+
+              {/* Valor Máximo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Valor Máx (R$)</label>
+                <input
+                  type="number"
+                  value={reportFilters.valorMax}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, valorMax: e.target.value }))}
+                  placeholder="9999999"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
+
+            {/* Filtros de Vidas - Terceira Linha */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              {/* Vidas Mín */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vidas Mín</label>
+                <input
+                  type="number"
+                  value={reportFilters.vidasMin}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, vidasMin: e.target.value }))}
+                  placeholder="1"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+
+              {/* Vidas Máx */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vidas Máx</label>
+                <input
+                  type="number"
+                  value={reportFilters.vidasMax}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, vidasMax: e.target.value }))}
+                  placeholder="999"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
             
             {/* Filtros Rápidos */}
             <div className="mt-6 pt-4 border-t border-gray-200">
@@ -1984,7 +2193,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
                 <button
                   onClick={() => setReportFilters({
-                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
+                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo',
+                    operadora: '', plano: '', tipoContrato: '', uf: '', cidade: '',
+                    valorMin: '', valorMax: '', vidasMin: '', vidasMax: '', searchQuery: ''
                   })}
                   className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-1"
                 >
@@ -2164,8 +2375,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             </div>
 
-            {/* Distribuição por Status */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Gráficos e Visualizações */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Distribuição por Status */}
               <div>
                 <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
                   <BarChart3 size={16} />
@@ -2176,7 +2388,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     const percentage = ((count / reportData.total) * 100).toFixed(1);
                     const statusConfig = Object.values(STATUS_CONFIG).find(config => config.label === status);
                     return (
-                      <div key={status} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={status} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                         <div className="flex items-center gap-3">
                           <div 
                             className="w-4 h-4 rounded-full"
@@ -2187,6 +2399,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         <div className="text-right">
                           <span className="text-lg font-bold text-gray-900">{count}</span>
                           <span className="text-xs text-gray-500 ml-1">({percentage}%)</span>
+                          <div className="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                            <div 
+                              className="h-2 rounded-full transition-all duration-500"
+                              style={{ 
+                                width: `${percentage}%`, 
+                                backgroundColor: statusConfig?.color || '#6B7280' 
+                              }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
                     );
@@ -2194,17 +2415,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               </div>
 
+              {/* Ranking de Vendedores */}
               <div>
                 <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
                   <Award size={16} />
-                  Ranking de Vendedores
+                  Ranking de Vendedores (Top 5)
                 </h4>
                 <div className="space-y-3">
                   {Object.entries(reportData.porVendedor)
                     .sort(([,a], [,b]) => b.count - a.count)
                     .slice(0, 5)
                     .map(([vendor, data], index) => (
-                    <div key={vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                       <div className="flex items-center gap-3">
                         <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
                           index === 0 ? 'bg-yellow-500' : 
@@ -2221,6 +2443,139 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Ranking por Operadora e Tipo de Contrato */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Ranking por Operadora */}
+              <div>
+                <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Building size={16} />
+                  Ranking por Operadora
+                </h4>
+                <div className="space-y-3">
+                  {Object.entries(reportData.porOperadora)
+                    .sort(([,a], [,b]) => b.count - a.count)
+                    .slice(0, 5)
+                    .map(([operadora, data], index) => {
+                      const percentage = ((data.count / reportData.total) * 100).toFixed(1);
+                      return (
+                        <div key={operadora} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-medium text-gray-700">{operadora}</span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-gray-900">{data.count}</div>
+                            <div className="text-xs text-gray-500">{formatCurrency(data.value.toString())} ({percentage}%)</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              {/* Distribuição por Tipo de Contrato */}
+              <div>
+                <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <FileText size={16} />
+                  Por Tipo de Contrato
+                </h4>
+                <div className="space-y-3">
+                  {Object.entries(reportData.porTipoContrato)
+                    .sort(([,a], [,b]) => b - a)
+                    .map(([tipo, count]) => {
+                      const percentage = ((count / reportData.total) * 100).toFixed(1);
+                      const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'];
+                      const colorIndex = Object.keys(reportData.porTipoContrato).indexOf(tipo) % colors.length;
+                      return (
+                        <div key={tipo} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-4 h-4 rounded-full ${colors[colorIndex]}`}></div>
+                            <span className="text-sm font-medium text-gray-700">{tipo}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-lg font-bold text-gray-900">{count}</span>
+                            <span className="text-xs text-gray-500 ml-1">({percentage}%)</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+
+            {/* Evolução Temporal */}
+            <div className="mb-8">
+              <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <TrendingUp size={16} />
+                Evolução Temporal (Últimos 6 Meses)
+              </h4>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="grid grid-cols-6 gap-4">
+                  {Object.entries(reportData.porMes)
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .slice(-6)
+                    .map(([mesAno, data]) => {
+                      const [ano, mes] = mesAno.split('-');
+                      const mesNome = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][parseInt(mes) - 1];
+                      const maxValue = Math.max(...Object.values(reportData.porMes).map(d => d.count));
+                      const altura = ((data.count / maxValue) * 100) || 0;
+                      
+                      return (
+                        <div key={mesAno} className="text-center">
+                          <div className="flex flex-col items-center justify-end h-24 mb-2">
+                            <div 
+                              className="bg-green-500 rounded-t-md w-8 transition-all duration-500 hover:bg-green-600"
+                              style={{ height: `${altura}%`, minHeight: data.count > 0 ? '8px' : '0px' }}
+                            ></div>
+                          </div>
+                          <div className="text-xs font-medium text-gray-700">{mesNome}/{ano}</div>
+                          <div className="text-xs text-gray-500">{data.count}</div>
+                          <div className="text-xs text-gray-400">{formatCurrency(data.value.toString())}</div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+
+            {/* Funil de Conversão */}
+            <div className="mb-8">
+              <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <Target size={16} />
+                Funil de Conversão
+              </h4>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="space-y-4">
+                  {Object.entries(reportData.porStatus)
+                    .sort(([,a], [,b]) => b - a)
+                    .map(([status, count], index) => {
+                      const percentage = ((count / reportData.total) * 100).toFixed(1);
+                      const statusConfig = Object.values(STATUS_CONFIG).find(config => config.label === status);
+                      const width = Math.max(parseFloat(percentage), 5); // Mínimo 5% para visibilidade
+                      
+                      return (
+                        <div key={status} className="relative">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-gray-700">{status}</span>
+                            <span className="text-sm text-gray-500">{count} ({percentage}%)</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-4">
+                            <div 
+                              className="h-4 rounded-full transition-all duration-700 flex items-center justify-end pr-2"
+                              style={{ 
+                                width: `${width}%`, 
+                                backgroundColor: statusConfig?.color || '#6B7280' 
+                              }}
+                            >
+                              <span className="text-xs text-white font-medium">{count}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>
