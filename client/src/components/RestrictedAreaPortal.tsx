@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
+import UserManagementDashboard from './UserManagementDashboard';
 
 interface User {
   id: string;
@@ -51,6 +52,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showSheetsConfigModal, setShowSheetsConfigModal] = useState(false);
   const [showWhatsAppConfigModal, setShowWhatsAppConfigModal] = useState(false);
   const [showBackupConfigModal, setShowBackupConfigModal] = useState(false);
+  const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -125,6 +127,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
+    { id: 'usuarios', label: 'Usuários', icon: Users },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'planilhas', label: 'Planilhas', icon: FileText },
@@ -542,6 +545,51 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && renderInterfaceSection()}
+        {activeTab === 'usuarios' && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Users className="w-6 h-6 text-purple-600 mr-3" />
+                <h3 className="text-xl font-bold text-gray-900">Gestão de Usuários</h3>
+              </div>
+              <button
+                onClick={() => setShowUserManagementModal(true)}
+                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Abrir Dashboard
+              </button>
+            </div>
+            
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
+              <h4 className="font-semibold text-gray-900 mb-3">Controle de Acesso Total</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                <div className="flex items-center">
+                  <Shield className="w-4 h-4 text-purple-600 mr-2" />
+                  <span>Gerenciar usuários de todos os painéis</span>
+                </div>
+                <div className="flex items-center">
+                  <Lock className="w-4 h-4 text-purple-600 mr-2" />
+                  <span>Definir permissões e níveis de acesso</span>
+                </div>
+                <div className="flex items-center">
+                  <Users className="w-4 h-4 text-purple-600 mr-2" />
+                  <span>Adicionar e remover usuários</span>
+                </div>
+                <div className="flex items-center">
+                  <Monitor className="w-4 h-4 text-purple-600 mr-2" />
+                  <span>Controlar senhas e status de acesso</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-3 bg-white rounded border border-purple-200">
+                <p className="text-sm text-purple-700">
+                  <strong>Dashboard Completo:</strong> Gerencie usuários do Portal Supervisor, Financial, Implantação, Vendedores e Clientes com controle total de login e senhas.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'planilhas' && renderPlanilhasSection()}
@@ -820,6 +868,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de Gestão de Usuários */}
+      {showUserManagementModal && (
+        <UserManagementDashboard 
+          onClose={() => setShowUserManagementModal(false)} 
+        />
       )}
     </div>
   );

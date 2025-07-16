@@ -9,6 +9,20 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
 });
 
+// Tabela de usuários do sistema (todos os painéis)
+export const systemUsers = pgTable("system_users", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  role: text("role").notNull(), // 'admin', 'supervisor', 'financial', 'implementation', 'vendor', 'client'
+  panel: text("panel").notNull(), // 'restricted', 'supervisor', 'financial', 'implementation', 'vendor', 'client'
+  active: boolean("active").notNull().default(true),
+  lastLogin: timestamp("last_login"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const vendors = pgTable("vendors", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -32,10 +46,21 @@ export const insertVendorSchema = createInsertSchema(vendors).pick({
   active: true,
 });
 
+export const insertSystemUserSchema = createInsertSchema(systemUsers).pick({
+  name: true,
+  email: true,
+  password: true,
+  role: true,
+  panel: true,
+  active: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertVendor = z.infer<typeof insertVendorSchema>;
 export type Vendor = typeof vendors.$inferSelect;
+export type InsertSystemUser = z.infer<typeof insertSystemUserSchema>;
+export type SystemUser = typeof systemUsers.$inferSelect;
 
 // Proposals table
 export const proposals = pgTable("proposals", {

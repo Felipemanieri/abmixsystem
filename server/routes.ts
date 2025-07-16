@@ -537,6 +537,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === SYSTEM USERS ROUTES ===
+  
+  // Get all system users
+  app.get("/api/system-users", async (req, res) => {
+    try {
+      const users = await storage.getAllSystemUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Erro ao buscar usuários do sistema:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get system user by ID
+  app.get("/api/system-users/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.getSystemUser(id);
+      if (!user) {
+        return res.status(404).json({ error: "Usuário não encontrado" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error("Erro ao buscar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create system user
+  app.post("/api/system-users", async (req, res) => {
+    try {
+      const { insertSystemUserSchema } = await import("@shared/schema");
+      const validatedData = insertSystemUserSchema.parse(req.body);
+      const user = await storage.createSystemUser(validatedData);
+      res.json(user);
+    } catch (error) {
+      console.error("Erro ao criar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update system user
+  app.put("/api/system-users/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await storage.updateSystemUser(id, req.body);
+      res.json(user);
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Delete system user
+  app.delete("/api/system-users/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSystemUser(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Erro ao deletar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update last login
+  app.patch("/api/system-users/:id/login", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.updateLastLogin(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Erro ao atualizar último login:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

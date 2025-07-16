@@ -1,4 +1,4 @@
-import { users, vendors, proposals, vendorTargets, teamTargets, awards, type User, type InsertUser, type Vendor, type InsertVendor, type Proposal, type InsertProposal, type VendorTarget, type InsertVendorTarget, type TeamTarget, type InsertTeamTarget, type Award, type InsertAward } from "@shared/schema";
+import { users, vendors, proposals, vendorTargets, teamTargets, awards, systemUsers, type User, type InsertUser, type Vendor, type InsertVendor, type Proposal, type InsertProposal, type VendorTarget, type InsertVendorTarget, type TeamTarget, type InsertTeamTarget, type Award, type InsertAward, type SystemUser, type InsertSystemUser } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql } from "drizzle-orm";
 
@@ -50,6 +50,15 @@ export interface IStorage {
   // Analytics operations
   getVendorStats(vendorId: number, month?: number, year?: number): Promise<any>;
   getTeamStats(month?: number, year?: number): Promise<any>;
+  
+  // System Users operations
+  getAllSystemUsers(): Promise<SystemUser[]>;
+  getSystemUser(id: number): Promise<SystemUser | undefined>;
+  getSystemUserByEmail(email: string): Promise<SystemUser | undefined>;
+  createSystemUser(user: InsertSystemUser): Promise<SystemUser>;
+  updateSystemUser(id: number, user: Partial<InsertSystemUser>): Promise<SystemUser>;
+  deleteSystemUser(id: number): Promise<void>;
+  updateLastLogin(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -335,6 +344,49 @@ export class DatabaseStorage implements IStorage {
     const totalVendors = new Set(filteredProposals.map(p => p.vendorId)).size;
 
     return { totalProposals, totalValue, averageValue, totalVendors };
+  }
+
+  // System Users operations
+  async getAllSystemUsers(): Promise<SystemUser[]> {
+    return await db.select().from(systemUsers).orderBy(desc(systemUsers.createdAt));
+  }
+
+  async getSystemUser(id: number): Promise<SystemUser | undefined> {
+    const [user] = await db.select().from(systemUsers).where(eq(systemUsers.id, id));
+    return user || undefined;
+  }
+
+  async getSystemUserByEmail(email: string): Promise<SystemUser | undefined> {
+    const [user] = await db.select().from(systemUsers).where(eq(systemUsers.email, email));
+    return user || undefined;
+  }
+
+  async createSystemUser(userData: InsertSystemUser): Promise<SystemUser> {
+    const [user] = await db
+      .insert(systemUsers)
+      .values(userData)
+      .returning();
+    return user;
+  }
+
+  async updateSystemUser(id: number, userData: Partial<InsertSystemUser>): Promise<SystemUser> {
+    const [user] = await db
+      .update(systemUsers)
+      .set({ ...userData, updatedAt: new Date() })
+      .where(eq(systemUsers.id, id))
+      .returning();
+    return user;
+  }
+
+  async deleteSystemUser(id: number): Promise<void> {
+    await db.delete(systemUsers).where(eq(systemUsers.id, id));
+  }
+
+  async updateLastLogin(id: number): Promise<void> {
+    await db
+      .update(systemUsers)
+      .set({ lastLogin: new Date() })
+      .where(eq(systemUsers.id, id));
   }
 }
 
