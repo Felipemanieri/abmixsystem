@@ -384,42 +384,7 @@ function App() {
           </div>
         </div>
 
-        {/* Security Notice */}
-        <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-3xl p-12 border border-teal-200">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <div className="ml-4">
-              <h3 className="text-2xl font-bold text-gray-700">Segurança e Privacidade</h3>
-              <p className="text-gray-600 font-semibold">Seus dados protegidos com a mais alta tecnologia</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-8">
-            <div>
-              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <Shield className="w-6 h-6 text-teal-600" />
-              </div>
-              <h4 className="font-bold text-gray-700 mb-2 text-lg">Dados Protegidos</h4>
-              <p className="text-gray-600 font-medium">Criptografia de ponta a ponta e armazenamento seguro</p>
-            </div>
-            <div>
-              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <Users className="w-6 h-6 text-teal-600" />
-              </div>
-              <h4 className="font-bold text-gray-700 mb-2 text-lg">Acesso Controlado</h4>
-              <p className="text-gray-600 font-medium">Permissões granulares e autenticação multifator</p>
-            </div>
-            <div>
-              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <FileText className="w-6 h-6 text-teal-600" />
-              </div>
-              <h4 className="font-bold text-gray-700 mb-2 text-lg">Conformidade LGPD</h4>
-              <p className="text-gray-600 font-medium">100% em conformidade com a legislação brasileira</p>
-            </div>
-          </div>
-        </div>
+
       </main>
       
       {/* Footer */}
