@@ -345,7 +345,7 @@ function App() {
         {/* Features Section */}
         <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-700 mb-4">Por que escolher nossa plataforma?</h2>
+
             <p className="text-gray-600 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
