@@ -246,13 +246,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               </div>
             )}
 
-            {/* Informações de demo */}
-            <div className="mt-6 p-4 bg-slate-50/50 rounded-xl border border-slate-100/50">
-              <p className="text-xs text-slate-600 text-center flex items-center justify-center">
-                <Info className="w-4 h-4 mr-2 text-teal-500" />
-                <span><strong>Demo:</strong> Use qualquer email e senha para testar</span>
-              </p>
-            </div>
+
           </div>
 
           {/* Footer */}
