@@ -2060,16 +2060,27 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <Filter size={18} />
                 Filtros de Relatório
               </h3>
-              <button
-                onClick={() => {
-                  realTimeSync.forceRefresh();
-                  showNotification('Sincronização com Google Sheets iniciada', 'success');
-                }}
-                className="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
-              >
-                <RefreshCw size={14} />
-                Sincronizar
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    realTimeSync.forceRefresh();
+                    showNotification('Sincronização com Google Sheets iniciada', 'success');
+                  }}
+                  className="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
+                >
+                  <RefreshCw size={14} />
+                  Sincronizar
+                </button>
+                <button
+                  onClick={() => setReportFilters({
+                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
+                  })}
+                  className="text-sm bg-gray-50 text-gray-600 hover:bg-gray-100 px-2 py-1 rounded-md flex items-center gap-1"
+                >
+                  <X size={12} />
+                  Limpar
+                </button>
+              </div>
             </div>
           </div>
           <div className="p-4">
@@ -2145,16 +2156,52 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   />
                 </div>
 
-                <div className="flex items-end">
-                  <button
-                    onClick={() => setReportFilters({
-                      dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
-                    })}
-                    className="w-full h-[42px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center gap-1"
-                  >
-                    <X size={14} />
-                    Limpar Filtros
-                  </button>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Atalhos de Período</label>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => {
+                        const hoje = new Date();
+                        const seteDiasAtras = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        setReportFilters(prev => ({
+                          ...prev,
+                          dataInicio: seteDiasAtras.toISOString().split('T')[0],
+                          dataFim: hoje.toISOString().split('T')[0]
+                        }));
+                      }}
+                      className="flex-1 px-2 py-2 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors"
+                    >
+                      7 dias
+                    </button>
+                    <button
+                      onClick={() => {
+                        const hoje = new Date();
+                        const quinzeDiasAtras = new Date(hoje.getTime() - 15 * 24 * 60 * 60 * 1000);
+                        setReportFilters(prev => ({
+                          ...prev,
+                          dataInicio: quinzeDiasAtras.toISOString().split('T')[0],
+                          dataFim: hoje.toISOString().split('T')[0]
+                        }));
+                      }}
+                      className="flex-1 px-2 py-2 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded hover:bg-green-100 transition-colors"
+                    >
+                      15 dias
+                    </button>
+                    <button
+                      onClick={() => {
+                        const hoje = new Date();
+                        const trintaDiasAtras = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
+                        setReportFilters(prev => ({
+                          ...prev,
+                          dataInicio: trintaDiasAtras.toISOString().split('T')[0],
+                          dataFim: hoje.toISOString().split('T')[0]
+                        }));
+                      }}
+                      className="flex-1 px-2 py-2 text-xs font-medium text-purple-700 bg-purple-50 border border-purple-200 rounded hover:bg-purple-100 transition-colors"
+                    >
+                      30 dias
+                    </button>
+                  </div>
                 </div>
               </div>
 
