@@ -2305,7 +2305,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       case 'propostas':
         return renderPropostas();
       case 'relatorios':
-        return renderRelatorios();
+        return renderReports();
       default:
         return renderDashboard();
     }
