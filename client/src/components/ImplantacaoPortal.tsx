@@ -319,7 +319,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const implantacaoStats = [
     {
       name: 'Aguardando Validação',
-      value: realProposals.filter(p => p.status === 'AGUARDANDO_VALIDACAO').length.toString(),
+      value: proposals.filter(p => p.status === 'pending_validation').length.toString(),
       change: 'Para revisar',
       changeType: 'warning',
       icon: AlertCircle,
@@ -327,7 +327,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Validadas',
-      value: realProposals.filter(p => p.status === 'VALIDADO').length.toString(),
+      value: proposals.filter(p => p.status === 'validated').length.toString(),
       change: 'Prontas para envio',
       changeType: 'positive',
       icon: CheckCircle,
@@ -335,7 +335,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Em Processamento',
-      value: realProposals.filter(p => p.status === 'PROCESSAMENTO').length.toString(),
+      value: proposals.filter(p => p.status === 'processing').length.toString(),
       change: 'Automação ativa',
       changeType: 'positive',
       icon: Settings,
@@ -343,7 +343,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Concluídas',
-      value: realProposals.filter(p => p.status === 'IMPLANTADO').length.toString(),
+      value: proposals.filter(p => p.status === 'completed').length.toString(),
       change: 'Finalizadas',
       changeType: 'positive',
       icon: TrendingUp,
@@ -502,13 +502,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // Usar propostas reais sempre que possível
   const proposalsToShow = realProposals || [];
 
-  // Manter ordem original das propostas sem reordenação
   const filteredProposals = proposalsToShow?.filter(proposal => {
     const matchesStatus = selectedStatus === 'all' || proposal.status === selectedStatus;
     const matchesSearch = (proposal.cliente || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (proposal.abmId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (proposal.vendedor || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
+  }).sort((a, b) => {
+    // Manter ordem cronológica de criação mesmo após filtros
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   }) || [];
 
   const renderProposalsTab = () => (
