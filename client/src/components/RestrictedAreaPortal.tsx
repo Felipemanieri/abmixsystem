@@ -31,7 +31,7 @@ import UserManagementDashboard from './UserManagementDashboard';
 import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
-import ControleSenhas from './ControleSenhas';
+
 import BackupManager from './BackupManager';
 
 interface User {
@@ -133,7 +133,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
     { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
-    { id: 'senhas', label: 'Controle Senhas', icon: Lock },
     { id: 'planilha', label: 'Visualizar Planilha', icon: FileText },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
@@ -555,7 +554,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && renderInterfaceSection()}
         {activeTab === 'usuarios' && <UnifiedUserManagement />}
-        {activeTab === 'senhas' && <ControleSenhas />}
         {activeTab === 'planilha' && <PlanilhaViewer />}
         {activeTab === 'logs' && <LogsViewer />}
         {activeTab === 'backup' && <BackupManager />}
