@@ -2395,7 +2395,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </tr>
             </thead>
             <tbody>
-              {filteredProposals.map(proposal => {
+              {filteredProposals.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()).map(proposal => {
                 const contractData = proposal.contractData || {};
                 const currentStatus = proposal.status as ProposalStatus;
                 const statusConfig = STATUS_CONFIG[currentStatus] || STATUS_CONFIG.observacao;
