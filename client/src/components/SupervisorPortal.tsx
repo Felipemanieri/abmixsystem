@@ -69,32 +69,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     realTimeSync.enableAggressivePolling();
   }, []);
 
-  // Funções auxiliares para Analytics
-  const toggleVendor = (vendor: string) => {
-    setSelectedVendors(prev => 
-      prev.includes(vendor) 
-        ? prev.filter(v => v !== vendor)
-        : [...prev, vendor]
-    );
-  };
-
-  const toggleStatus = (status: string) => {
-    setSelectedStatuses(prev => 
-      prev.includes(status) 
-        ? prev.filter(s => s !== status)
-        : [...prev, status]
-    );
-  };
-
-  const selectAllVendors = () => {
-    const uniqueVendors = [...new Set(filteredProposals.map(p => p.vendorName).filter(Boolean))];
-    setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
-  };
-
-  const selectAllStatuses = () => {
-    const allStatuses = Object.keys(STATUS_CONFIG);
-    setSelectedStatuses(selectedStatuses.length === allStatuses.length ? [] : allStatuses);
-  };
+  // Placeholder para funções que serão definidas depois dos dados
 
   const clearAllFilters = () => {
     setSelectedVendors([]);
@@ -539,6 +514,37 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     const dateMatch = !filterDate || new Date(proposal.createdAt).toDateString() === new Date(filterDate).toDateString();
     return vendorMatch && statusMatch && dateMatch;
   });
+
+  // Funções auxiliares para Analytics (definidas após filteredProposals)
+  const toggleVendor = (vendor: string) => {
+    setSelectedVendors(prev => 
+      prev.includes(vendor) 
+        ? prev.filter(v => v !== vendor)
+        : [...prev, vendor]
+    );
+  };
+
+  const toggleStatus = (status: string) => {
+    setSelectedStatuses(prev => 
+      prev.includes(status) 
+        ? prev.filter(s => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  const selectAllVendors = () => {
+    const vendorNames = filteredProposals.map(p => {
+      const vendor = vendors.find(v => v.id === p.vendorId);
+      return vendor ? vendor.name : null;
+    }).filter(Boolean);
+    const uniqueVendors = [...new Set(vendorNames)];
+    setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
+  };
+
+  const selectAllStatuses = () => {
+    const allStatuses = Object.keys(STATUS_CONFIG);
+    setSelectedStatuses(selectedStatuses.length === allStatuses.length ? [] : allStatuses);
+  };
 
   const renderDashboard = () => (
     <div className="space-y-6">
