@@ -70,6 +70,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     realTimeSync.enableAggressivePolling();
   }, []);
 
+  // Efeito para monitorar mudanças nos vendedores e atualizar gráfico
+  useEffect(() => {
+    if (vendors.length > 0 && proposals.length > 0) {
+      // Forçar recálculo dos dados do gráfico quando vendedores ou propostas mudam
+      console.log('Sincronizando dados: Vendedores atualizado:', vendors.length, 'Propostas:', proposals.length);
+      
+      // Aguardar um momento para garantir que os dados estejam consistentes
+      setTimeout(() => {
+        realTimeSync.forceRefresh();
+      }, 100);
+    }
+  }, [vendors.length, proposals.length]);
+
 
 
   // Funções para os botões de relatório
@@ -507,24 +520,28 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     queryKey: ['/api/vendors'],
     queryFn: () => apiRequest('/api/vendors'),
     retry: false,
+    refetchInterval: 1000,
   });
 
   // Buscar metas dos vendedores
   const { data: vendorTargets = [], isLoading: targetsLoading } = useQuery({
     queryKey: ['/api/vendor-targets'],
     queryFn: () => apiRequest('/api/vendor-targets'),
+    refetchInterval: 1000,
   });
 
   // Buscar metas da equipe
   const { data: teamTargets = [], isLoading: teamTargetsLoading } = useQuery({
     queryKey: ['/api/team-targets'],
     queryFn: () => apiRequest('/api/team-targets'),
+    refetchInterval: 1000,
   });
 
   // Buscar premiações
   const { data: awards = [], isLoading: awardsLoading } = useQuery({
     queryKey: ['/api/awards'],
     queryFn: () => apiRequest('/api/awards'),
+    refetchInterval: 1000,
   });
 
   // Buscar estatísticas da equipe
@@ -546,10 +563,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       });
     },
     onSuccess: () => {
+      // Invalidar todas as queries relacionadas quando vendedor é adicionado
       queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendor-targets'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/analytics/team'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/awards'] });
+      
+      // Forçar sincronização em tempo real
+      realTimeSync.forceRefresh();
+      
       setShowAddVendorForm(false);
       setNewVendorData({ name: '', email: '', password: '120784' });
-      showNotification('Vendedor adicionado com sucesso!', 'success');
+      showNotification('Vendedor adicionado com sucesso! Todos os gráficos atualizados.', 'success');
     },
     onError: (error: any) => {
       showNotification(error.message || 'Erro ao adicionar vendedor', 'error');
@@ -564,8 +590,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       });
     },
     onSuccess: () => {
+      // Invalidar todas as queries relacionadas quando vendedor é removido
       queryClientInstance.invalidateQueries({ queryKey: ['/api/vendors'] });
-      showNotification('Vendedor removido com sucesso!', 'success');
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/vendor-targets'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/analytics/team'] });
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/awards'] });
+      
+      // Forçar sincronização em tempo real
+      realTimeSync.forceRefresh();
+      
+      showNotification('Vendedor removido com sucesso! Todos os gráficos atualizados.', 'success');
     },
     onError: (error: any) => {
       showNotification(error.message || 'Erro ao remover vendedor', 'error');
