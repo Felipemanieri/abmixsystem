@@ -1933,7 +1933,6 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="completo">📊 Relatório Completo</option>
-                  <option value="executivo">📈 Resumo Executivo</option>
                   <option value="individual">👤 Por Vendedor Individual</option>
                   <option value="equipe">👥 Por Equipe</option>
                   <option value="financeiro">💰 Relatório Financeiro</option>
