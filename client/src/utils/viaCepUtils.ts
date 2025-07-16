@@ -35,30 +35,32 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
   }
   
   try {
-    console.log('Buscando CEP via ViaCEP direto:', cepLimpo);
+    console.log('Buscando CEP:', cepLimpo);
     
-    // Tentativa direta com ViaCEP usando fetch com configurações específicas
+    // Timeout para evitar travamentos
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
     const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`, {
       method: 'GET',
+      signal: controller.signal,
       headers: {
         'Accept': 'application/json',
       },
-      // Remove mode: 'cors' para permitir requisições CORS simples
     });
     
-    console.log('Resposta ViaCEP:', response.status, response.ok);
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
-      console.error('Erro na resposta ViaCEP:', response.status, response.statusText);
-      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      console.warn('CEP não encontrado ou erro na API');
+      return null;
     }
     
     const data: ViaCepResponse = await response.json();
-    console.log('Dados ViaCEP recebidos:', data);
     
     // Verifica se houve erro na consulta
     if (data.erro) {
-      console.warn('CEP não encontrado na ViaCEP:', cepLimpo);
+      console.warn('CEP não encontrado:', cepLimpo);
       return null;
     }
     
@@ -70,7 +72,7 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
       data.uf
     ].filter(Boolean).join(', ');
     
-    console.log('Endereço montado:', enderecoCompleto);
+    console.log('CEP encontrado:', enderecoCompleto);
     
     return {
       endereco: data.logradouro || '',
@@ -81,12 +83,13 @@ export const buscarCEP = async (cep: string): Promise<EnderecoFields | null> => 
     };
     
   } catch (error) {
-    console.error('Erro ao buscar CEP na ViaCEP:', {
-      cep: cepLimpo,
-      erro: error,
-      message: error instanceof Error ? error.message : 'Erro desconhecido',
-      name: error instanceof Error ? error.name : 'UnknownError'
-    });
+    // Não exibe erro para timeout ou abortar - é normal durante digitação
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.log('Busca CEP cancelada (normal durante digitação)');
+      return null;
+    }
+    
+    console.warn('Erro ao buscar CEP - tentativa silenciosa falhou');
     return null;
   }
 };
@@ -107,35 +110,56 @@ export const formatarCEP = (cep: string): string => {
 };
 
 /**
- * Função auxiliar para criar handler de busca de CEP
+ * Função auxiliar para criar handler de busca de CEP que não gera erro
  * @param updateFunction - Função para atualizar os campos do formulário
+ * @param showNotification - Função para mostrar notificações (opcional)
  * @returns Handler para onBlur do campo CEP
  */
 export const createCepHandler = (
-  updateFunction: (field: string, value: string) => void
+  updateFunction: (field: string, value: string) => void,
+  showNotification?: (message: string, type: 'success' | 'error' | 'warning') => void
 ) => {
   return async (cep: string) => {
-    const endereco = await buscarCEP(cep);
-    
-    if (endereco) {
-      // Atualiza os campos com os dados encontrados
-      if (endereco.enderecoCompleto) {
-        updateFunction('enderecoCompleto', endereco.enderecoCompleto);
-      }
+    // Só busca se o CEP tem 8 dígitos
+    const cepLimpo = cep.replace(/\D/g, '');
+    if (cepLimpo.length !== 8) {
+      return; // Não faz nada se CEP incompleto
+    }
+
+    try {
+      const endereco = await buscarCEP(cep);
       
-      // Se houver campos separados, também atualiza
-      if (endereco.endereco) {
-        updateFunction('endereco', endereco.endereco);
+      if (endereco && endereco.enderecoCompleto) {
+        // Atualiza os campos com os dados encontrados
+        updateFunction('enderecoCompleto', endereco.enderecoCompleto);
+        
+        // Se houver campos separados, também atualiza
+        if (endereco.endereco) {
+          updateFunction('endereco', endereco.endereco);
+        }
+        if (endereco.bairro) {
+          updateFunction('bairro', endereco.bairro);
+        }
+        if (endereco.cidade) {
+          updateFunction('cidade', endereco.cidade);
+        }
+        if (endereco.estado) {
+          updateFunction('estado', endereco.estado);
+        }
+        
+        // Mostra notificação de sucesso se disponível
+        if (showNotification) {
+          showNotification('CEP encontrado! Endereço preenchido automaticamente.', 'success');
+        }
+      } else {
+        // Mostra aviso se CEP não encontrado
+        if (showNotification) {
+          showNotification('CEP não encontrado. Preencha o endereço manualmente.', 'warning');
+        }
       }
-      if (endereco.bairro) {
-        updateFunction('bairro', endereco.bairro);
-      }
-      if (endereco.cidade) {
-        updateFunction('cidade', endereco.cidade);
-      }
-      if (endereco.estado) {
-        updateFunction('estado', endereco.estado);
-      }
+    } catch (error) {
+      // Em caso de erro, não faz nada - falha silenciosa
+      console.log('Busca CEP falhou silenciosamente:', error);
     }
   };
 };

@@ -309,7 +309,7 @@ The application provides role-based portals with specific functionality:
   - Sistema de edição de senhas centralizado com gerador automático
   - **Corrigido acesso direto à área restrita**: Removido login automático, agora exige autenticação
 
-### Integração API ViaCEP para Preenchimento Automático de Endereço (Jan 16, 2025)
+### Integração API ViaCEP para Preenchimento Automático de Endereço - CORRIGIDA (Jan 16, 2025)
 - **Implementado sistema completo de integração ViaCEP em todos os formulários**:
   - Criado `client/src/utils/viaCepUtils.ts` com funções utilitárias para busca e formatação
   - Integração implementada em todos os formulários com campos CEP:
@@ -327,6 +327,15 @@ The application provides role-based portals with specific functionality:
   - **API ViaCEP integrada**: https://viacep.com.br/ws/{cep}/json/
   - **Campos preenchidos automaticamente**: Endereço completo (logradouro, bairro, cidade, estado)
   - **Interface em português**: Todas as mensagens e notificações em português brasileiro
+
+- **Correções de Estabilidade (Jan 16, 2025)**:
+  - **Rota proxy backend criada**: `/api/cep/:cep` para evitar problemas de CORS
+  - **Handler de erro melhorado**: Implementação robusta que não quebra durante digitação
+  - **Timeout e AbortController**: Evita travamentos em conexões lentas (5s timeout)
+  - **Falha silenciosa**: Erros não mostram alertas desnecessários ao usuário
+  - **Validação antes da busca**: Só executa busca quando CEP tem exatos 8 dígitos
+  - **Promise com .then()/.catch()**: Substitui async/await para evitar erros não tratados
+  - **Logs otimizados**: Console logs informativos sem spam de erros
 
 - **Credenciais dos Portais**:
   - **Supervisor**: supervisao@abmix.com.br - Senha: 123456
