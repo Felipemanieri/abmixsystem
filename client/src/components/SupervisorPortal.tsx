@@ -1490,7 +1490,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       12: 'Sara Mattos'
     };
 
-    // Dados específicos para gráfico de pizza por vendedor (em tempo real)
+    // Dados específicos para gráfico de pizza por vendedor (TODOS os vendedores)
     const vendorPieData = realVendors.map(vendor => {
       // Contar propostas por vendorId mapeado para nome
       const vendorIdKey = Object.keys(vendorIdToNameMap).find(
@@ -1501,16 +1501,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         ? analyticsData.filter(p => p.vendorId === parseInt(vendorIdKey)).length
         : 0;
       
+      // Garantir que vendedores sem vendas tenham valor mínimo para aparecer
       return {
         name: vendor,
-        value: count,
+        value: count > 0 ? count : 0.1, // Traço pequeno para vendedores sem vendas
+        realValue: count, // Valor real para exibição
         fill: getVendorColor(vendor)
       };
-    }).filter(item => item.value > 0);
+    });
 
-    // Debug: Verificar se há dados
-    console.log('Analytics Data:', analyticsData);
-    console.log('Vendor Pie Data:', vendorPieData);
+
 
     // Dados para gráfico pizza (baseado nos filtros selecionados)
     const getChartData = () => {
@@ -1839,35 +1839,41 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Gráfico Pizza */}
+                {/* Gráfico Pizza Melhorado */}
                 <div className="flex justify-center">
-                  <div className="w-80 h-80">
+                  <div className="w-96 h-96">
                     <ResponsiveContainer width="100%" height="100%">
                       <RechartsPieChart>
                         <Pie
                           data={vendorPieData}
                           cx="50%"
                           cy="50%"
-                          innerRadius={60}
-                          outerRadius={140}
-                          paddingAngle={2}
+                          innerRadius={70}
+                          outerRadius={150}
+                          paddingAngle={1}
                           dataKey="value"
+                          label={({ name, percent, realValue }) => {
+                            if (realValue === 0) return ''; // Não mostrar label para vendedores sem vendas
+                            return `${(percent * 100).toFixed(1)}%`;
+                          }}
+                          labelLine={false}
                         >
                           {vendorPieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                            <Cell key={`cell-${index}`} fill={entry.fill} stroke="#fff" strokeWidth={2} />
                           ))}
                         </Pie>
                         <Tooltip 
-                          formatter={(value: any, name: any) => [
-                            `${value} propostas`, 
+                          formatter={(value: any, name: any, props: any) => [
+                            `${props.payload.realValue} propostas`, 
                             name
                           ]}
-                          labelStyle={{ color: '#374151' }}
+                          labelStyle={{ color: '#374151', fontWeight: 'bold' }}
                           contentStyle={{ 
                             backgroundColor: 'white', 
                             border: '1px solid #e5e7eb',
                             borderRadius: '8px',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                            fontSize: '14px'
                           }}
                         />
                       </RechartsPieChart>
@@ -1875,36 +1881,54 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   </div>
                 </div>
 
-                {/* Legenda com cores dos vendedores */}
+                {/* Legenda Completa - TODOS os Vendedores */}
                 <div className="space-y-3">
-                  <h3 className="text-base font-medium text-slate-800 mb-4">Vendedores</h3>
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                  <h3 className="text-base font-medium text-slate-800 mb-4">Todos os Vendedores</h3>
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
                     {vendorPieData
-                      .sort((a, b) => b.value - a.value)
-                      .map((entry, index) => (
-                      <div key={entry.name} className="flex items-center justify-between py-2">
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className="w-4 h-4 rounded-full flex-shrink-0" 
-                            style={{ backgroundColor: entry.fill }}
-                          ></div>
-                          <span className="text-sm text-slate-700 font-medium">
-                            {entry.name}
-                          </span>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-semibold text-slate-800">
-                            {entry.value}
+                      .sort((a, b) => (b.realValue || 0) - (a.realValue || 0))
+                      .map((entry, index) => {
+                        const totalReal = vendorPieData.reduce((sum, item) => sum + (item.realValue || 0), 0);
+                        const percentage = totalReal > 0 ? ((entry.realValue || 0) / totalReal * 100) : 0;
+                        
+                        return (
+                          <div key={entry.name} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                            <div className="flex items-center gap-3">
+                              <div 
+                                className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-white" 
+                                style={{ backgroundColor: entry.fill }}
+                              ></div>
+                              <span className={`text-sm font-medium ${(entry.realValue || 0) > 0 ? 'text-slate-800' : 'text-slate-500'}`}>
+                                {entry.name}
+                              </span>
+                            </div>
+                            <div className="text-right">
+                              <div className={`text-sm font-semibold ${(entry.realValue || 0) > 0 ? 'text-slate-800' : 'text-slate-400'}`}>
+                                {entry.realValue || 0}
+                              </div>
+                              <div className={`text-xs ${(entry.realValue || 0) > 0 ? 'text-slate-600' : 'text-slate-400'}`}>
+                                {percentage.toFixed(1)}%
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-xs text-slate-500">
-                            {vendorPieData.reduce((sum, item) => sum + item.value, 0) > 0 
-                              ? ((entry.value / vendorPieData.reduce((sum, item) => sum + item.value, 0)) * 100).toFixed(1)
-                              : 0
-                            }%
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                        );
+                      })}
+                  </div>
+                  
+                  {/* Resumo Total */}
+                  <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-slate-700">Total de Propostas:</span>
+                      <span className="text-sm font-bold text-slate-800">
+                        {vendorPieData.reduce((sum, item) => sum + (item.realValue || 0), 0)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-sm font-medium text-slate-700">Vendedores Ativos:</span>
+                      <span className="text-sm font-bold text-slate-800">
+                        {vendorPieData.filter(item => (item.realValue || 0) > 0).length}/{vendorPieData.length}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
