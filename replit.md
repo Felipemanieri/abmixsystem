@@ -309,6 +309,25 @@ The application provides role-based portals with specific functionality:
   - Sistema de edição de senhas centralizado com gerador automático
   - **Corrigido acesso direto à área restrita**: Removido login automático, agora exige autenticação
 
+### Integração API ViaCEP para Preenchimento Automático de Endereço (Jan 16, 2025)
+- **Implementado sistema completo de integração ViaCEP em todos os formulários**:
+  - Criado `client/src/utils/viaCepUtils.ts` com funções utilitárias para busca e formatação
+  - Integração implementada em todos os formulários com campos CEP:
+    - ProposalGenerator.tsx (formulário do vendedor)
+    - ClientProposalView.tsx (formulário do cliente)
+    - ProposalForm.tsx (formulário geral)
+  - **Funcionalidades implementadas**:
+    - Formatação automática do CEP com máscara (00000-000)
+    - Busca automática do endereço ao sair do campo CEP (onBlur)
+    - Preenchimento automático do campo "Endereço Completo"
+    - Notificações de sucesso quando CEP encontrado
+    - Notificações de aviso quando CEP não encontrado
+    - Tratamento de erros de conexão com a API
+    - Validação de CEP com 8 dígitos
+  - **API ViaCEP integrada**: https://viacep.com.br/ws/{cep}/json/
+  - **Campos preenchidos automaticamente**: Endereço completo (logradouro, bairro, cidade, estado)
+  - **Interface em português**: Todas as mensagens e notificações em português brasileiro
+
 - **Credenciais dos Portais**:
   - **Supervisor**: supervisao@abmix.com.br - Senha: 123456
   - **Financeiro**: financeiro@abmix.com.br - Senha: 123456

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building, FileText, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Upload, Camera, Save, Send, Info, Users, Lock, Check } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
+import { buscarCEP, formatarCEP } from '../utils/viaCepUtils';
 import ProposalProgressTracker from './ProposalProgressTracker';
 
 interface ContractData {
@@ -542,14 +543,29 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             type="text"
             value={person.cep}
             onChange={(e) => {
+              const formattedCep = formatarCEP(e.target.value);
               if (type === 'titular') {
-                updateTitular(index, 'cep', e.target.value);
+                updateTitular(index, 'cep', formattedCep);
               } else {
-                updateDependente(index, 'cep', e.target.value);
+                updateDependente(index, 'cep', formattedCep);
+              }
+            }}
+            onBlur={async (e) => {
+              const endereco = await buscarCEP(e.target.value);
+              if (endereco && endereco.enderecoCompleto) {
+                if (type === 'titular') {
+                  updateTitular(index, 'enderecoCompleto', endereco.enderecoCompleto);
+                } else {
+                  updateDependente(index, 'enderecoCompleto', endereco.enderecoCompleto);
+                }
+                showNotification('CEP encontrado! Endereço preenchido automaticamente.', 'success');
+              } else if (e.target.value.replace(/\D/g, '').length === 8) {
+                showNotification('CEP não encontrado. Preencha o endereço manualmente.', 'warning');
               }
             }}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="00000-000"
+            maxLength={9}
           />
         </div>
 
