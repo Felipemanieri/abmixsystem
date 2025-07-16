@@ -384,10 +384,17 @@ function App() {
         <div className="max-w-full mx-auto">
           <div className="flex items-center justify-between text-xs text-gray-600">
             
-            {/* Seção Esquerda - Info do Sistema */}
-            <div className="flex flex-col space-y-1">
-              <span className="font-medium text-gray-700">Sistema Interno v2.0</span>
-              <span className="text-gray-500">© 2025 Abmix Consultoria</span>
+            {/* Seção Esquerda - Logo e Info do Sistema */}
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-12 w-auto"
+              />
+              <div className="flex flex-col space-y-1">
+                <span className="font-medium text-gray-700">Sistema Interno v2.0</span>
+                <span className="text-gray-500">© 2025 Abmix Consultoria</span>
+              </div>
             </div>
 
             {/* Seção Centro - Suporte e Links */}
