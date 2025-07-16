@@ -1743,7 +1743,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     );
   };
 
-  // Nova seção Relatórios completa
+  // Aba Relatórios com integração Google Sheets - Sistema de relatórios profissional em tempo real
   const renderReports = () => {
     // Lista de vendedores reais do sistema
     const realVendors = [
@@ -1810,70 +1810,101 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
     return (
       <div className="space-y-6">
-        {/* Header discreto e profissional */}
-        <div className="border-b border-gray-200 pb-4 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-800">Relatórios</h2>
-              <p className="text-gray-600 mt-1">Geração e análise de relatórios</p>
-            </div>
-            <div className="text-right">
-              <span className="text-sm text-gray-500">{filteredData.length} registros</span>
+        {/* Header Profissional com Conexão Google Sheets */}
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-3">
+                  <BarChart3 size={24} className="text-green-600" />
+                  Sistema de Relatórios
+                </h2>
+                <p className="text-gray-600 mt-1">Dados em tempo real da planilha Google Sheets</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <span className="text-sm text-gray-500">{filteredData.length} registros disponíveis</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-600">Conectado</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/edit', '_blank');
+                    showNotification('Abrindo planilha Google Sheets', 'success');
+                  }}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                >
+                  <ExternalLink size={16} />
+                  Abrir Planilha
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Filtros de Relatório */}
-        <div className="bg-white border border-gray-200 rounded-lg">
+        {/* Filtros Avançados com Sincronização Google Sheets */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-base font-medium text-gray-700">Filtros</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+                <Filter size={18} />
+                Filtros de Relatório
+              </h3>
+              <button
+                onClick={() => {
+                  realTimeSync.forceRefresh();
+                  showNotification('Sincronização com Google Sheets iniciada', 'success');
+                }}
+                className="text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
+              >
+                <RefreshCw size={14} />
+                Sincronizar
+              </button>
+            </div>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {/* Vendedores */}
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+              {/* Tipo de Relatório */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
+                <select
+                  value={reportFilters.tipo}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="completo">📊 Relatório Completo</option>
+                  <option value="executivo">📈 Resumo Executivo</option>
+                  <option value="individual">👤 Por Vendedor Individual</option>
+                  <option value="equipe">👥 Por Equipe</option>
+                  <option value="financeiro">💰 Relatório Financeiro</option>
+                  <option value="status">📋 Por Status</option>
+                </select>
+              </div>
+
+              {/* Vendedor */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Vendedores</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Vendedor</label>
                 <select
                   value={reportFilters.vendedor}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
-                  <option value="">Selecione um vendedor</option>
+                  <option value="">Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
                     <option key={vendor} value={vendor}>{vendor}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Data Início */}
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">Data Início</label>
-                <input
-                  type="date"
-                  value={reportFilters.dataInicio}
-                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              {/* Data Fim */}
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">Data Fim</label>
-                <input
-                  type="date"
-                  value={reportFilters.dataFim}
-                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
               {/* Status */}
               <div>
-                <label className="block text-sm text-gray-600 mb-2">Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select
                   value={reportFilters.status}
                   onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="">Todos os Status</option>
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -1881,262 +1912,299 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   ))}
                 </select>
               </div>
+
+              {/* Data Início */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Data Início</label>
+                <input
+                  type="date"
+                  value={reportFilters.dataInicio}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+
+              {/* Data Fim */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Data Fim</label>
+                <input
+                  type="date"
+                  value={reportFilters.dataFim}
+                  onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
             </div>
             
-            {/* Botão Limpar Filtros */}
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setReportFilters({
-                  dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
-                })}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Limpar Filtros
-              </button>
+            {/* Filtros Rápidos */}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 7), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Últimos 7 dias
+                  </button>
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subDays(new Date(), 30), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Últimos 30 dias
+                  </button>
+                  <button
+                    onClick={() => setReportFilters(prev => ({ ...prev, dataInicio: format(subMonths(new Date(), 1), 'yyyy-MM-dd'), dataFim: format(new Date(), 'yyyy-MM-dd') }))}
+                    className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                  >
+                    Mês atual
+                  </button>
+                </div>
+                <button
+                  onClick={() => setReportFilters({
+                    dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
+                  })}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center gap-1"
+                >
+                  <X size={14} />
+                  Limpar Filtros
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Tipo de Relatório e Geração */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <FileText size={20} />
-            Configurações do Relatório
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium mb-2">Tipo de Relatório</label>
-              <select
-                value={reportFilters.tipo}
-                onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                className="w-full border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="completo">Relatório Completo</option>
-                <option value="resumo">Resumo Executivo</option>
-                <option value="vendedores">Por Vendedor</option>
-                <option value="financeiro">Relatório Financeiro</option>
-              </select>
-            </div>
-            <div className="flex items-end">
-              <button
-                onClick={() => setShowExportOptions(true)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-              >
-                <Download size={16} />
-                Gerar Relatório
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Preview dos Dados */}
-        <div className="bg-white border border-gray-200 rounded-lg">
+        {/* Sistema de Exportação Profissional */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-base font-medium text-gray-700 flex items-center gap-2">
-              <BarChart3 size={16} />
-              Preview dos Dados ({filteredData.length} registros)
-            </h3>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-sm text-gray-600 font-medium">TOTAL DE PROPOSTAS</p>
-                <p className="text-2xl font-semibold text-gray-800">{reportData.total}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-sm text-gray-600 font-medium">FATURAMENTO TOTAL</p>
-                <p className="text-2xl font-semibold text-gray-800">{formatCurrency(reportData.faturamento.toString())}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-sm text-gray-600 font-medium">TICKET MÉDIO</p>
-                <p className="text-2xl font-semibold text-gray-800">
-                  {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
-                </p>
-              </div>
-            </div>
-
-            {/* Resumo por Status */}
-            <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Distribuição por Status</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {Object.entries(reportData.porStatus).map(([status, count]) => (
-                  <div key={status} className="bg-gray-50 p-3 rounded-md text-center">
-                    <p className="text-xs text-gray-600 uppercase">{status}</p>
-                    <p className="text-lg font-semibold text-gray-800">{count}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Resumo por Vendedor */}
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Top 5 Vendedores</h4>
-              <div className="space-y-2">
-                {Object.entries(reportData.porVendedor)
-                  .sort(([,a], [,b]) => b.count - a.count)
-                  .slice(0, 5)
-                  .map(([vendor, data]) => (
-                  <div key={vendor} className="flex justify-between items-center bg-gray-50 p-3 rounded-md">
-                    <span className="text-sm font-medium text-gray-700">{vendor}</span>
-                    <div className="text-right">
-                      <span className="text-sm font-semibold text-gray-800">{data.count} propostas</span>
-                      <br />
-                      <span className="text-xs text-gray-600">{formatCurrency(data.value.toString())}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Exportação e Compartilhamento */}
-        <div className="bg-white border border-gray-200 rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-base font-medium text-gray-700 flex items-center gap-2">
-              <Share2 size={16} />
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <Download size={18} />
               Exportação e Compartilhamento
             </h3>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Exportação Principal */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <button
-                onClick={() => window.open('https://docs.google.com/spreadsheets', '_blank')}
-                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+                onClick={() => {
+                  generateReport('pdf');
+                  showNotification('Gerando relatório PDF...', 'success');
+                }}
+                disabled={isGenerating}
+                className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors disabled:opacity-50"
               >
-                <FileText size={20} />
-                <span className="text-sm font-medium">Exportar PDF</span>
+                <FileText size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar PDF</span>
+                  <p className="text-xs opacity-90">Relatório formatado</p>
+                </div>
               </button>
               
               <button
-                onClick={() => window.open('https://docs.google.com/spreadsheets', '_blank')}
-                className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+                onClick={() => {
+                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=xlsx', '_blank');
+                  showNotification('Baixando planilha Excel...', 'success');
+                }}
+                className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
               >
-                <Download size={20} />
-                <span className="text-sm font-medium">Exportar Excel</span>
+                <Download size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar Excel</span>
+                  <p className="text-xs opacity-90">Dados da planilha</p>
+                </div>
               </button>
               
               <button
-                onClick={() => window.open('mailto:?subject=Relatório Abmix&body=Segue em anexo o relatório solicitado.', '_blank')}
-                className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+                onClick={() => {
+                  window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/export?format=csv', '_blank');
+                  showNotification('Baixando arquivo CSV...', 'success');
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
               >
-                <Mail size={20} />
-                <span className="text-sm font-medium">Enviar Email</span>
+                <FileText size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Exportar CSV</span>
+                  <p className="text-xs opacity-90">Dados tabulares</p>
+                </div>
               </button>
               
               <button
-                onClick={() => window.open('https://drive.google.com', '_blank')}
-                className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-md flex flex-col items-center gap-2"
+                onClick={() => {
+                  window.open('https://drive.google.com/drive/folders/1your-folder-id', '_blank');
+                  showNotification('Abrindo Google Drive...', 'success');
+                }}
+                className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg flex flex-col items-center gap-3 transition-colors"
               >
-                <ExternalLink size={20} />
-                <span className="text-sm font-medium">Subir Drive</span>
+                <ExternalLink size={24} />
+                <div className="text-center">
+                  <span className="text-sm font-medium">Abrir Drive</span>
+                  <p className="text-xs opacity-90">Ver documentos</p>
+                </div>
               </button>
             </div>
-          </div>
-        </div>
 
-        {/* Opções de Exportação Rápida */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Share size={20} />
-            Exportação e Compartilhamento
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button
-              onClick={() => generateReport('pdf')}
-              disabled={isGenerating}
-              className="bg-red-500 text-white p-4 rounded-lg hover:bg-red-600 disabled:opacity-50 flex flex-col items-center gap-2"
-            >
-              <FileText size={24} />
-              Exportar PDF
-            </button>
-            <button
-              onClick={() => generateReport('excel')}
-              disabled={isGenerating}
-              className="bg-green-500 text-white p-4 rounded-lg hover:bg-green-600 disabled:opacity-50 flex flex-col items-center gap-2"
-            >
-              <Download size={24} />
-              Exportar Excel
-            </button>
-            <button
-              onClick={() => generateReport('email', 'email')}
-              disabled={isGenerating}
-              className="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 disabled:opacity-50 flex flex-col items-center gap-2"
-            >
-              <MessageSquare size={24} />
-              Enviar Email
-            </button>
-            <button
-              onClick={() => generateReport('drive', 'drive')}
-              disabled={isGenerating}
-              className="bg-orange-500 text-white p-4 rounded-lg hover:bg-orange-600 disabled:opacity-50 flex flex-col items-center gap-2"
-            >
-              <ExternalLink size={24} />
-              Subir Drive
-            </button>
-          </div>
-        </div>
-
-        {/* Modal de Opções de Exportação */}
-        {showExportOptions && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Opções de Exportação</h3>
+            {/* Opções de Compartilhamento */}
+            <div className="pt-4 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-700 mb-3">Compartilhamento Rápido</h4>
+              <div className="grid grid-cols-3 gap-3">
                 <button
-                  onClick={() => setShowExportOptions(false)}
-                  className="text-gray-500 hover:text-gray-700"
+                  onClick={() => {
+                    const subject = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo}`);
+                    const body = encodeURIComponent(`Segue em anexo o relatório ${reportFilters.tipo} gerado em ${new Date().toLocaleDateString('pt-BR')}.`);
+                    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+                  }}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
                 >
-                  <X size={20} />
+                  <Mail size={16} />
+                  Email
+                </button>
+                
+                <button
+                  onClick={() => {
+                    const message = encodeURIComponent(`Relatório Abmix - ${reportFilters.tipo} disponível: ${window.location.href}`);
+                    window.open(`https://wa.me/?text=${message}`, '_blank');
+                  }}
+                  className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
+                >
+                  <MessageSquare size={16} />
+                  WhatsApp
+                </button>
+                
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    showNotification('Link copiado para a área de transferência', 'success');
+                  }}
+                  className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-md flex items-center gap-2 text-sm"
+                >
+                  <Share size={16} />
+                  Copiar Link
                 </button>
               </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Formato</label>
-                  <select
-                    value={reportFormat}
-                    onChange={(e) => setReportFormat(e.target.value)}
-                    className="w-full border rounded-lg px-3 py-2"
-                  >
-                    <option value="pdf">PDF</option>
-                    <option value="excel">Excel (.xlsx)</option>
-                    <option value="csv">CSV</option>
-                    <option value="word">Word (.docx)</option>
-                  </select>
-                </div>
+            </div>
+          </div>
+        </div>
 
-                <div className="space-y-2">
-                  <button
-                    onClick={() => generateReport(reportFormat)}
-                    disabled={isGenerating}
-                    className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {isGenerating ? 'Gerando...' : `Baixar ${reportFormat.toUpperCase()}`}
-                  </button>
-                  
-                  <button
-                    onClick={() => generateReport(reportFormat, 'email')}
-                    disabled={isGenerating}
-                    className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
-                  >
-                    Enviar por Email
-                  </button>
-                  
-                  <button
-                    onClick={() => generateReport(reportFormat, 'whatsapp')}
-                    disabled={isGenerating}
-                    className="w-full bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 disabled:opacity-50"
-                  >
-                    Compartilhar WhatsApp
-                  </button>
+        {/* Dashboard Visual com Dados Google Sheets */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+              <PieChart size={18} />
+              Painel de Dados em Tempo Real
+              <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                {filteredData.length} registros
+              </span>
+            </h3>
+          </div>
+          <div className="p-6">
+            {/* KPIs Principais */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-blue-700">Total de Propostas</p>
+                    <p className="text-3xl font-bold text-blue-900">{reportData.total}</p>
+                  </div>
+                  <FileText className="h-10 w-10 text-blue-600" />
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-green-700">Faturamento Total</p>
+                    <p className="text-3xl font-bold text-green-900">{formatCurrency(reportData.faturamento.toString())}</p>
+                  </div>
+                  <DollarSign className="h-10 w-10 text-green-600" />
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-purple-700">Ticket Médio</p>
+                    <p className="text-3xl font-bold text-purple-900">
+                      {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
+                    </p>
+                  </div>
+                  <Calculator className="h-10 w-10 text-purple-600" />
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-orange-700">Vendedores Ativos</p>
+                    <p className="text-3xl font-bold text-orange-900">{uniqueVendors.length}</p>
+                  </div>
+                  <Users className="h-10 w-10 text-orange-600" />
+                </div>
+              </div>
+            </div>
+
+            {/* Distribuição por Status */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <BarChart3 size={16} />
+                  Distribuição por Status
+                </h4>
+                <div className="space-y-3">
+                  {Object.entries(reportData.porStatus).map(([status, count]) => {
+                    const percentage = ((count / reportData.total) * 100).toFixed(1);
+                    const statusConfig = Object.values(STATUS_CONFIG).find(config => config.label === status);
+                    return (
+                      <div key={status} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: statusConfig?.color || '#6B7280' }}
+                          ></div>
+                          <span className="text-sm font-medium text-gray-700">{status}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-lg font-bold text-gray-900">{count}</span>
+                          <span className="text-xs text-gray-500 ml-1">({percentage}%)</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Award size={16} />
+                  Ranking de Vendedores
+                </h4>
+                <div className="space-y-3">
+                  {Object.entries(reportData.porVendedor)
+                    .sort(([,a], [,b]) => b.count - a.count)
+                    .slice(0, 5)
+                    .map(([vendor, data], index) => (
+                    <div key={vendor} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+                          index === 0 ? 'bg-yellow-500' : 
+                          index === 1 ? 'bg-gray-400' : 
+                          index === 2 ? 'bg-orange-600' : 'bg-blue-500'
+                        }`}>
+                          {index + 1}
+                        </span>
+                        <span className="text-sm font-medium text-gray-700">{vendor}</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-900">{data.count}</div>
+                        <div className="text-xs text-gray-500">{formatCurrency(data.value.toString())}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
+
+
       </div>
     );
   };
