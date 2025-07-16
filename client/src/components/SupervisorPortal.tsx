@@ -723,9 +723,22 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     }
   };
 
-  const formatCurrency = (value: string) => {
-    if (!value || value === '0') return 'R$ 0,00';
-    const numValue = parseFloat(value.replace(/[^\d]/g, ''));
+  const formatCurrency = (value: string | number) => {
+    if (!value || value === '0' || value === 0) return 'R$ 0,00';
+    
+    // Se for string, tentar converter para número
+    let numValue: number;
+    if (typeof value === 'string') {
+      // Se já tem formato de moeda, extrair apenas números
+      if (value.includes('R$') || value.includes(',')) {
+        numValue = parseFloat(value.replace(/[^\d,]/g, '').replace(',', '.'));
+      } else {
+        numValue = parseFloat(value);
+      }
+    } else {
+      numValue = value;
+    }
+    
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
@@ -809,7 +822,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Faturamento Total</p>
-              <p className="text-2xl font-bold text-green-600">{formatCurrency(teamStats.totalValue?.toString() || '0')}</p>
+              <p className="text-2xl font-bold text-green-600">{formatCurrency(teamStats.totalValue || 0)}</p>
             </div>
             <DollarSign className="h-8 w-8 text-green-600" />
           </div>
@@ -829,7 +842,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Ticket Médio</p>
-              <p className="text-2xl font-bold text-purple-600">{formatCurrency(teamStats.averageValue?.toString() || '0')}</p>
+              <p className="text-2xl font-bold text-purple-600">{formatCurrency(teamStats.averageValue || 0)}</p>
             </div>
             <TrendingUp className="h-8 w-8 text-purple-600" />
           </div>
