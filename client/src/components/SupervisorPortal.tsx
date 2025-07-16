@@ -171,19 +171,35 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
   
-  // Função para alterar prioridade - versão simplificada
+  // Função para alterar prioridade - atualizada para sincronizar com backend
   const handlePriorityChange = async (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
     try {
       // Converter para formato do backend
       const backendPriority = priority === 'alta' ? 'high' : priority === 'media' ? 'medium' : 'low';
       
-      // Simular sucesso por enquanto até corrigir o backend
-      setProposalPriorities(prev => ({
-        ...prev,
-        [proposalId]: priority
-      }));
+      // Enviar para o backend
+      const response = await fetch(`/api/proposals/${proposalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priority: backendPriority }),
+      });
 
-      showNotification(`Prioridade alterada para ${getPriorityText(priority)}`, 'success');
+      if (response.ok) {
+        // Atualizar estado local
+        setProposalPriorities(prev => ({
+          ...prev,
+          [proposalId]: priority
+        }));
+
+        // Forçar sincronização em tempo real
+        realTimeSync.forceRefresh();
+        
+        showNotification(`Prioridade alterada para ${getPriorityText(priority)}`, 'success');
+      } else {
+        showNotification('Erro ao alterar prioridade no servidor', 'error');
+      }
     } catch (error) {
       console.error('Erro ao alterar prioridade:', error);
       showNotification('Erro ao alterar prioridade', 'error');

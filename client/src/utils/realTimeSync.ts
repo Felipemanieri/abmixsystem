@@ -58,6 +58,11 @@ class RealTimeSync {
     this.forceUpdateAllProposals();
   }
   
+  // Alias para forceUpdateAllProposals - usado pelos portais
+  public forceRefresh(): void {
+    this.forceUpdateAllProposals();
+  }
+  
   // Configurar polling agressivo para tempo real
   public enableAggressivePolling(): void {
     console.log('⚡ Enabling aggressive polling for real-time updates');
