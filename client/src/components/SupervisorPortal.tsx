@@ -87,6 +87,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   };
 
   const showReportPreview = (data: any[]) => {
+    // Calcular valores totais corretos
+    const totalValue = data.reduce((sum, item) => {
+      const value = parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+      return sum + value;
+    }, 0);
+    
+    const avgValue = data.length > 0 ? totalValue / data.length : 0;
+    
     const reportWindow = window.open('', '_blank', 'width=1200,height=800');
     if (reportWindow) {
       reportWindow.document.write(`
@@ -101,6 +109,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
               th { background-color: #f2f2f2; }
               .close-btn { position: absolute; top: 10px; right: 10px; background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+              .green { color: #22c55e; font-weight: bold; }
             </style>
           </head>
           <body>
@@ -108,19 +117,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <h2>👁️ Visualizar Relatório - EXCEL</h2>
             <div class="header">
               <div>
-                <div class="info"><strong>Tipo de relatório:</strong> completo</div>
+                <div class="info"><strong>Tipo de relatório:</strong> ${reportFilters.tipo}</div>
                 <div class="info"><strong>Total de Propostas:</strong> ${data.length}</div>
-                <div class="info"><strong>Faturamento Total:</strong> R$ ${data.reduce((sum, p) => sum + (parseFloat(p.valor.replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2)}</div>
-                <div class="info"><strong>Bilhete Médio:</strong> R$ ${data.length > 0 ? (data.reduce((sum, p) => sum + (parseFloat(p.valor.replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0) / data.length).toFixed(2) : '0.00'}</div>
+                <div class="info"><strong>Faturamento Total:</strong> <span class="green">R$ ${totalValue.toFixed(2).replace('.', ',')}</span></div>
+                <div class="info"><strong>Bilhete Médio:</strong> R$ ${avgValue.toFixed(2).replace('.', ',')}</div>
               </div>
               <div>
-                <div class="info"><strong>Vendedores Incluídos:</strong> Todos</div>
+                <div class="info"><strong>Vendedores Incluídos:</strong> ${reportFilters.vendedor || 'Todos'}</div>
                 <div class="info"><strong>Data de Geração:</strong> ${new Date().toLocaleString('pt-BR')}</div>
-                <div class="info"><strong>Status Incluído:</strong> Todos</div>
+                <div class="info"><strong>Status Incluído:</strong> ${reportFilters.status || 'Todos'}</div>
                 <div class="info"><strong>Formato:</strong> SOBRESSAIR</div>
-                <div class="info"><strong>Período Início:</strong> 2025-06-16</div>
+                <div class="info"><strong>Período Início:</strong> ${reportFilters.dataInicio || '2025-06-16'}</div>
                 <div class="info"><strong>Campos Incluídos:</strong> 10 colunas</div>
-                <div class="info"><strong>Período Fim:</strong> 2025-07-16</div>
+                <div class="info"><strong>Período Fim:</strong> ${reportFilters.dataFim || '2025-07-16'}</div>
                 <div class="info"><strong>Observações:</strong> 0 com dados</div>
               </div>
             </div>
@@ -208,6 +217,43 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   const openGoogleDrive = () => {
     window.open('https://drive.google.com/drive/folders/1cLvVhS7X9YQZ3K8N2M5P6R7T', '_blank');
+  };
+
+  // Função para obter propostas filtradas baseada nos filtros do relatório
+  const getFilteredProposals = () => {
+    if (!proposals || !Array.isArray(proposals)) return [];
+    
+    return proposals.filter(proposal => {
+      // Filtro por vendedor
+      if (reportFilters.vendedor && proposal.vendedor !== reportFilters.vendedor) {
+        return false;
+      }
+      
+      // Filtro por status
+      if (reportFilters.status && proposal.status !== reportFilters.status) {
+        return false;
+      }
+      
+      // Filtro por data de início
+      if (reportFilters.dataInicio) {
+        const proposalDate = new Date(proposal.createdAt);
+        const startDate = new Date(reportFilters.dataInicio);
+        if (proposalDate < startDate) {
+          return false;
+        }
+      }
+      
+      // Filtro por data fim
+      if (reportFilters.dataFim) {
+        const proposalDate = new Date(proposal.createdAt);
+        const endDate = new Date(reportFilters.dataFim);
+        if (proposalDate > endDate) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
   };
 
   const clearAllFilters = () => {
@@ -2025,16 +2071,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
           </div>
           <div className="p-4">
-            {/* Filtros ultra-compactos - 3 por linha real */}
+            {/* Layout exato como na primeira imagem - Filtros organizados da esquerda para direita */}
             <div className="space-y-3">
               {/* Primeira linha: Tipo de Relatório, Vendedor, Status */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Tipo de Relatório</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Relatório</label>
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="completo">📊 Relatório Completo</option>
                     <option value="individual">👤 Por Vendedor Individual</option>
@@ -2045,28 +2091,28 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Vendedor</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Vendedor</label>
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="">Todos os Vendedores</option>
-                    {uniqueVendors.map(vendor => (
+                    {uniqueVendors && uniqueVendors.map(vendor => (
                       <option key={vendor} value={vendor}>{vendor}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="">Todos os Status</option>
-                    {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                    {STATUS_CONFIG && Object.entries(STATUS_CONFIG).map(([key, config]) => (
                       <option key={key} value={key}>{config.label}</option>
                     ))}
                   </select>
@@ -2074,24 +2120,26 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
 
               {/* Segunda linha: Data Início, Data Fim, Limpar Filtros */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Data Início</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
                   <input
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    placeholder="dd/mm/aaaa"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Data Fim</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
                   <input
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    placeholder="dd/mm/aaaa"
                   />
                 </div>
 
@@ -2100,43 +2148,46 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     onClick={() => setReportFilters({
                       dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                     })}
-                    className="w-full h-[28px] px-2 py-1 text-xs text-gray-600 hover:text-gray-800 border border-gray-300 rounded hover:bg-gray-50 flex items-center justify-center gap-1"
+                    className="w-full h-[42px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center gap-1"
                   >
-                    <X size={12} />
+                    <X size={14} />
                     Limpar Filtros
                   </button>
                 </div>
               </div>
 
-              {/* Botões de Ação Funcionais */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                <span className="text-xs text-gray-500">Visualizar relatório com filtros aplicados:</span>
-                <div className="flex gap-2">
+              {/* Botões de Visualização - Todos da esquerda para direita como na imagem */}
+              <div className="flex items-center justify-between pt-3 mt-3">
+                <span className="text-sm text-gray-600">Visualizar relatório com filtros aplicados:</span>
+                <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      const reportData = generateReportData();
+                      const currentFilteredData = getFilteredProposals();
+                      const reportData = generateReportData(currentFilteredData);
                       showReportPreview(reportData);
                       showNotification('Visualização do relatório aberta', 'success');
                     }}
-                    className="px-2 py-1 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded flex items-center gap-1 transition-colors"
+                    className="px-4 py-2 text-sm bg-red-50 text-red-700 hover:bg-red-100 rounded-md flex items-center gap-2 transition-colors border border-red-200"
                   >
                     📊 PDF
                   </button>
                   <button
                     onClick={() => {
-                      exportToSheets(filteredData);
+                      const currentFilteredData = getFilteredProposals();
+                      exportToSheets(currentFilteredData);
                       showNotification('Dados enviados para Google Sheets', 'success');
                     }}
-                    className="px-2 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded flex items-center gap-1 transition-colors"
+                    className="px-4 py-2 text-sm bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-2 transition-colors border border-green-200"
                   >
                     📋 Sheets
                   </button>
                   <button
                     onClick={() => {
-                      exportToExcel(filteredData);
+                      const currentFilteredData = getFilteredProposals();
+                      exportToExcel(currentFilteredData);
                       showNotification('Arquivo Excel gerado e baixado', 'success');
                     }}
-                    className="px-2 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded flex items-center gap-1 transition-colors"
+                    className="px-4 py-2 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-2 transition-colors border border-blue-200"
                   >
                     📗 Excel
                   </button>
@@ -2145,7 +2196,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       openGoogleDrive();
                       showNotification('Google Drive aberto', 'info');
                     }}
-                    className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded flex items-center gap-1 transition-colors"
+                    className="px-4 py-2 text-sm bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded-md flex items-center gap-2 transition-colors border border-yellow-200"
                   >
                     📁 Drive
                   </button>
