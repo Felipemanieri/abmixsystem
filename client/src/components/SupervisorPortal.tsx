@@ -1773,6 +1773,165 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     );
   };
 
+  // Renderização da aba de Propostas
+  const renderPropostas = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900">Acompanhamento de Propostas</h2>
+        <button
+          onClick={refreshData}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+        >
+          <RefreshCw size={16} />
+          Atualizar
+        </button>
+      </div>
+      
+      {/* Filtros */}
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select
+            value={filterVendor}
+            onChange={(e) => setFilterVendor(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="">Todos os Vendedores</option>
+            {vendors?.map(vendor => (
+              <option key={vendor.id} value={vendor.name}>{vendor.name}</option>
+            ))}
+          </select>
+          
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="">Todos os Status</option>
+            {Object.values(STATUS_CONFIG).map(status => (
+              <option key={status.label} value={status.label}>{status.label}</option>
+            ))}
+          </select>
+          
+          <input
+            type="date"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2"
+          />
+        </div>
+      </div>
+
+      {/* Lista de Propostas */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">CNPJ</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendedor</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plano</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredProposals?.map((proposal) => (
+                <tr key={proposal.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                    {proposal.abmId || `ABM${proposal.id.slice(-3)}`}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {proposal.contractData?.companyName || 'Nome não informado'}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {proposal.contractData?.cnpj || 'CNPJ não informado'}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {proposal.vendorName || 'Vendedor não informado'}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {proposal.contractData?.selectedPlan || 'Plano não informado'}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    R$ {parseFloat(proposal.contractData?.monthlyValue || '0').toFixed(2)}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                      STATUS_CONFIG[proposal.status as ProposalStatus]?.bgColor || 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {proposal.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-500">
+                    {format(new Date(proposal.createdAt), 'dd/MM/yyyy')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Renderização da aba de Equipe
+  const renderTeam = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900">Gerenciamento da Equipe</h2>
+        <button
+          onClick={() => setShowAddVendorForm(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+        >
+          <UserPlus size={16} />
+          Adicionar Vendedor
+        </button>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Senha</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data Criação</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {vendors?.map((vendor) => (
+                <tr key={vendor.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{vendor.name}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{vendor.email}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600 font-mono">120784</td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                      Ativo
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-500">
+                    {format(new Date(vendor.createdAt), 'dd/MM/yyyy')}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button className="text-red-600 hover:text-red-800 text-sm">
+                      Remover
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
   // Sistema de Relatórios Profissional Completo
   const renderReports = () => {
     
