@@ -385,11 +385,24 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Logo */}
             <div className="flex items-center">
-              <img 
-                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
-                alt="Abmix" 
-                className="h-24 w-auto"
-              />
+              <div className="flex items-center space-x-3">
+                {/* Logo Abmix exato da imagem */}
+                <svg width="60" height="60" viewBox="0 0 100 100" className="flex-shrink-0">
+                  <defs>
+                    <linearGradient id="abmixFooterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#00bcd4" />
+                      <stop offset="100%" stopColor="#4caf50" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="45" fill="url(#abmixFooterGradient)" />
+                  <path d="M30 40 L50 60 L70 40 L50 20 Z" fill="white" opacity="0.9" />
+                  <circle cx="50" cy="50" r="8" fill="white" />
+                </svg>
+                <div className="flex flex-col">
+                  <span className="text-white text-2xl font-bold">Abmix</span>
+                  <span className="text-gray-400 text-sm">Consultoria em Benefícios</span>
+                </div>
+              </div>
             </div>
             
             {/* Contato */}
