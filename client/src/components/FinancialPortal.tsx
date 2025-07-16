@@ -206,6 +206,93 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     setShowReportModal(true);
   };
 
+  // Função para visualizar relatório no formato Excel
+  const handleViewExcel = (report: any) => {
+    // Criar uma janela modal com formato Excel
+    const excelContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Relatório Excel - ${report.title}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .excel-header { background: #217346; color: white; padding: 10px; text-align: center; font-weight: bold; }
+          .excel-table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+          .excel-table th, .excel-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+          .excel-table th { background: #f0f0f0; font-weight: bold; }
+          .excel-table tr:nth-child(even) { background: #f9f9f9; }
+          .summary-box { background: #e8f5e8; padding: 15px; border-left: 4px solid #217346; margin: 20px 0; }
+          .print-btn { background: #217346; color: white; padding: 10px 20px; border: none; margin: 10px 5px; cursor: pointer; }
+          .print-btn:hover { background: #1a5c37; }
+        </style>
+      </head>
+      <body>
+        <div class="excel-header">RELATÓRIO FINANCEIRO ABMIX - FORMATO EXCEL</div>
+        
+        <div class="summary-box">
+          <h3>📊 Resumo Executivo</h3>
+          <p><strong>Período:</strong> ${report.data.period}</p>
+          <p><strong>Total de Propostas:</strong> ${report.data.totalProposals}</p>
+          <p><strong>Valor Total:</strong> ${report.data.totalValue}</p>
+          <p><strong>Taxa de Conversão:</strong> ${report.data.conversionRate}</p>
+          <p><strong>Gerado em:</strong> ${new Date(report.receivedAt).toLocaleString('pt-BR')}</p>
+        </div>
+
+        <table class="excel-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>CLIENTE</th>
+              <th>CNPJ</th>
+              <th>VENDEDOR</th>
+              <th>VALOR</th>
+              <th>PLANO</th>
+              <th>STATUS</th>
+              <th>OBSERVAÇÕES</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${report.rawData ? report.rawData.map(item => `
+              <tr>
+                <td>${item.abmId}</td>
+                <td>${item.cliente}</td>
+                <td>${item.cnpj}</td>
+                <td>${item.vendedor}</td>
+                <td>${item.valor}</td>
+                <td>${item.plano}</td>
+                <td>${item.status.toUpperCase()}</td>
+                <td>${item.observacoes || ''}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="8">Nenhum dado disponível</td></tr>'}
+          </tbody>
+        </table>
+
+        <div style="margin-top: 30px; text-align: center;">
+          <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
+          <button class="print-btn" onclick="downloadExcel()">📊 Baixar Excel</button>
+          <button class="print-btn" onclick="window.close()">❌ Fechar</button>
+        </div>
+
+        <script>
+          function downloadExcel() {
+            const table = document.querySelector('.excel-table');
+            const wb = XLSX.utils.table_to_book(table);
+            XLSX.writeFile(wb, 'relatorio_abmix_${Date.now()}.xlsx');
+          }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+      </body>
+      </html>
+    `;
+
+    // Abrir em nova janela com formato Excel
+    const newWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=yes');
+    newWindow.document.write(excelContent);
+    newWindow.document.close();
+    
+    showNotification('Relatório aberto em formato Excel', 'success');
+  };
+
   // Função para simular recebimento de relatório do supervisor (para testes)
   const simulateReportReceived = (reportData: any) => {
     setReceivedReports(prev => [reportData, ...prev]);
@@ -402,7 +489,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     {/* Ações do Relatório */}
                     <div className="bg-gray-50 rounded-lg p-3">
                       <h5 className="text-xs font-medium text-gray-700 mb-2">Ações do Relatório</h5>
-                      <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                      <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
                         <button
                           onClick={() => handleDownloadReport(report.id)}
                           className="flex flex-col items-center p-2 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors"
@@ -441,6 +528,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                         >
                           <MessageSquare className="h-4 w-4 text-emerald-600 mb-1" />
                           <span className="text-emerald-700 text-xs">WhatsApp</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleViewExcel(report)}
+                          className="flex flex-col items-center p-2 bg-orange-100 hover:bg-orange-200 rounded-md transition-colors"
+                        >
+                          <FileText className="h-4 w-4 text-orange-600 mb-1" />
+                          <span className="text-orange-700 text-xs">Excel</span>
                         </button>
                       </div>
                     </div>
