@@ -180,23 +180,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const completedProposals = realTransactions.filter(t => t.status === 'completed').length;
   const conversionRate = totalProposals > 0 ? Math.round((completedProposals / totalProposals) * 100) : 0;
 
-  // Função para obter cores e texto do status usando o sistema do projeto
-  const getStatusInfo = (realStatus?: string) => {
-    if (!realStatus || !STATUS_CONFIG[realStatus as ProposalStatus]) {
-      return {
-        text: realStatus || 'Pendente',
-        bgClass: 'bg-gray-100',
-        textClass: 'text-gray-800'
-      };
-    }
-    
-    const config = STATUS_CONFIG[realStatus as ProposalStatus];
-    return {
-      text: config.label,
-      bgClass: config.bgColor,
-      textClass: config.textColor
-    };
-  };
+  // Usando o componente StatusBadge oficial do projeto para garantir cores corretas
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
     setSelectedProposalForAutomation({ id: proposalId, client: clientName });
@@ -578,14 +562,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <div className="text-sm font-medium text-gray-900">{transaction.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {(() => {
-                      const statusInfo = getStatusInfo(transaction.realStatus);
-                      return (
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusInfo.bgClass} ${statusInfo.textClass}`}>
-                          {statusInfo.text}
-                        </span>
-                      );
-                    })()}
+                    <StatusBadge 
+                      status={transaction.realStatus as ProposalStatus || 'observacao'}
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(transaction.date).toLocaleDateString('pt-BR')}
