@@ -2237,36 +2237,66 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <h3 className="text-lg font-semibold">Propostas ({filteredProposals.length})</h3>
         </div>
         
-        {/* Filtros */}
-        <div className="flex space-x-4 mb-6">
-          <select
-            value={filterVendor}
-            onChange={(e) => setFilterVendor(e.target.value)}
-            className="border rounded-lg px-3 py-2"
-          >
-            <option value="">Todos os vendedores</option>
-            {vendors.map(vendor => (
-              <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
-            ))}
-          </select>
+        {/* Filtros organizados - 3 por linha para economizar espaço */}
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <Filter size={16} />
+              Filtros
+            </h4>
+            <button
+              onClick={() => {
+                setFilterVendor('');
+                setFilterStatus('');
+                setFilterDate('');
+              }}
+              className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+            >
+              <X size={12} />
+              Limpar
+            </button>
+          </div>
           
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="border rounded-lg px-3 py-2"
-          >
-            <option value="">Todos os status</option>
-            {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-              <option key={key} value={key}>{config.label}</option>
-            ))}
-          </select>
-          
-          <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-            className="border rounded-lg px-3 py-2"
-          />
+          {/* Uma única linha com 3 filtros */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Vendedor</label>
+              <select
+                value={filterVendor}
+                onChange={(e) => setFilterVendor(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Todos os vendedores</option>
+                {vendors.map(vendor => (
+                  <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Todos os status</option>
+                {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                  <option key={key} value={key}>{config.label}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Data</label>
+              <input
+                type="date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Tabela de propostas */}
