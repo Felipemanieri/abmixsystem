@@ -140,7 +140,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [vendorAttachments, setVendorAttachments] = useState<File[]>([]);
   const [contractFieldsReadOnly, setContractFieldsReadOnly] = useState(false);
   const [showProfessionalModal, setShowProfessionalModal] = useState(false);
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [lastSaved, setLastSaved] = useState<string | null>(new Date().toISOString());
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
   const [isClearingDraft, setIsClearingDraft] = useState(false);
 

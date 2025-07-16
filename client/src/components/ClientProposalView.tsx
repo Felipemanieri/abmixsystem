@@ -66,7 +66,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [showVendorObservations, setShowVendorObservations] = useState(false);
   const [uploadMethod, setUploadMethod] = useState<'file' | 'camera' | 'gallery'>('file');
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [lastSaved, setLastSaved] = useState<string | null>(new Date().toISOString());
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
   const [isClearingDraft, setIsClearingDraft] = useState(false);
 
