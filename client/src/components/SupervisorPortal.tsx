@@ -1474,15 +1474,43 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
+    // Mapeamento de vendorId para nome do vendedor
+    const vendorIdToNameMap: { [key: number]: string } = {
+      1: 'Ana Caroline Terto',
+      2: 'Bruna Garcia', 
+      3: 'Fabiana Ferreira',
+      4: 'Fabiana Godinho',
+      5: 'Fernanda Batista',
+      6: 'Gabrielle Fernandes',
+      7: 'Isabela Velasquez',
+      8: 'Juliana Araujo',
+      9: 'Lohainy Berlino',
+      10: 'Luciana Velasquez',
+      11: 'Monique Silva',
+      12: 'Sara Mattos'
+    };
+
     // Dados específicos para gráfico de pizza por vendedor (em tempo real)
-    const vendorPieData = uniqueVendors.map(vendor => {
-      const count = analyticsData.filter(p => p.vendorName === vendor).length;
+    const vendorPieData = realVendors.map(vendor => {
+      // Contar propostas por vendorId mapeado para nome
+      const vendorIdKey = Object.keys(vendorIdToNameMap).find(
+        key => vendorIdToNameMap[parseInt(key)] === vendor
+      );
+      
+      const count = vendorIdKey 
+        ? analyticsData.filter(p => p.vendorId === parseInt(vendorIdKey)).length
+        : 0;
+      
       return {
         name: vendor,
         value: count,
         fill: getVendorColor(vendor)
       };
     }).filter(item => item.value > 0);
+
+    // Debug: Verificar se há dados
+    console.log('Analytics Data:', analyticsData);
+    console.log('Vendor Pie Data:', vendorPieData);
 
     // Dados para gráfico pizza (baseado nos filtros selecionados)
     const getChartData = () => {
