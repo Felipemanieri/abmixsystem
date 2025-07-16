@@ -336,11 +336,15 @@ function App() {
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-400 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-gray-200 group-hover:to-gray-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <img 
-                  src="/e56c6d42-ff7e-4f8e-a4cc-bb304b9efeb6_1752651616701.png" 
-                  alt="Supervisor" 
-                  className="w-8 h-8 object-contain"
-                />
+                <svg width="32" height="32" viewBox="0 0 100 100" className="text-gray-600">
+                  <path d="M15 85 C15 75, 25 65, 35 65 C40 55, 45 50, 50 50 C55 50, 60 55, 65 65 C75 65, 85 75, 85 85 L85 90 L15 90 Z" fill="currentColor"/>
+                  <path d="M50 50 C45 45, 40 40, 35 35 C30 30, 25 25, 20 20 C15 15, 10 10, 5 5" stroke="currentColor" strokeWidth="3" fill="none"/>
+                  <path d="M50 50 C55 45, 60 40, 65 35 C70 30, 75 25, 80 20 C85 15, 90 10, 95 5" stroke="currentColor" strokeWidth="3" fill="none"/>
+                  <path d="M50 50 C55 40, 60 35, 70 30 C75 28, 80 26, 85 25 C90 24, 95 23, 98 20" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <circle cx="65" cy="35" r="3" fill="currentColor"/>
+                  <path d="M68 30 C70 28, 72 26, 75 25" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <path d="M68 32 C70 30, 72 28, 74 27" stroke="currentColor" strokeWidth="2" fill="none"/>
+                </svg>
               </div>
               <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-gray-600 transition-colors">Portal Supervisor</h3>
               <p className="text-gray-600 mb-6 leading-relaxed font-medium">
