@@ -1474,6 +1474,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       fill: config.color
     })).filter(item => item.value > 0);
 
+    // Dados específicos para gráfico de pizza por vendedor (em tempo real)
+    const vendorPieData = uniqueVendors.map(vendor => {
+      const count = analyticsData.filter(p => p.vendorName === vendor).length;
+      return {
+        name: vendor,
+        value: count,
+        fill: getVendorColor(vendor)
+      };
+    }).filter(item => item.value > 0);
+
     // Dados para gráfico pizza (baseado nos filtros selecionados)
     const getChartData = () => {
       if (!selectedStatusForChart && !selectedVendorForChart) return [];
@@ -1785,6 +1795,92 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Gráfico de Pizza por Vendedor - Atualizado em Tempo Real */}
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h2 className="text-lg font-medium text-slate-800">Distribuição por Vendedor</h2>
+            <p className="text-sm text-slate-500 mt-1">Atualizado em tempo real</p>
+          </div>
+          <div className="p-6">
+            {vendorPieData.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-slate-500">Nenhuma proposta encontrada.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Gráfico Pizza */}
+                <div className="flex justify-center">
+                  <div className="w-80 h-80">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RechartsPieChart>
+                        <Pie
+                          data={vendorPieData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={140}
+                          paddingAngle={2}
+                          dataKey="value"
+                        >
+                          {vendorPieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value: any, name: any) => [
+                            `${value} propostas`, 
+                            name
+                          ]}
+                          labelStyle={{ color: '#374151' }}
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          }}
+                        />
+                      </RechartsPieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Legenda com cores dos vendedores */}
+                <div className="space-y-3">
+                  <h3 className="text-base font-medium text-slate-800 mb-4">Vendedores</h3>
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {vendorPieData
+                      .sort((a, b) => b.value - a.value)
+                      .map((entry, index) => (
+                      <div key={entry.name} className="flex items-center justify-between py-2">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-4 h-4 rounded-full flex-shrink-0" 
+                            style={{ backgroundColor: entry.fill }}
+                          ></div>
+                          <span className="text-sm text-slate-700 font-medium">
+                            {entry.name}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-semibold text-slate-800">
+                            {entry.value}
+                          </div>
+                          <div className="text-xs text-slate-500">
+                            {vendorPieData.reduce((sum, item) => sum + item.value, 0) > 0 
+                              ? ((entry.value / vendorPieData.reduce((sum, item) => sum + item.value, 0)) * 100).toFixed(1)
+                              : 0
+                            }%
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
