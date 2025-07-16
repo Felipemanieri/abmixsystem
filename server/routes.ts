@@ -615,6 +615,184 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // === UNIFIED AUTHENTICATION SYSTEM ===
+  
+  // Unified login for all portals - checks both system users and vendors
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password, portal } = req.body;
+      
+      if (!email || !password || !portal) {
+        return res.status(400).json({ error: "Email, senha e portal são obrigatórios" });
+      }
+
+      // First check system users
+      const systemUser = await storage.getSystemUserByEmail(email);
+      if (systemUser && systemUser.password === password && systemUser.active && systemUser.panel === portal) {
+        await storage.updateLastLogin(systemUser.id);
+        return res.json({
+          id: systemUser.id,
+          name: systemUser.name,
+          email: systemUser.email,
+          role: systemUser.panel,
+          userType: 'system',
+          panel: systemUser.panel
+        });
+      }
+
+      // Then check vendors (for vendor portal)
+      if (portal === 'vendor') {
+        const vendor = await storage.getVendorByEmail(email);
+        if (vendor && vendor.password === password && vendor.active) {
+          return res.json({
+            id: vendor.id,
+            name: vendor.name,
+            email: vendor.email,
+            role: 'vendor',
+            userType: 'vendor',
+            panel: 'vendor'
+          });
+        }
+      }
+
+      return res.status(401).json({ error: "Credenciais inválidas ou acesso não autorizado para este portal" });
+    } catch (error) {
+      console.error("Erro no login unificado:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get all users (system users + vendors) for unified management
+  app.get("/api/auth/users", async (req, res) => {
+    try {
+      const systemUsers = await storage.getAllSystemUsers();
+      const vendors = await storage.getAllVendors();
+      
+      const allUsers = [
+        ...systemUsers.map(user => ({
+          ...user,
+          userType: 'system',
+          panel: user.panel
+        })),
+        ...vendors.map(vendor => ({
+          ...vendor,
+          userType: 'vendor',
+          panel: 'vendor',
+          role: 'vendor'
+        }))
+      ];
+      
+      res.json(allUsers);
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create user (unified API)
+  app.post("/api/auth/users", async (req, res) => {
+    try {
+      const { userType, ...userData } = req.body;
+      
+      if (userType === 'vendor') {
+        const { insertVendorSchema } = await import("@shared/schema");
+        const validatedData = insertVendorSchema.parse({ ...userData, role: 'vendor' });
+        const vendor = await storage.createVendor(validatedData);
+        res.json({
+          ...vendor,
+          userType: 'vendor',
+          panel: 'vendor'
+        });
+      } else {
+        const { insertSystemUserSchema } = await import("@shared/schema");
+        const validatedData = insertSystemUserSchema.parse(userData);
+        const user = await storage.createSystemUser(validatedData);
+        res.json({
+          ...user,
+          userType: 'system'
+        });
+      }
+    } catch (error) {
+      if (error.code === '23505') {
+        return res.status(400).json({ error: "Email já está em uso" });
+      }
+      console.error("Erro ao criar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update user (unified API)
+  app.patch("/api/auth/users/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { userType, ...userData } = req.body;
+      
+      if (userType === 'vendor') {
+        const { insertVendorSchema } = await import("@shared/schema");
+        const validatedData = insertVendorSchema.partial().parse(userData);
+        const vendor = await storage.updateVendor(parseInt(id), validatedData);
+        res.json({
+          ...vendor,
+          userType: 'vendor',
+          panel: 'vendor'
+        });
+      } else {
+        const { insertSystemUserSchema } = await import("@shared/schema");
+        const validatedData = insertSystemUserSchema.partial().parse(userData);
+        const user = await storage.updateSystemUser(parseInt(id), validatedData);
+        res.json({
+          ...user,
+          userType: 'system'
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Delete user (unified API)
+  app.delete("/api/auth/users/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { userType } = req.query;
+      
+      if (userType === 'vendor') {
+        await storage.deleteVendor(parseInt(id));
+        res.json({ success: true, message: "Vendedor excluído com sucesso" });
+      } else {
+        await storage.deleteSystemUser(parseInt(id));
+        res.json({ success: true, message: "Usuário excluído com sucesso" });
+      }
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Update user password (works for both system users and vendors)
+  app.patch("/api/auth/users/:id/password", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { password, userType } = req.body;
+      
+      if (!password) {
+        return res.status(400).json({ error: "Nova senha é obrigatória" });
+      }
+
+      if (userType === 'vendor') {
+        const vendor = await storage.updateVendor(parseInt(id), { password });
+        res.json({ success: true, message: "Senha do vendedor atualizada com sucesso" });
+      } else {
+        const user = await storage.updateSystemUser(parseInt(id), { password });
+        res.json({ success: true, message: "Senha do usuário atualizada com sucesso" });
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar senha:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

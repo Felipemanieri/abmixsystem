@@ -32,9 +32,10 @@ interface User {
   role: string;
   panel: string;
   active: boolean;
+  userType: 'system' | 'vendor';
   lastLogin?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 interface UserFormData {
@@ -102,37 +103,16 @@ export default function UnifiedUserManagement() {
     }
   };
 
-  // Fetch all system users
-  const { data: allUsers = [], isLoading, refetch } = useQuery({
-    queryKey: ['/api/system-users'],
+  // Fetch all users using unified API
+  const { data: allCombinedUsers = [], isLoading, refetch } = useQuery({
+    queryKey: ['/api/auth/users'],
     queryFn: async () => {
-      const response = await fetch('/api/system-users');
-      if (!response.ok) throw new Error('Failed to fetch system users');
+      const response = await fetch('/api/auth/users');
+      if (!response.ok) throw new Error('Failed to fetch users');
       return response.json();
     },
     refetchInterval: 30000, // 30 seconds
   });
-
-  // Fetch vendors separately
-  const { data: vendors = [] } = useQuery({
-    queryKey: ['/api/vendors'],
-    queryFn: async () => {
-      const response = await fetch('/api/vendors');
-      if (!response.ok) throw new Error('Failed to fetch vendors');
-      return response.json();
-    },
-    refetchInterval: 30000,
-  });
-
-  // Combine system users and vendors, filtering by active panel
-  const allCombinedUsers = [
-    ...allUsers,
-    ...vendors.map((v: any) => ({
-      ...v,
-      panel: 'vendor',
-      role: 'vendor'
-    }))
-  ];
 
   const filteredUsers = allCombinedUsers.filter((user: User) => {
     const matchesPanel = user.panel === activePanel;
@@ -155,21 +135,13 @@ export default function UnifiedUserManagement() {
   // Create user mutation
   const createUserMutation = useMutation({
     mutationFn: async (userData: UserFormData) => {
-      if (userData.panel === 'vendor') {
-        return apiRequest(`/api/vendors`, {
-          method: 'POST',
-          body: { ...userData, role: 'vendor' }
-        });
-      } else {
-        return apiRequest(`/api/system-users`, {
-          method: 'POST',
-          body: userData
-        });
-      }
+      return apiRequest('/api/auth/users', {
+        method: 'POST',
+        body: { ...userData, userType: userData.panel === 'vendor' ? 'vendor' : 'system' }
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/vendors'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
       setShowUserModal(false);
       resetForm();
     }
@@ -178,21 +150,16 @@ export default function UnifiedUserManagement() {
   // Update user mutation
   const updateUserMutation = useMutation({
     mutationFn: async ({ id, userData }: { id: number; userData: Partial<UserFormData> }) => {
-      if (activePanel === 'vendor') {
-        return apiRequest(`/api/vendors/${id}`, {
-          method: 'PATCH',
-          body: userData
-        });
-      } else {
-        return apiRequest(`/api/system-users/${id}`, {
-          method: 'PATCH',
-          body: userData
-        });
-      }
+      const userToUpdate = allCombinedUsers.find(u => u.id === id);
+      if (!userToUpdate) throw new Error('User not found');
+      
+      return apiRequest(`/api/auth/users/${id}`, {
+        method: 'PATCH',
+        body: { ...userData, userType: userToUpdate.userType }
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/system-users'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/vendors'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
       setShowUserModal(false);
       setEditingUser(null);
       resetForm();
@@ -202,17 +169,31 @@ export default function UnifiedUserManagement() {
   // Delete user mutation
   const deleteUserMutation = useMutation({
     mutationFn: async (id: number) => {
-      if (activePanel === 'vendor') {
-        return apiRequest(`/api/vendors/${id}`, { method: 'DELETE' });
-      } else {
-        return apiRequest(`/api/system-users/${id}`, { method: 'DELETE' });
-      }
+      const userToDelete = allCombinedUsers.find(u => u.id === id);
+      if (!userToDelete) throw new Error('User not found');
+      
+      return apiRequest(`/api/auth/users/${id}?userType=${userToDelete.userType}`, { 
+        method: 'DELETE' 
+      });
     },
     onSuccess: () => {
       // Force immediate refetch for instant UI update
       refetch();
-      queryClient.refetchQueries({ queryKey: ['/api/system-users'] });
-      queryClient.refetchQueries({ queryKey: ['/api/vendors'] });
+      queryClient.refetchQueries({ queryKey: ['/api/auth/users'] });
+    }
+  });
+
+  // Update password mutation using unified API
+  const updatePasswordMutation = useMutation({
+    mutationFn: async ({ id, password, userType }: { id: number; password: string; userType: 'system' | 'vendor' }) => {
+      return apiRequest(`/api/auth/users/${id}/password`, {
+        method: 'PATCH',
+        body: { password, userType }
+      });
+    },
+    onSuccess: () => {
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/users'] });
     }
   });
 
@@ -224,6 +205,26 @@ export default function UnifiedUserManagement() {
       role: '',
       panel: activePanel,
       active: true
+    });
+  };
+
+  // Generate random password
+  const generatePassword = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let password = '';
+    for (let i = 0; i < 8; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+  };
+
+  // Handle password editing for specific user
+  const handleEditPassword = (user: User) => {
+    const newPassword = generatePassword();
+    updatePasswordMutation.mutate({
+      id: user.id,
+      password: newPassword,
+      userType: user.userType
     });
   };
 

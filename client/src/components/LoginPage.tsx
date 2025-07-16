@@ -68,51 +68,29 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
     setErrorMessage('');
 
     try {
-      if (portal === 'vendor') {
-        // Autenticação real para vendedores
-        const response = await fetch('/api/vendor/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
+      // Use unified authentication API for all portals
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, portal }),
+      });
 
-        if (response.ok) {
-          const vendorData = await response.json();
-          const user = {
-            id: vendorData.id,
-            name: vendorData.name,
-            email: vendorData.email,
-            role: vendorData.role,
-          };
-          onLogin(user);
-        } else {
-          const errorData = await response.json();
-          setErrorMessage(errorData.error || 'Credenciais inválidas');
-        }
-      } else if (portal === 'supervisor' && 
-          ((email === 'supervisao@abmix.com.br' && password === '123456') || 
-           (email === 'felipe@abmix.com.br' && password === '123456'))) {
-        // Login do supervisor
+      if (response.ok) {
+        const userData = await response.json();
         const user = {
-          id: '1',
-          name: 'Felipe Abmix',
-          email,
-          role: portal,
+          id: userData.id,
+          name: userData.name,
+          email: userData.email,
+          role: userData.role,
+          userType: userData.userType,
+          panel: userData.panel
         };
         onLogin(user);
-      } else if (portal === 'supervisor') {
-        setErrorMessage('Credenciais inválidas para o portal do supervisor');
       } else {
-        // Para outros portais, manter login simples
-        const user = {
-          id: '1',
-          name: 'Usuário Teste',
-          email,
-          role: portal,
-        };
-        onLogin(user);
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'Credenciais inválidas');
       }
     } catch (error) {
       setErrorMessage('Erro de conexão. Tente novamente.');

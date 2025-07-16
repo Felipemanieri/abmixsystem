@@ -65,6 +65,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   
+  // Buscar propostas (movido para antes dos useEffects)
+  const { data: proposals = [], isLoading: proposalsLoading } = useQuery({
+    queryKey: ['/api/proposals'],
+    queryFn: () => apiRequest('/api/proposals'),
+    refetchInterval: 1000,
+  });
+
+  // Buscar vendedores (movido para antes dos useEffects)
+  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
+    queryKey: ['/api/vendors'],
+    queryFn: () => apiRequest('/api/vendors'),
+    retry: false,
+    refetchInterval: 1000,
+  });
+  
   // Ativar sincronização em tempo real
   useEffect(() => {
     realTimeSync.enableAggressivePolling();
@@ -508,20 +523,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     type: 'recognition' as const
   });
 
-  // Buscar propostas
-  const { data: proposals = [], isLoading: proposalsLoading } = useQuery({
-    queryKey: ['/api/proposals'],
-    queryFn: () => apiRequest('/api/proposals'),
-    refetchInterval: 1000,
-  });
 
-  // Buscar vendedores
-  const { data: vendors = [], isLoading: vendorsLoading } = useQuery({
-    queryKey: ['/api/vendors'],
-    queryFn: () => apiRequest('/api/vendors'),
-    retry: false,
-    refetchInterval: 1000,
-  });
 
   // Buscar metas dos vendedores
   const { data: vendorTargets = [], isLoading: targetsLoading } = useQuery({
