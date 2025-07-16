@@ -109,7 +109,7 @@ function App() {
       return 'O processo é 100% digital! Você precisará apenas de: CNPJ da empresa, RG e CPF dos beneficiários, e comprovante de endereço. Tudo pode ser enviado pelo sistema online.';
     }
     if (lowerMessage.includes('contato') || lowerMessage.includes('telefone') || lowerMessage.includes('whatsapp')) {
-      return 'Você pode falar conosco por WhatsApp: (11) 98888-8888, telefone: (11) 99999-9999 ou email: contato@abmix.com.br. Atendemos 24/7 para sua comodidade!';
+      return 'Você pode falar conosco por WhatsApp: (11) 98888-8888, telefone: (11) 99999-9999 ou email: contato@abmix.com.br. Atendemos com suporte especializado para sua comodidade!';
     }
     if (lowerMessage.includes('portal') || lowerMessage.includes('acesso') || lowerMessage.includes('login')) {
       return 'Cada usuário tem acesso ao seu portal específico: Cliente (acompanhar propostas), Vendedor (criar propostas), Financeiro (análises) e Supervisor (relatórios). Qual portal você precisa acessar?';
@@ -222,7 +222,7 @@ function App() {
             </div>
             <div className="flex items-center text-gray-600 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-              <span>Suporte 24/7</span>
+              <span>Suporte Especializado</span>
             </div>
           </div>
         </div>
@@ -371,7 +371,7 @@ function App() {
                 <Users className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
-              <p className="text-gray-600 font-medium">Equipe especializada disponível 24/7 para auxiliar</p>
+              <p className="text-gray-600 font-medium">Equipe especializada com suporte dedicado para auxiliar</p>
             </div>
           </div>
         </div>
