@@ -189,6 +189,23 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     showNotification('Novo relatório recebido do supervisor', 'success');
   };
 
+  // Simular recebimento de relatório de teste
+  const sendTestReport = () => {
+    const testReport = {
+      id: `report-${Date.now()}`,
+      title: 'Relatório Semanal de Performance',
+      status: 'received',
+      receivedAt: new Date().toISOString(),
+      data: {
+        period: 'Semana 02/2025 (13-19 Jan)',
+        totalProposals: '47',
+        totalValue: 'R$ 187.500,00',
+        conversionRate: '73.4%'
+      }
+    };
+    simulateReportReceived(testReport);
+  };
+
   const renderDashboard = () => (
     <div className="space-y-6">
       {/* KPI Cards */}
@@ -840,6 +857,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <button
+                onClick={sendTestReport}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                📊 Enviar Relatório Teste
+              </button>
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
