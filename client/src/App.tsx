@@ -166,6 +166,21 @@ function App() {
               </div>
               <button
                 onClick={() => {
+                  const supervisorUser: User = {
+                    id: 'supervisor',
+                    name: 'Supervisor',
+                    role: 'supervisor',
+                    email: 'supervisor@abmix.com.br'
+                  };
+                  handleLogin(supervisorUser);
+                }}
+                className="flex items-center px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm mr-2"
+              >
+                <Crown className="w-4 h-4 mr-2" />
+                Supervisor
+              </button>
+              <button
+                onClick={() => {
                   const restrictedUser: User = {
                     id: 'admin',
                     name: 'Administrador',
