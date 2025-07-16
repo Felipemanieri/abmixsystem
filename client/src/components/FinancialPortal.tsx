@@ -51,6 +51,29 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [showReportModal, setShowReportModal] = useState(false);
   const [showReportsBox, setShowReportsBox] = useState(false);
   const [reportDateFilter, setReportDateFilter] = useState('all');
+
+  // Carregar relatórios do localStorage ao inicializar
+  useEffect(() => {
+    const loadReports = () => {
+      const savedReports = JSON.parse(localStorage.getItem('financialReports') || '[]');
+      setReceivedReports(savedReports);
+    };
+
+    loadReports();
+
+    // Escutar eventos de novos relatórios
+    const handleNewReport = (event: any) => {
+      const newReport = event.detail;
+      setReceivedReports(prev => [newReport, ...prev]);
+      showNotification('Novo relatório recebido do supervisor!', 'success');
+    };
+
+    window.addEventListener('newFinancialReport', handleNewReport);
+    
+    return () => {
+      window.removeEventListener('newFinancialReport', handleNewReport);
+    };
+  }, []);
   
   // Ativar sincronização em tempo real
   useEffect(() => {
@@ -314,20 +337,25 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         {showReportsBox && (
           <div className="p-6">
             {/* Filtros de Data */}
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Filtros</h4>
-                <select
-                  value={reportDateFilter}
-                  onChange={(e) => setReportDateFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">Todos os períodos</option>
-                  <option value="today">Hoje</option>
-                  <option value="week">Esta semana</option>
-                  <option value="month">Este mês</option>
-                  <option value="quarter">Este trimestre</option>
-                </select>
+            <div className="mb-6">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Filtros de Período</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+                  <input
+                    type="date"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="dd/mm/aaaa"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+                  <input
+                    type="date"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="dd/mm/aaaa"
+                  />
+                </div>
               </div>
             </div>
 
@@ -857,12 +885,6 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <button
-                onClick={sendTestReport}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
-              >
-                📊 Enviar Relatório Teste
-              </button>
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}

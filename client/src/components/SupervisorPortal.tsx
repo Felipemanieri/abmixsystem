@@ -116,6 +116,33 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   };
 
   const sendToFinanceiro = () => {
+    // Calcular dados do relatório
+    const totalValue = reportData.reduce((sum, item) => 
+      sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0
+    );
+    
+    const reportPayload = {
+      id: `report-${Date.now()}`,
+      title: `Relatório de Performance - ${format(new Date(), 'dd/MM/yyyy')}`,
+      status: 'received',
+      receivedAt: new Date().toISOString(),
+      data: {
+        period: `${format(new Date(), 'MMMM yyyy')}`,
+        totalProposals: reportData.length.toString(),
+        totalValue: `R$ ${totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        conversionRate: `${Math.round((reportData.filter(r => r.status === 'implantado').length / reportData.length) * 100)}%`
+      },
+      rawData: reportData
+    };
+
+    // Enviar para localStorage para simular comunicação entre portais
+    const existingReports = JSON.parse(localStorage.getItem('financialReports') || '[]');
+    existingReports.unshift(reportPayload);
+    localStorage.setItem('financialReports', JSON.stringify(existingReports));
+    
+    // Disparar evento customizado para notificar o FinancialPortal
+    window.dispatchEvent(new CustomEvent('newFinancialReport', { detail: reportPayload }));
+    
     showNotification('Relatório enviado para o painel financeiro!', 'success');
     setShowReportModal(false);
   };
@@ -2039,13 +2066,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
                 <button
                   onClick={() => {
-                    window.open('https://docs.google.com/spreadsheets/d/1your-sheet-id/edit', '_blank');
-                    showNotification('Abrindo planilha Google Sheets', 'success');
+                    const reportDataToSend = generateReportData(filteredData);
+                    showReportPreview(reportDataToSend);
                   }}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
                 >
-                  <ExternalLink size={16} />
-                  Abrir Planilha
+                  📊 Enviar Relatório
                 </button>
               </div>
             </div>
