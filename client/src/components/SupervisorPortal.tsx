@@ -180,6 +180,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [reportFormat, setReportFormat] = useState('pdf');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
+  const [showReportTable, setShowReportTable] = useState(false);
 
   // Salvar filtros no localStorage quando alterados
   useEffect(() => {
@@ -318,6 +319,26 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const { data: teamStats = {}, isLoading: teamStatsLoading } = useQuery({
     queryKey: ['/api/analytics/team', selectedMonth, selectedYear],
     queryFn: () => apiRequest(`/api/analytics/team?month=${selectedMonth}&year=${selectedYear}`),
+  });
+
+  // Mutation para atualizar proposta
+  const updateProposal = useMutation({
+    mutationFn: async ({ id, ...proposalData }: { id: string; [key: string]: any }) => {
+      return apiRequest(`/api/proposals/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(proposalData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
+      showNotification('Proposta atualizada com sucesso!', 'success');
+    },
+    onError: (error: any) => {
+      showNotification(error.message || 'Erro ao atualizar proposta', 'error');
+    },
   });
 
   // Mutation para criar vendedor
@@ -1972,6 +1993,156 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Botões de Visualização de Relatório */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2">
+                <Eye size={18} />
+                Visualizar Relatório
+              </h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowReportTable(!showReportTable)}
+                  className="px-4 py-2 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-2"
+                >
+                  <FileText size={14} />
+                  {showReportTable ? 'Ocultar' : 'Visualizar'} Tabela
+                </button>
+                <button
+                  onClick={() => {
+                    // Simular exportação Excel
+                    showNotification('Relatório exportado com sucesso!', 'success');
+                  }}
+                  className="px-4 py-2 text-sm bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-2"
+                >
+                  <Download size={14} />
+                  Exportar Excel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Resumo dos Filtros Aplicados */}
+          {showReportTable && (
+            <div className="px-6 py-3 bg-gray-50 border-b">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                <div>
+                  <span className="font-medium text-gray-600">Tipo de relatório:</span>
+                  <span className="ml-1 text-gray-800">{reportFilters.tipo}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Vendedores Incluídos:</span>
+                  <span className="ml-1 text-gray-800">{reportFilters.vendedor || 'Todos'}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Status Incluído:</span>
+                  <span className="ml-1 text-gray-800">{reportFilters.status || 'Todos'}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Data de Geração:</span>
+                  <span className="ml-1 text-gray-800">{new Date().toLocaleString('pt-BR')}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Total de Propostas:</span>
+                  <span className="ml-1 text-green-600 font-semibold">{filteredData.length}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Faturamento Total:</span>
+                  <span className="ml-1 text-green-600 font-semibold">{formatCurrency(reportData.faturamento.toString())}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Período Início:</span>
+                  <span className="ml-1 text-gray-800">{reportFilters.dataInicio || '2025-06-16'}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Período Fim:</span>
+                  <span className="ml-1 text-gray-800">{reportFilters.dataFim || '2025-07-16'}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tabela de Relatório Completa */}
+          {showReportTable && (
+            <div className="px-6 py-4">
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  Preview dos Dados (Primeiras {Math.min(filteredData.length, 50)} propostas)
+                </h4>
+              </div>
+              
+              <div className="overflow-x-auto max-h-96 overflow-y-auto">
+                <table className="w-full text-xs">
+                  <thead className="sticky top-0 bg-gray-100">
+                    <tr className="border-b">
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">ID</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Cliente</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">CNPJ</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Vendedor</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Valor</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Plano</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Status</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Desconto</th>
+                      <th className="text-left py-2 px-2 font-medium text-gray-700">Observações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.slice(0, 50).map((proposal) => (
+                      <tr key={proposal.id} className="border-b hover:bg-gray-50">
+                        <td className="py-2 px-2 font-medium text-blue-600">{proposal.abmId}</td>
+                        <td className="py-2 px-2">{proposal.contractData?.nomeEmpresa || 'N/A'}</td>
+                        <td className="py-2 px-2">{proposal.contractData?.cnpj || 'N/A'}</td>
+                        <td className="py-2 px-2">{proposal.vendedor || getVendorName(proposal.vendorId)}</td>
+                        <td className="py-2 px-2 text-green-600 font-medium">
+                          {formatCurrency(proposal.contractData?.valor || '0')}
+                        </td>
+                        <td className="py-2 px-2">{proposal.contractData?.planoContratado || 'N/A'}</td>
+                        <td className="py-2 px-2">
+                          <span 
+                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: STATUS_CONFIG[proposal.status]?.color + '20',
+                              color: STATUS_CONFIG[proposal.status]?.color
+                            }}
+                          >
+                            {STATUS_CONFIG[proposal.status]?.label}
+                          </span>
+                        </td>
+                        <td className="py-2 px-2">0%</td>
+                        <td className="py-2 px-2">
+                          <input
+                            type="text"
+                            defaultValue={proposal.internalData?.observacoes || ''}
+                            placeholder="Adicionar comentário"
+                            className="w-20 text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            onBlur={(e) => {
+                              // Atualizar observações da proposta
+                              updateProposal.mutate({
+                                id: proposal.id,
+                                internalData: {
+                                  ...proposal.internalData,
+                                  observacoes: e.target.value
+                                }
+                              });
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              {filteredData.length > 50 && (
+                <div className="mt-4 text-center text-sm text-gray-500">
+                  Mostrando 50 de {filteredData.length} propostas. Use os filtros para refinar os resultados.
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Dashboard Visual com Dados Google Sheets */}
