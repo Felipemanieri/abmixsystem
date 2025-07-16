@@ -625,8 +625,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                             if (config.bgColor.includes('sky')) return '#e0f2fe';
                             if (config.bgColor.includes('emerald')) return '#d1fae5';
                             if (config.bgColor.includes('amber')) return '#fef3c7';
-                            if (config.bgColor.includes('blue-500')) return '#dbeafe';
-                            if (config.bgColor.includes('green-500')) return '#dcfce7';
+                            if (config.bgColor.includes('blue')) return '#dbeafe';
+                            if (config.bgColor.includes('green')) return '#dcfce7';
                             if (config.bgColor.includes('pink')) return '#fce7f3';
                             if (config.bgColor.includes('yellow')) return '#fef7cd';
                             if (config.bgColor.includes('orange')) return '#fed7aa';
@@ -643,8 +643,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                             if (config.textColor.includes('sky')) return '#0369a1';
                             if (config.textColor.includes('emerald')) return '#047857';
                             if (config.textColor.includes('amber')) return '#92400e';
-                            if (config.textColor.includes('blue-700')) return '#1e40af';
-                            if (config.textColor.includes('green-700')) return '#166534';
+                            if (config.textColor.includes('blue')) return '#1e40af';
+                            if (config.textColor.includes('green')) return '#166534';
                             if (config.textColor.includes('pink')) return '#be185d';
                             if (config.textColor.includes('yellow')) return '#a16207';
                             if (config.textColor.includes('orange')) return '#c2410c';
@@ -663,8 +663,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                               backgroundColor: config.bgColor.includes('sky') ? '#e0f2fe' :
                                              config.bgColor.includes('emerald') ? '#d1fae5' :
                                              config.bgColor.includes('amber') ? '#fef3c7' :
-                                             config.bgColor.includes('blue-500') ? '#dbeafe' :
-                                             config.bgColor.includes('green-500') ? '#dcfce7' :
+                                             config.bgColor.includes('blue') ? '#dbeafe' :
+                                             config.bgColor.includes('green') ? '#dcfce7' :
                                              config.bgColor.includes('pink') ? '#fce7f3' :
                                              config.bgColor.includes('yellow') ? '#fef7cd' :
                                              config.bgColor.includes('orange') ? '#fed7aa' :
@@ -674,8 +674,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                               color: config.textColor.includes('sky') ? '#0369a1' :
                                      config.textColor.includes('emerald') ? '#047857' :
                                      config.textColor.includes('amber') ? '#92400e' :
-                                     config.textColor.includes('blue-700') ? '#1e40af' :
-                                     config.textColor.includes('green-700') ? '#166534' :
+                                     config.textColor.includes('blue') ? '#1e40af' :
+                                     config.textColor.includes('green') ? '#166534' :
                                      config.textColor.includes('pink') ? '#be185d' :
                                      config.textColor.includes('yellow') ? '#a16207' :
                                      config.textColor.includes('orange') ? '#c2410c' :

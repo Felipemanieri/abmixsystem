@@ -154,6 +154,23 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Correções Críticas de Interface e Persistência (Jan 16, 2025)
+- **Corrigido erro de inicialização no SupervisorPortal**:
+  - Erro "Cannot access 'proposalPriorities' before initialization" resolvido
+  - Reorganizados os useEffects para após declaração dos estados
+  - Persistência de prioridades e filtros no localStorage implementada corretamente
+  
+- **Corrigidas cores dos status EXPIRADO e IMPLANTADO no ImplantacaoPortal**:
+  - Mapeamento de cores "blue" e "green" adicionado ao sistema de cores inline
+  - Status EXPIRADO agora exibe cor azul forte corretamente
+  - Status IMPLANTADO agora exibe cor verde forte corretamente
+  - Dropdown de status com cores funcionando para todos os 11 status
+
+- **Sistema completo de persistência no localStorage**:
+  - ProposalSelector: Filtros de status, prioridade e vendedor persistem
+  - SupervisorPortal: Filtros de vendedor, status, data e prioridades persistem
+  - Usuário mantém preferências ao sair e entrar novamente nos portais
+
 ### Ordem Cronológica das Propostas Garantida (Jan 16, 2025)
 - **Corrigido problema de reordenação indevida das propostas**:
   - Backend: Adicionado orderBy(proposals.createdAt) em getAllProposals e getVendorProposals

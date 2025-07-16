@@ -69,23 +69,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     realTimeSync.enableAggressivePolling();
   }, []);
 
-  // Salvar prioridades no localStorage quando alteradas
-  useEffect(() => {
-    localStorage.setItem('supervisor_proposalPriorities', JSON.stringify(proposalPriorities));
-  }, [proposalPriorities]);
 
-  // Salvar filtros no localStorage quando alterados
-  useEffect(() => {
-    localStorage.setItem('supervisor_filterVendor', filterVendor);
-  }, [filterVendor]);
-
-  useEffect(() => {
-    localStorage.setItem('supervisor_filterStatus', filterStatus);
-  }, [filterStatus]);
-
-  useEffect(() => {
-    localStorage.setItem('supervisor_filterDate', filterDate);
-  }, [filterDate]);
 
   // Placeholder para funções que serão definidas depois dos dados
 
@@ -169,6 +153,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     const saved = localStorage.getItem('supervisor_proposalPriorities');
     return saved ? JSON.parse(saved) : {};
   });
+
+  // Salvar prioridades no localStorage quando alteradas
+  useEffect(() => {
+    localStorage.setItem('supervisor_proposalPriorities', JSON.stringify(proposalPriorities));
+  }, [proposalPriorities]);
   
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
@@ -191,6 +180,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [reportFormat, setReportFormat] = useState('pdf');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
+
+  // Salvar filtros no localStorage quando alterados
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterVendor', filterVendor);
+  }, [filterVendor]);
+
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterStatus', filterStatus);
+  }, [filterStatus]);
+
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterDate', filterDate);
+  }, [filterDate]);
   
   // Função para alterar prioridade - atualizada para sincronizar com backend
   const handlePriorityChange = async (proposalId: string, priority: 'alta' | 'media' | 'baixa') => {
