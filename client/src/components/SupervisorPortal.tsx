@@ -73,17 +73,29 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Funções para os botões de relatório
   const generateReportData = (filteredData: any[]) => {
-    return filteredData.map(proposal => ({
-      abmId: proposal.abmId || proposal.id,
-      cliente: proposal.contractData?.nomeEmpresa || 'N/A',
-      cnpj: proposal.contractData?.cnpj || 'N/A',
-      vendedor: proposal.vendedor || 'N/A',
-      valor: proposal.contractData?.valor || '0',
-      plano: proposal.contractData?.planoContratado || 'N/A',
-      status: proposal.status || 'pendente',
-      desconto: '0%',
-      observacoes: ''
-    }));
+    if (!filteredData || !Array.isArray(filteredData)) {
+      console.log('Dados filtrados inválidos:', filteredData);
+      return [];
+    }
+    
+    console.log('Gerando dados do relatório para:', filteredData.length, 'propostas');
+    
+    return filteredData.map(proposal => {
+      const reportItem = {
+        abmId: proposal.abmId || proposal.id || 'N/A',
+        cliente: proposal.contractData?.nomeEmpresa || 'Empresa não informada',
+        cnpj: proposal.contractData?.cnpj || 'CNPJ não informado', 
+        vendedor: proposal.vendedor || proposal.contractData?.vendedor || 'N/A',
+        valor: proposal.contractData?.valor || proposal.valor || '0',
+        plano: proposal.contractData?.planoContratado || proposal.plano || 'N/A',
+        status: proposal.status || 'pendente',
+        desconto: '0%',
+        observacoes: proposal.observacoes || ''
+      };
+      
+      console.log('Item do relatório:', reportItem);
+      return reportItem;
+    });
   };
 
   const showReportPreview = (data: any[]) => {
@@ -221,17 +233,28 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
   // Função para obter propostas filtradas baseada nos filtros do relatório
   const getFilteredProposals = () => {
-    if (!proposals || !Array.isArray(proposals)) return [];
+    if (!proposals || !Array.isArray(proposals)) {
+      console.log('Propostas não disponíveis:', proposals);
+      return [];
+    }
     
-    return proposals.filter(proposal => {
+    console.log('Filtrando propostas com filtros:', reportFilters);
+    console.log('Total de propostas disponíveis:', proposals.length);
+    
+    const filtered = proposals.filter(proposal => {
       // Filtro por vendedor
-      if (reportFilters.vendedor && proposal.vendedor !== reportFilters.vendedor) {
-        return false;
+      if (reportFilters.vendedor) {
+        const proposalVendor = proposal.vendedor || proposal.contractData?.vendedor;
+        if (proposalVendor !== reportFilters.vendedor) {
+          return false;
+        }
       }
       
       // Filtro por status
-      if (reportFilters.status && proposal.status !== reportFilters.status) {
-        return false;
+      if (reportFilters.status) {
+        if (proposal.status !== reportFilters.status) {
+          return false;
+        }
       }
       
       // Filtro por data de início
@@ -254,6 +277,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       
       return true;
     });
+    
+    console.log('Propostas filtradas:', filtered.length);
+    console.log('Dados das propostas filtradas:', filtered);
+    
+    return filtered;
   };
 
   const clearAllFilters = () => {
@@ -2156,50 +2184,52 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
               </div>
 
-              {/* Botões de Visualização - Todos da esquerda para direita como na imagem */}
-              <div className="flex items-center justify-between pt-3 mt-3">
-                <span className="text-sm text-gray-600">Visualizar relatório com filtros aplicados:</span>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      const currentFilteredData = getFilteredProposals();
-                      const reportData = generateReportData(currentFilteredData);
-                      showReportPreview(reportData);
-                      showNotification('Visualização do relatório aberta', 'success');
-                    }}
-                    className="px-4 py-2 text-sm bg-red-50 text-red-700 hover:bg-red-100 rounded-md flex items-center gap-2 transition-colors border border-red-200"
-                  >
-                    📊 PDF
-                  </button>
-                  <button
-                    onClick={() => {
-                      const currentFilteredData = getFilteredProposals();
-                      exportToSheets(currentFilteredData);
-                      showNotification('Dados enviados para Google Sheets', 'success');
-                    }}
-                    className="px-4 py-2 text-sm bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-2 transition-colors border border-green-200"
-                  >
-                    📋 Sheets
-                  </button>
-                  <button
-                    onClick={() => {
-                      const currentFilteredData = getFilteredProposals();
-                      exportToExcel(currentFilteredData);
-                      showNotification('Arquivo Excel gerado e baixado', 'success');
-                    }}
-                    className="px-4 py-2 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-2 transition-colors border border-blue-200"
-                  >
-                    📗 Excel
-                  </button>
-                  <button
-                    onClick={() => {
-                      openGoogleDrive();
-                      showNotification('Google Drive aberto', 'info');
-                    }}
-                    className="px-4 py-2 text-sm bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded-md flex items-center gap-2 transition-colors border border-yellow-200"
-                  >
-                    📁 Drive
-                  </button>
+              {/* Botões de Visualização - Layout profissional da esquerda para direita */}
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Visualizar relatório com filtros aplicados:</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => {
+                        const currentFilteredData = getFilteredProposals();
+                        const reportData = generateReportData(currentFilteredData);
+                        showReportPreview(reportData);
+                        showNotification('Visualização do relatório aberta', 'success');
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
+                    >
+                      📊 PDF
+                    </button>
+                    <button
+                      onClick={() => {
+                        const currentFilteredData = getFilteredProposals();
+                        exportToSheets(currentFilteredData);
+                        showNotification('Dados enviados para Google Sheets', 'success');
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-md hover:bg-green-100 transition-colors"
+                    >
+                      📋 Sheets
+                    </button>
+                    <button
+                      onClick={() => {
+                        const currentFilteredData = getFilteredProposals();
+                        exportToExcel(currentFilteredData);
+                        showNotification('Arquivo Excel gerado e baixado', 'success');
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                    >
+                      📗 Excel
+                    </button>
+                    <button
+                      onClick={() => {
+                        openGoogleDrive();
+                        showNotification('Google Drive aberto', 'info');
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-md hover:bg-yellow-100 transition-colors"
+                    >
+                      📁 Drive
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
