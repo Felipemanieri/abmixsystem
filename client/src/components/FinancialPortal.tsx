@@ -13,7 +13,7 @@ import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
 import { realTimeSync } from '../utils/realTimeSync';
-import StatusManager, { ProposalStatus } from '@shared/statusSystem';
+import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 
 interface FinancialPortalProps {
   user: any;
@@ -180,26 +180,22 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const completedProposals = realTransactions.filter(t => t.status === 'completed').length;
   const conversionRate = totalProposals > 0 ? Math.round((completedProposals / totalProposals) * 100) : 0;
 
-  // Mapeamento de status para português
-  const getStatusText = (status: string, realStatus?: string) => {
-    const statusMap: Record<string, string> = {
-      'completed': 'Concluído',
-      'pending': 'Pendente',
-      'cancelled': 'Cancelado',
-      'analise': 'Em Análise',
-      'observacao': 'Em Observação',
-      'assinatura_ds': 'Aguardando Assinatura DS',
-      'expirado': 'Expirado',
-      'implantado': 'Implantado',
-      'aguar_pagamento': 'Aguardando Pagamento',
-      'assinatura_proposta': 'Aguardando Assinatura',
-      'aguar_selecao_vigencia': 'Aguardando Seleção de Vigência',
-      'pendencia': 'Pendência',
-      'declinado': 'Declinado',
-      'aguar_vigencia': 'Aguardando Vigência'
-    };
+  // Função para obter cores e texto do status usando o sistema do projeto
+  const getStatusInfo = (realStatus?: string) => {
+    if (!realStatus || !STATUS_CONFIG[realStatus as ProposalStatus]) {
+      return {
+        text: realStatus || 'Pendente',
+        bgClass: 'bg-gray-100',
+        textClass: 'text-gray-800'
+      };
+    }
     
-    return statusMap[realStatus || status] || status;
+    const config = STATUS_CONFIG[realStatus as ProposalStatus];
+    return {
+      text: config.label,
+      bgClass: config.bgColor,
+      textClass: config.textColor
+    };
   };
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
@@ -582,15 +578,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <div className="text-sm font-medium text-gray-900">{transaction.value}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      transaction.status === 'completed' 
-                        ? 'bg-green-100 text-green-800'
-                        : transaction.status === 'cancelled'
-                        ? 'bg-red-100 text-red-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {getStatusText(transaction.status, transaction.realStatus)}
-                    </span>
+                    {(() => {
+                      const statusInfo = getStatusInfo(transaction.realStatus);
+                      return (
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusInfo.bgClass} ${statusInfo.textClass}`}>
+                          {statusInfo.text}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(transaction.date).toLocaleDateString('pt-BR')}
