@@ -212,10 +212,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     console.log('Total de propostas disponíveis:', proposals.length);
     
     const filtered = proposals.filter(proposal => {
-      // Filtro por vendedor
+      // Filtro por vendedor - comparar com o nome do vendedor baseado no vendorId
       if (reportFilters.vendedor) {
-        const proposalVendor = proposal.vendedor || proposal.contractData?.vendedor;
-        if (proposalVendor !== reportFilters.vendedor) {
+        let proposalVendorName = 'N/A';
+        if (proposal.vendorId && vendors?.length > 0) {
+          const vendor = vendors.find(v => v.id === proposal.vendorId);
+          proposalVendorName = vendor?.name || 'N/A';
+        }
+        if (proposalVendorName !== reportFilters.vendedor) {
           return false;
         }
       }
@@ -2168,7 +2172,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       }}
                       className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 transition-colors"
                     >
-                      📊 PDF
+                      📊 Visualizar Relatório
                     </button>
                     <button
                       onClick={() => {
