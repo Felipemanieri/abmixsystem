@@ -68,20 +68,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
     setErrorMessage('');
 
     try {
-      // Bypass direto para supervisor - sem autenticação
-      if (portal === 'supervisor') {
-        const supervisorUser = {
-          id: 'supervisor',
-          name: 'Supervisor',
-          role: 'supervisor',
-          email: 'supervisor@abmix.com.br'
-        };
-        setTimeout(() => {
-          onLogin(supervisorUser);
-        }, 500);
-        return;
-      }
-      
       if (portal === 'vendor') {
         // Autenticação real para vendedores
         const response = await fetch('/api/vendor/login', {

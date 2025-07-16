@@ -110,7 +110,7 @@ export default function UnifiedUserManagement() {
       if (!response.ok) throw new Error('Failed to fetch system users');
       return response.json();
     },
-    refetchInterval: 1000, // 1 segundo - atualização imediata
+    refetchInterval: 30000, // 30 seconds
   });
 
   // Fetch vendors separately
@@ -121,7 +121,7 @@ export default function UnifiedUserManagement() {
       if (!response.ok) throw new Error('Failed to fetch vendors');
       return response.json();
     },
-    refetchInterval: 1000, // 1 segundo - atualização imediata
+    refetchInterval: 30000,
   });
 
   // Combine system users and vendors, filtering by active panel
