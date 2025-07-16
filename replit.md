@@ -196,14 +196,27 @@ The application provides role-based portals with specific functionality:
   - Todas as funcionalidades administrativas preservadas
   - Expansão sem remoção de recursos críticos
 
-### Planilha Única Horizontal - Estrutura Linear (Jan 16, 2025)
-- **Implementada nova estrutura de planilha única sem abas**:
-  - Uma empresa = Uma linha completa na planilha
-  - Campos para múltiplos titulares (TITULAR1_, TITULAR2_, TITULAR3_) na mesma linha
-  - Campos para múltiplos dependentes (DEPENDENTE1_, DEPENDENTE2_, etc.) na mesma linha
-  - Campos vazios permanecem [vazio] ao invés de criar linhas separadas
-  - Estrutura horizontal expansível conforme necessidade
-  - Sincronização automática com Google Sheets em formato linear
+### Planilha Dinâmica Horizontal - Estrutura Adaptável (Jan 16, 2025)
+- **Implementado sistema de colunas dinâmicas baseado nos dados reais**:
+  - **REGRA 1**: Uma empresa = Uma linha única (jamais criar nova linha para mesma empresa)
+  - **REGRA 2**: Campos fixos pré-definidos criados automaticamente conforme necessidade
+  - **REGRA 3**: Campos vazios permitidos (sem dados ficam em branco, não [vazio])
+  - **REGRA 4**: Detecção automática do número máximo de titulares e dependentes
+  - **REGRA 5**: Estrutura horizontal que cresce conforme dados reais das propostas
+  - **REGRA 6**: Campos agrupados logicamente (Titular1_Nome, Titular1_CPF, etc.)
+
+- **Sistema de detecção automática implementado**:
+  - Análise de todas as propostas para detectar máximo de titulares e dependentes
+  - Criação dinâmica de colunas TITULAR1_ até TITULARn_ conforme necessário
+  - Criação dinâmica de colunas DEPENDENTE1_ até DEPENDENTEn_ conforme necessário
+  - Mínimo garantido: 3 titulares e 5 dependentes, expansível até 10+ titulares e 30+ dependentes
+  - Interface mostra estatísticas dinâmicas: máximo titulares, máximo dependentes, total colunas
+
+- **Estrutura horizontal completamente adaptável**:
+  - Planilha cresce verticalmente (novas empresas) e nunca horizontalmente
+  - Campos sempre organizados na mesma linha por empresa
+  - Sistema suporta qualquer quantidade de titulares/dependentes
+  - Colunas criadas dinamicamente conforme formulários são preenchidos
 
 ### Correções Críticas de Interface e Persistência (Jan 16, 2025)
 - **Corrigido erro de inicialização no SupervisorPortal**:

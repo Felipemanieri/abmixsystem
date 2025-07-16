@@ -37,6 +37,28 @@ export default function PlanilhaViewer() {
     return vendor ? vendor.name : 'Vendedor não encontrado';
   };
 
+  // Função para detectar o número máximo de titulares e dependentes
+  const getMaxCounts = () => {
+    let maxTitulares = 3; // Mínimo 3 por padrão
+    let maxDependentes = 5; // Mínimo 5 por padrão
+    
+    proposals.forEach((proposal: any) => {
+      const titulares = proposal.titulares || [];
+      const dependentes = proposal.dependentes || [];
+      
+      if (titulares.length > maxTitulares) {
+        maxTitulares = titulares.length;
+      }
+      if (dependentes.length > maxDependentes) {
+        maxDependentes = dependentes.length;
+      }
+    });
+    
+    return { maxTitulares, maxDependentes };
+  };
+
+  const { maxTitulares, maxDependentes } = getMaxCounts();
+
   const formatarDados = () => {
     return proposals.map((proposal: any) => {
       const contractData = proposal.contractData || {};
@@ -93,180 +115,54 @@ export default function PlanilhaViewer() {
         TOTAL_ANEXOS_CLIENTE: clientAttachments.length,
       };
 
-      // === TITULAR 1 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const titular1 = titulares[0] || {};
-      Object.assign(linhaUnica, {
-        TITULAR1_NOME_COMPLETO: titular1.nomeCompleto || '',
-        TITULAR1_CPF: titular1.cpf || '',
-        TITULAR1_RG: titular1.rg || '',
-        TITULAR1_DATA_NASCIMENTO: titular1.dataNascimento || '',
-        TITULAR1_NOME_MAE: titular1.nomeMae || '',
-        TITULAR1_SEXO: titular1.sexo || '',
-        TITULAR1_ESTADO_CIVIL: titular1.estadoCivil || '',
-        TITULAR1_PESO: titular1.peso || '',
-        TITULAR1_ALTURA: titular1.altura || '',
-        TITULAR1_EMAIL_PESSOAL: titular1.emailPessoal || '',
-        TITULAR1_TELEFONE_PESSOAL: titular1.telefonePessoal || '',
-        TITULAR1_EMAIL_EMPRESA: titular1.emailEmpresa || '',
-        TITULAR1_TELEFONE_EMPRESA: titular1.telefoneEmpresa || '',
-        TITULAR1_CEP: titular1.cep || '',
-        TITULAR1_ENDERECO_COMPLETO: titular1.enderecoCompleto || '',
-        TITULAR1_DADOS_REEMBOLSO: titular1.dadosReembolso || '',
-      });
+      // === TITULARES DINÂMICOS (CAMPOS BASEADOS NOS DADOS REAIS) ===
+      for (let i = 1; i <= maxTitulares; i++) {
+        const titular = titulares[i - 1] || {}; // Array começa em 0, mas numeração em 1
+        Object.assign(linhaUnica, {
+          [`TITULAR${i}_NOME_COMPLETO`]: titular.nomeCompleto || '',
+          [`TITULAR${i}_CPF`]: titular.cpf || '',
+          [`TITULAR${i}_RG`]: titular.rg || '',
+          [`TITULAR${i}_DATA_NASCIMENTO`]: titular.dataNascimento || '',
+          [`TITULAR${i}_NOME_MAE`]: titular.nomeMae || '',
+          [`TITULAR${i}_SEXO`]: titular.sexo || '',
+          [`TITULAR${i}_ESTADO_CIVIL`]: titular.estadoCivil || '',
+          [`TITULAR${i}_PESO`]: titular.peso || '',
+          [`TITULAR${i}_ALTURA`]: titular.altura || '',
+          [`TITULAR${i}_EMAIL_PESSOAL`]: titular.emailPessoal || '',
+          [`TITULAR${i}_TELEFONE_PESSOAL`]: titular.telefonePessoal || '',
+          [`TITULAR${i}_EMAIL_EMPRESA`]: titular.emailEmpresa || '',
+          [`TITULAR${i}_TELEFONE_EMPRESA`]: titular.telefoneEmpresa || '',
+          [`TITULAR${i}_CEP`]: titular.cep || '',
+          [`TITULAR${i}_ENDERECO_COMPLETO`]: titular.enderecoCompleto || '',
+          [`TITULAR${i}_DADOS_REEMBOLSO`]: titular.dadosReembolso || '',
+        });
+      }
 
-      // === TITULAR 2 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const titular2 = titulares[1] || {};
-      Object.assign(linhaUnica, {
-        TITULAR2_NOME_COMPLETO: titular2.nomeCompleto || '',
-        TITULAR2_CPF: titular2.cpf || '',
-        TITULAR2_RG: titular2.rg || '',
-        TITULAR2_DATA_NASCIMENTO: titular2.dataNascimento || '',
-        TITULAR2_NOME_MAE: titular2.nomeMae || '',
-        TITULAR2_SEXO: titular2.sexo || '',
-        TITULAR2_ESTADO_CIVIL: titular2.estadoCivil || '',
-        TITULAR2_PESO: titular2.peso || '',
-        TITULAR2_ALTURA: titular2.altura || '',
-        TITULAR2_EMAIL_PESSOAL: titular2.emailPessoal || '',
-        TITULAR2_TELEFONE_PESSOAL: titular2.telefonePessoal || '',
-        TITULAR2_EMAIL_EMPRESA: titular2.emailEmpresa || '',
-        TITULAR2_TELEFONE_EMPRESA: titular2.telefoneEmpresa || '',
-        TITULAR2_CEP: titular2.cep || '',
-        TITULAR2_ENDERECO_COMPLETO: titular2.enderecoCompleto || '',
-        TITULAR2_DADOS_REEMBOLSO: titular2.dadosReembolso || '',
-      });
+      // === DEPENDENTES DINÂMICOS (CAMPOS BASEADOS NOS DADOS REAIS) ===
+      for (let i = 1; i <= maxDependentes; i++) {
+        const dependente = dependentes[i - 1] || {}; // Array começa em 0, mas numeração em 1
+        Object.assign(linhaUnica, {
+          [`DEPENDENTE${i}_NOME_COMPLETO`]: dependente.nomeCompleto || '',
+          [`DEPENDENTE${i}_CPF`]: dependente.cpf || '',
+          [`DEPENDENTE${i}_RG`]: dependente.rg || '',
+          [`DEPENDENTE${i}_DATA_NASCIMENTO`]: dependente.dataNascimento || '',
+          [`DEPENDENTE${i}_PARENTESCO`]: dependente.parentesco || '',
+          [`DEPENDENTE${i}_NOME_MAE`]: dependente.nomeMae || '',
+          [`DEPENDENTE${i}_SEXO`]: dependente.sexo || '',
+          [`DEPENDENTE${i}_ESTADO_CIVIL`]: dependente.estadoCivil || '',
+          [`DEPENDENTE${i}_PESO`]: dependente.peso || '',
+          [`DEPENDENTE${i}_ALTURA`]: dependente.altura || '',
+          [`DEPENDENTE${i}_EMAIL_PESSOAL`]: dependente.emailPessoal || '',
+          [`DEPENDENTE${i}_TELEFONE_PESSOAL`]: dependente.telefonePessoal || '',
+          [`DEPENDENTE${i}_EMAIL_EMPRESA`]: dependente.emailEmpresa || '',
+          [`DEPENDENTE${i}_TELEFONE_EMPRESA`]: dependente.telefoneEmpresa || '',
+          [`DEPENDENTE${i}_CEP`]: dependente.cep || '',
+          [`DEPENDENTE${i}_ENDERECO_COMPLETO`]: dependente.enderecoCompleto || '',
+          [`DEPENDENTE${i}_DADOS_REEMBOLSO`]: dependente.dadosReembolso || '',
+        });
+      }
 
-      // === TITULAR 3 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const titular3 = titulares[2] || {};
-      Object.assign(linhaUnica, {
-        TITULAR3_NOME_COMPLETO: titular3.nomeCompleto || '',
-        TITULAR3_CPF: titular3.cpf || '',
-        TITULAR3_RG: titular3.rg || '',
-        TITULAR3_DATA_NASCIMENTO: titular3.dataNascimento || '',
-        TITULAR3_NOME_MAE: titular3.nomeMae || '',
-        TITULAR3_SEXO: titular3.sexo || '',
-        TITULAR3_ESTADO_CIVIL: titular3.estadoCivil || '',
-        TITULAR3_PESO: titular3.peso || '',
-        TITULAR3_ALTURA: titular3.altura || '',
-        TITULAR3_EMAIL_PESSOAL: titular3.emailPessoal || '',
-        TITULAR3_TELEFONE_PESSOAL: titular3.telefonePessoal || '',
-        TITULAR3_EMAIL_EMPRESA: titular3.emailEmpresa || '',
-        TITULAR3_TELEFONE_EMPRESA: titular3.telefoneEmpresa || '',
-        TITULAR3_CEP: titular3.cep || '',
-        TITULAR3_ENDERECO_COMPLETO: titular3.enderecoCompleto || '',
-        TITULAR3_DADOS_REEMBOLSO: titular3.dadosReembolso || '',
-      });
-
-      // === DEPENDENTE 1 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const dependente1 = dependentes[0] || {};
-      Object.assign(linhaUnica, {
-        DEPENDENTE1_NOME_COMPLETO: dependente1.nomeCompleto || '',
-        DEPENDENTE1_CPF: dependente1.cpf || '',
-        DEPENDENTE1_RG: dependente1.rg || '',
-        DEPENDENTE1_DATA_NASCIMENTO: dependente1.dataNascimento || '',
-        DEPENDENTE1_PARENTESCO: dependente1.parentesco || '',
-        DEPENDENTE1_NOME_MAE: dependente1.nomeMae || '',
-        DEPENDENTE1_SEXO: dependente1.sexo || '',
-        DEPENDENTE1_ESTADO_CIVIL: dependente1.estadoCivil || '',
-        DEPENDENTE1_PESO: dependente1.peso || '',
-        DEPENDENTE1_ALTURA: dependente1.altura || '',
-        DEPENDENTE1_EMAIL_PESSOAL: dependente1.emailPessoal || '',
-        DEPENDENTE1_TELEFONE_PESSOAL: dependente1.telefonePessoal || '',
-        DEPENDENTE1_EMAIL_EMPRESA: dependente1.emailEmpresa || '',
-        DEPENDENTE1_TELEFONE_EMPRESA: dependente1.telefoneEmpresa || '',
-        DEPENDENTE1_CEP: dependente1.cep || '',
-        DEPENDENTE1_ENDERECO_COMPLETO: dependente1.enderecoCompleto || '',
-        DEPENDENTE1_DADOS_REEMBOLSO: dependente1.dadosReembolso || '',
-      });
-
-      // === DEPENDENTE 2 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const dependente2 = dependentes[1] || {};
-      Object.assign(linhaUnica, {
-        DEPENDENTE2_NOME_COMPLETO: dependente2.nomeCompleto || '',
-        DEPENDENTE2_CPF: dependente2.cpf || '',
-        DEPENDENTE2_RG: dependente2.rg || '',
-        DEPENDENTE2_DATA_NASCIMENTO: dependente2.dataNascimento || '',
-        DEPENDENTE2_PARENTESCO: dependente2.parentesco || '',
-        DEPENDENTE2_NOME_MAE: dependente2.nomeMae || '',
-        DEPENDENTE2_SEXO: dependente2.sexo || '',
-        DEPENDENTE2_ESTADO_CIVIL: dependente2.estadoCivil || '',
-        DEPENDENTE2_PESO: dependente2.peso || '',
-        DEPENDENTE2_ALTURA: dependente2.altura || '',
-        DEPENDENTE2_EMAIL_PESSOAL: dependente2.emailPessoal || '',
-        DEPENDENTE2_TELEFONE_PESSOAL: dependente2.telefonePessoal || '',
-        DEPENDENTE2_EMAIL_EMPRESA: dependente2.emailEmpresa || '',
-        DEPENDENTE2_TELEFONE_EMPRESA: dependente2.telefoneEmpresa || '',
-        DEPENDENTE2_CEP: dependente2.cep || '',
-        DEPENDENTE2_ENDERECO_COMPLETO: dependente2.enderecoCompleto || '',
-        DEPENDENTE2_DADOS_REEMBOLSO: dependente2.dadosReembolso || '',
-      });
-
-      // === DEPENDENTE 3 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const dependente3 = dependentes[2] || {};
-      Object.assign(linhaUnica, {
-        DEPENDENTE3_NOME_COMPLETO: dependente3.nomeCompleto || '',
-        DEPENDENTE3_CPF: dependente3.cpf || '',
-        DEPENDENTE3_RG: dependente3.rg || '',
-        DEPENDENTE3_DATA_NASCIMENTO: dependente3.dataNascimento || '',
-        DEPENDENTE3_PARENTESCO: dependente3.parentesco || '',
-        DEPENDENTE3_NOME_MAE: dependente3.nomeMae || '',
-        DEPENDENTE3_SEXO: dependente3.sexo || '',
-        DEPENDENTE3_ESTADO_CIVIL: dependente3.estadoCivil || '',
-        DEPENDENTE3_PESO: dependente3.peso || '',
-        DEPENDENTE3_ALTURA: dependente3.altura || '',
-        DEPENDENTE3_EMAIL_PESSOAL: dependente3.emailPessoal || '',
-        DEPENDENTE3_TELEFONE_PESSOAL: dependente3.telefonePessoal || '',
-        DEPENDENTE3_EMAIL_EMPRESA: dependente3.emailEmpresa || '',
-        DEPENDENTE3_TELEFONE_EMPRESA: dependente3.telefoneEmpresa || '',
-        DEPENDENTE3_CEP: dependente3.cep || '',
-        DEPENDENTE3_ENDERECO_COMPLETO: dependente3.enderecoCompleto || '',
-        DEPENDENTE3_DADOS_REEMBOLSO: dependente3.dadosReembolso || '',
-      });
-
-      // === DEPENDENTE 4 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const dependente4 = dependentes[3] || {};
-      Object.assign(linhaUnica, {
-        DEPENDENTE4_NOME_COMPLETO: dependente4.nomeCompleto || '',
-        DEPENDENTE4_CPF: dependente4.cpf || '',
-        DEPENDENTE4_RG: dependente4.rg || '',
-        DEPENDENTE4_DATA_NASCIMENTO: dependente4.dataNascimento || '',
-        DEPENDENTE4_PARENTESCO: dependente4.parentesco || '',
-        DEPENDENTE4_NOME_MAE: dependente4.nomeMae || '',
-        DEPENDENTE4_SEXO: dependente4.sexo || '',
-        DEPENDENTE4_ESTADO_CIVIL: dependente4.estadoCivil || '',
-        DEPENDENTE4_PESO: dependente4.peso || '',
-        DEPENDENTE4_ALTURA: dependente4.altura || '',
-        DEPENDENTE4_EMAIL_PESSOAL: dependente4.emailPessoal || '',
-        DEPENDENTE4_TELEFONE_PESSOAL: dependente4.telefonePessoal || '',
-        DEPENDENTE4_EMAIL_EMPRESA: dependente4.emailEmpresa || '',
-        DEPENDENTE4_TELEFONE_EMPRESA: dependente4.telefoneEmpresa || '',
-        DEPENDENTE4_CEP: dependente4.cep || '',
-        DEPENDENTE4_ENDERECO_COMPLETO: dependente4.enderecoCompleto || '',
-        DEPENDENTE4_DADOS_REEMBOLSO: dependente4.dadosReembolso || '',
-      });
-
-      // === DEPENDENTE 5 (CAMPOS FIXOS PRÉ-DEFINIDOS) ===
-      const dependente5 = dependentes[4] || {};
-      Object.assign(linhaUnica, {
-        DEPENDENTE5_NOME_COMPLETO: dependente5.nomeCompleto || '',
-        DEPENDENTE5_CPF: dependente5.cpf || '',
-        DEPENDENTE5_RG: dependente5.rg || '',
-        DEPENDENTE5_DATA_NASCIMENTO: dependente5.dataNascimento || '',
-        DEPENDENTE5_PARENTESCO: dependente5.parentesco || '',
-        DEPENDENTE5_NOME_MAE: dependente5.nomeMae || '',
-        DEPENDENTE5_SEXO: dependente5.sexo || '',
-        DEPENDENTE5_ESTADO_CIVIL: dependente5.estadoCivil || '',
-        DEPENDENTE5_PESO: dependente5.peso || '',
-        DEPENDENTE5_ALTURA: dependente5.altura || '',
-        DEPENDENTE5_EMAIL_PESSOAL: dependente5.emailPessoal || '',
-        DEPENDENTE5_TELEFONE_PESSOAL: dependente5.telefonePessoal || '',
-        DEPENDENTE5_EMAIL_EMPRESA: dependente5.emailEmpresa || '',
-        DEPENDENTE5_TELEFONE_EMPRESA: dependente5.telefoneEmpresa || '',
-        DEPENDENTE5_CEP: dependente5.cep || '',
-        DEPENDENTE5_ENDERECO_COMPLETO: dependente5.enderecoCompleto || '',
-        DEPENDENTE5_DADOS_REEMBOLSO: dependente5.dadosReembolso || '',
-      });
-
-      return linhaBase;
+      return linhaUnica;
     });
   };
 
@@ -362,10 +258,48 @@ export default function PlanilhaViewer() {
           </div>
         </div>
 
-        {/* Informações sobre estrutura */}
+        {/* Informações sobre estrutura dinâmica */}
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4 mb-6">
-          <h4 className="font-semibold text-gray-900 mb-2">📋 Estrutura da Planilha Única Horizontal</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+          <h4 className="font-semibold text-gray-900 mb-2">📋 Estrutura Dinâmica - Uma Empresa = Uma Linha</h4>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div className="bg-white rounded p-3 border">
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="w-4 h-4 text-blue-600" />
+                <span className="font-medium text-blue-900">Máximo Titulares</span>
+              </div>
+              <p className="text-2xl font-bold text-blue-600">{maxTitulares}</p>
+              <p className="text-xs text-gray-600">campos criados dinamicamente</p>
+            </div>
+
+            <div className="bg-white rounded p-3 border">
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="w-4 h-4 text-purple-600" />
+                <span className="font-medium text-purple-900">Máximo Dependentes</span>
+              </div>
+              <p className="text-2xl font-bold text-purple-600">{maxDependentes}</p>
+              <p className="text-xs text-gray-600">campos criados dinamicamente</p>
+            </div>
+
+            <div className="bg-white rounded p-3 border">
+              <div className="flex items-center gap-2 mb-2">
+                <FileText className="w-4 h-4 text-green-600" />
+                <span className="font-medium text-green-900">Total Colunas</span>
+              </div>
+              <p className="text-2xl font-bold text-green-600">{colunas.length}</p>
+              <p className="text-xs text-gray-600">campos por linha</p>
+            </div>
+
+            <div className="bg-white rounded p-3 border">
+              <div className="flex items-center gap-2 mb-2">
+                <Database className="w-4 h-4 text-orange-600" />
+                <span className="font-medium text-orange-900">Propostas Ativas</span>
+              </div>
+              <p className="text-2xl font-bold text-orange-600">{proposals.length}</p>
+              <p className="text-xs text-gray-600">linhas na planilha</p>
+            </div>
+          </div>
+
+          <div className="mt-4 text-sm text-gray-700">
             <div>
               • <strong>Uma empresa = Uma linha</strong>
               <br />• Campos para múltiplos titulares (TITULAR1_, TITULAR2_, etc.)
