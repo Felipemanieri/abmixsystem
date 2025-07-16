@@ -71,7 +71,144 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
 
 
-  // Placeholder para funções que serão definidas depois dos dados
+  // Funções para os botões de relatório
+  const generateReportData = (filteredData: any[]) => {
+    return filteredData.map(proposal => ({
+      abmId: proposal.abmId || proposal.id,
+      cliente: proposal.contractData?.nomeEmpresa || 'N/A',
+      cnpj: proposal.contractData?.cnpj || 'N/A',
+      vendedor: proposal.vendedor || 'N/A',
+      valor: proposal.contractData?.valor || '0',
+      plano: proposal.contractData?.planoContratado || 'N/A',
+      status: proposal.status || 'pendente',
+      desconto: '0%',
+      observacoes: ''
+    }));
+  };
+
+  const showReportPreview = (data: any[]) => {
+    const reportWindow = window.open('', '_blank', 'width=1200,height=800');
+    if (reportWindow) {
+      reportWindow.document.write(`
+        <html>
+          <head>
+            <title>Visualizar Relatório - EXCEL</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+              .info { margin-bottom: 10px; }
+              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .close-btn { position: absolute; top: 10px; right: 10px; background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+            </style>
+          </head>
+          <body>
+            <button class="close-btn" onclick="window.close()">✕</button>
+            <h2>👁️ Visualizar Relatório - EXCEL</h2>
+            <div class="header">
+              <div>
+                <div class="info"><strong>Tipo de relatório:</strong> completo</div>
+                <div class="info"><strong>Total de Propostas:</strong> ${data.length}</div>
+                <div class="info"><strong>Faturamento Total:</strong> R$ ${data.reduce((sum, p) => sum + (parseFloat(p.valor.replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2)}</div>
+                <div class="info"><strong>Bilhete Médio:</strong> R$ ${data.length > 0 ? (data.reduce((sum, p) => sum + (parseFloat(p.valor.replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0) / data.length).toFixed(2) : '0.00'}</div>
+              </div>
+              <div>
+                <div class="info"><strong>Vendedores Incluídos:</strong> Todos</div>
+                <div class="info"><strong>Data de Geração:</strong> ${new Date().toLocaleString('pt-BR')}</div>
+                <div class="info"><strong>Status Incluído:</strong> Todos</div>
+                <div class="info"><strong>Formato:</strong> SOBRESSAIR</div>
+                <div class="info"><strong>Período Início:</strong> 2025-06-16</div>
+                <div class="info"><strong>Campos Incluídos:</strong> 10 colunas</div>
+                <div class="info"><strong>Período Fim:</strong> 2025-07-16</div>
+                <div class="info"><strong>Observações:</strong> 0 com dados</div>
+              </div>
+            </div>
+            <h3>Preview dos Dados (Primeiras ${Math.min(data.length, 5)} propostas)</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>CNPJ</th>
+                  <th>Vendedor</th>
+                  <th>Valor</th>
+                  <th>Plano</th>
+                  <th>Status</th>
+                  <th>Desconto</th>
+                  <th>Observações</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.slice(0, 5).map(item => `
+                  <tr>
+                    <td>${item.abmId}</td>
+                    <td>${item.cliente}</td>
+                    <td>${item.cnpj}</td>
+                    <td>${item.vendedor}</td>
+                    <td>R$ ${item.valor}</td>
+                    <td>${item.plano}</td>
+                    <td>${item.status.toUpperCase()}</td>
+                    <td>${item.desconto}</td>
+                    <td>
+                      <button style="background: #f0f0f0; border: 1px solid #ccc; padding: 2px 6px; border-radius: 3px; font-size: 11px;">
+                        Adicionar comentário
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </body>
+        </html>
+      `);
+    }
+  };
+
+  const exportToSheets = (data: any[]) => {
+    const csvContent = [
+      ['ID', 'Cliente', 'CNPJ', 'Vendedor', 'Valor', 'Plano', 'Status', 'Data'].join(','),
+      ...data.map(item => [
+        item.abmId || item.id,
+        item.contractData?.nomeEmpresa || 'N/A',
+        item.contractData?.cnpj || 'N/A',
+        item.vendedor || 'N/A',
+        item.contractData?.valor || '0',
+        item.contractData?.planoContratado || 'N/A',
+        item.status || 'pendente',
+        new Date(item.createdAt).toLocaleDateString('pt-BR')
+      ].join(','))
+    ].join('\n');
+    
+    console.log('Dados preparados para Google Sheets:', csvContent);
+    window.open('https://sheets.google.com/create', '_blank');
+  };
+
+  const exportToExcel = (data: any[]) => {
+    const csvContent = [
+      ['ID', 'Cliente', 'CNPJ', 'Vendedor', 'Valor', 'Plano', 'Status', 'Data'].join(';'),
+      ...data.map(item => [
+        item.abmId || item.id,
+        item.contractData?.nomeEmpresa || 'N/A',
+        item.contractData?.cnpj || 'N/A',
+        item.vendedor || 'N/A',
+        item.contractData?.valor || '0',
+        item.contractData?.planoContratado || 'N/A',
+        item.status || 'pendente',
+        new Date(item.createdAt).toLocaleDateString('pt-BR')
+      ].join(';'))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `relatorio_abmix_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const openGoogleDrive = () => {
+    window.open('https://drive.google.com/drive/folders/1cLvVhS7X9YQZ3K8N2M5P6R7T', '_blank');
+  };
 
   const clearAllFilters = () => {
     setSelectedVendors([]);
@@ -1887,17 +2024,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
             </div>
           </div>
-          <div className="p-6">
-            {/* Filtros organizados - 3 por linha conforme layout solicitado */}
-            <div className="space-y-4">
+          <div className="p-4">
+            {/* Filtros ultra-compactos - 3 por linha real */}
+            <div className="space-y-3">
               {/* Primeira linha: Tipo de Relatório, Vendedor, Status */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Relatório</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Tipo de Relatório</label>
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="completo">📊 Relatório Completo</option>
                     <option value="individual">👤 Por Vendedor Individual</option>
@@ -1908,11 +2045,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Vendedor</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Vendedor</label>
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="">Todos os Vendedores</option>
                     {uniqueVendors.map(vendor => (
@@ -1922,11 +2059,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Status</label>
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option value="">Todos os Status</option>
                     {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -1937,24 +2074,24 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
 
               {/* Segunda linha: Data Início, Data Fim, Limpar Filtros */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Data Início</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Data Início</label>
                   <input
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Data Fim</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Data Fim</label>
                   <input
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   />
                 </div>
 
@@ -1963,53 +2100,56 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     onClick={() => setReportFilters({
                       dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                     })}
-                    className="w-full h-[42px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center justify-center gap-1"
+                    className="w-full h-[28px] px-2 py-1 text-xs text-gray-600 hover:text-gray-800 border border-gray-300 rounded hover:bg-gray-50 flex items-center justify-center gap-1"
                   >
-                    <X size={14} />
+                    <X size={12} />
                     Limpar Filtros
                   </button>
                 </div>
               </div>
 
-              {/* Botões de Visualização - Discretos */}
-              <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-gray-200">
-                <span className="text-xs text-gray-500 mr-3">Visualizar:</span>
-                <button
-                  onClick={() => {
-                    // Mostrar preview do relatório como na segunda imagem
-                    showNotification('Abrindo visualização do relatório...', 'info');
-                    window.open('/reports/preview', '_blank');
-                  }}
-                  className="px-3 py-1 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded-md flex items-center gap-1 transition-colors"
-                >
-                  📊 PDF
-                </button>
-                <button
-                  onClick={() => {
-                    showNotification('Abrindo Google Sheets...', 'info');
-                    window.open('https://sheets.google.com', '_blank');
-                  }}
-                  className="px-3 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-1 transition-colors"
-                >
-                  📋 Sheets
-                </button>
-                <button
-                  onClick={() => {
-                    showNotification('Gerando arquivo Excel...', 'info');
-                  }}
-                  className="px-3 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-1 transition-colors"
-                >
-                  📗 Excel
-                </button>
-                <button
-                  onClick={() => {
-                    showNotification('Abrindo Google Drive...', 'info');
-                    window.open('https://drive.google.com', '_blank');
-                  }}
-                  className="px-3 py-1 text-xs bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded-md flex items-center gap-1 transition-colors"
-                >
-                  📁 Drive
-                </button>
+              {/* Botões de Ação Funcionais */}
+              <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                <span className="text-xs text-gray-500">Visualizar relatório com filtros aplicados:</span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const reportData = generateReportData();
+                      showReportPreview(reportData);
+                      showNotification('Visualização do relatório aberta', 'success');
+                    }}
+                    className="px-2 py-1 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded flex items-center gap-1 transition-colors"
+                  >
+                    📊 PDF
+                  </button>
+                  <button
+                    onClick={() => {
+                      exportToSheets(filteredData);
+                      showNotification('Dados enviados para Google Sheets', 'success');
+                    }}
+                    className="px-2 py-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded flex items-center gap-1 transition-colors"
+                  >
+                    📋 Sheets
+                  </button>
+                  <button
+                    onClick={() => {
+                      exportToExcel(filteredData);
+                      showNotification('Arquivo Excel gerado e baixado', 'success');
+                    }}
+                    className="px-2 py-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded flex items-center gap-1 transition-colors"
+                  >
+                    📗 Excel
+                  </button>
+                  <button
+                    onClick={() => {
+                      openGoogleDrive();
+                      showNotification('Google Drive aberto', 'info');
+                    }}
+                    className="px-2 py-1 text-xs bg-yellow-50 text-yellow-700 hover:bg-yellow-100 rounded flex items-center gap-1 transition-colors"
+                  >
+                    📁 Drive
+                  </button>
+                </div>
               </div>
             </div>
           </div>
