@@ -218,14 +218,6 @@ The application provides role-based portals with specific functionality:
   - Sistema suporta qualquer quantidade de titulares/dependentes
   - Colunas criadas dinamicamente conforme formulários são preenchidos
 
-### Bypass de Login para Supervisor - Acesso Direto Habilitado (Jan 16, 2025)
-- **Criado botão de acesso direto ao Portal Supervisor**:
-  - Adicionado botão "Supervisor" na header do App.tsx
-  - Bypass completo do sistema de autenticação 
-  - Acesso direto sem necessidade de login/senha
-  - Posicionado ao lado do botão "Área Restrita"
-  - Usuário pode acessar todas as funcionalidades do supervisor instantaneamente
-
 ### Sistema de Detecção Ilimitada e Correção de Senhas Vendedores (Jan 16, 2025)
 - **Implementado sistema de detecção dinâmica ilimitada na planilha**:
   - Detecção automática de 1-99+ titulares (sem limite pré-definido)
