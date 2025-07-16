@@ -2027,7 +2027,32 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ name, percent }) => `${name.length > 15 ? name.substring(0, 12) + '...' : name} ${(percent * 100).toFixed(0)}%`}
+                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+                            const RADIAN = Math.PI / 180;
+                            const radius = innerRadius + (outerRadius - innerRadius) * 0.8;
+                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+                            return (
+                              <text 
+                                x={x} 
+                                y={y} 
+                                fill="white" 
+                                textAnchor="middle" 
+                                dominantBaseline="central"
+                                fontSize="13"
+                                fontWeight="bold"
+                                stroke="rgba(0,0,0,0.8)"
+                                strokeWidth="1"
+                                style={{
+                                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                                  filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))'
+                                }}
+                              >
+                                {`${(percent * 100).toFixed(0)}%`}
+                              </text>
+                            );
+                          }}
                           outerRadius={120}
                           fill="#8884d8"
                           dataKey="value"
