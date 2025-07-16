@@ -2238,47 +2238,47 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </h3>
           </div>
           <div className="p-6">
-            {/* KPIs Principais */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+            {/* KPIs Principais - Versão Compacta */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-blue-700">Total de Propostas</p>
-                    <p className="text-3xl font-bold text-blue-900">{reportData.total}</p>
+                    <p className="text-xs font-medium text-blue-700">Total de Propostas</p>
+                    <p className="text-xl font-bold text-blue-900">{reportData.total}</p>
                   </div>
-                  <FileText className="h-10 w-10 text-blue-600" />
+                  <FileText className="h-6 w-6 text-blue-600" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+              <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-green-700">Faturamento Total</p>
-                    <p className="text-3xl font-bold text-green-900">{formatCurrency(reportData.faturamento.toString())}</p>
+                    <p className="text-xs font-medium text-green-700">Faturamento Total</p>
+                    <p className="text-xl font-bold text-green-900">{formatCurrency(reportData.faturamento.toString())}</p>
                   </div>
-                  <DollarSign className="h-10 w-10 text-green-600" />
+                  <DollarSign className="h-6 w-6 text-green-600" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-purple-700">Ticket Médio</p>
-                    <p className="text-3xl font-bold text-purple-900">
+                    <p className="text-xs font-medium text-purple-700">Ticket Médio</p>
+                    <p className="text-xl font-bold text-purple-900">
                       {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
                     </p>
                   </div>
-                  <Calculator className="h-10 w-10 text-purple-600" />
+                  <Calculator className="h-6 w-6 text-purple-600" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200">
+              <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-3 rounded-lg border border-orange-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-orange-700">Vendedores Ativos</p>
-                    <p className="text-3xl font-bold text-orange-900">{uniqueVendors.length}</p>
+                    <p className="text-xs font-medium text-orange-700">Vendedores Ativos</p>
+                    <p className="text-xl font-bold text-orange-900">{uniqueVendors.length}</p>
                   </div>
-                  <Users className="h-10 w-10 text-orange-600" />
+                  <Users className="h-6 w-6 text-orange-600" />
                 </div>
               </div>
             </div>
