@@ -154,7 +154,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             }
             
             setLastSaved(draftData.lastSaved);
-            showNotification('Rascunho carregado automaticamente', 'info');
+
           } else {
             localStorage.removeItem(draftKey);
             initializeWithProposalData(proposalData);
@@ -1106,8 +1106,27 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
         <div className="fixed bottom-4 right-4 z-50">
           <div className="flex items-center space-x-2 bg-white shadow-lg border border-gray-200 rounded-lg px-3 py-2">
             <div className="flex items-center text-xs text-green-600">
-              <CheckCircle className="w-3 h-3 mr-1" />
-              <span>Salvo às {new Date(lastSaved).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              <button
+                onClick={() => {
+                  const now = new Date().toISOString();
+                  const draftData = {
+                    titulares: titulares,
+                    dependentes: dependentes,
+                    isDraft: true,
+                    lastSaved: now
+                  };
+
+                  const draftKey = `client_draft_${token}`;
+                  localStorage.setItem(draftKey, JSON.stringify(draftData));
+                  setLastSaved(now);
+                  showNotification('Rascunho salvo manualmente', 'success');
+                }}
+                className="flex items-center hover:text-green-700 transition-colors"
+                title="Salvar rascunho manualmente"
+              >
+                <CheckCircle className="w-3 h-3 mr-1" />
+                <span>Salvo às {new Date(lastSaved).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+              </button>
             </div>
             <button
               onClick={handleClearDraft}
