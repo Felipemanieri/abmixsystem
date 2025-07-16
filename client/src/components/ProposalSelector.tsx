@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Search, Filter, User, Calendar, FileText, Eye } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import { ProposalStatus } from '@shared/statusSystem';
@@ -27,9 +27,22 @@ interface ProposalItem {
 
 const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, onSelectProposal }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [priorityFilter, setPriorityFilter] = useState('all');
-  const [vendorFilter, setVendorFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(() => localStorage.getItem('proposalSelector_statusFilter') || 'all');
+  const [priorityFilter, setPriorityFilter] = useState(() => localStorage.getItem('proposalSelector_priorityFilter') || 'all');
+  const [vendorFilter, setVendorFilter] = useState(() => localStorage.getItem('proposalSelector_vendorFilter') || 'all');
+
+  // Salvar filtros no localStorage quando alterados
+  useEffect(() => {
+    localStorage.setItem('proposalSelector_statusFilter', statusFilter);
+  }, [statusFilter]);
+
+  useEffect(() => {
+    localStorage.setItem('proposalSelector_priorityFilter', priorityFilter);
+  }, [priorityFilter]);
+
+  useEffect(() => {
+    localStorage.setItem('proposalSelector_vendorFilter', vendorFilter);
+  }, [vendorFilter]);
 
   // Buscar vendedores reais do banco de dados
   const { data: vendors = [] } = useQuery({

@@ -69,6 +69,24 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     realTimeSync.enableAggressivePolling();
   }, []);
 
+  // Salvar prioridades no localStorage quando alteradas
+  useEffect(() => {
+    localStorage.setItem('supervisor_proposalPriorities', JSON.stringify(proposalPriorities));
+  }, [proposalPriorities]);
+
+  // Salvar filtros no localStorage quando alterados
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterVendor', filterVendor);
+  }, [filterVendor]);
+
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterStatus', filterStatus);
+  }, [filterStatus]);
+
+  useEffect(() => {
+    localStorage.setItem('supervisor_filterDate', filterDate);
+  }, [filterDate]);
+
   // Placeholder para funções que serão definidas depois dos dados
 
   const clearAllFilters = () => {
@@ -120,10 +138,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     showNotification('Dados atualizados!', 'success');
   };
   
-  // Estados para filtros
-  const [filterVendor, setFilterVendor] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
-  const [filterDate, setFilterDate] = useState('');
+  // Estados para filtros com persistência
+  const [filterVendor, setFilterVendor] = useState(() => localStorage.getItem('supervisor_filterVendor') || '');
+  const [filterStatus, setFilterStatus] = useState(() => localStorage.getItem('supervisor_filterStatus') || '');
+  const [filterDate, setFilterDate] = useState(() => localStorage.getItem('supervisor_filterDate') || '');
 
   // Estados para Analytics - movidos para nível principal
   const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
@@ -146,8 +164,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   // Estados para gerenciamento de vendedores
   const [showAddVendorForm, setShowAddVendorForm] = useState(false);
   
-  // Estado para prioridades das propostas
-  const [proposalPriorities, setProposalPriorities] = useState<Record<string, 'alta' | 'media' | 'baixa'>>({});
+  // Estado para prioridades das propostas com persistência
+  const [proposalPriorities, setProposalPriorities] = useState<Record<string, 'alta' | 'media' | 'baixa'>>(() => {
+    const saved = localStorage.getItem('supervisor_proposalPriorities');
+    return saved ? JSON.parse(saved) : {};
+  });
   
   // Estados para Analytics (movidos para o nível do componente)
   const [selectedVendorAnalytics, setSelectedVendorAnalytics] = useState('');
