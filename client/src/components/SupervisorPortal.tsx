@@ -579,11 +579,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   };
 
   const selectAllVendors = () => {
-    const vendorNames = filteredProposals.map(p => {
+    const vendedors = filteredProposals.map(p => {
       const vendor = vendors.find(v => v.id === p.vendorId);
       return vendor ? vendor.name : null;
     }).filter(Boolean);
-    const uniqueVendors = [...new Set(vendorNames)];
+    const uniqueVendors = [...new Set(vendedors)];
     setSelectedVendors(selectedVendors.length === uniqueVendors.length ? [] : uniqueVendors);
   };
 
@@ -1199,7 +1199,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     };
     
     // Lista de vendedores únicos (incluindo dados reais e do banco)
-    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];;
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendedor).filter(Boolean)])];;
     
     // Lista de operadoras e tipos de plano únicos (mock data)
     const operadoras = ['SulAmérica', 'Bradesco', 'Amil', 'Unimed', 'NotreDame'];
@@ -1208,7 +1208,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     // Aplicar todos os filtros avançados
     const analyticsData = filteredProposals.filter(proposal => {
       // Filtro de vendedores
-      if (selectedVendors.length > 0 && !selectedVendors.includes(proposal.vendorName || '')) return false;
+      if (selectedVendors.length > 0 && !selectedVendors.includes(proposal.vendedor || '')) return false;
       
       // Filtro de status
       if (selectedStatuses.length > 0 && !selectedStatuses.includes(proposal.status)) return false;
@@ -1264,7 +1264,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       
       // Filtrar por vendedor
       if (selectedVendorForChart && selectedVendorForChart !== 'all') {
-        filteredData = filteredData.filter(p => p.vendorName === selectedVendorForChart);
+        filteredData = filteredData.filter(p => p.vendedor === selectedVendorForChart);
       }
       
       // Se vendedor específico selecionado, mostrar distribuição por status
@@ -1279,7 +1279,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       
       // Caso contrário, mostrar distribuição por vendedores
       return uniqueVendors.map(vendor => {
-        const count = filteredData.filter(p => p.vendorName === vendor).length;
+        const count = filteredData.filter(p => p.vendedor === vendor).length;
         return {
           name: vendor,
           value: count,
@@ -1300,7 +1300,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
     // Análise por vendedor
     const vendorAnalysis = analyticsData.reduce((acc, proposal) => {
-      const vendor = proposal.vendorName || 'Não Identificado';
+      const vendor = proposal.vendedor || 'Não Identificado';
       if (!acc[vendor]) {
         acc[vendor] = {
           total: 0,
@@ -1789,10 +1789,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     ];
     
     // Lista de vendedores únicos (incluindo dados reais e do banco)
-    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendorName).filter(Boolean)])];
+    const uniqueVendors = [...new Set([...realVendors, ...filteredProposals.map(p => p.vendedor).filter(Boolean)])];
 
     const filteredData = filteredProposals.filter(proposal => {
-      if (reportFilters.vendedor && !proposal.vendorName?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
+      if (reportFilters.vendedor && !proposal.vendedor?.toLowerCase().includes(reportFilters.vendedor.toLowerCase())) return false;
       if (reportFilters.status && proposal.status !== reportFilters.status) return false;
       // Filtros de data seriam aplicados aqui
       return true;
@@ -1896,7 +1896,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         return acc;
       }, {} as Record<string, number>),
       porVendedor: filteredData.reduce((acc, p) => {
-        const vendor = p.vendorName || 'Desconhecido';
+        const vendor = p.vendedor || 'Desconhecido';
         if (!acc[vendor]) acc[vendor] = { count: 0, value: 0 };
         acc[vendor].count += 1;
         acc[vendor].value += parseFloat(p.contractData?.valor || '0');
@@ -2299,7 +2299,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                                'Cliente não informado'}
                             </td>
                             <td className="px-3 py-2 text-xs">{proposal.contractData?.cnpj || 'N/A'}</td>
-                            <td className="px-3 py-2">{proposal.vendorName || 'N/A'}</td>
+                            <td className="px-3 py-2">{proposal.vendedor || 'N/A'}</td>
                             <td className="px-3 py-2 font-medium">
                               {formatCurrency(proposal.contractData?.valor || '0')}
                             </td>
