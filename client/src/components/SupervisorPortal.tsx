@@ -1916,21 +1916,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         const percentage = totalReal > 0 ? ((entry.realValue || 0) / totalReal * 100) : 0;
                         
                         return (
-                          <div key={entry.name} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
-                            <div className="flex items-center gap-3">
-                              <div 
-                                className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-white" 
-                                style={{ backgroundColor: entry.fill }}
-                              ></div>
+                          <div key={entry.name} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                            <div 
+                              className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-white" 
+                              style={{ backgroundColor: entry.fill }}
+                            ></div>
+                            <div className="flex-1">
                               <span className={`text-sm font-medium ${(entry.realValue || 0) > 0 ? 'text-slate-800' : 'text-slate-500'}`}>
                                 {entry.name}
                               </span>
                             </div>
-                            <div className="text-right">
+                            <div className="flex items-center gap-2">
                               <div className={`text-sm font-semibold ${(entry.realValue || 0) > 0 ? 'text-slate-800' : 'text-slate-400'}`}>
                                 {entry.realValue || 0}
                               </div>
-                              <div className={`text-xs ${(entry.realValue || 0) > 0 ? 'text-slate-600' : 'text-slate-400'}`}>
+                              <div className={`text-sm font-medium ${(entry.realValue || 0) > 0 ? 'text-slate-600' : 'text-slate-400'}`}>
                                 {percentage.toFixed(1)}%
                               </div>
                             </div>
