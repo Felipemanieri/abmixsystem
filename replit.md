@@ -301,6 +301,28 @@ The application provides role-based portals with specific functionality:
   - 1 meta de equipe para Janeiro 2025
   - 4 premiações de exemplo com diferentes tipos
 
+### Sistema de Autenticação Unificado Implementado (Jan 16, 2025)
+- **Implementado sistema completo de autenticação centralizada**:
+  - API unificada `/api/auth/login` para todos os portais
+  - API `/api/auth/users` para gestão unificada de usuários
+  - Painel de gestão na área restrita controla acesso a todos os portais
+  - Sistema de edição de senhas centralizado com gerador automático
+
+- **Credenciais dos Portais**:
+  - **Supervisor**: supervisao@abmix.com.br / felipe@abmix.com.br - Senha: 123456
+  - **Financeiro**: financeiro@abmix.com.br - Senha: 123456
+  - **Implementação**: implementacao@abmix.com.br - Senha: 123456
+  - **Cliente**: cliente@abmix.com.br - Senha: 123456
+  - **Área Restrita**: admin@abmix.com.br - Senha: 123456
+  - **Vendedores**: comercial@abmix.com.br, comercial2@abmix.com.br, etc. - Senha: 120784
+
+- **Funcionalidades do sistema unificado**:
+  - Login centralizado para todos os 6 portais
+  - Gestão de usuários e senhas na área restrita
+  - Criação, edição e exclusão de usuários por tipo (system/vendor)
+  - Gerador automático de senhas com 8 caracteres
+  - Sincronização em tempo real entre gestão e portais
+
 ### Sistema de Sincronização em Tempo Real para Propagação Instantânea (Jan 14, 2025)
 - **Implementado sistema completo de sincronização em tempo real**:
   - Criado realTimeSync.ts para forçar atualizações instantâneas entre todos os portais
