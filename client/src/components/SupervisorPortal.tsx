@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Share2, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail, FileX } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, DollarSign, FileText, Target, Calculator, UserPlus, Bell, MessageSquare, LogOut, X, CheckCircle, Calendar, PieChart, Settings, Award, Plus, Edit, Trash2, Save, Filter, Search, Download, Eye, ExternalLink, Share, Share2, Clock, User, RefreshCw, Zap, AlertTriangle, Heart, TrendingDown, Mail, FileX, Send } from 'lucide-react';
 import { format, isWithinInterval, subDays, subMonths, subWeeks, parseISO } from 'date-fns';
 import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, Area, AreaChart, Pie } from 'recharts';
 import AbmixLogo from './AbmixLogo';
@@ -183,6 +183,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [previewData, setPreviewData] = useState<any>(null);
   const [previewType, setPreviewType] = useState('');
+  const [editableObservations, setEditableObservations] = useState<{[key: string]: string}>({});
 
   // Salvar filtros no localStorage quando alterados
   useEffect(() => {
@@ -1797,6 +1798,35 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       return true;
     });
 
+    // Função para salvar observações editáveis
+    const saveObservations = async () => {
+      try {
+        const updates = Object.entries(editableObservations).map(async ([proposalId, observation]) => {
+          const response = await fetch(`/api/proposals/${proposalId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              internalData: { 
+                observacoesSupervisor: observation 
+              } 
+            }),
+          });
+          return response.ok;
+        });
+
+        await Promise.all(updates);
+        showNotification('Observações salvas com sucesso!', 'success');
+        
+        // Forçar atualização dos dados
+        queryClientInstance.invalidateQueries({ queryKey: ['/api/proposals'] });
+        
+      } catch (error) {
+        showNotification('Erro ao salvar observações', 'error');
+      }
+    };
+
     const generatePreview = async (format: string) => {
       setIsGenerating(true);
       setPreviewType(format);
@@ -1816,6 +1846,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           dataGeracao: new Date().toLocaleString('pt-BR'),
           dadosDetalhados: filteredData.slice(0, 5) // Primeiros 5 para preview
         };
+        
+        // Inicializar observações editáveis com dados existentes
+        const initialObservations: {[key: string]: string} = {};
+        filteredData.slice(0, 5).forEach(proposal => {
+          initialObservations[proposal.id] = proposal.internalData?.observacoesSupervisor || 
+                                            proposal.internalData?.observacoesFinanceiras || 
+                                            proposal.internalData?.observacoesVendedor || '';
+        });
+        setEditableObservations(initialObservations);
         
         setPreviewData(preview);
         setShowPreview(true);
@@ -2273,10 +2312,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                             <td className="px-3 py-2 text-xs">
                               {proposal.internalData?.desconto ? `${proposal.internalData.desconto}%` : '0%'}
                             </td>
-                            <td className="px-3 py-2 text-xs max-w-32 truncate">
-                              {proposal.internalData?.observacoesFinanceiras || 
-                               proposal.internalData?.observacoesVendedor || 
-                               'Sem observações'}
+                            <td className="px-3 py-2 text-xs max-w-32">
+                              <textarea
+                                value={editableObservations[proposal.id] || ''}
+                                onChange={(e) => setEditableObservations(prev => ({
+                                  ...prev,
+                                  [proposal.id]: e.target.value
+                                }))}
+                                placeholder="Adicionar observação..."
+                                className="w-full text-xs border border-gray-300 rounded px-2 py-1 resize-none"
+                                rows={2}
+                              />
                             </td>
                             <td className="px-3 py-2 text-xs">
                               {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
@@ -2366,6 +2412,33 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         <li>• Formato {previewData.format.toUpperCase()} pronto para análise financeira</li>
                       </ul>
                     </div>
+                  </div>
+                </div>
+
+                {/* Botões de Ação */}
+                <div className="mt-6 flex justify-between items-center gap-4 pt-4 border-t border-gray-200">
+                  <button
+                    onClick={saveObservations}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <Save size={16} />
+                    Salvar Observações
+                  </button>
+                  
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowPreview(false)}
+                      className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                      Fechar Preview
+                    </button>
+                    <button
+                      onClick={() => generateReport(previewData.format, 'Email')}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      <Send size={16} />
+                      Enviar para Financeiro
+                    </button>
                   </div>
                 </div>
               </div>
