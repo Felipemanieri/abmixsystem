@@ -57,7 +57,7 @@ interface Award {
 }
 
 export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
-  const [activeView, setActiveView] = useState<SupervisorView>('dashboard');
+  const [currentView, setCurrentView] = useState<SupervisorView>('dashboard');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
