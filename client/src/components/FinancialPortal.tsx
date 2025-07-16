@@ -360,7 +360,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
             <div className="flex items-center space-x-2">
               {receivedReports.length > 0 && (
-                <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                <span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
                   {receivedReports.filter(r => r.status === 'received').length} Novos
                 </span>
               )}
@@ -417,7 +417,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           <h4 className="text-sm font-semibold text-gray-900">{report.title}</h4>
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                             report.status === 'received' 
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-emerald-100 text-emerald-700'
                               : 'bg-gray-100 text-gray-800'
                           }`}>
                             {report.status === 'received' ? 'Novo' : 'Processado'}
@@ -737,8 +737,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       client.status === 'active' 
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-amber-100 text-amber-700'
                     }`}>
                       {client.status === 'active' ? 'Ativo' : 'Pendente'}
                     </span>
@@ -1244,7 +1244,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           <td className="border border-gray-300 px-3 py-2 text-sm font-bold">R$ {item.valor}</td>
                           <td className="border border-gray-300 px-3 py-2 text-sm">{item.plano}</td>
                           <td className="border border-gray-300 px-3 py-2 text-sm">
-                            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                            <span className="px-2 py-1 bg-sky-100 text-sky-700 rounded text-xs font-medium">
                               {item.status.toUpperCase()}
                             </span>
                           </td>

@@ -439,48 +439,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     return 'Como especialista em implantação, posso ajudar com validações, automações, integrações e monitoramento. O que precisa fazer?';
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending_validation':
-        return 'bg-orange-100 text-orange-800';
-      case 'validated':
-        return 'bg-green-100 text-green-800';
-      case 'sent_to_automation':
-        return 'bg-blue-100 text-blue-800';
-      case 'processing':
-        return 'bg-purple-100 text-purple-800';
-      case 'completed':
-        return 'bg-emerald-100 text-emerald-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pending_validation':
-        return 'Aguardando Validação';
-      case 'validated':
-        return 'Validado';
-      case 'sent_to_automation':
-        return 'Enviado p/ Automação';
-      case 'processing':
-        return 'Em Processamento';
-      case 'completed':
-        return 'Concluído';
-      default:
-        return 'Desconhecido';
-    }
-  };
-
+  // Funções de cores removidas - agora usa StatusBadge para cores uniformes
+  
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
         return 'bg-red-100 text-red-800';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-100 text-amber-700';
       case 'low':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-100 text-emerald-700';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -713,8 +681,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <span 
                       className={`px-2 py-1 rounded text-xs font-medium ${
                         proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
-                        proposal.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
+                        proposal.priority === 'medium' ? 'bg-amber-100 text-amber-700' :
+                        'bg-emerald-100 text-emerald-700'
                       }`}
                       title="Prioridade definida pelo Supervisor (somente leitura)"
                     >
@@ -895,7 +863,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="flex items-center space-x-3">
                     <h3 className="text-sm font-medium text-gray-900">{rule.name}</h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      rule.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      rule.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-800'
                     }`}>
                       {rule.status === 'active' ? 'Ativo' : 'Inativo'}
                     </span>
@@ -1242,8 +1210,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       </div>
                       <div>
                         <span className="font-medium text-gray-700">Prioridade:</span>
-                        <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(proposal.priority)}`}>
-                          {getPriorityText(proposal.priority)}
+                        <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                          proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
+                          proposal.priority === 'medium' ? 'bg-amber-100 text-amber-700' :
+                          'bg-emerald-100 text-emerald-700'
+                        }`}>
+                          {proposal.priority === 'high' ? 'Alta' : 
+                           proposal.priority === 'medium' ? 'Média' : 'Baixa'}
                         </span>
                       </div>
                       <div>
