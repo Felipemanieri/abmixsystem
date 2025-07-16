@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell, MessageSquare } from 'lucide-react';
-import AbmixLogo from './AbmixLogo';
+// import AbmixLogo from './AbmixLogo';
 import SystemFooter from './SystemFooter';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
@@ -549,7 +549,11 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <AbmixLogo size={40} className="mr-3" />
+                <img 
+                  src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                  alt="Abmix" 
+                  className="h-10 w-auto mr-3"
+                />
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
                   <User className="w-6 h-6 text-white" />
                 </div>

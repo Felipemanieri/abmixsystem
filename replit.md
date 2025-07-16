@@ -154,6 +154,17 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Logo Unificado em Todos os Portais (Jan 16, 2025)
+- **Implementado logo Abmix original consistente em todo o sistema**:
+  - Substituído componente AbmixLogo por imagem direta em todos os portais
+  - Logo original (`65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png`) aplicado uniformemente
+  - Portais atualizados: VendorPortal, ClientPortal, FinancialPortal, ImplantacaoPortal, LoginPage
+  - SystemFooter também atualizado para usar a mesma imagem
+  - Tamanhos padronizados: h-6 (footer), h-10 (header portais), h-12 (página inicial), h-20 (login)
+  - Mantida identidade visual consistente em toda a aplicação
+
+## Recent Changes
+
 ### Portal Restrito Expandido com Múltiplas Abas Especializadas (Jan 16, 2025)
 - **Implementado sistema completo de abas separadas no Portal Restrito**:
   - **Aba "Controle Senhas"**: Gerenciamento completo de senhas de todos os usuários

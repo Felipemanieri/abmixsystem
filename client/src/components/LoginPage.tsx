@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, FileText, DollarSign, Settings, Users } from 'lucide-react';
-import AbmixLogo from './AbmixLogo';
+// import AbmixLogo from './AbmixLogo';
 
 interface LoginPageProps {
   portal: 'client' | 'vendor' | 'financial' | 'supervisor' | 'implementation' | 'restricted';
@@ -165,7 +165,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
           <div className="p-8 text-center border-b border-gray-100/50">
             {/* Logo Abmix */}
             <div className="flex justify-center mb-6">
-              <AbmixLogo size={80} className="drop-shadow-sm" />
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-20 w-auto drop-shadow-sm"
+              />
             </div>
             
             {/* Ícone do portal com gradiente */}

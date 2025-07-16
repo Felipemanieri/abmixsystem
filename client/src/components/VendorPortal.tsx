@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut, Plus, Users, FileText, Link, Eye, BarChart3, Clock, CheckCircle, AlertCircle, Copy, ExternalLink, Download, Search, Filter, ArrowLeft, Home, Bell, Calculator, Target, TrendingUp, DollarSign, X, Mail, Image, MessageSquare, MessageCircle, Trash2, Camera, Upload, Paperclip } from 'lucide-react';
-import AbmixLogo from './AbmixLogo';
+// import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
@@ -1561,7 +1561,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <AbmixLogo size={40} className="mr-3" />
+                <img 
+                  src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                  alt="Abmix" 
+                  className="h-10 w-auto mr-3"
+                />
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">Portal Vendedor</h1>
                   <p className="text-sm text-gray-600">

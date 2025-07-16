@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail, Download, Share2, ExternalLink, Send, Copy, X } from 'lucide-react';
-import AbmixLogo from './AbmixLogo';
+// import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import FinancialAutomationModal from './FinancialAutomationModal';
@@ -799,7 +799,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <AbmixLogo />
+              <img 
+                src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
+                alt="Abmix" 
+                className="h-10 w-auto mr-3"
+              />
               <div className="ml-4">
                 <h1 className="text-xl font-semibold text-gray-900">Portal Financeiro</h1>
                 <p className="text-sm text-gray-500">Gestão financeira e análises</p>
