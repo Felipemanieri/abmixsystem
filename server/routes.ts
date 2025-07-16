@@ -746,6 +746,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
     } catch (error) {
+      if (error.code === '23505') {
+        return res.status(400).json({ error: "Email já está em uso por outro usuário" });
+      }
       console.error("Erro ao atualizar usuário:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }

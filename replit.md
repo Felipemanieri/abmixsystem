@@ -309,11 +309,11 @@ The application provides role-based portals with specific functionality:
   - Sistema de edição de senhas centralizado com gerador automático
 
 - **Credenciais dos Portais**:
-  - **Supervisor**: supervisao@abmix.com.br / felipe@abmix.com.br - Senha: 123456
+  - **Supervisor**: supervisao@abmix.com.br - Senha: 123456
   - **Financeiro**: financeiro@abmix.com.br - Senha: 123456
   - **Implementação**: implementacao@abmix.com.br - Senha: 123456
   - **Cliente**: cliente@abmix.com.br - Senha: 123456
-  - **Área Restrita**: admin@abmix.com.br - Senha: 123456
+  - **Área Restrita**: felipe@abmix.com.br - Senha: 123456 (usuário principal do administrador)
   - **Vendedores**: comercial@abmix.com.br, comercial2@abmix.com.br, etc. - Senha: 120784
 
 - **Funcionalidades do sistema unificado**:
