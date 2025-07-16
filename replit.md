@@ -307,6 +307,7 @@ The application provides role-based portals with specific functionality:
   - API `/api/auth/users` para gestão unificada de usuários
   - Painel de gestão na área restrita controla acesso a todos os portais
   - Sistema de edição de senhas centralizado com gerador automático
+  - **Corrigido acesso direto à área restrita**: Removido login automático, agora exige autenticação
 
 - **Credenciais dos Portais**:
   - **Supervisor**: supervisao@abmix.com.br - Senha: 123456

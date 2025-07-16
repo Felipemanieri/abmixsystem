@@ -165,15 +165,7 @@ function App() {
                 />
               </div>
               <button
-                onClick={() => {
-                  const restrictedUser: User = {
-                    id: 'admin',
-                    name: 'Administrador',
-                    role: 'restricted',
-                    email: 'admin@abmix.com.br'
-                  };
-                  handleLogin(restrictedUser);
-                }}
+                onClick={() => setCurrentPortal('restricted')}
                 className="flex items-center px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition-colors shadow-sm"
               >
                 <Lock className="w-4 h-4 mr-2" />
