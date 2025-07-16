@@ -141,6 +141,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   const [contractFieldsReadOnly, setContractFieldsReadOnly] = useState(false);
   const [showProfessionalModal, setShowProfessionalModal] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [isLoadingDraft, setIsLoadingDraft] = useState(false);
 
   // Estados para cotação
   const [quotationData, setQuotationData] = useState<QuotationData>({
@@ -158,6 +159,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   // Carregar rascunho salvo quando o componente for montado
   useEffect(() => {
     if (currentVendor) {
+      setIsLoadingDraft(true);
       const draftKey = `proposal_draft_${currentVendor.id}`;
       const savedDraft = localStorage.getItem(draftKey);
       
@@ -165,59 +167,83 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         try {
           const draftData = JSON.parse(savedDraft);
           
-          // Restaurar dados do contrato
-          if (draftData.contractData) {
-            setContractData(draftData.contractData);
-          }
+          // Verificar se há dados realmente preenchidos
+          const hasData = draftData.contractData?.nomeEmpresa || 
+                          draftData.titulares?.some((t: any) => t.nomeCompleto) ||
+                          draftData.dependentes?.some((d: any) => d.nomeCompleto);
           
-          // Restaurar titulares
-          if (draftData.titulares && draftData.titulares.length > 0) {
-            setTitulares(draftData.titulares);
+          if (hasData) {
+            // Restaurar dados do contrato
+            if (draftData.contractData) {
+              setContractData(draftData.contractData);
+            }
+            
+            // Restaurar titulares
+            if (draftData.titulares && draftData.titulares.length > 0) {
+              setTitulares(draftData.titulares);
+            }
+            
+            // Restaurar dependentes
+            if (draftData.dependentes && draftData.dependentes.length > 0) {
+              setDependentes(draftData.dependentes);
+            }
+            
+            // Restaurar dados internos
+            if (draftData.internalData) {
+              setInternalData(draftData.internalData);
+            }
+            
+            // Restaurar lastSaved
+            if (draftData.lastSaved) {
+              setLastSaved(draftData.lastSaved);
+            }
+            
+            showNotification('Rascunho carregado automaticamente', 'info');
+          } else {
+            localStorage.removeItem(draftKey);
           }
-          
-          // Restaurar dependentes
-          if (draftData.dependentes) {
-            setDependentes(draftData.dependentes);
-          }
-          
-          // Restaurar dados internos
-          if (draftData.internalData) {
-            setInternalData(draftData.internalData);
-          }
-          
-          // Restaurar lastSaved
-          if (draftData.lastSaved) {
-            setLastSaved(draftData.lastSaved);
-          }
-          
-          showNotification('Rascunho carregado automaticamente', 'info');
         } catch (error) {
           console.error('Erro ao carregar rascunho:', error);
         }
       }
+      
+      setIsLoadingDraft(false);
     }
   }, [currentVendor]);
 
-  // Auto-save: salvar dados automaticamente a cada mudança
+  // Auto-save: salvar dados automaticamente a cada mudança com debounce
   useEffect(() => {
-    if (currentVendor && !isSubmitted) {
-      const now = new Date().toISOString();
-      const draftData = {
-        vendorId: currentVendor.id,
-        contractData: contractData,
-        titulares: titulares,
-        dependentes: dependentes,
-        internalData: internalData,
-        attachments: vendorAttachments,
-        isDraft: true,
-        lastSaved: now
-      };
+    if (currentVendor && !isSubmitted && !isLoadingDraft) {
+      const timeoutId = setTimeout(() => {
+        // Verificar se há dados realmente preenchidos antes de salvar
+        const hasData = contractData.nomeEmpresa || 
+                        titulares.some(t => t.nomeCompleto) ||
+                        dependentes.some(d => d.nomeCompleto);
+        
+        if (hasData) {
+          const now = new Date().toISOString();
+          const draftData = {
+            vendorId: currentVendor.id,
+            contractData: contractData,
+            titulares: titulares,
+            dependentes: dependentes,
+            internalData: internalData,
+            attachments: vendorAttachments,
+            isDraft: true,
+            lastSaved: now
+          };
 
-      const draftKey = `proposal_draft_${currentVendor.id}`;
-      localStorage.setItem(draftKey, JSON.stringify(draftData));
-      setLastSaved(now);
+          const draftKey = `proposal_draft_${currentVendor.id}`;
+          localStorage.setItem(draftKey, JSON.stringify(draftData));
+          setLastSaved(now);
+          
+
+        }
+      }, 500); // Debounce de 500ms
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [contractData, titulares, dependentes, internalData, currentVendor, isSubmitted]);
+  }, [contractData, titulares, dependentes, internalData, vendorAttachments, currentVendor, isSubmitted, isLoadingDraft]);
 
 
   const planosDisponiveis = [
