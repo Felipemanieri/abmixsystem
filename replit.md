@@ -154,6 +154,34 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Sistema de Relatórios SupervisorPortal Aprimorado com Preview Obrigatório (Jan 16, 2025)
+- **Implementado sistema crítico de relatórios para o departamento financeiro**:
+  - Preview obrigatório antes de qualquer envio ou download de relatório
+  - Processo em 2 etapas: 1) Gerar Preview (obrigatório) 2) Enviar para Financeiro
+  - Botões discretos e alinhados horizontalmente conforme solicitação
+  - Filtros compactos com layout responsivo e organizado
+  - Modal de preview detalhado mostrando exatamente o que será enviado
+
+- **Relatório completo com 10 colunas essenciais**:
+  - ID (corrigido de "EU IA"), Cliente (sempre presente), CNPJ, Vendedor
+  - Valor (corrigido de "Valentia"), Plano, Status, Desconto, Observações, Data
+  - Observações financeiras específicas destacadas separadamente
+  - Informações de desconto e autorizador quando aplicável
+  - Dados completos de cliente extraídos de nomeEmpresa ou titulares
+
+- **Interface profissional de supervisão**:
+  - Avisos "CRÍTICO" e "REVISÃO OBRIGATÓRIA" em destaque
+  - Seção específica para observações financeiras críticas
+  - Confirmação final detalhada listando o que será enviado
+  - Remoção da opção "Resumo Executivo" conforme solicitado
+  - Botões de ação só aparecem após geração do preview
+
+- **Sistema garante qualidade dos dados enviados ao financeiro**:
+  - Validação visual completa antes do envio
+  - Dados de propostas reais do banco PostgreSQL
+  - Informações completas de contratos, vendedores e observações
+  - Processo não permite envio sem prévia revisão
+
 ### Planilha Única Horizontal - Estrutura Linear (Jan 16, 2025)
 - **Implementada nova estrutura de planilha única sem abas**:
   - Uma empresa = Uma linha completa na planilha

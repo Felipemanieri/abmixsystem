@@ -2168,7 +2168,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 {/* Informações do Relatório */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm font-medium text-gray-600">Tipo de Relatório:</span>
@@ -2176,15 +2176,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium text-gray-600">Total de Propostas:</span>
-                      <span className="text-sm text-gray-900">{previewData.totalPropostas}</span>
+                      <span className="text-sm text-gray-900 font-bold">{previewData.totalPropostas}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium text-gray-600">Faturamento Total:</span>
-                      <span className="text-sm text-gray-900">{formatCurrency(previewData.faturamento.toString())}</span>
+                      <span className="text-sm text-gray-900 font-bold text-green-600">{formatCurrency(previewData.faturamento.toString())}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-600">Data de Geração:</span>
-                      <span className="text-sm text-gray-900">{previewData.dataGeracao}</span>
+                      <span className="text-sm font-medium text-gray-600">Ticket Médio:</span>
+                      <span className="text-sm text-gray-900">{formatCurrency((previewData.faturamento / (previewData.totalPropostas || 1)).toString())}</span>
                     </div>
                   </div>
                   
@@ -2206,6 +2206,25 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       <span className="text-sm text-gray-900">{previewData.periodoFim}</span>
                     </div>
                   </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-600">Data de Geração:</span>
+                      <span className="text-sm text-gray-900">{previewData.dataGeracao}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-600">Formato:</span>
+                      <span className="text-sm text-gray-900 uppercase">{previewData.format}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-600">Campos Incluídos:</span>
+                      <span className="text-sm text-gray-900">10 colunas</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-600">Observações:</span>
+                      <span className="text-sm text-gray-900">{previewData.dadosDetalhados.filter((p: any) => p.internalData?.observacoesFinanceiras || p.internalData?.observacoesVendedor).length} com dados</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Preview dos Dados */}
@@ -2219,27 +2238,47 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <table className="w-full text-sm">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-4 py-2 text-left">ID</th>
-                          <th className="px-4 py-2 text-left">Cliente</th>
-                          <th className="px-4 py-2 text-left">Vendedor</th>
-                          <th className="px-4 py-2 text-left">Valor</th>
-                          <th className="px-4 py-2 text-left">Status</th>
-                          <th className="px-4 py-2 text-left">Data</th>
+                          <th className="px-3 py-2 text-left">ID</th>
+                          <th className="px-3 py-2 text-left">Cliente</th>
+                          <th className="px-3 py-2 text-left">CNPJ</th>
+                          <th className="px-3 py-2 text-left">Vendedor</th>
+                          <th className="px-3 py-2 text-left">Valor</th>
+                          <th className="px-3 py-2 text-left">Plano</th>
+                          <th className="px-3 py-2 text-left">Status</th>
+                          <th className="px-3 py-2 text-left">Desconto</th>
+                          <th className="px-3 py-2 text-left">Observações</th>
+                          <th className="px-3 py-2 text-left">Data</th>
                         </tr>
                       </thead>
                       <tbody>
                         {previewData.dadosDetalhados.map((proposal: any, index: number) => (
                           <tr key={index} className="border-b border-gray-100">
-                            <td className="px-4 py-2 font-mono text-xs">{proposal.abmId}</td>
-                            <td className="px-4 py-2">{proposal.cliente}</td>
-                            <td className="px-4 py-2">{proposal.vendorName || 'N/A'}</td>
-                            <td className="px-4 py-2">{formatCurrency(proposal.contractData?.valor || '0')}</td>
-                            <td className="px-4 py-2">
+                            <td className="px-3 py-2 font-mono text-xs">{proposal.abmId}</td>
+                            <td className="px-3 py-2">
+                              {proposal.contractData?.nomeEmpresa || 
+                               proposal.titulares?.[0]?.nomeCompleto || 
+                               'Cliente não informado'}
+                            </td>
+                            <td className="px-3 py-2 text-xs">{proposal.contractData?.cnpj || 'N/A'}</td>
+                            <td className="px-3 py-2">{proposal.vendorName || 'N/A'}</td>
+                            <td className="px-3 py-2 font-medium">
+                              {formatCurrency(proposal.contractData?.valor || '0')}
+                            </td>
+                            <td className="px-3 py-2 text-xs">{proposal.contractData?.planoContratado || 'N/A'}</td>
+                            <td className="px-3 py-2">
                               <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
                                 {STATUS_CONFIG[proposal.status as ProposalStatus]?.label || proposal.status}
                               </span>
                             </td>
-                            <td className="px-4 py-2 text-xs">
+                            <td className="px-3 py-2 text-xs">
+                              {proposal.internalData?.desconto ? `${proposal.internalData.desconto}%` : '0%'}
+                            </td>
+                            <td className="px-3 py-2 text-xs max-w-32 truncate">
+                              {proposal.internalData?.observacoesFinanceiras || 
+                               proposal.internalData?.observacoesVendedor || 
+                               'Sem observações'}
+                            </td>
+                            <td className="px-3 py-2 text-xs">
                               {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                             </td>
                           </tr>
@@ -2249,16 +2288,83 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   </div>
                 </div>
 
+                {/* Observações Financeiras Específicas */}
+                <div className="mt-6 border border-orange-200 rounded-lg">
+                  <div className="px-4 py-3 bg-orange-50 border-b border-orange-200">
+                    <h4 className="text-sm font-semibold text-orange-800 flex items-center gap-2">
+                      <AlertTriangle size={16} />
+                      Observações Financeiras Críticas
+                    </h4>
+                  </div>
+                  <div className="p-4">
+                    <div className="space-y-3">
+                      {previewData.dadosDetalhados.map((proposal: any, index: number) => {
+                        const hasObservations = proposal.internalData?.observacoesFinanceiras || 
+                                              proposal.internalData?.desconto > 0 ||
+                                              proposal.internalData?.autorizadorDesconto;
+                        
+                        if (!hasObservations) return null;
+                        
+                        return (
+                          <div key={index} className="bg-gray-50 p-3 rounded border">
+                            <div className="flex justify-between items-start mb-2">
+                              <span className="font-medium text-sm">{proposal.abmId} - {proposal.contractData?.nomeEmpresa || 'Cliente'}</span>
+                              <span className="text-xs text-gray-500">{formatCurrency(proposal.contractData?.valor || '0')}</span>
+                            </div>
+                            <div className="space-y-1 text-xs text-gray-700">
+                              {proposal.internalData?.desconto > 0 && (
+                                <div className="flex justify-between">
+                                  <span>Desconto aplicado:</span>
+                                  <span className="font-medium text-red-600">{proposal.internalData.desconto}%</span>
+                                </div>
+                              )}
+                              {proposal.internalData?.autorizadorDesconto && (
+                                <div className="flex justify-between">
+                                  <span>Autorizado por:</span>
+                                  <span className="font-medium">{proposal.internalData.autorizadorDesconto}</span>
+                                </div>
+                              )}
+                              {proposal.internalData?.observacoesFinanceiras && (
+                                <div className="mt-2">
+                                  <span className="font-medium">Obs. Financeiras:</span>
+                                  <p className="text-gray-600 mt-1">{proposal.internalData.observacoesFinanceiras}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                      
+                      {previewData.dadosDetalhados.filter((p: any) => 
+                        p.internalData?.observacoesFinanceiras || 
+                        p.internalData?.desconto > 0 ||
+                        p.internalData?.autorizadorDesconto
+                      ).length === 0 && (
+                        <div className="text-center text-gray-500 py-4">
+                          <FileX size={24} className="mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">Nenhuma observação financeira específica nas propostas selecionadas</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Confirmação */}
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-start gap-3">
                     <CheckCircle className="text-green-600 mt-0.5" size={16} />
                     <div>
-                      <h4 className="text-sm font-semibold text-green-800">Confirmação</h4>
+                      <h4 className="text-sm font-semibold text-green-800">Confirmação Final</h4>
                       <p className="text-sm text-green-700 mt-1">
-                        Os dados acima serão enviados para o departamento financeiro. 
-                        Verifique se todas as informações estão corretas antes de prosseguir.
+                        Os dados acima serão enviados para o departamento financeiro incluindo:
                       </p>
+                      <ul className="text-xs text-green-600 mt-2 space-y-1">
+                        <li>• {previewData.totalPropostas} propostas com dados completos</li>
+                        <li>• Informações de clientes, valores e status atualizados</li>
+                        <li>• Observações financeiras e descontos aplicados</li>
+                        <li>• Dados dos vendedores responsáveis</li>
+                        <li>• Formato {previewData.format.toUpperCase()} pronto para análise financeira</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
