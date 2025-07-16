@@ -61,6 +61,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   const [dependentes, setDependentes] = useState<PersonData[]>([]);
   const [clientAttachments, setClientAttachments] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showVendorObservations, setShowVendorObservations] = useState(false);
   const [uploadMethod, setUploadMethod] = useState<'file' | 'camera' | 'gallery'>('file');
@@ -178,6 +179,42 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
 
   const removeAttachment = (index: number) => {
     setClientAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+
+    try {
+      const updateData = {
+        titulares,
+        dependentes,
+        clientAttachments: clientAttachments.map(file => ({
+          name: file.name,
+          size: file.size,
+          type: file.type
+        })),
+        clientCompleted: false // Indica que é apenas um salvamento, não envio final
+      };
+
+      const response = await fetch(`/api/proposals/client/${token}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao salvar dados');
+      }
+
+      showNotification('Dados salvos com sucesso! Você pode continuar mais tarde.', 'success');
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+      showNotification('Erro ao salvar dados', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -871,11 +908,29 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center">
+            {/* Action Buttons */}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={handleSave}
+                disabled={isSaving || isSubmitting}
+                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Salvando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5 mr-2" />
+                    Salvar
+                  </>
+                )}
+              </button>
+              
               <button
                 onClick={handleSubmit}
-                disabled={isSubmitting}
+                disabled={isSubmitting || isSaving}
                 className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isSubmitting ? (
