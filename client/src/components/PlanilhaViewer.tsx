@@ -442,6 +442,10 @@ export default function PlanilhaViewer() {
           <p className="text-gray-600 mt-1">
             Visualização em tempo real dos dados formatados para Google Sheets
           </p>
+          <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+            <span>↔️ Role horizontalmente para ver todos os {colunas.length} campos</span>
+            <span>🔄 Atualização automática a cada 5 segundos</span>
+          </div>
         </div>
 
         {isLoading ? (
@@ -455,39 +459,53 @@ export default function PlanilhaViewer() {
             <p className="text-gray-600">Nenhuma proposta encontrada</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto overflow-y-auto max-h-96 border border-gray-300 rounded-lg">
+            <table className="min-w-max w-full border-collapse">
+              <thead className="bg-gray-100 sticky top-0 z-10">
                 <tr>
-                  {colunas.slice(0, 10).map((coluna) => (
-                    <th key={coluna} className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-r">
-                      {coluna}
+                  {colunas.map((coluna, index) => (
+                    <th 
+                      key={coluna} 
+                      className="px-3 py-2 text-left text-xs font-bold text-gray-800 border-r border-gray-300 min-w-[100px] max-w-[150px] whitespace-nowrap"
+                      style={{ position: 'sticky', top: 0, backgroundColor: '#f3f4f6' }}
+                    >
+                      <div className="truncate" title={coluna}>
+                        {index + 1}. {coluna}
+                      </div>
                     </th>
                   ))}
-                  {colunas.length > 10 && (
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">
-                      ... e mais {colunas.length - 10} colunas
-                    </th>
-                  )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                {dadosFormatados.map((linha, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    {colunas.slice(0, 10).map((coluna) => (
-                      <td key={coluna} className="px-4 py-3 text-sm text-gray-900 border-r max-w-32 truncate">
-                        {linha[coluna] || '[vazio]'}
+              <tbody>
+                {dadosFormatados.map((linha, rowIndex) => (
+                  <tr 
+                    key={rowIndex} 
+                    className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors duration-150`}
+                  >
+                    {colunas.map((coluna) => (
+                      <td 
+                        key={coluna} 
+                        className="px-3 py-2 text-xs text-gray-900 border-r border-gray-200 min-w-[100px] max-w-[150px] whitespace-nowrap overflow-hidden"
+                        title={String(linha[coluna] || '[vazio]')}
+                      >
+                        <div className="truncate">
+                          {linha[coluna] ? (
+                            <span className="text-gray-900">{String(linha[coluna])}</span>
+                          ) : (
+                            <span className="text-gray-400 italic text-xs">[vazio]</span>
+                          )}
+                        </div>
                       </td>
                     ))}
-                    {colunas.length > 10 && (
-                      <td className="px-4 py-3 text-sm text-gray-500">
-                        ...
-                      </td>
-                    )}
                   </tr>
                 ))}
               </tbody>
             </table>
+            <div className="mt-2 text-center">
+              <p className="text-xs text-gray-500">
+                Role horizontalmente para navegar pelos {colunas.length} campos
+              </p>
+            </div>
           </div>
         )}
       </div>
