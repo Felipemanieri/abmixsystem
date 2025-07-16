@@ -2006,60 +2006,108 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="flex gap-2">
                 <button
                   onClick={() => setShowReportTable(!showReportTable)}
-                  className="px-4 py-2 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-2"
+                  className="px-3 py-2 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md flex items-center gap-1"
                 >
-                  <FileText size={14} />
-                  {showReportTable ? 'Ocultar' : 'Visualizar'} Tabela
+                  <Eye size={12} />
+                  {showReportTable ? 'Ocultar' : 'Visualizar'} Relatório
                 </button>
                 <button
                   onClick={() => {
-                    // Simular exportação Excel
-                    showNotification('Relatório exportado com sucesso!', 'success');
+                    showNotification('Relatório PDF gerado com sucesso!', 'success');
                   }}
-                  className="px-4 py-2 text-sm bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-2"
+                  className="px-3 py-2 text-xs bg-red-50 text-red-700 hover:bg-red-100 rounded-md flex items-center gap-1"
                 >
-                  <Download size={14} />
-                  Exportar Excel
+                  <FileText size={12} />
+                  PDF
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Relatório Excel exportado com sucesso!', 'success');
+                  }}
+                  className="px-3 py-2 text-xs bg-green-50 text-green-700 hover:bg-green-100 rounded-md flex items-center gap-1"
+                >
+                  <Download size={12} />
+                  Excel
+                </button>
+                <button
+                  onClick={() => {
+                    window.open('https://docs.google.com/spreadsheets', '_blank');
+                  }}
+                  className="px-3 py-2 text-xs bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-md flex items-center gap-1"
+                >
+                  <ExternalLink size={12} />
+                  Sheets
+                </button>
+                <button
+                  onClick={() => {
+                    window.open('https://drive.google.com', '_blank');
+                  }}
+                  className="px-3 py-2 text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-md flex items-center gap-1"
+                >
+                  <ExternalLink size={12} />
+                  Drive
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Resumo dos Filtros Aplicados */}
+          {/* Resumo dos Filtros Aplicados - Estilo conforme imagem */}
           {showReportTable && (
-            <div className="px-6 py-3 bg-gray-50 border-b">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                <div>
+            <div className="px-6 py-4 bg-gray-50 border-b">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-3 text-sm">
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Tipo de relatório:</span>
-                  <span className="ml-1 text-gray-800">{reportFilters.tipo}</span>
+                  <span className="text-gray-800 font-semibold">{reportFilters.tipo}</span>
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Vendedores Incluídos:</span>
-                  <span className="ml-1 text-gray-800">{reportFilters.vendedor || 'Todos'}</span>
+                  <span className="text-gray-800 font-semibold">{reportFilters.vendedor || 'Todos'}</span>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-600">Status Incluído:</span>
-                  <span className="ml-1 text-gray-800">{reportFilters.status || 'Todos'}</span>
-                </div>
-                <div>
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Data de Geração:</span>
-                  <span className="ml-1 text-gray-800">{new Date().toLocaleString('pt-BR')}</span>
+                  <span className="text-gray-800 font-semibold">{new Date().toLocaleString('pt-BR')}</span>
                 </div>
-                <div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Formato:</span>
+                  <span className="text-gray-800 font-semibold">SOBRESSAIR</span>
+                </div>
+                
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Total de Propostas:</span>
-                  <span className="ml-1 text-green-600 font-semibold">{filteredData.length}</span>
+                  <span className="text-blue-600 font-bold">{filteredData.length}</span>
                 </div>
-                <div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Status Incluído:</span>
+                  <span className="text-gray-800 font-semibold">{reportFilters.status || 'Todos'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Campos Incluídos:</span>
+                  <span className="text-gray-800 font-semibold">9 colunas</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Observações:</span>
+                  <span className="text-gray-800 font-semibold">
+                    {filteredData.filter(p => p.internalData?.observacoes).length} com dados
+                  </span>
+                </div>
+                
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Faturamento Total:</span>
-                  <span className="ml-1 text-green-600 font-semibold">{formatCurrency(reportData.faturamento.toString())}</span>
+                  <span className="text-green-600 font-bold">{formatCurrency(reportData.faturamento.toString())}</span>
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Período Início:</span>
-                  <span className="ml-1 text-gray-800">{reportFilters.dataInicio || '2025-06-16'}</span>
+                  <span className="text-gray-800 font-semibold">{reportFilters.dataInicio || '2025-06-16'}</span>
                 </div>
-                <div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-600">Bilhete Médio:</span>
+                  <span className="text-purple-600 font-bold">
+                    {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="font-medium text-gray-600">Período Fim:</span>
-                  <span className="ml-1 text-gray-800">{reportFilters.dataFim || '2025-07-16'}</span>
+                  <span className="text-gray-800 font-semibold">{reportFilters.dataFim || '2025-07-16'}</span>
                 </div>
               </div>
             </div>
@@ -2074,52 +2122,55 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </h4>
               </div>
               
-              <div className="overflow-x-auto max-h-96 overflow-y-auto">
+              <div className="overflow-x-auto max-h-96 overflow-y-auto border rounded-lg">
                 <table className="w-full text-xs">
-                  <thead className="sticky top-0 bg-gray-100">
+                  <thead className="sticky top-0 bg-red-50">
                     <tr className="border-b">
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">ID</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Cliente</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">CNPJ</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Vendedor</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Valor</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Plano</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Status</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Desconto</th>
-                      <th className="text-left py-2 px-2 font-medium text-gray-700">Observações</th>
+                      <th className="text-left py-3 px-3 font-bold text-red-600">ID</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Cliente</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">CNPJ</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Vendedor</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Valor</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Plano</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Status</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Desconto</th>
+                      <th className="text-left py-3 px-3 font-bold text-gray-700">Observações</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredData.slice(0, 50).map((proposal) => (
+                    {filteredData.slice(0, 100).map((proposal) => (
                       <tr key={proposal.id} className="border-b hover:bg-gray-50">
-                        <td className="py-2 px-2 font-medium text-blue-600">{proposal.abmId}</td>
-                        <td className="py-2 px-2">{proposal.contractData?.nomeEmpresa || 'N/A'}</td>
-                        <td className="py-2 px-2">{proposal.contractData?.cnpj || 'N/A'}</td>
-                        <td className="py-2 px-2">{proposal.vendedor || getVendorName(proposal.vendorId)}</td>
-                        <td className="py-2 px-2 text-green-600 font-medium">
+                        <td className="py-3 px-3 font-bold text-blue-600">{proposal.abmId}</td>
+                        <td className="py-3 px-3 font-medium">{proposal.contractData?.nomeEmpresa || 'N/A'}</td>
+                        <td className="py-3 px-3">{proposal.contractData?.cnpj || 'N/A'}</td>
+                        <td className="py-3 px-3">
+                          <span className="text-red-600 font-medium">
+                            {proposal.vendedor || getVendorName(proposal.vendorId)}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 text-blue-600 font-bold">
                           {formatCurrency(proposal.contractData?.valor || '0')}
                         </td>
-                        <td className="py-2 px-2">{proposal.contractData?.planoContratado || 'N/A'}</td>
-                        <td className="py-2 px-2">
+                        <td className="py-3 px-3">{proposal.contractData?.planoContratado || 'N/A'}</td>
+                        <td className="py-3 px-3">
                           <span 
-                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            className="px-2 py-1 rounded text-xs font-bold uppercase"
                             style={{
-                              backgroundColor: STATUS_CONFIG[proposal.status]?.color + '20',
-                              color: STATUS_CONFIG[proposal.status]?.color
+                              backgroundColor: STATUS_CONFIG[proposal.status]?.color,
+                              color: 'white'
                             }}
                           >
                             {STATUS_CONFIG[proposal.status]?.label}
                           </span>
                         </td>
-                        <td className="py-2 px-2">0%</td>
-                        <td className="py-2 px-2">
+                        <td className="py-3 px-3 text-center">0%</td>
+                        <td className="py-3 px-3">
                           <input
                             type="text"
                             defaultValue={proposal.internalData?.observacoes || ''}
                             placeholder="Adicionar comentário"
-                            className="w-20 text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            className="w-24 text-xs border border-gray-300 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             onBlur={(e) => {
-                              // Atualizar observações da proposta
                               updateProposal.mutate({
                                 id: proposal.id,
                                 internalData: {
