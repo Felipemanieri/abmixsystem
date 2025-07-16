@@ -380,113 +380,53 @@ function App() {
       </main>
       
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* Logo */}
-            <div className="flex items-center">
-              <div className="flex items-center space-x-3">
-                {/* Logo Abmix exato da imagem */}
-                <svg width="60" height="60" viewBox="0 0 100 100" className="flex-shrink-0">
-                  <defs>
-                    <linearGradient id="abmixFooterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#00bcd4" />
-                      <stop offset="100%" stopColor="#4caf50" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="50" cy="50" r="45" fill="url(#abmixFooterGradient)" />
-                  <path d="M30 40 L50 60 L70 40 L50 20 Z" fill="white" opacity="0.9" />
-                  <circle cx="50" cy="50" r="8" fill="white" />
-                </svg>
-                <div className="flex flex-col">
-                  <span className="text-white text-2xl font-bold">Abmix</span>
-                  <span className="text-gray-400 text-sm">Consultoria em Benefícios</span>
-                </div>
-              </div>
-            </div>
+      <footer className="bg-gray-100 border-t border-gray-200 py-4 px-6">
+        <div className="max-w-full mx-auto">
+          <div className="flex items-center justify-between text-xs text-gray-600">
             
-            {/* Contato */}
-            <div>
-              <h3 className="font-bold mb-4">Contato</h3>
-              <div className="space-y-2 text-gray-400">
-                <div className="flex items-center">
-                  <Phone className="w-4 h-4 mr-2" />
-                  <span>(11) 99999-9999</span>
-                </div>
-                <div className="flex items-center">
-                  <Mail className="w-4 h-4 mr-2" />
-                  <span>contato@abmix.com.br</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  <span>Rua das Flores, 123 - Centro</span>
-                </div>
-                <p className="ml-6">São Paulo, SP</p>
-                <div className="flex items-center">
-                  <Globe className="w-4 h-4 mr-2" />
-                  <span>www.abmix.com.br</span>
-                </div>
-              </div>
+            {/* Seção Esquerda - Info do Sistema */}
+            <div className="flex flex-col space-y-1">
+              <span className="font-medium text-gray-700">Sistema Interno v2.0</span>
+              <span className="text-gray-500">© 2025 Abmix Consultoria</span>
             </div>
-            
-            {/* WhatsApp */}
-            <div>
-              <h3 className="font-bold mb-4">WhatsApp</h3>
-              <div className="space-y-2 text-gray-400">
-                <div className="flex items-center">
-                  <MessageCircle className="w-4 h-4 mr-2 text-green-400" />
-                  <span>(11) 98888-8888</span>
-                </div>
-                <p className="text-sm">Atendimento 24/7</p>
-                <button 
-                  onClick={() => window.open('https://wa.me/5511988888888?text=Olá! Gostaria de mais informações.', '_blank')}
-                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mt-3"
+
+            {/* Seção Centro - Suporte e Links */}
+            <div className="flex flex-col items-center space-y-1">
+              <div className="flex items-center space-x-1">
+                <span>Suporte:</span>
+                <a 
+                  href="mailto:suporte@abmix.com.br" 
+                  className="text-blue-600 hover:text-blue-800 transition-colors"
                 >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Falar no WhatsApp
-                </button>
+                  suporte@abmix.com.br
+                </a>
+              </div>
+              <div className="flex items-center space-x-3">
+                <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
+                  Manual do Sistema
+                </a>
+                <span className="text-gray-400">|</span>
+                <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
+                  FAQ
+                </a>
+                <span className="text-gray-400">|</span>
+                <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
+                  Configurações
+                </a>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span>Status:</span>
+                <span className="text-green-600 font-medium">🟢 Online</span>
               </div>
             </div>
-            
-            {/* Redes Sociais */}
-            <div>
-              <h3 className="font-bold mb-4">Redes Sociais</h3>
-              <div className="space-y-2 text-gray-400">
-                <p className="mb-4">Siga-nos nas redes sociais</p>
-                <div className="flex space-x-4">
-                  <button 
-                    onClick={() => window.open('https://facebook.com/abmix', '_blank')}
-                    className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
-                  >
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                  </button>
-                  <button 
-                    onClick={() => window.open('https://instagram.com/abmix', '_blank')}
-                    className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors"
-                  >
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.781c-.49 0-.928-.175-1.297-.49-.367-.315-.49-.753-.49-1.243 0-.49.123-.928.49-1.243.369-.367.807-.49 1.297-.49s.928.123 1.297.49c.367.315.49.753.49 1.243 0 .49-.123.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
-                    </svg>
-                  </button>
-                  <button 
-                    onClick={() => window.open('https://linkedin.com/company/abmix', '_blank')}
-                    className="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
-                  >
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
+
+            {/* Seção Direita - Informações do Sistema */}
+            <div className="flex flex-col items-end space-y-1">
+              <span>Última Sync: <span className="font-medium">14:39</span></span>
+              <span>Propostas Hoje: <span className="font-medium text-blue-600">45</span></span>
+              <span>Backup: <span className="font-medium text-green-600">Ativo</span></span>
             </div>
-          </div>
-          
-          <div className="border-t border-gray-800 pt-8 flex items-center justify-between">
-            <div className="text-gray-400 text-xl">
-              <p>&copy; 2024 Abmix. Todos os direitos reservados.</p>
-            </div>
+
           </div>
         </div>
       </footer>
