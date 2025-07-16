@@ -212,37 +212,37 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     }
   }, [currentVendor]);
 
-  // Auto-save: salvar dados automaticamente a cada mudança com debounce
-  useEffect(() => {
-    if (currentVendor && !isSubmitted && !isLoadingDraft && !isClearingDraft) {
-      const timeoutId = setTimeout(() => {
-        // Verificar se há dados realmente preenchidos antes de salvar
-        const hasData = contractData.nomeEmpresa || 
-                        titulares.some(t => t.nomeCompleto) ||
-                        dependentes.some(d => d.nomeCompleto);
+  // Auto-save DESABILITADO temporariamente para corrigir problema dos campos sumindo
+  // useEffect(() => {
+  //   if (currentVendor && !isSubmitted && !isLoadingDraft && !isClearingDraft) {
+  //     const timeoutId = setTimeout(() => {
+  //       // Verificar se há dados realmente preenchidos antes de salvar
+  //       const hasData = contractData.nomeEmpresa || 
+  //                       titulares.some(t => t.nomeCompleto) ||
+  //                       dependentes.some(d => d.nomeCompleto);
         
-        if (hasData) {
-          const now = new Date().toISOString();
-          const draftData = {
-            vendorId: currentVendor.id,
-            contractData: contractData,
-            titulares: titulares,
-            dependentes: dependentes,
-            internalData: internalData,
-            attachments: vendorAttachments,
-            isDraft: true,
-            lastSaved: now
-          };
+  //       if (hasData) {
+  //         const now = new Date().toISOString();
+  //         const draftData = {
+  //           vendorId: currentVendor.id,
+  //           contractData: contractData,
+  //           titulares: titulares,
+  //           dependentes: dependentes,
+  //           internalData: internalData,
+  //           attachments: vendorAttachments,
+  //           isDraft: true,
+  //           lastSaved: now
+  //         };
 
-          const draftKey = `proposal_draft_${currentVendor.id}`;
-          localStorage.setItem(draftKey, JSON.stringify(draftData));
-          setLastSaved(now);
-        }
-      }, 500); // Debounce de 500ms
+  //         const draftKey = `proposal_draft_${currentVendor.id}`;
+  //         localStorage.setItem(draftKey, JSON.stringify(draftData));
+  //         setLastSaved(now);
+  //       }
+  //     }, 500); // Debounce de 500ms
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [contractData, titulares, dependentes, internalData, vendorAttachments, currentVendor, isSubmitted, isLoadingDraft, isClearingDraft]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [contractData, titulares, dependentes, internalData, vendorAttachments, currentVendor, isSubmitted, isLoadingDraft, isClearingDraft]);
 
 
   const planosDisponiveis = [

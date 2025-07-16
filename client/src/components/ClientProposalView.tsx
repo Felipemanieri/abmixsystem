@@ -74,32 +74,32 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
     fetchProposal();
   }, [token]);
 
-  // Auto-save: salvar dados automaticamente a cada mudança com debounce
-  useEffect(() => {
-    if (proposal && !loading && !isSubmitting && !isLoadingDraft && !isClearingDraft) {
-      const timeoutId = setTimeout(() => {
-        // Verificar se há dados realmente preenchidos antes de salvar
-        const hasData = titulares.some(t => t.nomeCompleto) ||
-                        dependentes.some(d => d.nomeCompleto);
+  // Auto-save DESABILITADO temporariamente para corrigir problema dos campos sumindo
+  // useEffect(() => {
+  //   if (proposal && !loading && !isSubmitting && !isLoadingDraft && !isClearingDraft) {
+  //     const timeoutId = setTimeout(() => {
+  //       // Verificar se há dados realmente preenchidos antes de salvar
+  //       const hasData = titulares.some(t => t.nomeCompleto) ||
+  //                       dependentes.some(d => d.nomeCompleto);
         
-        if (hasData) {
-          const now = new Date().toISOString();
-          const draftData = {
-            titulares: titulares,
-            dependentes: dependentes,
-            isDraft: true,
-            lastSaved: now
-          };
+  //       if (hasData) {
+  //         const now = new Date().toISOString();
+  //         const draftData = {
+  //           titulares: titulares,
+  //           dependentes: dependentes,
+  //           isDraft: true,
+  //           lastSaved: now
+  //         };
 
-          const draftKey = `client_draft_${token}`;
-          localStorage.setItem(draftKey, JSON.stringify(draftData));
-          setLastSaved(now);
-        }
-      }, 500); // Debounce de 500ms
+  //         const draftKey = `client_draft_${token}`;
+  //         localStorage.setItem(draftKey, JSON.stringify(draftData));
+  //         setLastSaved(now);
+  //       }
+  //     }, 500); // Debounce de 500ms
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [titulares, dependentes, token, proposal, loading, isSubmitting, isLoadingDraft, isClearingDraft]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [titulares, dependentes, token, proposal, loading, isSubmitting, isLoadingDraft, isClearingDraft]);
 
   const initializeWithProposalData = (proposalData: any) => {
     if (proposalData.titulares && proposalData.titulares.length > 0) {
