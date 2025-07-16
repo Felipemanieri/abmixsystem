@@ -1889,30 +1889,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           outerRadius={150}
                           paddingAngle={1}
                           dataKey="value"
-                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, realValue, name }) => {
-                            if (realValue === 0) return null; // Não mostrar label para vendedores sem vendas
-                            
-                            const RADIAN = Math.PI / 180;
-                            const radius = innerRadius + (outerRadius - innerRadius) * 0.7; // Mais próximo da borda externa
-                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
+                          label={({ percent, realValue }) => {
+                            if (realValue === 0) return null;
                             return (
-                              <text 
-                                x={x} 
-                                y={y} 
-                                fill="white" 
-                                textAnchor="middle" 
-                                dominantBaseline="central"
-                                fontSize="14"
-                                fontWeight="bold"
-                                stroke="rgba(0,0,0,0.8)"
-                                strokeWidth="1"
-                                style={{
-                                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-                                  filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))'
-                                }}
-                              >
+                              <text fill="white" fontSize="14" fontWeight="bold">
                                 {`${(percent * 100).toFixed(1)}%`}
                               </text>
                             );
@@ -2027,29 +2007,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-                            const RADIAN = Math.PI / 180;
-                            const radius = innerRadius + (outerRadius - innerRadius) * 0.8;
-                            const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                            const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
+                          label={({ name, percent }) => {
+                            const displayName = name.length > 15 ? name.substring(0, 12) + '...' : name;
                             return (
-                              <text 
-                                x={x} 
-                                y={y} 
-                                fill="white" 
-                                textAnchor="middle" 
-                                dominantBaseline="central"
-                                fontSize="13"
-                                fontWeight="bold"
-                                stroke="rgba(0,0,0,0.8)"
-                                strokeWidth="1"
-                                style={{
-                                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-                                  filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.8))'
-                                }}
-                              >
-                                {`${(percent * 100).toFixed(0)}%`}
+                              <text fill="white" fontSize="14" fontWeight="bold">
+                                {`${displayName} ${(percent * 100).toFixed(0)}%`}
                               </text>
                             );
                           }}
