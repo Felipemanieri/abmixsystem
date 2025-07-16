@@ -154,6 +154,48 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Portal Restrito Expandido com Múltiplas Abas Especializadas (Jan 16, 2025)
+- **Implementado sistema completo de abas separadas no Portal Restrito**:
+  - **Aba "Controle Senhas"**: Gerenciamento completo de senhas de todos os usuários
+    - Visualização de senhas de usuários do sistema e vendedores
+    - Edição individual de senhas com gerador automático
+    - Busca e filtros por nome/email
+    - Export completo da lista de usuários e senhas
+    - Estatísticas em tempo real (total usuários, ativos, por tipo)
+    - Interface segura com modo mostrar/ocultar senhas
+
+  - **Aba "Backup & Restore"**: Sistema completo de backup e recuperação
+    - Backup completo e incremental com um clique
+    - Histórico detalhado de todos os backups realizados
+    - Download e restauração de backups anteriores
+    - Configurações automáticas de backup (frequência, retenção)
+    - Estatísticas de espaço, quantidade e último backup
+    - Informações técnicas sobre estrutura e segurança
+
+  - **Aba "Visualizar Planilha"**: Preview completo da estrutura de dados
+    - Expansão para 100% dos dados das propostas (antes apenas 30%)
+    - Estrutura horizontal com múltiplos titulares e dependentes
+    - Dados internos do vendedor, anexos e configurações
+    - Export CSV e atualização automática a cada 5 segundos
+    - Correção do loop infinito no useEffect
+
+  - **Aba "Logs Sistema"**: Monitoramento em tempo real
+    - Console de logs com filtros por módulo e nível
+    - Estatísticas por tipo de log e controle live/pause
+    - Export de logs e limpeza do console
+
+- **Sistema de abas organizadas para evitar conflitos**:
+  - Interface, Gestão Usuários, Controle Senhas, Visualizar Planilha
+  - Logs Sistema, Automação, Integrações, Config Planilhas
+  - Google Drive, Backup & Restore, Sistema
+  - Total de 11 abas especializadas mantendo todas as funcionalidades
+
+- **Manutenção completa das funcionalidades existentes**:
+  - UserManagementDashboard preservado integralmente
+  - Sistema de login/senha mantido funcionando
+  - Todas as funcionalidades administrativas preservadas
+  - Expansão sem remoção de recursos críticos
+
 ### Planilha Única Horizontal - Estrutura Linear (Jan 16, 2025)
 - **Implementada nova estrutura de planilha única sem abas**:
   - Uma empresa = Uma linha completa na planilha

@@ -30,6 +30,8 @@ import IntegrationGuide from './IntegrationGuide';
 import UserManagementDashboard from './UserManagementDashboard';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
+import ControleSenhas from './ControleSenhas';
+import BackupManager from './BackupManager';
 
 interface User {
   id: string;
@@ -129,13 +131,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
-    { id: 'usuarios', label: 'Usuários', icon: Users },
+    { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
+    { id: 'senhas', label: 'Controle Senhas', icon: Lock },
     { id: 'planilha', label: 'Visualizar Planilha', icon: FileText },
-    { id: 'logs', label: 'Logs do Sistema', icon: Monitor },
+    { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
-    { id: 'planilhas', label: 'Planilhas', icon: FileText },
+    { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
+    { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'sistema', label: 'Sistema', icon: Settings }
   ];
 
@@ -594,8 +598,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
         )}
+        {activeTab === 'senhas' && <ControleSenhas />}
         {activeTab === 'planilha' && <PlanilhaViewer />}
         {activeTab === 'logs' && <LogsViewer />}
+        {activeTab === 'backup' && <BackupManager />}
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'planilhas' && renderPlanilhasSection()}
