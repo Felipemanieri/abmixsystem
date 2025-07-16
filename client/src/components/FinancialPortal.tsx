@@ -29,6 +29,7 @@ interface Transaction {
   date: string;
   status: 'completed' | 'pending' | 'cancelled';
   category: string;
+  realStatus?: string;
 }
 
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
@@ -124,17 +125,18 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     const contractData = proposal.contractData || {};
     const value = contractData.valor ? `R$ ${contractData.valor}` : 'R$ 0';
     const isCompleted = proposal.status === 'implantado';
-    const isPending = ['aguar_pagamento', 'aguar_selecao_vigencia', 'aguar_vigencia'].includes(proposal.status);
+    const isPending = ['aguar_pagamento', 'aguar_selecao_vigencia', 'aguar_vigencia', 'analise', 'observacao', 'assinatura_ds', 'assinatura_proposta', 'pendencia'].includes(proposal.status);
     
     return {
-      id: proposal.id,
+      id: proposal.abmId || proposal.id, // Usar abmId se disponível
       client: contractData.nomeEmpresa || 'Cliente não informado',
       plan: contractData.planoContratado || 'Plano não informado',
       value: value,
       type: 'income' as const,
-      date: proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR'),
-      status: isCompleted ? 'completed' as const : isPending ? 'pending' as const : 'pending' as const,
-      category: 'subscription'
+      date: proposal.createdAt || new Date().toISOString(),
+      status: isCompleted ? 'completed' as const : isPending ? 'pending' as const : proposal.status === 'declinado' ? 'cancelled' as const : 'pending' as const,
+      category: 'subscription',
+      realStatus: proposal.status // Manter status real para debugging
     };
   });
 
@@ -177,6 +179,28 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const totalProposals = realTransactions.length;
   const completedProposals = realTransactions.filter(t => t.status === 'completed').length;
   const conversionRate = totalProposals > 0 ? Math.round((completedProposals / totalProposals) * 100) : 0;
+
+  // Mapeamento de status para português
+  const getStatusText = (status: string, realStatus?: string) => {
+    const statusMap: Record<string, string> = {
+      'completed': 'Concluído',
+      'pending': 'Pendente',
+      'cancelled': 'Cancelado',
+      'analise': 'Em Análise',
+      'observacao': 'Em Observação',
+      'assinatura_ds': 'Aguardando Assinatura DS',
+      'expirado': 'Expirado',
+      'implantado': 'Implantado',
+      'aguar_pagamento': 'Aguardando Pagamento',
+      'assinatura_proposta': 'Aguardando Assinatura',
+      'aguar_selecao_vigencia': 'Aguardando Seleção de Vigência',
+      'pendencia': 'Pendência',
+      'declinado': 'Declinado',
+      'aguar_vigencia': 'Aguardando Vigência'
+    };
+    
+    return statusMap[realStatus || status] || status;
+  };
 
   const handleAutomateProposal = (proposalId: string, clientName: string) => {
     setSelectedProposalForAutomation({ id: proposalId, client: clientName });
@@ -542,10 +566,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 <tr key={transaction.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button 
-                      onClick={() => window.open(`https://drive.google.com/drive/folders/${transaction.id.replace('TXN', 'ABM').slice(0, 6)}`, '_blank')}
+                      onClick={() => window.open(`https://drive.google.com/drive/folders/${transaction.id}`, '_blank')}
                       className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
                     >
-                      {transaction.id.replace('TXN', 'ABM').slice(0, 6)}
+                      {transaction.id}
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -561,12 +585,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       transaction.status === 'completed' 
                         ? 'bg-green-100 text-green-800'
-                        : transaction.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
+                        : transaction.status === 'cancelled'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                      {transaction.status === 'completed' ? 'Concluído' : 
-                       transaction.status === 'pending' ? 'Pendente' : 'Cancelado'}
+                      {getStatusText(transaction.status, transaction.realStatus)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
