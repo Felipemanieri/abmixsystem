@@ -39,7 +39,7 @@ class RealTimeSync {
   }
   
   // Força atualização quando vendedor específico cria proposta
-  public notifyProposalCreated(vendorId: number): void {
+  public notifyProposalCreated(vendorId: number, proposalId?: string): void {
     console.log(`🆕 New proposal created by vendor ${vendorId}`);
     
     // Atualizar imediatamente todas as consultas
@@ -49,13 +49,63 @@ class RealTimeSync {
     queryClient.invalidateQueries({ queryKey: ['/api/proposals/vendor', vendorId] });
     queryClient.refetchQueries({ queryKey: ['/api/proposals/vendor', vendorId] });
     
+    // Notificar Make.com sobre nova proposta
+    if (proposalId) {
+      this.notifyMakeWebhook('proposal_created', { vendorId, proposalId });
+    }
+    
     console.log(`✅ Vendor ${vendorId} proposals updated immediately`);
   }
   
+  // Notifica Make.com via webhook
+  private async notifyMakeWebhook(type: string, data: any): Promise<void> {
+    try {
+      await fetch('/api/webhook/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type,
+          data,
+          timestamp: new Date().toISOString()
+        })
+      });
+      console.log(`🔗 Make.com notified: ${type}`);
+    } catch (error) {
+      console.error('Erro ao notificar Make.com:', error);
+    }
+  }
+  
   // Força atualização quando status de proposta muda
-  public notifyProposalUpdated(proposalId: string): void {
+  public notifyProposalUpdated(proposalId: string, updateType?: string): void {
     console.log(`📝 Proposal ${proposalId} updated`);
     this.forceUpdateAllProposals();
+    
+    // Notificar Make.com sobre atualização
+    this.notifyMakeWebhook('proposal_updated', { proposalId, updateType });
+    
+    // Sincronizar com Google Sheets
+    this.syncWithGoogleSheets(proposalId);
+  }
+  
+  // Sincroniza proposta específica com Google Sheets
+  private async syncWithGoogleSheets(proposalId: string): Promise<void> {
+    try {
+      await fetch('/api/sync/sheets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          proposalId,
+          action: 'update'
+        })
+      });
+      console.log(`📊 Google Sheets sync initiated for proposal ${proposalId}`);
+    } catch (error) {
+      console.error('Erro ao sincronizar com Google Sheets:', error);
+    }
   }
   
   // Alias para forceUpdateAllProposals - usado pelos portais

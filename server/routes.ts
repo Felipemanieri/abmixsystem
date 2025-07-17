@@ -508,6 +508,128 @@ router.post("/proposals", async (req, res) => {
     }
   });
 
+  // === WEBHOOK/MAKE.COM INTEGRATION ROUTES ===
+  
+  // Webhook para notificar Make.com sobre mudanças
+  router.post("webhook/notify", async (req, res) => {
+    try {
+      const { type, data, proposalId, vendorId } = req.body;
+      
+      // URLs de webhook do Make.com (configuráveis via variáveis de ambiente)
+      const makeWebhookUrls = [
+        process.env.MAKE_WEBHOOK_PROPOSALS,
+        process.env.MAKE_WEBHOOK_FINANCIAL,
+        process.env.MAKE_WEBHOOK_SHEETS
+      ].filter(Boolean);
+      
+      // Enviar notificação para todos os webhooks configurados
+      const webhookPromises = makeWebhookUrls.map(async (url) => {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              type,
+              data,
+              proposalId,
+              vendorId,
+              timestamp: new Date().toISOString()
+            })
+          });
+          
+          return { url, success: response.ok, status: response.status };
+        } catch (error) {
+          console.error(`Erro ao notificar webhook ${url}:`, error);
+          return { url, success: false, error: error.message };
+        }
+      });
+      
+      const results = await Promise.all(webhookPromises);
+      
+      res.json({
+        success: true,
+        webhooksNotified: results.length,
+        results
+      });
+    } catch (error) {
+      console.error("Erro ao enviar webhooks:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+  
+  // Sync com Google Sheets via Make.com
+  router.post("sync/sheets", async (req, res) => {
+    try {
+      const { proposalId, action = 'update' } = req.body;
+      
+      // Buscar dados da proposta
+      const proposal = await storage.getProposal(proposalId);
+      if (!proposal) {
+        return res.status(404).json({ error: "Proposta não encontrada" });
+      }
+      
+      // Enviar para webhook do Make.com para sincronização com Google Sheets
+      if (process.env.MAKE_WEBHOOK_SHEETS) {
+        await fetch(process.env.MAKE_WEBHOOK_SHEETS, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'sync_sheets',
+            proposal,
+            timestamp: new Date().toISOString()
+          })
+        });
+      }
+      
+      res.json({ success: true, message: "Sincronização com Google Sheets iniciada" });
+    } catch (error) {
+      console.error("Erro ao sincronizar com Sheets:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+  
+  // Integração com sistema financeiro
+  router.post("integration/financial", async (req, res) => {
+    try {
+      const { proposalId, action, financialData } = req.body;
+      
+      // Buscar proposta
+      const proposal = await storage.getProposal(proposalId);
+      if (!proposal) {
+        return res.status(404).json({ error: "Proposta não encontrada" });
+      }
+      
+      // Enviar para sistema financeiro via Make.com
+      if (process.env.MAKE_WEBHOOK_FINANCIAL) {
+        const response = await fetch(process.env.MAKE_WEBHOOK_FINANCIAL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'financial_integration',
+            proposalId,
+            proposal,
+            financialData,
+            timestamp: new Date().toISOString()
+          })
+        });
+        
+        const result = await response.json();
+        res.json({ success: true, integrationResult: result });
+      } else {
+        res.status(503).json({ error: "Webhook financeiro não configurado" });
+      }
+    } catch (error) {
+      console.error("Erro na integração financeira:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
   // === ANALYTICS ROUTES ===
   
   // Get vendor statistics
@@ -523,6 +645,66 @@ router.post("/proposals", async (req, res) => {
       );
       
       res.json(stats);
+    } catch (error) {
+      console.error("Erro ao buscar estatísticas do vendedor:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get team statistics
+  router.get("analytics/team", async (req, res) => {
+    try {
+      const { month, year } = req.query;
+      
+      const stats = await storage.getTeamStats(
+        month ? parseInt(month as string) : undefined,
+        year ? parseInt(year as string) : undefined
+      );
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Erro ao buscar estatísticas da equipe:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // === INTEGRATION CONFIG ROUTES ===
+  
+  // Get integration status
+  router.get("integration/status", async (req, res) => {
+    try {
+      const status = {
+        makeWebhook: !!(process.env.MAKE_WEBHOOK_PROPOSALS || process.env.MAKE_WEBHOOK_FINANCIAL || process.env.MAKE_WEBHOOK_SHEETS),
+        googleSheets: !!process.env.MAKE_WEBHOOK_SHEETS,
+        financialSystem: !!process.env.MAKE_WEBHOOK_FINANCIAL,
+        lastSync: new Date().toISOString()
+      };
+      
+      res.json(status);
+    } catch (error) {
+      console.error("Erro ao verificar status das integrações:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+  
+  // Get integration config (sans sensitive data)
+  router.get("integration/config", async (req, res) => {
+    try {
+      const config = {
+        hasProposalsWebhook: !!process.env.MAKE_WEBHOOK_PROPOSALS,
+        hasFinancialWebhook: !!process.env.MAKE_WEBHOOK_FINANCIAL,
+        hasSheetsWebhook: !!process.env.MAKE_WEBHOOK_SHEETS,
+        hasGoogleDriveApi: !!process.env.GOOGLE_DRIVE_API_KEY,
+        hasSheetsApi: !!process.env.GOOGLE_SHEETS_API_KEY,
+        environment: process.env.NODE_ENV || 'development'
+      };
+      
+      res.json(config);
+    } catch (error) {
+      console.error("Erro ao obter configurações:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
     } catch (error) {
       console.error("Erro ao buscar estatísticas do vendedor:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
