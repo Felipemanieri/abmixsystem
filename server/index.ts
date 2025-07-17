@@ -22,7 +22,11 @@ async function startServer() {
   if (process.env.NODE_ENV === "development") {
     // Setup Vite dev server
     const vite = await createViteServer({
-      server: { middlewareMode: true, hmr: { server } },
+      server: { 
+        middlewareMode: true, 
+        hmr: { server },
+        allowedHosts: "all"
+      },
       appType: "custom",
       root: path.resolve(__dirname, "..", "client"),
       resolve: {
