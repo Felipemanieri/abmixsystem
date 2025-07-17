@@ -22,10 +22,24 @@ async function startServer() {
   if (process.env.NODE_ENV === "development") {
     // Setup Vite dev server
     const vite = await createViteServer({
+      plugins: [
+        {
+          name: "react-jsx-runtime",
+          config() {
+            return {
+              esbuild: {
+                jsx: "automatic",
+                jsxImportSource: "react"
+              }
+            };
+          }
+        }
+      ],
       server: { 
         middlewareMode: true, 
         hmr: { server },
-        allowedHosts: "all"
+        allowedHosts: ["0b9dc262-d94f-4205-ae6f-4654c93ab584-00-ultt68ws1yda.riker.replit.dev", "localhost", "127.0.0.1"],
+        host: "0.0.0.0"
       },
       appType: "custom",
       root: path.resolve(__dirname, "..", "client"),
@@ -35,6 +49,9 @@ async function startServer() {
           "@shared": path.resolve(__dirname, "..", "shared"),
           "@assets": path.resolve(__dirname, "..", "attached_assets"),
         },
+      },
+      define: {
+        global: 'globalThis',
       },
     });
 

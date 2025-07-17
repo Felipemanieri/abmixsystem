@@ -1,3 +1,4 @@
+import React from "react";
 import React from 'react';
 import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2, Zap, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 

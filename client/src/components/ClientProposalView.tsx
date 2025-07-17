@@ -1,3 +1,4 @@
+import React from "react";
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Building, FileText, User, Upload, Camera, CheckCircle, Lock, Save, Download, Eye, EyeOff, Plus, Trash2, Users, Phone, Mail, MapPin, Calendar, Shield, Check, Image } from 'lucide-react';
 import { showNotification } from '../utils/notifications';
