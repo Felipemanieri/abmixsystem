@@ -1,17 +1,13 @@
-import express from "express";
-import path from "path";
-
-const app = express();
-
-// 🔥 Serve os arquivos estáticos do frontend (gerados pelo Vite)
-app.use(express.static(path.resolve("dist", "public")));
-
-// 🔥 Para qualquer rota, devolve sempre o index.html (SPA React)
-app.get("*", (_, res) => {
-  res.sendFile(path.resolve("dist", "public", "index.html"));
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-});
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abmix System</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

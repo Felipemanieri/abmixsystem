@@ -1,14 +1,13 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
+import { Router } from "express";
 import { storage } from "./storage";
 import crypto from "crypto";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+const router = Router();
   // put application routes here
   // prefix all routes with /api
 
-  // ViaCEP proxy route (must be before other routes to avoid conflicts)
-  app.get("/api/cep/:cep", async (req, res) => {
+// ViaCEP proxy route (must be before other routes to avoid conflicts)
+router.get("/cep/:cep", async (req, res) => {
     try {
       const { cep } = req.params;
       
@@ -58,8 +57,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const { insertVendorSchema } = await import("@shared/schema");
 
-  // Vendor authentication route
-  app.post("/api/vendor/login", async (req, res) => {
+// Vendor authentication route
+router.post("/vendor/login", async (req, res) => {
     try {
       const { email, password } = req.body;
       
@@ -86,7 +85,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all vendors (for supervisor)
-  app.get("/api/vendors", async (req, res) => {
+router.get("/vendors", async (req, res) => {
     try {
       const vendors = await storage.getAllVendors();
       res.json(vendors.map(vendor => ({
@@ -105,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create vendor (for supervisor)
-  app.post("/api/vendors", async (req, res) => {
+router.post("/vendors", async (req, res) => {
     try {
       const validatedData = insertVendorSchema.parse(req.body);
       const vendor = await storage.createVendor(validatedData);
@@ -127,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update vendor (for supervisor)
-  app.patch("/api/vendors/:id", async (req, res) => {
+router.patch("/vendors/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertVendorSchema.partial().parse(req.body);
@@ -147,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete vendor (for supervisor)
-  app.delete("/api/vendors/:id", async (req, res) => {
+router.delete("/vendors/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteVendor(id);
@@ -159,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Proposal routes
-  app.post("/api/proposals", async (req, res) => {
+router.post("/proposals", async (req, res) => {
     try {
       const proposalData = req.body;
       console.log("Dados recebidos:", JSON.stringify(proposalData, null, 2));
@@ -208,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get proposal by token (for client access)
-  app.get("/api/proposals/client/:token", async (req, res) => {
+  router.get("proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const proposal = await storage.getProposalByToken(token);
@@ -225,7 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all proposals (for portals)
-  app.get("/api/proposals", async (req, res) => {
+  router.get("proposals", async (req, res) => {
     try {
       const proposals = await storage.getAllProposals();
       res.json(proposals);
@@ -236,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get vendor proposals
-  app.get("/api/proposals/vendor/:vendorId", async (req, res) => {
+  router.get("proposals/vendor/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const proposals = await storage.getVendorProposals(vendorId);
@@ -248,7 +247,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update proposal by token (for client completion)
-  app.put("/api/proposals/client/:token", async (req, res) => {
+  router.put("proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const updateData = req.body;
@@ -274,7 +273,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update proposal status and priority (for implementation portal)
-  app.put("/api/proposals/:id", async (req, res) => {
+  router.put("proposals/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { status, priority } = req.body;
@@ -297,7 +296,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete proposal (for implementation and vendor portals)
-  app.delete("/api/proposals/:id", async (req, res) => {
+  router.delete("proposals/:id", async (req, res) => {
     try {
       const { id } = req.params;
       
@@ -315,7 +314,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Generate horizontal sheet format for all proposals
-  app.get("/api/proposals/sheet", async (req, res) => {
+  router.get("proposals/sheet", async (req, res) => {
     try {
       const { formatProposalsToSheet, getSheetHeaders } = await import("@shared/sheetsFormatter");
       const proposals = await storage.getAllProposals();
@@ -338,7 +337,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === VENDOR TARGETS ROUTES ===
   
   // Get all vendor targets
-  app.get("/api/vendor-targets", async (req, res) => {
+  router.get("vendor-targets", async (req, res) => {
     try {
       const targets = await storage.getAllVendorTargets();
       res.json(targets);
@@ -349,7 +348,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get vendor targets by vendor ID
-  app.get("/api/vendor-targets/:vendorId", async (req, res) => {
+  router.get("vendor-targets/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const targets = await storage.getVendorTargets(vendorId);
@@ -361,7 +360,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create vendor target
-  app.post("/api/vendor-targets", async (req, res) => {
+  router.post("vendor-targets", async (req, res) => {
     try {
       const { insertVendorTargetSchema } = await import("@shared/schema");
       const validatedData = insertVendorTargetSchema.parse(req.body);
@@ -374,7 +373,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update vendor target
-  app.put("/api/vendor-targets/:id", async (req, res) => {
+  router.put("vendor-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedTarget = await storage.updateVendorTarget(id, req.body);
@@ -386,7 +385,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete vendor target
-  app.delete("/api/vendor-targets/:id", async (req, res) => {
+  router.delete("vendor-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteVendorTarget(id);
@@ -400,7 +399,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === TEAM TARGETS ROUTES ===
   
   // Get all team targets
-  app.get("/api/team-targets", async (req, res) => {
+  router.get("team-targets", async (req, res) => {
     try {
       const targets = await storage.getAllTeamTargets();
       res.json(targets);
@@ -411,7 +410,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create team target
-  app.post("/api/team-targets", async (req, res) => {
+  router.post("team-targets", async (req, res) => {
     try {
       const { insertTeamTargetSchema } = await import("@shared/schema");
       const validatedData = insertTeamTargetSchema.parse(req.body);
@@ -424,7 +423,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update team target
-  app.put("/api/team-targets/:id", async (req, res) => {
+  router.put("team-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedTarget = await storage.updateTeamTarget(id, req.body);
@@ -436,7 +435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete team target
-  app.delete("/api/team-targets/:id", async (req, res) => {
+  router.delete("team-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteTeamTarget(id);
@@ -450,7 +449,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === AWARDS ROUTES ===
   
   // Get all awards
-  app.get("/api/awards", async (req, res) => {
+  router.get("awards", async (req, res) => {
     try {
       const awards = await storage.getAllAwards();
       res.json(awards);
@@ -461,7 +460,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get awards by vendor ID
-  app.get("/api/awards/:vendorId", async (req, res) => {
+  router.get("awards/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const awards = await storage.getVendorAwards(vendorId);
@@ -473,7 +472,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create award
-  app.post("/api/awards", async (req, res) => {
+  router.post("awards", async (req, res) => {
     try {
       const { insertAwardSchema } = await import("@shared/schema");
       const validatedData = insertAwardSchema.parse(req.body);
@@ -486,7 +485,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update award
-  app.put("/api/awards/:id", async (req, res) => {
+  router.put("awards/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedAward = await storage.updateAward(id, req.body);
@@ -498,7 +497,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete award
-  app.delete("/api/awards/:id", async (req, res) => {
+  router.delete("awards/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteAward(id);
@@ -512,7 +511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === ANALYTICS ROUTES ===
   
   // Get vendor statistics
-  app.get("/api/analytics/vendor/:vendorId", async (req, res) => {
+  router.get("analytics/vendor/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const { month, year } = req.query;
@@ -531,7 +530,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get team statistics
-  app.get("/api/analytics/team", async (req, res) => {
+  router.get("analytics/team", async (req, res) => {
     try {
       const { month, year } = req.query;
       
@@ -550,7 +549,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === INTEGRATIONS ROUTES ===
   
   // Sync Google Sheets
-  app.post("/api/sync-sheets", async (req, res) => {
+  router.post("sync-sheets", async (req, res) => {
     try {
       // Buscar todas as propostas para sincronizar
       const proposals = await storage.getAllProposals();
@@ -572,7 +571,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Google Drive integration status
-  app.get("/api/drive-status", async (req, res) => {
+  router.get("drive-status", async (req, res) => {
     try {
       // Simular verificação de status do Google Drive
       res.json({
@@ -590,7 +589,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === SYSTEM USERS ROUTES ===
   
   // Get all system users
-  app.get("/api/system-users", async (req, res) => {
+  router.get("system-users", async (req, res) => {
     try {
       const users = await storage.getAllSystemUsers();
       res.json(users);
@@ -601,7 +600,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get system user by ID
-  app.get("/api/system-users/:id", async (req, res) => {
+  router.get("system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const user = await storage.getSystemUser(id);
@@ -616,7 +615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create system user
-  app.post("/api/system-users", async (req, res) => {
+  router.post("system-users", async (req, res) => {
     try {
       const { insertSystemUserSchema } = await import("@shared/schema");
       const validatedData = insertSystemUserSchema.parse(req.body);
@@ -629,7 +628,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update system user
-  app.put("/api/system-users/:id", async (req, res) => {
+  router.put("system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const user = await storage.updateSystemUser(id, req.body);
@@ -641,7 +640,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete system user
-  app.delete("/api/system-users/:id", async (req, res) => {
+  router.delete("system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteSystemUser(id);
@@ -653,7 +652,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update last login
-  app.patch("/api/system-users/:id/login", async (req, res) => {
+  router.patch("system-users/:id/login", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.updateLastLogin(id);
@@ -667,7 +666,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // === UNIFIED AUTHENTICATION SYSTEM ===
   
   // Unified login for all portals - checks both system users and vendors
-  app.post("/api/auth/login", async (req, res) => {
+  router.post("auth/login", async (req, res) => {
     try {
       const { email, password, portal } = req.body;
       
@@ -712,7 +711,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all users (system users + vendors) for unified management
-  app.get("/api/auth/users", async (req, res) => {
+  router.get("auth/users", async (req, res) => {
     try {
       const systemUsers = await storage.getAllSystemUsers();
       const vendors = await storage.getAllVendors();
@@ -739,7 +738,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create user (unified API)
-  app.post("/api/auth/users", async (req, res) => {
+  router.post("auth/users", async (req, res) => {
     try {
       const { userType, ...userData } = req.body;
       
@@ -771,7 +770,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update user (unified API)
-  app.patch("/api/auth/users/:id", async (req, res) => {
+  router.patch("auth/users/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { userType, ...userData } = req.body;
@@ -804,7 +803,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete user (unified API)
-  app.delete("/api/auth/users/:id", async (req, res) => {
+  router.delete("auth/users/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { userType } = req.query;
@@ -823,7 +822,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update user password (works for both system users and vendors)
-  app.patch("/api/auth/users/:id/password", async (req, res) => {
+  router.patch("auth/users/:id/password", async (req, res) => {
     try {
       const { id } = req.params;
       const { password, userType } = req.body;
@@ -847,7 +846,4 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  const httpServer = createServer(app);
-
-  return httpServer;
-}
+export default router;
