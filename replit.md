@@ -349,6 +349,20 @@ The application provides role-based portals with specific functionality:
   - **Implementação em todos os formulários**: ProposalGenerator, ClientProposalView, ProposalForm
   - **Interface em português**: Todas as mensagens e notificações em português brasileiro
 
+### Migração Completa do Replit Agent para Ambiente Replit (Jan 17, 2025)
+- **Migração realizada com sucesso do Replit Agent para ambiente Replit**:
+  - Corrigido problema de __dirname em ES modules no vite.config.ts
+  - Configurado allowedHosts para aceitar domínios do Replit
+  - Implementado configuração JSX automática para React
+  - Banco de dados PostgreSQL configurado e funcionando
+  - Servidor rodando corretamente na porta 5000 com Vite HMR
+  - Separação cliente/servidor mantida com segurança robusta
+
+- **Questões pendentes identificadas pelo usuário**:
+  - Projeto atual está 5 atualizações atrás do site em produção
+  - Necessidade de transferir domínio do projeto "traviu" 
+  - Decisão entre sincronizar atualizações ou refazer projeto
+
 ### Sistema de Auto-Save Completo Implementado (Jan 16, 2025)
 - **Auto-save completo funcionando em ambos os formulários**:
   - VendorPortal (ProposalGenerator): Auto-save automático a cada mudança nos dados
