@@ -65,11 +65,11 @@ export interface IStorage {
   getAttachment(id: number): Promise<Attachment | undefined>;
   getAttachmentsByProposal(proposalId: string): Promise<Attachment[]>;
   createAttachment(attachment: InsertAttachment): Promise<Attachment>;
-  updateAttachmentStatus(id: number, status: string, approvedBy?: string): Promise<Attachment>;
+  updateAttachmentStatus(id: number, status: string): Promise<Attachment>;
   deleteAttachment(id: number): Promise<void>;
   
   // Drive Config operations
-  getAllDriveConfigs(): Promise<DriveConfig[]>;
+  getAllDrives(): Promise<DriveConfig[]>;
   getDriveConfig(id: number): Promise<DriveConfig | undefined>;
   createDriveConfig(config: InsertDriveConfig): Promise<DriveConfig>;
   updateDriveConfig(id: number, config: Partial<InsertDriveConfig>): Promise<DriveConfig>;
@@ -406,7 +406,7 @@ export class DatabaseStorage implements IStorage {
 
   // Attachment operations
   async getAllAttachments(): Promise<Attachment[]> {
-    return await db.select().from(attachments);
+    return await db.select().from(attachments).orderBy(desc(attachments.uploadedAt));
   }
 
   async getAttachment(id: number): Promise<Attachment | undefined> {
@@ -426,13 +426,14 @@ export class DatabaseStorage implements IStorage {
     return attachment;
   }
 
-  async updateAttachmentStatus(id: number, status: string, approvedBy?: string): Promise<Attachment> {
-    const updateData: any = { status };
-    if (approvedBy) {
-      updateData.approvedBy = approvedBy;
+  async updateAttachmentStatus(id: number, status: string): Promise<Attachment> {
+    const updateData: any = { status, updatedAt: new Date() };
+    
+    if (status === 'approved') {
       updateData.approvedAt = new Date();
+      updateData.approvedBy = 'admin'; // You can pass this as a parameter
     }
-
+    
     const [attachment] = await db
       .update(attachments)
       .set(updateData)
@@ -446,8 +447,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Drive Config operations
-  async getAllDriveConfigs(): Promise<DriveConfig[]> {
-    return await db.select().from(driveConfigs);
+  async getAllDrives(): Promise<DriveConfig[]> {
+    return await db.select().from(driveConfigs).orderBy(desc(driveConfigs.createdAt));
   }
 
   async getDriveConfig(id: number): Promise<DriveConfig | undefined> {

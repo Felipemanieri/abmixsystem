@@ -133,22 +133,24 @@ export type TeamTarget = typeof teamTargets.$inferSelect;
 export type InsertAward = z.infer<typeof insertAwardSchema>;
 export type Award = typeof awards.$inferSelect;
 
-// Tabela para attachments/anexos
+// Tabela para gerenciar anexos com Google Drive
 export const attachments = pgTable("attachments", {
   id: serial("id").primaryKey(),
   proposalId: varchar("proposal_id").references(() => proposals.id),
   filename: varchar("filename").notNull(),
   originalName: varchar("original_name").notNull(),
-  fileType: varchar("file_type").notNull(),
-  fileSize: integer("file_size").notNull(),
-  category: varchar("category").notNull(), // 'identity', 'financial', 'proposal', 'contract', 'other'
-  status: varchar("status").notNull().default("pending"), // 'pending', 'approved', 'rejected'
-  driveFileId: varchar("drive_file_id"),
-  driveUrl: varchar("drive_url"),
-  uploadedBy: varchar("uploaded_by").notNull(),
-  uploadedAt: timestamp("uploaded_at").defaultNow(),
-  approvedBy: varchar("approved_by"),
+  fileType: varchar("file_type").notNull(), // pdf, jpg, png, doc, etc
+  fileSize: integer("file_size"), // em bytes
+  driveFileId: varchar("drive_file_id"), // ID do arquivo no Google Drive
+  driveUrl: varchar("drive_url"), // Link direto para visualização
+  uploadedBy: varchar("uploaded_by").notNull(), // vendor ou client
+  category: varchar("category").notNull(), // documento, foto, comprovante, etc
+  status: varchar("status").default("pending"), // pending, approved, rejected
+  approvedBy: varchar("approved_by"), // quem aprovou
   approvedAt: timestamp("approved_at"),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Tabela para configurações de múltiplos Google Drives

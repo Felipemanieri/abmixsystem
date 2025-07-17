@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abmix Consultoria em Benefícios</title>
+    
+    <meta name="description" content="Abmix Consultoria em Benefícios - Sistema de gestão de propostas e planos de saúde" />
+    <meta property="og:title" content="Abmix Consultoria em Benefícios" />
+    <meta property="og:description" content="Sistema de gestão de propostas e planos de saúde" />
+    
+    <!-- Sistema ANTI-CACHE EXTREMO para Mobile -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, private, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <script>
+      // SISTEMA ANTI-CACHE AGRESSIVO PARA MOBILE
+      const timestamp = Date.now();
+      const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent);
+      
+      if ('caches' in window) {
+        caches.keys().then(names => names.forEach(name => caches.delete(name)));
+      }
+      
+      // Força atualização mais frequente no mobile
+      const updateInterval = isMobile ? 60000 : 300000; // 1 min mobile, 5 min desktop
+      const lastUpdate = localStorage.getItem('lastCacheUpdate');
+      const shouldUpdate = !lastUpdate || (timestamp - parseInt(lastUpdate)) > updateInterval;
+      
+      if (shouldUpdate) {
+        localStorage.setItem('lastCacheUpdate', timestamp.toString());
+        // Adiciona timestamp único na URL para forçar atualização
+        const currentUrl = new URL(window.location.href);
+        const newTimestamp = Math.floor(timestamp / (isMobile ? 60000 : 300000));
+        
+        if (currentUrl.searchParams.get('v') !== newTimestamp.toString()) {
+          currentUrl.searchParams.set('v', newTimestamp.toString());
+          if (isMobile) {
+            currentUrl.searchParams.set('mobile', '1');
+          }
+          window.location.replace(currentUrl.toString());
+        }
+      }
+      
+      // Força reload quando voltar de background (mobile)
+      if (isMobile) {
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            const lastVisible = sessionStorage.getItem('lastVisible');
+            const now = Date.now();
+            if (!lastVisible || (now - parseInt(lastVisible)) > 30000) { // 30 segundos
+              sessionStorage.setItem('lastVisible', now.toString());
+              window.location.reload(true);
+            }
+          }
+        });
+      }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

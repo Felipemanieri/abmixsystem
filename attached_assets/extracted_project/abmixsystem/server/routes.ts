@@ -1,13 +1,14 @@
-import { Router } from "express";
+import type { Express } from "express";
+import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import crypto from "crypto";
 
-const router = Router();
+export async function registerRoutes(app: Express): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
 
-// ViaCEP proxy route (must be before other routes to avoid conflicts)
-router.get("/cep/:cep", async (req, res) => {
+  // ViaCEP proxy route (must be before other routes to avoid conflicts)
+  app.get("/api/cep/:cep", async (req, res) => {
     try {
       const { cep } = req.params;
       
@@ -57,8 +58,8 @@ router.get("/cep/:cep", async (req, res) => {
 
   const { insertVendorSchema } = await import("@shared/schema");
 
-// Vendor authentication route
-router.post("/vendor/login", async (req, res) => {
+  // Vendor authentication route
+  app.post("/api/vendor/login", async (req, res) => {
     try {
       const { email, password } = req.body;
       
@@ -85,7 +86,7 @@ router.post("/vendor/login", async (req, res) => {
   });
 
   // Get all vendors (for supervisor)
-router.get("/vendors", async (req, res) => {
+  app.get("/api/vendors", async (req, res) => {
     try {
       const vendors = await storage.getAllVendors();
       res.json(vendors.map(vendor => ({
@@ -104,7 +105,7 @@ router.get("/vendors", async (req, res) => {
   });
 
   // Create vendor (for supervisor)
-router.post("/vendors", async (req, res) => {
+  app.post("/api/vendors", async (req, res) => {
     try {
       const validatedData = insertVendorSchema.parse(req.body);
       const vendor = await storage.createVendor(validatedData);
@@ -126,7 +127,7 @@ router.post("/vendors", async (req, res) => {
   });
 
   // Update vendor (for supervisor)
-router.patch("/vendors/:id", async (req, res) => {
+  app.patch("/api/vendors/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertVendorSchema.partial().parse(req.body);
@@ -146,7 +147,7 @@ router.patch("/vendors/:id", async (req, res) => {
   });
 
   // Delete vendor (for supervisor)
-router.delete("/vendors/:id", async (req, res) => {
+  app.delete("/api/vendors/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteVendor(id);
@@ -158,7 +159,7 @@ router.delete("/vendors/:id", async (req, res) => {
   });
 
   // Proposal routes
-router.post("/proposals", async (req, res) => {
+  app.post("/api/proposals", async (req, res) => {
     try {
       const proposalData = req.body;
       console.log("Dados recebidos:", JSON.stringify(proposalData, null, 2));
@@ -207,7 +208,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get proposal by token (for client access)
-  router.get("proposals/client/:token", async (req, res) => {
+  app.get("/api/proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const proposal = await storage.getProposalByToken(token);
@@ -224,7 +225,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get all proposals (for portals)
-  router.get("proposals", async (req, res) => {
+  app.get("/api/proposals", async (req, res) => {
     try {
       const proposals = await storage.getAllProposals();
       res.json(proposals);
@@ -235,7 +236,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get vendor proposals
-  router.get("proposals/vendor/:vendorId", async (req, res) => {
+  app.get("/api/proposals/vendor/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const proposals = await storage.getVendorProposals(vendorId);
@@ -247,7 +248,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update proposal by token (for client completion)
-  router.put("proposals/client/:token", async (req, res) => {
+  app.put("/api/proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const updateData = req.body;
@@ -273,7 +274,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update proposal status and priority (for implementation portal)
-  router.put("proposals/:id", async (req, res) => {
+  app.put("/api/proposals/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { status, priority } = req.body;
@@ -296,7 +297,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete proposal (for implementation and vendor portals)
-  router.delete("proposals/:id", async (req, res) => {
+  app.delete("/api/proposals/:id", async (req, res) => {
     try {
       const { id } = req.params;
       
@@ -314,7 +315,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Generate horizontal sheet format for all proposals
-  router.get("proposals/sheet", async (req, res) => {
+  app.get("/api/proposals/sheet", async (req, res) => {
     try {
       const { formatProposalsToSheet, getSheetHeaders } = await import("@shared/sheetsFormatter");
       const proposals = await storage.getAllProposals();
@@ -337,7 +338,7 @@ router.post("/proposals", async (req, res) => {
   // === VENDOR TARGETS ROUTES ===
   
   // Get all vendor targets
-  router.get("vendor-targets", async (req, res) => {
+  app.get("/api/vendor-targets", async (req, res) => {
     try {
       const targets = await storage.getAllVendorTargets();
       res.json(targets);
@@ -348,7 +349,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get vendor targets by vendor ID
-  router.get("vendor-targets/:vendorId", async (req, res) => {
+  app.get("/api/vendor-targets/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const targets = await storage.getVendorTargets(vendorId);
@@ -360,7 +361,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create vendor target
-  router.post("vendor-targets", async (req, res) => {
+  app.post("/api/vendor-targets", async (req, res) => {
     try {
       const { insertVendorTargetSchema } = await import("@shared/schema");
       const validatedData = insertVendorTargetSchema.parse(req.body);
@@ -373,7 +374,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update vendor target
-  router.put("vendor-targets/:id", async (req, res) => {
+  app.put("/api/vendor-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedTarget = await storage.updateVendorTarget(id, req.body);
@@ -385,7 +386,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete vendor target
-  router.delete("vendor-targets/:id", async (req, res) => {
+  app.delete("/api/vendor-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteVendorTarget(id);
@@ -399,7 +400,7 @@ router.post("/proposals", async (req, res) => {
   // === TEAM TARGETS ROUTES ===
   
   // Get all team targets
-  router.get("team-targets", async (req, res) => {
+  app.get("/api/team-targets", async (req, res) => {
     try {
       const targets = await storage.getAllTeamTargets();
       res.json(targets);
@@ -410,7 +411,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create team target
-  router.post("team-targets", async (req, res) => {
+  app.post("/api/team-targets", async (req, res) => {
     try {
       const { insertTeamTargetSchema } = await import("@shared/schema");
       const validatedData = insertTeamTargetSchema.parse(req.body);
@@ -423,7 +424,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update team target
-  router.put("team-targets/:id", async (req, res) => {
+  app.put("/api/team-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedTarget = await storage.updateTeamTarget(id, req.body);
@@ -435,7 +436,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete team target
-  router.delete("team-targets/:id", async (req, res) => {
+  app.delete("/api/team-targets/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteTeamTarget(id);
@@ -449,7 +450,7 @@ router.post("/proposals", async (req, res) => {
   // === AWARDS ROUTES ===
   
   // Get all awards
-  router.get("awards", async (req, res) => {
+  app.get("/api/awards", async (req, res) => {
     try {
       const awards = await storage.getAllAwards();
       res.json(awards);
@@ -460,7 +461,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get awards by vendor ID
-  router.get("awards/:vendorId", async (req, res) => {
+  app.get("/api/awards/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const awards = await storage.getVendorAwards(vendorId);
@@ -472,7 +473,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create award
-  router.post("awards", async (req, res) => {
+  app.post("/api/awards", async (req, res) => {
     try {
       const { insertAwardSchema } = await import("@shared/schema");
       const validatedData = insertAwardSchema.parse(req.body);
@@ -485,7 +486,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update award
-  router.put("awards/:id", async (req, res) => {
+  app.put("/api/awards/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const updatedAward = await storage.updateAward(id, req.body);
@@ -497,7 +498,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete award
-  router.delete("awards/:id", async (req, res) => {
+  app.delete("/api/awards/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteAward(id);
@@ -508,132 +509,10 @@ router.post("/proposals", async (req, res) => {
     }
   });
 
-  // === WEBHOOK/MAKE.COM INTEGRATION ROUTES ===
-  
-  // Webhook para notificar Make.com sobre mudanças
-  router.post("webhook/notify", async (req, res) => {
-    try {
-      const { type, data, proposalId, vendorId } = req.body;
-      
-      // URLs de webhook do Make.com (configuráveis via variáveis de ambiente)
-      const makeWebhookUrls = [
-        process.env.MAKE_WEBHOOK_PROPOSALS,
-        process.env.MAKE_WEBHOOK_FINANCIAL,
-        process.env.MAKE_WEBHOOK_SHEETS
-      ].filter(Boolean);
-      
-      // Enviar notificação para todos os webhooks configurados
-      const webhookPromises = makeWebhookUrls.map(async (url) => {
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              type,
-              data,
-              proposalId,
-              vendorId,
-              timestamp: new Date().toISOString()
-            })
-          });
-          
-          return { url, success: response.ok, status: response.status };
-        } catch (error) {
-          console.error(`Erro ao notificar webhook ${url}:`, error);
-          return { url, success: false, error: error.message };
-        }
-      });
-      
-      const results = await Promise.all(webhookPromises);
-      
-      res.json({
-        success: true,
-        webhooksNotified: results.length,
-        results
-      });
-    } catch (error) {
-      console.error("Erro ao enviar webhooks:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-  
-  // Sync com Google Sheets via Make.com
-  router.post("sync/sheets", async (req, res) => {
-    try {
-      const { proposalId, action = 'update' } = req.body;
-      
-      // Buscar dados da proposta
-      const proposal = await storage.getProposal(proposalId);
-      if (!proposal) {
-        return res.status(404).json({ error: "Proposta não encontrada" });
-      }
-      
-      // Enviar para webhook do Make.com para sincronização com Google Sheets
-      if (process.env.MAKE_WEBHOOK_SHEETS) {
-        await fetch(process.env.MAKE_WEBHOOK_SHEETS, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            action: 'sync_sheets',
-            proposal,
-            timestamp: new Date().toISOString()
-          })
-        });
-      }
-      
-      res.json({ success: true, message: "Sincronização com Google Sheets iniciada" });
-    } catch (error) {
-      console.error("Erro ao sincronizar com Sheets:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-  
-  // Integração com sistema financeiro
-  router.post("integration/financial", async (req, res) => {
-    try {
-      const { proposalId, action, financialData } = req.body;
-      
-      // Buscar proposta
-      const proposal = await storage.getProposal(proposalId);
-      if (!proposal) {
-        return res.status(404).json({ error: "Proposta não encontrada" });
-      }
-      
-      // Enviar para sistema financeiro via Make.com
-      if (process.env.MAKE_WEBHOOK_FINANCIAL) {
-        const response = await fetch(process.env.MAKE_WEBHOOK_FINANCIAL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            action: 'financial_integration',
-            proposalId,
-            proposal,
-            financialData,
-            timestamp: new Date().toISOString()
-          })
-        });
-        
-        const result = await response.json();
-        res.json({ success: true, integrationResult: result });
-      } else {
-        res.status(503).json({ error: "Webhook financeiro não configurado" });
-      }
-    } catch (error) {
-      console.error("Erro na integração financeira:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-
   // === ANALYTICS ROUTES ===
   
   // Get vendor statistics
-  router.get("analytics/vendor/:vendorId", async (req, res) => {
+  app.get("/api/analytics/vendor/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const { month, year } = req.query;
@@ -652,62 +531,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get team statistics
-  router.get("analytics/team", async (req, res) => {
-    try {
-      const { month, year } = req.query;
-      
-      const stats = await storage.getTeamStats(
-        month ? parseInt(month as string) : undefined,
-        year ? parseInt(year as string) : undefined
-      );
-      
-      res.json(stats);
-    } catch (error) {
-      console.error("Erro ao buscar estatísticas da equipe:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-
-  // === INTEGRATION CONFIG ROUTES ===
-  
-  // Get integration status
-  router.get("integration/status", async (req, res) => {
-    try {
-      const status = {
-        makeWebhook: !!(process.env.MAKE_WEBHOOK_PROPOSALS || process.env.MAKE_WEBHOOK_FINANCIAL || process.env.MAKE_WEBHOOK_SHEETS),
-        googleSheets: !!process.env.MAKE_WEBHOOK_SHEETS,
-        financialSystem: !!process.env.MAKE_WEBHOOK_FINANCIAL,
-        lastSync: new Date().toISOString()
-      };
-      
-      res.json(status);
-    } catch (error) {
-      console.error("Erro ao verificar status das integrações:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-  
-  // Get integration config (sans sensitive data)
-  router.get("integration/config", async (req, res) => {
-    try {
-      const config = {
-        hasProposalsWebhook: !!process.env.MAKE_WEBHOOK_PROPOSALS,
-        hasFinancialWebhook: !!process.env.MAKE_WEBHOOK_FINANCIAL,
-        hasSheetsWebhook: !!process.env.MAKE_WEBHOOK_SHEETS,
-        hasGoogleDriveApi: !!process.env.GOOGLE_DRIVE_API_KEY,
-        hasSheetsApi: !!process.env.GOOGLE_SHEETS_API_KEY,
-        environment: process.env.NODE_ENV || 'development'
-      };
-      
-      res.json(config);
-    } catch (error) {
-      console.error("Erro ao obter configurações:", error);
-      res.status(500).json({ error: "Erro interno do servidor" });
-    }
-  });
-
-  // Get team statistics
-  router.get("analytics/team", async (req, res) => {
+  app.get("/api/analytics/team", async (req, res) => {
     try {
       const { month, year } = req.query;
       
@@ -726,7 +550,7 @@ router.post("/proposals", async (req, res) => {
   // === INTEGRATIONS ROUTES ===
   
   // Sync Google Sheets
-  router.post("sync-sheets", async (req, res) => {
+  app.post("/api/sync-sheets", async (req, res) => {
     try {
       // Buscar todas as propostas para sincronizar
       const proposals = await storage.getAllProposals();
@@ -748,7 +572,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Google Drive integration status
-  router.get("drive-status", async (req, res) => {
+  app.get("/api/drive-status", async (req, res) => {
     try {
       // Simular verificação de status do Google Drive
       res.json({
@@ -766,7 +590,7 @@ router.post("/proposals", async (req, res) => {
   // === SYSTEM USERS ROUTES ===
   
   // Get all system users
-  router.get("system-users", async (req, res) => {
+  app.get("/api/system-users", async (req, res) => {
     try {
       const users = await storage.getAllSystemUsers();
       res.json(users);
@@ -777,7 +601,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get system user by ID
-  router.get("system-users/:id", async (req, res) => {
+  app.get("/api/system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const user = await storage.getSystemUser(id);
@@ -792,7 +616,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create system user
-  router.post("system-users", async (req, res) => {
+  app.post("/api/system-users", async (req, res) => {
     try {
       const { insertSystemUserSchema } = await import("@shared/schema");
       const validatedData = insertSystemUserSchema.parse(req.body);
@@ -805,7 +629,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update system user
-  router.put("system-users/:id", async (req, res) => {
+  app.put("/api/system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const user = await storage.updateSystemUser(id, req.body);
@@ -817,7 +641,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete system user
-  router.delete("system-users/:id", async (req, res) => {
+  app.delete("/api/system-users/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteSystemUser(id);
@@ -829,7 +653,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update last login
-  router.patch("system-users/:id/login", async (req, res) => {
+  app.patch("/api/system-users/:id/login", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.updateLastLogin(id);
@@ -843,7 +667,7 @@ router.post("/proposals", async (req, res) => {
   // === UNIFIED AUTHENTICATION SYSTEM ===
   
   // Unified login for all portals - checks both system users and vendors
-  router.post("auth/login", async (req, res) => {
+  app.post("/api/auth/login", async (req, res) => {
     try {
       const { email, password, portal } = req.body;
       
@@ -888,7 +712,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get all users (system users + vendors) for unified management
-  router.get("auth/users", async (req, res) => {
+  app.get("/api/auth/users", async (req, res) => {
     try {
       const systemUsers = await storage.getAllSystemUsers();
       const vendors = await storage.getAllVendors();
@@ -915,7 +739,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create user (unified API)
-  router.post("auth/users", async (req, res) => {
+  app.post("/api/auth/users", async (req, res) => {
     try {
       const { userType, ...userData } = req.body;
       
@@ -947,7 +771,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update user (unified API)
-  router.patch("auth/users/:id", async (req, res) => {
+  app.patch("/api/auth/users/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { userType, ...userData } = req.body;
@@ -980,7 +804,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete user (unified API)
-  router.delete("auth/users/:id", async (req, res) => {
+  app.delete("/api/auth/users/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { userType } = req.query;
@@ -999,7 +823,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update user password (works for both system users and vendors)
-  router.patch("auth/users/:id/password", async (req, res) => {
+  app.patch("/api/auth/users/:id/password", async (req, res) => {
     try {
       const { id } = req.params;
       const { password, userType } = req.body;
@@ -1024,7 +848,7 @@ router.post("/proposals", async (req, res) => {
   // === ATTACHMENTS ROUTES ===
   
   // Get all attachments
-  router.get("attachments", async (req, res) => {
+  app.get("/api/attachments", async (req, res) => {
     try {
       const attachments = await storage.getAllAttachments();
       res.json(attachments);
@@ -1034,30 +858,42 @@ router.post("/proposals", async (req, res) => {
     }
   });
 
-  // Get attachment by ID
-  router.get("attachments/:id", async (req, res) => {
+  // Get attachments by proposal ID
+  app.get("/api/attachments/proposal/:proposalId", async (req, res) => {
     try {
-      const { id } = req.params;
-      const attachment = await storage.getAttachment(parseInt(id));
-      
-      if (!attachment) {
-        return res.status(404).json({ error: "Anexo não encontrado" });
-      }
-      
+      const { proposalId } = req.params;
+      const attachments = await storage.getAttachmentsByProposal(proposalId);
+      res.json(attachments);
+    } catch (error) {
+      console.error("Erro ao buscar anexos da proposta:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Create attachment
+  app.post("/api/attachments", async (req, res) => {
+    try {
+      const { insertAttachmentSchema } = await import("@shared/schema");
+      const validatedData = insertAttachmentSchema.parse(req.body);
+      const attachment = await storage.createAttachment(validatedData);
       res.json(attachment);
     } catch (error) {
-      console.error("Erro ao buscar anexo:", error);
+      console.error("Erro ao criar anexo:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
   // Update attachment status
-  router.put("attachments/:id/status", async (req, res) => {
+  app.patch("/api/attachments/:id/status", async (req, res) => {
     try {
-      const { id } = req.params;
-      const { status, approvedBy } = req.body;
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
       
-      const attachment = await storage.updateAttachmentStatus(parseInt(id), status, approvedBy);
+      if (!['pending', 'approved', 'rejected'].includes(status)) {
+        return res.status(400).json({ error: "Status inválido" });
+      }
+      
+      const attachment = await storage.updateAttachmentStatus(id, status);
       res.json(attachment);
     } catch (error) {
       console.error("Erro ao atualizar status do anexo:", error);
@@ -1066,65 +902,96 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Delete attachment
-  router.delete("attachments/:id", async (req, res) => {
+  app.delete("/api/attachments/:id", async (req, res) => {
     try {
-      const { id } = req.params;
-      await storage.deleteAttachment(parseInt(id));
+      const id = parseInt(req.params.id);
+      await storage.deleteAttachment(id);
       res.json({ success: true });
     } catch (error) {
-      console.error("Erro ao excluir anexo:", error);
+      console.error("Erro ao deletar anexo:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
-  // === DRIVE CONFIGS ROUTES ===
+  // Download attachment
+  app.get("/api/attachments/:id/download", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const attachment = await storage.getAttachment(id);
+      
+      if (!attachment) {
+        return res.status(404).json({ error: "Anexo não encontrado" });
+      }
+
+      // Redirect to Google Drive download URL if available
+      if (attachment.driveUrl) {
+        return res.redirect(attachment.driveUrl);
+      }
+
+      // Otherwise return file info for local download
+      res.json({
+        filename: attachment.filename,
+        originalName: attachment.originalName,
+        fileType: attachment.fileType,
+        fileSize: attachment.fileSize
+      });
+    } catch (error) {
+      console.error("Erro ao baixar anexo:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // === GOOGLE DRIVE CONFIGURATIONS ===
   
-  // Get all drive configs
-  router.get("drive-configs", async (req, res) => {
+  // Get all drive configurations
+  app.get("/api/drives", async (req, res) => {
     try {
-      const configs = await storage.getAllDriveConfigs();
-      res.json(configs);
+      const drives = await storage.getAllDrives();
+      res.json(drives);
     } catch (error) {
-      console.error("Erro ao buscar configurações do drive:", error);
+      console.error("Erro ao buscar configurações do Drive:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
-  // Create drive config
-  router.post("drive-configs", async (req, res) => {
+  // Create drive configuration
+  app.post("/api/drives", async (req, res) => {
     try {
-      const configData = req.body;
-      const config = await storage.createDriveConfig(configData);
-      res.status(201).json(config);
+      const { insertDriveConfigSchema } = await import("@shared/schema");
+      const validatedData = insertDriveConfigSchema.parse(req.body);
+      const drive = await storage.createDriveConfig(validatedData);
+      res.json(drive);
     } catch (error) {
-      console.error("Erro ao criar configuração do drive:", error);
+      console.error("Erro ao criar configuração do Drive:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
-  // Update drive config
-  router.put("drive-configs/:id", async (req, res) => {
+  // Update drive configuration
+  app.patch("/api/drives/:id", async (req, res) => {
     try {
-      const { id } = req.params;
-      const configData = req.body;
-      const config = await storage.updateDriveConfig(parseInt(id), configData);
-      res.json(config);
+      const id = parseInt(req.params.id);
+      const drive = await storage.updateDriveConfig(id, req.body);
+      res.json(drive);
     } catch (error) {
-      console.error("Erro ao atualizar configuração do drive:", error);
+      console.error("Erro ao atualizar configuração do Drive:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
-  // Delete drive config
-  router.delete("drive-configs/:id", async (req, res) => {
+  // Delete drive configuration
+  app.delete("/api/drives/:id", async (req, res) => {
     try {
-      const { id } = req.params;
-      await storage.deleteDriveConfig(parseInt(id));
+      const id = parseInt(req.params.id);
+      await storage.deleteDriveConfig(id);
       res.json({ success: true });
     } catch (error) {
-      console.error("Erro ao excluir configuração do drive:", error);
+      console.error("Erro ao deletar configuração do Drive:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
 
-export default router;
+  const httpServer = createServer(app);
+
+  return httpServer;
+}

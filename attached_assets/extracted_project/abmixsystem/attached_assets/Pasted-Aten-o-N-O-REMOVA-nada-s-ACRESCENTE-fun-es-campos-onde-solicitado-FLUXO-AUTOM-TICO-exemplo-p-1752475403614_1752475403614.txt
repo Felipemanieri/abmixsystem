@@ -1,0 +1,84 @@
+Atenção: NÃO REMOVA nada, só ACRESCENTE funções/campos onde solicitado.
+
+FLUXO AUTOMÁTICO (exemplo para explicar):
+Quando o vendedor gera o link exclusivo da proposta:
+
+Imediatamente gerar o ID único do cliente (ex: ABM001).
+
+Todas as informações já preenchidas pelo vendedor (ID, Cliente, Plano, Valor, Data, Nome do Vendedor) devem ser enviadas automaticamente para:
+
+Painel do Vendedor
+
+Painel da Implantação
+
+Painel do Supervisor
+
+Painel do Financeiro
+
+O cliente já aparece nas listas/tabelas de cada painel assim que o link é gerado.
+
+A barra de progresso (preenchimento da documentação) deve aparecer em todos os painéis e atualizar em tempo real conforme o cliente preenche seus dados.
+
+O painel de implantação deve continuar com seus próprios filtros editáveis e campos, não remova nada, só agregue as informações vindas do vendedor e sincronize tudo em tempo real.
+
+EXEMPLO VISUAL DE TABELAS (campos obrigatórios):
+Painel do Vendedor
+ID	CLIENTE	PLANO	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Empresarial Premium	OBSERVAÇÃO	[barra evolutiva]	14/01/2024	...ícones...
+
+OBS: O vendedor NÃO precisa do nome dele próprio no painel (ele já está logado).
+
+Painel da Implantação
+ID	CLIENTE	VENDEDOR	PLANO	VALOR	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Ana Caroline	Empresarial Premium	R$1.250,00	OBSERVAÇÃO	[barra evolutiva]	14/01/2024	...ícones...
+
+Mantenha TODOS os filtros editáveis já existentes no painel da implantação.
+
+Sincronize para aparecer as informações automaticamente assim que o vendedor gerar o link.
+
+O responsável pela implantação pode editar, anexar arquivos, visualizar e atualizar campos próprios do painel, sem perder os filtros e sem apagar nada.
+
+Painel do Supervisor
+ID	CLIENTE	VENDEDOR	PLANO	VALOR	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Ana Caroline	Empresarial Premium	R$1.250,00	OBSERVAÇÃO	[barra evolutiva]	14/01/2024	...ícones...
+
+Aqui pode criar uma barra de progresso mais completa, mostrando também o status de cada etapa (exemplo: Proposta, Envio Docs, Aprovação, Implantação).
+
+NÃO remova campos, ícones, filtros de ação! Só adicione o que faltar.
+
+Painel Financeiro
+ID	CLIENTE	VENDEDOR	PLANO	VALOR	STATUS	PROGRESSO	DATA	AÇÕES
+ABM001	Empresa ABC Ltda	Ana Caroline	Empresarial Premium	R$1.250,00	OBSERVAÇÃO	[barra evolutiva]	14/01/2024	...ícones...
+
+Só acrescente o que falta (barra de progresso, campos sincronizados), sem remover nada já existente.
+
+Sincronização em tempo real: se o cliente preenche um novo dado, aparece na barra em todos os painéis.
+
+Resumo e Regras
+O vendedor gera o link ➔ automaticamente gera o ID e preenche TODAS as tabelas/painéis em tempo real.
+
+NUNCA apague ou substitua filtros, ícones, ações, campos ou botões já existentes.
+
+Nos painéis onde já existe um campo/filtro, mantenha! Apenas agregue os novos campos se necessário.
+
+O painel da implantação pode editar/anexar arquivos sem perder os filtros.
+
+O supervisor pode ter mais detalhes na barra de progresso, sem perder nada do que já existe.
+
+Padronização visual: tabelas dos quatro painéis devem ser similares, mas cada uma pode ter campos a mais ou a menos, conforme a necessidade do setor.
+
+Tudo sincronizado em tempo real.
+
+Exemplo de Funcionamento (resumido):
+Vendedor preenche a proposta, gera o link ➔ sistema cria ID automático.
+
+Instantaneamente a proposta aparece nos quatro painéis, com as informações: ID, Cliente, Vendedor, Plano, Valor, Status, Barra de Progresso, Data, etc.
+
+Cliente começa a preencher docs ➔ barra de progresso atualiza ao vivo em todos os painéis.
+
+Implantação pode editar/anexar sem perder filtros ou campos.
+
+Supervisor acompanha evolução detalhada, com todos os filtros e campos.
+
+Financeiro só agrega campos, mantém filtros/ícones, e vê tudo sincronizado.
+
