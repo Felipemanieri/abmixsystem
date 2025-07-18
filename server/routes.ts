@@ -275,7 +275,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get proposal by token (for client access)
-  router.get("proposals/client/:token", async (req, res) => {
+  router.get("/proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const proposal = await storage.getProposalByToken(token);
@@ -292,7 +292,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get all proposals (for portals)
-  router.get("proposals", async (req, res) => {
+  router.get("/proposals", async (req, res) => {
     try {
       const proposals = await storage.getAllProposals();
       res.json(proposals);
@@ -303,7 +303,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get vendor proposals
-  router.get("proposals/vendor/:vendorId", async (req, res) => {
+  router.get("/proposals/vendor/:vendorId", async (req, res) => {
     try {
       const vendorId = parseInt(req.params.vendorId);
       const proposals = await storage.getVendorProposals(vendorId);
@@ -315,7 +315,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update proposal by token (for client completion)
-  router.put("proposals/client/:token", async (req, res) => {
+  router.put("/proposals/client/:token", async (req, res) => {
     try {
       const { token } = req.params;
       const updateData = req.body;
