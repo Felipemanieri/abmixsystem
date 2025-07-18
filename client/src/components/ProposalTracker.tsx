@@ -8,63 +8,7 @@ interface ProposalTrackerProps {
 const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
   const [selectedFilter, setSelectedFilter] = useState('all');
 
-  const proposals = [
-    {
-      id: 'VEND001-PROP123',
-      client: 'Empresa ABC Ltda',
-      plan: 'Plano Empresarial Premium',
-      status: 'client_filling',
-      progress: 75,
-      date: '2024-01-15',
-      link: 'https://abmix.com/cliente/VEND001-PROP123',
-      lastActivity: '2 horas atrás',
-      daysOpen: 2,
-    },
-    {
-      id: 'VEND001-PROP124',
-      client: 'Tech Solutions SA',
-      plan: 'Plano Família Básico',
-      status: 'docs_pending',
-      progress: 45,
-      date: '2024-01-14',
-      link: 'https://abmix.com/cliente/VEND001-PROP124',
-      lastActivity: '1 dia atrás',
-      daysOpen: 5,
-    },
-    {
-      id: 'VEND001-PROP125',
-      client: 'Consultoria XYZ',
-      plan: 'Plano Individual',
-      status: 'completed',
-      progress: 100,
-      date: '2024-01-13',
-      link: 'https://abmix.com/cliente/VEND001-PROP125',
-      lastActivity: '3 dias atrás',
-      daysOpen: 1,
-    },
-    {
-      id: 'VEND001-PROP126',
-      client: 'Startup Inovadora',
-      plan: 'Plano Empresarial',
-      status: 'client_filling',
-      progress: 25,
-      date: '2024-01-12',
-      link: 'https://abmix.com/cliente/VEND001-PROP126',
-      lastActivity: '5 dias atrás',
-      daysOpen: 15,
-    },
-    {
-      id: 'VEND001-PROP127',
-      client: 'Família Silva',
-      plan: 'Plano Família Premium',
-      status: 'docs_pending',
-      progress: 80,
-      date: '2024-01-10',
-      link: 'https://abmix.com/cliente/VEND001-PROP127',
-      lastActivity: '1 semana atrás',
-      daysOpen: 25,
-    },
-  ];
+  const proposals: any[] = []; // Removido dados fake - usar apenas dados reais do banco
 
   const getStatusColor = (status: string) => {
     switch (status) {

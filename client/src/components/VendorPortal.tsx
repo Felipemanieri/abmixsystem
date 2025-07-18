@@ -617,7 +617,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </label>
             <button
               onClick={addIdade}
-              className="flex items-center px-3 py-1 text-sm bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-3 py-1 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-1" />
               Adicionar Idade
