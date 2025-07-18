@@ -1706,12 +1706,23 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </div>
               
               <div className="mt-6 flex justify-between">
-                <button
-                  onClick={resetToDefault}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Restaurar Padrão
-                </button>
+                <div className="flex space-x-4">
+                  <button
+                    onClick={resetToDefault}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Restaurar Padrão
+                  </button>
+                  <button
+                    onClick={() => {
+                      window.location.href = '/';
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Voltar para Página Inicial
+                  </button>
+                </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   As mudanças são aplicadas imediatamente
                 </div>
