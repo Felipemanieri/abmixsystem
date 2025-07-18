@@ -1044,7 +1044,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 Abrir Drive
               </button>
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => {
+                  setAbaAtiva('drive');
+                  setShowDriveManagementModal(true);
+                }}
                 className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
               >
                 <Settings className="w-4 h-4 mr-2" />
@@ -1114,8 +1117,17 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="mt-4 flex space-x-2">
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => setActiveTab('google-sheets')}
                 className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+              >
+                Visualizar
+              </button>
+              <button 
+                onClick={() => {
+                  setAbaAtiva('sheets');
+                  setShowDriveManagementModal(true);
+                }}
+                className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
               >
                 Editar
               </button>
@@ -1140,7 +1152,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="mt-4 flex space-x-2">
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => {
+                  setAbaAtiva('forms');
+                  setShowDriveManagementModal(true);
+                }}
                 className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
               >
                 Editar
@@ -1166,7 +1181,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="mt-4 flex space-x-2">
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => {
+                  setAbaAtiva('docs');
+                  setShowDriveManagementModal(true);
+                }}
                 className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
               >
                 Editar
@@ -1200,7 +1218,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="mt-4 flex space-x-2">
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => {
+                  setAbaAtiva('backup');
+                  setShowDriveManagementModal(true);
+                }}
                 className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
               >
                 Editar
@@ -1234,7 +1255,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="mt-4 flex space-x-2">
               <button 
-                onClick={() => setShowDriveManagementModal(true)}
+                onClick={() => {
+                  setAbaAtiva('api');
+                  setShowDriveManagementModal(true);
+                }}
                 className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
               >
                 Editar
