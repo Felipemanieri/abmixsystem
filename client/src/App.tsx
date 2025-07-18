@@ -296,12 +296,12 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-8 mb-16 px-4 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-16 px-4 justify-items-center max-w-6xl mx-auto">
           {/* Portal do Cliente - Condicional */}
           {portalVisibility.showClientPortal && (
             <div 
               onClick={() => setCurrentPortal('client')}
-              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 w-72 h-80"
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-6 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 hover:scale-102 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 w-64 h-72 flex flex-col justify-between"
             >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
@@ -327,7 +327,7 @@ function App() {
           {portalVisibility.showVendorPortal && (
           <div 
             onClick={() => setCurrentPortal('vendor')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400 w-72 h-80"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-6 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 hover:scale-102 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400 w-64 h-72 flex flex-col justify-between"
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
@@ -353,7 +353,7 @@ function App() {
           {portalVisibility.showImplementationPortal && (
           <div 
             onClick={() => setCurrentPortal('implementation')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400 w-72 h-80"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-6 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 hover:scale-102 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400 w-64 h-72 flex flex-col justify-between"
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
@@ -379,7 +379,7 @@ function App() {
           {portalVisibility.showFinancialPortal && (
           <div 
             onClick={() => setCurrentPortal('financial')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400 w-72 h-80"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-6 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 hover:scale-102 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400 w-64 h-72 flex flex-col justify-between"
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
@@ -405,7 +405,7 @@ function App() {
           {portalVisibility.showSupervisorPortal && (
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400 w-72 h-80"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-6 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-2 hover:scale-102 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400 w-64 h-72 flex flex-col justify-between"
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
