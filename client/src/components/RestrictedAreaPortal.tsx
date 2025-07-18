@@ -244,6 +244,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     savePortalVisibility(defaultVisibility);
   };
 
+  const handlePortalVisibilityChange = (portal: string, value: boolean) => {
+    const newVisibility = {
+      ...portalVisibility,
+      [portal]: value
+    };
+    savePortalVisibility(newVisibility);
+  };
+
   // Estados para o sistema de anexos
   const [attachments, setAttachments] = useState([
     {
@@ -1619,7 +1627,98 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && (
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* CONTROLE DE VISIBILIDADE DOS PORTAIS */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <div className="flex items-center mb-4">
+                <Eye className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Controle de Visibilidade dos Portais</h3>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                Controle quais portais aparecem na página inicial. Desmarque para ocultar.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className="flex items-center">
+                    <Users className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3" />
+                    <span className="font-medium text-gray-900 dark:text-white">Portal do Cliente</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={portalVisibility.showClientPortal}
+                    onChange={handleToggleClientPortal}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                </label>
+                
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className="flex items-center">
+                    <FileText className="w-5 h-5 text-green-600 dark:text-green-400 mr-3" />
+                    <span className="font-medium text-gray-900 dark:text-white">Portal Vendedor</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={portalVisibility.showVendorPortal}
+                    onChange={handleToggleVendorPortal}
+                    className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+                  />
+                </label>
+                
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className="flex items-center">
+                    <DollarSign className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-3" />
+                    <span className="font-medium text-gray-900 dark:text-white">Portal Financeiro</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={portalVisibility.showFinancialPortal}
+                    onChange={handleToggleFinancialPortal}
+                    className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+                  />
+                </label>
+                
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className="flex items-center">
+                    <Settings className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-3" />
+                    <span className="font-medium text-gray-900 dark:text-white">Portal Implantação</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={portalVisibility.showImplementationPortal}
+                    onChange={handleToggleImplementationPortal}
+                    className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                  />
+                </label>
+                
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <div className="flex items-center">
+                    <Crown className="w-5 h-5 text-gray-600 dark:text-gray-400 mr-3" />
+                    <span className="font-medium text-gray-900 dark:text-white">Portal Supervisor</span>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={portalVisibility.showSupervisorPortal}
+                    onChange={handleToggleSupervisorPortal}
+                    className="w-4 h-4 text-gray-600 rounded focus:ring-gray-500"
+                  />
+                </label>
+              </div>
+              
+              <div className="mt-6 flex justify-between">
+                <button
+                  onClick={resetToDefault}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Restaurar Padrão
+                </button>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  As mudanças são aplicadas imediatamente
+                </div>
+              </div>
+            </div>
+            
+            {/* ESTATÍSTICAS DO SISTEMA */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center mb-3">
