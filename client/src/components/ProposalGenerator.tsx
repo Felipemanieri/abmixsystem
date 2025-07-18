@@ -701,7 +701,70 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     showNotification('Formulário de cotação limpo!', 'success');
   };
 
+  const gerarCotacao = () => {
+    if (!quotationData.operadora || !quotationData.tipoPlano) {
+      showNotification('Preencha a operadora e tipo de plano para gerar a cotação', 'error');
+      return;
+    }
+    
+    // Simular cálculo de cotação baseado em dados
+    const valorBase = 180;
+    const multiplicador = quotationData.numeroVidas * (quotationData.tipoPlano === 'Empresarial' ? 0.8 : 1);
+    const valorCalculado = (valorBase * multiplicador).toFixed(2);
+    
+    setQuotationData(prev => ({ ...prev, valor: valorCalculado }));
+    showNotification(`Cotação gerada: R$ ${valorCalculado}`, 'success');
+  };
+
   const salvarCotacao = () => {
+    if (!quotationData.operadora || !quotationData.tipoPlano || !quotationData.valor) {
+      showNotification('Preencha todos os campos obrigatórios da cotação', 'error');
+      return;
+    }
+
+    // Salvar no localStorage ou banco de dados
+    const cotacaoSalva = {
+      ...quotationData,
+      dataHora: new Date().toISOString(),
+      arquivos: arquivosAnexados.length
+    };
+    
+    // Aqui você poderia salvar no banco de dados
+    localStorage.setItem(`cotacao_${Date.now()}`, JSON.stringify(cotacaoSalva));
+    showNotification('Cotação salva com sucesso!', 'success');
+  };
+
+  const baixarCotacao = () => {
+    if (!quotationData.operadora || !quotationData.valor) {
+      showNotification('Gere uma cotação antes de baixar', 'error');
+      return;
+    }
+
+    // Criar conteúdo do arquivo
+    const conteudo = `
+COTAÇÃO DE PLANO DE SAÚDE
+========================
+Data: ${new Date().toLocaleDateString('pt-BR')}
+Operadora: ${quotationData.operadora}
+Tipo de Plano: ${quotationData.tipoPlano}
+Número de Vidas: ${quotationData.numeroVidas}
+Valor: R$ ${quotationData.valor}
+Validade: ${quotationData.validade ? new Date(quotationData.validade).toLocaleDateString('pt-BR') : 'N/A'}
+    `;
+
+    // Criar e baixar arquivo
+    const blob = new Blob([conteudo], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Cotacao_${quotationData.operadora}_${Date.now()}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    
+    showNotification('Cotação baixada com sucesso!', 'success');
+  };
+
+  const adicionarCotacao = () => {
     if (!quotationData.operadora || !quotationData.tipoPlano || !quotationData.valor) {
       showNotification('Preencha todos os campos obrigatórios da cotação', 'error');
       return;
@@ -720,7 +783,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
     setCotacoesCadastradas(prev => [...prev, novaCotacao]);
     
-    // Limpar formulário após salvar
+    // Limpar formulário após adicionar
     setQuotationData({
       numeroVidas: 1,
       operadora: '',
@@ -1816,17 +1879,40 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
             )}
 
-            {/* Botões Adicionar e Limpar Cotação */}
-            <div className="flex justify-between gap-4 mt-6">
+            {/* Botões de Cotação */}
+            <div className="flex justify-between items-center gap-4 mt-6">
+              <div className="flex gap-3">
+                <button
+                  onClick={limparFormulario}
+                  className="flex items-center px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Limpar Formulário
+                </button>
+                <button
+                  onClick={gerarCotacao}
+                  className="flex items-center px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Gerar Cotação
+                </button>
+                <button
+                  onClick={salvarCotacao}
+                  className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Salvar Cotação
+                </button>
+                <button
+                  onClick={baixarCotacao}
+                  className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Baixar Cotação
+                </button>
+              </div>
               <button
-                onClick={limparFormulario}
-                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-md"
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Limpar Formulário
-              </button>
-              <button
-                onClick={salvarCotacao}
+                onClick={adicionarCotacao}
                 className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md"
               >
                 <Plus className="w-4 h-4 mr-2" />
