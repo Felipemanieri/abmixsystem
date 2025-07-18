@@ -348,27 +348,27 @@ function App() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-teal-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                <Database className="w-10 h-10 text-gray-600 dark:text-gray-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Processo Ágil</h3>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">Gestão Centralizada</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Sistema integrado para controle total de propostas e documentos</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-green-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-10 h-10 text-gray-600 dark:text-gray-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Máxima Segurança</h3>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Criptografia avançada e conformidade total com LGPD</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">Eficiência Operacional</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Automação inteligente reduz o tempo de processamento</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-purple-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                <Award className="w-10 h-10 text-gray-600 dark:text-gray-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Suporte Dedicado</h3>
-              <p className="text-gray-600 dark:text-gray-400 font-medium">Equipe especializada com suporte dedicado para auxiliar</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">Excelência Corporativa</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Padrões empresariais com conformidade e segurança</p>
             </div>
           </div>
         </div>
