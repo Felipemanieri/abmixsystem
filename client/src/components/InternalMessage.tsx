@@ -55,15 +55,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   // Sistema de mensagens limpo - FORÇAR LIMPEZA TOTAL
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // LIMPAR TUDO AO CARREGAR
-  useEffect(() => {
-    localStorage.removeItem('internalMessages');
-    localStorage.removeItem('notifications');
-    localStorage.removeItem('userNotifications');
-    setMessages([]);
-    setUnreadCount(0);
-    console.log('TODAS AS MENSAGENS E NOTIFICAÇÕES FORAM APAGADAS');
-  }, []);
+  // Sistema de mensagens funcionando normalmente
+  // Não apagar mensagens automaticamente
   
   // Sistema de detecção automática de usuários do banco de dados
   const [availableUsers, setAvailableUsers] = useState<User[]>([]);
@@ -181,6 +174,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
         timestamp: new Date(msg.timestamp)
       }));
       setMessages(parsedMessages);
+      console.log(`${parsedMessages.length} mensagens carregadas do localStorage`);
     }
   }, []);
 
@@ -243,7 +237,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       setMessages(updatedMessages);
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
       
-      console.log(`Mensagem geral enviada para ${recipients.length} usuários`);
+      console.log(`✓ Mensagem geral enviada para ${recipients.length} usuários`);
       setNotificationMessage(`Mensagem geral enviada para ${recipients.length} usuários!`);
       setShowNotification(true);
     } else {
@@ -276,7 +270,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       setMessages(updatedMessages);
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
 
-      console.log(`APENAS ${composeData.recipient} foi notificado`);
+      console.log(`✓ Mensagem enviada para ${composeData.recipient}`);
       setNotificationMessage('Mensagem enviada com sucesso!');
       setShowNotification(true);
     }
