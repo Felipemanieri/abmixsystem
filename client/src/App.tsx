@@ -486,6 +486,8 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Chatbot temporariamente removido para estabilização */}
       </div>
     </ThemeProvider>
   );
