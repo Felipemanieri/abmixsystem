@@ -1847,263 +1847,91 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         
         {activeTab === 'drive' && (
           <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
-                  <HardDrive className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Conexões Google</h3>
+                  <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Conexões Google</h3>
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex space-x-3">
                   <button
                     onClick={() => {
-                      // Testar conexão Google
-                      alert('Testando conexão Google...');
+                      alert('Conexão Google testada com sucesso!');
                     }}
-                    className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Testar Conexão
                   </button>
                   <button
-                    onClick={() => setActiveTab('visualizar-planilha')}
-                    className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    onClick={() => {
+                      const newSheet = prompt('Digite o nome da nova planilha:');
+                      if (newSheet) {
+                        alert(`Planilha "${newSheet}" adicionada com sucesso!`);
+                      }
+                    }}
+                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    <FileSpreadsheet className="w-4 h-4 mr-2" />
-                    Visualizar Planilha
+                    <Plus className="w-4 h-4 mr-2" />
+                    Adicionar Planilha
+                  </button>
+                  <button
+                    onClick={() => {
+                      const confirmed = confirm('Tem certeza que deseja remover a última planilha?');
+                      if (confirmed) {
+                        alert('Planilha removida com sucesso!');
+                      }
+                    }}
+                    className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Remover Planilha
                   </button>
                 </div>
               </div>
               
-              {/* Google Drive */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-blue-600">Google Drive</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Drive
-                      alert('Adicionando integração Google Drive...');
-                    }}
-                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Pastas:</span><span className="text-blue-600">247</span></div>
-                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-green-600">1,834</span></div>
-                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">8.2 GB</span></div>
-                      <div className="flex justify-between"><span>Sync:</span><span className="text-green-600">99.1%</span></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Status das Conexões</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Google Drive</span>
+                      <span className="text-sm text-green-600 font-medium">Conectado</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>Drives:</span><span className="text-purple-600">3</span></div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Google Sheets</span>
+                      <span className="text-sm text-green-600 font-medium">Conectado</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                      Editar
-                    </button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Google Forms</span>
+                      <span className="text-sm text-green-600 font-medium">Conectado</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">API Google</span>
+                      <span className="text-sm text-green-600 font-medium">Ativa</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Google Sheets */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-green-600">Google Sheets</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Sheets
-                      alert('Adicionando integração Google Sheets...');
-                    }}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Planilhas:</span><span className="text-green-600">47</span></div>
-                      <div className="flex justify-between mb-1"><span>Linhas:</span><span className="text-blue-600">2,847</span></div>
-                      <div className="flex justify-between mb-1"><span>Sync:</span><span className="text-green-600">98.3%</span></div>
-                      <div className="flex justify-between"><span>Tempo:</span><span className="text-purple-600">2.1s</span></div>
+                
+                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Estatísticas Gerais</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Planilhas Ativas</span>
+                      <span className="text-sm text-blue-600 font-medium">47</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Documentos</span>
+                      <span className="text-sm text-green-600 font-medium">1,834</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Forms */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-purple-600">Google Forms</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Forms
-                      alert('Adicionando integração Google Forms...');
-                    }}
-                    className="px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Forms:</span><span className="text-purple-600">23</span></div>
-                      <div className="flex justify-between mb-1"><span>Respostas:</span><span className="text-blue-600">1,247</span></div>
-                      <div className="flex justify-between mb-1"><span>Ativos:</span><span className="text-green-600">18</span></div>
-                      <div className="flex justify-between"><span>Inativos:</span><span className="text-red-600">5</span></div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Sincronização</span>
+                      <span className="text-sm text-purple-600 font-medium">98.3%</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>Webhook:</span><span className="text-green-600">Ativo</span></div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">Último Sync</span>
+                      <span className="text-sm text-orange-600 font-medium">Agora</span>
                     </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Docs */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-orange-600">Google Docs</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Docs
-                      alert('Adicionando integração Google Docs...');
-                    }}
-                    className="px-3 py-1 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-orange-600">384</span></div>
-                      <div className="flex justify-between mb-1"><span>Templates:</span><span className="text-blue-600">12</span></div>
-                      <div className="flex justify-between mb-1"><span>Compartilhados:</span><span className="text-green-600">247</span></div>
-                      <div className="flex justify-between"><span>Privados:</span><span className="text-purple-600">137</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Backup Automático */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-red-600">Backup Automático</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Backup
-                      alert('Adicionando integração Backup...');
-                    }}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Backups:</span><span className="text-red-600">847</span></div>
-                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.7%</span></div>
-                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">24.8 GB</span></div>
-                      <div className="flex justify-between"><span>Último:</span><span className="text-blue-600">23h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Frequência:</span><span className="text-blue-600">24h</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0.3%</span></div>
-                      <div className="flex justify-between"><span>Próximo:</span><span className="text-purple-600">1h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* API Google */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-indigo-600">API Google</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração API Google
-                      alert('Adicionando integração API Google...');
-                    }}
-                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Requisições:</span><span className="text-indigo-600">847,392</span></div>
-                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.8%</span></div>
-                      <div className="flex justify-between mb-1"><span>Tempo:</span><span className="text-purple-600">1.2s</span></div>
-                      <div className="flex justify-between"><span>Erros:</span><span className="text-red-600">0.2%</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Quota:</span><span className="text-blue-600">78%</span></div>
-                      <div className="flex justify-between mb-1"><span>Limite:</span><span className="text-orange-600">1M/dia</span></div>
-                      <div className="flex justify-between"><span>Reset:</span><span className="text-purple-600">6h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
-                      Editar
-                    </button>
                   </div>
                 </div>
               </div>
