@@ -143,17 +143,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     };
   });
 
-  const mockProposals = [
-    { id: '1', client: 'Empresa ABC', value: 'R$ 25.000', status: 'approved', date: '2024-01-10' },
-    { id: '2', client: 'Tech Solutions', value: 'R$ 18.000', status: 'pending', date: '2024-01-12' },
-    { id: '3', client: 'StartupXYZ', value: 'R$ 30.000', status: 'review', date: '2024-01-14' },
-  ];
-
-  const mockClients = [
-    { id: '1', name: 'Empresa ABC', plan: 'Premium', value: 'R$ 15.000/mês', status: 'active' },
-    { id: '2', name: 'Tech Solutions', plan: 'Básico', value: 'R$ 8.500/mês', status: 'active' },
-    { id: '3', name: 'StartupXYZ', plan: 'Consultoria', value: 'R$ 12.000/projeto', status: 'pending' },
-  ];
+  // Dados demo removidos - usando apenas dados reais do banco de dados
 
   const filteredTransactions = realTransactions.filter(transaction => {
     const matchesCategory = selectedCategory === 'all' || transaction.category === selectedCategory;
@@ -693,10 +683,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 dark:bg-gray-800 divide-y divide-gray-200">
-              {mockClients.map((client) => (
+              {realTransactions.map((client) => (
                 <tr key={client.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{client.name}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{client.client}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{client.plan}</div>
@@ -706,11 +696,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      client.status === 'active' 
+                      client.status === 'completed' 
                         ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-amber-100 text-amber-700'
+                        : client.status === 'pending'
+                        ? 'bg-amber-100 text-amber-700'
+                        : 'bg-red-100 text-red-700'
                     }`}>
-                      {client.status === 'active' ? 'Ativo' : 'Pendente'}
+                      {client.status === 'completed' ? 'Ativo' : client.status === 'pending' ? 'Pendente' : 'Cancelado'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
