@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, Bell, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail, Download, Share2, ExternalLink, Send, Copy, X } from 'lucide-react';
+import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculator, Calendar, FileText, User, CreditCard, PieChart, BarChart3, Wallet, MessageSquare, Zap, Users, Upload, Database, Filter, Search, Settings, Mail, Download, Share2, ExternalLink, Send, Copy, X } from 'lucide-react';
 // import AbmixLogo from './AbmixLogo';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import FinancialAutomationModal from './FinancialAutomationModal';
-import NotificationCenter from './NotificationCenter';
+// NotificationCenter removido
 import ClientForm from './ClientForm';
 import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
@@ -12,7 +12,7 @@ import ProposalProgressTracker from './ProposalProgressTracker';
 import SystemFooter from './SystemFooter';
 import ThemeToggle from './ThemeToggle';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
-import { showNotification } from '../utils/notifications';
+// Notificações completamente removidas
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
 import { realTimeSync } from '../utils/realTimeSync';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
@@ -36,16 +36,7 @@ interface Transaction {
 
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
-  const [showNotifications, setShowNotifications] = useState(false);
-  
-  // DESABILITAR TODAS AS NOTIFICAÇÕES DO FINANCIAL PORTAL
-  const [notifications, setNotifications] = useState([]);
-  
-  useEffect(() => {
-    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
-    setNotifications([]);
-    console.log(`Notificações DESABILITADAS no FinancialPortal para ${user.name}`);
-  }, [user.name]);
+  // NOTIFICAÇÕES COMPLETAMENTE REMOVIDAS
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showAutomationModal, setShowAutomationModal] = useState(false);
   const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<{id: string, client: string} | null>(null);
@@ -794,15 +785,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 <Settings className="h-6 w-6" />
               </button>
               
-              <button
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-white dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                {/* SINO REMOVIDO */}
-                {/* NOTIFICAÇÕES DESABILITADAS - SEM CONTADOR */}
-              </button>
-              
-              {/* NOTIFICAÇÕES COMPLETAMENTE REMOVIDAS */}
+              {/* TODAS AS NOTIFICAÇÕES REMOVIDAS */}
               
               <div className="flex items-center space-x-3">
                 <div className="text-right">
@@ -867,14 +850,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         </div>
       )}
 
-      {/* Notifications Panel */}
-      {showNotifications && (
-        <NotificationCenter 
-          isOpen={showNotifications}
-          onClose={() => setShowNotifications(false)}
-          userRole="financial"
-        />
-      )}
+      {/* NOTIFICAÇÕES COMPLETAMENTE REMOVIDAS */}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
