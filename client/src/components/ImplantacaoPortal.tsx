@@ -452,7 +452,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       case 'low':
         return 'bg-emerald-100 text-emerald-700';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -490,7 +490,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
               <input
                 type="text"
                 placeholder="Buscar propostas..."
@@ -541,31 +541,31 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Cliente
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Vendedor
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Plano
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Valor
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Prioridade
                 </th>
-                <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-8 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Progresso
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -576,7 +576,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button 
                       onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                      className="text-sm font-medium text-blue-600 hover:text-blue-800 underline"
+                      className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-white underline"
                     >
                       {proposal.abmId}
                     </button>
@@ -585,13 +585,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="flex items-center">
                       <div>
                         <div className="text-sm font-medium text-gray-900 dark:text-white">{proposal.cliente}</div>
-                        <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
+                        <div className="text-sm text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <User className="w-4 h-4 text-gray-400 mr-2" />
+                      <User className="w-4 h-4 text-gray-400 dark:text-white mr-2" />
                       <div className="text-sm text-gray-900 dark:text-white">{proposal.vendedor}</div>
                     </div>
                   </td>
@@ -699,42 +699,42 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                        className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                        className="p-2 text-blue-600 hover:text-blue-800 dark:text-white hover:bg-blue-50 rounded-md transition-colors"
                         title="Ver no Google Drive"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                     <button
                       onClick={() => setEditingProposalId(proposal.id)}
-                      className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                      className="p-2 text-green-600 hover:text-green-800 dark:text-white hover:bg-green-50 rounded-md transition-colors"
                       title="Editar Proposta"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Enviando para automação...', 'info')}
-                      className="p-2 text-purple-600 hover:text-purple-800 hover:bg-purple-50 rounded-md transition-colors"
+                      className="p-2 text-purple-600 hover:text-purple-800 dark:text-white hover:bg-purple-50 rounded-md transition-colors"
                       title="Enviar para Automação"
                     >
                       <Zap className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Sincronizando com Google Sheets...', 'info')}
-                      className="p-2 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors"
+                      className="p-2 text-indigo-600 hover:text-indigo-800 dark:text-white hover:bg-indigo-50 rounded-md transition-colors"
                       title="Sincronizar Google Sheets"
                     >
                       <RefreshCw className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                      className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-md transition-colors"
+                      className="p-2 text-orange-600 hover:text-orange-800 dark:text-white hover:bg-orange-50 rounded-md transition-colors"
                       title="Link do Cliente"
                     >
                       <Link className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Enviando notificação...', 'info')}
-                      className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-50 rounded-md transition-colors"
+                      className="p-2 text-pink-600 hover:text-pink-800 dark:text-white hover:bg-pink-50 rounded-md transition-colors"
                       title="Notificar Cliente"
                     >
                       <MessageCircle className="w-4 h-4" />
@@ -746,7 +746,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
                         showNotification('Link copiado para área de transferência!', 'success');
                       }}
-                      className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 hover:bg-gray-50 dark:bg-gray-700 rounded-md transition-colors"
+                      className="p-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white hover:bg-gray-50 dark:bg-gray-700 rounded-md transition-colors"
                       title="Copiar Link"
                     >
                       <Copy className="w-4 h-4" />
@@ -756,7 +756,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         const message = `Olá! Sua proposta está disponível em: ${window.location.origin}/cliente/proposta/${proposal.clientToken}`;
                         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
                       }}
-                      className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-md transition-colors"
+                      className="p-2 text-emerald-600 hover:text-emerald-800 dark:text-white hover:bg-emerald-50 rounded-md transition-colors"
                       title="Enviar via WhatsApp"
                     >
                       <Send className="w-4 h-4" />
@@ -767,21 +767,21 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         const body = `Olá!\n\nSua proposta de plano de saúde está pronta e pode ser acessada através do link:\n${window.location.origin}/cliente/proposta/${proposal.clientToken}\n\nQualquer dúvida, estamos à disposição.\n\nAtenciosamente,\nEquipe Abmix`;
                         window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
                       }}
-                      className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+                      className="p-2 text-blue-500 hover:text-blue-700 dark:text-white hover:bg-blue-50 rounded-md transition-colors"
                       title="Enviar por Email"
                     >
                       <Mail className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Download iniciado...', 'info')}
-                      className="p-2 text-cyan-600 hover:text-cyan-800 hover:bg-cyan-50 rounded-md transition-colors"
+                      className="p-2 text-cyan-600 hover:text-cyan-800 dark:text-white hover:bg-cyan-50 rounded-md transition-colors"
                       title="Download de Documentos"
                     >
                       <Download className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDeleteProposal(proposal.id, proposal.cliente)}
-                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                      className="p-2 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 rounded-md transition-colors"
                       title="Excluir Proposta"
                       disabled={deleteProposal.isPending}
                     >
@@ -789,21 +789,21 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     </button>
                     <button
                       onClick={() => window.open(`/cliente/proposta/${proposal.clientToken}`, '_blank')}
-                      className="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-md transition-colors"
+                      className="p-2 text-teal-600 hover:text-teal-800 dark:text-white hover:bg-teal-50 rounded-md transition-colors"
                       title="Link Externo"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Proposta aprovada!', 'success')}
-                      className="p-2 text-lime-600 hover:text-lime-800 hover:bg-lime-50 rounded-md transition-colors"
+                      className="p-2 text-lime-600 hover:text-lime-800 dark:text-white hover:bg-lime-50 rounded-md transition-colors"
                       title="Aprovar Proposta"
                     >
                       <CheckCircle className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => showNotification('Alerta enviado!', 'warning')}
-                      className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-md transition-colors"
+                      className="p-2 text-amber-600 hover:text-amber-800 dark:text-white hover:bg-amber-50 rounded-md transition-colors"
                       title="Alerta"
                     >
                       <AlertCircle className="w-4 h-4" />
@@ -820,14 +820,14 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                           showNotification('Compartilhamento não disponível neste dispositivo', 'info');
                         }
                       }}
-                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-md transition-colors"
+                      className="p-2 text-slate-600 dark:text-white hover:text-slate-800 dark:text-white hover:bg-slate-50 rounded-md transition-colors"
                       title="Compartilhar"
                     >
                       <Share2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setShowInternalMessage(true)}
-                      className="p-2 text-violet-600 hover:text-violet-800 hover:bg-violet-50 rounded-md transition-colors"
+                      className="p-2 text-violet-600 hover:text-violet-800 dark:text-white hover:bg-violet-50 rounded-md transition-colors"
                       title="Mensagem Interna"
                     >
                       <MessageSquare className="w-4 h-4" />
@@ -865,31 +865,31 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="flex items-center space-x-3">
                     <h3 className="text-sm font-medium text-gray-900 dark:text-white">{rule.name}</h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      rule.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-800'
+                      rule.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-800 dark:text-white'
                     }`}>
                       {rule.status === 'active' ? 'Ativo' : 'Inativo'}
                     </span>
                   </div>
-                  <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+                  <div className="mt-1 text-sm text-gray-600 dark:text-white">
                     <span className="font-medium">Gatilho:</span> {rule.trigger}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="text-sm text-gray-600 dark:text-white">
                     <span className="font-medium">Ação:</span> {rule.action}
                   </div>
-                  <div className="text-xs text-gray-500 mt-2">
+                  <div className="text-xs text-gray-500 dark:text-white mt-2">
                     Última execução: {rule.lastRun}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => showNotification('Regra editada!', 'info')}
-                    className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+                    className="text-blue-600 hover:text-blue-900 dark:text-white p-1 rounded hover:bg-blue-50 transition-colors"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => showNotification('Regra removida!', 'error')}
-                    className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+                    className="text-red-600 hover:text-red-900 dark:text-white p-1 rounded hover:bg-red-50 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -913,7 +913,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </button>
         </div>
         
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        <p className="text-sm text-gray-600 dark:text-white mb-4">
           Selecione uma proposta para verificar se está completa e enviar para automação manualmente.
         </p>
         
@@ -923,33 +923,33 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white">{proposal.client}</h3>
-                  <p className="text-xs text-gray-500">{proposal.id}</p>
+                  <p className="text-xs text-gray-500 dark:text-white">{proposal.id}</p>
                 </div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => showNotification(`Verificando formulário de ${proposal.client}...`, 'info')}
-                    className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-full transition-colors"
+                    className="p-2 text-blue-600 hover:text-blue-900 dark:text-white hover:bg-blue-50 rounded-full transition-colors"
                     title="Verificar formulário completo"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => showNotification(`Editando proposta de ${proposal.client}...`, 'info')}
-                    className="p-2 text-amber-600 hover:text-amber-900 hover:bg-amber-50 rounded-full transition-colors"
+                    className="p-2 text-amber-600 hover:text-amber-900 dark:text-white hover:bg-amber-50 rounded-full transition-colors"
                     title="Editar proposta"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => window.open(`mailto:${proposal.vendor.toLowerCase().replace(/\s/g, '.')}@abmix.com.br?subject=Proposta ${proposal.id}`)}
-                    className="p-2 text-purple-600 hover:text-purple-900 hover:bg-purple-50 rounded-full transition-colors"
+                    className="p-2 text-purple-600 hover:text-purple-900 dark:text-white hover:bg-purple-50 rounded-full transition-colors"
                     title="Enviar email para vendedor"
                   >
                     <Mail className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => window.open(`https://wa.me/55${proposal.vendor.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Sobre a proposta ${proposal.id} do cliente ${proposal.client}...`)}`)}
-                    className="p-2 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-full transition-colors"
+                    className="p-2 text-green-600 hover:text-green-900 dark:text-white hover:bg-green-50 rounded-full transition-colors"
                     title="Enviar WhatsApp para vendedor"
                   >
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -958,7 +958,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   </button>
                   <button
                     onClick={() => sendToAutomation(proposal.id)}
-                    className="p-2 text-purple-600 hover:text-purple-900 hover:bg-purple-50 rounded-full transition-colors"
+                    className="p-2 text-purple-600 hover:text-purple-900 dark:text-white hover:bg-purple-50 rounded-full transition-colors"
                     title="Enviar para automação"
                   >
                     <Zap className="w-4 h-4" />
@@ -972,13 +972,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     style={{ width: '100%' }}
                   ></div>
                 </div>
-                <span className="text-xs text-gray-600 dark:text-gray-300">Completo</span>
+                <span className="text-xs text-gray-600 dark:text-white">Completo</span>
               </div>
             </div>
           ))}
           
           {proposals.filter(p => p.status === 'validated').length === 0 && (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-white">
               Nenhuma proposta validada disponível para automação
             </div>
           )}
@@ -1009,7 +1009,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -1031,18 +1031,18 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600 dark:text-gray-300">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-white">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1056,7 +1056,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard Implantação</h1>
-          <p className="text-gray-600 dark:text-gray-300">Valide propostas, configure automações e gerencie integrações</p>
+          <p className="text-gray-600 dark:text-white">Valide propostas, configure automações e gerencie integrações</p>
         </div>
 
         <div className="space-y-6">
@@ -1068,7 +1068,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 <div key={stat.name} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">{stat.name}</p>
+                      <p className="text-sm font-medium text-gray-600 dark:text-white">{stat.name}</p>
                       <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                     </div>
                     <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
@@ -1078,7 +1078,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="mt-4 flex items-center">
                     <span className={`text-sm font-medium ${
                       stat.changeType === 'positive' ? 'text-green-600' : 
-                      stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600 dark:text-gray-300'
+                      stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600 dark:text-white'
                     }`}>
                       {stat.change}
                     </span>
@@ -1090,7 +1090,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
           {/* Quick Actions */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5 mb-6">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Ações Rápidas</h3>
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-white mb-4">Ações Rápidas</h3>
             <div className="flex space-x-4">
               <button
                 onClick={() => setShowProposalSelector(true)}
@@ -1128,7 +1128,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                         activeTab === tab.id
                           ? 'border-teal-500 text-teal-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
+                          : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-2" />
@@ -1150,7 +1150,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     </h2>
                     <button
                       onClick={handleBackFromEditor}
-                      className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 transition-colors"
+                      className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white transition-colors"
                     >
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       Voltar para Lista
@@ -1166,9 +1166,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               )}
               {activeTab === 'editor' && !editingProposalId && (
                 <div className="text-center py-12">
-                  <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <FileText className="w-16 h-16 text-gray-300 dark:text-white mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma proposta selecionada</h3>
-                  <p className="text-gray-600 dark:text-gray-300">Use o botão "Selecionar Proposta" para escolher uma proposta para edição.</p>
+                  <p className="text-gray-600 dark:text-white">Use o botão "Selecionar Proposta" para escolher uma proposta para edição.</p>
                 </div>
               )}
             </div>
@@ -1187,7 +1187,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 hover:text-gray-600 dark:text-gray-300"
+                  className="text-gray-400 dark:text-white hover:text-gray-600 dark:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1201,23 +1201,23 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Cliente:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Cliente:</span>
                         <span className="ml-2">{proposal.client}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Vendedor:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Vendedor:</span>
                         <span className="ml-2">{proposal.vendor}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Plano:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Plano:</span>
                         <span className="ml-2">{proposal.plan}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Valor:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Valor:</span>
                         <span className="ml-2">{proposal.value}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Prioridade:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Prioridade:</span>
                         <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                           proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
                           proposal.priority === 'medium' ? 'bg-amber-100 text-amber-700' :
@@ -1228,13 +1228,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         </span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Previsão:</span>
+                        <span className="font-medium text-gray-700 dark:text-white">Previsão:</span>
                         <span className="ml-2">{new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}</span>
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                         Observações de Implantação
                       </label>
                       <textarea
@@ -1249,7 +1249,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="flex justify-end space-x-4">
                       <button
                         onClick={() => setSelectedProposal(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 rounded-md hover:bg-gray-200"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200"
                       >
                         Cancelar
                       </button>
@@ -1308,7 +1308,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente Implantação</h3>
-                  <p className="text-xs text-teal-100">Online agora</p>
+                  <p className="text-xs text-teal-100 dark:text-white">Online agora</p>
                 </div>
               </div>
               <button
@@ -1324,12 +1324,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
+                      ? 'bg-gray-100 text-gray-800 dark:text-white' 
                       : 'bg-gradient-to-r from-teal-600 to-teal-700 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>
                     <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-teal-100'
+                      message.isBot ? 'text-gray-500 dark:text-white' : 'text-teal-100'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>

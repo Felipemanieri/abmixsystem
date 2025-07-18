@@ -251,7 +251,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       case 'rejected':
         return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -273,16 +273,16 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Minhas Cotações</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+          <p className="text-sm text-gray-600 dark:text-white mt-1">
             Visualize todas as cotações criadas pelo seu vendedor
           </p>
         </div>
         
         {cotacoes.length === 0 ? (
           <div className="p-8 text-center">
-            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <FileText className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma cotação disponível</h3>
-            <p className="text-gray-600 dark:text-gray-300">Aguarde seu vendedor criar suas primeiras cotações.</p>
+            <p className="text-gray-600 dark:text-white">Aguarde seu vendedor criar suas primeiras cotações.</p>
           </div>
         ) : (
           <div className="space-y-4 p-6">
@@ -290,40 +290,40 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Envio</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Data de Envio</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Operadora</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Operadora</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1 font-medium">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo do Plano</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Tipo do Plano</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1">{cotacao.tipoplano}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de Vidas</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Número de Vidas</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1 font-medium">{cotacao.numeroVidas}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor</label>
-                    <p className="text-lg font-bold text-green-600 mt-1">R$ {cotacao.valor}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Valor</label>
+                    <p className="text-lg font-bold text-green-600 dark:text-white mt-1">R$ {cotacao.valor}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Validade da Cotação</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Validade da Cotação</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1">
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Arquivos Anexados</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Arquivos Anexados</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:text-white">
                         <FileText className="w-3 h-3 mr-1" />
                         {cotacao.arquivos.length} arquivo(s)
                       </span>
@@ -425,11 +425,11 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="md:w-1/3">
             <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg text-center">
               <div className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <User className="w-12 h-12 text-teal-600" />
+                <User className="w-12 h-12 text-teal-600 dark:text-white" />
               </div>
               <h3 className="font-medium text-gray-900 dark:text-white mb-1">{user.name}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{user.email}</p>
-              <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+              <p className="text-sm text-gray-600 dark:text-white mb-4">{user.email}</p>
+              <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 dark:text-white rounded-lg hover:bg-gray-300 transition-colors text-sm">
                 Alterar Foto
               </button>
             </div>
@@ -439,7 +439,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             <form className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Nome Completo</label>
                   <input
                     type="text"
                     defaultValue={user.name}
@@ -448,7 +448,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Email</label>
                   <input
                     type="email"
                     defaultValue={user.email}
@@ -457,7 +457,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Telefone</label>
                   <input
                     type="tel"
                     defaultValue="(11) 99999-9999"
@@ -466,7 +466,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">CPF</label>
                   <input
                     type="text"
                     defaultValue="123.456.789-00"
@@ -476,7 +476,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Endereço</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-1">Endereço</label>
                 <input
                   type="text"
                   defaultValue="Rua das Flores, 123 - Centro, São Paulo - SP"
@@ -504,7 +504,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-gray-900 dark:text-white">Notificações por Email</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Receba atualizações sobre suas propostas</p>
+              <p className="text-sm text-gray-600 dark:text-white">Receba atualizações sobre suas propostas</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-email" className="sr-only" defaultChecked />
@@ -516,7 +516,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-gray-900 dark:text-white">Notificações por WhatsApp</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Receba mensagens sobre status de propostas</p>
+              <p className="text-sm text-gray-600 dark:text-white">Receba mensagens sobre status de propostas</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-whatsapp" className="sr-only" defaultChecked />
@@ -528,7 +528,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-gray-900 dark:text-white">Lembretes de Documentos</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Receba lembretes sobre documentos pendentes</p>
+              <p className="text-sm text-gray-600 dark:text-white">Receba lembretes sobre documentos pendentes</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-reminders" className="sr-only" defaultChecked />
@@ -565,7 +565,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -587,18 +587,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600 dark:text-gray-300">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-white">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -612,7 +612,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Área do Cliente</h1>
-          <p className="text-gray-600 dark:text-gray-300">Gerencie suas propostas e documentos</p>
+          <p className="text-gray-600 dark:text-white">Gerencie suas propostas e documentos</p>
         </div>
 
         {/* Navigation Tabs */}
@@ -624,7 +624,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'cotacoes'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <FileText className="w-4 h-4 mr-2" />
@@ -636,7 +636,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'complete-proposal'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <Check className="w-4 h-4 mr-2" />
@@ -647,7 +647,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'profile'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <User className="w-4 h-4 mr-2" />
@@ -703,7 +703,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 </div>
                 <div className="ml-3">
                   <h3 className="font-bold">Assistente do Cliente</h3>
-                  <p className="text-xs text-blue-100">Online agora</p>
+                  <p className="text-xs text-blue-100 dark:text-white">Online agora</p>
                 </div>
               </div>
               <button
@@ -719,12 +719,12 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
-                      ? 'bg-gray-100 text-gray-800' 
+                      ? 'bg-gray-100 text-gray-800 dark:text-white' 
                       : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>
                     <p className={`text-xs mt-1 ${
-                      message.isBot ? 'text-gray-500' : 'text-blue-100'
+                      message.isBot ? 'text-gray-500 dark:text-white' : 'text-blue-100'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
