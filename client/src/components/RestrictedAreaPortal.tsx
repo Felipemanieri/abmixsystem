@@ -53,8 +53,10 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
-  Copy,
+  Archive,
   MessageSquare,
+  Webhook,
+  Copy,
   Bell
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
@@ -1502,19 +1504,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Automações</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
                 <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Google Drive Automático</h4>
+                <h4 className="font-medium text-gray-900 dark:text-white">Google Drive Principal</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
-                Envio automático de propostas e documentos para pastas organizadas no Google Drive
+                Envio automático de propostas para pasta principal - Propostas/Ativas
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('drive')}
+                  onClick={() => configureAutomation('drive1')}
                   className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
@@ -1524,16 +1526,54 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Globe className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Sync Google Sheets</h4>
+                <HardDrive className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Google Drive Backup</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
-                Sincronização automática com planilha principal do sistema
+                Backup automático de documentos - Pasta Backup/Diario
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('sheets')}
+                  onClick={() => configureAutomation('drive2')}
+                  className="px-3 py-1 text-xs bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <Archive className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Google Drive Arquivo</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Arquivamento de propostas finalizadas - Pasta Arquivo/Historico
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ Manual</span>
+                <button 
+                  onClick={() => configureAutomation('drive3')}
+                  className="px-3 py-1 text-xs bg-purple-600 text-white dark:bg-purple-600 dark:text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <FileSpreadsheet className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Planilha Operacional</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Sincronização tempo real - Aba Propostas_Ativas
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
+                <button 
+                  onClick={() => configureAutomation('sheet1')}
                   className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
@@ -1543,17 +1583,131 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Planilha Financeiro</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Sincronização a cada hora - Aba Financeiro_Consolidado
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
+                <button 
+                  onClick={() => configureAutomation('sheet2')}
+                  className="px-3 py-1 text-xs bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Planilha Relatórios</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Sincronização diária - Aba Relatorios_Gerenciais
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">🔄 Diário</span>
+                <button 
+                  onClick={() => configureAutomation('sheet3')}
+                  className="px-3 py-1 text-xs bg-purple-600 text-white dark:bg-purple-600 dark:text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Google Forms</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Coleta automática de respostas e integração com sistema
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
+                <button 
+                  onClick={() => configureAutomation('forms')}
+                  className="px-3 py-1 text-xs bg-indigo-600 text-white dark:bg-indigo-600 dark:text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <FileCheck className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Google Docs</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-white mb-4">
+                Geração automática de documentos e contratos
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ Manual</span>
+                <button 
+                  onClick={() => configureAutomation('docs')}
+                  className="px-3 py-1 text-xs bg-orange-600 text-white dark:bg-orange-600 dark:text-white rounded-lg hover:bg-orange-700 dark:hover:bg-orange-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <Calendar className="w-5 h-5 text-cyan-600 dark:text-cyan-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Tarefas Automáticas</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Agendamento e execução de tarefas programadas
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
+                <button 
+                  onClick={() => configureAutomation('tasks')}
+                  className="px-3 py-1 text-xs bg-cyan-600 text-white dark:bg-cyan-600 dark:text-white rounded-lg hover:bg-cyan-700 dark:hover:bg-cyan-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <Webhook className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Integrações Externas</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Webhooks, Make.com e APIs de terceiros
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
+                <button 
+                  onClick={() => configureAutomation('external')}
+                  className="px-3 py-1 text-xs bg-red-600 text-white dark:bg-red-600 dark:text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-500 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+              <div className="flex items-center mb-4">
+                <MessageSquare className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Notificações WhatsApp</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Envio de notificações automáticas para vendedores e clientes
+                Envio automático para vendedores e clientes
               </p>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('whatsapp')}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+                  className="px-3 py-1 text-xs bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -1562,7 +1716,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Cloud className="w-5 h-5 text-orange-600 dark:text-white mr-2" />
+                <Cloud className="w-5 h-5 text-gray-600 dark:text-gray-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Backup Automático</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
@@ -1572,7 +1726,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('backup')}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+                  className="px-3 py-1 text-xs bg-gray-600 text-white dark:bg-gray-600 dark:text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -1581,278 +1735,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
         </div>
 
-        {/* Configuração Múltiplas Instâncias Google */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Globe className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Múltiplas Instâncias Google</h3>
-          </div>
 
-          {/* Configuração 3 Google Drives */}
-          <div className="mb-8">
-            <h4 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <HardDrive className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-              Configuração dos 3 Google Drives
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Drive 1 - Principal */}
-              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-blue-800 dark:text-blue-200">Drive 1 - Principal</h5>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">URL do Drive</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://drive.google.com/drive/folders/..."
-                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Pasta Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Propostas/Ativas"
-                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Automação</label>
-                    <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="realtime">Tempo Real</option>
-                      <option value="manual">Manual</option>
-                      <option value="scheduled">Agendado</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
-                    Configurar Drive 1
-                  </button>
-                </div>
-              </div>
-
-              {/* Drive 2 - Backup */}
-              <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-green-800 dark:text-green-200">Drive 2 - Backup</h5>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">URL do Drive</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://drive.google.com/drive/folders/..."
-                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Pasta Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Backup/Diario"
-                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Automação</label>
-                    <select className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="daily">Diário</option>
-                      <option value="hourly">A cada hora</option>
-                      <option value="manual">Manual</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
-                    Configurar Drive 2
-                  </button>
-                </div>
-              </div>
-
-              {/* Drive 3 - Arquivo */}
-              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-purple-800 dark:text-purple-200">Drive 3 - Arquivo</h5>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">URL do Drive</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://drive.google.com/drive/folders/..."
-                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Pasta Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Arquivo/Historico"
-                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Automação</label>
-                    <select className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="monthly">Mensal</option>
-                      <option value="weekly">Semanal</option>
-                      <option value="manual">Manual</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors">
-                    Configurar Drive 3
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Configuração 3 Google Sheets */}
-          <div>
-            <h4 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-              <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-              Configuração das 3 Google Sheets
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Sheet 1 - Operacional */}
-              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-blue-800 dark:text-blue-200">Sheet 1 - Operacional</h5>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">URL da Planilha</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://docs.google.com/spreadsheets/d/..."
-                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Aba Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Propostas_Ativas"
-                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Sincronização</label>
-                    <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="realtime">Tempo Real</option>
-                      <option value="5min">5 minutos</option>
-                      <option value="manual">Manual</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
-                    Configurar Sheet 1
-                  </button>
-                </div>
-              </div>
-
-              {/* Sheet 2 - Financeiro */}
-              <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-green-800 dark:text-green-200">Sheet 2 - Financeiro</h5>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">URL da Planilha</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://docs.google.com/spreadsheets/d/..."
-                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Aba Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Financeiro_Consolidado"
-                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Sincronização</label>
-                    <select className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="hourly">A cada hora</option>
-                      <option value="daily">Diário</option>
-                      <option value="manual">Manual</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
-                    Configurar Sheet 2
-                  </button>
-                </div>
-              </div>
-
-              {/* Sheet 3 - Relatórios */}
-              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
-                <div className="flex items-center justify-between mb-3">
-                  <h5 className="font-medium text-purple-800 dark:text-purple-200">Sheet 3 - Relatórios</h5>
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">URL da Planilha</label>
-                    <input 
-                      type="text" 
-                      placeholder="https://docs.google.com/spreadsheets/d/..."
-                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Aba Destino</label>
-                    <input 
-                      type="text" 
-                      placeholder="Relatorios_Gerenciais"
-                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Sincronização</label>
-                    <select className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                      <option value="daily">Diário</option>
-                      <option value="weekly">Semanal</option>
-                      <option value="manual">Manual</option>
-                    </select>
-                  </div>
-                  <button className="w-full px-3 py-2 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors">
-                    Configurar Sheet 3
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Botões de Ação Global */}
-          <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t border-gray-200 dark:border-gray-600">
-            <button 
-              onClick={() => alert('Testando todas as conexões...')}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Testar Todas Conexões
-            </button>
-            <button 
-              onClick={() => alert('Sincronizando todas as instâncias...')}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Sincronizar Tudo
-            </button>
-            <button 
-              onClick={() => alert('Configurações salvas!')}
-              className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              Salvar Configurações
-            </button>
-          </div>
-        </div>
       </div>
     );
   }
