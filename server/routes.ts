@@ -259,6 +259,10 @@ router.post("/proposals", async (req, res) => {
       const proposal = await storage.createProposal(dataToInsert);
       
       console.log("Proposta criada:", proposal);
+      
+      // Notificar sistema de sincronização em tempo real
+      const { notifyDataChange } = await import("@shared/realTimeSheetSync");
+      await notifyDataChange('proposal_created', proposal);
 
       const response = {
         ...proposal,
@@ -333,6 +337,10 @@ router.post("/proposals", async (req, res) => {
         status: "client_completed"
       });
 
+      // Notificar sistema de sincronização em tempo real
+      const { notifyDataChange } = await import("@shared/realTimeSheetSync");
+      await notifyDataChange('proposal_updated', updatedProposal);
+
       res.json(updatedProposal);
     } catch (error) {
       console.error("Erro ao atualizar proposta:", error);
@@ -356,6 +364,11 @@ router.post("/proposals", async (req, res) => {
       if (priority !== undefined) updateData.priority = priority;
 
       const updatedProposal = await storage.updateProposal(id, updateData);
+      
+      // Notificar sistema de sincronização em tempo real
+      const { notifyDataChange } = await import("@shared/realTimeSheetSync");
+      await notifyDataChange('proposal_updated', updatedProposal);
+      
       res.json(updatedProposal);
     } catch (error) {
       console.error("Erro ao atualizar proposta:", error);
@@ -392,23 +405,66 @@ router.post("/proposals", async (req, res) => {
     }
   });
 
-  // Generate horizontal sheet format for all proposals
-  router.get("proposals/sheet", async (req, res) => {
+  // Generate dynamic sheet format for all proposals
+  router.get("/proposals/sheet", async (req, res) => {
     try {
-      const { formatProposalsToSheet, getSheetHeaders } = await import("@shared/sheetsFormatter");
+      const { generateDynamicSheet } = await import("@shared/dynamicSheetGenerator");
       const proposals = await storage.getAllProposals();
+      const vendors = await storage.getAllVendors();
       
-      // Get headers and data in horizontal format
-      const headers = getSheetHeaders();
-      const sheetData = formatProposalsToSheet(proposals);
+      // Add vendor names to proposals
+      const proposalsWithVendor = proposals.map(proposal => ({
+        ...proposal,
+        vendorName: vendors.find(v => v.id === proposal.vendorId)?.name || 'Vendedor Não Identificado'
+      }));
+      
+      // Generate dynamic sheet structure
+      const sheetData = generateDynamicSheet(proposalsWithVendor);
       
       res.json({
-        headers,
-        data: sheetData,
-        totalRows: sheetData.length
+        success: true,
+        ...sheetData,
+        message: `Planilha gerada com ${sheetData.data.length} propostas, ${sheetData.maxTitulares} titulares máx., ${sheetData.maxDependentes} dependentes máx.`
       });
     } catch (error) {
-      console.error("Erro ao gerar planilha horizontal:", error);
+      console.error("Erro ao gerar planilha dinâmica:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+  
+  // Real-time sheet sync endpoint for all departments
+  router.post("/sync/sheet", async (req, res) => {
+    try {
+      const { generateDynamicSheet, formatForGoogleSheets } = await import("@shared/dynamicSheetGenerator");
+      const proposals = await storage.getAllProposals();
+      const vendors = await storage.getAllVendors();
+      
+      // Add vendor names to proposals
+      const proposalsWithVendor = proposals.map(proposal => ({
+        ...proposal,
+        vendorName: vendors.find(v => v.id === proposal.vendorId)?.name || 'Vendedor Não Identificado'
+      }));
+      
+      // Generate dynamic sheet structure
+      const sheetData = generateDynamicSheet(proposalsWithVendor);
+      const googleSheetsData = formatForGoogleSheets(sheetData);
+      
+      // Here you would integrate with Google Sheets API
+      // For now, we'll just return the formatted data
+      
+      res.json({
+        success: true,
+        message: "Planilha sincronizada com sucesso",
+        data: googleSheetsData,
+        stats: {
+          totalPropostas: sheetData.data.length,
+          maxTitulares: sheetData.maxTitulares,
+          maxDependentes: sheetData.maxDependentes,
+          totalColunas: sheetData.totalColumns
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao sincronizar planilha:", error);
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });

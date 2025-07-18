@@ -1,10 +1,65 @@
-import { useState } from 'react';
-import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search, Database } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { generateDynamicSheet, type DynamicSheetData } from '@shared/dynamicSheetGenerator';
+import { useRealTimeSheetSync } from '@shared/realTimeSheetSync';
 
 export default function PlanilhaViewer() {
   const [autoUpdate, setAutoUpdate] = useState(true);
   const [filterStatus, setFilterStatus] = useState('todos');
   const [searchTerm, setSearchTerm] = useState('');
+  const [dynamicSheetData, setDynamicSheetData] = useState<DynamicSheetData | null>(null);
+  
+  // Sistema de sincronização em tempo real
+  const { triggerSync, getSyncStatus, registerCallback, unregisterCallback } = useRealTimeSheetSync();
+  
+  // BUSCAR DADOS REAIS DAS PROPOSTAS EM TEMPO REAL
+  const { data: proposals = [], isLoading } = useQuery({
+    queryKey: ['/api/proposals'],
+    refetchInterval: 1000, // Atualização em tempo real a cada 1 segundo
+    refetchIntervalInBackground: true
+  });
+  
+  const { data: vendors = [] } = useQuery({
+    queryKey: ['/api/vendors'],
+    refetchInterval: 5000 // Atualizar vendedores a cada 5 segundos
+  });
+  
+  // GERAR PLANILHA DINÂMICA AUTOMATICAMENTE COM SINCRONIZAÇÃO
+  useEffect(() => {
+    if (proposals.length > 0) {
+      // Adicionar nome do vendedor às propostas
+      const proposalsWithVendor = proposals.map((proposal: any) => ({
+        ...proposal,
+        vendorName: vendors.find((v: any) => v.id === proposal.vendorId)?.name || 'Vendedor Não Identificado'
+      }));
+      
+      // Gerar estrutura dinâmica
+      const sheetData = generateDynamicSheet(proposalsWithVendor);
+      setDynamicSheetData(sheetData);
+      
+      console.log('🔄 Planilha dinâmica atualizada:', {
+        totalPropostas: proposals.length,
+        maxTitulares: sheetData.maxTitulares,
+        maxDependentes: sheetData.maxDependentes,
+        totalColunas: sheetData.totalColumns
+      });
+    }
+  }, [proposals, vendors]);
+
+  // Registrar callback para sincronização automática
+  useEffect(() => {
+    const syncCallback = () => {
+      // Forçar atualização dos dados
+      window.location.reload();
+    };
+    
+    registerCallback(syncCallback);
+    
+    return () => {
+      unregisterCallback(syncCallback);
+    };
+  }, [registerCallback, unregisterCallback]);
 
   // Dados simulados da planilha principal - ESTRUTURA HORIZONTAL FIXA
   const planilhaData = [
@@ -232,56 +287,25 @@ export default function PlanilhaViewer() {
   };
 
   const exportCSV = () => {
-    const headers = [
-      // CAMPOS FIXOS
-      'ID', 'LINK_CLIENTE', 'EMPRESA', 'CNPJ', 'VENDEDOR', 'PLANO', 'VALOR', 'STATUS',
-      // INFORMAÇÕES DO CONTRATO
-      'ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 'INICIO_VIGENCIA', 'PERIODO_MINIMO',
-      // INFORMAÇÕES INTERNAS
-      'REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE',
-      // TITULARES FIXOS (3)
-      'TITULAR1_NOME', 'TITULAR1_CPF', 'TITULAR1_RG', 'TITULAR1_EMAIL', 'TITULAR1_TELEFONE',
-      'TITULAR2_NOME', 'TITULAR2_CPF', 'TITULAR2_RG', 'TITULAR2_EMAIL', 'TITULAR2_TELEFONE',
-      'TITULAR3_NOME', 'TITULAR3_CPF', 'TITULAR3_RG', 'TITULAR3_EMAIL', 'TITULAR3_TELEFONE',
-      // DEPENDENTES FIXOS (5)
-      'DEPENDENTE1_NOME', 'DEPENDENTE1_CPF', 'DEPENDENTE1_PARENTESCO',
-      'DEPENDENTE2_NOME', 'DEPENDENTE2_CPF', 'DEPENDENTE2_PARENTESCO',
-      'DEPENDENTE3_NOME', 'DEPENDENTE3_CPF', 'DEPENDENTE3_PARENTESCO',
-      'DEPENDENTE4_NOME', 'DEPENDENTE4_CPF', 'DEPENDENTE4_PARENTESCO',
-      'DEPENDENTE5_NOME', 'DEPENDENTE5_CPF', 'DEPENDENTE5_PARENTESCO',
-      // EXTRAS
-      'ANEXOS', 'DATA_CONTRATO'
-    ];
+    if (!dynamicSheetData) {
+      console.error('Dados da planilha não disponíveis');
+      return;
+    }
     
     const csvContent = [
-      headers.join(','),
-      ...filteredData.map(item => [
-        // CAMPOS FIXOS
-        item.id, `"${item.link_cliente}"`, `"${item.empresa}"`, item.cnpj, `"${item.vendedor}"`, `"${item.plano}"`, item.valor, item.status,
-        // INFORMAÇÕES DO CONTRATO
-        item.odonto_conjugado, item.livre_adesao, item.compulsorio, item.aproveitamento_congenere, item.inicio_vigencia, item.periodo_minimo,
-        // INFORMAÇÕES INTERNAS
-        item.reuniao_realizada, `"${item.nome_reuniao}"`, item.venda_dupla, `"${item.vendedor_dupla}"`, item.desconto_percent, item.origem_venda, item.autorizador_desconto, `"${item.obs_financeiras}"`, `"${item.obs_cliente}"`,
-        // TITULARES FIXOS
-        `"${item.titular1_nome}"`, item.titular1_cpf, item.titular1_rg, `"${item.titular1_email}"`, item.titular1_telefone,
-        `"${item.titular2_nome}"`, item.titular2_cpf, item.titular2_rg, `"${item.titular2_email}"`, item.titular2_telefone,
-        `"${item.titular3_nome}"`, item.titular3_cpf, item.titular3_rg, `"${item.titular3_email}"`, item.titular3_telefone,
-        // DEPENDENTES FIXOS
-        `"${item.dependente1_nome}"`, item.dependente1_cpf, item.dependente1_parentesco,
-        `"${item.dependente2_nome}"`, item.dependente2_cpf, item.dependente2_parentesco,
-        `"${item.dependente3_nome}"`, item.dependente3_cpf, item.dependente3_parentesco,
-        `"${item.dependente4_nome}"`, item.dependente4_cpf, item.dependente4_parentesco,
-        `"${item.dependente5_nome}"`, item.dependente5_cpf, item.dependente5_parentesco,
-        // EXTRAS
-        item.anexos, item.dataContrato
-      ].join(','))
+      dynamicSheetData.headers.join(','),
+      ...dynamicSheetData.data.map(row => 
+        row.map(cell => 
+          typeof cell === 'string' && cell.includes(',') ? `"${cell}"` : cell
+        ).join(',')
+      )
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `planilha_horizontal_abmix_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `planilha_dinamica_abmix_${new Date().toISOString().slice(0, 10)}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -353,169 +377,178 @@ export default function PlanilhaViewer() {
           </div>
         </div>
 
-        {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {/* Estatísticas Dinâmicas */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{planilhaData.length}</div>
+            <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{proposals.length}</div>
             <div className="text-sm text-blue-600 dark:text-blue-400">Total Propostas</div>
           </div>
           <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-green-900 dark:text-green-200">
-              {planilhaData.filter(p => p.status === 'IMPLANTADO').length}
+              {dynamicSheetData?.maxTitulares || 0}
             </div>
-            <div className="text-sm text-green-600 dark:text-green-400">Implantadas</div>
-          </div>
-          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">
-              {planilhaData.filter(p => p.status === 'ANALISAR').length}
-            </div>
-            <div className="text-sm text-yellow-600 dark:text-yellow-400">Em Análise</div>
+            <div className="text-sm text-green-600 dark:text-green-400">Máx. Titulares</div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
             <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">
-              {planilhaData.reduce((acc, p) => acc + p.anexos, 0)}
+              {dynamicSheetData?.maxDependentes || 0}
             </div>
-            <div className="text-sm text-purple-600 dark:text-purple-400">Total Anexos</div>
+            <div className="text-sm text-purple-600 dark:text-purple-400">Máx. Dependentes</div>
+          </div>
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">
+              {dynamicSheetData?.totalColumns || 0}
+            </div>
+            <div className="text-sm text-yellow-600 dark:text-yellow-400">Total Colunas</div>
+          </div>
+          <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-red-900 dark:text-red-200">
+              {dynamicSheetData?.lastUpdated ? dynamicSheetData.lastUpdated.toLocaleTimeString('pt-BR') : '--:--'}
+            </div>
+            <div className="text-sm text-red-600 dark:text-red-400">Última Atualização</div>
           </div>
         </div>
 
-        {/* TABELA HORIZONTAL - ESTRUTURA FIXA COMPLETA */}
+        {/* TABELA HORIZONTAL - ESTRUTURA DINÂMICA AUTOMÁTICA */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-6">
           <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-              📊 Planilha Horizontal - Estrutura Fixa
-            </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              ✅ REGRA 1: Uma empresa = uma linha horizontal | ✅ REGRA 2: Colunas fixas para 3 titulares e 5 dependentes | ✅ REGRA 3: Campos vazios permitidos
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
+                  📊 Planilha Horizontal - Estrutura Dinâmica Automática
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  ✅ REGRA 1: Uma empresa = uma linha horizontal | ✅ REGRA 2: Colunas criadas automaticamente | ✅ REGRA 3: Campos vazios permitidos | ✅ REGRA 4: Tempo real
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center text-sm text-green-600 dark:text-green-400">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                  Tempo Real
+                </div>
+                <button
+                  onClick={() => triggerSync()}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 flex items-center"
+                >
+                  <RefreshCw className="w-4 h-4 mr-1" />
+                  Sincronizar
+                </button>
+              </div>
+            </div>
           </div>
           
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  {/* CAMPOS FIXOS */}
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">ID</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">LINK_CLIENTE</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">EMPRESA</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">CNPJ</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">VENDEDOR</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">PLANO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">VALOR</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">STATUS</th>
-                  
-                  {/* INFORMAÇÕES INTERNAS */}
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">REUNIÃO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">NOME_REUNIÃO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">VENDA_DUPLA</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">VENDEDOR_DUPLA</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">DESCONTO%</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">ORIGEM_VENDA</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-blue-600 dark:text-blue-400">AUTORIZADOR</th>
-                  
-                  {/* TITULARES FIXOS (3) */}
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR1_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR1_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR1_EMAIL</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR2_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR2_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR2_EMAIL</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR3_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR3_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-green-600 dark:text-green-400">TITULAR3_EMAIL</th>
-                  
-                  {/* DEPENDENTES FIXOS (5) */}
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE1_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE1_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE1_PARENTESCO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE2_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE2_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE2_PARENTESCO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE3_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE3_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE3_PARENTESCO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE4_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE4_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE4_PARENTESCO</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE5_NOME</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE5_CPF</th>
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-purple-600 dark:text-purple-400">DEPENDENTE5_PARENTESCO</th>
-                  
-                  <th className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium text-gray-900 dark:text-white">ANEXOS</th>
-                </tr>
-              </thead>
-              
-              <tbody>
-                {filteredData.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    {/* CAMPOS FIXOS */}
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 font-medium text-blue-600 dark:text-blue-400">{item.id}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-gray-600 dark:text-gray-300 truncate max-w-32" title={item.link_cliente}>
-                      {item.link_cliente.length > 20 ? item.link_cliente.substring(0, 20) + '...' : item.link_cliente}
-                    </td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-gray-900 dark:text-white truncate max-w-32" title={item.empresa}>
-                      {item.empresa.length > 20 ? item.empresa.substring(0, 20) + '...' : item.empresa}
-                    </td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-gray-600 dark:text-gray-300">{item.cnpj}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-gray-900 dark:text-white">{item.vendedor}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-gray-900 dark:text-white">{item.plano}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400 font-medium">{item.valor}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${statusColors[item.status] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
-                        {item.status}
-                      </span>
-                    </td>
-                    
-                    {/* INFORMAÇÕES INTERNAS */}
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.reuniao_realizada}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.nome_reuniao || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.venda_dupla}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.vendedor_dupla || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.desconto_percent}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.origem_venda}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-blue-600 dark:text-blue-400">{item.autorizador_desconto}</td>
-                    
-                    {/* TITULARES FIXOS (3) */}
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular1_nome}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular1_cpf}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular1_email}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular2_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular2_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular2_email || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular3_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular3_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-green-600 dark:text-green-400">{item.titular3_email || '-'}</td>
-                    
-                    {/* DEPENDENTES FIXOS (5) */}
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente1_nome}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente1_cpf}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente1_parentesco}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente2_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente2_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente2_parentesco || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente3_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente3_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente3_parentesco || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente4_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente4_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente4_parentesco || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente5_nome || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente5_cpf || '-'}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-purple-600 dark:text-purple-400">{item.dependente5_parentesco || '-'}</td>
-                    
-                    <td className="border border-gray-300 dark:border-gray-600 px-2 py-2 text-center text-gray-600 dark:text-gray-300">{item.anexos}</td>
+            {isLoading ? (
+              <div className="flex items-center justify-center p-8">
+                <RefreshCw className="w-6 h-6 animate-spin text-blue-600 dark:text-blue-400 mr-2" />
+                <span className="text-gray-600 dark:text-gray-400">Carregando dados em tempo real...</span>
+              </div>
+            ) : dynamicSheetData ? (
+              <table className="w-full border-collapse text-xs">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    {dynamicSheetData.headers.map((header, index) => {
+                      let colorClass = 'text-gray-900 dark:text-white';
+                      
+                      // Cores por tipo de campo
+                      if (header.includes('TITULAR')) {
+                        colorClass = 'text-green-600 dark:text-green-400';
+                      } else if (header.includes('DEPENDENTE')) {
+                        colorClass = 'text-purple-600 dark:text-purple-400';
+                      } else if (['REUNIAO', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE'].includes(header)) {
+                        colorClass = 'text-blue-600 dark:text-blue-400';
+                      } else if (['ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 'INICIO_VIGENCIA', 'PERIODO_MINIMO'].includes(header)) {
+                        colorClass = 'text-orange-600 dark:text-orange-400';
+                      }
+                      
+                      return (
+                        <th
+                          key={index}
+                          className={`border border-gray-300 dark:border-gray-600 px-2 py-2 text-left font-medium ${colorClass}`}
+                        >
+                          {header}
+                        </th>
+                      );
+                    })}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                
+                <tbody>
+                  {dynamicSheetData.data.map((row, rowIndex) => (
+                    <tr key={rowIndex} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                      {row.map((cell, cellIndex) => {
+                        let colorClass = 'text-gray-900 dark:text-white';
+                        const header = dynamicSheetData.headers[cellIndex];
+                        
+                        // Cores por tipo de campo
+                        if (header === 'ID') {
+                          colorClass = 'text-blue-600 dark:text-blue-400 font-medium';
+                        } else if (header === 'VALOR') {
+                          colorClass = 'text-green-600 dark:text-green-400 font-medium';
+                        } else if (header.includes('TITULAR')) {
+                          colorClass = 'text-green-600 dark:text-green-400';
+                        } else if (header.includes('DEPENDENTE')) {
+                          colorClass = 'text-purple-600 dark:text-purple-400';
+                        } else if (['REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE'].includes(header)) {
+                          colorClass = 'text-blue-600 dark:text-blue-400';
+                        } else if (['ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 'INICIO_VIGENCIA', 'PERIODO_MINIMO'].includes(header)) {
+                          colorClass = 'text-orange-600 dark:text-orange-400';
+                        }
+                        
+                        return (
+                          <td
+                            key={cellIndex}
+                            className={`border border-gray-300 dark:border-gray-600 px-2 py-2 ${colorClass}`}
+                          >
+                            {header === 'STATUS' ? (
+                              <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${statusColors[cell] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+                                {cell}
+                              </span>
+                            ) : (
+                              cell || '-'
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="flex items-center justify-center p-8">
+                <Database className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+                <div className="text-center">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum dado encontrado</h3>
+                  <p className="text-gray-500 dark:text-gray-400">Aguardando dados das propostas...</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {filteredData.length === 0 && (
-          <div className="text-center py-8">
-            <FileSpreadsheet className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum registro encontrado</h3>
-            <p className="text-gray-500 dark:text-gray-400">Tente ajustar os filtros para encontrar os registros desejados.</p>
+        {/* Informações de debug */}
+        {dynamicSheetData && (
+          <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <h5 className="font-medium text-gray-900 dark:text-white mb-2">📊 Informações da Planilha Dinâmica</h5>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600 dark:text-gray-400">Total Propostas:</span>
+                <span className="ml-2 font-medium text-gray-900 dark:text-white">{dynamicSheetData.data.length}</span>
+              </div>
+              <div>
+                <span className="text-gray-600 dark:text-gray-400">Máx. Titulares:</span>
+                <span className="ml-2 font-medium text-green-600 dark:text-green-400">{dynamicSheetData.maxTitulares}</span>
+              </div>
+              <div>
+                <span className="text-gray-600 dark:text-gray-400">Máx. Dependentes:</span>
+                <span className="ml-2 font-medium text-purple-600 dark:text-purple-400">{dynamicSheetData.maxDependentes}</span>
+              </div>
+              <div>
+                <span className="text-gray-600 dark:text-gray-400">Total Colunas:</span>
+                <span className="ml-2 font-medium text-blue-600 dark:text-blue-400">{dynamicSheetData.totalColumns}</span>
+              </div>
+            </div>
           </div>
         )}
       </div>
