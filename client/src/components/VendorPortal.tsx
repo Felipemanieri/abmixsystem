@@ -1577,7 +1577,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -1599,7 +1599,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
@@ -1610,7 +1610,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1730,7 +1730,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={() => setSelectedProposal(null)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
                   >
                     Fechar
                   </button>

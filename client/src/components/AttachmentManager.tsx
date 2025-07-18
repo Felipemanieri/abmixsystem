@@ -173,7 +173,7 @@ export default function AttachmentManager() {
       case 'approved': return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
       case 'pending': return <Clock className="w-4 h-4 text-yellow-500" />;
-      default: return <AlertCircle className="w-4 h-4 text-gray-500" />;
+      default: return <AlertCircle className="w-4 h-4 text-gray-500 dark:text-white" />;
     }
   };
 
@@ -271,7 +271,7 @@ export default function AttachmentManager() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-white w-4 h-4" />
               <input
                 type="text"
                 placeholder="Nome do arquivo ou proposta..."
@@ -352,14 +352,14 @@ export default function AttachmentManager() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Arquivo</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Proposta</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoria</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tamanho</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Enviado por</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Arquivo</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Proposta</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Categoria</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Tamanho</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Enviado por</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Data</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -370,7 +370,7 @@ export default function AttachmentManager() {
                       {getFileIcon(attachment.fileType)}
                       <div>
                         <p className="font-medium text-gray-900">{attachment.originalName}</p>
-                        <p className="text-sm text-gray-500">{attachment.fileType}</p>
+                        <p className="text-sm text-gray-500 dark:text-white">{attachment.fileType}</p>
                       </div>
                     </div>
                   </td>
@@ -378,7 +378,7 @@ export default function AttachmentManager() {
                     <span className="text-sm text-gray-900">{attachment.proposalId}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 dark:text-white rounded-full">
                       {attachment.category}
                     </span>
                   </td>
@@ -455,9 +455,9 @@ export default function AttachmentManager() {
 
         {filteredAttachments.length === 0 && (
           <div className="text-center py-8">
-            <FolderOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <FolderOpen className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum anexo encontrado</h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-white">
               {attachments.length === 0 
                 ? 'Não há anexos no sistema ainda.'
                 : 'Tente ajustar os filtros para encontrar o que procura.'

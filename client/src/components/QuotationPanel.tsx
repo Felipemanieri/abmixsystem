@@ -329,11 +329,11 @@ const QuotationPanel: React.FC = () => {
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             />
             <label htmlFor="file-upload" className="cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+              <Upload className="w-8 h-8 text-gray-400 dark:text-white mx-auto mb-2" />
               <p className="text-sm text-gray-600">
                 Clique para anexar arquivos ou arraste aqui
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-white mt-1">
                 PDF, DOC, DOCX, JPG, PNG - Quantidade ilimitada
               </p>
             </label>
@@ -348,9 +348,9 @@ const QuotationPanel: React.FC = () => {
                 {arquivos.map((arquivo, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
                     <div className="flex items-center">
-                      <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                      <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
                       <span className="text-sm text-gray-700">{arquivo.name}</span>
-                      <span className="text-xs text-gray-500 ml-2">({formatFileSize(arquivo.size)})</span>
+                      <span className="text-xs text-gray-500 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
                     </div>
                     <button
                       onClick={() => removerArquivo(index)}
@@ -381,9 +381,9 @@ const QuotationPanel: React.FC = () => {
 
         {cotacoesCadastradas.length === 0 ? (
           <div className="text-center py-12">
-            <Calculator className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">Nenhuma cotação cadastrada ainda.</p>
-            <p className="text-gray-400 text-sm mt-1">
+            <Calculator className="w-16 h-16 text-gray-400 dark:text-white mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-white text-lg">Nenhuma cotação cadastrada ainda.</p>
+            <p className="text-gray-400 dark:text-white text-sm mt-1">
               Use o formulário acima para adicionar sua primeira cotação.
             </p>
           </div>
@@ -471,7 +471,7 @@ const QuotationPanel: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900">Distribuição de Vidas</h3>
                 <button
                   onClick={() => setShowDistribuicaoModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 dark:text-white hover:text-gray-600"
                 >
                   <X className="w-6 h-6" />
                 </button>

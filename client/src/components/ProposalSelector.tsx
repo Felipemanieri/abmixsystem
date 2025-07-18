@@ -108,7 +108,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       case 'low':
         return 'bg-green-100 text-green-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -139,7 +139,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                 <h2 className="text-lg font-semibold text-gray-900">Selecionar Proposta</h2>
                 <button
                   onClick={onClose}
-                  className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-200 transition-colors"
+                  className="p-2 text-gray-400 dark:text-white hover:text-gray-600 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -151,7 +151,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
                   <input
                     type="text"
                     placeholder="Buscar por ID, cliente ou vendedor..."
@@ -249,7 +249,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                         </div>
                         <div className="text-right">
                           <div className="text-lg font-semibold text-gray-900">{proposal.value}</div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-500 dark:text-white">
                             {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
                           </div>
                         </div>
@@ -271,7 +271,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                           <div className="text-sm text-gray-600">
                             Progresso: {proposal.progress}%
                           </div>
-                          <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="w-24 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                             <div
                               className="bg-blue-600 h-2 rounded-full transition-all"
                               style={{ width: `${proposal.progress}%` }}
@@ -282,7 +282,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
 
                       <div className="mt-3 pt-3 border-t border-gray-100">
                         <div className="flex items-center justify-between">
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-gray-500 dark:text-white">
                             ID: {proposal.id}
                           </div>
                           <button className="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">

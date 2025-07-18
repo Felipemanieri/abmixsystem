@@ -628,7 +628,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
           <p className="text-gray-600 mb-6">
             Seus dados foram enviados e serão analisados pela nossa equipe.
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-white">
             Em breve você receberá um retorno sobre sua proposta.
           </p>
         </div>
@@ -669,7 +669,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 Dados do Contrato
               </h2>
               {!isVendor && (
-                <div className="ml-auto flex items-center text-sm text-gray-500">
+                <div className="ml-auto flex items-center text-sm text-gray-500 dark:text-white">
                   <Lock className="w-4 h-4 mr-1" />
                   Preenchido pelo vendedor
                 </div>
@@ -864,8 +864,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             
             {dependentes.length === 0 ? (
               <div className="bg-gray-50 p-6 rounded-lg text-center">
-                <p className="text-gray-500">Nenhum dependente adicionado</p>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-gray-500 dark:text-white">Nenhum dependente adicionado</p>
+                <p className="text-sm text-gray-400 dark:text-white mt-1">
                   Clique em "Adicionar Dependente" para incluir familiares
                 </p>
               </div>
@@ -926,11 +926,11 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
                 <label htmlFor="file-upload-cliente" className="cursor-pointer">
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
                   <p className="text-lg font-medium text-gray-700 mb-2">
                     Arraste arquivos aqui ou escolha uma opção
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-white">
                     Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                   </p>
                 </label>
@@ -990,7 +990,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                     {clientAttachments.map((file, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
                         <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
                           <span className="text-sm text-gray-700">{file.name}</span>
                         </div>
                         <button
@@ -1015,7 +1015,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 Observações do Vendedor
               </h2>
               {!isVendor && (
-                <div className="ml-auto flex items-center text-sm text-gray-500">
+                <div className="ml-auto flex items-center text-sm text-gray-500 dark:text-white">
                   <Lock className="w-4 h-4 mr-1" />
                   Somente leitura
                 </div>
@@ -1037,7 +1037,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                     {vendorObservations}
                   </p>
                 ) : (
-                  <p className="text-gray-500 italic">
+                  <p className="text-gray-500 dark:text-white italic">
                     Nenhuma observação específica do vendedor para esta proposta.
                   </p>
                 )}

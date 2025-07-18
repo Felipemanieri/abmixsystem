@@ -416,7 +416,7 @@ export default function UnifiedUserManagement() {
         {/* Search and Controls */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-white" />
             <input
               type="text"
               placeholder="Buscar por nome ou email..."
@@ -454,22 +454,22 @@ export default function UnifiedUserManagement() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Usuário
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Senha
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Último Login
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -477,15 +477,15 @@ export default function UnifiedUserManagement() {
             <tbody className="bg-white divide-y divide-gray-200">
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-white">
                     <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2" />
                     Carregando usuários...
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-white">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-white" />
                     Nenhum usuário encontrado para este painel
                   </td>
                 </tr>
@@ -499,7 +499,7 @@ export default function UnifiedUserManagement() {
                         </div>
                         <div>
                           <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-500">{user.role}</div>
+                          <div className="text-sm text-gray-500 dark:text-white">{user.role}</div>
                         </div>
                       </div>
                     </td>
@@ -512,7 +512,7 @@ export default function UnifiedUserManagement() {
                           {user.password || (user.role === 'vendor' ? '120784' : 'N/A')}
                         </span>
                       ) : (
-                        <span className="text-gray-400">••••••••</span>
+                        <span className="text-gray-400 dark:text-white">••••••••</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -534,7 +534,7 @@ export default function UnifiedUserManagement() {
                         )}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
                       {user.lastLogin 
                         ? new Date(user.lastLogin).toLocaleDateString('pt-BR')
                         : 'Nunca'
@@ -575,7 +575,7 @@ export default function UnifiedUserManagement() {
                 </h3>
                 <button
                   onClick={() => setShowUserModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 dark:text-white hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
                 </button>

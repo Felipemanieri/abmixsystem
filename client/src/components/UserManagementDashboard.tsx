@@ -317,14 +317,14 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                           <td className="p-3 font-medium">{user.name}</td>
                           <td className="p-3">
                             <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-gray-400" />
+                              <Mail className="h-4 w-4 text-gray-400 dark:text-white" />
                               {user.email}
                             </div>
                           </td>
                           {showPasswords && (
                             <td className="p-3">
                               <div className="flex items-center gap-2">
-                                <Key className="h-4 w-4 text-gray-400" />
+                                <Key className="h-4 w-4 text-gray-400 dark:text-white" />
                                 <code className="bg-gray-100 px-2 py-1 rounded text-sm">
                                   {user.password}
                                 </code>
@@ -342,13 +342,13 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                             </span>
                           </td>
                           <td className="p-3">
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800 dark:text-white'}`}>
                               {user.active ? "Ativo" : "Inativo"}
                             </span>
                           </td>
                           <td className="p-3">
                             <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-gray-400" />
+                              <Clock className="h-4 w-4 text-gray-400 dark:text-white" />
                               <span className="text-sm text-gray-600">
                                 {formatLastLogin(user.lastLogin)}
                               </span>

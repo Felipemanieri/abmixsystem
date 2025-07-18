@@ -490,7 +490,7 @@ export default function PlanilhaViewer() {
           <p className="text-gray-600 mt-1">
             Visualização em tempo real dos dados formatados para Google Sheets
           </p>
-          <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+          <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 dark:text-white">
             <span>↔️ Role horizontalmente para ver todos os {colunas.length} campos</span>
             <span>🔄 Atualização automática a cada 5 segundos</span>
           </div>
@@ -503,7 +503,7 @@ export default function PlanilhaViewer() {
           </div>
         ) : dadosFormatados.length === 0 ? (
           <div className="p-8 text-center">
-            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <FileText className="h-12 w-12 text-gray-400 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Nenhuma proposta encontrada</p>
           </div>
         ) : (
@@ -514,7 +514,7 @@ export default function PlanilhaViewer() {
                   {colunas.map((coluna, index) => (
                     <th 
                       key={coluna} 
-                      className="px-3 py-2 text-left text-xs font-bold text-gray-800 border-r border-gray-300 min-w-[100px] max-w-[150px] whitespace-nowrap"
+                      className="px-3 py-2 text-left text-xs font-bold text-gray-800 dark:text-white border-r border-gray-300 min-w-[100px] max-w-[150px] whitespace-nowrap"
                       style={{ position: 'sticky', top: 0, backgroundColor: '#f3f4f6' }}
                     >
                       <div className="truncate" title={coluna}>
@@ -540,7 +540,7 @@ export default function PlanilhaViewer() {
                           {linha[coluna] ? (
                             <span className="text-gray-900">{String(linha[coluna])}</span>
                           ) : (
-                            <span className="text-gray-400 italic text-xs">[vazio]</span>
+                            <span className="text-gray-400 dark:text-white italic text-xs">[vazio]</span>
                           )}
                         </div>
                       </td>
@@ -550,7 +550,7 @@ export default function PlanilhaViewer() {
               </tbody>
             </table>
             <div className="mt-2 text-center">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-white">
                 Role horizontalmente para navegar pelos {colunas.length} campos
               </p>
             </div>
@@ -566,7 +566,7 @@ export default function PlanilhaViewer() {
             {colunas.map((coluna, index) => (
               <div key={coluna} className="flex items-center justify-between py-1 px-2 bg-white rounded border">
                 <span className="font-mono text-gray-700">{coluna}</span>
-                <span className="text-xs text-gray-500">#{index + 1}</span>
+                <span className="text-xs text-gray-500 dark:text-white">#{index + 1}</span>
               </div>
             ))}
           </div>

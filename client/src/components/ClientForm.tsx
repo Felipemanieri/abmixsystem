@@ -398,7 +398,7 @@ const ClientForm: React.FC = () => {
           </p>
           
           <div className="mb-4">
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
               <div 
                 className="bg-teal-600 h-3 rounded-full transition-all duration-300" 
                 style={{ width: `${uploadProgress}%` }}
@@ -407,7 +407,7 @@ const ClientForm: React.FC = () => {
             <p className="text-sm text-gray-600 mt-2">{uploadProgress}% concluído</p>
           </div>
           
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-white">
             {uploadProgress < 30 ? 'Criando pasta para seus documentos...' : 
              uploadProgress < 70 ? 'Enviando documentos...' : 
              'Salvando informações...'}
@@ -491,7 +491,7 @@ const ClientForm: React.FC = () => {
           </div>
           
           {dependentes.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">Nenhum dependente adicionado</p>
+            <p className="text-gray-500 dark:text-white text-center py-8">Nenhum dependente adicionado</p>
           ) : (
             dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))
           )}
@@ -507,9 +507,9 @@ const ClientForm: React.FC = () => {
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
             <div className="space-y-4">
               <div className="flex justify-center space-x-4">
-                <Upload className="w-8 h-8 text-gray-400" />
-                <Camera className="w-8 h-8 text-gray-400" />
-                <FileText className="w-8 h-8 text-gray-400" />
+                <Upload className="w-8 h-8 text-gray-400 dark:text-white" />
+                <Camera className="w-8 h-8 text-gray-400 dark:text-white" />
+                <FileText className="w-8 h-8 text-gray-400 dark:text-white" />
               </div>
               
               <div>
@@ -525,10 +525,10 @@ const ClientForm: React.FC = () => {
                     className="hidden"
                   />
                 </label>
-                <span className="text-gray-500"> ou arraste e solte aqui</span>
+                <span className="text-gray-500 dark:text-white"> ou arraste e solte aqui</span>
               </div>
               
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-white">
                 PDF, JPG, PNG, DOC, DOCX até 10MB cada
               </p>
             </div>
@@ -542,9 +542,9 @@ const ClientForm: React.FC = () => {
               <div className="space-y-2">
                 {uploadedFiles.map((file, index) => (
                   <div key={index} className="flex items-center p-2 bg-gray-50 rounded">
-                    <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                    <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
                     <span className="text-sm text-gray-700">{file.name}</span>
-                    <span className="text-xs text-gray-500 ml-auto">
+                    <span className="text-xs text-gray-500 dark:text-white ml-auto">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </span>
                   </div>

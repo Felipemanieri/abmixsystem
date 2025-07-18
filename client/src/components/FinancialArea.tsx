@@ -207,7 +207,7 @@ const FinancialArea: React.FC = () => {
       case 'sent_to_automation':
         return 'bg-purple-100 text-purple-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -307,7 +307,7 @@ const FinancialArea: React.FC = () => {
               </div>
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Calculadora</h3>
-                <p className="text-sm text-gray-500">Cálculos financeiros</p>
+                <p className="text-sm text-gray-500 dark:text-white">Cálculos financeiros</p>
               </div>
             </div>
           </div>
@@ -319,7 +319,7 @@ const FinancialArea: React.FC = () => {
               </div>
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Análises</h3>
-                <p className="text-sm text-gray-500">Gráficos e métricas</p>
+                <p className="text-sm text-gray-500 dark:text-white">Gráficos e métricas</p>
               </div>
             </div>
           </div>
@@ -331,7 +331,7 @@ const FinancialArea: React.FC = () => {
               </div>
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Projeções</h3>
-                <p className="text-sm text-gray-500">Previsões financeiras</p>
+                <p className="text-sm text-gray-500 dark:text-white">Previsões financeiras</p>
               </div>
             </div>
           </div>
@@ -343,7 +343,7 @@ const FinancialArea: React.FC = () => {
               </div>
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Fluxo de Caixa</h3>
-                <p className="text-sm text-gray-500">Controle financeiro</p>
+                <p className="text-sm text-gray-500 dark:text-white">Controle financeiro</p>
               </div>
             </div>
           </div>
@@ -362,14 +362,14 @@ const FinancialArea: React.FC = () => {
                   <span className="text-sm font-medium text-gray-900">{category.name}</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="w-32 bg-gray-200 rounded-full h-2">
+                  <div className="w-32 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                     <div 
                       className="bg-green-500 h-2 rounded-full" 
                       style={{ width: `${category.percentage}%` }}
                     ></div>
                   </div>
                   <span className="text-sm font-medium text-gray-900 w-20 text-right">{category.value}</span>
-                  <span className="text-sm text-gray-500 w-12 text-right">{category.percentage}%</span>
+                  <span className="text-sm text-gray-500 dark:text-white w-12 text-right">{category.percentage}%</span>
                 </div>
               </div>
             ))}
@@ -386,7 +386,7 @@ const FinancialArea: React.FC = () => {
           </div>
           <div className="flex flex-wrap gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
               <input
                 type="text"
                 placeholder="Buscar propostas..."
@@ -413,7 +413,7 @@ const FinancialArea: React.FC = () => {
             />
             <button 
               onClick={() => {setSearchTerm(''); setFilterDate(''); setSelectedStatus('all');}}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
             >
               <Filter className="w-4 h-4 inline mr-1" />
               Limpar Filtros
@@ -428,28 +428,28 @@ const FinancialArea: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Proposta
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Vendedor
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Plano
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Valor
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Documentos
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Data
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -460,7 +460,7 @@ const FinancialArea: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                      <div className="text-sm text-gray-500">{proposal.id}</div>
+                      <div className="text-sm text-gray-500 dark:text-white">{proposal.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -486,11 +486,11 @@ const FinancialArea: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <FileText className="w-4 h-4 text-gray-400 mr-1" />
+                      <FileText className="w-4 h-4 text-gray-400 dark:text-white mr-1" />
                       <span className="text-sm text-gray-900">{proposal.documents}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
                     {new Date(proposal.submissionDate).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -548,7 +548,7 @@ const FinancialArea: React.FC = () => {
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 dark:text-white hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -676,7 +676,7 @@ const FinancialArea: React.FC = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => setSelectedProposal(null)}
-                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
                         >
                           Cancelar
                         </button>

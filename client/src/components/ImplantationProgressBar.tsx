@@ -138,7 +138,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
                   ? 'bg-emerald-100 text-emerald-600' 
                   : status === 'in-progress'
                   ? 'bg-amber-100 text-amber-600'
-                  : 'bg-gray-100 text-gray-400'
+                  : 'bg-gray-100 text-gray-400 dark:text-white'
               }`}>
                 {status === 'completed' ? (
                   <CheckCircle className="w-3 h-3" />
@@ -152,7 +152,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-700 font-medium">{stage.name}</span>
-                  <span className="text-xs text-gray-500">{stageProgress}%</span>
+                  <span className="text-xs text-gray-500 dark:text-white">{stageProgress}%</span>
                 </div>
                 <div className="w-full bg-gray-100 rounded-full h-1 mt-1">
                   <div 
@@ -161,7 +161,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
                         ? 'bg-emerald-400' 
                         : status === 'in-progress'
                         ? 'bg-amber-400'
-                        : 'bg-gray-300'
+                        : 'bg-gray-300 dark:bg-gray-600'
                     }`}
                     style={{ width: `${stageProgress}%` }}
                   />
@@ -173,7 +173,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
       </div>
 
       {/* Status textual */}
-      <div className="mt-2 text-xs text-gray-500">
+      <div className="mt-2 text-xs text-gray-500 dark:text-white">
         {progress === 100 ? 'Processo totalmente concluído' :
          progress >= 75 ? 'Implantação em fase final' :
          progress >= 50 ? 'Processo em andamento' :

@@ -113,7 +113,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
       case 'sent_to_automation':
         return <TrendingUp className="w-5 h-5 text-purple-500" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-500" />;
+        return <Clock className="w-5 h-5 text-gray-500 dark:text-white" />;
     }
   };
 
@@ -151,7 +151,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
       case 'sent_to_automation':
         return 'bg-purple-100 text-purple-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -206,29 +206,29 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   ID / Cliente
                 </th>
                 {userRole === 'financial' && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                     Vendedor
                   </th>
                 )}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Plano
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Status
                 </th>
                 {userRole === 'vendor' && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                     Progresso
                   </th>
                 )}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Data
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -239,7 +239,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                      <div className="text-sm text-gray-500">{proposal.id}</div>
+                      <div className="text-sm text-gray-500 dark:text-white">{proposal.id}</div>
                     </div>
                   </td>
                   {userRole === 'financial' && (
@@ -261,7 +261,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                   {userRole === 'vendor' && (
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mr-2">
                           <div 
                             className="bg-teal-600 h-2 rounded-full" 
                             style={{ width: `${proposal.progress}%` }}
@@ -271,7 +271,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                       </div>
                     </td>
                   )}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
                     {new Date(proposal.date).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -304,7 +304,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Nova Proposta</h3>
-                  <p className="text-sm text-gray-500">Criar proposta para cliente</p>
+                  <p className="text-sm text-gray-500 dark:text-white">Criar proposta para cliente</p>
                 </div>
               </div>
             </div>
@@ -316,7 +316,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Gerar Links</h3>
-                  <p className="text-sm text-gray-500">Links únicos para clientes</p>
+                  <p className="text-sm text-gray-500 dark:text-white">Links únicos para clientes</p>
                 </div>
               </div>
             </div>
@@ -328,7 +328,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Acompanhar</h3>
-                  <p className="text-sm text-gray-500">Status das propostas</p>
+                  <p className="text-sm text-gray-500 dark:text-white">Status das propostas</p>
                 </div>
               </div>
             </div>
@@ -342,7 +342,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Validar Propostas</h3>
-                  <p className="text-sm text-gray-500">15 aguardando validação</p>
+                  <p className="text-sm text-gray-500 dark:text-white">15 aguardando validação</p>
                 </div>
               </div>
             </div>
@@ -354,7 +354,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Enviar Automação</h3>
-                  <p className="text-sm text-gray-500">Para Make/Zapier</p>
+                  <p className="text-sm text-gray-500 dark:text-white">Para Make/Zapier</p>
                 </div>
               </div>
             </div>
@@ -366,7 +366,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-gray-900">Relatórios</h3>
-                  <p className="text-sm text-gray-500">Análise financeira</p>
+                  <p className="text-sm text-gray-500 dark:text-white">Análise financeira</p>
                 </div>
               </div>
             </div>

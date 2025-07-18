@@ -340,7 +340,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
               )}
               <button
                 onClick={() => setEditingField(null)}
-                className="p-1 text-gray-400 hover:text-gray-600"
+                className="p-1 text-gray-400 dark:text-white hover:text-gray-600"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -408,7 +408,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
         <div className="text-center">
           <RefreshCw className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Carregando dados da proposta {proposalId}...</p>
-          <p className="text-sm text-gray-500 mt-2">Sincronizando com Google Sheets</p>
+          <p className="text-sm text-gray-500 dark:text-white mt-2">Sincronizando com Google Sheets</p>
         </div>
       </div>
     );
@@ -428,7 +428,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Voltar
               </button>
-              <div className="h-6 w-px bg-gray-300"></div>
+              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
               <h1 className="text-xl font-semibold text-gray-900">
                 Editar Proposta {proposalId}
               </h1>
@@ -558,7 +558,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                   {dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-white">
                   <User className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                   <p>Nenhum dependente adicionado</p>
                 </div>
@@ -611,10 +611,10 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <FileText className="w-4 h-4 text-gray-400" />
+                          <FileText className="w-4 h-4 text-gray-400 dark:text-white" />
                           <span className="text-sm font-medium text-gray-900 truncate">{attachment.name}</span>
                         </div>
-                        <div className="text-xs text-gray-500 space-y-1">
+                        <div className="text-xs text-gray-500 dark:text-white space-y-1">
                           <div>{attachment.type} • {attachment.size}</div>
                           <div>Por: {attachment.uploadedBy}</div>
                           <div>{attachment.uploadDate}</div>
@@ -628,21 +628,21 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                       <div className="flex items-center space-x-1 ml-2">
                         <button
                           onClick={() => attachment.url && window.open(attachment.url, '_blank')}
-                          className="p-1 text-gray-400 hover:text-blue-600"
+                          className="p-1 text-gray-400 dark:text-white hover:text-blue-600"
                           title="Visualizar"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => showNotification(`Download de ${attachment.name} iniciado`, 'success')}
-                          className="p-1 text-gray-400 hover:text-green-600"
+                          className="p-1 text-gray-400 dark:text-white hover:text-green-600"
                           title="Download"
                         >
                           <Download className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteAttachment(attachment.id)}
-                          className="p-1 text-gray-400 hover:text-red-600"
+                          className="p-1 text-gray-400 dark:text-white hover:text-red-600"
                           title="Excluir"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -677,7 +677,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                   {changeLog.map((change) => (
                     <div key={change.id} className="border-l-2 border-blue-200 pl-4 py-2">
                       <div className="text-sm font-medium text-gray-900">{change.field}</div>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div className="text-xs text-gray-500 dark:text-white mt-1">
                         <div>{change.section}</div>
                         <div>{change.user} • {change.timestamp.toLocaleString('pt-BR')}</div>
                         {change.oldValue && (

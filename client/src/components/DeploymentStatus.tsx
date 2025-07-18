@@ -71,7 +71,7 @@ const DeploymentStatus: React.FC<DeploymentStatusProps> = ({ deployId, onRefresh
         <h3 className="text-lg font-semibold text-gray-900">Status da Implantação</h3>
         <button 
           onClick={handleRefresh}
-          className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+          className="p-2 text-gray-400 dark:text-white hover:text-gray-600 rounded-full hover:bg-gray-100"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
@@ -102,7 +102,7 @@ const DeploymentStatus: React.FC<DeploymentStatusProps> = ({ deployId, onRefresh
         )}
         
         {status === 'loading' && (
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
             <div 
               className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
               style={{ width: `${progress}%` }}
@@ -127,7 +127,7 @@ const DeploymentStatus: React.FC<DeploymentStatusProps> = ({ deployId, onRefresh
         )}
         
         {deployId && (
-          <div className="text-xs text-gray-500 mt-2">
+          <div className="text-xs text-gray-500 dark:text-white mt-2">
             ID da implantação: {deployId}
           </div>
         )}

@@ -63,7 +63,7 @@ export default function MobileRefreshButton({ className = '' }: MobileRefreshBut
       </button>
       
       {lastRefresh && (
-        <span className="text-xs text-gray-500 dark:text-gray-400 hidden md:inline">
+        <span className="text-xs text-gray-500 dark:text-white dark:text-gray-400 dark:text-white hidden md:inline">
           {formatLastRefresh()}
         </span>
       )}

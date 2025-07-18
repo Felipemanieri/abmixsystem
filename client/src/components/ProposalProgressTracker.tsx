@@ -137,7 +137,7 @@ const ProposalProgressTracker: React.FC<ProposalProgressTrackerProps> = ({
       </div>
 
       {/* Status textual discreto */}
-      <div className="mt-2 text-xs text-gray-500">
+      <div className="mt-2 text-xs text-gray-500 dark:text-white">
         {progress === 0 && 'Dados pendentes de preenchimento'}
         {progress > 0 && progress <= 30 && 'Iniciando preenchimento'}
         {progress > 30 && progress <= 70 && 'Progresso em andamento'}

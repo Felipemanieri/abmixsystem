@@ -264,7 +264,7 @@ export default function BackupManager() {
                   <td className="p-4">
                     <div>
                       <div className="font-medium">{backup.date.toLocaleDateString('pt-BR')}</div>
-                      <div className="text-sm text-gray-500">{backup.date.toLocaleTimeString('pt-BR')}</div>
+                      <div className="text-sm text-gray-500 dark:text-white">{backup.date.toLocaleTimeString('pt-BR')}</div>
                     </div>
                   </td>
                   <td className="p-4">

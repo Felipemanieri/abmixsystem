@@ -20,9 +20,9 @@ const SystemFooter: React.FC = () => {
   };
 
   return (
-    <footer className="bg-gray-100 border-t border-gray-200 py-3 px-6">
+    <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-3 px-6">
       <div className="max-w-full mx-auto">
-        <div className="flex items-center justify-between text-xs text-gray-600">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300">
           
           {/* Seção Esquerda - Logo e Info do Sistema */}
           <div className="flex items-center space-x-4">
@@ -34,8 +34,8 @@ const SystemFooter: React.FC = () => {
                 className="h-6 w-auto flex-shrink-0"
               />
               <div className="flex flex-col">
-                <span className="font-medium text-gray-700">Sistema Interno v2.0</span>
-                <span className="text-gray-500">© 2025 Abmix Consultoria</span>
+                <span className="font-medium text-gray-700 dark:text-white">Sistema Interno v2.0</span>
+                <span className="text-gray-500 dark:text-white dark:text-gray-300">© 2025 Abmix Consultoria</span>
               </div>
             </div>
           </div>
@@ -55,11 +55,11 @@ const SystemFooter: React.FC = () => {
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 Manual do Sistema
               </a>
-              <span className="text-gray-400">|</span>
+              <span className="text-gray-400 dark:text-white">|</span>
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 FAQ
               </a>
-              <span className="text-gray-400">|</span>
+              <span className="text-gray-400 dark:text-white">|</span>
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 Configurações
               </a>

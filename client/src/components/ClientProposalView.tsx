@@ -702,7 +702,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
           <p className="text-gray-600 mb-4">
             Sua proposta foi enviada com sucesso e está sendo processada por nossa equipe.
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-white">
             Você receberá atualizações por e-mail sobre o status da sua proposta.
           </p>
         </div>
@@ -730,7 +730,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             <div className="flex items-center mb-6">
               <Building className="h-6 w-6 text-blue-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">Dados do Contrato</h2>
-              <Lock className="h-4 w-4 text-gray-500 ml-2" />
+              <Lock className="h-4 w-4 text-gray-500 dark:text-white ml-2" />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -850,7 +850,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   <h2 className="text-xl font-semibold text-gray-900">Observações do Vendedor</h2>
                   <button
                     onClick={() => setShowVendorObservations(!showVendorObservations)}
-                    className="ml-2 text-gray-500 hover:text-gray-700"
+                    className="ml-2 text-gray-500 dark:text-white hover:text-gray-700"
                   >
                     {showVendorObservations ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -947,7 +947,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
                 <div className="text-center mb-4">
                   <p className="text-lg text-gray-600 mb-2">Escolha como enviar seus documentos</p>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-sm text-gray-500 dark:text-white mb-4">
                     Aceitos: PDF, JPG, PNG (máx. 10MB cada)
                   </p>
                   
@@ -989,9 +989,9 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                       {clientAttachments.map((file, index) => (
                         <li key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded">
                           <div className="flex items-center">
-                            <FileText className="h-4 w-4 text-gray-500 mr-2" />
+                            <FileText className="h-4 w-4 text-gray-500 dark:text-white mr-2" />
                             <span className="text-sm text-gray-700">{file.name}</span>
-                            <span className="text-xs text-gray-500 ml-2">
+                            <span className="text-xs text-gray-500 dark:text-white ml-2">
                               ({(file.size / 1024 / 1024).toFixed(2)} MB)
                             </span>
                           </div>

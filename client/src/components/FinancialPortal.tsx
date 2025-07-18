@@ -843,7 +843,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 
                 <button
                   onClick={onLogout}
-                  className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                  className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair

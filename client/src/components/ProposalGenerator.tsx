@@ -1143,7 +1143,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     <div className="max-w-6xl mx-auto">
       <button
         onClick={onBack}
-        className="flex items-center text-gray-600 hover:text-gray-800 mb-6 transition-colors"
+        className="flex items-center text-gray-600 hover:text-gray-800 dark:text-white mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Voltar ao Dashboard
@@ -1420,8 +1420,8 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             
             {dependentes.length === 0 ? (
               <div className="bg-gray-50 p-6 rounded-lg text-center">
-                <p className="text-gray-500">Nenhum dependente adicionado</p>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-gray-500 dark:text-white">Nenhum dependente adicionado</p>
+                <p className="text-sm text-gray-400 dark:text-white mt-1">
                   Clique em "Adicionar Dependente" para incluir familiares
                 </p>
               </div>
@@ -1633,11 +1633,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               />
               <label htmlFor="file-upload-cotacao" className="cursor-pointer">
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
                 <p className="text-lg font-medium text-gray-700 mb-2">
                   Arraste arquivos aqui ou escolha uma opção
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-white">
                   Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                 </p>
               </label>
@@ -1800,9 +1800,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   {arquivosAnexados.map((arquivo, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
                       <div className="flex items-center">
-                        <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                        <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
                         <span className="text-sm text-gray-700">{arquivo.name}</span>
-                        <span className="text-xs text-gray-500 ml-2">({formatFileSize(arquivo.size)})</span>
+                        <span className="text-xs text-gray-500 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
                       </div>
                       <button
                         onClick={() => removerArquivo(index)}
@@ -1843,11 +1843,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {cotacoesCadastradas.length === 0 ? (
               <div className="text-center py-8">
-                <Calculator className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 text-sm">
+                <Calculator className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
+                <p className="text-gray-500 dark:text-white text-sm">
                   Nenhuma cotação cadastrada ainda.
                 </p>
-                <p className="text-gray-400 text-xs mt-1">
+                <p className="text-gray-400 dark:text-white text-xs mt-1">
                   Use o formulário acima para adicionar cotações à proposta.
                 </p>
               </div>
@@ -2009,7 +2009,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             </div>
             <button
               onClick={handleClearDraft}
-              className="text-xs text-gray-500 hover:text-red-600 p-1 rounded transition-colors"
+              className="text-xs text-gray-500 dark:text-white hover:text-red-600 p-1 rounded transition-colors"
               title="Limpar rascunho salvo"
             >
               <Trash2 className="w-3 h-3" />

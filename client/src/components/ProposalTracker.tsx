@@ -75,7 +75,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       case 'completed':
         return 'bg-green-100 text-green-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:text-white';
     }
   };
 
@@ -101,7 +101,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       case 'completed':
         return <CheckCircle className="w-4 h-4 text-green-500" />;
       default:
-        return <AlertCircle className="w-4 h-4 text-gray-500" />;
+        return <AlertCircle className="w-4 h-4 text-gray-500 dark:text-white" />;
     }
   };
 
@@ -147,7 +147,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
     <div className="space-y-6">
       <button
         onClick={onBack}
-        className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+        className="flex items-center text-gray-600 hover:text-gray-800 dark:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Voltar ao Dashboard
@@ -207,25 +207,25 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Cliente
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Plano
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Progresso
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Última Atividade
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Dias em Aberto
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -236,7 +236,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
-                      <div className="text-sm text-gray-500">{proposal.id}</div>
+                      <div className="text-sm text-gray-500 dark:text-white">{proposal.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -252,7 +252,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mr-2">
                         <div 
                           className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
                           style={{ width: `${proposal.progress}%` }}
@@ -261,7 +261,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
                       <span className="text-sm text-gray-600 min-w-0">{proposal.progress}%</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
                     {proposal.lastActivity}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

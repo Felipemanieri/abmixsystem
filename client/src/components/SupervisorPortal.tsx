@@ -2891,7 +2891,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
+              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
             >
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -2901,7 +2901,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={() => setShowInternalMessage(!showInternalMessage)}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <MessageSquare size={20} />
             </button>
@@ -2910,7 +2910,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={onLogout}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <LogOut size={20} />
             </button>

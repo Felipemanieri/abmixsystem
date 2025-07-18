@@ -50,7 +50,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
         </h3>
         <button 
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600"
+          className="text-gray-400 dark:text-white hover:text-gray-600"
         >
           <X className="w-5 h-5" />
         </button>
@@ -159,7 +159,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
       <div className="flex justify-between pt-4 border-t border-gray-200">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
         >
           Cancelar
         </button>
@@ -196,7 +196,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
       </div>
       
       <div className="mb-6">
-        <div className="w-full bg-gray-200 rounded-full h-3">
+        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
           <div 
             className="bg-purple-600 h-3 rounded-full transition-all duration-300" 
             style={{ width: `${progress}%` }}
@@ -210,23 +210,23 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
         <div className="space-y-2 text-sm">
           <div className="flex items-center">
             <Check className={`w-4 h-4 ${progress >= 20 ? 'text-green-500' : 'text-gray-300'} mr-2`} />
-            <span className={progress >= 20 ? 'text-gray-900' : 'text-gray-500'}>Consolidando dados do cliente</span>
+            <span className={progress >= 20 ? 'text-gray-900' : 'text-gray-500 dark:text-white'}>Consolidando dados do cliente</span>
           </div>
           <div className="flex items-center">
             <Check className={`w-4 h-4 ${progress >= 40 ? 'text-green-500' : 'text-gray-300'} mr-2`} />
-            <span className={progress >= 40 ? 'text-gray-900' : 'text-gray-500'}>Atualizando planilha principal</span>
+            <span className={progress >= 40 ? 'text-gray-900' : 'text-gray-500 dark:text-white'}>Atualizando planilha principal</span>
           </div>
           <div className="flex items-center">
             <Check className={`w-4 h-4 ${progress >= 60 ? 'text-green-500' : 'text-gray-300'} mr-2`} />
-            <span className={progress >= 60 ? 'text-gray-900' : 'text-gray-500'}>Organizando links de documentos</span>
+            <span className={progress >= 60 ? 'text-gray-900' : 'text-gray-500 dark:text-white'}>Organizando links de documentos</span>
           </div>
           <div className="flex items-center">
             <Check className={`w-4 h-4 ${progress >= 80 ? 'text-green-500' : 'text-gray-300'} mr-2`} />
-            <span className={progress >= 80 ? 'text-gray-900' : 'text-gray-500'}>Enviando para Make/Zapier</span>
+            <span className={progress >= 80 ? 'text-gray-900' : 'text-gray-500 dark:text-white'}>Enviando para Make/Zapier</span>
           </div>
           <div className="flex items-center">
             <Check className={`w-4 h-4 ${progress >= 100 ? 'text-green-500' : 'text-gray-300'} mr-2`} />
-            <span className={progress >= 100 ? 'text-gray-900' : 'text-gray-500'}>Confirmando recebimento</span>
+            <span className={progress >= 100 ? 'text-gray-900' : 'text-gray-500 dark:text-white'}>Confirmando recebimento</span>
           </div>
         </div>
       </div>

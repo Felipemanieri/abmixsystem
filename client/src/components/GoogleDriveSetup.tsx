@@ -40,7 +40,7 @@ const GoogleDriveSetup: React.FC = () => {
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 step > s ? 'bg-green-100 text-green-600' : 
                 step === s ? 'bg-blue-100 text-blue-600' : 
-                'bg-gray-100 text-gray-400'
+                'bg-gray-100 text-gray-400 dark:text-white'
               }`}>
                 {step > s ? (
                   <Check className="w-5 h-5" />
@@ -49,7 +49,7 @@ const GoogleDriveSetup: React.FC = () => {
                 )}
               </div>
               <span className={`text-xs mt-2 ${
-                step >= s ? 'text-gray-700' : 'text-gray-400'
+                step >= s ? 'text-gray-700' : 'text-gray-400 dark:text-white'
               }`}>
                 {s === 1 ? 'Preparação' : 
                  s === 2 ? 'Conexão' : 
@@ -58,7 +58,7 @@ const GoogleDriveSetup: React.FC = () => {
             </div>
           ))}
           
-          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 top-5"></div>
+          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-600 top-5"></div>
         </div>
         
         {step === 1 && (
@@ -125,7 +125,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => setStep(1)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 transition-colors"
               >
                 Voltar
               </button>
@@ -207,7 +207,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => setStep(2)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 transition-colors"
               >
                 Voltar
               </button>

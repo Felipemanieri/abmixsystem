@@ -170,7 +170,7 @@ export default function LogsViewer() {
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 isLive 
                   ? 'bg-green-600 text-white hover:bg-green-700' 
-                  : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                  : 'bg-gray-300 dark:bg-gray-600 text-gray-700 hover:bg-gray-400'
               }`}
             >
               <Monitor className="w-4 h-4 mr-2" />
@@ -248,7 +248,7 @@ export default function LogsViewer() {
         {/* Filtros */}
         <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <Search className="w-4 h-4 text-gray-500" />
+            <Search className="w-4 h-4 text-gray-500 dark:text-white" />
             <input
               type="text"
               placeholder="Buscar nos logs..."
@@ -261,13 +261,13 @@ export default function LogsViewer() {
                 onClick={() => setSearchTerm('')}
                 className="p-1 hover:bg-gray-100 rounded"
               >
-                <X className="w-4 h-4 text-gray-500" />
+                <X className="w-4 h-4 text-gray-500 dark:text-white" />
               </button>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-500" />
+            <Filter className="w-4 h-4 text-gray-500 dark:text-white" />
             <select
               value={levelFilter}
               onChange={(e) => setLevelFilter(e.target.value)}
@@ -328,7 +328,7 @@ export default function LogsViewer() {
 
         <div className="max-h-96 overflow-y-auto bg-gray-900 text-gray-100 font-mono text-sm">
           {filteredLogs.length === 0 ? (
-            <div className="p-8 text-center text-gray-400">
+            <div className="p-8 text-center text-gray-400 dark:text-white">
               <Monitor className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum log encontrado</p>
               {searchTerm && <p className="text-xs mt-2">Tente ajustar os filtros de busca</p>}
@@ -345,7 +345,7 @@ export default function LogsViewer() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <span className="text-xs text-gray-500 font-mono">
+                      <span className="text-xs text-gray-500 dark:text-white font-mono">
                         {log.timestamp.toLocaleTimeString('pt-BR')}
                       </span>
                       <span className={`px-2 py-0.5 text-xs rounded font-semibold ${
@@ -356,14 +356,14 @@ export default function LogsViewer() {
                       }`}>
                         {log.level.toUpperCase()}
                       </span>
-                      <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded font-medium">
+                      <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 dark:text-white rounded font-medium">
                         {log.module}
                       </span>
                     </div>
-                    <p className="text-gray-800 break-words">{log.message}</p>
+                    <p className="text-gray-800 dark:text-white break-words">{log.message}</p>
                     {log.details && (
                       <details className="mt-2">
-                        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">
+                        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 dark:text-white">
                           Detalhes técnicos
                         </summary>
                         <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-x-auto">

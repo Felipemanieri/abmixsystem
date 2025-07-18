@@ -136,7 +136,7 @@ export default function ControleSenhas() {
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 showAllPasswords 
                   ? 'bg-red-600 text-white hover:bg-red-700' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 dark:bg-gray-600 text-gray-700 hover:bg-gray-300 dark:bg-gray-600'
               }`}
             >
               {showAllPasswords ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
@@ -197,7 +197,7 @@ export default function ControleSenhas() {
 
         {/* Busca */}
         <div className="flex items-center gap-2 mb-6">
-          <Search className="w-4 h-4 text-gray-500" />
+          <Search className="w-4 h-4 text-gray-500 dark:text-white" />
           <input
             type="text"
             placeholder="Buscar por nome ou email..."
@@ -210,7 +210,7 @@ export default function ControleSenhas() {
               onClick={() => setSearchTerm('')}
               className="p-2 hover:bg-gray-100 rounded"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-4 h-4 text-gray-500 dark:text-white" />
             </button>
           )}
         </div>
@@ -241,7 +241,7 @@ export default function ControleSenhas() {
 
         {loadingSystemUsers ? (
           <div className="p-8 text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-4" />
+            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Carregando usuários...</p>
           </div>
         ) : (
@@ -293,7 +293,7 @@ export default function ControleSenhas() {
                     </td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800 dark:text-white'
                       }`}>
                         {user.active ? 'Ativo' : 'Inativo'}
                       </span>
@@ -350,7 +350,7 @@ export default function ControleSenhas() {
 
         {loadingVendors ? (
           <div className="p-8 text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-4" />
+            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Carregando vendedores...</p>
           </div>
         ) : (

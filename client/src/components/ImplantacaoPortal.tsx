@@ -820,7 +820,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                           showNotification('Compartilhamento não disponível neste dispositivo', 'info');
                         }
                       }}
-                      className="p-2 text-slate-600 dark:text-white hover:text-slate-800 dark:text-white hover:bg-slate-50 rounded-md transition-colors"
+                      className="p-2 text-slate-600 dark:text-white hover:text-slate-800 dark:text-white hover:bg-slate-50 dark:bg-gray-800 rounded-md transition-colors"
                       title="Compartilhar"
                     >
                       <Share2 className="w-4 h-4" />
@@ -966,7 +966,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 </div>
               </div>
               <div className="mt-2 flex items-center">
-                <div className="w-full bg-gray-200 rounded-full h-2 mr-2">
+                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mr-2">
                   <div 
                     className="bg-green-600 h-2 rounded-full" 
                     style={{ width: '100%' }}
@@ -1031,7 +1031,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
@@ -1042,7 +1042,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1249,7 +1249,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="flex justify-end space-x-4">
                       <button
                         onClick={() => setSelectedProposal(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
                       >
                         Cancelar
                       </button>

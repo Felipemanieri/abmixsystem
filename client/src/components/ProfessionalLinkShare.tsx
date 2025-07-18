@@ -89,13 +89,13 @@ Abmix Consultoria em Benefícios`;
                 />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Abmix Consultoria em Benefícios</h2>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Abmix Consultoria em Benefícios</h2>
                 <p className="text-gray-600">Formulário de Proposta</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100"
+              className="text-gray-400 dark:text-white hover:text-gray-600 p-2 rounded-full hover:bg-gray-100"
             >
               ✕
             </button>
@@ -108,7 +108,7 @@ Abmix Consultoria em Benefícios`;
                 <CheckCircle className="w-6 h-6 text-green-600 mt-1" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                   Segue o link do formulário para completar sua proposta
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
@@ -128,7 +128,7 @@ Abmix Consultoria em Benefícios`;
                 <Shield className="w-5 h-5 text-blue-600" />
                 <Lock className="w-5 h-5 text-green-600" />
               </div>
-              <h4 className="font-semibold text-gray-800">Segurança Garantida</h4>
+              <h4 className="font-semibold text-gray-800 dark:text-white">Segurança Garantida</h4>
             </div>
             <p className="text-gray-700 text-sm leading-relaxed">
               🔒 <strong>Seus dados estão protegidos</strong> com criptografia de ponta a ponta e armazenamento seguro.

@@ -429,7 +429,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               </div>
               <h3 className="font-medium text-gray-900 dark:text-white mb-1">{user.name}</h3>
               <p className="text-sm text-gray-600 dark:text-white mb-4">{user.email}</p>
-              <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 dark:text-white rounded-lg hover:bg-gray-300 transition-colors text-sm">
+              <button className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors text-sm">
                 Alterar Foto
               </button>
             </div>
@@ -508,7 +508,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-email" className="sr-only" defaultChecked />
-              <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
+              <div className="block bg-gray-300 dark:bg-gray-600 w-12 h-6 rounded-full"></div>
               <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
@@ -520,7 +520,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-whatsapp" className="sr-only" defaultChecked />
-              <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
+              <div className="block bg-gray-300 dark:bg-gray-600 w-12 h-6 rounded-full"></div>
               <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
@@ -532,7 +532,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-reminders" className="sr-only" defaultChecked />
-              <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
+              <div className="block bg-gray-300 dark:bg-gray-600 w-12 h-6 rounded-full"></div>
               <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
@@ -598,7 +598,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair

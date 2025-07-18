@@ -168,7 +168,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 className={`flex-1 py-3 text-sm font-medium ${
                   activeTab === 'inbox'
                     ? 'text-teal-600 border-b-2 border-teal-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    : 'text-gray-500 dark:text-white hover:text-gray-700'
                 }`}
               >
                 Caixa de Entrada
@@ -178,7 +178,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 className={`flex-1 py-3 text-sm font-medium ${
                   activeTab === 'sent'
                     ? 'text-teal-600 border-b-2 border-teal-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                    : 'text-gray-500 dark:text-white hover:text-gray-700'
                 }`}
               >
                 Enviadas
@@ -188,7 +188,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
             {/* Search */}
             <div className="p-3 border-b border-gray-200">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
                 <input
                   type="text"
                   placeholder="Buscar mensagens..."
@@ -202,7 +202,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
             {/* Message List */}
             <div className="flex-1 overflow-y-auto">
               {filteredMessages.length === 0 ? (
-                <div className="p-4 text-center text-gray-500">
+                <div className="p-4 text-center text-gray-500 dark:text-white">
                   Nenhuma mensagem encontrada
                 </div>
               ) : (
@@ -218,12 +218,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                       <span className="text-sm font-medium truncate">
                         {activeTab === 'inbox' ? message.sender : message.recipient}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-white">
                         {formatTimestamp(message.timestamp)}
                       </span>
                     </div>
                     <p className="text-sm font-medium text-gray-900 truncate">{message.subject}</p>
-                    <p className="text-xs text-gray-500 truncate">{message.content}</p>
+                    <p className="text-xs text-gray-500 dark:text-white truncate">{message.content}</p>
                     {message.attachments && message.attachments.length > 0 && (
                       <div className="flex items-center mt-1">
                         <span className="text-xs text-blue-600">
@@ -301,7 +301,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 
                 <div className="flex justify-between items-center">
                   <div>
-                    <button className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors">
+                    <button className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors">
                       <FileText className="w-4 h-4 mr-2" />
                       Anexar Arquivo
                     </button>
@@ -310,7 +310,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setActiveTab('inbox')}
-                      className="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                      className="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
                     >
                       Cancelar
                     </button>
@@ -337,16 +337,16 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                         <p className="text-sm font-medium text-gray-900">
                           {activeTab === 'inbox' ? selectedMessage.sender : `Para: ${selectedMessage.recipient}`}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-white">
                           {selectedMessage.timestamp.toLocaleString('pt-BR')}
                         </p>
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      <button className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                      <button className="text-gray-400 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100">
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                      <button className="text-gray-400 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100">
                         <Download className="w-4 h-4" />
                       </button>
                     </div>
@@ -354,7 +354,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 </div>
                 
                 <div className="flex-1 mb-4">
-                  <div className="text-sm text-gray-800 whitespace-pre-line">
+                  <div className="text-sm text-gray-800 dark:text-white whitespace-pre-line">
                     {selectedMessage.content}
                   </div>
                 </div>
@@ -368,7 +368,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                           <div className="flex items-center">
                             <FileText className="w-4 h-4 text-blue-600 mr-2" />
                             <span className="text-sm">{attachment.name}</span>
-                            <span className="text-xs text-gray-500 ml-2">({attachment.size})</span>
+                            <span className="text-xs text-gray-500 dark:text-white ml-2">({attachment.size})</span>
                           </div>
                           <button className="text-blue-600 hover:text-blue-800 p-1">
                             <Download className="w-4 h-4" />
@@ -401,7 +401,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 <div className="text-center">
                   <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-1">Nenhuma mensagem selecionada</h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-white">
                     Selecione uma mensagem para visualizar ou clique em Nova Mensagem
                   </p>
                 </div>
