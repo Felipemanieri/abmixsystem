@@ -1074,13 +1074,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => window.open(drive.url, '_blank')}
-                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                     >
                       Abrir
                     </button>
                     <button 
                       onClick={() => setShowDriveManagementModal(true)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                     >
                       Editar
                     </button>
@@ -1159,13 +1159,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowSheetsConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1182,13 +1182,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowSheetsConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1205,13 +1205,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowSheetsConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1287,13 +1287,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
-                      className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                     >
                       Abrir
                     </button>
                     <button 
                       onClick={() => setShowFormsConfigModal(true)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                     >
                       Editar
                     </button>
@@ -1310,13 +1310,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
-                      className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                     >
                       Abrir
                     </button>
                     <button 
                       onClick={() => setShowFormsConfigModal(true)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                     >
                       Editar
                     </button>
@@ -1390,13 +1390,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => window.open('https://docs.google.com/document/', '_blank')}
-                      className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
                     >
                       Abrir
                     </button>
                     <button 
                       onClick={() => setShowDocsConfigModal(true)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                     >
                       Editar
                     </button>
@@ -1413,13 +1413,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => window.open('https://docs.google.com/document/', '_blank')}
-                      className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
                     >
                       Abrir
                     </button>
                     <button 
                       onClick={() => setShowDocsConfigModal(true)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                     >
                       Editar
                     </button>
@@ -1498,13 +1498,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowBackupConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1521,13 +1521,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowBackupConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1605,13 +1605,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
-                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowApiConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1628,13 +1628,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
-                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowApiConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
@@ -1651,13 +1651,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
-                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
                   >
                     Abrir
                   </button>
                   <button 
                     onClick={() => setShowApiConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Editar
                   </button>
