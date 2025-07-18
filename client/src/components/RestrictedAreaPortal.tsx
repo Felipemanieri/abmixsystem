@@ -1498,10 +1498,316 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   function renderAutomacaoSection() {
     return (
       <div className="space-y-6">
+        {/* Seção Make.com, Zapier e APIs */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Plataformas de Automação</h3>
+          </div>
+
+          {/* Make.com e Zapier */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Make.com */}
+            <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200">Make.com</h4>
+                </div>
+                <button 
+                  onClick={() => alert('Adicionando novo cenário Make.com...')}
+                  className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  title="Adicionar cenário"
+                >
+                  <span className="text-sm">+</span>
+                </button>
+              </div>
+              <div className="space-y-2 mb-3">
+                <input 
+                  type="text" 
+                  placeholder="Webhook URL"
+                  defaultValue="https://hook.eu1.make.com/abmix123"
+                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="password" 
+                  placeholder="API Key"
+                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="propostas">Cenário: Propostas → Drive</option>
+                  <option value="notificacoes">Cenário: Notificações Email</option>
+                  <option value="backup">Cenário: Backup Automático</option>
+                  <option value="sheets">Cenário: Sync Planilhas</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ 4 Cenários Ativos</span>
+                <button 
+                  onClick={() => alert('Abrindo configuração Make.com...')}
+                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            {/* Zapier */}
+            <div className="border border-orange-200 dark:border-orange-600 rounded-lg p-4 bg-orange-50 dark:bg-orange-900">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Bot className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2" />
+                  <h4 className="font-medium text-orange-800 dark:text-orange-200">Zapier</h4>
+                </div>
+                <button 
+                  onClick={() => alert('Adicionando novo Zap...')}
+                  className="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
+                  title="Adicionar Zap"
+                >
+                  <span className="text-sm">+</span>
+                </button>
+              </div>
+              <div className="space-y-2 mb-3">
+                <input 
+                  type="text" 
+                  placeholder="Webhook URL"
+                  defaultValue="https://hooks.zapier.com/hooks/catch/abmix456"
+                  className="w-full px-2 py-1 text-xs border border-orange-300 dark:border-orange-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="password" 
+                  placeholder="API Key"
+                  className="w-full px-2 py-1 text-xs border border-orange-300 dark:border-orange-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-orange-300 dark:border-orange-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="email">Zap: Email Automático</option>
+                  <option value="crm">Zap: CRM Integration</option>
+                  <option value="slack">Zap: Slack Notifications</option>
+                  <option value="teams">Zap: Microsoft Teams</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ 3 Zaps Ativos</span>
+                <button 
+                  onClick={() => alert('Abrindo configuração Zapier...')}
+                  className="px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* APIs Integradas */}
+          <div className="mb-6">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">APIs Integradas - Sistema</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* WhatsApp Business API */}
+              <div className="border border-green-200 dark:border-green-600 rounded-lg p-3 bg-green-50 dark:bg-green-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-green-800 dark:text-green-200">WhatsApp</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância WhatsApp...')}
+                    className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Phone Number ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Access Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando WhatsApp...')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
+              </div>
+
+              {/* SendGrid Email */}
+              <div className="border border-red-200 dark:border-red-600 rounded-lg p-3 bg-red-50 dark:bg-red-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-red-800 dark:text-red-200">SendGrid</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância SendGrid...')}
+                    className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="email" placeholder="From Email" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando SendGrid...')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
+              </div>
+
+              {/* Twilio SMS */}
+              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-3 bg-purple-50 dark:bg-purple-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-purple-800 dark:text-purple-200">Twilio</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Twilio...')}
+                    className="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Account SID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Auth Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Twilio...')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
+              </div>
+
+              {/* Slack API */}
+              <div className="border border-indigo-200 dark:border-indigo-600 rounded-lg p-3 bg-indigo-50 dark:bg-indigo-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Slack</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Slack...')}
+                    className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Workspace URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Bot Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Slack...')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
+              </div>
+
+              {/* Pipedrive CRM */}
+              <div className="border border-orange-200 dark:border-orange-600 rounded-lg p-3 bg-orange-50 dark:bg-orange-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-orange-800 dark:text-orange-200">Pipedrive</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Pipedrive...')}
+                    className="w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Company Domain" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Pipedrive...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
+              </div>
+
+              {/* HubSpot */}
+              <div className="border border-cyan-200 dark:border-cyan-600 rounded-lg p-3 bg-cyan-50 dark:bg-cyan-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-cyan-800 dark:text-cyan-200">HubSpot</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância HubSpot...')}
+                    className="w-5 h-5 bg-cyan-600 text-white rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Portal ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Private App Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando HubSpot...')} className="w-full px-2 py-1 bg-cyan-600 text-white text-xs rounded hover:bg-cyan-700">Configurar</button>
+              </div>
+
+              {/* Telegram Bot */}
+              <div className="border border-teal-200 dark:border-teal-600 rounded-lg p-3 bg-teal-50 dark:bg-teal-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-teal-800 dark:text-teal-200">Telegram</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Telegram...')}
+                    className="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center hover:bg-teal-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Bot Username" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Bot Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Telegram...')} className="w-full px-2 py-1 bg-teal-600 text-white text-xs rounded hover:bg-teal-700">Configurar</button>
+              </div>
+
+              {/* Microsoft Teams */}
+              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-3 bg-blue-50 dark:bg-blue-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-blue-800 dark:text-blue-200">Teams</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Teams...')}
+                    className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Tenant ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Client Secret" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Teams...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
+              </div>
+
+              {/* Discord */}
+              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-3 bg-purple-50 dark:bg-purple-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-purple-800 dark:text-purple-200">Discord</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Discord...')}
+                    className="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Server ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Webhook URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Discord...')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
+              </div>
+
+              {/* Mailchimp */}
+              <div className="border border-yellow-200 dark:border-yellow-600 rounded-lg p-3 bg-yellow-50 dark:bg-yellow-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Mailchimp</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Mailchimp...')}
+                    className="w-5 h-5 bg-yellow-600 text-white rounded-full flex items-center justify-center hover:bg-yellow-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Audience ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Mailchimp...')} className="w-full px-2 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700">Configurar</button>
+              </div>
+
+              {/* AWS S3 */}
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-gray-800 dark:text-gray-200">AWS S3</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância AWS S3...')}
+                    className="w-5 h-5 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Bucket Name" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Access Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando AWS S3...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Seção Google Drive e Sheets */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center mb-6">
             <Bot className="w-6 h-6 text-purple-600 dark:text-white mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Automações</h3>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Automações Google</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -2243,7 +2549,253 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   function renderPlanilhasSection() {
     return (
       <div className="space-y-6">
-        {/* Configurações de Tempo */}
+        {/* Seção Make.com e Zapier para Planilhas */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Automação de Planilhas</h3>
+          </div>
+
+          {/* Make.com e Zapier específicos para planilhas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Make.com para Planilhas */}
+            <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Zap className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                  <h4 className="font-medium text-green-800 dark:text-green-200">Make.com - Planilhas</h4>
+                </div>
+                <button 
+                  onClick={() => alert('Adicionando novo cenário Make.com para planilhas...')}
+                  className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+                  title="Adicionar cenário"
+                >
+                  <span className="text-sm">+</span>
+                </button>
+              </div>
+              <div className="space-y-2 mb-3">
+                <input 
+                  type="text" 
+                  placeholder="Webhook URL"
+                  defaultValue="https://hook.eu1.make.com/planilhas789"
+                  className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="password" 
+                  placeholder="API Key"
+                  className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="propostas-sync">Cenário: Sync Propostas</option>
+                  <option value="notificacoes-planilha">Cenário: Notificações Planilha</option>
+                  <option value="backup-planilha">Cenário: Backup Planilha</option>
+                  <option value="relatorios">Cenário: Geração Relatórios</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ 3 Cenários Planilha</span>
+                <button 
+                  onClick={() => alert('Configurando Make.com para planilhas...')}
+                  className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+
+            {/* Zapier para Planilhas */}
+            <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <Bot className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+                  <h4 className="font-medium text-purple-800 dark:text-purple-200">Zapier - Planilhas</h4>
+                </div>
+                <button 
+                  onClick={() => alert('Adicionando novo Zap para planilhas...')}
+                  className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+                  title="Adicionar Zap"
+                >
+                  <span className="text-sm">+</span>
+                </button>
+              </div>
+              <div className="space-y-2 mb-3">
+                <input 
+                  type="text" 
+                  placeholder="Webhook URL"
+                  defaultValue="https://hooks.zapier.com/hooks/catch/planilhas101"
+                  className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="password" 
+                  placeholder="API Key"
+                  className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="email-auto-planilha">Zap: Email Automático Planilha</option>
+                  <option value="crm-integration-planilha">Zap: CRM Sync Planilha</option>
+                  <option value="slack-planilha">Zap: Slack Notif. Planilha</option>
+                  <option value="excel-export">Zap: Excel Export</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ 2 Zaps Planilha</span>
+                <button 
+                  onClick={() => alert('Configurando Zapier para planilhas...')}
+                  className="px-3 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* APIs específicas para Planilhas */}
+          <div className="mb-6">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">APIs para Planilhas</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Google Sheets API */}
+              <div className="border border-green-200 dark:border-green-600 rounded-lg p-3 bg-green-50 dark:bg-green-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-green-800 dark:text-green-200">Google Sheets</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Google Sheets...')}
+                    className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Spreadsheet ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Service Account JSON" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Google Sheets...')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
+              </div>
+
+              {/* Microsoft Excel API */}
+              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-3 bg-blue-50 dark:bg-blue-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-blue-800 dark:text-blue-200">Excel Online</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Excel...')}
+                    className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Workbook ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Client Secret" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Excel Online...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
+              </div>
+
+              {/* Airtable API */}
+              <div className="border border-orange-200 dark:border-orange-600 rounded-lg p-3 bg-orange-50 dark:bg-orange-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-orange-800 dark:text-orange-200">Airtable</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Airtable...')}
+                    className="w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Base ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Personal Access Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Airtable...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
+              </div>
+
+              {/* CSV Export API */}
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-gray-800 dark:text-gray-200">CSV Export</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância CSV Export...')}
+                    className="w-5 h-5 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Export Path" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <select className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="daily">Diário</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="monthly">Mensal</option>
+                  </select>
+                </div>
+                <button onClick={() => alert('Configurando CSV Export...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
+              </div>
+
+              {/* Database Sync API */}
+              <div className="border border-indigo-200 dark:border-indigo-600 rounded-lg p-3 bg-indigo-50 dark:bg-indigo-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Database Sync</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância Database Sync...')}
+                    className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="text" placeholder="Database URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Connection String" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando Database Sync...')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
+              </div>
+
+              {/* REST Webhook API */}
+              <div className="border border-red-200 dark:border-red-600 rounded-lg p-3 bg-red-50 dark:bg-red-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h6 className="text-sm font-medium text-red-800 dark:text-red-200">REST Webhook</h6>
+                  <button 
+                    onClick={() => alert('Adicionando nova instância REST Webhook...')}
+                    className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-1 mb-2">
+                  <input type="url" placeholder="Webhook URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="Authorization Header" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                </div>
+                <button onClick={() => alert('Configurando REST Webhook...')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Botões globais */}
+          <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-600">
+            <div className="flex space-x-3">
+              <button 
+                onClick={() => alert('Sincronizando todas as planilhas...')}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Sincronizar Todas
+              </button>
+              <button 
+                onClick={() => alert('Testando conexões das planilhas...')}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Testar Conexões
+              </button>
+            </div>
+            <button 
+              onClick={() => alert('Exportando configurações das planilhas...')}
+              className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar Config
+            </button>
+          </div>
+        </div>
+
+        {/* Seção Configurações de Tempo */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center mb-6">
             <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
