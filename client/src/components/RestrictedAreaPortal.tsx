@@ -123,6 +123,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   
   // Sistema de notificações no painel
   const [notifications, setNotifications] = useState<{id: number; title: string; message: string; type: 'success' | 'error' | 'info'}[]>([]);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [configModalData, setConfigModalData] = useState<any>(null);
+  
+  // Estados para armazenar múltiplas configurações
+  const [savedConfigs, setSavedConfigs] = useState<{
+    sheets: any[];
+    drive: any[];
+    integrations: any[];
+  }>({
+    sheets: [],
+    drive: [],
+    integrations: []
+  });
   
   // Função para mostrar notificação no painel
   const showNotification = (title: string, message: string, type: 'success' | 'error' | 'info' = 'info') => {
@@ -400,6 +413,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         setShowBackupConfigModal(true);
         break;
     }
+  };
+
+  // Função genérica para abrir modal de configuração
+  const openConfigModal = (name: string, fields: any[]) => {
+    setConfigModalData({ name, fields });
+    setShowConfigModal(true);
   };
 
   // Função para renderizar a seção de gerenciamento de anexos
@@ -1838,7 +1857,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('drive1')}
+                  onClick={() => openConfigModal('Google Drive Principal', [
+                    { label: 'Client ID', placeholder: 'ID do cliente Google', type: 'text' },
+                    { label: 'Client Secret', placeholder: 'Secret do cliente', type: 'password' },
+                    { label: 'Refresh Token', placeholder: 'Token de atualização', type: 'password' },
+                    { label: 'Pasta Principal', placeholder: 'ID da pasta Propostas/Ativas', type: 'text' },
+                    { label: 'Organização', type: 'select', options: ['Por Cliente', 'Por Data', 'Por Vendedor', 'Por Status'] }
+                  ])}
                   className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
@@ -1857,7 +1882,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('drive2')}
+                  onClick={() => openConfigModal('Google Drive Backup', [
+                    { label: 'Client ID', placeholder: 'ID do cliente Google', type: 'text' },
+                    { label: 'Client Secret', placeholder: 'Secret do cliente', type: 'password' },
+                    { label: 'Refresh Token', placeholder: 'Token de atualização', type: 'password' },
+                    { label: 'Pasta Backup', placeholder: 'ID da pasta Backup/Diario', type: 'text' },
+                    { label: 'Frequência', type: 'select', options: ['Diário', 'Semanal', 'Mensal'] },
+                    { label: 'Horário', type: 'time', placeholder: '02:00' }
+                  ])}
                   className="px-3 py-1 text-xs bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
                 >
                   Configurar
@@ -1876,7 +1908,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ Manual</span>
                 <button 
-                  onClick={() => configureAutomation('drive3')}
+                  onClick={() => openConfigModal('Google Drive Arquivo', [
+                    { label: 'Client ID', placeholder: 'ID do cliente Google', type: 'text' },
+                    { label: 'Client Secret', placeholder: 'Secret do cliente', type: 'password' },
+                    { label: 'Refresh Token', placeholder: 'Token de atualização', type: 'password' },
+                    { label: 'Pasta Arquivo', placeholder: 'ID da pasta Arquivo/Historico', type: 'text' },
+                    { label: 'Mover após', type: 'select', options: ['30 dias', '60 dias', '90 dias', '180 dias', '1 ano'] },
+                    { label: 'Automatizar', type: 'select', options: ['Sim', 'Não'] }
+                  ])}
                   className="px-3 py-1 text-xs bg-purple-600 text-white dark:bg-purple-600 dark:text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500 transition-colors"
                 >
                   Configurar
@@ -1895,7 +1934,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('sheet1')}
+                  onClick={() => openConfigModal('Planilha Operacional', [
+                    { label: 'ID da Planilha', placeholder: '1ABC...xyz', type: 'text' },
+                    { label: 'Nome da Aba', placeholder: 'Propostas_Ativas', type: 'text' },
+                    { label: 'API Key', placeholder: 'Chave API do Google', type: 'password' },
+                    { label: 'Sincronização', type: 'select', options: ['Tempo real', 'A cada 5 min', 'A cada 15 min', 'A cada hora'] },
+                    { label: 'Campos', placeholder: 'ID,Cliente,CNPJ,Vendedor,Status', type: 'text', help: 'Separe os campos por vírgula' }
+                  ])}
                   className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
@@ -1914,7 +1959,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
-                  onClick={() => configureAutomation('sheet2')}
+                  onClick={() => openConfigModal('Planilha Financeiro', [
+                    { label: 'ID da Planilha', placeholder: '1ABC...xyz', type: 'text' },
+                    { label: 'Nome da Aba', placeholder: 'Financeiro_Consolidado', type: 'text' },
+                    { label: 'API Key', placeholder: 'Chave API do Google', type: 'password' },
+                    { label: 'Sincronização', type: 'select', options: ['A cada hora', 'A cada 30 min', 'A cada 2 horas', 'A cada 4 horas'] },
+                    { label: 'Validações', type: 'select', options: ['Automática', 'Manual', 'Notificar'] }
+                  ])}
                   className="px-3 py-1 text-xs bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
                 >
                   Configurar
@@ -1933,7 +1984,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">🔄 Diário</span>
                 <button 
-                  onClick={() => configureAutomation('sheet3')}
+                  onClick={() => openConfigModal('Planilha Relatórios', [
+                    { label: 'ID da Planilha', placeholder: '1ABC...xyz', type: 'text' },
+                    { label: 'Nome da Aba', placeholder: 'Relatorios_Gerenciais', type: 'text' },
+                    { label: 'API Key', placeholder: 'Chave API do Google', type: 'password' },
+                    { label: 'Horário', type: 'time', placeholder: '06:00' },
+                    { label: 'Tipo de Relatório', type: 'select', options: ['Completo', 'Resumido', 'Executivo', 'Detalhado'] },
+                    { label: 'Enviar por email', type: 'select', options: ['Sim', 'Não'] }
+                  ])}
                   className="px-3 py-1 text-xs bg-purple-600 text-white dark:bg-purple-600 dark:text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500 transition-colors"
                 >
                   Configurar
@@ -2057,6 +2115,235 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
         </div>
 
+        {/* MAIS 10 APIs PERSONALIZADAS EDITÁVEIS */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mt-6">
+          <div className="flex items-center mb-6">
+            <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">APIs Personalizadas</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* API Personalizada 11 */}
+            <div className="border border-cyan-200 dark:border-cyan-600 rounded-lg p-3 bg-cyan-50 dark:bg-cyan-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 11"
+                  className="font-medium text-cyan-800 dark:text-cyan-200 bg-transparent border-b border-transparent hover:border-cyan-400 focus:border-cyan-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-cyan-600 text-white rounded-full flex items-center justify-center hover:bg-cyan-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-cyan-600 text-white text-xs rounded hover:bg-cyan-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 12 */}
+            <div className="border border-rose-200 dark:border-rose-600 rounded-lg p-3 bg-rose-50 dark:bg-rose-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 12"
+                  className="font-medium text-rose-800 dark:text-rose-200 bg-transparent border-b border-transparent hover:border-rose-400 focus:border-rose-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-rose-600 text-white rounded-full flex items-center justify-center hover:bg-rose-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-rose-600 text-white text-xs rounded hover:bg-rose-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 13 */}
+            <div className="border border-emerald-200 dark:border-emerald-600 rounded-lg p-3 bg-emerald-50 dark:bg-emerald-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 13"
+                  className="font-medium text-emerald-800 dark:text-emerald-200 bg-transparent border-b border-transparent hover:border-emerald-400 focus:border-emerald-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:bg-emerald-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-emerald-600 text-white text-xs rounded hover:bg-emerald-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 14 */}
+            <div className="border border-violet-200 dark:border-violet-600 rounded-lg p-3 bg-violet-50 dark:bg-violet-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 14"
+                  className="font-medium text-violet-800 dark:text-violet-200 bg-transparent border-b border-transparent hover:border-violet-400 focus:border-violet-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-violet-600 text-white rounded-full flex items-center justify-center hover:bg-violet-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-violet-600 text-white text-xs rounded hover:bg-violet-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 15 */}
+            <div className="border border-amber-200 dark:border-amber-600 rounded-lg p-3 bg-amber-50 dark:bg-amber-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 15"
+                  className="font-medium text-amber-800 dark:text-amber-200 bg-transparent border-b border-transparent hover:border-amber-400 focus:border-amber-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-amber-600 text-white rounded-full flex items-center justify-center hover:bg-amber-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-amber-600 text-white text-xs rounded hover:bg-amber-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 16 */}
+            <div className="border border-lime-200 dark:border-lime-600 rounded-lg p-3 bg-lime-50 dark:bg-lime-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 16"
+                  className="font-medium text-lime-800 dark:text-lime-200 bg-transparent border-b border-transparent hover:border-lime-400 focus:border-lime-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-lime-600 text-white rounded-full flex items-center justify-center hover:bg-lime-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-lime-600 text-white text-xs rounded hover:bg-lime-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 17 */}
+            <div className="border border-sky-200 dark:border-sky-600 rounded-lg p-3 bg-sky-50 dark:bg-sky-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 17"
+                  className="font-medium text-sky-800 dark:text-sky-200 bg-transparent border-b border-transparent hover:border-sky-400 focus:border-sky-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-sky-600 text-white rounded-full flex items-center justify-center hover:bg-sky-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-sky-600 text-white text-xs rounded hover:bg-sky-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 18 */}
+            <div className="border border-fuchsia-200 dark:border-fuchsia-600 rounded-lg p-3 bg-fuchsia-50 dark:bg-fuchsia-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 18"
+                  className="font-medium text-fuchsia-800 dark:text-fuchsia-200 bg-transparent border-b border-transparent hover:border-fuchsia-400 focus:border-fuchsia-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-fuchsia-600 text-white rounded-full flex items-center justify-center hover:bg-fuchsia-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-fuchsia-600 text-white text-xs rounded hover:bg-fuchsia-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 19 */}
+            <div className="border border-stone-200 dark:border-stone-600 rounded-lg p-3 bg-stone-50 dark:bg-stone-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 19"
+                  className="font-medium text-stone-800 dark:text-stone-200 bg-transparent border-b border-transparent hover:border-stone-400 focus:border-stone-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-stone-600 text-white rounded-full flex items-center justify-center hover:bg-stone-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-stone-600 text-white text-xs rounded hover:bg-stone-700">Configurar</button>
+            </div>
+
+            {/* API Personalizada 20 */}
+            <div className="border border-zinc-200 dark:border-zinc-600 rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900">
+              <div className="flex items-center justify-between mb-2">
+                <input 
+                  type="text"
+                  defaultValue="Minha API 20"
+                  className="font-medium text-zinc-800 dark:text-zinc-200 bg-transparent border-b border-transparent hover:border-zinc-400 focus:border-zinc-500 focus:outline-none w-full"
+                />
+                <button 
+                  onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                  className="w-5 h-5 bg-zinc-600 text-white rounded-full flex items-center justify-center hover:bg-zinc-700 ml-2"
+                >
+                  <span className="text-xs">+</span>
+                </button>
+              </div>
+              <div className="space-y-1 mb-2">
+                <input type="text" placeholder="Endpoint URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              </div>
+              <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-zinc-600 text-white text-xs rounded hover:bg-zinc-700">Configurar</button>
+            </div>
+          </div>
+        </div>
 
       </div>
     );
@@ -2522,6 +2809,232 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <button className="w-full px-3 py-2 bg-black dark:bg-white text-white dark:text-black text-xs rounded hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
                   Configurar
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/* MAIS 10 APIs EDITÁVEIS */}
+          <div className="mt-8">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">APIs Personalizadas</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* API Personalizada 1 */}
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 1"
+                    className="font-medium text-gray-800 dark:text-gray-200 bg-transparent border-b border-transparent hover:border-gray-400 focus:border-blue-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 2 */}
+              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 2"
+                    className="font-medium text-blue-800 dark:text-blue-200 bg-transparent border-b border-transparent hover:border-blue-400 focus:border-blue-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 3 */}
+              <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 3"
+                    className="font-medium text-green-800 dark:text-green-200 bg-transparent border-b border-transparent hover:border-green-400 focus:border-green-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 4 */}
+              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 4"
+                    className="font-medium text-purple-800 dark:text-purple-200 bg-transparent border-b border-transparent hover:border-purple-400 focus:border-purple-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 5 */}
+              <div className="border border-red-200 dark:border-red-600 rounded-lg p-4 bg-red-50 dark:bg-red-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 5"
+                    className="font-medium text-red-800 dark:text-red-200 bg-transparent border-b border-transparent hover:border-red-400 focus:border-red-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 6 */}
+              <div className="border border-yellow-200 dark:border-yellow-600 rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 6"
+                    className="font-medium text-yellow-800 dark:text-yellow-200 bg-transparent border-b border-transparent hover:border-yellow-400 focus:border-yellow-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-yellow-600 text-white rounded-full flex items-center justify-center hover:bg-yellow-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-yellow-300 dark:border-yellow-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-yellow-300 dark:border-yellow-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 7 */}
+              <div className="border border-indigo-200 dark:border-indigo-600 rounded-lg p-4 bg-indigo-50 dark:bg-indigo-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 7"
+                    className="font-medium text-indigo-800 dark:text-indigo-200 bg-transparent border-b border-transparent hover:border-indigo-400 focus:border-indigo-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-indigo-300 dark:border-indigo-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-indigo-300 dark:border-indigo-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 8 */}
+              <div className="border border-pink-200 dark:border-pink-600 rounded-lg p-4 bg-pink-50 dark:bg-pink-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 8"
+                    className="font-medium text-pink-800 dark:text-pink-200 bg-transparent border-b border-transparent hover:border-pink-400 focus:border-pink-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-pink-300 dark:border-pink-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-pink-300 dark:border-pink-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-pink-600 text-white text-xs rounded hover:bg-pink-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 9 */}
+              <div className="border border-teal-200 dark:border-teal-600 rounded-lg p-4 bg-teal-50 dark:bg-teal-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 9"
+                    className="font-medium text-teal-800 dark:text-teal-200 bg-transparent border-b border-transparent hover:border-teal-400 focus:border-teal-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center hover:bg-teal-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-teal-300 dark:border-teal-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-teal-300 dark:border-teal-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-teal-600 text-white text-xs rounded hover:bg-teal-700 transition-colors">Configurar</button>
+                </div>
+              </div>
+
+              {/* API Personalizada 10 */}
+              <div className="border border-orange-200 dark:border-orange-600 rounded-lg p-4 bg-orange-50 dark:bg-orange-900">
+                <div className="flex items-center justify-between mb-3">
+                  <input 
+                    type="text"
+                    defaultValue="API Personalizada 10"
+                    className="font-medium text-orange-800 dark:text-orange-200 bg-transparent border-b border-transparent hover:border-orange-400 focus:border-orange-500 focus:outline-none"
+                  />
+                  <button 
+                    onClick={() => showNotification('API', 'Adicionando nova instância...', 'info')}
+                    className="w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Endpoint URL" className="w-full px-2 py-1 text-xs border border-orange-300 dark:border-orange-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <input type="password" placeholder="API Key" className="w-full px-2 py-1 text-xs border border-orange-300 dark:border-orange-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+                  <button onClick={() => showNotification('API', 'Configurando...', 'info')} className="w-full px-3 py-2 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors">Configurar</button>
+                </div>
               </div>
             </div>
           </div>
@@ -3791,69 +4304,171 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       {/* Modais de Configuração */}
       {showDriveConfigModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center mb-4">
-              <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Drive</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center mb-6">
+              <HardDrive className="w-6 h-6 text-blue-600 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Google Drive</h3>
             </div>
             
+            {/* Configurações salvas */}
+            {savedConfigs.drive.length > 0 && (
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">Drives Configurados:</h4>
+                <div className="space-y-2 mb-4">
+                  {savedConfigs.drive.map((config, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                      <div>
+                        <span className="font-medium">{config.name || `Drive ${index + 1}`}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                          ({config.type || 'Principal'})
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSavedConfigs(prev => ({
+                            ...prev,
+                            drive: prev.drive.filter((_, i) => i !== index)
+                          }));
+                          showNotification('Removido', 'Configuração removida', 'info');
+                        }}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Formulário de nova configuração */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Estrutura de Pastas</label>
-                <select 
-                  value={driveConfig.folderStructure}
-                  onChange={(e) => setDriveConfig({...driveConfig, folderStructure: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nome da Configuração
+                </label>
+                <input
+                  id="drive-name"
+                  type="text"
+                  placeholder="Ex: Drive Principal"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Tipo de Drive
+                </label>
+                <select
+                  id="drive-type"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <option value="Por Cliente">Por Cliente</option>
-                  <option value="Por Data">Por Data</option>
-                  <option value="Por Vendedor">Por Vendedor</option>
+                  <option value="principal">Principal - Propostas Ativas</option>
+                  <option value="backup">Backup - Cópias de Segurança</option>
+                  <option value="archive">Arquivo - Propostas Finalizadas</option>
+                  <option value="temp">Temporário - Processamento</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  ID da Pasta Raiz
+                </label>
+                <input
+                  id="drive-folder-id"
+                  type="text"
+                  placeholder="Ex: 1FAIpQLScQKE8BjIZJ-abmix-proposals"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Estrutura de Pastas
+                </label>
+                <select
+                  id="folder-structure"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="client">Por Cliente</option>
+                  <option value="date">Por Data</option>
+                  <option value="status">Por Status</option>
+                  <option value="vendor">Por Vendedor</option>
+                  <option value="custom">Personalizada</option>
                 </select>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-white">Sincronização Automática</span>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Sincronização Automática
+                </label>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={driveConfig.autoSync}
-                    onChange={(e) => setDriveConfig({...driveConfig, autoSync: e.target.checked})}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <input id="auto-sync" type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 </label>
               </div>
-
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Frequência de Backup</label>
-                <select 
-                  value={driveConfig.backupFrequency}
-                  onChange={(e) => setDriveConfig({...driveConfig, backupFrequency: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Tempo Real">Tempo Real</option>
-                  <option value="Diário">Diário</option>
-                  <option value="Semanal">Semanal</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Credenciais (Service Account)
+                </label>
+                <textarea
+                  id="drive-credentials"
+                  placeholder='{"type": "service_account", "project_id": "..."}'
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                />
               </div>
             </div>
             
-            <div className="flex space-x-3 mt-6">
-              <button
-                onClick={() => setShowDriveConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-              >
-                Cancelar
-              </button>
+            <div className="flex justify-between mt-6">
               <button
                 onClick={() => {
-                  openGoogleDrive();
-                  setShowDriveConfigModal(false);
+                  const name = (document.getElementById('drive-name') as HTMLInputElement)?.value;
+                  const type = (document.getElementById('drive-type') as HTMLSelectElement)?.value;
+                  const folderId = (document.getElementById('drive-folder-id') as HTMLInputElement)?.value;
+                  const folderStructure = (document.getElementById('folder-structure') as HTMLSelectElement)?.value;
+                  const autoSync = (document.getElementById('auto-sync') as HTMLInputElement)?.checked;
+                  const credentials = (document.getElementById('drive-credentials') as HTMLTextAreaElement)?.value;
+                  
+                  if (folderId) {
+                    setSavedConfigs(prev => ({
+                      ...prev,
+                      drive: [...prev.drive, { name, type, folderId, folderStructure, autoSync, credentials }]
+                    }));
+                    
+                    // Limpar campos
+                    (document.getElementById('drive-name') as HTMLInputElement).value = '';
+                    (document.getElementById('drive-folder-id') as HTMLInputElement).value = '';
+                    (document.getElementById('drive-credentials') as HTMLTextAreaElement).value = '';
+                    
+                    showNotification('Adicionado', `Drive "${name || 'Novo'}" configurado!`, 'success');
+                  } else {
+                    showNotification('Erro', 'ID da pasta é obrigatório', 'error');
+                  }
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Salvar e Abrir Drive
+                + Adicionar Drive
               </button>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowDriveConfigModal(false)}
+                  className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Google Drive', `${savedConfigs.drive.length} drives configurados!`, 'success');
+                    setShowDriveConfigModal(false);
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Salvar Configurações
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -3861,67 +4476,156 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
       {showSheetsConfigModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center mb-4">
-              <FileText className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Sheets</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center mb-6">
+              <FileSpreadsheet className="w-6 h-6 text-green-600 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar o Planilhas Google</h3>
             </div>
             
+            {/* Configurações salvas */}
+            {savedConfigs.sheets.length > 0 && (
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">Planilhas Configuradas:</h4>
+                <div className="space-y-2 mb-4">
+                  {savedConfigs.sheets.map((config, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                      <div>
+                        <span className="font-medium">{config.name || `Planilha ${index + 1}`}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                          ({config.syncFrequency || 'Tempo Real'})
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSavedConfigs(prev => ({
+                            ...prev,
+                            sheets: prev.sheets.filter((_, i) => i !== index)
+                          }));
+                          showNotification('Removido', 'Configuração removida', 'info');
+                        }}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Formulário de nova configuração */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">ID da Planilha</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nome da Planilha
+                </label>
                 <input
+                  id="sheet-name"
                   type="text"
-                  value={sheetsConfig.sheetId}
-                  onChange={(e) => setSheetsConfig({...sheetsConfig, sheetId: e.target.value})}
+                  placeholder="Ex: Propostas Ativas"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  ID da Planilha
+                </label>
+                <input
+                  id="sheet-id"
+                  type="text"
                   placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 />
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-white">Atualização Automática</span>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Atualização Automática
+                </label>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={sheetsConfig.autoUpdate}
-                    onChange={(e) => setSheetsConfig({...sheetsConfig, autoUpdate: e.target.checked})}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <input id="auto-update" type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
                 </label>
               </div>
-
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Frequência de Sync</label>
-                <select 
-                  value={sheetsConfig.syncFrequency}
-                  onChange={(e) => setSheetsConfig({...sheetsConfig, syncFrequency: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Frequência de Sincronização
+                </label>
+                <select
+                  id="sync-frequency"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <option value="Tempo Real">Tempo Real</option>
-                  <option value="5 Minutos">A cada 5 minutos</option>
-                  <option value="Horário">A cada hora</option>
+                  <option value="real-time">Tempo Real</option>
+                  <option value="5min">A cada 5 minutos</option>
+                  <option value="15min">A cada 15 minutos</option>
+                  <option value="30min">A cada 30 minutos</option>
+                  <option value="1hour">A cada hora</option>
+                  <option value="daily">Diariamente</option>
                 </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nome da Aba
+                </label>
+                <input
+                  id="sheet-tab"
+                  type="text"
+                  placeholder="Ex: Propostas_Ativas"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
               </div>
             </div>
             
-            <div className="flex space-x-3 mt-6">
-              <button
-                onClick={() => setShowSheetsConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-              >
-                Cancelar
-              </button>
+            <div className="flex justify-between mt-6">
               <button
                 onClick={() => {
-                  syncGoogleSheets();
-                  setShowSheetsConfigModal(false);
+                  const name = (document.getElementById('sheet-name') as HTMLInputElement)?.value;
+                  const id = (document.getElementById('sheet-id') as HTMLInputElement)?.value;
+                  const tab = (document.getElementById('sheet-tab') as HTMLInputElement)?.value;
+                  const syncFrequency = (document.getElementById('sync-frequency') as HTMLSelectElement)?.value;
+                  const autoUpdate = (document.getElementById('auto-update') as HTMLInputElement)?.checked;
+                  
+                  if (id) {
+                    setSavedConfigs(prev => ({
+                      ...prev,
+                      sheets: [...prev.sheets, { name, id, tab, syncFrequency, autoUpdate }]
+                    }));
+                    
+                    // Limpar campos
+                    (document.getElementById('sheet-name') as HTMLInputElement).value = '';
+                    (document.getElementById('sheet-id') as HTMLInputElement).value = '';
+                    (document.getElementById('sheet-tab') as HTMLInputElement).value = '';
+                    
+                    showNotification('Adicionado', `Planilha "${name || 'Nova'}" configurada!`, 'success');
+                  } else {
+                    showNotification('Erro', 'ID da planilha é obrigatório', 'error');
+                  }
                 }}
-                className="flex-1 px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Salvar e Sincronizar
+                + Adicionar Planilha
               </button>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowSheetsConfigModal(false)}
+                  className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Google Sheets', `${savedConfigs.sheets.length} planilhas configuradas!`, 'success');
+                    setShowSheetsConfigModal(false);
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Salvar e sincronizar
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -3929,66 +4633,170 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
       {showWhatsAppConfigModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center mb-4">
-              <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar WhatsApp</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center mb-6">
+              <MessageSquare className="w-6 h-6 text-green-600 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar WhatsApp Business</h3>
             </div>
             
+            {/* Números configurados */}
+            {savedConfigs.integrations.filter(c => c.category === 'whatsapp').length > 0 && (
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">Números Configurados:</h4>
+                <div className="space-y-2 mb-4">
+                  {savedConfigs.integrations.filter(c => c.category === 'whatsapp').map((config, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                      <div>
+                        <span className="font-medium">{config.name || 'WhatsApp Business'}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                          {config.number}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSavedConfigs(prev => ({
+                            ...prev,
+                            integrations: prev.integrations.filter(c => !(c.category === 'whatsapp' && c.number === config.number))
+                          }));
+                          showNotification('Removido', 'Número removido', 'info');
+                        }}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Formulário de nova configuração */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Token da API</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nome da Conta
+                </label>
                 <input
-                  type="password"
-                  placeholder="Token do WhatsApp Business API"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  id="whatsapp-name"
+                  type="text"
+                  placeholder="Ex: Atendimento Principal"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Número do WhatsApp</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Número do WhatsApp Business
+                </label>
                 <input
+                  id="whatsapp-number"
                   type="text"
                   placeholder="+55 11 99999-9999"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 />
               </div>
-
+              
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tipo de Notificações</label>
-                <div className="space-y-2">
-                  <label className="flex items-center">
-                    <input type="checkbox" className="rounded" defaultChecked />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-white">Nova proposta criada</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="rounded" defaultChecked />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-white">Cliente completou formulário</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input type="checkbox" className="rounded" />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-white">Status da proposta alterado</span>
-                  </label>
-                </div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Token de Acesso
+                </label>
+                <input
+                  id="whatsapp-token"
+                  type="text"
+                  placeholder="EAA..."
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Webhook Secret
+                </label>
+                <input
+                  id="whatsapp-webhook"
+                  type="text"
+                  placeholder="webhook_secret_key"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Respostas Automáticas
+                </label>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input id="whatsapp-auto-reply" type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Mensagem de Boas-vindas
+                </label>
+                <textarea
+                  id="whatsapp-welcome"
+                  placeholder="Olá! Bem-vindo ao Abmix System..."
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
               </div>
             </div>
             
-            <div className="flex space-x-3 mt-6">
-              <button
-                onClick={() => setShowWhatsAppConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-              >
-                Cancelar
-              </button>
+            <div className="flex justify-between mt-6">
               <button
                 onClick={() => {
-                  showNotification('Notificação', 'Configurações do WhatsApp salvas com sucesso!');
-                  setShowWhatsAppConfigModal(false);
+                  const name = (document.getElementById('whatsapp-name') as HTMLInputElement)?.value;
+                  const number = (document.getElementById('whatsapp-number') as HTMLInputElement)?.value;
+                  const token = (document.getElementById('whatsapp-token') as HTMLInputElement)?.value;
+                  const webhook = (document.getElementById('whatsapp-webhook') as HTMLInputElement)?.value;
+                  const autoReply = (document.getElementById('whatsapp-auto-reply') as HTMLInputElement)?.checked;
+                  const welcome = (document.getElementById('whatsapp-welcome') as HTMLTextAreaElement)?.value;
+                  
+                  if (number && token) {
+                    setSavedConfigs(prev => ({
+                      ...prev,
+                      integrations: [...prev.integrations, {
+                        name, number, token, webhook, autoReply, welcome,
+                        category: 'whatsapp',
+                        status: 'Ativo'
+                      }]
+                    }));
+                    
+                    // Limpar campos
+                    (document.getElementById('whatsapp-name') as HTMLInputElement).value = '';
+                    (document.getElementById('whatsapp-number') as HTMLInputElement).value = '';
+                    (document.getElementById('whatsapp-token') as HTMLInputElement).value = '';
+                    (document.getElementById('whatsapp-webhook') as HTMLInputElement).value = '';
+                    (document.getElementById('whatsapp-welcome') as HTMLTextAreaElement).value = '';
+                    
+                    showNotification('Adicionado', `WhatsApp "${name || number}" configurado!`, 'success');
+                  } else {
+                    showNotification('Erro', 'Número e token são obrigatórios', 'error');
+                  }
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
-                Salvar
+                + Adicionar Número
               </button>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowWhatsAppConfigModal(false)}
+                  className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('WhatsApp Business', `${savedConfigs.integrations.filter(c => c.category === 'whatsapp').length} números configurados!`, 'success');
+                    setShowWhatsAppConfigModal(false);
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Salvar e Ativar
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -4079,6 +4887,159 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         />
       )}
       
+      {/* Modal Genérico de Configuração */}
+      {showConfigModal && configModalData && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center mb-6">
+              <Settings className="w-6 h-6 text-blue-600 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                Configurar {configModalData.name}
+              </h3>
+            </div>
+            
+            {/* Configurações salvas para integrações */}
+            {configModalData.type === 'integration' && savedConfigs.integrations.filter(c => c.category === configModalData.category).length > 0 && (
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-3">Configurações Existentes:</h4>
+                <div className="space-y-2 mb-4">
+                  {savedConfigs.integrations.filter(c => c.category === configModalData.category).map((config, index) => (
+                    <div key={index} className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-3 rounded">
+                      <div>
+                        <span className="font-medium">{config.name}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                          ({config.status || 'Ativo'})
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSavedConfigs(prev => ({
+                            ...prev,
+                            integrations: prev.integrations.filter((c, i) => !(c.category === configModalData.category && i === index))
+                          }));
+                          showNotification('Removido', 'Configuração removida', 'info');
+                        }}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div className="space-y-4">
+              {configModalData.fields?.map((field: any, index: number) => (
+                <div key={index}>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {field.label}
+                  </label>
+                  {field.type === 'select' ? (
+                    <select
+                      id={`field-${index}`}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="">Selecione...</option>
+                      {field.options?.map((option: string) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  ) : field.type === 'toggle' ? (
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input id={`field-${index}`} type="checkbox" defaultChecked className="sr-only peer" />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                    </label>
+                  ) : field.type === 'textarea' ? (
+                    <textarea
+                      id={`field-${index}`}
+                      placeholder={field.placeholder}
+                      rows={field.rows || 3}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    />
+                  ) : (
+                    <input
+                      id={`field-${index}`}
+                      type={field.type || 'text'}
+                      placeholder={field.placeholder}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    />
+                  )}
+                  {field.help && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{field.help}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-between mt-6">
+              {configModalData.type === 'integration' && (
+                <button
+                  onClick={() => {
+                    const values: any = {};
+                    configModalData.fields?.forEach((field: any, index: number) => {
+                      const element = document.getElementById(`field-${index}`) as any;
+                      if (element) {
+                        values[field.key || field.label] = field.type === 'checkbox' ? element.checked : element.value;
+                      }
+                    });
+                    
+                    if (Object.values(values).some(v => v)) {
+                      setSavedConfigs(prev => ({
+                        ...prev,
+                        integrations: [...prev.integrations, {
+                          name: configModalData.name,
+                          category: configModalData.category,
+                          ...values,
+                          status: 'Ativo'
+                        }]
+                      }));
+                      
+                      // Limpar campos
+                      configModalData.fields?.forEach((field: any, index: number) => {
+                        const element = document.getElementById(`field-${index}`) as any;
+                        if (element && field.type !== 'checkbox') {
+                          element.value = '';
+                        }
+                      });
+                      
+                      showNotification('Adicionado', `${configModalData.name} configurado!`, 'success');
+                    } else {
+                      showNotification('Erro', 'Preencha pelo menos um campo', 'error');
+                    }
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  + Adicionar Configuração
+                </button>
+              )}
+              
+              <div className="flex space-x-3 ml-auto">
+                <button
+                  onClick={() => {
+                    setShowConfigModal(false);
+                    setConfigModalData(null);
+                  }}
+                  className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showNotification('Configuração', `${configModalData.name} ${configModalData.type === 'integration' ? 'salvo' : 'configurado'} com sucesso!`, 'success');
+                    setShowConfigModal(false);
+                    setConfigModalData(null);
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  {configModalData.saveText || 'Salvar Configuração'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* System Footer */}
       <SystemFooter />
     </div>
