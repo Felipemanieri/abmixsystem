@@ -858,50 +858,50 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gray-800 rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white dark:text-white sm font-medium text-white">Faturamento Total</p>
-              <p className="text-white dark:text-white 2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(teamStats.totalValue || 0)}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Faturamento Total</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(teamStats.totalValue || 0)}</p>
             </div>
             <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white dark:text-white sm font-medium text-white">Total Propostas</p>
-              <p className="text-white dark:text-white 2xl font-bold text-blue-600 dark:text-blue-400">{teamStats.totalProposals || 0}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Propostas</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{teamStats.totalProposals || 0}</p>
             </div>
             <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white dark:text-white sm font-medium text-white">Ticket Médio</p>
-              <p className="text-white dark:text-white 2xl font-bold text-purple-600 dark:text-white">{formatCurrency(teamStats.averageValue || 0)}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Ticket Médio</p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{formatCurrency(teamStats.averageValue || 0)}</p>
             </div>
-            <TrendingUp className="h-8 w-8 text-purple-600 dark:text-white" />
+            <TrendingUp className="h-8 w-8 text-purple-600 dark:text-purple-400" />
           </div>
         </div>
         
-        <div className="bg-gray-800 rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white dark:text-white sm font-medium text-white">Vendedores Ativos</p>
-              <p className="text-white dark:text-white 2xl font-bold text-orange-600 dark:text-white">{teamStats.totalVendors || 0}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Vendedores Ativos</p>
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{teamStats.totalVendors || 0}</p>
             </div>
-            <Users className="h-8 w-8 text-orange-600 dark:text-white" />
+            <Users className="h-8 w-8 text-orange-600 dark:text-orange-400" />
           </div>
         </div>
       </div>
 
       {/* Performance por Vendedor */}
-      <div className="bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-white dark:text-white lg font-semibold mb-4">Performance por Vendedor</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
+        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Performance por Vendedor</h3>
         <div className="space-y-4">
           {vendors.map(vendor => {
             const stats = getVendorStats(vendor.id);
@@ -909,14 +909,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             const progress = target ? calculateProgress(vendor.id, target) : 0;
             
             return (
-              <div key={vendor.id} className="border bg-gray-700 text-white rounded-lg p-4">
+              <div key={vendor.id} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium text-white">{vendor.name}</span>
-                  <span className="text-white dark:text-white sm text-white">{stats.totalProposals} propostas</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{vendor.name}</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">{stats.totalProposals} propostas</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-white dark:text-white sm text-white">Faturamento: {formatCurrency(stats.totalValue.toString())}</span>
-                  <span className="text-white dark:text-white sm font-medium">{progress.toFixed(1)}% da meta</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Faturamento: {formatCurrency(stats.totalValue.toString())}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{progress.toFixed(1)}% da meta</span>
                 </div>
                 <SimpleProgressBar percentage={progress} />
               </div>
@@ -930,9 +930,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const renderMetas = () => (
     <div className="space-y-6">
       {/* Controles */}
-      <div className="bg-gray-800 rounded-lg shadow-md p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-white dark:text-white lg font-semibold">Gerenciar Metas</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Gerenciar Metas</h3>
           <div className="flex space-x-2">
             <button
               onClick={() => setShowAddTargetForm(true)}
@@ -956,7 +956,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-            className="border bg-gray-700 text-white rounded-lg px-3 py-2 bg-gray-700 text-white"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2"
           >
             {Array.from({ length: 12 }, (_, i) => (
               <option className="text-black bg-white" key={i + 1} value={i + 1}>
@@ -967,7 +967,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            className="border bg-gray-700 text-white rounded-lg px-3 py-2 bg-gray-700 text-white"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2"
           >
             <option value={2024}>2024</option>
             <option value={2025}>2025</option>
@@ -977,30 +977,30 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       </div>
 
       {/* Metas dos Vendedores */}
-      <div className="bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-white dark:text-white lg font-semibold mb-4">Metas Individuais</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-600">
+        <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Metas Individuais</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border bg-gray-700 text-white-b">
-                <th className="text-white text-white dark:text-white left py-2">Vendedor</th>
-                <th className="text-white text-white dark:text-white left py-2">Período</th>
-                <th className="text-white text-white dark:text-white left py-2">Meta Valor</th>
-                <th className="text-white text-white dark:text-white left py-2">Meta Propostas</th>
-                <th className="text-white text-white dark:text-white left py-2">Bônus</th>
-                <th className="text-white text-white dark:text-white left py-2">Progresso</th>
-                <th className="text-white text-white dark:text-white left py-2">Ações</th>
+              <tr className="border-b border-gray-200 dark:border-gray-600">
+                <th className="text-left py-2 text-gray-900 dark:text-white">Vendedor</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Período</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Meta Valor</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Meta Propostas</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Bônus</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Progresso</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendorTargets.map(target => (
-                <tr key={target.id} className="border bg-gray-700 text-white-b">
-                  <td className="text-white py-2">{getVendorName(target.vendorId)}</td>
-                  <td className="text-white py-2">{getMonthName(target.month)}/{target.year}</td>
-                  <td className="text-white py-2">{formatCurrency(target.targetValue)}</td>
-                  <td className="text-white py-2">{target.targetProposals}</td>
-                  <td className="text-white py-2">{formatCurrency(target.bonus)}</td>
-                  <td className="text-white py-2">
+                <tr key={target.id} className="border-b border-gray-200 dark:border-gray-600">
+                  <td className="py-2 text-gray-900 dark:text-white">{getVendorName(target.vendorId)}</td>
+                  <td className="py-2 text-gray-900 dark:text-white">{getMonthName(target.month)}/{target.year}</td>
+                  <td className="py-2 text-gray-900 dark:text-white">{formatCurrency(target.targetValue)}</td>
+                  <td className="py-2 text-gray-900 dark:text-white">{target.targetProposals}</td>
+                  <td className="py-2 text-gray-900 dark:text-white">{formatCurrency(target.bonus)}</td>
+                  <td className="py-2">
                     <div className="w-24">
                       <SimpleProgressBar percentage={calculateProgress(target.vendorId, target)} />
                     </div>
@@ -1670,35 +1670,35 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     return (
       <div className="space-y-6">
         {/* Header discreto e profissional */}
-        <div className="border bg-gray-700 text-white-b border-gray-200 dark:border-gray-700 dark:border-gray-600 pb-4 mb-6">
+        <div className="border-b border-gray-200 dark:border-gray-600 pb-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-white dark:text-white 2xl font-semibold text-white dark:text-white">Analytics & Performance</h2>
-              <p className="text-white dark:text-white white mt-1">Análise de {analyticsData.length} propostas</p>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Analytics & Performance</h2>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">Análise de {analyticsData.length} propostas</p>
             </div>
             <div className="text-white dark:text-white right">
-              <span className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{new Date().toLocaleDateString('pt-BR')}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">{new Date().toLocaleDateString('pt-BR')}</span>
             </div>
           </div>
         </div>
 
         {/* Filtros */}
-        <div className="bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
-            <h3 className="text-white dark:text-white base font-medium text-white dark:text-white">Filtros</h3>
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+            <h3 className="text-base font-medium text-gray-900 dark:text-white">Filtros</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Vendedores */}
               <div>
-                <label className="text-white block text-sm text-white mb-2">Vendedores</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Vendedores</label>
                 <select
                   value={selectedVendorForChart}
                   onChange={(e) => {
                     setSelectedVendorForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 >
                   <option className="text-black bg-white" value="">Selecione um vendedor</option>
                   <option className="text-black bg-white" value="all">Todos os Vendedores</option>
@@ -1710,36 +1710,36 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Data Início */}
               <div>
-                <label className="text-white block text-sm text-white mb-2">Data Início</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Data Início</label>
                 <input
                   type="date"
                   value={dataInicio}
                   onChange={(e) => setDataInicio(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 />
               </div>
 
               {/* Data Fim */}
               <div>
-                <label className="text-white block text-sm text-white mb-2">Data Fim</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Data Fim</label>
                 <input
                   type="date"
                   value={dataFim}
                   onChange={(e) => setDataFim(e.target.value)}
-                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 />
               </div>
 
               {/* Status */}
               <div>
-                <label className="text-white block text-sm text-white mb-2">Status</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Status</label>
                 <select
                   value={selectedStatusForChart}
                   onChange={(e) => {
                     setSelectedStatusForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 >
                   <option className="text-black bg-white" value="">Selecione um status</option>
                   <option className="text-black bg-white" value="all">Todos os Status</option> className="text-white"
