@@ -173,8 +173,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             </div>
             
             {/* Ícone do portal com gradiente */}
-            <div className={`w-16 h-16 bg-gradient-to-br ${config.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg dark:shadow-gray-900/50`}>
-              <IconComponent className="w-8 h-8 text-white" />
+            <div className={`w-16 h-16 ${portal === 'restricted' ? 'bg-gradient-to-br from-gray-200 to-gray-300' : `bg-gradient-to-br ${config.gradient}`} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg dark:shadow-gray-900/50`}>
+              <IconComponent className={`w-8 h-8 ${portal === 'restricted' ? 'text-gray-600' : 'text-white'}`} />
             </div>
             
             {/* Título e subtítulo */}
