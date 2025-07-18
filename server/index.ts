@@ -13,9 +13,6 @@ const server = createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// API routes
-app.use("/api", routes);
-
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
@@ -55,6 +52,9 @@ async function startServer() {
       },
     });
 
+    // API routes MUST come before vite middlewares
+    app.use("/api", routes);
+    
     app.use(vite.middlewares);
     
     app.use("*", async (req, res, next) => {

@@ -843,7 +843,7 @@ router.post("/proposals", async (req, res) => {
   // === UNIFIED AUTHENTICATION SYSTEM ===
   
   // Unified login for all portals - checks both system users and vendors
-  router.post("auth/login", async (req, res) => {
+  router.post("/auth/login", async (req, res) => {
     try {
       const { email, password, portal } = req.body;
       
@@ -888,7 +888,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Get all users (system users + vendors) for unified management
-  router.get("auth/users", async (req, res) => {
+  router.get("/auth/users", async (req, res) => {
     try {
       const systemUsers = await storage.getAllSystemUsers();
       const vendors = await storage.getAllVendors();
@@ -915,7 +915,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Create user (unified API)
-  router.post("auth/users", async (req, res) => {
+  router.post("/auth/users", async (req, res) => {
     try {
       const { userType, ...userData } = req.body;
       
@@ -999,7 +999,7 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update user password (works for both system users and vendors)
-  router.patch("auth/users/:id/password", async (req, res) => {
+  router.patch("/auth/users/:id/password", async (req, res) => {
     try {
       const { id } = req.params;
       const { password, userType } = req.body;
