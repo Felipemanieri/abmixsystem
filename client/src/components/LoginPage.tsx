@@ -153,7 +153,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
         {/* Botão voltar minimalista */}
         <button
           onClick={onBack}
-          className="flex items-center text-slate-600 dark:text-white hover:text-slate-800 dark:text-white mb-8 transition-colors bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm dark:shadow-gray-900/30 hover:shadow-md border border-white/50"
+          className="flex items-center text-slate-600 dark:text-white dark:text-white hover:text-slate-800 dark:text-white dark:text-white mb-8 transition-colors bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm dark:shadow-gray-900/30 hover:shadow-md border border-white/50"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar aos Portais
@@ -178,8 +178,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             </div>
             
             {/* Título e subtítulo */}
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">{config.title}</h1>
-            <p className="text-slate-600 dark:text-white text-sm leading-relaxed max-w-sm mx-auto">{config.subtitle}</p>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white dark:text-white mb-2">{config.title}</h1>
+            <p className="text-slate-600 dark:text-white dark:text-white text-sm leading-relaxed max-w-sm mx-auto">{config.subtitle}</p>
           </div>
 
           {/* Formulário de login */}
@@ -187,7 +187,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Campo de email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-gray-200 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-white dark:text-gray-200 mb-2">
                   Email
                 </label>
                 <div className="relative">
@@ -197,7 +197,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
+                    className="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-white dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="seu@email.com"
                   />
                 </div>
@@ -205,7 +205,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
               {/* Campo de senha */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-gray-200 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-white dark:text-gray-200 mb-2">
                   Senha
                 </label>
                 <div className="relative">
@@ -215,7 +215,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-11 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
+                    className="w-full pl-11 pr-11 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-white dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="••••••••"
                   />
                   <button
@@ -237,7 +237,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
                   />
-                  <span className="ml-2 text-sm text-slate-600 dark:text-white">Lembrar-me</span>
+                  <span className="ml-2 text-sm text-slate-600 dark:text-white dark:text-white">Lembrar-me</span>
                 </label>
                 <a href="#" className="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors">
                   Esqueceu a senha?
@@ -263,7 +263,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
             {/* Mensagem de erro */}
             {errorMessage && (
-              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-xl text-sm border border-red-100 flex items-center">
+              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900 text-red-700 rounded-xl text-sm border border-red-100 flex items-center">
                 <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
                 {errorMessage}
               </div>

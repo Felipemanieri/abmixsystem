@@ -46,7 +46,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onView && (
         <button 
           onClick={onView}
-          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 transition-colors"
           title="Visualizar"
         >
           <Eye className="w-4 h-4" />
@@ -56,7 +56,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onCopyLink && (
         <button 
           onClick={onCopyLink}
-          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 transition-colors"
           title="Copiar Link"
         >
           <Copy className="w-4 h-4" />
@@ -66,7 +66,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onWhatsApp && (
         <button 
           onClick={onWhatsApp}
-          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 transition-colors"
           title="Enviar WhatsApp"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -78,7 +78,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onEmail && (
         <button 
           onClick={onEmail}
-          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 dark:bg-purple-900 transition-colors"
           title="Enviar Email"
         >
           <Mail className="w-4 h-4" />
@@ -108,7 +108,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onDelete && (
         <button 
           onClick={onDelete}
-          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 transition-colors"
           title="Excluir"
         >
           <Trash2 className="w-4 h-4" />
@@ -118,7 +118,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onExternalLink && (
         <button 
           onClick={onExternalLink}
-          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 transition-colors"
           title="Abrir Link"
         >
           <ExternalLink className="w-4 h-4" />
@@ -128,7 +128,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onSend && (
         <button 
           onClick={onSend}
-          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 dark:bg-purple-900 transition-colors"
           title="Enviar"
         >
           <Send className="w-4 h-4" />
@@ -138,7 +138,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onAutomate && (
         <button 
           onClick={onAutomate}
-          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 transition-colors"
+          className="text-purple-600 hover:text-purple-900 p-1 rounded hover:bg-purple-50 dark:bg-purple-900 transition-colors"
           title="Automatizar"
         >
           <Zap className="w-4 h-4" />
@@ -148,7 +148,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onApprove && (
         <button 
           onClick={onApprove}
-          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 transition-colors"
           title="Aprovar"
         >
           <CheckCircle className="w-4 h-4" />
@@ -158,7 +158,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onReject && (
         <button 
           onClick={onReject}
-          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 transition-colors"
           title="Rejeitar"
         >
           <AlertCircle className="w-4 h-4" />
@@ -168,7 +168,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onForward && (
         <button 
           onClick={onForward}
-          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 transition-colors"
           title="Encaminhar"
         >
           <ArrowRight className="w-4 h-4" />
@@ -193,7 +193,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         >
           <MessageSquare className="w-4 h-4" />
           {userRole && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               2
             </span>
           )}

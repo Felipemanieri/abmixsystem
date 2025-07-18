@@ -49,7 +49,7 @@ const IntegrationGuide: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Integração com Google Sheets</h2>
         
         <div className="space-y-6">
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
             <div className="flex items-start">
               <Info className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-blue-700">
@@ -110,7 +110,7 @@ const IntegrationGuide: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-green-50 p-4 rounded-lg">
+          <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
             <div className="flex items-start">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
               <div>
@@ -132,7 +132,7 @@ const IntegrationGuide: React.FC = () => {
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Integração com Make</h2>
         
         <div className="space-y-6">
-          <div className="bg-purple-50 p-4 rounded-lg">
+          <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
             <div className="flex items-start">
               <Info className="w-5 h-5 text-purple-600 mr-2 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-purple-700">
@@ -205,7 +205,7 @@ const IntegrationGuide: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-green-50 p-4 rounded-lg">
+          <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
             <div className="flex items-start">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
               <div>

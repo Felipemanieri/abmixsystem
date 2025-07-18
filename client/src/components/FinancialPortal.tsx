@@ -277,7 +277,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Receita Total</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Receita Total</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{formatCurrency(totalIncome)}</p>
             </div>
             <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -287,14 +287,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="mt-4 flex items-center text-sm">
             <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-400 mr-1" />
             <span className="text-green-600 dark:text-green-400">+12.5%</span>
-            <span className="text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
+            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Pendente</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Pendente</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{formatCurrency(totalPending)}</p>
             </div>
             <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -302,14 +302,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">{realTransactions.filter(t => t.status === 'pending').length} transações</span>
+            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{realTransactions.filter(t => t.status === 'pending').length} transações</span>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Clientes Ativos</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Clientes Ativos</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{realTransactions.filter(t => t.status === 'completed').length}</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -318,14 +318,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           </div>
           <div className="mt-4 flex items-center text-sm">
             <span className="text-green-600 dark:text-green-400">+2</span>
-            <span className="text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white ml-1">novos este mês</span>
+            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">novos este mês</span>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Taxa de Conversão</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Taxa de Conversão</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{conversionRate}%</p>
             </div>
             <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -334,7 +334,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           </div>
           <div className="mt-4 flex items-center text-sm">
             <span className="text-green-600 dark:text-green-400">+5.2%</span>
-            <span className="text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
+            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
           </div>
         </div>
       </div>
@@ -352,7 +352,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white">Relatórios do Supervisor</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                   {receivedReports.length === 0 
                     ? "Clique para acessar relatórios" 
                     : `${receivedReports.length} relatório(s) disponível(eis)`
@@ -382,7 +382,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <h4 className="text-sm font-medium text-gray-900 dark:text-white dark:text-white mb-3">Filtros de Período</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-1">Data Início</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Data Início</label>
                   <input
                     type="date"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -390,7 +390,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-1">Data Fim</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Data Fim</label>
                   <input
                     type="date"
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -406,7 +406,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   <FileText className="h-8 w-8 text-gray-400 dark:text-gray-500 dark:text-white" />
                 </div>
                 <h4 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">Aguardando Relatórios</h4>
-                <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-1">Nenhum relatório recebido do supervisor ainda</p>
+                <p className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white mb-1">Nenhum relatório recebido do supervisor ainda</p>
                 <p className="text-sm text-gray-400 dark:text-gray-500 dark:text-white">Quando o supervisor enviar relatórios, eles aparecerão aqui para análise</p>
               </div>
             ) : (
@@ -420,19 +420,19 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                             report.status === 'received' 
                               ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white dark:text-white'
                           }`}>
                             {report.status === 'received' ? 'Novo' : 'Processado'}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-3">
+                        <p className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white mb-3">
                           Recebido em {new Date(report.receivedAt).toLocaleDateString('pt-BR')} às {new Date(report.receivedAt).toLocaleTimeString('pt-BR')}
                         </p>
                         
                         {/* Botão para visualizar relatório completo */}
                         <button
                           onClick={() => handleViewReport(report)}
-                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 dark:text-white bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 dark:text-white bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Visualizar Relatório Completo
@@ -442,7 +442,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     
                     {/* Ações do Relatório */}
                     <div className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded-lg p-3">
-                      <h5 className="text-xs font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">Ações do Relatório</h5>
+                      <h5 className="text-xs font-medium text-gray-700 dark:text-white dark:text-white mb-2">Ações do Relatório</h5>
                       <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
                         <button
                           onClick={() => handleDownloadReport(report.id)}
@@ -534,13 +534,13 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Plano</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Data</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Plano</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Data</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 dark:bg-gray-800 divide-y divide-gray-200">
@@ -558,7 +558,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{transaction.client}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">{transaction.plan}</div>
+                    <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{transaction.plan}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{transaction.value}</div>
@@ -568,7 +568,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       status={transaction.realStatus as ProposalStatus || 'observacao'}
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                     {new Date(transaction.date).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -636,14 +636,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Vendedor</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Progresso</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Data</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Vendedor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Progresso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Data</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 dark:bg-gray-800 divide-y divide-gray-200">
@@ -659,7 +659,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{proposal.contractData?.nomeEmpresa}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
+                    <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900 dark:text-white dark:text-white">{proposal.vendorName}</div>
@@ -680,7 +680,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       />
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                     {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -717,11 +717,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Plano</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Plano</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 dark:bg-gray-800 divide-y divide-gray-200">
@@ -731,7 +731,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{client.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">{client.plan}</div>
+                    <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{client.plan}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{client.value}</div>
@@ -807,7 +807,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               />
               <div className="ml-4">
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white">Portal Financeiro</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white dark:text-gray-300 dark:text-white">Gestão financeira e análises</p>
+                <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white dark:text-gray-300 dark:text-white">Gestão financeira e análises</p>
               </div>
             </div>
             
@@ -819,7 +819,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               
               <button
                 onClick={() => setShowFinancialArea(!showFinancialArea)}
-                className="p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-white dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 title={showFinancialArea ? "Mostrar Área Financeira Completa" : "Mostrar Área Financeira Simplificada"}
               >
                 <Settings className="h-6 w-6" />
@@ -827,7 +827,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="relative p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-white dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 <Bell className="h-6 w-6" />
                 <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
@@ -836,14 +836,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <div className="flex items-center space-x-3">
                 <div className="text-right">
                   <p className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{user?.name || 'Usuário Financeiro'}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white dark:text-gray-300 dark:text-white">Área Financeira</p>
+                  <p className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white dark:text-gray-300 dark:text-white">Área Financeira</p>
                 </div>
                 
                 <ThemeToggle />
                 
                 <button
                   onClick={onLogout}
-                  className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-md transition-colors"
+                  className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-white dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-md transition-colors"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair
@@ -873,7 +873,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   className={`flex items-center px-1 py-4 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === tab.id
                       ? 'border-green-500 text-green-600'
-                      : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-gray-300 dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                      : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
                   }`}
                 >
                   <Icon className="h-4 w-4 mr-2" />
@@ -890,12 +890,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white mb-6">Área Financeira Completa</h2>
-            <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-4">
+            <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white mb-4">
               Esta área permite validar propostas, aprovar ou rejeitar documentos, e enviar para automação.
             </p>
             <button
               onClick={() => setShowAutomationModal(true)}
-              className="px-4 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
+              className="px-4 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Zap className="w-4 h-4 mr-2 inline-block" />
               Enviar Proposta para Automação
@@ -925,7 +925,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 {activeTab === 'analysis' && 'Análises e Relatórios'}
                 {activeTab === 'forms' && 'Formulários'}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+              <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">
                 {activeTab === 'dashboard' && 'Visão geral das métricas financeiras'}
                 {activeTab === 'proposals' && 'Acompanhe e gerencie propostas comerciais'}
                 {activeTab === 'clients' && 'Gerencie informações dos clientes'}
@@ -1006,7 +1006,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white mb-4">Resumo Executivo</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 border border-blue-200">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Período</p>
@@ -1016,7 +1016,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     </div>
                   </div>
                   
-                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                  <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 border border-green-200">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-green-600 dark:text-green-400 text-sm font-medium">Total de Propostas</p>
@@ -1026,7 +1026,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     </div>
                   </div>
                   
-                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                  <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 border border-purple-200">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-purple-600 dark:text-white text-sm font-medium">Valor Total</p>
@@ -1052,14 +1052,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white mb-4">Análise Detalhada</h4>
                 <div className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded-lg p-4">
-                  <p className="text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+                  <p className="text-gray-700 dark:text-white dark:text-white mb-2">
                     Este relatório apresenta uma análise completa do desempenho da equipe para o período de <strong>{selectedReport.data.period}</strong>.
                   </p>
-                  <p className="text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+                  <p className="text-gray-700 dark:text-white dark:text-white mb-2">
                     Foram processadas <strong>{selectedReport.data.totalProposals} propostas</strong> com um valor total de <strong>{selectedReport.data.totalValue}</strong>, 
                     resultando em uma taxa de conversão de <strong>{selectedReport.data.conversionRate}</strong>.
                   </p>
-                  <p className="text-gray-700 dark:text-gray-300 dark:text-white">
+                  <p className="text-gray-700 dark:text-white dark:text-white">
                     Todos os dados foram coletados e validados automaticamente pelo sistema de gestão, 
                     garantindo a precisão e confiabilidade das informações apresentadas.
                   </p>
@@ -1202,27 +1202,27 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             {/* Conteúdo Excel */}
             <div className="p-6 overflow-y-auto max-h-[calc(95vh-100px)]" id="excel-content">
               {/* Resumo Executivo */}
-              <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+              <div className="bg-green-50 dark:bg-green-900 border-l-4 border-green-500 p-4 mb-6">
                 <h3 className="text-lg font-semibold text-green-800 dark:text-white mb-3">📊 Resumo Executivo</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Período:</span>
+                    <span className="font-medium text-gray-700 dark:text-white dark:text-white">Período:</span>
                     <div className="text-green-700 dark:text-white">{excelReportData.data.period}</div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Total Propostas:</span>
+                    <span className="font-medium text-gray-700 dark:text-white dark:text-white">Total Propostas:</span>
                     <div className="text-green-700 dark:text-white font-bold">{excelReportData.data.totalProposals}</div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Valor Total:</span>
+                    <span className="font-medium text-gray-700 dark:text-white dark:text-white">Valor Total:</span>
                     <div className="text-green-700 dark:text-white font-bold">{excelReportData.data.totalValue}</div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Taxa Conversão:</span>
+                    <span className="font-medium text-gray-700 dark:text-white dark:text-white">Taxa Conversão:</span>
                     <div className="text-green-700 dark:text-white font-bold">{excelReportData.data.conversionRate}</div>
                   </div>
                 </div>
-                <div className="mt-3 text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                <div className="mt-3 text-xs text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">
                   Gerado em: {new Date(excelReportData.receivedAt).toLocaleString('pt-BR')}
                 </div>
               </div>
@@ -1232,14 +1232,14 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-100 dark:bg-gray-700">
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">ID</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">CLIENTE</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">CNPJ</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">VENDEDOR</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">VALOR</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">PLANO</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">STATUS</th>
-                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-gray-300 dark:text-white uppercase">OBSERVAÇÕES</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">ID</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">CLIENTE</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">CNPJ</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">VENDEDOR</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">VALOR</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">PLANO</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">STATUS</th>
+                      <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-2 text-left text-xs font-bold text-gray-700 dark:text-white dark:text-white uppercase">OBSERVAÇÕES</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1262,7 +1262,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-4 text-center text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                        <td colSpan="8" className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 px-3 py-4 text-center text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                           Nenhum dado disponível
                         </td>
                       </tr>

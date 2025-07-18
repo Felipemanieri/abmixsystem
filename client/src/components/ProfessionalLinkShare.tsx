@@ -153,8 +153,8 @@ Abmix Consultoria em Benefícios`;
                 onClick={handleCopy}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   copied 
-                    ? 'bg-green-600 text-white dark:bg-green-500 dark:text-white' 
-                    : 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white hover:bg-blue-700'
+                    ? 'bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white' 
+                    : 'bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white hover:bg-blue-700'
                 }`}
               >
                 {copied ? <Check size={16} /> : <Copy size={16} />}
@@ -174,7 +174,7 @@ Abmix Consultoria em Benefícios`;
             
             <button
               onClick={handleWhatsApp}
-              className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <MessageCircle size={18} />
               <span className="font-medium">WhatsApp</span>
@@ -182,7 +182,7 @@ Abmix Consultoria em Benefícios`;
             
             <button
               onClick={handleEmail}
-              className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Mail size={18} />
               <span className="font-medium">Email</span>

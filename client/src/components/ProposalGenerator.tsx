@@ -1175,7 +1175,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
         <div className="space-y-8">
           {/* Dados do Contrato */}
-          <div className="bg-blue-50 p-6 rounded-lg">
+          <div className="bg-blue-50 dark:bg-blue-900 p-6 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Building className="w-5 h-5 text-blue-600 mr-2" />
@@ -1386,7 +1386,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               <button
                 onClick={adicionarTitular}
-                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Titular
@@ -1411,7 +1411,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               <button
                 onClick={adicionarDependente}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Dependente
@@ -1583,7 +1583,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Observações para o Cliente */}
-          <div className="bg-green-50 p-6 rounded-lg">
+          <div className="bg-green-50 dark:bg-green-900 p-6 rounded-lg">
             <div className="flex items-center mb-4">
               <Info className="w-5 h-5 text-green-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -1645,7 +1645,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -1659,7 +1659,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 <span className="text-xs text-blue-600">Do computador/celular</span>
               </label>
 
-              <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
+              <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
                 <input
                   type="file"
                   accept="image/*"
@@ -1673,7 +1673,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 <span className="text-xs text-green-600">Câmera do dispositivo</span>
               </label>
 
-              <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+              <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -1820,7 +1820,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex justify-end">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -1857,7 +1857,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-200 dark:border-gray-700 relative">
                     {/* Número da cotação */}
                     <div className="absolute top-3 right-3">
-                      <span className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white text-xs px-2 py-1 rounded-full font-medium">
+                      <span className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white text-xs px-2 py-1 rounded-full font-medium">
                         #{index + 1}
                       </span>
                     </div>
@@ -1904,14 +1904,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     <div className="flex justify-end space-x-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                       <button
                         onClick={() => enviarWhatsApp(cotacao)}
-                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                       >
                         <Phone className="w-4 h-4 mr-2" />
                         WhatsApp
                       </button>
                       <button
                         onClick={() => removerCotacao(cotacao.id)}
-                        className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
+                        className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Remover
@@ -1928,7 +1928,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex space-x-3">
               <button
                 onClick={handleSave}
-                className="flex items-center px-6 py-3 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Rascunho
@@ -1937,7 +1937,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               <button
                 onClick={handleClearDraft}
                 disabled={isClearingDraft}
-                className="flex items-center px-6 py-3 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 {isClearingDraft ? (
                   <>
@@ -1955,7 +1955,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             <button
               onClick={handleSend}
-              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               <Send className="w-4 h-4 mr-2" />
               Gerar Link para Cliente

@@ -248,8 +248,8 @@ const FinancialArea: React.FC = () => {
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
     toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg dark:shadow-gray-900/50 text-white font-medium ${
-      type === 'success' ? 'bg-green-500' : 
-      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+      type === 'success' ? 'bg-green-50 dark:bg-green-9000' : 
+      type === 'error' ? 'bg-red-50 dark:bg-red-9000' : 'bg-blue-50 dark:bg-blue-9000'
     }`;
     toast.textContent = message;
     document.body.appendChild(toast);
@@ -358,13 +358,13 @@ const FinancialArea: React.FC = () => {
             {categoryStats.map((category) => (
               <div key={category.name} className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                  <div className="w-4 h-4 bg-green-50 dark:bg-green-9000 rounded-full mr-3"></div>
                   <span className="text-sm font-medium text-gray-900">{category.name}</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="w-32 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
                     <div 
-                      className="bg-green-500 h-2 rounded-full" 
+                      className="bg-green-50 dark:bg-green-9000 h-2 rounded-full" 
                       style={{ width: `${category.percentage}%` }}
                     ></div>
                   </div>

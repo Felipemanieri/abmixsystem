@@ -120,7 +120,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             <div
               key={notification.id}
               className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                !notification.read ? 'bg-blue-50' : ''
+                !notification.read ? 'bg-blue-50 dark:bg-blue-900' : ''
               }`}
               onClick={() => onMarkAsRead(notification.id)}
             >

@@ -65,7 +65,7 @@ const GoogleDriveSetup: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-lg font-semibold text-gray-900">Preparação</h2>
             
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
               <div className="flex items-start">
                 <Info className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
                 <div>
@@ -86,7 +86,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-end">
               <button
                 onClick={() => setStep(2)}
-                className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Continuar
               </button>
@@ -98,7 +98,7 @@ const GoogleDriveSetup: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-lg font-semibold text-gray-900">Conectar ao Google Drive</h2>
             
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-50 dark:bg-yellow-900 p-4 rounded-lg">
               <div className="flex items-start">
                 <AlertCircle className="w-5 h-5 text-yellow-600 mr-2 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-yellow-700">
@@ -116,7 +116,7 @@ const GoogleDriveSetup: React.FC = () => {
               <p className="text-gray-700 font-medium mb-4">Conectar ao Google Drive</p>
               <button
                 onClick={handleConnect}
-                className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Autorizar Acesso
               </button>
@@ -138,7 +138,7 @@ const GoogleDriveSetup: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900">Configuração da Estrutura</h2>
             
             {isConnected && (
-              <div className="bg-green-50 p-4 rounded-lg mb-4">
+              <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg mb-4">
                 <div className="flex items-start">
                   <Check className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-green-700">
@@ -219,7 +219,7 @@ const GoogleDriveSetup: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-lg font-semibold text-gray-900">Configuração Concluída</h2>
             
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
               <div className="flex items-start">
                 <Check className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
                 <div>
@@ -265,7 +265,7 @@ const GoogleDriveSetup: React.FC = () => {
               
               <button
                 onClick={handleFinish}
-                className="flex-1 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                className="flex-1 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
               >
                 <Check className="w-4 h-4 mr-2" />
                 Concluir Configuração

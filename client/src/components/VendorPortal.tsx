@@ -562,7 +562,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <div className="flex items-center justify-between">
         <button
           onClick={() => setActiveView('dashboard')}
-          className="flex items-center text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-800 dark:text-gray-200 dark:text-white transition-colors"
+          className="flex items-center text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-800 dark:text-white dark:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar ao Dashboard
@@ -579,7 +579,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Número de Vidas
             </label>
             <input
@@ -592,7 +592,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Operadora
             </label>
             <select
@@ -612,12 +612,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">
               Idades dos Beneficiários
             </label>
             <button
               onClick={addIdade}
-              className="flex items-center px-3 py-1 text-sm bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-3 py-1 text-sm bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-1" />
               Adicionar Idade
@@ -639,7 +639,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 {quotationData.idades.length > 1 && (
                   <button
                     onClick={() => removeIdade(index)}
-                    className="p-2 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 rounded-md transition-colors"
+                    className="p-2 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 rounded-md transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -657,7 +657,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             {/* Operadora */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Operadora *
               </label>
               <select
@@ -680,7 +680,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Tipo do Plano */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Tipo do Plano *
               </label>
               <select
@@ -698,7 +698,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Número de Vidas */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Número de Vidas *
               </label>
               <input
@@ -713,7 +713,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Valor */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Valor (R$) *
               </label>
               <input
@@ -730,7 +730,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Validade da Cotação */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Validade da Cotação *
               </label>
               <input
@@ -743,7 +743,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Data de Envio */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                 Data de Envio *
               </label>
               <input
@@ -757,7 +757,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Anexar Cotação */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-4">Anexar Cotação</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-4">Anexar Cotação</h4>
             
             {/* Área de Upload com Drag & Drop */}
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg p-8 text-center mb-4">
@@ -771,10 +771,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               />
               <label htmlFor="file-upload-cotacao" className="cursor-pointer">
                 <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+                <p className="text-lg font-medium text-gray-700 dark:text-white dark:text-white mb-2">
                   Arraste arquivos aqui ou escolha uma opção
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                   Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                 </p>
               </label>
@@ -782,7 +782,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-4">
-              <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+              <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-blue-50 dark:bg-blue-900 border-2 border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
                 <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-2" />
                 <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Escolher Arquivo</span>
                 <span className="text-xs text-blue-500 dark:text-blue-400">Do computador/celular</span>
@@ -790,14 +790,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
               <button
                 onClick={tirarFoto}
-                className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
+                className="flex flex-col items-center justify-center p-6 bg-green-50 dark:bg-green-900 border-2 border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
               >
                 <Camera className="w-8 h-8 text-green-600 dark:text-green-400 mb-2" />
                 <span className="text-sm font-medium text-green-600 dark:text-green-400">Tirar Foto</span>
                 <span className="text-xs text-green-500 dark:text-green-400">Câmera do dispositivo</span>
               </button>
 
-              <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center p-6 bg-purple-50 border-2 border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+              <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center p-6 bg-purple-50 dark:bg-purple-900 border-2 border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -815,15 +815,15 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             {/* Arquivos anexados */}
             {novaCotacao.arquivos.length > 0 && (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">
+                <p className="text-sm font-medium text-gray-700 dark:text-white dark:text-white">
                   Arquivos Anexados ({novaCotacao.arquivos.length})
                 </p>
                 <div className="space-y-2">
                   {novaCotacao.arquivos.map((arquivo, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg">
                       <div className="flex items-center">
-                        <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white mr-2" />
-                        <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
+                        <FileText className="w-4 h-4 text-gray-500 dark:text-white dark:text-gray-500 dark:text-white mr-2" />
+                        <span className="text-sm text-gray-700 dark:text-white dark:text-white">{arquivo.name}</span>
                       </div>
                       <button
                         onClick={() => removerArquivoCotacao('', index)}
@@ -841,7 +841,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="flex justify-end mt-6">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -861,34 +861,34 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-700 dark:border-gray-600">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Operadora</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Operadora</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.operadora}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Tipo do Plano</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Tipo do Plano</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.tipoplano}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Nº de Vidas</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Nº de Vidas</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.numeroVidas}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Valor</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Valor</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">R$ {cotacao.valor}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Validade</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Validade</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Data de Envio</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Data de Envio</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Arquivos Anexados</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Arquivos Anexados</span>
                         <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
                       </div>
                     </div>
@@ -896,14 +896,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     <div className="flex justify-end space-x-3">
                       <button
                         onClick={() => enviarWhatsAppCotacao(cotacao)}
-                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm"
                       >
                         <MessageSquare className="w-4 h-4 mr-1" />
                         WhatsApp
                       </button>
                       <button
                         onClick={() => removerCotacao(cotacao.id)}
-                        className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-md hover:bg-red-700 transition-colors text-sm"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Remover
@@ -928,7 +928,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={generateQuotation}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Calculator className="w-4 h-4 mr-2" />
             Gerar Cotação
@@ -936,7 +936,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={salvarCotacao}
-            className="flex items-center px-6 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             Salvar Cotação
@@ -944,7 +944,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-6 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
           >
             <Download className="w-4 h-4 mr-2" />
             Baixar Cotação
@@ -960,11 +960,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white dark:text-white">Cotações</h1>
-          <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerencie cotações para suas propostas</p>
+          <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Gerencie cotações para suas propostas</p>
         </div>
         <button
           onClick={() => setActiveView('dashboard')}
-          className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-lg transition-colors"
+          className="flex items-center px-4 py-2 text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
@@ -978,7 +978,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Operadora */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Operadora *
             </label>
             <select
@@ -1001,7 +1001,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Tipo do Plano */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Tipo do Plano *
             </label>
             <select
@@ -1019,7 +1019,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Número de Vidas */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Número de Vidas *
             </label>
             <input
@@ -1034,7 +1034,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Valor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Valor (R$) *
             </label>
             <input
@@ -1052,7 +1052,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Validade */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Validade da Cotação *
             </label>
             <input
@@ -1065,7 +1065,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Data de Envio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">
               Data de Envio *
             </label>
             <input
@@ -1079,7 +1079,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
         {/* Upload de Arquivos Avançado */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-4">
             Anexar Cotação
           </label>
           
@@ -1087,7 +1087,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           <div
             className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive 
-                ? 'border-blue-500 bg-blue-50' 
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900' 
                 : 'border-gray-300 dark:border-gray-600 dark:border-gray-600 hover:border-gray-400'
             }`}
             onDragEnter={handleDrag}
@@ -1099,14 +1099,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">
               Arraste arquivos aqui ou escolha uma opção
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-6">
+            <p className="text-sm text-gray-600 dark:text-white dark:text-gray-500 dark:text-white mb-6">
               Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
             </p>
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Escolher Arquivo */}
-              <label className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg cursor-pointer transition-colors">
+              <label className="flex flex-col items-center p-4 bg-blue-50 dark:bg-blue-900 hover:bg-blue-100 rounded-lg cursor-pointer transition-colors">
                 <Paperclip className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
                 <span className="text-sm font-medium text-blue-700 dark:text-white">Escolher Arquivo</span>
                 <span className="text-xs text-blue-600 dark:text-blue-400">Do computador/celular</span>
@@ -1123,7 +1123,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               <button
                 type="button"
                 onClick={tirarFoto}
-                className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                className="flex flex-col items-center p-4 bg-green-50 dark:bg-green-900 hover:bg-green-100 rounded-lg transition-colors"
               >
                 <Camera className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
                 <span className="text-sm font-medium text-green-700 dark:text-white">Tirar Foto</span>
@@ -1131,7 +1131,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </button>
 
               {/* Upload da Galeria */}
-              <label className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg cursor-pointer transition-colors">
+              <label className="flex flex-col items-center p-4 bg-purple-50 dark:bg-purple-900 hover:bg-purple-100 rounded-lg cursor-pointer transition-colors">
                 <Image className="w-6 h-6 text-purple-600 dark:text-white mb-2" />
                 <span className="text-sm font-medium text-purple-700 dark:text-white">Da Galeria</span>
                 <span className="text-xs text-purple-600 dark:text-white">Fotos salvas</span>
@@ -1150,18 +1150,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         {/* Arquivos Anexados na Nova Cotação */}
         {novaCotacao.arquivos.length > 0 && (
           <div className="mt-6">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">Arquivos Anexados:</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-2">Arquivos Anexados:</h4>
             <div className="space-y-2">
               {novaCotacao.arquivos.map((arquivo, index) => (
                 <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded">
                   <div className="flex items-center space-x-2">
-                    <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
+                    <FileText className="w-4 h-4 text-gray-500 dark:text-white dark:text-gray-500 dark:text-white" />
+                    <span className="text-sm text-gray-700 dark:text-white dark:text-white">{arquivo.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
                   </div>
                   <button 
                     onClick={() => removerArquivoCotacao('', index)}
-                    className="p-1 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 rounded"
+                    className="p-1 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 rounded"
                     title="Remover arquivo"
                   >
                     <X className="w-4 h-4" />
@@ -1176,7 +1176,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={adicionarCotacao}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4 mr-2" />
             Adicionar Cotação
@@ -1194,7 +1194,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-8 text-center">
             <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">Nenhuma cotação cadastrada</h3>
-            <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Adicione sua primeira cotação usando o formulário acima.</p>
+            <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Adicione sua primeira cotação usando o formulário acima.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -1202,38 +1202,38 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               <div key={cotacao.id} className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Operadora</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Operadora</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Tipo do Plano</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Tipo do Plano</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.tipoplano}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Nº de Vidas</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Nº de Vidas</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.numeroVidas}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Valor</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Valor</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">R$ {cotacao.valor}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Validade</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Validade</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Data de Envio</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Data de Envio</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Arquivos Anexados</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white">Arquivos Anexados</label>
                     <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
                   </div>
                 </div>
@@ -1245,13 +1245,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                       {cotacao.arquivos.map((arquivo, index) => (
                         <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded">
                           <div className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white" />
-                            <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
+                            <FileText className="w-4 h-4 text-gray-500 dark:text-white dark:text-gray-500 dark:text-white" />
+                            <span className="text-sm text-gray-700 dark:text-white dark:text-white">{arquivo.name}</span>
+                            <span className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
                           </div>
                           <button 
                             onClick={() => removerArquivoCotacao(cotacao.id, index)}
-                            className="p-1 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 rounded"
+                            className="p-1 text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 rounded"
                             title="Remover arquivo"
                           >
                             <X className="w-4 h-4" />
@@ -1266,14 +1266,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 <div className="flex justify-end space-x-3">
                   <button
                     onClick={() => enviarWhatsAppCotacao(cotacao)}
-                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </button>
                   <button
                     onClick={() => removerCotacao(cotacao.id)}
-                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-md hover:bg-red-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-md hover:bg-red-700 transition-colors"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Remover
@@ -1328,7 +1328,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <div key={stat.name} className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">{stat.name}</p>
+                        <p className="text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">{stat.name}</p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{stat.value}</p>
                       </div>
                       <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
@@ -1338,7 +1338,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     <div className="mt-4 flex items-center">
                       <span className={`text-sm font-medium ${
                         stat.changeType === 'positive' ? 'text-green-600' : 
-                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white'
+                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-gray-600 dark:text-white dark:text-gray-500 dark:text-white'
                       }`}>
                         {stat.change}
                       </span>
@@ -1360,7 +1360,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Nova Proposta</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Criar proposta e cotações</p>
+                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Criar proposta e cotações</p>
                   </div>
                 </div>
               </button>
@@ -1375,7 +1375,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Acompanhar</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Status propostas</p>
+                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Status propostas</p>
                   </div>
                 </div>
               </button>
@@ -1390,7 +1390,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Painel de Cotações</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerenciar cotações</p>
+                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Gerenciar cotações</p>
                   </div>
                 </div>
               </button>
@@ -1400,7 +1400,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700">
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white">Propostas Recentes ({realProposals?.length || 0})</h2>
-                <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                   Atualização em tempo real • Suas propostas exclusivas
                 </div>
               </div>
@@ -1409,10 +1409,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <div className="p-8 text-center">
                     <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">Nenhuma proposta criada</h3>
-                    <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
+                    <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
                     <button
                       onClick={() => setActiveView('new-proposal')}
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Nova Proposta
@@ -1422,25 +1422,25 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           ID Único
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Cliente
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Plano
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Data
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Progresso
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Ações
                         </th>
                       </tr>
@@ -1451,7 +1451,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button 
                               onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
-                              className="text-sm font-bold text-blue-600 hover:text-blue-800 dark:text-white underline bg-blue-50 px-2 py-1 rounded"
+                              className="text-sm font-bold text-blue-600 hover:text-blue-800 dark:text-white underline bg-blue-50 dark:bg-blue-900 px-2 py-1 rounded"
                               title="Abrir pasta no Google Drive"
                             >
                               {proposal.abmId}
@@ -1461,24 +1461,24 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                             <div className="flex items-center">
                               <div>
                                 <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{proposal.cliente}</div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
+                                <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900 dark:text-white dark:text-white">{proposal.plano}</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">R$ {proposal.valor}</div>
+                            <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">R$ {proposal.valor}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <StatusBadge 
                               status={proposal.status}
                             />
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                             <div className="text-sm text-gray-900 dark:text-white dark:text-white">
                               {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                            <div className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
                               {new Date(proposal.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                           </td>
@@ -1537,12 +1537,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </div>
               {realProposals?.length > 0 && (
                 <div className="px-6 py-3 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-700 dark:border-gray-600">
-                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">
                     <span>
                       Mostrando {realProposals.length} proposta{realProposals.length !== 1 ? 's' : ''} sua{realProposals.length !== 1 ? 's' : ''}
                     </span>
                     <span className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                      <div className="w-2 h-2 bg-green-50 dark:bg-green-9000 rounded-full mr-2 animate-pulse"></div>
                       Atualização automática ativa
                     </span>
                   </div>
@@ -1569,7 +1569,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 />
                 <div>
                   <h1 className="text-xl font-bold text-gray-900 dark:text-white dark:text-white">Portal Vendedor</h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                  <p className="text-sm text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">
                     Bem-vinda(o), <span className="font-medium text-teal-600 dark:text-white">{user?.name || 'Vendedor'}</span>
                   </p>
                 </div>
@@ -1577,12 +1577,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
                 {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {notifications.filter(n => !n.read).length}
                   </span>
                 )}
@@ -1599,18 +1599,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1625,7 +1625,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         {activeView === 'dashboard' && (
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white dark:text-white mb-2">Dashboard do Vendedor</h1>
-            <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
+            <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
           </div>
         )}
         
@@ -1643,7 +1643,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white"
+                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 dark:text-white dark:text-gray-500 dark:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1654,22 +1654,22 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white dark:text-white border-b dark:border-gray-600 pb-2">Informações Básicas</h4>
                     <div className="space-y-2 text-sm">
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">CNPJ:</span> <span className="ml-2">{selectedProposal.cnpj}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Plano:</span> <span className="ml-2">{selectedProposal.plan}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Valor:</span> <span className="ml-2">{selectedProposal.value}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Progresso:</span> <span className="ml-2">{selectedProposal.progress}%</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">CNPJ:</span> <span className="ml-2">{selectedProposal.cnpj}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Plano:</span> <span className="ml-2">{selectedProposal.plan}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Valor:</span> <span className="ml-2">{selectedProposal.value}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Progresso:</span> <span className="ml-2">{selectedProposal.progress}%</span></div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white dark:text-white border-b pb-2">Contato</h4>
                     <div className="space-y-2 text-sm">
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-white dark:text-white">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
                     </div>
                   </div>
                 </div>
@@ -1689,7 +1689,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{attachment.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">{attachment.size}</p>
+                          <p className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{attachment.size}</p>
                         </div>
                       </div>
                       <button
@@ -1699,7 +1699,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           link.download = attachment.name;
                           link.click();
                         }}
-                        className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded hover:bg-blue-700"
+                        className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded hover:bg-blue-700"
                       >
                         <Download className="w-4 h-4 mr-1" />
                         Baixar
@@ -1710,7 +1710,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </div>
                 
                 <div className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 p-4 rounded-lg">
-                  <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Link do Cliente:</span>
+                  <span className="font-medium text-gray-700 dark:text-white dark:text-white">Link do Cliente:</span>
                   <div className="flex items-center mt-2 space-x-2">
                     <input
                       type="text"
@@ -1720,7 +1720,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     />
                     <button
                       onClick={() => handleCopyLink(selectedProposal.link)}
-                      className="px-3 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+                      className="px-3 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>
@@ -1730,7 +1730,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={() => setSelectedProposal(null)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white dark:text-white bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600"
                   >
                     Fechar
                   </button>

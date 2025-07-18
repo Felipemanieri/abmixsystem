@@ -445,7 +445,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                 onClick={() => {
                   showNotification('Dados sincronizados com Google Sheets', 'success');
                 }}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Alterações
@@ -505,7 +505,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                     };
                     setTitulares(prev => [...prev, newTitular]);
                   }}
-                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Titular
@@ -547,7 +547,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                     };
                     setDependentes(prev => [...prev, newDependente]);
                   }}
-                  className="flex items-center px-3 py-2 text-sm bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Dependente
@@ -699,14 +699,14 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
               <div className="space-y-3">
                 <button
                   onClick={() => showNotification('Sincronização com Google Sheets iniciada', 'info')}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Sincronizar Sheets
                 </button>
                 <button
                   onClick={() => showNotification('Backup de documentos iniciado', 'info')}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Backup Drive

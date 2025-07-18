@@ -165,9 +165,9 @@ const DocumentManager: React.FC = () => {
                 key={field.id}
                 className={`p-4 border-2 border-dashed rounded-lg transition-colors ${
                   field.assignedDoc 
-                    ? 'border-green-300 bg-green-50' 
+                    ? 'border-green-300 bg-green-50 dark:bg-green-900' 
                     : field.required 
-                      ? 'border-red-300 bg-red-50' 
+                      ? 'border-red-300 bg-red-50 dark:bg-red-900' 
                       : 'border-gray-300 dark:border-gray-600 bg-gray-50'
                 }`}
               >

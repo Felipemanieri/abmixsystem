@@ -196,7 +196,7 @@ const QuotationPanel: React.FC = () => {
           </div>
           <button
             onClick={adicionarCotacao}
-            className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             <Plus className="w-5 h-5 mr-2" />
             Adicionar Cotação
@@ -257,7 +257,7 @@ const QuotationPanel: React.FC = () => {
               />
               <button
                 onClick={() => setShowDistribuicaoModal(true)}
-                className="px-4 py-3 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-4 py-3 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
                 title="Distribuição de Vidas"
               >
                 <Users className="w-5 h-5" />
@@ -392,7 +392,7 @@ const QuotationPanel: React.FC = () => {
             {cotacoesCadastradas.map((cotacao, index) => (
               <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 relative">
                 <div className="absolute top-4 right-4">
-                  <span className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white text-xs px-3 py-1 rounded-full font-medium">
+                  <span className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white text-xs px-3 py-1 rounded-full font-medium">
                     #{index + 1}
                   </span>
                 </div>
@@ -443,14 +443,14 @@ const QuotationPanel: React.FC = () => {
                 <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => enviarWhatsApp(cotacao)}
-                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     WhatsApp
                   </button>
                   <button
                     onClick={() => removerCotacao(cotacao.id)}
-                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Remover
@@ -516,7 +516,7 @@ const QuotationPanel: React.FC = () => {
                 ))}
               </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg mb-6">
+              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mb-6">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-blue-900">Total de Vidas:</span>
                   <span className="text-2xl font-bold text-blue-600">{calcularTotalVidas()}</span>
@@ -539,7 +539,7 @@ const QuotationPanel: React.FC = () => {
                   </button>
                   <button
                     onClick={aplicarDistribuicao}
-                    className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     Aplicar
                   </button>

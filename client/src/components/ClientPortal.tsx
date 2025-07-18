@@ -217,8 +217,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
     toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg dark:shadow-gray-900/50 text-white font-medium ${
-      type === 'success' ? 'bg-green-500' : 
-      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+      type === 'success' ? 'bg-green-50 dark:bg-green-9000' : 
+      type === 'error' ? 'bg-red-50 dark:bg-red-9000' : 'bg-blue-50 dark:bg-blue-9000'
     }`;
     toast.textContent = message;
     document.body.appendChild(toast);
@@ -251,7 +251,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       case 'rejected':
         return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white dark:text-white';
     }
   };
 
@@ -570,7 +570,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               >
                 <Bell className="w-5 h-5" />
                 {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {notifications.filter(n => !n.read).length}
                   </span>
                 )}
@@ -719,7 +719,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
-                      ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white' 
+                      ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white dark:text-white' 
                       : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>

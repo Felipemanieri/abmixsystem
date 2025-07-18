@@ -344,7 +344,7 @@ export default function PlanilhaViewer() {
             <button
               onClick={exportarCSV}
               disabled={dadosFormatados.length === 0}
-              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               <Download className="w-4 h-4 mr-2" />
               Baixar CSV
@@ -528,7 +528,7 @@ export default function PlanilhaViewer() {
                 {dadosFormatados.map((linha, rowIndex) => (
                   <tr 
                     key={rowIndex} 
-                    className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors duration-150`}
+                    className={`${rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 transition-colors duration-150`}
                   >
                     {colunas.map((coluna) => (
                       <td 

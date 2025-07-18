@@ -662,7 +662,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
         <div className="space-y-8">
           {/* Dados do Contrato - Read Only para Cliente */}
-          <div className="bg-blue-50 p-6 rounded-lg">
+          <div className="bg-blue-50 dark:bg-blue-900 p-6 rounded-lg">
             <div className="flex items-center mb-4">
               <Building className="w-5 h-5 text-blue-600 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900">
@@ -830,7 +830,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               </div>
               <button
                 onClick={adicionarTitular}
-                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Titular
@@ -855,7 +855,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               </div>
               <button
                 onClick={adicionarDependente}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Dependente
@@ -908,7 +908,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             </div>
 
             {/* Texto discreto dos documentos necessários */}
-            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-100">
               <p className="text-xs text-gray-600 leading-relaxed">
                 <span className="font-medium text-gray-700">Documentos necessários:</span> CNPJ • Contrato social • RG/CPF de todos (pode ser CNH) • Certidão de Nascimento para menores de 12 anos • Relatório de alta / Declaração de saúde pediátrica (até 3 anos) • Certidão de casamento • Comprovante de residência do(s) titular(es) • Carteirinhas do plano atual • Carta de permanência • Analítico do plano atual
               </p>
@@ -938,7 +938,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
               {/* Botões de Upload */}
               <div className="grid grid-cols-3 gap-4 mb-6">
-                <label htmlFor="escolher-arquivo-cliente" className="flex flex-col items-center justify-center p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+                <label htmlFor="escolher-arquivo-cliente" className="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
                   <input
                     type="file"
                     multiple
@@ -952,7 +952,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   <span className="text-xs text-blue-600">Do computador/celular</span>
                 </label>
 
-                <label htmlFor="tirar-foto-cliente" className="flex flex-col items-center justify-center p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
+                <label htmlFor="tirar-foto-cliente" className="flex flex-col items-center justify-center p-4 bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
                   <input
                     type="file"
                     accept="image/*"
@@ -966,7 +966,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   <span className="text-xs text-green-600">Câmera do dispositivo</span>
                 </label>
 
-                <label htmlFor="da-galeria-cliente" className="flex flex-col items-center justify-center p-4 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
+                <label htmlFor="da-galeria-cliente" className="flex flex-col items-center justify-center p-4 bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
                   <input
                     type="file"
                     multiple
@@ -1057,7 +1057,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
             <button
               onClick={handleSubmit}
-              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               <Send className="w-4 h-4 mr-2" />
               {isVendor ? 'Gerar Link para Cliente' : 'Enviar Proposta'}

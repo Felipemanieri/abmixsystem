@@ -695,7 +695,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-green-50">
+      <div className="min-h-screen flex items-center justify-center bg-green-50 dark:bg-green-900">
         <div className="text-center bg-white p-8 rounded-lg shadow-lg dark:shadow-gray-900/50 max-w-md">
           <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-green-600 mb-2">Proposta Enviada!</h1>
@@ -715,7 +715,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
       <div className="max-w-4xl mx-auto py-8 px-4">
         <div className="bg-white rounded-lg shadow-lg dark:shadow-gray-900/50 overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white p-6">
+          <div className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white p-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">Completar Proposta de Plano de Saúde</h1>
@@ -843,7 +843,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
 
           {/* Vendor Observations */}
           {(proposal.vendorObservations || proposal.internalData?.observacoesCliente) && (
-            <div className="p-6 border-b bg-yellow-50">
+            <div className="p-6 border-b bg-yellow-50 dark:bg-yellow-900">
               <div className="flex items-center mb-4">
                 <div className="flex items-center">
                   <User className="h-6 w-6 text-blue-600 mr-2" />
@@ -878,7 +878,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 </div>
                 <button
                   onClick={addTitular}
-                  className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
+                  className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
                   disabled={titulares.length >= 10}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -900,7 +900,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 </div>
                 <button
                   onClick={addDependente}
-                  className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center"
+                  className="bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center"
                   disabled={dependentes.length >= 20}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -920,7 +920,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <h2 className="text-xl font-semibold text-gray-900">Documentos Necessários</h2>
               </div>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg p-4 mb-4">
                 <h3 className="font-medium text-blue-900 mb-2">Documentos obrigatórios para todos os beneficiários:</h3>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• CNPJ</li>
@@ -952,7 +952,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   </p>
                   
                   <div className="flex flex-wrap justify-center gap-4">
-                    <label className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-6 py-3 rounded-md hover:bg-blue-700 cursor-pointer inline-flex items-center">
+                    <label className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-6 py-3 rounded-md hover:bg-blue-700 cursor-pointer inline-flex items-center">
                       <Upload className="h-5 w-5 mr-2" />
                       Escolher Arquivo
                       <input
@@ -966,7 +966,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     
                     <button
                       onClick={handleCameraCapture}
-                      className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
+                      className="bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
                     >
                       <Camera className="h-5 w-5 mr-2" />
                       Tirar Foto
@@ -974,7 +974,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     
                     <button
                       onClick={handleGallerySelect}
-                      className="bg-purple-600 text-white dark:bg-purple-500 dark:text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
+                      className="bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
                     >
                       <Image className="h-5 w-5 mr-2" />
                       Da Galeria
@@ -1068,7 +1068,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleSave}
                 disabled={isSaving || isSubmitting}
-                className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isSaving ? (
                   <>
@@ -1086,7 +1086,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleClearDraft}
                 disabled={isClearingDraft}
-                className="bg-red-600 text-white dark:bg-red-500 dark:text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isClearingDraft ? (
                   <>
@@ -1104,7 +1104,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isSaving}
-                className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isSubmitting ? (
                   <>
@@ -1143,7 +1143,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 showNotification('Rascunho salvo manualmente', 'success');
               }}
               disabled={isLoadingDraft}
-              className="flex items-center px-3 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+              className="flex items-center px-3 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
               title="Salvar rascunho manualmente"
             >
               {isLoadingDraft ? (
@@ -1161,7 +1161,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             <button
               onClick={handleClearDraft}
               disabled={isClearingDraft}
-              className="flex items-center px-3 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+              className="flex items-center px-3 py-2 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
               title="Limpar rascunho salvo"
             >
               {isClearingDraft ? (

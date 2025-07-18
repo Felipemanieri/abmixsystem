@@ -199,14 +199,14 @@ export default function AttachmentManager() {
         <div className="flex gap-3">
           <button
             onClick={() => setShowDriveModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Settings className="w-4 h-4" />
             Configurar Drive
           </button>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             <Upload className="w-4 h-4" />
             Upload Manual
@@ -518,7 +518,7 @@ export default function AttachmentManager() {
               <button
                 onClick={() => addDriveConfigMutation.mutate(newDrive)}
                 disabled={!newDrive.name || !newDrive.email || !newDrive.folderId}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Salvar
               </button>

@@ -212,7 +212,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                     onClick={() => setSelectedMessage(message)}
                     className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
                       selectedMessage?.id === message.id ? 'bg-gray-50' : ''
-                    } ${!message.read && activeTab === 'inbox' ? 'bg-blue-50' : ''}`}
+                    } ${!message.read && activeTab === 'inbox' ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium truncate">

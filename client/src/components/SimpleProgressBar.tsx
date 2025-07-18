@@ -19,10 +19,10 @@ const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
         <div className="flex-1 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all duration-500 ${
-              safePercentage < 30 ? 'bg-red-500' :
-              safePercentage < 60 ? 'bg-yellow-500' :
-              safePercentage < 90 ? 'bg-blue-500' :
-              'bg-green-500'
+              safePercentage < 30 ? 'bg-red-50 dark:bg-red-9000' :
+              safePercentage < 60 ? 'bg-yellow-50 dark:bg-yellow-9000' :
+              safePercentage < 90 ? 'bg-blue-50 dark:bg-blue-9000' :
+              'bg-green-50 dark:bg-green-9000'
             }`}
             style={{ width: `${safePercentage}%` }}
           ></div>

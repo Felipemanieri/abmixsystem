@@ -128,7 +128,7 @@ const VendorForm: React.FC = () => {
             </button>
             <button
               onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Segue o link para preenchimento da proposta de plano de saúde: ${generatedLink}`)}`)}
-              className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               Enviar WhatsApp
             </button>

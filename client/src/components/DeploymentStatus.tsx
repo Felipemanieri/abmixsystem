@@ -111,7 +111,7 @@ const DeploymentStatus: React.FC<DeploymentStatusProps> = ({ deployId, onRefresh
         )}
         
         {deployUrl && status === 'success' && (
-          <div className="bg-green-50 p-4 rounded-lg">
+          <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
             <p className="text-sm text-green-700 mb-2">
               Seu site está disponível em:
             </p>

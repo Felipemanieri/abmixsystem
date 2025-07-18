@@ -135,7 +135,7 @@ export default function ControleSenhas() {
               onClick={() => setShowAllPasswords(!showAllPasswords)}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 showAllPasswords 
-                  ? 'bg-red-600 text-white dark:bg-red-500 dark:text-white hover:bg-red-700' 
+                  ? 'bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white hover:bg-red-700' 
                   : 'bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 text-gray-700 hover:bg-gray-300 dark:bg-gray-600'
               }`}
             >
@@ -144,7 +144,7 @@ export default function ControleSenhas() {
             </button>
             <button
               onClick={exportPasswordList}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar Lista
@@ -154,7 +154,7 @@ export default function ControleSenhas() {
 
         {/* Estatísticas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg p-4">
             <div className="flex items-center">
               <Users className="w-5 h-5 text-blue-600 mr-2" />
               <div>
@@ -164,7 +164,7 @@ export default function ControleSenhas() {
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg p-4">
             <div className="flex items-center">
               <Shield className="w-5 h-5 text-green-600 mr-2" />
               <div>
@@ -174,7 +174,7 @@ export default function ControleSenhas() {
             </div>
           </div>
 
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg p-4">
             <div className="flex items-center">
               <Lock className="w-5 h-5 text-purple-600 mr-2" />
               <div>
@@ -216,7 +216,7 @@ export default function ControleSenhas() {
         </div>
 
         {/* Aviso de Segurança */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+        <div className="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 rounded-lg p-4 mb-6">
           <div className="flex items-start">
             <AlertTriangle className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
             <div>
@@ -231,7 +231,7 @@ export default function ControleSenhas() {
 
       {/* Usuários do Sistema */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6 border-b bg-purple-50">
+        <div className="p-6 border-b bg-purple-50 dark:bg-purple-900">
           <h4 className="text-lg font-semibold flex items-center gap-2">
             <Shield className="h-5 w-5 text-purple-600" />
             Usuários do Sistema ({filteredSystemUsers.length})
@@ -274,7 +274,7 @@ export default function ControleSenhas() {
                           />
                           <button
                             onClick={() => generateRandomPassword()}
-                            className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                            className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
                             title="Gerar senha aleatória"
                           >
                             <RefreshCw className="w-4 h-4" />
@@ -304,7 +304,7 @@ export default function ControleSenhas() {
                           <button
                             onClick={() => handleUpdatePassword(user.id, 'system')}
                             disabled={updatePasswordMutation.isPending}
-                            className="p-1 text-green-600 hover:bg-green-50 rounded"
+                            className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 rounded"
                           >
                             <Check className="w-4 h-4" />
                           </button>
@@ -324,7 +324,7 @@ export default function ControleSenhas() {
                             setEditingUser(user.id);
                             setNewPassword(user.password);
                           }}
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
@@ -382,7 +382,7 @@ export default function ControleSenhas() {
                           />
                           <button
                             onClick={() => generateRandomPassword()}
-                            className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                            className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
                             title="Gerar senha aleatória"
                           >
                             <RefreshCw className="w-4 h-4" />
@@ -405,7 +405,7 @@ export default function ControleSenhas() {
                           <button
                             onClick={() => handleUpdatePassword(vendor.id, 'vendor')}
                             disabled={updatePasswordMutation.isPending}
-                            className="p-1 text-green-600 hover:bg-green-50 rounded"
+                            className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 rounded"
                           >
                             <Check className="w-4 h-4" />
                           </button>
@@ -425,7 +425,7 @@ export default function ControleSenhas() {
                             setEditingUser(`vendor-${vendor.id}`);
                             setNewPassword(vendor.password || '120784');
                           }}
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
                         >
                           <Edit className="w-4 h-4" />
                         </button>

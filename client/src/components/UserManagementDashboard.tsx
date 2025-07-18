@@ -175,10 +175,10 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
 
   const getPanelBadgeColor = (panel: string) => {
     switch (panel) {
-      case 'restricted': return 'bg-red-500 text-white';
-      case 'supervisor': return 'bg-purple-500 text-white';
-      case 'financial': return 'bg-green-500 text-white';
-      case 'implementation': return 'bg-blue-500 text-white';
+      case 'restricted': return 'bg-red-50 dark:bg-red-9000 text-white';
+      case 'supervisor': return 'bg-purple-50 dark:bg-purple-9000 text-white';
+      case 'financial': return 'bg-green-50 dark:bg-green-9000 text-white';
+      case 'implementation': return 'bg-blue-50 dark:bg-blue-9000 text-white';
       case 'vendor': return 'bg-orange-500 text-white';
       case 'client': return 'bg-gray-500 text-white';
       default: return 'bg-gray-400 text-white';
@@ -187,10 +187,10 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'admin': return 'bg-red-600 text-white dark:bg-red-500 dark:text-white';
-      case 'supervisor': return 'bg-purple-600 text-white dark:bg-purple-500 dark:text-white';
-      case 'financial': return 'bg-green-600 text-white dark:bg-green-500 dark:text-white';
-      case 'implementation': return 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white';
+      case 'admin': return 'bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white';
+      case 'supervisor': return 'bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white';
+      case 'financial': return 'bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white';
+      case 'implementation': return 'bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white';
       case 'vendor': return 'bg-orange-600 text-white';
       case 'client': return 'bg-gray-600 text-white';
       default: return 'bg-gray-400 text-white';
@@ -224,7 +224,7 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
               </button>
               <button
                 onClick={() => setIsAddDialogOpen(true)}
-                className="flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                className="flex items-center px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 transition-colors"
               >
                 <UserPlus className="h-4 w-4 mr-2" />
                 Novo Usuário
@@ -364,7 +364,7 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                               </button>
                               <button
                                 onClick={() => handleDeleteUser(user.id)}
-                                className="p-1 border rounded hover:bg-red-50 text-red-600"
+                                className="p-1 border rounded hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 text-red-600"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
@@ -466,7 +466,7 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
               <button
                 onClick={handleCreateUser}
                 disabled={createUserMutation.isPending}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {createUserMutation.isPending ? "Criando..." : "Criar Usuário"}
               </button>
@@ -571,7 +571,7 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
               <button
                 onClick={handleUpdateUser}
                 disabled={updateUserMutation.isPending}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {updateUserMutation.isPending ? "Atualizando..." : "Atualizar Usuário"}
               </button>

@@ -329,7 +329,7 @@ export default function UnifiedUserManagement() {
             </button>
             <button
               onClick={exportUsers}
-              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar
@@ -348,12 +348,12 @@ export default function UnifiedUserManagement() {
                 onClick={() => setActivePanel(key)}
                 className={`p-3 rounded-lg border-2 transition-all ${
                   isActive
-                    ? panel.color === 'blue' ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : panel.color === 'green' ? 'border-green-500 bg-green-50 text-green-700'
-                    : panel.color === 'purple' ? 'border-purple-500 bg-purple-50 text-purple-700'
+                    ? panel.color === 'blue' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900 text-blue-700'
+                    : panel.color === 'green' ? 'border-green-500 bg-green-50 dark:bg-green-900 text-green-700'
+                    : panel.color === 'purple' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900 text-purple-700'
                     : panel.color === 'orange' ? 'border-orange-500 bg-orange-50 text-orange-700'
                     : panel.color === 'pink' ? 'border-pink-500 bg-pink-50 text-pink-700'
-                    : panel.color === 'red' ? 'border-red-500 bg-red-50 text-red-700'
+                    : panel.color === 'red' ? 'border-red-500 bg-red-50 dark:bg-red-900 text-red-700'
                     : 'border-gray-500 bg-gray-50 text-gray-700'
                     : 'border-gray-200 hover:border-gray-300 dark:border-gray-600 text-gray-600'
                 }`}
@@ -368,12 +368,12 @@ export default function UnifiedUserManagement() {
 
         {/* Current Panel Info */}
         <div className={`rounded-lg p-4 mb-6 ${
-          currentPanel.color === 'blue' ? 'bg-blue-50 border border-blue-200'
-          : currentPanel.color === 'green' ? 'bg-green-50 border border-green-200'
-          : currentPanel.color === 'purple' ? 'bg-purple-50 border border-purple-200'
+          currentPanel.color === 'blue' ? 'bg-blue-50 dark:bg-blue-900 border border-blue-200'
+          : currentPanel.color === 'green' ? 'bg-green-50 dark:bg-green-900 border border-green-200'
+          : currentPanel.color === 'purple' ? 'bg-purple-50 dark:bg-purple-900 border border-purple-200'
           : currentPanel.color === 'orange' ? 'bg-orange-50 border border-orange-200'
           : currentPanel.color === 'pink' ? 'bg-pink-50 border border-pink-200'
-          : currentPanel.color === 'red' ? 'bg-red-50 border border-red-200'
+          : currentPanel.color === 'red' ? 'bg-red-50 dark:bg-red-900 border border-red-200'
           : 'bg-gray-50 border border-gray-200'
         }`}>
           <div className="flex items-center">
@@ -439,7 +439,7 @@ export default function UnifiedUserManagement() {
             </button>
             <button
               onClick={handleCreateUser}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
               Novo Usuário
@@ -544,13 +544,13 @@ export default function UnifiedUserManagement() {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEditUser(user)}
-                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user)}
-                          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -663,7 +663,7 @@ export default function UnifiedUserManagement() {
                   <button
                     type="submit"
                     disabled={createUserMutation.isPending || updateUserMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
                     <Save className="w-4 h-4 mr-2 inline" />
                     {editingUser ? 'Salvar' : 'Criar'}

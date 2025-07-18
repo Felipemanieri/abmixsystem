@@ -132,7 +132,7 @@ export default function BackupManager() {
             <button
               onClick={() => executeBackup('incremental')}
               disabled={isBackingUp || isRestoring}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isBackingUp ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Archive className="w-4 h-4 mr-2" />}
               Backup Incremental
@@ -140,7 +140,7 @@ export default function BackupManager() {
             <button
               onClick={() => executeBackup('complete')}
               disabled={isBackingUp || isRestoring}
-              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               {isBackingUp ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Database className="w-4 h-4 mr-2" />}
               Backup Completo
@@ -150,7 +150,7 @@ export default function BackupManager() {
 
         {/* Estatísticas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg p-4">
             <div className="flex items-center">
               <Archive className="w-5 h-5 text-blue-600 mr-2" />
               <div>
@@ -160,7 +160,7 @@ export default function BackupManager() {
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg p-4">
             <div className="flex items-center">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
               <div>
@@ -172,7 +172,7 @@ export default function BackupManager() {
             </div>
           </div>
 
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg p-4">
             <div className="flex items-center">
               <HardDrive className="w-5 h-5 text-purple-600 mr-2" />
               <div>
@@ -299,7 +299,7 @@ export default function BackupManager() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => downloadBackup(backup.id)}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                        className="p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
                         title="Baixar backup"
                       >
                         <Download className="w-4 h-4" />
@@ -307,7 +307,7 @@ export default function BackupManager() {
                       <button
                         onClick={() => restoreBackup(backup.id)}
                         disabled={isRestoring}
-                        className="p-1 text-green-600 hover:bg-green-50 rounded disabled:opacity-50"
+                        className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 rounded disabled:opacity-50"
                         title="Restaurar backup"
                       >
                         {isRestoring ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
@@ -363,7 +363,7 @@ export default function BackupManager() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 rounded-lg">
           <div className="flex items-start">
             <AlertTriangle className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
             <div>

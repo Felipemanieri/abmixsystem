@@ -56,7 +56,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
         </button>
       </div>
       
-      <div className="bg-blue-50 p-4 rounded-lg">
+      <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
         <div className="flex items-start">
           <Info className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
           <div>
@@ -245,7 +245,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
         </p>
       </div>
       
-      <div className="bg-green-50 p-4 rounded-lg">
+      <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
         <div className="flex items-start">
           <Check className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
           <div>
