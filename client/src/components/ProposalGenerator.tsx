@@ -1411,7 +1411,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               <button
                 onClick={adicionarDependente}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Dependente
@@ -1435,17 +1435,17 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Controles Internos do Vendedor */}
-          <div className="bg-orange-50 p-6 rounded-lg">
+          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Settings className="w-5 h-5 text-orange-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <Settings className="w-5 h-5 text-gray-300 mr-2" />
+                <h2 className="text-xl font-semibold text-white dark:text-white">
                   Controles Internos
                 </h2>
               </div>
               <button
                 onClick={() => setShowInternalFields(!showInternalFields)}
-                className="flex items-center text-orange-600 hover:text-orange-800 transition-colors"
+                className="flex items-center text-gray-300 hover:text-gray-100 transition-colors"
               >
                 {showInternalFields ? (
                   <>
@@ -1469,7 +1469,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="reuniao"
                     checked={internalData.reuniao}
                     onChange={(e) => setInternalData(prev => ({ ...prev, reuniao: e.target.checked }))}
-                    className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-orange-500"
+                    className="w-4 h-4 text-gray-300 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-gray-500"
                   />
                   <label htmlFor="reuniao" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Venda em reunião
@@ -1485,7 +1485,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       type="text"
                       value={internalData.nomeReuniao}
                       onChange={(e) => setInternalData(prev => ({ ...prev, nomeReuniao: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                       placeholder="Nome da reunião"
                     />
                   </div>
@@ -1497,7 +1497,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="vendaDupla"
                     checked={internalData.vendaDupla}
                     onChange={(e) => setInternalData(prev => ({ ...prev, vendaDupla: e.target.checked }))}
-                    className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-orange-500"
+                    className="w-4 h-4 text-gray-300 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-gray-500"
                   />
                   <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Venda dupla
@@ -1513,7 +1513,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       type="text"
                       value={internalData.nomeVendaDupla}
                       onChange={(e) => setInternalData(prev => ({ ...prev, nomeVendaDupla: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                       placeholder="Nome do vendedor parceiro"
                     />
                   </div>
@@ -1527,7 +1527,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     type="text"
                     value={internalData.desconto}
                     onChange={(e) => setInternalData(prev => ({ ...prev, desconto: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                     placeholder="0"
                   />
                 </div>
@@ -1539,7 +1539,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   <select
                     value={internalData.origemVenda}
                     onChange={(e) => setInternalData(prev => ({ ...prev, origemVenda: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   >
                     <option value="">Selecione a origem</option>
                     <option value="Base Abmix">Base Abmix</option>
@@ -1557,7 +1557,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   <select
                     value={internalData.autorizadorDesconto}
                     onChange={(e) => setInternalData(prev => ({ ...prev, autorizadorDesconto: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   >
                     <option value="">Selecione o autorizador</option>
                     <option value="Michelle Manieri">Michelle Manieri</option>
@@ -1573,7 +1573,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   <textarea
                     value={internalData.observacoesFinanceiras}
                     onChange={(e) => setInternalData(prev => ({ ...prev, observacoesFinanceiras: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                     rows={3}
                     placeholder="Observações para o setor financeiro..."
                   />
@@ -1682,9 +1682,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   className="hidden"
                   id="da-galeria"
                 />
-                <User className="w-8 h-8 text-purple-600 mb-2" />
-                <span className="text-sm font-medium text-purple-700">Da Galeria</span>
-                <span className="text-xs text-purple-600">Fotos salvas</span>
+                <User className="w-8 h-8 text-purple-300 mb-2" />
+                <span className="text-sm font-medium text-purple-300">Da Galeria</span>
+                <span className="text-xs text-purple-300">Fotos salvas</span>
               </label>
             </div>
 
