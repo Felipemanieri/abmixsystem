@@ -409,6 +409,28 @@ The application provides role-based portals with specific functionality:
   - APIs Google Drive e Sheets configuráveis
   - Sistema preparado para máquinas robustas (conforme necessidade)
 
+### Sistema de Mensagens Internas Automatizado e Refinado (Jan 18, 2025)
+- **Sistema de detecção automática de usuários implementado**:
+  - Carregamento automático de usuários do banco de dados (sistema + vendedores)
+  - Recarregamento a cada 30 segundos para detectar novos usuários
+  - Detecção automática de usuários em mensagens trocadas
+  - Organização por departamentos: Comercial, Supervisão, Financeiro, Implementação, Administração, Sistema
+  - Remoção de "Cliente Portal" conforme solicitado
+  - Nomenclatura refinada: "- Departamento" em vez de "(Departamento)"
+
+- **Interface aprimorada do sistema de mensagens**:
+  - Campo destinatário com contagem dinâmica de usuários disponíveis
+  - Agrupamento automático por departamento com ordenação inteligente
+  - Opção "Mensagem Geral" para broadcast para todos os usuários
+  - Campo de anexos com upload múltiplo e visualização
+  - Sistema limpo sem dados demo
+
+- **Sincronização automática em tempo real**:
+  - Detecção automática de novos usuários adicionados ao sistema
+  - Atualização imediata da lista de destinatários
+  - Contador de mensagens não lidas que zera ao abrir
+  - Cores atualizadas para esquema cinza conforme padrão do sistema
+
 ### Sistema de Auto-Save Completo Implementado (Jan 16, 2025)
 - **Auto-save completo funcionando em ambos os formulários**:
   - VendorPortal (ProposalGenerator): Auto-save automático a cada mudança nos dados

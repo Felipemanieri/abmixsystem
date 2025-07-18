@@ -18,6 +18,13 @@ interface Message {
   }[];
 }
 
+interface User {
+  name: string;
+  role: string;
+  department: string;
+  email: string;
+}
+
 interface InternalMessageProps {
   isOpen: boolean;
   onClose: () => void;
@@ -41,26 +48,111 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Lista de usuários disponíveis para envio de mensagens
-  const [availableUsers] = useState([
-    { name: 'Ana Caroline Terto', role: 'vendor', email: 'comercial14@abmix.com.br' },
-    { name: 'Bruna Garcia', role: 'vendor', email: 'comercial10@abmix.com.br' },
-    { name: 'Fabiana Ferreira', role: 'vendor', email: 'comercial17@abmix.com.br' },
-    { name: 'Fabiana Godinho', role: 'vendor', email: 'comercial@abmix.com.br' },
-    { name: 'Fernanda Batista', role: 'vendor', email: 'comercial18@abmix.com.br' },
-    { name: 'Gabrielle Fernandes', role: 'vendor', email: 'comercial3@abmix.com.br' },
-    { name: 'Isabela Velasquez', role: 'vendor', email: 'comercial4@abmix.com.br' },
-    { name: 'Juliana Araujo', role: 'vendor', email: 'comercial6@abmix.com.br' },
-    { name: 'Lohainy Berlino', role: 'vendor', email: 'comercial15@abmix.com.br' },
-    { name: 'Luciana Velasquez', role: 'vendor', email: 'comercial21@abmix.com.br' },
-    { name: 'Monique Silva', role: 'vendor', email: 'comercial2@abmix.com.br' },
-    { name: 'Sara Mattos', role: 'vendor', email: 'comercial8@abmix.com.br' },
-    { name: 'Supervisor Abmix', role: 'supervisor', email: 'supervisao@abmix.com.br' },
-    { name: 'Financeiro Abmix', role: 'financial', email: 'financeiro@abmix.com.br' },
-    { name: 'Implementação Abmix', role: 'implementation', email: 'implementacao@abmix.com.br' },
-    { name: 'Cliente Portal', role: 'client', email: 'cliente@abmix.com.br' },
-    { name: 'Felipe Admin', role: 'admin', email: 'felipe@abmix.com.br' }
-  ]);
+  // Sistema de detecção automática de usuários do banco de dados
+  const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+
+  // Carregar usuários automaticamente do banco de dados
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        // Buscar usuários do sistema
+        const systemUsersResponse = await fetch('/api/auth/users');
+        const systemUsers = systemUsersResponse.ok ? await systemUsersResponse.json() : [];
+
+        // Buscar vendedores
+        const vendorsResponse = await fetch('/api/vendors');
+        const vendors = vendorsResponse.ok ? await vendorsResponse.json() : [];
+
+        // Combinar e formatar usuários
+        const allUsers: User[] = [
+          // Usuários do sistema
+          ...systemUsers.map((user: any) => ({
+            name: user.username || user.email?.split('@')[0] || 'Usuário',
+            role: user.type || 'system',
+            department: getDepartmentFromRole(user.type || 'system'),
+            email: user.email
+          })),
+          // Vendedores
+          ...vendors.map((vendor: any) => ({
+            name: vendor.name || vendor.email?.split('@')[0] || 'Vendedor',
+            role: 'vendor',
+            department: 'Comercial',
+            email: vendor.email
+          }))
+        ];
+
+        setAvailableUsers(allUsers);
+      } catch (error) {
+        console.error('Erro ao carregar usuários:', error);
+        // Fallback para usuários padrão
+        setAvailableUsers([
+          { name: 'Supervisor Abmix', role: 'supervisor', department: 'Supervisão', email: 'supervisao@abmix.com.br' },
+          { name: 'Financeiro Abmix', role: 'financial', department: 'Financeiro', email: 'financeiro@abmix.com.br' },
+          { name: 'Implementação Abmix', role: 'implementation', department: 'Implementação', email: 'implementacao@abmix.com.br' },
+          { name: 'Felipe Admin', role: 'admin', department: 'Administração', email: 'felipe@abmix.com.br' }
+        ]);
+      }
+    };
+
+    loadUsers();
+
+    // Recarregar usuários a cada 30 segundos para detectar mudanças
+    const interval = setInterval(loadUsers, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Detectar novos usuários em mensagens
+  useEffect(() => {
+    const detectMessageUsers = () => {
+      const existingMessages = JSON.parse(localStorage.getItem('internalMessages') || '[]');
+      const existingUserNames = new Set(availableUsers.map(u => u.name));
+      const newUsers: User[] = [];
+      
+      existingMessages.forEach((msg: any) => {
+        // Detectar remetente não cadastrado
+        if (!existingUserNames.has(msg.sender) && msg.sender !== safeCurrentUser.name) {
+          newUsers.push({
+            name: msg.sender,
+            role: msg.senderRole || 'user',
+            department: getDepartmentFromRole(msg.senderRole || 'user'),
+            email: `${msg.sender.toLowerCase().replace(/\s+/g, '.')}@abmix.com.br`
+          });
+          existingUserNames.add(msg.sender);
+        }
+        
+        // Detectar destinatário não cadastrado
+        if (!existingUserNames.has(msg.recipient) && msg.recipient !== safeCurrentUser.name) {
+          newUsers.push({
+            name: msg.recipient,
+            role: msg.recipientRole || 'user',
+            department: getDepartmentFromRole(msg.recipientRole || 'user'),
+            email: `${msg.recipient.toLowerCase().replace(/\s+/g, '.')}@abmix.com.br`
+          });
+          existingUserNames.add(msg.recipient);
+        }
+      });
+
+      if (newUsers.length > 0) {
+        setAvailableUsers(prev => [...prev, ...newUsers]);
+      }
+    };
+
+    if (availableUsers.length > 0) {
+      detectMessageUsers();
+    }
+  }, [messages, availableUsers]);
+
+  const getDepartmentFromRole = (role: string) => {
+    switch (role) {
+      case 'vendor': return 'Comercial';
+      case 'supervisor': return 'Supervisão';
+      case 'financial': return 'Financeiro';
+      case 'implementation': return 'Implementação';
+      case 'admin': return 'Administração';
+      case 'system': return 'Sistema';
+      default: return 'Geral';
+    }
+  };
 
   // Sistema de mensagens limpo - sem dados demo
   const [messages, setMessages] = useState<Message[]>([]);
@@ -344,7 +436,10 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
               <div className="flex-1 flex flex-col p-4">
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Destinatário
+                    Destinatário 
+                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                      ({availableUsers.length} usuários disponíveis)
+                    </span>
                   </label>
                   <select
                     value={composeData.recipient}
@@ -352,24 +447,30 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-white"
                   >
                     <option value="">Selecione um destinatário</option>
-                    <option value="Mensagem Geral">📢 Mensagem Geral (Todos os usuários)</option>
-                    <optgroup label="Vendedores">
-                      {availableUsers.filter(user => user.role === 'vendor').map(user => (
-                        <option key={user.email} value={user.name}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="Equipe Interna">
-                      {availableUsers.filter(user => user.role !== 'vendor').map(user => (
-                        <option key={user.email} value={user.name}>
-                          {user.name} ({user.role === 'supervisor' ? 'Supervisão' : 
-                                        user.role === 'financial' ? 'Financeiro' : 
-                                        user.role === 'implementation' ? 'Implementação' : 
-                                        user.role === 'client' ? 'Cliente' : 'Administrador'})
-                        </option>
-                      ))}
-                    </optgroup>
+                    <option value="Mensagem Geral">📢 Mensagem Geral - Todos os usuários</option>
+                    
+                    {/* Agrupar por departamento automaticamente */}
+                    {Array.from(new Set(availableUsers.map(user => user.department)))
+                      .sort((a, b) => {
+                        const order = ['Comercial', 'Supervisão', 'Financeiro', 'Implementação', 'Administração', 'Sistema', 'Geral'];
+                        return order.indexOf(a) - order.indexOf(b);
+                      })
+                      .map(dept => {
+                        const usersInDept = availableUsers.filter(user => user.department === dept);
+                        if (usersInDept.length === 0) return null;
+                        
+                        return (
+                          <optgroup key={dept} label={dept}>
+                            {usersInDept
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map(user => (
+                                <option key={user.email} value={user.name}>
+                                  {user.name} - {user.department}
+                                </option>
+                              ))}
+                          </optgroup>
+                        );
+                      })}
                   </select>
                 </div>
                 
