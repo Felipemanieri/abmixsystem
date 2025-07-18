@@ -574,12 +574,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <p className="text-gray-300">Gere cotações personalizadas para seus clientes</p>
       </div>
 
-      <div className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-white dark:text-white mb-6">Dados da Cotação</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Dados da Cotação</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-white dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
               Número de Vidas
             </label>
             <input
@@ -587,18 +587,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               min="1"
               value={quotationData.numeroVidas}
               onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-800 dark:bg-gray-900 dark:bg-gray-700 text-white dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-white dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
               Operadora
             </label>
             <select
               value={quotationData.operadora}
               onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-800 dark:bg-gray-900 dark:bg-gray-700 text-white dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               <option value="">Selecione a operadora</option>
               <option value="unimed">Unimed</option>
@@ -612,7 +612,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-medium text-white dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-white">
               Idades dos Beneficiários
             </label>
             <button
@@ -1325,11 +1325,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <div key={stat.name} className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
+                  <div key={stat.name} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-white dark:text-gray-500 dark:text-white">{stat.name}</p>
-                        <p className="text-2xl font-bold text-white dark:text-white">{stat.value}</p>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-300">{stat.name}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                       </div>
                       <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
                         <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -1338,7 +1338,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     <div className="mt-4 flex items-center">
                       <span className={`text-sm font-medium ${
                         stat.changeType === 'positive' ? 'text-green-600' : 
-                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-white dark:text-gray-500 dark:text-white'
+                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-gray-600 dark:text-gray-300'
                       }`}>
                         {stat.change}
                       </span>
@@ -1382,25 +1382,25 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
               <button
                 onClick={() => setActiveView('quotations')}
-                className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <Calculator className="w-6 h-6 text-blue-300 dark:text-blue-200 dark:text-blue-400" />
+                    <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-white dark:text-white">Painel de Cotações</h3>
-                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Gerenciar cotações</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Painel de Cotações</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Gerenciar cotações</p>
                   </div>
                 </div>
               </button>
             </div>
 
             {/* Recent Proposals */}
-            <div className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700">
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-white dark:text-white">Propostas Recentes ({realProposals?.length || 0})</h2>
-                <div className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Propostas Recentes ({realProposals?.length || 0})</h2>
+                <div className="text-sm text-gray-500 dark:text-gray-300">
                   Atualização em tempo real • Suas propostas exclusivas
                 </div>
               </div>
