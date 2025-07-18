@@ -133,19 +133,29 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     // Notificações removidas
   }, []);
 
+  // Estados para resultado do teste
+  const [sheetsTestResult, setSheetsTestResult] = useState(null);
+  const [isTestingSheets, setIsTestingSheets] = useState(false);
+
   // Função para testar conexão com Google Sheets
   const testSheetsConnection = async () => {
+    setIsTestingSheets(true);
+    setSheetsTestResult(null);
+    
     try {
       const response = await fetch('/api/test/sheets');
       const data = await response.json();
       
-      if (data.success && data.connected) {
-        alert('✅ CONECTADO COM GOOGLE SHEETS!\n\nStatus: Funcionando\nDados de teste: ' + JSON.stringify(data.testData, null, 2));
-      } else {
-        alert('❌ ERRO NA CONEXÃO\n\n' + data.message + '\n\nErro: ' + JSON.stringify(data.error, null, 2));
-      }
+      setSheetsTestResult(data);
     } catch (error) {
-      alert('❌ ERRO DE REDE\n\nNão foi possível conectar com a API:\n' + error.message);
+      setSheetsTestResult({
+        success: false,
+        connected: false,
+        message: 'Erro de rede',
+        error: error.message
+      });
+    } finally {
+      setIsTestingSheets(false);
     }
   };
   
@@ -1131,6 +1141,45 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               </div>
             </div>
             
+            {/* Resultado do teste de conectividade */}
+            {sheetsTestResult && (
+              <div className={`p-4 rounded-lg mb-4 ${
+                sheetsTestResult.success && sheetsTestResult.connected 
+                  ? 'bg-green-100 dark:bg-green-900 border border-green-300' 
+                  : 'bg-red-100 dark:bg-red-900 border border-red-300'
+              }`}>
+                <div className="flex items-center mb-2">
+                  {sheetsTestResult.success && sheetsTestResult.connected ? (
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+                  )}
+                  <span className={`font-medium ${
+                    sheetsTestResult.success && sheetsTestResult.connected 
+                      ? 'text-green-800 dark:text-green-200' 
+                      : 'text-red-800 dark:text-red-200'
+                  }`}>
+                    {sheetsTestResult.success && sheetsTestResult.connected 
+                      ? '✅ CONECTADO COM GOOGLE SHEETS' 
+                      : '❌ ERRO NA CONEXÃO'}
+                  </span>
+                </div>
+                <div className={`text-sm ${
+                  sheetsTestResult.success && sheetsTestResult.connected 
+                    ? 'text-green-700 dark:text-green-300' 
+                    : 'text-red-700 dark:text-red-300'
+                }`}>
+                  <div>Status: {sheetsTestResult.message}</div>
+                  {sheetsTestResult.error && (
+                    <div className="mt-1">Erro: {JSON.stringify(sheetsTestResult.error)}</div>
+                  )}
+                  {sheetsTestResult.testData && (
+                    <div className="mt-1">Dados de teste obtidos com sucesso</div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Caixas informativas para Google Sheets */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div className="bg-green-100 dark:bg-green-800 rounded-lg p-4 text-center">
@@ -1198,9 +1247,10 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={testSheetsConnection}
-                    className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    disabled={isTestingSheets}
+                    className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
-                    Testar
+                    {isTestingSheets ? 'Testando...' : 'Testar'}
                   </button>
                   <button 
                     onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
