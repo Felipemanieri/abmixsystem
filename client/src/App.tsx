@@ -153,7 +153,8 @@ function App() {
 
   // Página inicial com seleção de portais
   return (
-    <div className="min-h-screen bg-gray-50">
+    <ThemeProvider>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <header className="bg-slate-800 dark:bg-slate-900 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -163,7 +164,7 @@ function App() {
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                   alt="Abmix" 
-                  className="h-10 w-auto"
+                  className="h-12 w-auto"
                 />
               </div>
               <button
@@ -200,24 +201,24 @@ function App() {
           </div>
           
           {/* Texto principal com z-index maior */}
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-600 mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-600 dark:text-gray-300 mb-6 leading-tight">
             Sistema Abmix de Propostas
           </h1>
-          <p className="text-xl text-gray-600 font-bold max-w-4xl mx-auto leading-relaxed relative z-10">
+          <p className="text-xl text-gray-600 dark:text-gray-400 font-bold max-w-4xl mx-auto leading-relaxed relative z-10">
             Plataforma completa para gestão de propostas de planos de saúde empresariais. 
             Acesse sua área específica e gerencie todo o processo de forma simples, segura e eficiente.
           </p>
           
           <div className="flex items-center justify-center space-x-8 mt-8 relative z-10">
-            <div className="flex items-center text-gray-600 font-bold">
+            <div className="flex items-center text-gray-600 dark:text-gray-400 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>100% Digital</span>
             </div>
-            <div className="flex items-center text-gray-600 font-bold">
+            <div className="flex items-center text-gray-600 dark:text-gray-400 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Seguro e Rápido</span>
             </div>
-            <div className="flex items-center text-gray-600 font-bold">
+            <div className="flex items-center text-gray-600 dark:text-gray-400 font-bold">
               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
               <span>Suporte Especializado</span>
             </div>
@@ -340,10 +341,10 @@ function App() {
         </div>
 
         {/* Features Section */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-3xl p-12 mb-16 border border-gray-200 dark:border-gray-700">
           <div className="text-center mb-12">
 
-            <p className="text-gray-600 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
+            <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -351,24 +352,24 @@ function App() {
               <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-teal-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 mb-2">Processo Ágil</h3>
-              <p className="text-gray-600 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Processo Ágil</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Automatização completa do fluxo de propostas, reduzindo tempo e erros</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 mb-2">Máxima Segurança</h3>
-              <p className="text-gray-600 font-medium">Criptografia avançada e conformidade total com LGPD</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Máxima Segurança</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Criptografia avançada e conformidade total com LGPD</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 mb-2">Suporte Dedicado</h3>
-              <p className="text-gray-600 font-medium">Equipe especializada com suporte dedicado para auxiliar</p>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Suporte Dedicado</h3>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">Equipe especializada com suporte dedicado para auxiliar</p>
             </div>
           </div>
         </div>
@@ -377,9 +378,9 @@ function App() {
       </main>
       
       {/* Footer */}
-      <footer className="bg-gray-100 border-t border-gray-200 py-4 px-6">
+      <footer className="bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-4 px-6">
         <div className="max-w-full mx-auto">
-          <div className="flex items-center justify-between text-xs text-gray-600">
+          <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
             
             {/* Seção Esquerda - Logo e Info do Sistema */}
             <div className="flex items-center space-x-3">
@@ -506,8 +507,9 @@ function App() {
             <MessageCircle className="w-8 h-8" />
           </button>
         )}
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
