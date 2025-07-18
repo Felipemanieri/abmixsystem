@@ -281,12 +281,12 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(totalIncome)}</p>
             </div>
             <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="h-6 w-6 text-green-600 dark:text-white" />
+              <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <TrendingUp className="h-4 w-4 text-green-500 dark:text-white mr-1" />
-            <span className="text-green-600 dark:text-white">+12.5%</span>
+            <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-400 mr-1" />
+            <span className="text-green-600 dark:text-green-400">+12.5%</span>
             <span className="text-gray-500 dark:text-white ml-1">vs mês anterior</span>
           </div>
         </div>
@@ -298,7 +298,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(totalPending)}</p>
             </div>
             <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-white" />
+              <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
@@ -313,11 +313,11 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{realTransactions.filter(t => t.status === 'completed').length}</p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Users className="h-6 w-6 text-blue-600 dark:text-white" />
+              <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600 dark:text-white">+2</span>
+            <span className="text-green-600 dark:text-green-400">+2</span>
             <span className="text-gray-500 dark:text-white ml-1">novos este mês</span>
           </div>
         </div>
@@ -333,7 +333,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600 dark:text-white">+5.2%</span>
+            <span className="text-green-600 dark:text-green-400">+5.2%</span>
             <span className="text-gray-500 dark:text-white ml-1">vs mês anterior</span>
           </div>
         </div>
@@ -348,7 +348,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <FileText className="h-5 w-5 text-blue-600 dark:text-white" />
+                <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Relatórios do Supervisor</h3>
@@ -448,7 +448,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           onClick={() => handleDownloadReport(report.id)}
                           className="flex flex-col items-center p-2 bg-blue-100 hover:bg-blue-200 rounded-md transition-colors"
                         >
-                          <Download className="h-4 w-4 text-blue-600 dark:text-white mb-1" />
+                          <Download className="h-4 w-4 text-blue-600 dark:text-blue-400 mb-1" />
                           <span className="text-blue-700 dark:text-white text-xs">Baixar</span>
                         </button>
                         
@@ -456,7 +456,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           onClick={() => handleEmailReport(report.id)}
                           className="flex flex-col items-center p-2 bg-green-100 hover:bg-green-200 rounded-md transition-colors"
                         >
-                          <Mail className="h-4 w-4 text-green-600 dark:text-white mb-1" />
+                          <Mail className="h-4 w-4 text-green-600 dark:text-green-400 mb-1" />
                           <span className="text-green-700 dark:text-white text-xs">Email</span>
                         </button>
                         
@@ -472,7 +472,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                           onClick={() => handleViewInSheets(report.id)}
                           className="flex flex-col items-center p-2 bg-yellow-100 hover:bg-yellow-200 rounded-md transition-colors"
                         >
-                          <BarChart3 className="h-4 w-4 text-yellow-600 dark:text-white mb-1" />
+                          <BarChart3 className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mb-1" />
                           <span className="text-yellow-700 dark:text-white text-xs">Google Sheets</span>
                         </button>
                         
@@ -1009,20 +1009,20 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                   <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-blue-600 dark:text-white text-sm font-medium">Período</p>
+                        <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Período</p>
                         <p className="text-blue-900 dark:text-white text-lg font-bold">{selectedReport.data.period}</p>
                       </div>
-                      <Calendar className="h-8 w-8 text-blue-500 dark:text-white" />
+                      <Calendar className="h-8 w-8 text-blue-500 dark:text-blue-400" />
                     </div>
                   </div>
                   
                   <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-green-600 dark:text-white text-sm font-medium">Total de Propostas</p>
+                        <p className="text-green-600 dark:text-green-400 text-sm font-medium">Total de Propostas</p>
                         <p className="text-green-900 dark:text-white text-lg font-bold">{selectedReport.data.totalProposals}</p>
                       </div>
-                      <FileText className="h-8 w-8 text-green-500 dark:text-white" />
+                      <FileText className="h-8 w-8 text-green-500 dark:text-green-400" />
                     </div>
                   </div>
                   
@@ -1077,7 +1077,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     }}
                     className="flex flex-col items-center p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
                   >
-                    <Download className="h-6 w-6 text-blue-600 dark:text-white mb-1" />
+                    <Download className="h-6 w-6 text-blue-600 dark:text-blue-400 mb-1" />
                     <span className="text-blue-700 dark:text-white text-xs font-medium">Baixar</span>
                   </button>
                   
@@ -1088,7 +1088,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     }}
                     className="flex flex-col items-center p-3 bg-green-100 hover:bg-green-200 rounded-lg transition-colors"
                   >
-                    <Mail className="h-6 w-6 text-green-600 dark:text-white mb-1" />
+                    <Mail className="h-6 w-6 text-green-600 dark:text-green-400 mb-1" />
                     <span className="text-green-700 dark:text-white text-xs font-medium">Email</span>
                   </button>
                   
@@ -1110,7 +1110,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                     }}
                     className="flex flex-col items-center p-3 bg-yellow-100 hover:bg-yellow-200 rounded-lg transition-colors"
                   >
-                    <BarChart3 className="h-6 w-6 text-yellow-600 dark:text-white mb-1" />
+                    <BarChart3 className="h-6 w-6 text-yellow-600 dark:text-yellow-400 mb-1" />
                     <span className="text-yellow-700 dark:text-white text-xs font-medium">Google Sheets</span>
                   </button>
                   

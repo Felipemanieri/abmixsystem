@@ -783,18 +783,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-4">
               <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                <FileText className="w-8 h-8 text-blue-600 dark:text-white mb-2" />
-                <span className="text-sm font-medium text-blue-600 dark:text-white">Escolher Arquivo</span>
-                <span className="text-xs text-blue-500 dark:text-white">Do computador/celular</span>
+                <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-2" />
+                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Escolher Arquivo</span>
+                <span className="text-xs text-blue-500 dark:text-blue-400">Do computador/celular</span>
               </label>
 
               <button
                 onClick={tirarFoto}
                 className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors"
               >
-                <Camera className="w-8 h-8 text-green-600 dark:text-white mb-2" />
-                <span className="text-sm font-medium text-green-600 dark:text-white">Tirar Foto</span>
-                <span className="text-xs text-green-500 dark:text-white">Câmera do dispositivo</span>
+                <Camera className="w-8 h-8 text-green-600 dark:text-green-400 mb-2" />
+                <span className="text-sm font-medium text-green-600 dark:text-green-400">Tirar Foto</span>
+                <span className="text-xs text-green-500 dark:text-green-400">Câmera do dispositivo</span>
               </button>
 
               <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center p-6 bg-purple-50 border-2 border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
@@ -1107,9 +1107,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Escolher Arquivo */}
               <label className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg cursor-pointer transition-colors">
-                <Paperclip className="w-6 h-6 text-blue-600 dark:text-white mb-2" />
+                <Paperclip className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
                 <span className="text-sm font-medium text-blue-700 dark:text-white">Escolher Arquivo</span>
-                <span className="text-xs text-blue-600 dark:text-white">Do computador/celular</span>
+                <span className="text-xs text-blue-600 dark:text-blue-400">Do computador/celular</span>
                 <input
                   type="file"
                   multiple
@@ -1125,9 +1125,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 onClick={tirarFoto}
                 className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
               >
-                <Camera className="w-6 h-6 text-green-600 dark:text-white mb-2" />
+                <Camera className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
                 <span className="text-sm font-medium text-green-700 dark:text-white">Tirar Foto</span>
-                <span className="text-xs text-green-600 dark:text-white">Câmera do dispositivo</span>
+                <span className="text-xs text-green-600 dark:text-green-400">Câmera do dispositivo</span>
               </button>
 
               {/* Upload da Galeria */}
@@ -1356,7 +1356,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-                    <Plus className="w-6 h-6 text-green-600 dark:text-white" />
+                    <Plus className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Nova Proposta</h3>
@@ -1386,7 +1386,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
-                    <Calculator className="w-6 h-6 text-blue-600 dark:text-white" />
+                    <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Painel de Cotações</h3>
@@ -1682,9 +1682,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-blue-100 rounded">
                           {attachment.type === 'pdf' ? (
-                            <FileText className="w-4 h-4 text-blue-600 dark:text-white" />
+                            <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                           ) : (
-                            <Image className="w-4 h-4 text-blue-600 dark:text-white" />
+                            <Image className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                           )}
                         </div>
                         <div>

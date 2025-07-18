@@ -312,7 +312,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-white">Valor</label>
-                    <p className="text-lg font-bold text-green-600 dark:text-white mt-1">R$ {cotacao.valor}</p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-400 mt-1">R$ {cotacao.valor}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-white">Validade da Cotação</label>

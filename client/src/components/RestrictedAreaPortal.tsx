@@ -357,7 +357,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <Paperclip className="w-6 h-6 text-blue-600 dark:text-white mr-3" />
+              <Paperclip className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciamento de Anexos</h3>
             </div>
             <div className="flex space-x-3">
@@ -387,34 +387,34 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             
             <div className="bg-yellow-50 rounded-lg p-4 text-center">
               <div className="flex items-center justify-center mb-2">
-                <Clock className="w-8 h-8 text-yellow-600 dark:text-white" />
+                <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div className="text-2xl font-bold text-yellow-900 dark:text-white">2</div>
-              <div className="text-sm text-yellow-600 dark:text-white">Pingentes</div>
+              <div className="text-sm text-yellow-600 dark:text-yellow-400">Pingentes</div>
             </div>
             
             <div className="bg-green-50 rounded-lg p-4 text-center">
               <div className="flex items-center justify-center mb-2">
-                <CheckCircle className="w-8 h-8 text-green-600 dark:text-white" />
+                <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>
               <div className="text-2xl font-bold text-green-900 dark:text-white">3</div>
-              <div className="text-sm text-green-600 dark:text-white">Aprovados</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Aprovados</div>
             </div>
             
             <div className="bg-red-50 rounded-lg p-4 text-center">
               <div className="flex items-center justify-center mb-2">
-                <X className="w-8 h-8 text-red-600 dark:text-white" />
+                <X className="w-8 h-8 text-red-600 dark:text-red-400" />
               </div>
               <div className="text-2xl font-bold text-red-900 dark:text-white">1</div>
-              <div className="text-sm text-red-600 dark:text-white">Rejeitados</div>
+              <div className="text-sm text-red-600 dark:text-red-400">Rejeitados</div>
             </div>
             
             <div className="bg-blue-50 rounded-lg p-4 text-center">
               <div className="flex items-center justify-center mb-2">
-                <Cloud className="w-8 h-8 text-blue-600 dark:text-white" />
+                <Cloud className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
               <div className="text-2xl font-bold text-blue-900 dark:text-white">6,72 MB</div>
-              <div className="text-sm text-blue-600 dark:text-white">Tamanho Total</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">Tamanho Total</div>
             </div>
           </div>
 
@@ -501,10 +501,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 {anexosFiltrados.map((anexo) => {
                   const CategoriaIcon = getCategoriaIcon(anexo.categoria);
                   return (
-                    <tr key={anexo.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:bg-gray-700">
+                    <tr key={anexo.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="py-3 px-4">
                         <div className="flex items-center">
-                          <FileText className="w-5 h-5 text-red-500 dark:text-white mr-2" />
+                          <FileText className="w-5 h-5 text-red-500 dark:text-red-400 mr-2" />
                           <span className="text-sm text-gray-900 dark:text-white">{anexo.nome}</span>
                         </div>
                       </td>
@@ -575,7 +575,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center mb-6">
-            <Eye className="w-6 h-6 text-blue-600 dark:text-white mr-3" />
+            <Eye className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Interface</h3>
           </div>
 
@@ -585,19 +585,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <Users className="w-5 h-5 text-blue-600 dark:text-white mr-2" />
+                    <Users className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                     <span className="font-medium text-gray-900 dark:text-white">Portal do Cliente</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     {portalVisibility.showClientPortal ? (
                       <>
-                        <Eye className="w-4 h-4 text-green-600 dark:text-white" />
-                        <span className="text-sm text-green-600 dark:text-white font-medium">Visível</span>
+                        <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">Visível</span>
                       </>
                     ) : (
                       <>
-                        <EyeOff className="w-4 h-4 text-red-600 dark:text-white" />
-                        <span className="text-sm text-red-600 dark:text-white font-medium">Oculto</span>
+                        <EyeOff className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm text-red-600 dark:text-red-400 font-medium">Oculto</span>
                       </>
                     )}
                   </div>
@@ -619,19 +619,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center">
-                    <FileText className="w-5 h-5 text-green-600 dark:text-white mr-2" />
+                    <FileText className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                     <span className="font-medium text-gray-900 dark:text-white">Portal Vendedor</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     {portalVisibility.showVendorPortal ? (
                       <>
-                        <Eye className="w-4 h-4 text-green-600 dark:text-white" />
-                        <span className="text-sm text-green-600 dark:text-white font-medium">Visível</span>
+                        <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">Visível</span>
                       </>
                     ) : (
                       <>
-                        <EyeOff className="w-4 h-4 text-red-600 dark:text-white" />
-                        <span className="text-sm text-red-600 dark:text-white font-medium">Oculto</span>
+                        <EyeOff className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm text-red-600 dark:text-red-400 font-medium">Oculto</span>
                       </>
                     )}
                   </div>
@@ -659,13 +659,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <div className="flex items-center space-x-2">
                     {portalVisibility.showFinancialPortal ? (
                       <>
-                        <Eye className="w-4 h-4 text-green-600 dark:text-white" />
-                        <span className="text-sm text-green-600 dark:text-white font-medium">Visível</span>
+                        <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">Visível</span>
                       </>
                     ) : (
                       <>
-                        <EyeOff className="w-4 h-4 text-red-600 dark:text-white" />
-                        <span className="text-sm text-red-600 dark:text-white font-medium">Oculto</span>
+                        <EyeOff className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm text-red-600 dark:text-red-400 font-medium">Oculto</span>
                       </>
                     )}
                   </div>
@@ -693,13 +693,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <div className="flex items-center space-x-2">
                     {portalVisibility.showImplementationPortal ? (
                       <>
-                        <Eye className="w-4 h-4 text-green-600 dark:text-white" />
-                        <span className="text-sm text-green-600 dark:text-white font-medium">Visível</span>
+                        <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">Visível</span>
                       </>
                     ) : (
                       <>
-                        <EyeOff className="w-4 h-4 text-red-600 dark:text-white" />
-                        <span className="text-sm text-red-600 dark:text-white font-medium">Oculto</span>
+                        <EyeOff className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm text-red-600 dark:text-red-400 font-medium">Oculto</span>
                       </>
                     )}
                   </div>
@@ -727,13 +727,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <div className="flex items-center space-x-2">
                     {portalVisibility.showSupervisorPortal ? (
                       <>
-                        <Eye className="w-4 h-4 text-green-600 dark:text-white" />
-                        <span className="text-sm text-green-600 dark:text-white font-medium">Visível</span>
+                        <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">Visível</span>
                       </>
                     ) : (
                       <>
-                        <EyeOff className="w-4 h-4 text-red-600 dark:text-white" />
-                        <span className="text-sm text-red-600 dark:text-white font-medium">Oculto</span>
+                        <EyeOff className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm text-red-600 dark:text-red-400 font-medium">Oculto</span>
                       </>
                     )}
                   </div>
@@ -754,7 +754,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-600 mt-6">
             <button
               onClick={resetToDefault}
-              className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+              className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               Restaurar Padrão
@@ -777,14 +777,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Zap className="w-5 h-5 text-yellow-600 dark:text-white mr-2" />
+                <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Google Drive Automático</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
                 Envio automático de propostas e documentos para pastas organizadas no Google Drive
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-green-600 dark:text-white font-medium">✓ Ativo</span>
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('drive')}
                   className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
@@ -796,14 +796,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Globe className="w-5 h-5 text-green-600 dark:text-white mr-2" />
+                <Globe className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Sync Google Sheets</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
                 Sincronização automática com planilha principal do sistema
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-green-600 dark:text-white font-medium">✓ Ativo</span>
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('sheets')}
                   className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
@@ -815,14 +815,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Calendar className="w-5 h-5 text-blue-600 dark:text-white mr-2" />
+                <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Notificações WhatsApp</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
                 Envio de notificações automáticas para vendedores e clientes
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-green-600 dark:text-white font-medium">✓ Ativo</span>
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('whatsapp')}
                   className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
@@ -841,7 +841,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 Backup diário de todos os dados do sistema
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-green-600 dark:text-white font-medium">✓ Ativo</span>
+                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('backup')}
                   className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
@@ -866,7 +866,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <FileText className="w-6 h-6 text-green-600 dark:text-white mr-3" />
+              <FileText className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciar Planilhas</h3>
             </div>
             <button 
@@ -881,7 +881,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <BarChart3 className="w-5 h-5 text-blue-600 dark:text-white mr-2" />
+                <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Planilha Principal</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-white mb-4">
@@ -890,7 +890,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Status:</span>
-                  <span className="text-green-600 dark:text-white font-medium">Sincronizada</span>
+                  <span className="text-green-600 dark:text-green-400 font-medium">Sincronizada</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Última atualização:</span>
@@ -910,7 +910,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </button>
                 <button 
                   onClick={syncGoogleSheets}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
                 >
                   Sync
                 </button>
@@ -928,7 +928,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Status:</span>
-                  <span className="text-green-600 dark:text-white font-medium">Ativa</span>
+                  <span className="text-green-600 dark:text-green-400 font-medium">Ativa</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Relatórios gerados:</span>
@@ -948,7 +948,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </button>
                 <button 
                   onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
                 >
                   Config
                 </button>
@@ -980,29 +980,29 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-white">Servidor</span>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-white mr-1" />
-                    <span className="text-sm text-green-600 dark:text-white">Online</span>
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
+                    <span className="text-sm text-green-600 dark:text-green-400">Online</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-white">Banco de Dados</span>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-white mr-1" />
-                    <span className="text-sm text-green-600 dark:text-white">Conectado</span>
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
+                    <span className="text-sm text-green-600 dark:text-green-400">Conectado</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-white">Google APIs</span>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-white mr-1" />
-                    <span className="text-sm text-green-600 dark:text-white">Funcionando</span>
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
+                    <span className="text-sm text-green-600 dark:text-green-400">Funcionando</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-white">Backup</span>
                   <div className="flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-white mr-1" />
-                    <span className="text-sm text-green-600 dark:text-white">Atualizado</span>
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
+                    <span className="text-sm text-green-600 dark:text-green-400">Atualizado</span>
                   </div>
                 </div>
               </div>
@@ -1039,7 +1039,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                 Backup Manual
               </button>
-              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors">
+              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors">
                 Logs do Sistema
               </button>
             </div>
@@ -1056,13 +1056,11 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Lock className="w-8 h-8 text-red-600 dark:text-white" />
+              <Lock className="w-8 h-8 text-red-600 dark:text-red-400" />
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Área Restrita</h1>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 dark:text-white">Bem-vindo, {user.name}</span>
-              
-              <ThemeToggle />
               
               <button
                 onClick={onLogout}
@@ -1089,7 +1087,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   className={`flex items-center px-1 py-4 border-b-2 font-medium text-sm transition-colors ${
                     activeTab === tab.id
                       ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
+                      : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:hover:border-gray-500'
                   }`}
                 >
                   <Icon className="w-5 h-5 mr-2" />
@@ -1122,7 +1120,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-                <HardDrive className="w-6 h-6 text-blue-600 dark:text-white mr-3" />
+                <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciar Drive</h3>
               </div>
               <button
@@ -1201,10 +1199,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   </thead>
                   <tbody>
                     {drives.map((drive) => (
-                      <tr key={drive.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:bg-gray-700">
+                      <tr key={drive.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td className="py-3 px-4">
                           <div className="flex items-center">
-                            <HardDrive className="w-5 h-5 text-blue-500 dark:text-white mr-2" />
+                            <HardDrive className="w-5 h-5 text-blue-500 dark:text-blue-400 mr-2" />
                             <div>
                               <div className="text-sm font-medium text-gray-900 dark:text-white">{drive.nome}</div>
                               <div className="text-xs text-gray-500 dark:text-white truncate max-w-xs">{drive.url}</div>
@@ -1275,15 +1273,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-blue-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-blue-900 dark:text-white">{drives.length}</div>
-                  <div className="text-sm text-blue-600 dark:text-white">Total de Drives</div>
+                  <div className="text-sm text-blue-600 dark:text-blue-400">Total de Drives</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-green-900 dark:text-white">{drives.filter(d => d.status === 'ativo').length}</div>
-                  <div className="text-sm text-green-600 dark:text-white">Drives Ativos</div>
+                  <div className="text-sm text-green-600 dark:text-green-400">Drives Ativos</div>
                 </div>
                 <div className="bg-red-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-red-900 dark:text-white">{drives.filter(d => d.status === 'inativo').length}</div>
-                  <div className="text-sm text-red-600 dark:text-white">Drives Inativos</div>
+                  <div className="text-sm text-red-600 dark:text-red-400">Drives Inativos</div>
                 </div>
               </div>
             </div>
@@ -1305,7 +1303,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center mb-4">
-              <HardDrive className="w-6 h-6 text-blue-600 dark:text-white mr-3" />
+              <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Drive</h3>
             </div>
             
@@ -1353,7 +1351,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowDriveConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1375,7 +1373,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center mb-4">
-              <FileText className="w-6 h-6 text-green-600 dark:text-white mr-3" />
+              <FileText className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Sheets</h3>
             </div>
             
@@ -1421,7 +1419,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowSheetsConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1443,7 +1441,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center mb-4">
-              <Calendar className="w-6 h-6 text-blue-600 dark:text-white mr-3" />
+              <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar WhatsApp</h3>
             </div>
             
@@ -1488,7 +1486,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowWhatsAppConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1555,7 +1553,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowBackupConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>

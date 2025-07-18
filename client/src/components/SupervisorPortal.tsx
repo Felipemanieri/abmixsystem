@@ -862,9 +862,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-white">Faturamento Total</p>
-              <p className="text-2xl font-bold text-green-600 dark:text-white">{formatCurrency(teamStats.totalValue || 0)}</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(teamStats.totalValue || 0)}</p>
             </div>
-            <DollarSign className="h-8 w-8 text-green-600 dark:text-white" />
+            <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
         </div>
         
@@ -872,9 +872,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-white">Total Propostas</p>
-              <p className="text-2xl font-bold text-blue-600 dark:text-white">{teamStats.totalProposals || 0}</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{teamStats.totalProposals || 0}</p>
             </div>
-            <FileText className="h-8 w-8 text-blue-600 dark:text-white" />
+            <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
         
@@ -2153,7 +2153,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="flex justify-between items-center">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
-                  <BarChart3 size={24} className="text-green-600 dark:text-white" />
+                  <BarChart3 size={24} className="text-green-600 dark:text-green-400" />
                   Sistema de Relatórios
                 </h2>
                 <p className="text-gray-600 dark:text-white mt-1">Dados em tempo real da planilha Google Sheets</p>
@@ -2163,7 +2163,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <span className="text-sm text-gray-500 dark:text-white">{filteredData.length} registros disponíveis</span>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-600 dark:text-white">Conectado</span>
+                    <span className="text-xs text-green-600 dark:text-green-400">Conectado</span>
                   </div>
                 </div>
                 <button
@@ -2421,7 +2421,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <p className="text-xs font-medium text-blue-700 dark:text-white">Total de Propostas</p>
                     <p className="text-xl font-bold text-blue-900 dark:text-white">{reportData.total}</p>
                   </div>
-                  <FileText className="h-6 w-6 text-blue-600 dark:text-white" />
+                  <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
               
@@ -2431,7 +2431,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <p className="text-xs font-medium text-green-700 dark:text-white">Faturamento Total</p>
                     <p className="text-xl font-bold text-green-900 dark:text-white">{formatCurrency(reportData.faturamento.toString())}</p>
                   </div>
-                  <DollarSign className="h-6 w-6 text-green-600 dark:text-white" />
+                  <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
               
@@ -2766,7 +2766,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                          <span className="text-green-600 dark:text-white text-xs font-medium">
+                          <span className="text-green-600 dark:text-green-400 text-xs font-medium">
                             {getVendorName(proposal.vendorId).charAt(0)}
                           </span>
                         </div>
@@ -2809,14 +2809,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                          className="p-1 text-blue-600 dark:text-white hover:bg-blue-50 rounded"
+                          className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-50 rounded"
                           title="Ver Drive"
                         >
                           <Eye size={14} />
                         </button>
                         <button
                           onClick={() => window.open(`/client/${proposal.clientToken}`, '_blank')}
-                          className="p-1 text-green-600 dark:text-white hover:bg-green-50 rounded"
+                          className="p-1 text-green-600 dark:text-green-400 hover:bg-green-50 rounded"
                           title="Link do Cliente"
                         >
                           <ExternalLink size={14} />
@@ -3040,7 +3040,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <div className="mb-2"><strong>Total de Propostas:</strong> {reportData.length}</div>
                   <div className="mb-2">
                     <strong>Faturamento Total:</strong> 
-                    <span className="text-green-600 dark:text-white font-bold ml-2">
+                    <span className="text-green-600 dark:text-green-400 font-bold ml-2">
                       R$ {reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2).replace('.', ',')}
                     </span>
                   </div>
@@ -3127,7 +3127,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   >
                     <div className="text-2xl mb-2">💼</div>
                     <span className="text-sm font-medium text-blue-700 dark:text-white">Enviar para Financeiro</span>
-                    <span className="text-xs text-blue-600 dark:text-white mt-1">Sistema interno</span>
+                    <span className="text-xs text-blue-600 dark:text-blue-400 mt-1">Sistema interno</span>
                   </button>
 
                   <button
@@ -3136,7 +3136,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   >
                     <div className="text-2xl mb-2">📱</div>
                     <span className="text-sm font-medium text-green-700 dark:text-white">WhatsApp</span>
-                    <span className="text-xs text-green-600 dark:text-white mt-1">Compartilhar via WhatsApp</span>
+                    <span className="text-xs text-green-600 dark:text-green-400 mt-1">Compartilhar via WhatsApp</span>
                   </button>
 
                   <button

@@ -168,7 +168,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               <img 
                 src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                 alt="Abmix" 
-                className="h-20 w-auto drop-shadow-sm bg-white rounded-lg p-2"
+                className="h-12 w-auto"
               />
             </div>
             
@@ -191,7 +191,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-teal-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-teal-400 dark:text-teal-300" />
                   <input
                     type="email"
                     required
@@ -209,7 +209,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-teal-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-teal-400 dark:text-teal-300" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -221,7 +221,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-400 hover:text-teal-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-400 dark:text-teal-300 hover:text-teal-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
