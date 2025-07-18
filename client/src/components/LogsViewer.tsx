@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Monitor, Play, Pause, Trash2, Download, Filter, Search, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
+import { Monitor, Play, Pause, Trash2, Download, Filter, Search, AlertTriangle, CheckCircle, Info, X, Database } from 'lucide-react';
+import DataControlPanel from './DataControlPanel';
 
 interface LogEntry {
   id: string;
@@ -12,6 +13,7 @@ interface LogEntry {
 
 export default function LogsViewer() {
   const [isLive, setIsLive] = useState(true);
+  const [activeSection, setActiveSection] = useState<'logs' | 'data-control'>('logs');
   const [filter, setFilter] = useState({
     level: 'all',
     module: 'all',
@@ -160,25 +162,57 @@ export default function LogsViewer() {
 
   return (
     <div className="space-y-6">
+      {/* Navegação entre seções */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <Monitor className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Console de Logs do Sistema</h3>
-            <div className="ml-4 flex items-center space-x-2">
-              {isLive ? (
-                <>
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-green-600 dark:text-green-400 font-medium">LIVE</span>
-                </>
-              ) : (
-                <>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">PAUSADO</span>
-                </>
-              )}
+        <div className="flex items-center space-x-6">
+          <button
+            onClick={() => setActiveSection('logs')}
+            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+              activeSection === 'logs' 
+                ? 'bg-blue-600 text-white' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
+          >
+            <Monitor className="w-5 h-5 mr-2" />
+            Console de Logs
+          </button>
+          <button
+            onClick={() => setActiveSection('data-control')}
+            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+              activeSection === 'data-control' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+            }`}
+          >
+            <Database className="w-5 h-5 mr-2" />
+            Controle de Dados
+          </button>
+        </div>
+      </div>
+
+      {/* Renderizar seção ativa */}
+      {activeSection === 'data-control' && <DataControlPanel />}
+      
+      {activeSection === 'logs' && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Monitor className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Console de Logs do Sistema</h3>
+              <div className="ml-4 flex items-center space-x-2">
+                {isLive ? (
+                  <>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm text-green-600 dark:text-green-400 font-medium">LIVE</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">PAUSADO</span>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
           <div className="flex space-x-3">
             <button
               onClick={() => setIsLive(!isLive)}
@@ -308,7 +342,8 @@ export default function LogsViewer() {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

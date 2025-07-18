@@ -363,6 +363,17 @@ router.post("/proposals", async (req, res) => {
     }
   });
 
+  // Clear all proposals (for admin)
+  router.delete("/proposals/clear-all", async (req, res) => {
+    try {
+      await storage.clearAllProposals();
+      res.json({ success: true, message: 'Todas as propostas foram removidas' });
+    } catch (error) {
+      console.error('Error clearing all proposals:', error);
+      res.status(500).json({ error: 'Erro ao limpar propostas' });
+    }
+  });
+
   // Delete proposal (for implementation and vendor portals)
   router.delete("proposals/:id", async (req, res) => {
     try {
