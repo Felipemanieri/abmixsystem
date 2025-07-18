@@ -1,4 +1,4 @@
-import { users, vendors, proposals, vendorTargets, teamTargets, awards, systemUsers, attachments, driveConfigs, type User, type InsertUser, type Vendor, type InsertVendor, type Proposal, type InsertProposal, type VendorTarget, type InsertVendorTarget, type TeamTarget, type InsertTeamTarget, type Award, type InsertAward, type SystemUser, type InsertSystemUser, type Attachment, type InsertAttachment, type DriveConfig, type InsertDriveConfig } from "@shared/schema";
+import { users, vendors, proposals, vendorTargets, teamTargets, awards, systemUsers, attachments, driveConfigs, systemSettings, type User, type InsertUser, type Vendor, type InsertVendor, type Proposal, type InsertProposal, type VendorTarget, type InsertVendorTarget, type TeamTarget, type InsertTeamTarget, type Award, type InsertAward, type SystemUser, type InsertSystemUser, type Attachment, type InsertAttachment, type DriveConfig, type InsertDriveConfig } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql } from "drizzle-orm";
 
@@ -73,6 +73,10 @@ export interface IStorage {
   getDriveConfig(id: number): Promise<DriveConfig | undefined>;
   createDriveConfig(config: InsertDriveConfig): Promise<DriveConfig>;
   updateDriveConfig(id: number, config: Partial<InsertDriveConfig>): Promise<DriveConfig>;
+  
+  // System Settings operations
+  getSystemSetting(key: string): Promise<string | null>;
+  setSystemSetting(key: string, value: string): Promise<void>;
   deleteDriveConfig(id: number): Promise<void>;
 }
 
@@ -474,6 +478,22 @@ export class DatabaseStorage implements IStorage {
 
   async deleteDriveConfig(id: number): Promise<void> {
     await db.delete(driveConfigs).where(eq(driveConfigs.id, id));
+  }
+
+  // System Settings operations
+  async getSystemSetting(key: string): Promise<string | null> {
+    const [setting] = await db.select().from(systemSettings).where(eq(systemSettings.key, key));
+    return setting?.value || null;
+  }
+
+  async setSystemSetting(key: string, value: string): Promise<void> {
+    await db
+      .insert(systemSettings)
+      .values({ key, value })
+      .onConflictDoUpdate({
+        target: systemSettings.key,
+        set: { value, updatedAt: new Date() }
+      });
   }
 }
 

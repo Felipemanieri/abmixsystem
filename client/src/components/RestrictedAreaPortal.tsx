@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Settings, 
   LogOut, 
@@ -51,21 +51,30 @@ interface RestrictedAreaPortalProps {
 
 export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaPortalProps) {
   const [activeTab, setActiveTab] = useState('interface');
-  const [showClientPortal, setShowClientPortal] = useState(() => {
-    return localStorage.getItem('showClientPortal') !== 'false';
+  const [portalVisibility, setPortalVisibility] = useState({
+    showClientPortal: true,
+    showVendorPortal: true,
+    showFinancialPortal: true,
+    showImplementationPortal: true,
+    showSupervisorPortal: true
   });
-  const [showVendorPortal, setShowVendorPortal] = useState(() => {
-    return localStorage.getItem('showVendorPortal') !== 'false';
-  });
-  const [showFinancialPortal, setShowFinancialPortal] = useState(() => {
-    return localStorage.getItem('showFinancialPortal') !== 'false';
-  });
-  const [showImplementationPortal, setShowImplementationPortal] = useState(() => {
-    return localStorage.getItem('showImplementationPortal') !== 'false';
-  });
-  const [showSupervisorPortal, setShowSupervisorPortal] = useState(() => {
-    return localStorage.getItem('showSupervisorPortal') !== 'false';
-  });
+
+  // Carrega configurações globais dos portais
+  useEffect(() => {
+    const loadPortalVisibility = async () => {
+      try {
+        const response = await fetch('/api/portal-visibility');
+        if (response.ok) {
+          const data = await response.json();
+          setPortalVisibility(data);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar visibilidade dos portais:', error);
+      }
+    };
+    
+    loadPortalVisibility();
+  }, []);
   
   // Estados para modais
   const [showDriveConfigModal, setShowDriveConfigModal] = useState(false);
@@ -89,47 +98,73 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     syncFrequency: 'Tempo Real'
   });
 
+  const savePortalVisibility = async (newVisibility: any) => {
+    try {
+      const response = await fetch('/api/portal-visibility', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newVisibility)
+      });
+      
+      if (response.ok) {
+        setPortalVisibility(newVisibility);
+        // Força recarregamento da página principal
+        window.parent.postMessage({ type: 'PORTAL_VISIBILITY_CHANGED' }, '*');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar visibilidade dos portais:', error);
+    }
+  };
+
   const handleToggleClientPortal = () => {
-    const newValue = !showClientPortal;
-    setShowClientPortal(newValue);
-    localStorage.setItem('showClientPortal', newValue.toString());
+    const newVisibility = {
+      ...portalVisibility,
+      showClientPortal: !portalVisibility.showClientPortal
+    };
+    savePortalVisibility(newVisibility);
   };
 
   const handleToggleVendorPortal = () => {
-    const newValue = !showVendorPortal;
-    setShowVendorPortal(newValue);
-    localStorage.setItem('showVendorPortal', newValue.toString());
+    const newVisibility = {
+      ...portalVisibility,
+      showVendorPortal: !portalVisibility.showVendorPortal
+    };
+    savePortalVisibility(newVisibility);
   };
 
   const handleToggleFinancialPortal = () => {
-    const newValue = !showFinancialPortal;
-    setShowFinancialPortal(newValue);
-    localStorage.setItem('showFinancialPortal', newValue.toString());
+    const newVisibility = {
+      ...portalVisibility,
+      showFinancialPortal: !portalVisibility.showFinancialPortal
+    };
+    savePortalVisibility(newVisibility);
   };
 
   const handleToggleImplementationPortal = () => {
-    const newValue = !showImplementationPortal;
-    setShowImplementationPortal(newValue);
-    localStorage.setItem('showImplementationPortal', newValue.toString());
+    const newVisibility = {
+      ...portalVisibility,
+      showImplementationPortal: !portalVisibility.showImplementationPortal
+    };
+    savePortalVisibility(newVisibility);
   };
 
   const handleToggleSupervisorPortal = () => {
-    const newValue = !showSupervisorPortal;
-    setShowSupervisorPortal(newValue);
-    localStorage.setItem('showSupervisorPortal', newValue.toString());
+    const newVisibility = {
+      ...portalVisibility,
+      showSupervisorPortal: !portalVisibility.showSupervisorPortal
+    };
+    savePortalVisibility(newVisibility);
   };
 
   const resetToDefault = () => {
-    setShowClientPortal(true);
-    setShowVendorPortal(true);
-    setShowFinancialPortal(true);
-    setShowImplementationPortal(true);
-    setShowSupervisorPortal(true);
-    localStorage.removeItem('showClientPortal');
-    localStorage.removeItem('showVendorPortal');
-    localStorage.removeItem('showFinancialPortal');
-    localStorage.removeItem('showImplementationPortal');
-    localStorage.removeItem('showSupervisorPortal');
+    const defaultVisibility = {
+      showClientPortal: true,
+      showVendorPortal: true,
+      showFinancialPortal: true,
+      showImplementationPortal: true,
+      showSupervisorPortal: true
+    };
+    savePortalVisibility(defaultVisibility);
   };
 
   // Funções para abrir serviços reais
@@ -207,7 +242,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <span className="font-medium text-gray-900">Portal do Cliente</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {showClientPortal ? (
+                    {portalVisibility.showClientPortal ? (
                       <>
                         <Eye className="w-4 h-4 text-green-600" />
                         <span className="text-sm text-green-600 font-medium">Visível</span>
@@ -223,7 +258,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showClientPortal}
+                    checked={portalVisibility.showClientPortal}
                     onChange={handleToggleClientPortal}
                     className="sr-only peer"
                   />
@@ -241,7 +276,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <span className="font-medium text-gray-900">Portal Vendedor</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {showVendorPortal ? (
+                    {portalVisibility.showVendorPortal ? (
                       <>
                         <Eye className="w-4 h-4 text-green-600" />
                         <span className="text-sm text-green-600 font-medium">Visível</span>
@@ -257,7 +292,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showVendorPortal}
+                    checked={portalVisibility.showVendorPortal}
                     onChange={handleToggleVendorPortal}
                     className="sr-only peer"
                   />
@@ -275,7 +310,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <span className="font-medium text-gray-900">Portal Financeiro</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {showFinancialPortal ? (
+                    {portalVisibility.showFinancialPortal ? (
                       <>
                         <Eye className="w-4 h-4 text-green-600" />
                         <span className="text-sm text-green-600 font-medium">Visível</span>
@@ -291,7 +326,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showFinancialPortal}
+                    checked={portalVisibility.showFinancialPortal}
                     onChange={handleToggleFinancialPortal}
                     className="sr-only peer"
                   />
@@ -309,7 +344,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <span className="font-medium text-gray-900">Portal Implantação</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {showImplementationPortal ? (
+                    {portalVisibility.showImplementationPortal ? (
                       <>
                         <Eye className="w-4 h-4 text-green-600" />
                         <span className="text-sm text-green-600 font-medium">Visível</span>
@@ -325,7 +360,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showImplementationPortal}
+                    checked={portalVisibility.showImplementationPortal}
                     onChange={handleToggleImplementationPortal}
                     className="sr-only peer"
                   />
@@ -343,7 +378,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <span className="font-medium text-gray-900">Portal Supervisor</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {showSupervisorPortal ? (
+                    {portalVisibility.showSupervisorPortal ? (
                       <>
                         <Eye className="w-4 h-4 text-green-600" />
                         <span className="text-sm text-green-600 font-medium">Visível</span>
@@ -359,7 +394,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showSupervisorPortal}
+                    checked={portalVisibility.showSupervisorPortal}
                     onChange={handleToggleSupervisorPortal}
                     className="sr-only peer"
                   />

@@ -123,6 +123,18 @@ export const awards = pgTable("awards", {
 });
 
 export const insertVendorTargetSchema = createInsertSchema(vendorTargets);
+
+// Configurações globais do sistema
+export const systemSettings = pgTable("system_settings", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertSystemSettingsSchema = createInsertSchema(systemSettings);
+export type InsertSystemSettings = z.infer<typeof insertSystemSettingsSchema>;
+export type SystemSettings = typeof systemSettings.$inferSelect;
 export const insertTeamTargetSchema = createInsertSchema(teamTargets);
 export const insertAwardSchema = createInsertSchema(awards);
 

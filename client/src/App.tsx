@@ -41,21 +41,61 @@ function App() {
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
-  const [showClientPortal, setShowClientPortal] = useState(() => {
-    return localStorage.getItem('showClientPortal') !== 'false';
+  const [portalVisibility, setPortalVisibility] = useState({
+    showClientPortal: true,
+    showVendorPortal: true,
+    showFinancialPortal: true,
+    showImplementationPortal: true,
+    showSupervisorPortal: true
   });
-  const [showVendorPortal, setShowVendorPortal] = useState(() => {
-    return localStorage.getItem('showVendorPortal') !== 'false';
-  });
-  const [showFinancialPortal, setShowFinancialPortal] = useState(() => {
-    return localStorage.getItem('showFinancialPortal') !== 'false';
-  });
-  const [showImplementationPortal, setShowImplementationPortal] = useState(() => {
-    return localStorage.getItem('showImplementationPortal') !== 'false';
-  });
-  const [showSupervisorPortal, setShowSupervisorPortal] = useState(() => {
-    return localStorage.getItem('showSupervisorPortal') !== 'false';
-  });
+
+  // Carrega configurações globais dos portais
+  useEffect(() => {
+    const loadPortalVisibility = async () => {
+      try {
+        const response = await fetch('/api/portal-visibility');
+        if (response.ok) {
+          const data = await response.json();
+          setPortalVisibility(data);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar visibilidade dos portais:', error);
+      }
+    };
+    
+    loadPortalVisibility();
+
+    // Listener para recarregar configurações quando mudarem na área restrita
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'PORTAL_VISIBILITY_CHANGED') {
+        loadPortalVisibility();
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Verificar URLs específicas para acesso direto aos portais
+  useEffect(() => {
+    const path = window.location.pathname;
+    const hash = window.location.hash;
+    
+    // URLs específicas para cada portal
+    if (path === '/portal/cliente' || hash === '#cliente') {
+      setCurrentPortal('client');
+    } else if (path === '/portal/vendedor' || hash === '#vendedor') {
+      setCurrentPortal('vendor');
+    } else if (path === '/portal/financeiro' || hash === '#financeiro') {
+      setCurrentPortal('financial');
+    } else if (path === '/portal/implantacao' || hash === '#implantacao') {
+      setCurrentPortal('implementation');
+    } else if (path === '/portal/supervisor' || hash === '#supervisor') {
+      setCurrentPortal('supervisor');
+    } else if (path === '/portal/restrito' || hash === '#restrito') {
+      setCurrentPortal('restricted');
+    }
+  }, []);
 
   // Check for client proposal token in URL
   useEffect(() => {
@@ -239,7 +279,7 @@ function App() {
         {/* Portal Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16 px-4">
           {/* Portal do Cliente - Condicional */}
-          {showClientPortal && (
+          {portalVisibility.showClientPortal && (
             <div 
               onClick={() => setCurrentPortal('client')}
               className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400"
@@ -261,7 +301,7 @@ function App() {
           )}
 
           {/* Portal Vendedor */}
-          {showVendorPortal && (
+          {portalVisibility.showVendorPortal && (
           <div 
             onClick={() => setCurrentPortal('vendor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400"
@@ -283,7 +323,7 @@ function App() {
           )}
 
           {/* Portal Implantação */}
-          {showImplementationPortal && (
+          {portalVisibility.showImplementationPortal && (
           <div 
             onClick={() => setCurrentPortal('implementation')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400"
@@ -305,7 +345,7 @@ function App() {
           )}
 
           {/* Portal Financeiro */}
-          {showFinancialPortal && (
+          {portalVisibility.showFinancialPortal && (
           <div 
             onClick={() => setCurrentPortal('financial')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400"
@@ -327,7 +367,7 @@ function App() {
           )}
 
           {/* Portal Supervisor */}
-          {showSupervisorPortal && (
+          {portalVisibility.showSupervisorPortal && (
           <div 
             onClick={() => setCurrentPortal('supervisor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400"

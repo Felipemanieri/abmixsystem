@@ -6,6 +6,74 @@ const router = Router();
   // put application routes here
   // prefix all routes with /api
 
+// Global System Settings API
+router.get("/settings/:key", async (req, res) => {
+  try {
+    const { key } = req.params;
+    const value = await storage.getSystemSetting(key);
+    res.json({ key, value });
+  } catch (error) {
+    console.error("Erro ao buscar configuração:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.post("/settings", async (req, res) => {
+  try {
+    const { key, value } = req.body;
+    await storage.setSystemSetting(key, value);
+    res.json({ success: true, key, value });
+  } catch (error) {
+    console.error("Erro ao salvar configuração:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+// Portal visibility settings
+router.get("/portal-visibility", async (req, res) => {
+  try {
+    const showClientPortal = await storage.getSystemSetting("showClientPortal") || "true";
+    const showVendorPortal = await storage.getSystemSetting("showVendorPortal") || "true";
+    const showFinancialPortal = await storage.getSystemSetting("showFinancialPortal") || "true";
+    const showImplementationPortal = await storage.getSystemSetting("showImplementationPortal") || "true";
+    const showSupervisorPortal = await storage.getSystemSetting("showSupervisorPortal") || "true";
+    
+    res.json({
+      showClientPortal: showClientPortal === "true",
+      showVendorPortal: showVendorPortal === "true",
+      showFinancialPortal: showFinancialPortal === "true",
+      showImplementationPortal: showImplementationPortal === "true",
+      showSupervisorPortal: showSupervisorPortal === "true"
+    });
+  } catch (error) {
+    console.error("Erro ao buscar visibilidade dos portais:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+router.post("/portal-visibility", async (req, res) => {
+  try {
+    const { 
+      showClientPortal,
+      showVendorPortal, 
+      showFinancialPortal,
+      showImplementationPortal,
+      showSupervisorPortal 
+    } = req.body;
+    
+    await storage.setSystemSetting("showClientPortal", showClientPortal.toString());
+    await storage.setSystemSetting("showVendorPortal", showVendorPortal.toString());
+    await storage.setSystemSetting("showFinancialPortal", showFinancialPortal.toString());
+    await storage.setSystemSetting("showImplementationPortal", showImplementationPortal.toString());
+    await storage.setSystemSetting("showSupervisorPortal", showSupervisorPortal.toString());
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Erro ao salvar visibilidade dos portais:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
 // ViaCEP proxy route (must be before other routes to avoid conflicts)
 router.get("/cep/:cep", async (req, res) => {
     try {
