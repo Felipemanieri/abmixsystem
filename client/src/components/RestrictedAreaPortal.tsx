@@ -310,6 +310,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
+    { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
   ];
 
@@ -1081,6 +1082,210 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     );
   }
 
+  function renderTempoSection() {
+    const [timeConfigs, setTimeConfigs] = useState({
+      googleDrive: { active: true, interval: '30s' },
+      googleSheets: { active: true, interval: '5s' },
+      googleForms: { active: true, interval: '10m' },
+      apiRequests: { active: true, interval: '1s' },
+      dataSync: { active: true, interval: '2m' },
+      backupAuto: { active: false, interval: '24h' }
+    });
+
+    const [allPaused, setAllPaused] = useState(false);
+    
+    const toggleModule = (module: string) => {
+      setTimeConfigs(prev => ({
+        ...prev,
+        [module]: { ...prev[module], active: !prev[module].active }
+      }));
+    };
+
+    const updateInterval = (module: string, interval: string) => {
+      setTimeConfigs(prev => ({
+        ...prev,
+        [module]: { ...prev[module], interval }
+      }));
+    };
+
+    const pauseAll = () => {
+      setAllPaused(true);
+      setTimeConfigs(prev => {
+        const newConfigs = { ...prev };
+        Object.keys(newConfigs).forEach(key => {
+          newConfigs[key] = { ...newConfigs[key], active: false };
+        });
+        return newConfigs;
+      });
+    };
+
+    const startAll = () => {
+      setAllPaused(false);
+      setTimeConfigs(prev => {
+        const newConfigs = { ...prev };
+        Object.keys(newConfigs).forEach(key => {
+          newConfigs[key] = { ...newConfigs[key], active: true };
+        });
+        return newConfigs;
+      });
+    };
+
+    const getModuleColor = (module: string) => {
+      const colors = {
+        googleDrive: 'bg-blue-500',
+        googleSheets: 'bg-green-500',
+        googleForms: 'bg-purple-500',
+        apiRequests: 'bg-orange-500',
+        dataSync: 'bg-cyan-500',
+        backupAuto: 'bg-red-500'
+      };
+      return colors[module] || 'bg-gray-500';
+    };
+
+    const getModuleName = (module: string) => {
+      const names = {
+        googleDrive: 'Google Drive',
+        googleSheets: 'Google Sheets',
+        googleForms: 'Google Forms',
+        apiRequests: 'Requisições API',
+        dataSync: 'Sincronização de Dados',
+        backupAuto: 'Backup Automático'
+      };
+      return names[module] || module;
+    };
+
+    const getIntervalOptions = (module: string) => {
+      const options = {
+        googleDrive: ['30s', '1m', '5m', 'manual'],
+        googleSheets: ['1s', '5s', '30s', 'manual'],
+        googleForms: ['5m', '10m', '30m', 'manual'],
+        apiRequests: ['1s', '5s', '30s', 'manual'],
+        dataSync: ['30s', '1m', '2m', 'manual'],
+        backupAuto: ['1h', '6h', '24h', 'manual']
+      };
+      return options[module] || ['1s', '5s', '30s', 'manual'];
+    };
+
+    const activeModules = Object.keys(timeConfigs).filter(module => timeConfigs[module].active).length;
+    const totalModules = Object.keys(timeConfigs).length;
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400 mr-3" />
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Sistema de Controle de Tempo</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Controle manual das requisições para módulos Google</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={pauseAll}
+                disabled={allPaused}
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <Pause className="w-4 h-4 mr-2" />
+                Parar Todos
+              </button>
+              
+              <button
+                onClick={startAll}
+                disabled={!allPaused}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <Play className="w-4 h-4 mr-2" />
+                Iniciar Todos
+              </button>
+            </div>
+          </div>
+
+          {/* Estatísticas */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{totalModules}</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Módulos Totais</div>
+            </div>
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-900 dark:text-white">{activeModules}</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Módulos Ativos</div>
+            </div>
+            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-blue-900 dark:text-white">3</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">Google Conectados</div>
+            </div>
+          </div>
+
+          {/* Controles dos Módulos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Object.entries(timeConfigs).map(([module, config]) => (
+              <div key={module} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full ${getModuleColor(module)} mr-3`}></div>
+                    <h4 className="font-medium text-gray-900 dark:text-white">{getModuleName(module)}</h4>
+                  </div>
+                  
+                  <button
+                    onClick={() => toggleModule(module)}
+                    className={`p-2 rounded-lg transition-colors ${
+                      config.active 
+                        ? 'bg-green-600 text-white hover:bg-green-700' 
+                        : 'bg-gray-400 text-white hover:bg-gray-500'
+                    }`}
+                    title={config.active ? 'Pausar módulo' : 'Iniciar módulo'}
+                  >
+                    {config.active ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Intervalo:</span>
+                  <select
+                    value={config.interval}
+                    onChange={(e) => updateInterval(module, e.target.value)}
+                    disabled={!config.active}
+                    className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm disabled:opacity-50"
+                  >
+                    {getIntervalOptions(module).map(option => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Status:</span>
+                  <span className={`text-sm font-medium ${
+                    config.active ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {config.active ? 'Ativo' : 'Pausado'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Aviso sobre controle manual */}
+          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg border border-yellow-200 dark:border-yellow-700">
+            <div className="flex items-start">
+              <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-3 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-medium text-yellow-800 dark:text-yellow-200">Controle Manual</h4>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                  Este sistema permite pausar manualmente as requisições para os módulos Google quando necessário 
+                  para manutenção ou controle de quotas da API. Use os controles individuais ou os botões 
+                  "Parar Todos" / "Iniciar Todos" conforme necessário.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function renderSistemaSection() {
     return (
       <div className="space-y-6">
@@ -1258,6 +1463,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'planilhas' && renderPlanilhasSection()}
         {activeTab === 'drive' && renderDriveSection()}
+        {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'sistema' && renderSistemaSection()}
       </main>
 
