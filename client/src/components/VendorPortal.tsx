@@ -965,40 +965,40 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         </div>
 
         {/* Botões de Ação - 5 botões incluindo Adicionar Cotação */}
-        <div className="flex items-center gap-2 mt-8">
+        <div className="flex items-center gap-4 mt-8">
           <button
             onClick={adicionarCotacao}
-            className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs"
+            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
           >
-            <Plus className="w-3 h-3 mr-1" />
+            <Plus className="w-5 h-5 mr-2" />
             Adicionar Cotação
           </button>
           <button
             onClick={limparFormulario}
-            className="flex items-center px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs"
+            className="flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
           >
-            <X className="w-3 h-3 mr-1" />
+            <X className="w-5 h-5 mr-2" />
             Limpar Formulário
           </button>
           <button
             onClick={generateQuotation}
-            className="flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs"
+            className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
           >
-            <Calculator className="w-3 h-3 mr-1" />
+            <Calculator className="w-5 h-5 mr-2" />
             Gerar Cotação
           </button>
           <button
             onClick={salvarCotacao}
-            className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs"
+            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
           >
-            <CheckCircle className="w-3 h-3 mr-1" />
+            <CheckCircle className="w-5 h-5 mr-2" />
             Salvar Cotação
           </button>
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-xs"
+            className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
           >
-            <Download className="w-3 h-3 mr-1" />
+            <Download className="w-5 h-5 mr-2" />
             Baixar Cotação
           </button>
         </div>
