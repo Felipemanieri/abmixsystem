@@ -121,8 +121,18 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
-  // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
-  const [notifications, setNotifications] = useState([]);
+  // Sistema de notificações no painel
+  const [notifications, setNotifications] = useState<{id: number; title: string; message: string; type: 'success' | 'error' | 'info'}[]>([]);
+  
+  // Função para mostrar notificação no painel
+  const showNotification = (title: string, message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, title, message, type }]);
+    // Auto remover após 5 segundos
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 5000);
+  };
   
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
@@ -365,13 +375,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       const result = await response.json();
       
       if (response.ok) {
-        alert(`✅ ${result.message}\n\nÚltima atualização: ${new Date(result.timestamp).toLocaleString('pt-BR')}`);
+        showNotification('Sucesso', result.message + ' - Última atualização: ' + new Date(result.timestamp).toLocaleString('pt-BR'), 'success');
       } else {
-        alert(`❌ Erro na sincronização: ${result.error}`);
+        showNotification('Erro', 'Erro na sincronização: ' + result.error, 'error');
       }
     } catch (error) {
       console.error('Erro ao sincronizar:', error);
-      alert('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+      showNotification('Erro', 'Erro de conexão. Verifique sua internet e tente novamente.', 'error');
     }
   };
 
@@ -615,14 +625,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => alert('Todas as atualizações foram desabilitadas temporariamente!')}
+                onClick={() => showNotification('Sistema', 'Todas as atualizações foram desabilitadas temporariamente!', 'info')}
                 className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 <X className="w-4 h-4 mr-2" />
                 Desabilitar Todas
               </button>
               <button
-                onClick={() => alert('Todas as atualizações foram habilitadas!')}
+                onClick={() => showNotification('Sistema', 'Todas as atualizações foram habilitadas!', 'success')}
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -1267,28 +1277,28 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           {/* Botões de Ação */}
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => alert('Configurações aplicadas com sucesso!')}
+              onClick={() => showNotification('Configurações', 'Configurações aplicadas com sucesso!', 'success')}
               className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               <Save className="w-5 h-5 mr-2" />
               Aplicar Configurações
             </button>
             <button
-              onClick={() => alert('Sistema otimizado para produção!')}
+              onClick={() => showNotification('Sistema', 'Sistema otimizado para produção!', 'success')}
               className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
             >
               <Zap className="w-5 h-5 mr-2" />
               Otimizar para Produção
             </button>
             <button
-              onClick={() => alert('Modo de desenvolvimento ativado!')}
+              onClick={() => showNotification('Sistema', 'Modo de desenvolvimento ativado!', 'info')}
               className="flex items-center px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
             >
               <Code className="w-5 h-5 mr-2" />
               Modo Desenvolvimento
             </button>
             <button
-              onClick={() => alert('Configurações padrão restauradas!')}
+              onClick={() => showNotification('Sistema', 'Configurações padrão restauradas!', 'info')}
               className="flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
             >
               <RotateCcw className="w-5 h-5 mr-2" />
@@ -1515,7 +1525,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <h4 className="font-medium text-blue-800 dark:text-blue-200">Make.com</h4>
                 </div>
                 <button 
-                  onClick={() => alert('Adicionando novo cenário Make.com...')}
+                  onClick={() => {
+                    toast({
+                      title: "Make.com",
+                      description: "Adicionando novo cenário Make.com...",
+                      variant: "default",
+                    });
+                  }}
                   className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
                   title="Adicionar cenário"
                 >
@@ -1544,7 +1560,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ 4 Cenários Ativos</span>
                 <button 
-                  onClick={() => alert('Abrindo configuração Make.com...')}
+                  onClick={() => showNotification('Make.com', 'Abrindo configuração...', 'info')}
                   className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                 >
                   Configurar
@@ -1560,7 +1576,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <h4 className="font-medium text-orange-800 dark:text-orange-200">Zapier</h4>
                 </div>
                 <button 
-                  onClick={() => alert('Adicionando novo Zap...')}
+                  onClick={() => showNotification('Zapier', 'Adicionando novo Zap...', 'info')}
                   className="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
                   title="Adicionar Zap"
                 >
@@ -1589,7 +1605,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ 3 Zaps Ativos</span>
                 <button 
-                  onClick={() => alert('Abrindo configuração Zapier...')}
+                  onClick={() => showNotification('Zapier', 'Abrindo configuração...', 'info')}
                   className="px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
                 >
                   Configurar
@@ -1607,7 +1623,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-green-800 dark:text-green-200">WhatsApp</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância WhatsApp...')}
+                    onClick={() => showNotification('WhatsApp', 'Adicionando nova instância...', 'info')}
                     className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1617,7 +1633,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Phone Number ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Access Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando WhatsApp...')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
+                <button onClick={() => showNotification('WhatsApp', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
               </div>
 
               {/* SendGrid Email */}
@@ -1625,7 +1641,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-red-800 dark:text-red-200">SendGrid</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância SendGrid...')}
+                    onClick={() => showNotification('SendGrid', 'Adicionando nova instância...', 'info')}
                     className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1635,7 +1651,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="email" placeholder="From Email" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando SendGrid...')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
+                <button onClick={() => showNotification('SendGrid', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
               </div>
 
               {/* Twilio SMS */}
@@ -1643,7 +1659,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-purple-800 dark:text-purple-200">Twilio</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Twilio...')}
+                    onClick={() => showNotification('Twilio', 'Adicionando nova instância...', 'info')}
                     className="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1653,7 +1669,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Account SID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Auth Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Twilio...')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
+                <button onClick={() => showNotification('Twilio', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
               </div>
 
               {/* Slack API */}
@@ -1661,7 +1677,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Slack</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Slack...')}
+                    onClick={() => showNotification('Slack', 'Adicionando nova instância...', 'info')}
                     className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1671,7 +1687,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Workspace URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Bot Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Slack...')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
+                <button onClick={() => showNotification('Slack', 'Configurando...', 'info')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
               </div>
 
               {/* Pipedrive CRM */}
@@ -1679,7 +1695,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-orange-800 dark:text-orange-200">Pipedrive</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Pipedrive...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Pipedrive...')}
                     className="w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1689,7 +1705,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Company Domain" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="API Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Pipedrive...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Pipedrive...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
               </div>
 
               {/* HubSpot */}
@@ -1697,7 +1713,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-cyan-800 dark:text-cyan-200">HubSpot</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância HubSpot...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância HubSpot...')}
                     className="w-5 h-5 bg-cyan-600 text-white rounded-full flex items-center justify-center hover:bg-cyan-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1707,7 +1723,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Portal ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Private App Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando HubSpot...')} className="w-full px-2 py-1 bg-cyan-600 text-white text-xs rounded hover:bg-cyan-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando HubSpot...')} className="w-full px-2 py-1 bg-cyan-600 text-white text-xs rounded hover:bg-cyan-700">Configurar</button>
               </div>
 
               {/* Telegram Bot */}
@@ -1715,7 +1731,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-teal-800 dark:text-teal-200">Telegram</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Telegram...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Telegram...')}
                     className="w-5 h-5 bg-teal-600 text-white rounded-full flex items-center justify-center hover:bg-teal-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1725,7 +1741,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Bot Username" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Bot Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Telegram...')} className="w-full px-2 py-1 bg-teal-600 text-white text-xs rounded hover:bg-teal-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Telegram...')} className="w-full px-2 py-1 bg-teal-600 text-white text-xs rounded hover:bg-teal-700">Configurar</button>
               </div>
 
               {/* Microsoft Teams */}
@@ -1733,7 +1749,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-blue-800 dark:text-blue-200">Teams</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Teams...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Teams...')}
                     className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1743,7 +1759,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Tenant ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Client Secret" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Teams...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Teams...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
               </div>
 
               {/* Discord */}
@@ -1751,7 +1767,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-purple-800 dark:text-purple-200">Discord</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Discord...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Discord...')}
                     className="w-5 h-5 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1761,7 +1777,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Server ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Webhook URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Discord...')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Discord...')} className="w-full px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">Configurar</button>
               </div>
 
               {/* Mailchimp */}
@@ -1769,7 +1785,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Mailchimp</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Mailchimp...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Mailchimp...')}
                     className="w-5 h-5 bg-yellow-600 text-white rounded-full flex items-center justify-center hover:bg-yellow-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1779,7 +1795,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Audience ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="API Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Mailchimp...')} className="w-full px-2 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Mailchimp...')} className="w-full px-2 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700">Configurar</button>
               </div>
 
               {/* AWS S3 */}
@@ -1787,7 +1803,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-gray-800 dark:text-gray-200">AWS S3</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância AWS S3...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância AWS S3...')}
                     className="w-5 h-5 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -1797,7 +1813,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Bucket Name" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Access Key" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando AWS S3...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando AWS S3...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
               </div>
             </div>
           </div>
@@ -2155,7 +2171,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <h5 className="font-medium text-blue-800 dark:text-blue-200">Google Drive API</h5>
                 <div className="flex items-center space-x-2">
                   <button 
-                    onClick={() => alert('Adicionando nova instância do Google Drive...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância do Google Drive...')}
                     className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
                     title="Adicionar nova instância"
                   >
@@ -2186,7 +2202,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <option value="write-only">Write Only</option>
                 </select>
                 <button 
-                  onClick={() => alert('Configurando Google Drive API...')}
+                  onClick={() => showNotification('Notificação', 'Configurando Google Drive API...')}
                   className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
                 >
                   Configurar Drive
@@ -2200,7 +2216,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <h5 className="font-medium text-green-800 dark:text-green-200">WhatsApp Business</h5>
                 <div className="flex items-center space-x-2">
                   <button 
-                    onClick={() => alert('Adicionando nova instância do WhatsApp...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância do WhatsApp...')}
                     className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
                     title="Adicionar nova instância"
                   >
@@ -2226,7 +2242,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
                 <button 
-                  onClick={() => alert('Configurando WhatsApp Business API...')}
+                  onClick={() => showNotification('Notificação', 'Configurando WhatsApp Business API...')}
                   className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
                 >
                   Configurar WhatsApp
@@ -2240,7 +2256,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <h5 className="font-medium text-red-800 dark:text-red-200">SendGrid Email</h5>
                 <div className="flex items-center space-x-2">
                   <button 
-                    onClick={() => alert('Adicionando nova instância do SendGrid...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância do SendGrid...')}
                     className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
                     title="Adicionar nova instância"
                   >
@@ -2271,7 +2287,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <option value="both">Ambos</option>
                 </select>
                 <button 
-                  onClick={() => alert('Configurando SendGrid Email...')}
+                  onClick={() => showNotification('Notificação', 'Configurando SendGrid Email...')}
                   className="w-full px-3 py-2 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
                 >
                   Configurar Email
@@ -2513,28 +2529,28 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           {/* Botões Globais */}
           <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t border-gray-200 dark:border-gray-600">
             <button 
-              onClick={() => alert('Testando todas as APIs...')}
+              onClick={() => showNotification('Notificação', 'Testando todas as APIs...')}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <CheckCircle className="w-4 h-4 mr-2" />
               Testar Todas APIs
             </button>
             <button 
-              onClick={() => alert('Exportando configurações...')}
+              onClick={() => showNotification('Notificação', 'Exportando configurações...')}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar Config
             </button>
             <button 
-              onClick={() => alert('Importando configurações...')}
+              onClick={() => showNotification('Notificação', 'Importando configurações...')}
               className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Upload className="w-4 h-4 mr-2" />
               Importar Config
             </button>
             <button 
-              onClick={() => alert('Configurações salvas!')}
+              onClick={() => showNotification('Notificação', 'Configurações salvas!')}
               className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
               <Save className="w-4 h-4 mr-2" />
@@ -2566,7 +2582,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <h4 className="font-medium text-green-800 dark:text-green-200">Make.com - Planilhas</h4>
                 </div>
                 <button 
-                  onClick={() => alert('Adicionando novo cenário Make.com para planilhas...')}
+                  onClick={() => showNotification('Notificação', 'Adicionando novo cenário Make.com para planilhas...')}
                   className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
                   title="Adicionar cenário"
                 >
@@ -2595,7 +2611,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ 3 Cenários Planilha</span>
                 <button 
-                  onClick={() => alert('Configurando Make.com para planilhas...')}
+                  onClick={() => showNotification('Notificação', 'Configurando Make.com para planilhas...')}
                   className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                 >
                   Configurar
@@ -2611,7 +2627,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <h4 className="font-medium text-purple-800 dark:text-purple-200">Zapier - Planilhas</h4>
                 </div>
                 <button 
-                  onClick={() => alert('Adicionando novo Zap para planilhas...')}
+                  onClick={() => showNotification('Notificação', 'Adicionando novo Zap para planilhas...')}
                   className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
                   title="Adicionar Zap"
                 >
@@ -2640,7 +2656,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="flex items-center justify-between">
                 <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">⚠ 2 Zaps Planilha</span>
                 <button 
-                  onClick={() => alert('Configurando Zapier para planilhas...')}
+                  onClick={() => showNotification('Notificação', 'Configurando Zapier para planilhas...')}
                   className="px-3 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                 >
                   Configurar
@@ -2658,7 +2674,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-green-800 dark:text-green-200">Google Sheets</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Google Sheets...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Google Sheets...')}
                     className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2668,7 +2684,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Spreadsheet ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Service Account JSON" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Google Sheets...')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Google Sheets...')} className="w-full px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Configurar</button>
               </div>
 
               {/* Microsoft Excel API */}
@@ -2676,7 +2692,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-blue-800 dark:text-blue-200">Excel Online</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Excel...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Excel...')}
                     className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2686,7 +2702,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Workbook ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Client Secret" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Excel Online...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Excel Online...')} className="w-full px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Configurar</button>
               </div>
 
               {/* Airtable API */}
@@ -2694,7 +2710,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-orange-800 dark:text-orange-200">Airtable</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Airtable...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Airtable...')}
                     className="w-5 h-5 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2704,7 +2720,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Base ID" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Personal Access Token" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Airtable...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Airtable...')} className="w-full px-2 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700">Configurar</button>
               </div>
 
               {/* CSV Export API */}
@@ -2712,7 +2728,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-gray-800 dark:text-gray-200">CSV Export</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância CSV Export...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância CSV Export...')}
                     className="w-5 h-5 bg-gray-600 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2726,7 +2742,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <option value="monthly">Mensal</option>
                   </select>
                 </div>
-                <button onClick={() => alert('Configurando CSV Export...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando CSV Export...')} className="w-full px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700">Configurar</button>
               </div>
 
               {/* Database Sync API */}
@@ -2734,7 +2750,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Database Sync</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância Database Sync...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância Database Sync...')}
                     className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2744,7 +2760,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="text" placeholder="Database URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Connection String" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando Database Sync...')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando Database Sync...')} className="w-full px-2 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700">Configurar</button>
               </div>
 
               {/* REST Webhook API */}
@@ -2752,7 +2768,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <div className="flex items-center justify-between mb-2">
                   <h6 className="text-sm font-medium text-red-800 dark:text-red-200">REST Webhook</h6>
                   <button 
-                    onClick={() => alert('Adicionando nova instância REST Webhook...')}
+                    onClick={() => showNotification('Notificação', 'Adicionando nova instância REST Webhook...')}
                     className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
                   >
                     <span className="text-xs">+</span>
@@ -2762,7 +2778,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <input type="url" placeholder="Webhook URL" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                   <input type="password" placeholder="Authorization Header" className="w-full px-1 py-1 text-xs border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
                 </div>
-                <button onClick={() => alert('Configurando REST Webhook...')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
+                <button onClick={() => showNotification('Notificação', 'Configurando REST Webhook...')} className="w-full px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Configurar</button>
               </div>
             </div>
           </div>
@@ -2771,14 +2787,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-600">
             <div className="flex space-x-3">
               <button 
-                onClick={() => alert('Sincronizando todas as planilhas...')}
+                onClick={() => showNotification('Notificação', 'Sincronizando todas as planilhas...')}
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Sincronizar Todas
               </button>
               <button 
-                onClick={() => alert('Testando conexões das planilhas...')}
+                onClick={() => showNotification('Notificação', 'Testando conexões das planilhas...')}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -2786,7 +2802,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
             </div>
             <button 
-              onClick={() => alert('Exportando configurações das planilhas...')}
+              onClick={() => showNotification('Notificação', 'Exportando configurações das planilhas...')}
               className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
@@ -3253,28 +3269,28 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           {/* Botões Globais Config Planilhas */}
           <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t border-gray-200 dark:border-gray-600">
             <button 
-              onClick={() => alert('Sincronizando todas as planilhas...')}
+              onClick={() => showNotification('Notificação', 'Sincronizando todas as planilhas...')}
               className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Sincronizar Tudo
             </button>
             <button 
-              onClick={() => alert('Testando APIs...')}
+              onClick={() => showNotification('Notificação', 'Testando APIs...')}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <CheckCircle className="w-4 h-4 mr-2" />
               Testar APIs
             </button>
             <button 
-              onClick={() => alert('Exportando configurações...')}
+              onClick={() => showNotification('Notificação', 'Exportando configurações...')}
               className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar Config
             </button>
             <button 
-              onClick={() => alert('Configurações salvas!')}
+              onClick={() => showNotification('Notificação', 'Configurações salvas!')}
               className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
               <Save className="w-4 h-4 mr-2" />
@@ -3546,6 +3562,32 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         </div>
       </div>
 
+      {/* Sistema de Notificações no Painel */}
+      <div className="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
+        {notifications.map(notification => (
+          <div
+            key={notification.id}
+            className={`
+              flex items-start p-4 rounded-lg shadow-lg transform transition-all duration-300
+              ${notification.type === 'success' ? 'bg-green-500 text-white' : ''}
+              ${notification.type === 'error' ? 'bg-red-500 text-white' : ''}
+              ${notification.type === 'info' ? 'bg-blue-500 text-white' : ''}
+            `}
+          >
+            <div className="flex-1">
+              <h4 className="font-semibold">{notification.title}</h4>
+              <p className="text-sm">{notification.message}</p>
+            </div>
+            <button
+              onClick={() => setNotifications(prev => prev.filter(n => n.id !== notification.id))}
+              className="ml-2 text-white hover:opacity-80"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && renderInterfaceSection()}
@@ -3618,9 +3660,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       };
                       setDrives([...drives, newDrive]);
                       setNovoDrive({ nome: '', url: '' });
-                      alert('Drive adicionado com sucesso!');
+                      showNotification('Notificação', 'Drive adicionado com sucesso!');
                     } else {
-                      alert('Preencha todos os campos obrigatórios.');
+                      showNotification('Notificação', 'Preencha todos os campos obrigatórios.');
                     }
                   }}
                   className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
@@ -3699,7 +3741,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                               onClick={() => {
                                 if (confirm(`Tem certeza que deseja excluir o drive "${drive.nome}"?`)) {
                                   setDrives(drives.filter(d => d.id !== drive.id));
-                                  alert('Drive excluído com sucesso!');
+                                  showNotification('Notificação', 'Drive excluído com sucesso!');
                                 }
                               }}
                               className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
@@ -3940,7 +3982,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  alert('Configurações do WhatsApp salvas com sucesso!');
+                  showNotification('Notificação', 'Configurações do WhatsApp salvas com sucesso!');
                   setShowWhatsAppConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -4007,7 +4049,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  alert('Configurações de backup salvas! Próximo backup: hoje às 02:00');
+                  showNotification('Notificação', 'Configurações de backup salvas! Próximo backup: hoje às 02:00');
                   setShowBackupConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
