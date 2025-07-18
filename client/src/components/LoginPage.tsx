@@ -168,7 +168,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               <img 
                 src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                 alt="Abmix" 
-                className="h-12 w-auto"
+                className="h-12 w-auto opacity-90 brightness-125 contrast-110"
               />
             </div>
             
@@ -248,7 +248,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-gradient-to-r ${config.gradient} text-white py-3 px-4 rounded-xl font-medium shadow-lg dark:shadow-gray-900/50 hover:shadow-xl dark:shadow-gray-900/50 transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none`}
+                className="w-full bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 text-gray-700 hover:text-gray-800 py-3 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">
