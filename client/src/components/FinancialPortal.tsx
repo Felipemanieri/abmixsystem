@@ -285,9 +285,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-400 mr-1" />
-            <span className="text-green-600 dark:text-green-400">+12.5%</span>
-            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
+            <TrendingUp className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-1" />
+            <span className="text-gray-600 dark:text-gray-400">+0%</span>
+            <span className="text-gray-500 dark:text-gray-400 ml-1">vs mês anterior</span>
           </div>
         </div>
 
@@ -317,8 +317,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600 dark:text-green-400">+2</span>
-            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">novos este mês</span>
+            <span className="text-gray-600 dark:text-gray-400">+0</span>
+            <span className="text-gray-500 dark:text-gray-400 ml-1">novos este mês</span>
           </div>
         </div>
 
@@ -333,8 +333,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
             </div>
           </div>
           <div className="mt-4 flex items-center text-sm">
-            <span className="text-green-600 dark:text-green-400">+5.2%</span>
-            <span className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">vs mês anterior</span>
+            <span className="text-gray-600 dark:text-gray-400">+0%</span>
+            <span className="text-gray-500 dark:text-gray-400 ml-1">vs mês anterior</span>
           </div>
         </div>
       </div>
