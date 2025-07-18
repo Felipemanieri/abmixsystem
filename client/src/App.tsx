@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe, Crown, Database, Clock, Award, Lock } from 'lucide-react';
-import MobileRefreshButton from './components/MobileRefreshButton';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -247,7 +246,6 @@ function App() {
               <div className="hidden md:flex items-center space-x-6">
                 <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Sobre</a>
                 <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Suporte</a>
-                <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Atualizar</a>
               </div>
               <ThemeToggle />
             </div>
