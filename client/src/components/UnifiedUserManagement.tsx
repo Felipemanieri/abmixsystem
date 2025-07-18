@@ -263,12 +263,12 @@ export default function UnifiedUserManagement() {
   const handleEditUser = (user: User) => {
     setEditingUser(user);
     setFormData({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      panel: user.panel,
-      active: user.active
+      name: user.name || '',
+      email: user.email || '',
+      password: user.password || '120784',
+      role: user.role || activePanel,
+      panel: user.panel || activePanel,
+      active: user.active !== undefined ? user.active : true
     });
     setShowUserModal(true);
   };
@@ -607,9 +607,13 @@ export default function UnifiedUserManagement() {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFormData(prev => ({ ...prev, name: value }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                     required
+                    autoComplete="off"
                   />
                 </div>
 
@@ -620,9 +624,13 @@ export default function UnifiedUserManagement() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFormData(prev => ({ ...prev, email: value }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                     required
+                    autoComplete="email"
                   />
                 </div>
 
@@ -633,9 +641,13 @@ export default function UnifiedUserManagement() {
                   <input
                     type="text"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFormData(prev => ({ ...prev, password: value }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                     required
+                    autoComplete="new-password"
                   />
                 </div>
 
@@ -645,8 +657,11 @@ export default function UnifiedUserManagement() {
                   </label>
                   <select
                     value={formData.panel}
-                    onChange={(e) => setFormData({ ...formData, panel: e.target.value, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setFormData(prev => ({ ...prev, panel: value, role: value }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                     required
                   >
                     {Object.entries(panels).map(([key, panel]) => (
@@ -662,8 +677,11 @@ export default function UnifiedUserManagement() {
                     type="checkbox"
                     id="active"
                     checked={formData.active}
-                    onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setFormData(prev => ({ ...prev, active: checked }));
+                    }}
+                    className="w-4 h-4 text-gray-600 border-gray-300 dark:border-gray-600 rounded focus:ring-gray-500"
                   />
                   <label htmlFor="active" className="ml-2 text-sm text-gray-700 dark:text-gray-200">
                     Usuário ativo
@@ -681,7 +699,7 @@ export default function UnifiedUserManagement() {
                   <button
                     type="submit"
                     disabled={createUserMutation.isPending || updateUserMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-gray-600 text-white dark:bg-gray-50 dark:bg-gray-900 dark:text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
                   >
                     <Save className="w-4 h-4 mr-2 inline" />
                     {editingUser ? 'Salvar' : 'Criar'}
