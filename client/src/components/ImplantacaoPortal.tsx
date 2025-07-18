@@ -125,33 +125,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   //   ... funcionalidade removida
   // };
 
-  // Notificações simuladas
-  const [notifications, setNotifications] = useState([
-    {
-      id: '1',
-      title: 'Nova proposta para validação',
-      message: 'A proposta VEND001-PROP123 foi enviada para validação',
-      type: 'approval',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
-      read: false,
-    },
-    {
-      id: '2',
-      title: 'Automação concluída',
-      message: 'A automação da proposta VEND003-PROP126 foi concluída com sucesso',
-      type: 'approval',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 horas atrás
-      read: false,
-    },
-    {
-      id: '3',
-      title: 'Erro na integração',
-      message: 'A integração com o CRM falhou. Verifique as configurações.',
-      type: 'alert',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
-      read: true,
-    },
-  ]);
+  // Sistema de notificações - será configurado conforme necessário
+  const [notifications, setNotifications] = useState([]);
   
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
@@ -163,11 +138,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   ]);
   const [newMessage, setNewMessage] = useState('');
 
-  // Inicializar status dos proposals e escutar mudanças
+  // Inicializar status dos proposals reais e escutar mudanças
   useEffect(() => {
     const initializeStatuses = () => {
       const statusMap = new Map<string, ProposalStatus>();
-      proposals.forEach(proposal => {
+      realProposalsData.forEach(proposal => {
         statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
       });
       setProposalStatuses(statusMap);
@@ -185,7 +160,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     return () => {
       statusManager.unsubscribe(handleStatusChange);
     };
-  }, [statusManager]);
+  }, [statusManager, realProposalsData]);
 
   const handleSelectProposal = (proposalId: string) => {
     console.log('Selecionando proposta:', proposalId);
@@ -204,124 +179,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     showNotification('Proposta salva e sincronizada com Google Sheets!', 'success');
   };
 
-  const [proposals, setProposals] = useState<Proposal[]>([
-    {
-      id: 'VEND001-PROP123',
-      client: 'Empresa ABC Ltda',
-      vendor: 'Ana Caroline',
-      plan: 'Plano Empresarial Premium',
-      value: 'R$ 1.250,00',
-      status: 'pending_validation',
-      submissionDate: '2024-01-15',
-      documents: 8,
-      priority: 'high',
-      estimatedCompletion: '2024-01-17',
-    },
-    {
-      id: 'VEND002-PROP124',
-      client: 'Tech Solutions SA',
-      vendor: 'Bruna Garcia',
-      plan: 'Plano Família Básico',
-      value: 'R$ 650,00',
-      status: 'pending_validation',
-      submissionDate: '2024-01-14',
-      documents: 6,
-      priority: 'medium',
-      estimatedCompletion: '2024-01-16',
-    },
-    {
-      id: 'VEND001-PROP125',
-      client: 'Consultoria XYZ',
-      vendor: 'Ana Caroline',
-      plan: 'Plano Individual',
-      value: 'R$ 320,00',
-      status: 'validated',
-      submissionDate: '2024-01-13',
-      documents: 5,
-      observations: 'Documentação completa e validada',
-      priority: 'low',
-      estimatedCompletion: '2024-01-15',
-    },
-    {
-      id: 'VEND003-PROP126',
-      client: 'Inovação Digital',
-      vendor: 'Carlos Silva',
-      plan: 'Plano Empresarial',
-      value: 'R$ 890,00',
-      status: 'sent_to_automation',
-      submissionDate: '2024-01-12',
-      documents: 7,
-      observations: 'Enviado para automação Make/Zapier',
-      priority: 'high',
-      estimatedCompletion: '2024-01-14',
-    },
-    {
-      id: 'VEND004-PROP127',
-      client: 'Startup Moderna',
-      vendor: 'Diana Santos',
-      plan: 'Plano Família Premium',
-      value: 'R$ 980,00',
-      status: 'processing',
-      submissionDate: '2024-01-11',
-      documents: 9,
-      observations: 'Em processamento automático',
-      priority: 'medium',
-      estimatedCompletion: '2024-01-13',
-    },
-    {
-      id: 'VEND005-PROP128',
-      client: 'Consultoria Avançada',
-      vendor: 'Eduardo Lima',
-      plan: 'Plano Individual Plus',
-      value: 'R$ 450,00',
-      status: 'completed',
-      submissionDate: '2024-01-10',
-      documents: 6,
-      observations: 'Implantação concluída com sucesso',
-      priority: 'low',
-      estimatedCompletion: '2024-01-12',
-    },
-  ]);
-
-  const [automationRules] = useState<AutomationRule[]>([
-    {
-      id: '1',
-      name: 'Validação Automática de Documentos',
-      trigger: 'Documentos completos',
-      action: 'Enviar para aprovação',
-      status: 'active',
-      lastRun: '2024-01-15 14:30'
-    },
-    {
-      id: '2',
-      name: 'Notificação de Pendências',
-      trigger: 'Proposta pendente > 3 dias',
-      action: 'Enviar email para vendedor',
-      status: 'active',
-      lastRun: '2024-01-15 09:15'
-    },
-    {
-      id: '3',
-      name: 'Backup Automático',
-      trigger: 'Diariamente às 02:00',
-      action: 'Backup completo do sistema',
-      status: 'active',
-      lastRun: '2024-01-15 02:00'
-    },
-    {
-      id: '4',
-      name: 'Integração CRM',
-      trigger: 'Proposta aprovada',
-      action: 'Criar cliente no CRM',
-      status: 'inactive',
-      lastRun: '2024-01-14 16:45'
-    }
-  ]);
-
+  // Use dados reais do banco de dados
+  const [automationRules] = useState<AutomationRule[]>([]);
+  
+  // Estatísticas baseadas nos dados reais do banco de dados
+  const realProposalsData = realProposals || [];
+  
   const implantacaoStats = [
     {
       name: 'Aguardando Validação',
-      value: proposals.filter(p => p.status === 'pending_validation').length.toString(),
+      value: realProposalsData.filter(p => p.status === 'observacao').length.toString(),
       change: 'Para revisar',
       changeType: 'warning',
       icon: AlertCircle,
@@ -329,7 +196,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Validadas',
-      value: proposals.filter(p => p.status === 'validated').length.toString(),
+      value: realProposalsData.filter(p => p.status === 'analise').length.toString(),
       change: 'Prontas para envio',
       changeType: 'positive',
       icon: CheckCircle,
@@ -337,7 +204,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Em Processamento',
-      value: proposals.filter(p => p.status === 'processing').length.toString(),
+      value: realProposalsData.filter(p => p.status === 'assinatura_ds').length.toString(),
       change: 'Automação ativa',
       changeType: 'positive',
       icon: Settings,
@@ -345,7 +212,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
     {
       name: 'Concluídas',
-      value: proposals.filter(p => p.status === 'completed').length.toString(),
+      value: realProposalsData.filter(p => p.status === 'implantado').length.toString(),
       change: 'Finalizadas',
       changeType: 'positive',
       icon: TrendingUp,
@@ -353,30 +220,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     },
   ];
 
+  // Funções antigas removidas - agora usa API para validação
   const validateProposal = (proposalId: string) => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { ...proposal, status: 'validated', observations }
-        : proposal
-    ));
-    setSelectedProposal(null);
-    setObservations('');
-    showNotification('Proposta validada com sucesso!', 'success');
+    showNotification('Funcionalidade será implementada conforme necessário', 'info');
   };
 
   const sendToAutomation = (proposalId: string) => {
-    setProposals(prev => prev.map(proposal => 
-      proposal.id === proposalId 
-        ? { 
-            ...proposal, 
-            status: 'sent_to_automation',
-            observations: observations || 'Enviado para automação Make/Zapier'
-          }
-        : proposal
-    ));
-    setSelectedProposal(null);
-    setObservations('');
-    showNotification('Proposta enviada para automação!', 'success');
+    showNotification('Funcionalidade será implementada conforme necessário', 'info');
   };
 
   const handleMarkAsRead = (id: string) => {

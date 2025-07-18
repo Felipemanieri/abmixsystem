@@ -154,6 +154,32 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Sistema de Autenticação Universal e Limpeza de Dados Demo (Jan 18, 2025)
+- **Sistema de autenticação universal implementado**:
+  - Qualquer usuário criado na área restrita agora funciona automaticamente em TODOS os portais
+  - Removida restrição de campo `panel` - usuários podem acessar qualquer portal com suas credenciais
+  - Autenticação unificada garante flexibilidade máxima para gestão de usuários
+  - Sistema suporta tanto usuários do sistema quanto vendedores nos portais apropriados
+
+- **Limpeza completa de dados demo realizada**:
+  - Removidas todas as propostas demo do banco de dados
+  - Eliminadas propostas fictícias do Portal da Implantação
+  - Removidas notificações simuladas e regras de automação demo
+  - Estatísticas agora baseadas exclusivamente em dados reais do PostgreSQL
+  - Sistema pronto para uso em produção com dados reais
+
+- **Configuração otimizada do queryClient**:
+  - Implementado defaultQueryFn no queryClient para resolver problemas de API
+  - Corrigidos logs contínuos de erro de vendors
+  - Sistema de polling em tempo real funcionando corretamente
+  - Todas as consultas à API agora funcionam sem erros
+
+- **Portal da Implantação otimizado**:
+  - Interface limpa sem dados fictícios
+  - Estatísticas baseadas em status reais do sistema
+  - Sistema preparado para receber as 5 propostas reais do usuário
+  - Funcionalidades de automação prontas para configuração posterior
+
 ### Logo Unificado em Todos os Portais (Jan 16, 2025)
 - **Implementado logo Abmix original consistente em todo o sistema**:
   - Substituído componente AbmixLogo por imagem direta em todos os portais

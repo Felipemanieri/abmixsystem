@@ -919,17 +919,17 @@ router.post("/proposals", async (req, res) => {
         return res.status(400).json({ error: "Email, senha e portal são obrigatórios" });
       }
 
-      // First check system users
+      // First check system users - ANY active user can access ANY portal
       const systemUser = await storage.getSystemUserByEmail(email);
-      if (systemUser && systemUser.password === password && systemUser.active && systemUser.panel === portal) {
+      if (systemUser && systemUser.password === password && systemUser.active) {
         await storage.updateLastLogin(systemUser.id);
         return res.json({
           id: systemUser.id,
           name: systemUser.name,
           email: systemUser.email,
-          role: systemUser.panel,
+          role: portal, // Use the requested portal as role
           userType: 'system',
-          panel: systemUser.panel
+          panel: portal // Use the requested portal as panel
         });
       }
 
