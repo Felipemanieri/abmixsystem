@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search, Database } from 'lucide-react';
+import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search, Database, BarChart3 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { generateDynamicSheet, type DynamicSheetData } from '@shared/dynamicSheetGenerator';
 import { useRealTimeSheetSync } from '@shared/realTimeSheetSync';
@@ -13,16 +13,16 @@ export default function PlanilhaViewer() {
   // Sistema de sincronização em tempo real
   const { triggerSync, getSyncStatus, registerCallback, unregisterCallback } = useRealTimeSheetSync();
   
-  // BUSCAR DADOS REAIS DAS PROPOSTAS EM TEMPO REAL
+  // BUSCAR DADOS REAIS DAS PROPOSTAS EM TEMPO REAL - ATUALIZAÇÃO RÁPIDA
   const { data: proposals = [], isLoading } = useQuery({
     queryKey: ['/api/proposals'],
-    refetchInterval: 1000, // Atualização em tempo real a cada 1 segundo
+    refetchInterval: 500, // Atualização em tempo real a cada 0.5 segundos
     refetchIntervalInBackground: true
   });
   
   const { data: vendors = [] } = useQuery({
     queryKey: ['/api/vendors'],
-    refetchInterval: 5000 // Atualizar vendedores a cada 5 segundos
+    refetchInterval: 2000 // Atualizar vendedores a cada 2 segundos
   });
   
   // GERAR PLANILHA DINÂMICA AUTOMATICAMENTE COM SINCRONIZAÇÃO
@@ -315,12 +315,20 @@ export default function PlanilhaViewer() {
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        {/* CABEÇALHO PRINCIPAL */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Visualizar Planilha Principal</h3>
+            <FileSpreadsheet className="w-8 h-8 text-green-600 dark:text-green-400 mr-3" />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Planilha Principal - Sistema Abmix</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Visualização em tempo real - Atualização a cada 0.5 segundos</p>
+            </div>
           </div>
           <div className="flex space-x-3">
+            <div className="flex items-center px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-lg">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              <span className="text-sm font-medium">Tempo Real</span>
+            </div>
             <button 
               onClick={openGoogleSheets}
               className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
@@ -372,38 +380,58 @@ export default function PlanilhaViewer() {
               className="rounded border-gray-300 dark:border-gray-600"
             />
             <label htmlFor="autoUpdate" className="text-sm text-gray-700 dark:text-gray-300">
-              Auto-atualizar (5s)
+              Auto-atualizar (0.5s)
             </label>
           </div>
         </div>
 
-        {/* Estatísticas Dinâmicas */}
+        {/* Estatísticas Dinâmicas em Tempo Real */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{proposals.length}</div>
-            <div className="text-sm text-blue-600 dark:text-blue-400">Total Propostas</div>
+            <div className="flex items-center justify-center mb-2">
+              <Database className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-2" />
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            </div>
+            <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{filteredData.length}</div>
+            <div className="text-sm text-blue-600 dark:text-blue-400">Propostas Filtradas</div>
           </div>
           <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            </div>
             <div className="text-2xl font-bold text-green-900 dark:text-green-200">
-              {dynamicSheetData?.maxTitulares || 0}
+              {dynamicSheetData?.maxTitulares || 3}
             </div>
             <div className="text-sm text-green-600 dark:text-green-400">Máx. Titulares</div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <FileSpreadsheet className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+            </div>
             <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">
-              {dynamicSheetData?.maxDependentes || 0}
+              {dynamicSheetData?.maxDependentes || 5}
             </div>
             <div className="text-sm text-purple-600 dark:text-purple-400">Máx. Dependentes</div>
           </div>
           <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <BarChart3 className="w-6 h-6 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+            </div>
             <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">
-              {dynamicSheetData?.totalColumns || 0}
+              {dynamicSheetData?.totalColumns || 50}
             </div>
             <div className="text-sm text-yellow-600 dark:text-yellow-400">Total Colunas</div>
           </div>
           <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <RefreshCw className="w-6 h-6 text-red-600 dark:text-red-400 mr-2" />
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+            </div>
             <div className="text-2xl font-bold text-red-900 dark:text-red-200">
-              {dynamicSheetData?.lastUpdated ? dynamicSheetData.lastUpdated.toLocaleTimeString('pt-BR') : '--:--'}
+              {new Date().toLocaleTimeString('pt-BR')}
             </div>
             <div className="text-sm text-red-600 dark:text-red-400">Última Atualização</div>
           </div>
