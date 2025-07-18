@@ -154,6 +154,14 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Correção Final do Layout dos Portais (Jan 18, 2025)
+- **Layout grid de 4 colunas implementado para caber todos os portais em uma linha**:
+  - Tamanho reduzido para 260px x 280px para caber perfeitamente em telas menores
+  - Grid responsivo: 1 coluna (mobile), 2 colunas (tablet), 4 colunas (desktop)
+  - Container com largura máxima controlada para centralização automática
+  - Espaçamento reduzido entre portais para melhor aproveitamento do espaço
+  - Sistema de centralização automática quando portais são removidos via área restrita
+
 ### Sistema de Autenticação Universal e Limpeza de Dados Demo (Jan 18, 2025)
 - **Sistema de autenticação universal implementado**:
   - Qualquer usuário criado na área restrita agora funciona automaticamente em TODOS os portais
