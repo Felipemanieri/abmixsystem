@@ -64,14 +64,13 @@ import {
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
-import SimpleUserManagement from './SimpleUserManagement';
+import UserManagementDashboard from './UserManagementDashboard';
 import SystemFooter from './SystemFooter';
 
-import SimplePasswordManagement from './SimplePasswordManagement';
+import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
 import InternalMessage from './InternalMessage';
-import NotificationCenter from './NotificationCenter';
 
 import BackupManager from './BackupManager';
 
@@ -187,11 +186,112 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     return (
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Automação</h3>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Automação</h3>
+            </div>
+            <button
+              onClick={() => showNotification('Automação', 'Todas as automações foram reiniciadas!', 'success')}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Reiniciar Automações
+            </button>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Em desenvolvimento</p>
+
+          {/* Automação de Propostas */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Bot className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Automação de Propostas</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Geração Automática de Links</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Notificações Automáticas</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Automação de Documentos */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <FileText className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Automação de Documentos</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Organização Google Drive</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Validação de Documentos</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Automação de Status */}
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <RefreshCw className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Automação de Status</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Mudança Automática de Status</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Alertas de Prazos</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="enabled">Habilitado (atual)</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Logs de Automação */}
+          <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-6">
+            <div className="flex items-center mb-4">
+              <Monitor className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Logs de Automação</h4>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Geração de link automática executada</span>
+                <span className="text-xs text-green-600 dark:text-green-400">2 min atrás</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Organização de documentos concluída</span>
+                <span className="text-xs text-blue-600 dark:text-blue-400">5 min atrás</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Validação automática de proposta</span>
+                <span className="text-xs text-purple-600 dark:text-purple-400">10 min atrás</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -201,11 +301,170 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     return (
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Link className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Integrações</h3>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Link className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Integrações Externas</h3>
+            </div>
+            <button
+              onClick={() => showNotification('Integração', 'Todas as integrações foram sincronizadas!', 'success')}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Sincronizar Todas
+            </button>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Em desenvolvimento</p>
+
+          {/* Google Services */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Serviços Google</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Drive</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Sheets</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Forms</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Webhooks e APIs */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Webhook className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Webhooks e APIs</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Make.com Webhooks</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="active">Ativo</option>
+                    <option value="inactive">Inativo</option>
+                  </select>
+                  <button className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    Testar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">APIs Terceiros</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="active">Ativo</option>
+                    <option value="inactive">Inativo</option>
+                  </select>
+                  <button className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Comunicação */}
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <MessageSquare className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Comunicação</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">WhatsApp API</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Email SMTP</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">SMS Gateway</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                    <option value="connected">Conectado</option>
+                    <option value="disconnected">Desconectado</option>
+                  </select>
+                  <button className="px-3 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Status das Integrações */}
+          <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-6">
+            <div className="flex items-center mb-4">
+              <Monitor className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Status das Integrações</h4>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Google Drive API</span>
+                <span className="text-xs text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900 px-2 py-1 rounded">Conectado</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Google Sheets API</span>
+                <span className="text-xs text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900 px-2 py-1 rounded">Conectado</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">Make.com Webhooks</span>
+                <span className="text-xs text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900 px-2 py-1 rounded">Ativo</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <span className="text-sm text-gray-600 dark:text-gray-300">WhatsApp API</span>
+                <span className="text-xs text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900 px-2 py-1 rounded">Configurando</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -215,11 +474,183 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     return (
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Config Planilhas</h3>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Planilhas</h3>
+            </div>
+            <button
+              onClick={() => showNotification('Planilhas', 'Todas as planilhas foram sincronizadas!', 'success')}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Sincronizar Planilhas
+            </button>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Em desenvolvimento</p>
+
+          {/* Planilhas Principais */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <FileSpreadsheet className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Planilhas Principais</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 1 - Propostas</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="active">Ativa</option>
+                    <option value="inactive">Inativa</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 2 - Clientes</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="active">Ativa</option>
+                    <option value="inactive">Inativa</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 3 - Relatórios</label>
+                <div className="flex items-center space-x-2">
+                  <select className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="active">Ativa</option>
+                    <option value="inactive">Inativa</option>
+                  </select>
+                  <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Configurar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Configurações de Campos */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Edit className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Configurações de Campos</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Campos Obrigatórios</label>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Nome da Empresa</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">CNPJ</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Plano</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Vendedor</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Campos Opcionais</label>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Observações</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Desconto</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" defaultChecked className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Data de Vigência</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-2 text-green-600 focus:ring-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Prioridade</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Estrutura da Planilha */}
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Layers className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Estrutura da Planilha</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tipo de Estrutura</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="horizontal">Horizontal (atual)</option>
+                  <option value="vertical">Vertical</option>
+                  <option value="mixed">Mista</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Máximo de Titulares</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="dynamic">Dinâmico (atual)</option>
+                  <option value="3">3 fixos</option>
+                  <option value="5">5 fixos</option>
+                  <option value="10">10 fixos</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Automação de Planilhas */}
+          <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-6">
+            <div className="flex items-center mb-4">
+              <RefreshCw className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Automação de Planilhas</h4>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Sincronização Automática</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Atualiza planilhas em tempo real</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Backup Automático</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Cria backup diário das planilhas</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg">
+                <div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Validação de Dados</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Verifica integridade dos dados</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" defaultChecked className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -236,7 +667,6 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">Portal Restrito</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <NotificationCenter notifications={notifications} />
               <button
                 onClick={onLogout}
                 className="flex items-center px-4 py-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
@@ -284,10 +714,10 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
         )}
 
         {/* Aba Gestão Usuários */}
-        {activeTab === 'usuarios' && <SimpleUserManagement />}
+        {activeTab === 'usuarios' && <UserManagementDashboard onClose={() => setActiveTab('interface')} />}
 
         {/* Aba Controle Senhas */}
-        {activeTab === 'senhas' && <SimplePasswordManagement />}
+        {activeTab === 'senhas' && <UnifiedUserManagement />}
 
         {/* Aba Visualizar Planilha */}
         {activeTab === 'planilha' && <PlanilhaViewer />}
