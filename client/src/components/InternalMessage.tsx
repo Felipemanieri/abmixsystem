@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Send, User, MessageSquare, Clock, Search, Filter, Download, FileText, Trash2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Send, User, MessageSquare, Clock, Search, Filter, Download, FileText, Trash2, Paperclip, UserPlus } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -37,58 +37,53 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     recipient: '',
     subject: '',
     content: '',
+    attachments: [] as File[]
   });
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Dados simulados de mensagens
-  const [messages] = useState<Message[]>([
-    {
-      id: '1',
-      sender: 'Ana Caroline',
-      senderRole: 'vendor',
-      recipient: safeCurrentUser.name,
-      recipientRole: safeCurrentUser.role,
-      subject: 'Proposta VEND001-PROP123',
-      content: 'Olá! Precisamos verificar os documentos da proposta VEND001-PROP123. O cliente está com dúvidas sobre o processo de carência.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
-      read: false,
-    },
-    {
-      id: '2',
-      sender: 'Carlos Silva',
-      senderRole: 'financial',
-      recipient: safeCurrentUser.name,
-      recipientRole: safeCurrentUser.role,
-      subject: 'Validação pendente',
-      content: 'Por favor, verifique a proposta VEND002-PROP124 que está aguardando validação há 3 dias. Precisamos finalizar até amanhã.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 horas atrás
-      read: true,
-    },
-    {
-      id: '3',
-      sender: 'Bruna Garcia',
-      senderRole: 'implantacao',
-      recipient: safeCurrentUser.name,
-      recipientRole: safeCurrentUser.role,
-      subject: 'Documentação incompleta',
-      content: 'A proposta VEND003-PROP126 está com documentação incompleta. Falta o comprovante de residência e a carteirinha do plano atual. Por favor, solicite ao cliente.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 dia atrás
-      read: true,
-      attachments: [
-        { name: 'lista_documentos.pdf', size: '245 KB', type: 'pdf' }
-      ]
-    },
-    {
-      id: '4',
-      sender: safeCurrentUser.name,
-      senderRole: safeCurrentUser.role,
-      recipient: 'Ana Caroline',
-      recipientRole: 'vendor',
-      subject: 'Re: Proposta VEND001-PROP123',
-      content: 'Vou verificar os documentos e entrar em contato com o cliente para esclarecer as dúvidas sobre carência.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 25), // 25 minutos atrás
-      read: true,
-    },
+  // Lista de usuários disponíveis para envio de mensagens
+  const [availableUsers] = useState([
+    { name: 'Ana Caroline Terto', role: 'vendor', email: 'comercial14@abmix.com.br' },
+    { name: 'Bruna Garcia', role: 'vendor', email: 'comercial10@abmix.com.br' },
+    { name: 'Fabiana Ferreira', role: 'vendor', email: 'comercial17@abmix.com.br' },
+    { name: 'Fabiana Godinho', role: 'vendor', email: 'comercial@abmix.com.br' },
+    { name: 'Fernanda Batista', role: 'vendor', email: 'comercial18@abmix.com.br' },
+    { name: 'Gabrielle Fernandes', role: 'vendor', email: 'comercial3@abmix.com.br' },
+    { name: 'Isabela Velasquez', role: 'vendor', email: 'comercial4@abmix.com.br' },
+    { name: 'Juliana Araujo', role: 'vendor', email: 'comercial6@abmix.com.br' },
+    { name: 'Lohainy Berlino', role: 'vendor', email: 'comercial15@abmix.com.br' },
+    { name: 'Luciana Velasquez', role: 'vendor', email: 'comercial21@abmix.com.br' },
+    { name: 'Monique Silva', role: 'vendor', email: 'comercial2@abmix.com.br' },
+    { name: 'Sara Mattos', role: 'vendor', email: 'comercial8@abmix.com.br' },
+    { name: 'Supervisor Abmix', role: 'supervisor', email: 'supervisao@abmix.com.br' },
+    { name: 'Financeiro Abmix', role: 'financial', email: 'financeiro@abmix.com.br' },
+    { name: 'Implementação Abmix', role: 'implementation', email: 'implementacao@abmix.com.br' },
+    { name: 'Cliente Portal', role: 'client', email: 'cliente@abmix.com.br' },
+    { name: 'Felipe Admin', role: 'admin', email: 'felipe@abmix.com.br' }
   ]);
+
+  // Sistema de mensagens limpo - sem dados demo
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  // Carregar mensagens do localStorage na inicialização
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('internalMessages');
+    if (savedMessages) {
+      const parsedMessages = JSON.parse(savedMessages).map((msg: any) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp)
+      }));
+      setMessages(parsedMessages);
+    }
+  }, []);
+
+  // Atualizar contador de não lidas
+  useEffect(() => {
+    const unread = messages.filter(msg => 
+      msg.recipient === safeCurrentUser.name && !msg.read
+    ).length;
+    setUnreadCount(unread);
+  }, [messages, safeCurrentUser.name]);
 
   const filteredMessages = messages.filter(message => {
     // Filtrar por caixa de entrada ou enviados
@@ -110,14 +105,99 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
 
   const handleSendMessage = () => {
-    // Simulação de envio de mensagem
-    alert('Mensagem enviada com sucesso!');
+    if (!composeData.recipient || !composeData.subject || !composeData.content) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    // Se for mensagem geral, enviar para todos os usuários
+    if (composeData.recipient === 'Mensagem Geral') {
+      const newMessages: Message[] = availableUsers.map(user => ({
+        id: `${Date.now()}-${user.name}`,
+        sender: safeCurrentUser.name,
+        senderRole: safeCurrentUser.role,
+        recipient: user.name,
+        recipientRole: user.role,
+        subject: `[GERAL] ${composeData.subject}`,
+        content: composeData.content,
+        timestamp: new Date(),
+        read: false,
+        attachments: composeData.attachments.map(file => ({
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(1)} KB`,
+          type: file.type
+        }))
+      }));
+
+      const updatedMessages = [...messages, ...newMessages];
+      setMessages(updatedMessages);
+      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+      
+      alert(`Mensagem enviada para ${availableUsers.length} usuários!`);
+    } else {
+      // Mensagem individual
+      const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
+      if (!selectedUser) {
+        alert('Destinatário não encontrado.');
+        return;
+      }
+
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        sender: safeCurrentUser.name,
+        senderRole: safeCurrentUser.role,
+        recipient: composeData.recipient,
+        recipientRole: selectedUser.role,
+        subject: composeData.subject,
+        content: composeData.content,
+        timestamp: new Date(),
+        read: false,
+        attachments: composeData.attachments.map(file => ({
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(1)} KB`,
+          type: file.type
+        }))
+      };
+
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
+      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+
+      alert('Mensagem enviada com sucesso!');
+    }
+
     setComposeData({
       recipient: '',
       subject: '',
       content: '',
+      attachments: []
     });
     setActiveTab('sent');
+  };
+
+  const handleMarkAsRead = (messageId: string) => {
+    const updatedMessages = messages.map(msg => 
+      msg.id === messageId ? { ...msg, read: true } : msg
+    );
+    setMessages(updatedMessages);
+    localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+  };
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (files) {
+      const newFiles = Array.from(files);
+      setComposeData(prev => ({
+        ...prev,
+        attachments: [...prev.attachments, ...newFiles]
+      }));
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setComposeData(prev => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, i) => i !== index)
+    }));
   };
 
   const formatTimestamp = (date: Date) => {
@@ -209,7 +289,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 filteredMessages.map((message) => (
                   <div
                     key={message.id}
-                    onClick={() => setSelectedMessage(message)}
+                    onClick={() => {
+                      setSelectedMessage(message);
+                      if (!message.read && message.recipient === safeCurrentUser.name) {
+                        handleMarkAsRead(message.id);
+                      }
+                    }}
                     className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
                       selectedMessage?.id === message.id ? 'bg-gray-50' : ''
                     } ${!message.read && activeTab === 'inbox' ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
@@ -240,13 +325,13 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
             </div>
             
             {/* Compose Button */}
-            <div className="p-3 border-t border-gray-200">
+            <div className="p-3 border-t border-gray-200 dark:border-gray-600">
               <button
                 onClick={() => {
                   setSelectedMessage(null);
                   setActiveTab('compose');
                 }}
-                className="w-full py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors text-sm font-medium"
+                className="w-full py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors text-sm font-medium"
               >
                 Nova Mensagem
               </button>
@@ -258,65 +343,125 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
             {activeTab === 'compose' ? (
               <div className="flex-1 flex flex-col p-4">
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Destinatário
                   </label>
                   <select
                     value={composeData.recipient}
                     onChange={(e) => setComposeData({...composeData, recipient: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-white"
                   >
                     <option value="">Selecione um destinatário</option>
-                    <option value="Ana Caroline">Ana Caroline (Vendedor)</option>
-                    <option value="Carlos Silva">Carlos Silva (Financeiro)</option>
-                    <option value="Bruna Garcia">Bruna Garcia (Implantação)</option>
-                    <option value="Diana Santos">Diana Santos (Supervisora)</option>
+                    <option value="Mensagem Geral">📢 Mensagem Geral (Todos os usuários)</option>
+                    <optgroup label="Vendedores">
+                      {availableUsers.filter(user => user.role === 'vendor').map(user => (
+                        <option key={user.email} value={user.name}>
+                          {user.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Equipe Interna">
+                      {availableUsers.filter(user => user.role !== 'vendor').map(user => (
+                        <option key={user.email} value={user.name}>
+                          {user.name} ({user.role === 'supervisor' ? 'Supervisão' : 
+                                        user.role === 'financial' ? 'Financeiro' : 
+                                        user.role === 'implementation' ? 'Implementação' : 
+                                        user.role === 'client' ? 'Cliente' : 'Administrador'})
+                        </option>
+                      ))}
+                    </optgroup>
                   </select>
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Assunto
                   </label>
                   <input
                     type="text"
                     value={composeData.subject}
                     onChange={(e) => setComposeData({...composeData, subject: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-white"
                     placeholder="Assunto da mensagem"
                   />
                 </div>
                 
                 <div className="flex-1 mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Mensagem
                   </label>
                   <textarea
                     value={composeData.content}
                     onChange={(e) => setComposeData({...composeData, content: e.target.value})}
-                    className="w-full h-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                    className="w-full h-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 resize-none dark:bg-gray-700 dark:text-white"
                     placeholder="Digite sua mensagem aqui..."
+                    rows={8}
                   />
+                </div>
+
+                {/* Anexos */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Anexos
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                    <div className="text-center">
+                      <label className="cursor-pointer">
+                        <div className="flex flex-col items-center">
+                          <Paperclip className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            Clique para anexar arquivos ou arraste aqui
+                          </span>
+                        </div>
+                        <input
+                          type="file"
+                          multiple
+                          onChange={(e) => handleFileUpload(e.target.files)}
+                          className="hidden"
+                          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt,.xlsx,.xls"
+                        />
+                      </label>
+                    </div>
+                    
+                    {composeData.attachments.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Arquivos anexados ({composeData.attachments.length})
+                        </h4>
+                        {composeData.attachments.map((file, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                            <div className="flex items-center">
+                              <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-700 dark:text-gray-300">{file.name}</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                                ({(file.size / 1024).toFixed(1)} KB)
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => removeAttachment(index)}
+                              className="text-red-500 hover:text-red-700 p-1"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="flex justify-between items-center">
-                  <div>
-                    <button className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors">
-                      <FileText className="w-4 h-4 mr-2" />
-                      Anexar Arquivo
-                    </button>
-                  </div>
                   
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setActiveTab('inbox')}
-                      className="px-4 py-2 text-sm text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
+                      className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                     >
                       Cancelar
                     </button>
                     <button
                       onClick={handleSendMessage}
-                      className="flex items-center px-4 py-2 text-sm text-white bg-teal-600 rounded-md hover:bg-teal-700 transition-colors"
+                      className="flex items-center px-4 py-2 text-sm text-white bg-gray-600 dark:bg-gray-700 rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
                     >
                       <Send className="w-4 h-4 mr-2" />
                       Enviar
