@@ -314,7 +314,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
-    { id: 'drive', label: 'Google Drive', icon: HardDrive },
+    { id: 'drive', label: 'Google Integrações', icon: HardDrive },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
