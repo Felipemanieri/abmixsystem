@@ -154,6 +154,34 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Expansão Completa da Aba Google Drive com Todas as Integrações (Jan 18, 2025)
+- **Aba Google Drive expandida para incluir todas as configurações Google solicitadas**:
+  - Google Drive: Estatísticas (247 pastas, 1,834 documentos, 8.2 GB, 99.1% sync) + lista de drives configurados
+  - Google Sheets: Estatísticas (47 planilhas ativas, 2,847 linhas, 98.3% sync, 2.1s tempo médio)
+  - Google Forms: Estatísticas (23 forms ativos, 1,247 respostas) + integrações
+  - Google Docs: Estatísticas (384 documentos, 12 templates) + integrações
+  - Backup Automático: Estatísticas (847 backups, 99.7% sucesso, 24.8 GB, último: 23h)
+  - API Google: Estatísticas (847,392 req/mês, 99.8% sucesso, 1.2s tempo médio, 0.2% erro)
+
+- **Funcionalidade completa do botão "Editar" implementada**:
+  - Todos os botões "Editar" agora direcionam para o modal de configurações
+  - Modal expandido com formulário completo para adicionar novos drives
+  - Tabela de drives configurados com status, espaço e ações
+  - Interface unificada para gerenciar todas as integrações Google
+
+- **Removidas configurações de tempo conforme solicitado**:
+  - Foco exclusivo em integrações, não em configurações temporais
+  - Mantidas todas as informações estatísticas (pastas, documentos, GB, etc.)
+  - Preservada aba "Configurações do Tempo" separada para configurações temporais
+
+- **Estrutura visual organizada por cores**:
+  - Azul: Google Drive (pastas, documentos, armazenamento, sync)
+  - Verde: Google Sheets (planilhas, linhas, sync, tempo)
+  - Roxo/Índigo: Google Forms (forms, respostas)
+  - Laranja/Amarelo: Google Docs (documentos, templates)
+  - Vermelho: Backup Automático (backups, sucesso, espaço, último)
+  - Índigo: API Google (requisições, sucesso, tempo, erro)
+
 ### Correção Final do Layout dos Portais (Jan 18, 2025)
 - **Layout grid de 4 colunas implementado para caber todos os portais em uma linha**:
   - Tamanho reduzido para 260px x 280px para caber perfeitamente em telas menores
