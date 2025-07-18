@@ -303,11 +303,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 'interface', label: 'Interface', icon: Eye },
     { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
     { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
-    { id: 'planilha', label: 'Visualizar Planilha', icon: FileSpreadsheet },
+    { id: 'google-sheets', label: 'Google Sheets', icon: FileSpreadsheet },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
-    { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
@@ -821,24 +820,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </div>
             </div>
 
-            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <Globe className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Sync Google Sheets</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-white mb-4">
-                Sincronização automática com planilha principal do sistema
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
-                <button 
-                  onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
-                >
-                  Configurar
-                </button>
-              </div>
-            </div>
+
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
@@ -887,32 +869,34 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     return <IntegrationGuide />;
   }
 
-  function renderPlanilhasSection() {
+  function renderGoogleSheetsSection() {
     return (
       <div className="space-y-6">
+        {/* Cabeçalho Principal */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <FileText className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciar Planilhas</h3>
+              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Sheets - Central Unificada</h3>
             </div>
             <button 
               onClick={openGoogleSheets}
               className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
             >
-              <Globe className="w-4 h-4 mr-2" />
+              <ExternalLink className="w-4 h-4 mr-2" />
               Abrir Google Sheets
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Planilha Principal e Relatórios */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
                 <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Planilha Principal</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Planilha unificada com todos os dados dos clientes e propostas
+                Planilha horizontal dinâmica com todos os dados dos clientes e propostas
               </p>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
@@ -946,7 +930,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
             <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
               <div className="flex items-center mb-4">
-                <Database className="w-5 h-5 text-purple-600 dark:text-white mr-2" />
+                <Database className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Relatórios</h4>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
@@ -981,6 +965,46 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Visualizador de Planilha Integrado */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Visualizador de Planilha</h3>
+            </div>
+            <div className="flex space-x-3">
+              <button 
+                onClick={() => window.location.reload()}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Atualizar
+              </button>
+              <button 
+                onClick={() => {
+                  const csvContent = "data:text/csv;charset=utf-8,ID,EMPRESA,CNPJ,VENDEDOR,PLANO,VALOR,STATUS\n";
+                  const encodedUri = encodeURI(csvContent);
+                  const link = document.createElement("a");
+                  link.setAttribute("href", encodedUri);
+                  link.setAttribute("download", "planilha_abmix.csv");
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+
+          {/* Componente PlanilhaViewer integrado */}
+          <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+            <PlanilhaViewer />
           </div>
         </div>
       </div>
@@ -1085,7 +1109,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   function renderTempoSection() {
     const [timeConfigs, setTimeConfigs] = useState({
       googleDrive: { active: true, interval: '30s' },
-      googleSheets: { active: true, interval: '5s' },
       googleForms: { active: true, interval: '10m' },
       apiRequests: { active: true, interval: '1s' },
       dataSync: { active: true, interval: '2m' },
@@ -1133,7 +1156,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     const getModuleColor = (module: string) => {
       const colors = {
         googleDrive: 'bg-blue-500',
-        googleSheets: 'bg-green-500',
         googleForms: 'bg-purple-500',
         apiRequests: 'bg-orange-500',
         dataSync: 'bg-cyan-500',
@@ -1145,7 +1167,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     const getModuleName = (module: string) => {
       const names = {
         googleDrive: 'Google Drive',
-        googleSheets: 'Google Sheets',
         googleForms: 'Google Forms',
         apiRequests: 'Requisições API',
         dataSync: 'Sincronização de Dados',
@@ -1157,7 +1178,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     const getIntervalOptions = (module: string) => {
       const options = {
         googleDrive: ['30s', '1m', '5m', 'manual'],
-        googleSheets: ['1s', '5s', '30s', 'manual'],
         googleForms: ['5m', '10m', '30m', 'manual'],
         apiRequests: ['1s', '5s', '30s', 'manual'],
         dataSync: ['30s', '1m', '2m', 'manual'],
@@ -1456,12 +1476,11 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {activeTab === 'interface' && renderInterfaceSection()}
         {activeTab === 'usuarios' && <UnifiedUserManagement />}
         {activeTab === 'anexos' && renderAnexosSection()}
-        {activeTab === 'planilha' && <PlanilhaViewer />}
+        {activeTab === 'google-sheets' && renderGoogleSheetsSection()}
         {activeTab === 'logs' && <LogsViewer />}
         {activeTab === 'backup' && <BackupManager />}
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
-        {activeTab === 'planilhas' && renderPlanilhasSection()}
         {activeTab === 'drive' && renderDriveSection()}
         {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'sistema' && renderSistemaSection()}
