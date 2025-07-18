@@ -1645,7 +1645,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-200 border border-gray-400 rounded-lg cursor-pointer hover:bg-gray-300 transition-colors">
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-100 border border-gray-300 rounded-lg cursor-pointer">
                 <input
                   type="file"
                   multiple
@@ -1654,9 +1654,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   id="escolher-arquivo"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
-                <FileText className="w-8 h-8 text-gray-800 mb-2" />
-                <span className="text-sm font-medium text-gray-900">Escolher Arquivo</span>
-                <span className="text-xs text-gray-700">Do computador/celular</span>
+                <FileText className="w-8 h-8 text-gray-600 mb-2" />
+                <span className="text-sm font-medium text-gray-700">Escolher Arquivo</span>
+                <span className="text-xs text-gray-500">Do computador/celular</span>
               </label>
 
               <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
@@ -1820,9 +1820,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex justify-between gap-4 mt-6">
               <button
                 onClick={limparFormulario}
-                className="flex items-center px-10 py-5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-black text-xl shadow-2xl border-4 border-red-500 transform hover:scale-105"
+                className="flex items-center px-8 py-4 bg-red-600 text-white rounded-lg font-bold text-lg shadow-xl border-2 border-red-500"
               >
-                <Trash2 className="w-6 h-6 mr-4" />
+                <Trash2 className="w-5 h-5 mr-3" />
                 LIMPAR FORMULÁRIO
               </button>
               <button
