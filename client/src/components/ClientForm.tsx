@@ -426,46 +426,46 @@ const ClientForm: React.FC = () => {
       </div>
 
       {/* Contract Info (Read Only) */}
-      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Dados do Contrato</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Dados do Contrato</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="font-medium text-gray-700">Empresa:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.nomeEmpresa}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Empresa:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.nomeEmpresa}</span>
           </div>
           <div>
-            <span className="font-medium text-gray-700">CNPJ:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.cnpj}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">CNPJ:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.cnpj}</span>
           </div>
           <div>
-            <span className="font-medium text-gray-700">Plano:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.planoContratado}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Plano:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.planoContratado}</span>
           </div>
           <div>
-            <span className="font-medium text-gray-700">Valor:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.valor}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Valor:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.valor}</span>
           </div>
           <div>
-            <span className="font-medium text-gray-700">Odonto:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.odontoConjugado ? 'Sim' : 'Não'}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Odonto:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.odontoConjugado ? 'Sim' : 'Não'}</span>
           </div>
           <div>
-            <span className="font-medium text-gray-700">Início:</span>
-            <span className="ml-2 text-gray-900">{contractInfo.inicioVigencia}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">Início:</span>
+            <span className="ml-2 text-gray-900 dark:text-white">{contractInfo.inicioVigencia}</span>
           </div>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Titulares */}
-        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Titulares</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Titulares</h2>
             <button
               type="button"
               onClick={addTitular}
               disabled={titulares.length >= 99}
-              className="flex items-center px-4 py-2 text-sm font-medium text-teal-600 bg-teal-50 rounded-md hover:bg-teal-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Titular ({titulares.length}/99)
@@ -476,14 +476,14 @@ const ClientForm: React.FC = () => {
         </div>
 
         {/* Dependentes */}
-        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Dependentes</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Dependentes</h2>
             <button
               type="button"
               onClick={addDependente}
               disabled={dependentes.length >= 50}
-              className="flex items-center px-4 py-2 text-sm font-medium text-teal-600 bg-teal-50 rounded-md hover:bg-teal-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Dependente ({dependentes.length}/50)
@@ -491,16 +491,16 @@ const ClientForm: React.FC = () => {
           </div>
           
           {dependentes.length === 0 ? (
-            <p className="text-gray-500 dark:text-white text-center py-8">Nenhum dependente adicionado</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-8">Nenhum dependente adicionado</p>
           ) : (
             dependentes.map((dependente, index) => renderPersonForm(dependente, 'dependente', index))
           )}
         </div>
 
         {/* Document Upload */}
-        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Documentos</h2>
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Documentos</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Anexe todos os documentos em um só lugar. O vendedor organizará depois.
           </p>
           
@@ -514,7 +514,7 @@ const ClientForm: React.FC = () => {
               
               <div>
                 <label className="cursor-pointer">
-                  <span className="text-teal-600 hover:text-teal-700 font-medium">
+                  <span className="text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 font-medium">
                     Clique para selecionar arquivos
                   </span>
                   <input
@@ -525,10 +525,10 @@ const ClientForm: React.FC = () => {
                     className="hidden"
                   />
                 </label>
-                <span className="text-gray-500 dark:text-white"> ou arraste e solte aqui</span>
+                <span className="text-gray-500 dark:text-gray-400"> ou arraste e solte aqui</span>
               </div>
               
-              <p className="text-xs text-gray-500 dark:text-white">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 PDF, JPG, PNG, DOC, DOCX até 10MB cada
               </p>
             </div>
@@ -536,15 +536,15 @@ const ClientForm: React.FC = () => {
           
           {uploadedFiles.length > 0 && (
             <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Arquivos Anexados ({uploadedFiles.length})
               </h3>
               <div className="space-y-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center p-2 bg-gray-50 rounded">
-                    <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
-                    <span className="text-sm text-gray-700">{file.name}</span>
-                    <span className="text-xs text-gray-500 dark:text-white ml-auto">
+                  <div key={index} className="flex items-center p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                    <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 mr-2" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{file.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-auto">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </span>
                   </div>
@@ -559,7 +559,7 @@ const ClientForm: React.FC = () => {
           <button
             disabled={isUploading}
             type="submit"
-            className="px-8 py-3 text-lg font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 text-lg font-medium text-white bg-gray-600 dark:bg-gray-700 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isUploading ? 'Enviando...' : 'Enviar Dados'}
           </button>
