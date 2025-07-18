@@ -304,6 +304,11 @@ function App() {
               className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400"
               style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
             >
+            {/* Status Indicator */}
+            <div className="absolute top-0 right-0 m-2 flex items-center">
+              <span className="text-xs font-bold text-green-500">🟢 Online</span>
+            </div>
+            
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-4 transition-all shadow-xl">
                 <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -327,6 +332,11 @@ function App() {
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400"
             style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
+            {/* Status Indicator */}
+            <div className="absolute top-0 right-0 m-2 flex items-center">
+              <span className="text-xs font-bold text-green-500">🟢 Online</span>
+            </div>
+            
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-4 transition-all shadow-xl">
                 <FileText className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -350,6 +360,11 @@ function App() {
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400"
             style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
+            {/* Status Indicator */}
+            <div className="absolute top-0 right-0 m-2 flex items-center">
+              <span className="text-xs font-bold text-green-500">🟢 Online</span>
+            </div>
+            
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-4 transition-all shadow-xl">
                 <Settings className="w-6 h-6 text-teal-600 dark:text-teal-400" />
@@ -373,6 +388,11 @@ function App() {
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400"
             style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
+            {/* Status Indicator */}
+            <div className="absolute top-0 right-0 m-2 flex items-center">
+              <span className="text-xs font-bold text-green-500">🟢 Online</span>
+            </div>
+            
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-4 transition-all shadow-xl">
                 <Calculator className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -396,6 +416,11 @@ function App() {
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400"
             style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
+            {/* Status Indicator */}
+            <div className="absolute top-0 right-0 m-2 flex items-center">
+              <span className="text-xs font-bold text-green-500">🟢 Online</span>
+            </div>
+            
             <div className="relative z-10">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-4 transition-all shadow-xl">
                 <Crown className="w-6 h-6 text-gray-600 dark:text-gray-400" />
