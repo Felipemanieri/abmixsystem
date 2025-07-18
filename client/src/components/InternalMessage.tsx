@@ -204,64 +204,36 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       return;
     }
 
-    // Se for mensagem geral, enviar para todos os usuários (exceto o próprio remetente)
-    if (composeData.recipient === 'Mensagem Geral') {
-      const recipients = availableUsers.filter(user => user.name !== safeCurrentUser.name);
-      const newMessages: Message[] = recipients.map((user, index) => ({
-        id: `${Date.now()}-${index}-${user.name.replace(/\s+/g, '')}`,
-        sender: safeCurrentUser.name,
-        senderRole: safeCurrentUser.role,
-        recipient: user.name,
-        recipientRole: user.role,
-        subject: `[GERAL] ${composeData.subject}`,
-        content: composeData.content,
-        timestamp: new Date(),
-        read: false,
-        attachments: composeData.attachments.map(file => ({
-          name: file.name,
-          size: `${(file.size / 1024).toFixed(1)} KB`,
-          type: file.type
-        }))
-      }));
-
-      const updatedMessages = [...messages, ...newMessages];
-      setMessages(updatedMessages);
-      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
-      
-      console.log(`Mensagem geral enviada para ${recipients.length} usuários`);
-      alert(`Mensagem enviada para ${recipients.length} usuários!`);
-    } else {
-      // Mensagem individual
-      const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
-      if (!selectedUser) {
-        alert('Destinatário não encontrado.');
-        return;
-      }
-
-      const newMessage: Message = {
-        id: `${Date.now()}-individual-${selectedUser.name.replace(/\s+/g, '')}`,
-        sender: safeCurrentUser.name,
-        senderRole: safeCurrentUser.role,
-        recipient: composeData.recipient,
-        recipientRole: selectedUser.role,
-        subject: composeData.subject,
-        content: composeData.content,
-        timestamp: new Date(),
-        read: false,
-        attachments: composeData.attachments.map(file => ({
-          name: file.name,
-          size: `${(file.size / 1024).toFixed(1)} KB`,
-          type: file.type
-        }))
-      };
-
-      const updatedMessages = [...messages, newMessage];
-      setMessages(updatedMessages);
-      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
-
-      console.log(`Mensagem individual enviada para: ${selectedUser.name} (${selectedUser.department})`);
-      alert('Mensagem enviada com sucesso!');
+    // Criar mensagem apenas para o destinatário específico
+    const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
+    if (!selectedUser && composeData.recipient !== 'Mensagem Geral') {
+      alert('Destinatário não encontrado.');
+      return;
     }
+
+    const newMessage: Message = {
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      sender: safeCurrentUser.name,
+      senderRole: safeCurrentUser.role,
+      recipient: composeData.recipient,
+      recipientRole: selectedUser?.role || 'all',
+      subject: composeData.subject,
+      content: composeData.content,
+      timestamp: new Date(),
+      read: false,
+      attachments: composeData.attachments.map(file => ({
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(1)} KB`,
+        type: file.type
+      }))
+    };
+
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+    localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+
+    console.log(`Mensagem individual enviada para: ${composeData.recipient}`);
+    alert('Mensagem enviada com sucesso!');
 
     setComposeData({
       recipient: '',
@@ -289,6 +261,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     if (selectedMessage?.id === messageId) {
       setSelectedMessage(null);
     }
+    
+    // Atualizar contador de mensagens não lidas
+    const unread = updatedMessages.filter(msg => 
+      msg.recipient === safeCurrentUser.name && !msg.read
+    ).length;
+    setUnreadCount(unread);
   };
 
   const handleFileUpload = (files: FileList | null) => {
