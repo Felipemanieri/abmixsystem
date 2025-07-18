@@ -156,16 +156,21 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   // Sistema de notificações baseado em mensagens internas
   const [notifications, setNotifications] = useState([]);
 
-  // Carregar mensagens do localStorage e converter para notificações
+  // SISTEMA CORRIGIDO: Carregar apenas mensagens do usuário atual
   useEffect(() => {
     const loadInternalMessages = () => {
       try {
         const storedMessages = localStorage.getItem('internalMessages');
         if (storedMessages) {
           const messages = JSON.parse(storedMessages);
-          // Filtrar mensagens para o usuário atual que não foram lidas
+          // FILTRO CORRETO: Apenas mensagens para este usuário específico que não foram lidas
           const userMessages = messages
-            .filter(msg => msg.recipient === user.name && !msg.read)
+            .filter(msg => {
+              const isForThisUser = msg.recipient === user.name;
+              const isUnread = !msg.read;
+              console.log(`Verificando mensagem: destinatário=${msg.recipient}, usuário=${user.name}, lida=${msg.read}, para este usuário=${isForThisUser}, não lida=${isUnread}`);
+              return isForThisUser && isUnread;
+            })
             .map(msg => ({
               id: msg.id,
               title: `Nova mensagem de ${msg.sender}`,
@@ -175,17 +180,22 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               read: false,
               link: null
             }));
+          
+          console.log(`Usuário ${user.name} tem ${userMessages.length} notificações não lidas`);
           setNotifications(userMessages);
+        } else {
+          setNotifications([]);
         }
       } catch (error) {
         console.error('Erro ao carregar mensagens:', error);
+        setNotifications([]);
       }
     };
 
     loadInternalMessages();
     
-    // Verificar a cada 5 segundos por novas mensagens
-    const interval = setInterval(loadInternalMessages, 5000);
+    // Verificar a cada 2 segundos por novas mensagens
+    const interval = setInterval(loadInternalMessages, 2000);
     
     return () => clearInterval(interval);
   }, [user.name]);
@@ -528,7 +538,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   const handleMarkAsRead = (id: string) => {
-    // Marcar mensagem como lida no localStorage
+    // SISTEMA CORRIGIDO: Marcar mensagem como lida e REMOVER da lista de notificações
     try {
       const storedMessages = localStorage.getItem('internalMessages');
       if (storedMessages) {
@@ -537,20 +547,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           msg.id === id ? { ...msg, read: true } : msg
         );
         localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+        console.log(`Mensagem ${id} marcada como lida para ${user.name}`);
       }
     } catch (error) {
       console.error('Erro ao marcar mensagem como lida:', error);
     }
     
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
+    // REMOVER completamente da lista de notificações
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
   };
 
   const handleMarkAllAsRead = () => {
-    // Marcar todas as mensagens do usuário como lidas no localStorage
+    // SISTEMA CORRIGIDO: Marcar todas como lidas e LIMPAR lista de notificações
     try {
       const storedMessages = localStorage.getItem('internalMessages');
       if (storedMessages) {
@@ -559,32 +567,32 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           msg.recipient === user.name ? { ...msg, read: true } : msg
         );
         localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+        console.log(`Todas as mensagens de ${user.name} marcadas como lidas`);
       }
     } catch (error) {
       console.error('Erro ao marcar todas as mensagens como lidas:', error);
     }
     
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, read: true }))
-    );
+    // LIMPAR completamente a lista de notificações
+    setNotifications([]);
   };
 
   const handleDeleteNotification = (id: string) => {
-    // Deletar mensagem do localStorage
+    // SISTEMA CORRIGIDO: Deletar mensagem completamente
     try {
       const storedMessages = localStorage.getItem('internalMessages');
       if (storedMessages) {
         const messages = JSON.parse(storedMessages);
         const updatedMessages = messages.filter(msg => msg.id !== id);
         localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+        console.log(`Mensagem ${id} deletada completamente`);
       }
     } catch (error) {
       console.error('Erro ao deletar mensagem:', error);
     }
     
-    setNotifications(prev => 
-      prev.filter(notification => notification.id !== id)
-    );
+    // REMOVER da lista de notificações
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
   };
 
   const handleViewProposal = (proposal: Proposal) => {

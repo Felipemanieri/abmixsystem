@@ -204,36 +204,65 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       return;
     }
 
-    // Criar mensagem apenas para o destinatário específico
-    const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
-    if (!selectedUser && composeData.recipient !== 'Mensagem Geral') {
-      alert('Destinatário não encontrado.');
-      return;
+    // SISTEMA CORRIGIDO: Enviar APENAS para o destinatário escolhido
+    if (composeData.recipient === 'Mensagem Geral') {
+      // Para mensagem geral, enviar para TODOS exceto o remetente
+      const recipients = availableUsers.filter(user => user.name !== safeCurrentUser.name);
+      const newMessages: Message[] = recipients.map((user, index) => ({
+        id: `${Date.now()}-${index}-${user.name.replace(/\s+/g, '')}`,
+        sender: safeCurrentUser.name,
+        senderRole: safeCurrentUser.role,
+        recipient: user.name,
+        recipientRole: user.role,
+        subject: `[GERAL] ${composeData.subject}`,
+        content: composeData.content,
+        timestamp: new Date(),
+        read: false,
+        attachments: composeData.attachments.map(file => ({
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(1)} KB`,
+          type: file.type
+        }))
+      }));
+
+      const updatedMessages = [...messages, ...newMessages];
+      setMessages(updatedMessages);
+      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+      
+      console.log(`Mensagem geral enviada para ${recipients.length} usuários`);
+      alert(`Mensagem geral enviada para ${recipients.length} usuários!`);
+    } else {
+      // Para mensagem individual, enviar APENAS para a pessoa escolhida
+      const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
+      if (!selectedUser) {
+        alert('Destinatário não encontrado.');
+        return;
+      }
+
+      const newMessage: Message = {
+        id: `${Date.now()}-individual-${selectedUser.name.replace(/\s+/g, '')}`,
+        sender: safeCurrentUser.name,
+        senderRole: safeCurrentUser.role,
+        recipient: composeData.recipient,
+        recipientRole: selectedUser.role,
+        subject: composeData.subject,
+        content: composeData.content,
+        timestamp: new Date(),
+        read: false,
+        attachments: composeData.attachments.map(file => ({
+          name: file.name,
+          size: `${(file.size / 1024).toFixed(1)} KB`,
+          type: file.type
+        }))
+      };
+
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
+      localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+
+      console.log(`APENAS ${composeData.recipient} foi notificado`);
+      alert('Mensagem enviada apenas para a pessoa escolhida!');
     }
-
-    const newMessage: Message = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      sender: safeCurrentUser.name,
-      senderRole: safeCurrentUser.role,
-      recipient: composeData.recipient,
-      recipientRole: selectedUser?.role || 'all',
-      subject: composeData.subject,
-      content: composeData.content,
-      timestamp: new Date(),
-      read: false,
-      attachments: composeData.attachments.map(file => ({
-        name: file.name,
-        size: `${(file.size / 1024).toFixed(1)} KB`,
-        type: file.type
-      }))
-    };
-
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
-
-    console.log(`Mensagem individual enviada para: ${composeData.recipient}`);
-    alert('Mensagem enviada com sucesso!');
 
     setComposeData({
       recipient: '',
