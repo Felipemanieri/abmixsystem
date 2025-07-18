@@ -53,6 +53,7 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
+  ArrowLeft,
   Copy,
   MessageSquare,
   Bell,
