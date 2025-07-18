@@ -806,18 +806,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Carregar no Google Drive</label>
                 <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
-                  <option value="realtime">Tempo Real (atual)</option>
-                  <option value="60">1 minuto</option>
-                  <option value="300">5 minutos</option>
-                  <option value="600">10 minutos</option>
-                  <option value="900">15 minutos</option>
-                  <option value="1800">30 minutos</option>
-                  <option value="3600">1 hora</option>
-                  <option value="10800">3 horas</option>
-                  <option value="18000">5 horas</option>
-                  <option value="36000">10 horas</option>
-                  <option value="54000">15 horas</option>
-                  <option value="86400">24 horas</option>
+                  <option value="automatic">Automático</option>
+                  <option value="manual">Manual</option>
                 </select>
               </div>
               <div>
