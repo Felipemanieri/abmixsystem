@@ -439,13 +439,13 @@ function App() {
         </div>
 
         {/* Features Section */}
-        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-3xl p-8 mb-16 border border-gray-200 dark:border-gray-700 max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-3xl px-6 py-4 mb-16 border border-gray-200 dark:border-gray-700 max-w-5xl mx-auto">
+          <div className="text-center mb-4">
 
             <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">Tecnologia de ponta para simplificar seus processos</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Database className="w-10 h-10 text-gray-600 dark:text-gray-400" />
