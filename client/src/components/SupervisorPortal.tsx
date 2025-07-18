@@ -62,6 +62,15 @@ interface Award {
 export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   const [activeView, setActiveView] = useState<SupervisorView>('dashboard');
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO SUPERVISOR PORTAL
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no SupervisorPortal para ${user.name}`);
+  }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
@@ -2894,9 +2903,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
             >
               <Bell size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                3
-              </span>
+              {/* NOTIFICAÇÕES DESABILITADAS - SEM CONTADOR */}
             </button>
             
             <button
@@ -3164,15 +3171,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       )}
 
       {/* Modals */}
-      {showNotifications && (
-        <NotificationCenter 
-          notifications={[]}
-          onMarkAsRead={() => {}}
-          onMarkAllAsRead={() => {}}
-          onDeleteNotification={() => {}}
-          onClose={() => setShowNotifications(false)} 
-        />
-      )}
+      {/* NOTIFICAÇÕES DESABILITADAS - MODAL REMOVIDO */}
       
       {showInternalMessage && (
         <InternalMessage 

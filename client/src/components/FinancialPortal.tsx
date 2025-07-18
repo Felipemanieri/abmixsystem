@@ -37,6 +37,15 @@ interface Transaction {
 const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO FINANCIAL PORTAL
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no FinancialPortal para ${user.name}`);
+  }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showAutomationModal, setShowAutomationModal] = useState(false);
   const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<{id: string, client: string} | null>(null);
@@ -790,8 +799,10 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 className="relative p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-white dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 <Bell className="h-6 w-6" />
-                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white" />
+                {/* NOTIFICAÇÕES DESABILITADAS - SEM CONTADOR */}
               </button>
+              
+              {/* NOTIFICAÇÕES COMPLETAMENTE REMOVIDAS */}
               
               <div className="flex items-center space-x-3">
                 <div className="text-right">

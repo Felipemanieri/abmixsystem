@@ -52,6 +52,15 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<'cotacoes' | 'profile' | 'complete-proposal'>('cotacoes');
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO CLIENT PORTAL
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no ClientPortal para ${user.name}`);
+  }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
@@ -95,8 +104,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     };
   }, [statusManager]);
   
-  // Sistema de notificações limpo
-  const [notifications, setNotifications] = useState([]);
+  // Sistema de notificações já definido acima
 
   // Dados de cotações criadas pelo vendedor (sincronizadas do ProposalGenerator)
   const cotacoes: Cotacao[] = [
@@ -552,21 +560,10 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.filter(n => !n.read).length}
-                  </span>
-                )}
+                {/* CONTADOR DESABILITADO */}
               </button>
               
-              {showNotifications && (
-                <NotificationCenter 
-                  notifications={notifications}
-                  onMarkAsRead={handleMarkAsRead}
-                  onMarkAllAsRead={handleMarkAllAsRead}
-                  onClose={() => setShowNotifications(false)}
-                />
-              )}
+              {/* NOTIFICAÇÕES COMPLETAMENTE DESABILITADAS */}
               
               <button
                 onClick={() => setShowInternalMessage(true)}

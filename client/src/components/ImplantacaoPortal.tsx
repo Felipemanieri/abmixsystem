@@ -57,6 +57,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const [showChat, setShowChat] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO IMPLANTAÇÃO PORTAL
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no ImplantacaoPortal para ${user.name}`);
+  }, [user.name]);
+  
   // Ativar sincronização em tempo real
   useEffect(() => {
     realTimeSync.enableAggressivePolling();
@@ -124,9 +133,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   // const handlePriorityUpdate = async (proposalId: string, newPriority: 'low' | 'medium' | 'high') => {
   //   ... funcionalidade removida
   // };
-
-  // Sistema de notificações - será configurado conforme necessário
-  const [notifications, setNotifications] = useState([]);
   
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
@@ -863,21 +869,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.filter(n => !n.read).length}
-                  </span>
-                )}
+                {/* NOTIFICAÇÕES DESABILITADAS */}
               </button>
               
-              {showNotifications && (
-                <NotificationCenter 
-                  notifications={notifications}
-                  onMarkAsRead={handleMarkAsRead}
-                  onMarkAllAsRead={handleMarkAllAsRead}
-                  onClose={() => setShowNotifications(false)}
-                />
-              )}
+              {/* NOTIFICAÇÕES COMPLETAMENTE DESABILITADAS */}
               
               <button
                 onClick={() => setShowInternalMessage(true)}

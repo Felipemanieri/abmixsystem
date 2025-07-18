@@ -101,6 +101,15 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     }
   };
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO VENDOR PORTAL
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no VendorPortal para ${user.name}`);
+  }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
   const [proposalStatuses, setProposalStatuses] = useState<Map<string, ProposalStatus>>(new Map());
@@ -153,8 +162,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     };
   }, [statusManager]);
 
-  // Sistema de notificações LIMPO E CORRIGIDO
-  const [notifications, setNotifications] = useState([]);
+  // Sistema de notificações já definido acima
 
   // FORÇAR LIMPEZA TOTAL AO CARREGAR
   useEffect(() => {
@@ -1632,15 +1640,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 {/* DESABILITADO: Contador de notificações */}
               </button>
               
-              {showNotifications && (
-                <NotificationCenter 
-                  notifications={[]}
-                  onMarkAsRead={handleMarkAsRead}
-                  onMarkAllAsRead={handleMarkAllAsRead}
-                  onDeleteNotification={handleDeleteNotification}
-                  onClose={() => setShowNotifications(false)}
-                />
-              )}
+              {/* NOTIFICAÇÕES COMPLETAMENTE DESABILITADAS */}
               
               <button
                 onClick={() => setShowInternalMessage(true)}

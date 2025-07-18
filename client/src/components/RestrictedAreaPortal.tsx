@@ -117,7 +117,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
   const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS no RestrictedAreaPortal para ${user.name}`);
+  }, [user.name]);
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -1177,6 +1185,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full transition-colors"
                 >
                   <Bell className="w-5 h-5" />
+                  {/* NOTIFICAÇÕES DESABILITADAS */}
                 </button>
               </div>
               
@@ -1716,16 +1725,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         />
       )}
       
-      {/* Sistema de Notificações */}
-      {showNotifications && (
-        <NotificationCenter 
-          notifications={notifications}
-          onMarkAsRead={() => {}}
-          onMarkAllAsRead={() => {}}
-          onDeleteNotification={() => {}}
-          onClose={() => setShowNotifications(false)} 
-        />
-      )}
+      {/* NOTIFICAÇÕES COMPLETAMENTE DESABILITADAS */}
       
       {/* Sistema de Mensagens Internas */}
       {showInternalMessage && (
