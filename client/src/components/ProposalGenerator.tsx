@@ -1645,7 +1645,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer" style={{backgroundColor: '#f3f4f6'}}>
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -1654,9 +1654,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   id="escolher-arquivo"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
-                <FileText className="w-8 h-8 text-gray-500 mb-2" />
-                <span className="text-sm font-medium text-gray-600">Escolher Arquivo</span>
-                <span className="text-xs text-gray-400">Do computador/celular</span>
+                <FileText className="w-8 h-8 text-gray-600 mb-2" />
+                <span className="text-sm font-medium text-gray-700">Escolher Arquivo</span>
+                <span className="text-xs text-gray-500">Do computador/celular</span>
               </label>
 
               <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
@@ -1820,15 +1820,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex justify-between gap-4 mt-6">
               <button
                 onClick={limparFormulario}
-                className="flex items-center px-10 py-5 bg-red-500 text-white rounded-lg font-black text-xl shadow-2xl"
-                style={{backgroundColor: '#ef4444', color: 'white', display: 'flex', alignItems: 'center'}}
+                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-md"
               >
-                <Trash2 className="w-6 h-6 mr-4" style={{color: 'white'}} />
-                <span style={{color: 'white'}}>LIMPAR FORMULÁRIO</span>
+                <Trash2 className="w-4 h-4 mr-2" />
+                Limpar Formulário
               </button>
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-3 bg-blue-600 dark:bg-blue-600 text-white dark:text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-700 transition-colors font-medium shadow-lg"
+                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
