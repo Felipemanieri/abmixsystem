@@ -2407,7 +2407,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <h3 className="text-white dark:text-white base font-semibold text-white dark:text-white flex items-center gap-2">
               <PieChart size={18} />
               Painel de Dados em Tempo Real
-              <span className="ml-2 text-xs bg-green-100 text-green-700 dark:text-white px-2 py-1 rounded-full">
+              <span className="ml-2 text-xs bg-green-700 text-white px-2 py-1 rounded-full">
                 {filteredData.length} registros
               </span>
             </h3>
