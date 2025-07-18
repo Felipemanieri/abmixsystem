@@ -2415,45 +2415,45 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="p-6">
             {/* KPIs Principais - Versão Compacta */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200">
+              <div className="bg-blue-800 p-3 rounded-lg border border-blue-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white dark:text-white xs font-medium text-blue-700 dark:text-white">Total de Propostas</p>
-                    <p className="text-white dark:text-white xl font-bold text-blue-900 dark:text-white">{reportData.total}</p>
+                    <p className="text-xs font-medium text-blue-100">Total de Propostas</p>
+                    <p className="text-xl font-bold text-white">{reportData.total}</p>
                   </div>
-                  <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <FileText className="h-6 w-6 text-blue-300" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
+              <div className="bg-green-800 p-3 rounded-lg border border-green-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white dark:text-white xs font-medium text-green-700 dark:text-white">Faturamento Total</p>
-                    <p className="text-white dark:text-white xl font-bold text-green-900 dark:text-white">{formatCurrency(reportData.faturamento.toString())}</p>
+                    <p className="text-xs font-medium text-green-100">Faturamento Total</p>
+                    <p className="text-xl font-bold text-white">{formatCurrency(reportData.faturamento.toString())}</p>
                   </div>
-                  <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
+                  <DollarSign className="h-6 w-6 text-green-300" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
+              <div className="bg-purple-800 p-3 rounded-lg border border-purple-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white dark:text-white xs font-medium text-purple-700 dark:text-white">Ticket Médio</p>
-                    <p className="text-white dark:text-white xl font-bold text-purple-900 dark:text-white">
+                    <p className="text-xs font-medium text-purple-100">Ticket Médio</p>
+                    <p className="text-xl font-bold text-white">
                       {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
                     </p>
                   </div>
-                  <Calculator className="h-6 w-6 text-purple-600 dark:text-white" />
+                  <Calculator className="h-6 w-6 text-purple-300" />
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-3 rounded-lg border border-orange-200">
+              <div className="bg-orange-800 p-3 rounded-lg border border-orange-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-white dark:text-white xs font-medium text-orange-700 dark:text-white">Vendedores Ativos</p>
-                    <p className="text-white dark:text-white xl font-bold text-orange-900 dark:text-white">{uniqueVendors.length}</p>
+                    <p className="text-xs font-medium text-orange-100">Vendedores Ativos</p>
+                    <p className="text-xl font-bold text-white">{uniqueVendors.length}</p>
                   </div>
-                  <Users className="h-6 w-6 text-orange-600 dark:text-white" />
+                  <Users className="h-6 w-6 text-orange-300" />
                 </div>
               </div>
             </div>
