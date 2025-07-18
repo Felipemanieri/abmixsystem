@@ -53,7 +53,8 @@ import {
   ChevronDown,
   ChevronUp,
   Copy,
-  MessageSquare
+  MessageSquare,
+  Bell
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
@@ -64,6 +65,7 @@ import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
 import InternalMessage from './InternalMessage';
+import NotificationCenter from './NotificationCenter';
 
 import BackupManager from './BackupManager';
 
@@ -114,6 +116,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showDriveManagementModal, setShowDriveManagementModal] = useState(false);
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -1167,6 +1171,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
               
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(true)}
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full transition-colors"
+                >
+                  <Bell className="w-5 h-5" />
+                </button>
+              </div>
+              
               <button
                 onClick={() => setShowInternalMessage(true)}
                 className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full transition-colors"
@@ -1703,11 +1716,23 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         />
       )}
       
+      {/* Sistema de Notificações */}
+      {showNotifications && (
+        <NotificationCenter 
+          notifications={notifications}
+          onMarkAsRead={() => {}}
+          onMarkAllAsRead={() => {}}
+          onDeleteNotification={() => {}}
+          onClose={() => setShowNotifications(false)} 
+        />
+      )}
+      
       {/* Sistema de Mensagens Internas */}
       {showInternalMessage && (
         <InternalMessage 
+          isOpen={true}
           onClose={() => setShowInternalMessage(false)}
-          userRole="admin"
+          currentUser={{ name: user.name, role: 'admin' }}
         />
       )}
       
