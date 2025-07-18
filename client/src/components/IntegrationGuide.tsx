@@ -224,13 +224,13 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Suporte */}
-      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Suporte para Integrações</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Suporte para Integrações</h2>
         
-        <div className="bg-orange-50 p-4 rounded-lg mb-6">
+        <div className="bg-orange-50 dark:bg-orange-900/30 p-4 rounded-lg mb-6">
           <div className="flex items-start">
-            <AlertCircle className="w-5 h-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-orange-700">
+            <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-orange-700 dark:text-orange-200">
               Para suporte técnico com integrações, entre em contato com nossa equipe de suporte pelo email <span className="font-medium">suporte@abmix.com.br</span> ou pelo WhatsApp <span className="font-medium">(11) 99999-9999</span>.
             </p>
           </div>
@@ -239,7 +239,7 @@ const IntegrationGuide: React.FC = () => {
         <div className="flex justify-center">
           <button 
             onClick={() => window.open('https://calendly.com/abmix/integracao', '_blank')}
-            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+            className="px-6 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors"
           >
             Agendar Consultoria de Integração
           </button>

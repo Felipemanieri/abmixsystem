@@ -309,20 +309,20 @@ export default function UnifiedUserManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow dark:shadow-gray-900/30 p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <Users className="w-6 h-6 text-blue-600 mr-3" />
+            <Users className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Gestão Unificada de Usuários</h3>
-              <p className="text-gray-600">Gerenciar usuários de todos os painéis do sistema</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gestão Unificada de Usuários</h3>
+              <p className="text-gray-600 dark:text-gray-300">Gerenciar usuários de todos os painéis do sistema</p>
             </div>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => refetch()}
               disabled={isLoading}
-              className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
               Atualizar
@@ -430,8 +430,8 @@ export default function UnifiedUserManagement() {
               onClick={() => setShowPasswords(!showPasswords)}
               className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${
                 showPasswords
-                  ? 'border-orange-300 bg-orange-50 text-orange-700'
-                  : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'border-orange-300 bg-orange-50 dark:bg-orange-900 text-orange-700 dark:text-orange-200'
+                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               {showPasswords ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
@@ -474,18 +474,18 @@ export default function UnifiedUserManagement() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-white">
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
                     <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2" />
                     Carregando usuários...
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-white">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500 dark:text-white" />
+                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
                     Nenhum usuário encontrado para este painel
                   </td>
                 </tr>
@@ -498,21 +498,21 @@ export default function UnifiedUserManagement() {
                           <PanelIcon className={`w-4 h-4 text-${currentPanel.color}-600`} />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-500 dark:text-white">{user.role}</div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">{user.role}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {user.email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {showPasswords ? (
                         <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                           {user.password || (user.role === 'vendor' ? '120784' : 'N/A')}
                         </span>
                       ) : (
-                        <span className="text-gray-400 dark:text-gray-500 dark:text-white">••••••••</span>
+                        <span className="text-gray-400 dark:text-gray-500">••••••••</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -534,7 +534,7 @@ export default function UnifiedUserManagement() {
                         )}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                       {user.lastLogin 
                         ? new Date(user.lastLogin).toLocaleDateString('pt-BR')
                         : 'Nunca'
@@ -567,15 +567,15 @@ export default function UnifiedUserManagement() {
       {/* User Modal */}
       {showUserModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full mx-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full mx-4">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {editingUser ? 'Editar Usuário' : 'Novo Usuário'}
                 </h3>
                 <button
                   onClick={() => setShowUserModal(false)}
-                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
+                  className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -583,7 +583,7 @@ export default function UnifiedUserManagement() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Nome Completo
                   </label>
                   <input
@@ -596,7 +596,7 @@ export default function UnifiedUserManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Email
                   </label>
                   <input
@@ -609,7 +609,7 @@ export default function UnifiedUserManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Senha
                   </label>
                   <input
@@ -622,7 +622,7 @@ export default function UnifiedUserManagement() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Painel
                   </label>
                   <select
@@ -647,7 +647,7 @@ export default function UnifiedUserManagement() {
                     onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
                     className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="active" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="active" className="ml-2 text-sm text-gray-700 dark:text-gray-200">
                     Usuário ativo
                   </label>
                 </div>
@@ -656,7 +656,7 @@ export default function UnifiedUserManagement() {
                   <button
                     type="button"
                     onClick={() => setShowUserModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     Cancelar
                   </button>

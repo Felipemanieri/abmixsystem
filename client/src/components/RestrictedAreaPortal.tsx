@@ -829,7 +829,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Notificações WhatsApp</h4>
               </div>
-              <p className="text-sm text-gray-600 dark:text-white mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Envio de notificações automáticas para vendedores e clientes
               </p>
               <div className="flex items-center justify-between">
@@ -848,7 +848,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <Cloud className="w-5 h-5 text-orange-600 dark:text-white mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Backup Automático</h4>
               </div>
-              <p className="text-sm text-gray-600 dark:text-white mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Backup diário de todos os dados do sistema
               </p>
               <div className="flex items-center justify-between">
@@ -895,21 +895,21 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Planilha Principal</h4>
               </div>
-              <p className="text-sm text-gray-600 dark:text-white mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Planilha unificada com todos os dados dos clientes e propostas
               </p>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Status:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Status:</span>
                   <span className="text-green-600 dark:text-green-400 font-medium">Sincronizada</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Última atualização:</span>
-                  <span className="text-gray-600 dark:text-white">2 min atrás</span>
+                  <span className="text-gray-600 dark:text-gray-300">Última atualização:</span>
+                  <span className="text-gray-600 dark:text-gray-300">2 min atrás</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Total de registros:</span>
-                  <span className="text-gray-600 dark:text-white">247</span>
+                  <span className="text-gray-600 dark:text-gray-300">Total de registros:</span>
+                  <span className="text-gray-600 dark:text-gray-300">247</span>
                 </div>
               </div>
               <div className="mt-4 flex space-x-2">
@@ -933,21 +933,21 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <Database className="w-5 h-5 text-purple-600 dark:text-white mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white">Relatórios</h4>
               </div>
-              <p className="text-sm text-gray-600 dark:text-white mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Planilhas de relatórios e análises automatizadas
               </p>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Status:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Status:</span>
                   <span className="text-green-600 dark:text-green-400 font-medium">Ativa</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Relatórios gerados:</span>
-                  <span className="text-gray-600 dark:text-white">15</span>
+                  <span className="text-gray-600 dark:text-gray-300">Relatórios gerados:</span>
+                  <span className="text-gray-600 dark:text-gray-300">15</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Frequência:</span>
-                  <span className="text-gray-600 dark:text-white">Diária</span>
+                  <span className="text-gray-600 dark:text-gray-300">Frequência:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Diária</span>
                 </div>
               </div>
               <div className="mt-4 flex space-x-2">
