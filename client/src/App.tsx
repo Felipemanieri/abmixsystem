@@ -51,16 +51,33 @@ function App() {
   // Carrega configurações globais dos portais
   useEffect(() => {
     // Configurações padrão sem necessidade de API
-    setPortalVisibility({
-      showClientPortal: true,
-      showVendorPortal: true,
-      showFinancialPortal: true,
-      showImplementationPortal: true,
-      showSupervisorPortal: true
-    });
+    const loadPortalVisibility = async () => {
+      try {
+        const response = await fetch('/api/portal-visibility');
+        if (response.ok) {
+          const data = await response.json();
+          setPortalVisibility(data);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar visibilidade dos portais:', error);
+      }
+    };
+    
+    loadPortalVisibility();
+
+    // Escuta mudanças da área restrita
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'PORTAL_VISIBILITY_CHANGED') {
+        loadPortalVisibility();
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
 
     // Sistema funcionando normalmente
     console.log('Sistema Abmix carregado com sucesso');
+    
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   // Verificar URLs específicas para acesso direto aos portais
@@ -299,6 +316,10 @@ function App() {
                 Acessar Portal
               </div>
             </div>
+            {/* Status Indicator */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
+              <span className="text-green-600">🟢 Online</span>
+            </div>
           </div>
           )}
 
@@ -320,6 +341,10 @@ function App() {
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Acessar Portal
               </div>
+            </div>
+            {/* Status Indicator */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
+              <span className="text-green-600">🟢 Online</span>
             </div>
           </div>
           )}
@@ -343,6 +368,10 @@ function App() {
                 Acessar Portal
               </div>
             </div>
+            {/* Status Indicator */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
+              <span className="text-green-600">🟢 Online</span>
+            </div>
           </div>
           )}
 
@@ -365,6 +394,10 @@ function App() {
                 Acessar Portal
               </div>
             </div>
+            {/* Status Indicator */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
+              <span className="text-green-600">🟢 Online</span>
+            </div>
           </div>
           )}
 
@@ -386,6 +419,10 @@ function App() {
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Acessar Portal
               </div>
+            </div>
+            {/* Status Indicator */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
+              <span className="text-green-600">🟢 Online</span>
             </div>
           </div>
           )}
