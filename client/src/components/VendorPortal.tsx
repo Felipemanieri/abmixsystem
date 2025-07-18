@@ -1349,33 +1349,33 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
-                className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
                     <Plus className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-white dark:text-white">Nova Proposta</h3>
-                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Criar proposta e cotações</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Nova Proposta</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Criar proposta e cotações</p>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setActiveView('tracker')}
-                className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
                     <BarChart3 className="w-6 h-6 text-purple-600 dark:text-white" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-white dark:text-white">Acompanhar</h3>
-                    <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">Status propostas</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Acompanhar</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Status propostas</p>
                   </div>
                 </div>
               </button>
@@ -1408,11 +1408,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 {realProposals?.length === 0 ? (
                   <div className="p-8 text-center">
                     <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-white dark:text-white mb-2">Nenhuma proposta criada</h3>
-                    <p className="text-white dark:text-gray-500 dark:text-white mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma proposta criada</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
                     <button
                       onClick={() => setActiveView('new-proposal')}
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Nova Proposta

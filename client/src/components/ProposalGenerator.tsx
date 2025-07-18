@@ -784,7 +784,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Nome Completo *
           </label>
           <input
@@ -803,7 +803,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             CPF *
           </label>
           <input
@@ -822,7 +822,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             RG *
           </label>
           <input
@@ -841,7 +841,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Data de Nascimento *
           </label>
           <input
@@ -860,7 +860,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
         {type === 'dependente' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
               Parentesco *
             </label>
             <select
@@ -879,7 +879,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         )}
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Nome da Mãe *
           </label>
           <input
@@ -898,7 +898,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Sexo *
           </label>
           <select
@@ -919,7 +919,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Estado Civil *
           </label>
           <select
@@ -942,7 +942,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Peso (kg)
           </label>
           <input
@@ -961,7 +961,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Altura (cm)
           </label>
           <input
@@ -980,7 +980,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Email Pessoal *
           </label>
           <input
@@ -999,7 +999,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Telefone Pessoal *
           </label>
           <input
@@ -1018,7 +1018,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Email Empresa
           </label>
           <input
@@ -1037,7 +1037,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Telefone Empresa
           </label>
           <input
@@ -1056,7 +1056,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             CEP *
           </label>
           <input
@@ -1097,7 +1097,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Endereço Completo *
           </label>
           <input
@@ -1116,7 +1116,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
             Dados para Reembolso
           </label>
           <textarea
@@ -1175,11 +1175,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
         <div className="space-y-8">
           {/* Dados do Contrato */}
-          <div className="bg-blue-50 dark:bg-blue-900 p-6 rounded-lg">
+          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Building className="w-5 h-5 text-blue-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <Building className="w-5 h-5 text-gray-300 mr-2" />
+                <h2 className="text-xl font-semibold text-white dark:text-white">
                   Dados do Contrato
                 </h2>
               </div>
@@ -1195,7 +1195,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Nome da Empresa *
                 </label>
                 <input
@@ -1213,7 +1213,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   CNPJ *
                 </label>
                 <input
@@ -1231,7 +1231,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Plano Contratado *
                 </label>
                 <input
@@ -1249,7 +1249,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Valor Mensal (R$) *
                 </label>
                 <input
@@ -1267,7 +1267,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Início da Vigência *
                 </label>
                 <input
@@ -1284,7 +1284,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Período mínimo de vigência *
                 </label>
                 <select
@@ -1317,7 +1317,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   />
-                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Inclui cobertura odontológica
                   </label>
                 </div>
@@ -1334,7 +1334,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                         contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     />
-                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                       Livre adesão
                     </label>
                   </div>
@@ -1350,7 +1350,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                         contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     />
-                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                       Compulsório
                     </label>
                   </div>
@@ -1367,7 +1367,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   />
-                  <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Aproveitamento de carência congênere
                   </label>
                 </div>
@@ -1386,7 +1386,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               </div>
               <button
                 onClick={adicionarTitular}
-                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Titular
@@ -1471,14 +1471,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     onChange={(e) => setInternalData(prev => ({ ...prev, reuniao: e.target.checked }))}
                     className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-orange-500"
                   />
-                  <label htmlFor="reuniao" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  <label htmlFor="reuniao" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Venda em reunião
                   </label>
                 </div>
 
                 {internalData.reuniao && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                       Nome da Reunião
                     </label>
                     <input
@@ -1499,14 +1499,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     onChange={(e) => setInternalData(prev => ({ ...prev, vendaDupla: e.target.checked }))}
                     className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:ring-orange-500"
                   />
-                  <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-300 dark:text-gray-300">
                     Venda dupla
                   </label>
                 </div>
 
                 {internalData.vendaDupla && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                       Nome do Parceiro
                     </label>
                     <input
@@ -1520,7 +1520,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                     Desconto (%)
                   </label>
                   <input
@@ -1533,7 +1533,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                     Origem da Venda
                   </label>
                   <select
@@ -1551,7 +1551,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                     Autorizador do Desconto
                   </label>
                   <select
@@ -1567,7 +1567,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">
                     Observações Financeiras
                   </label>
                   <textarea
@@ -1583,10 +1583,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Observações para o Cliente */}
-          <div className="bg-green-50 dark:bg-green-900 p-6 rounded-lg">
+          <div className="bg-gray-700 dark:bg-gray-800 p-6 rounded-lg">
             <div className="flex items-center mb-4">
-              <Info className="w-5 h-5 text-green-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <Info className="w-5 h-5 text-gray-300 mr-2" />
+              <h2 className="text-xl font-semibold text-white dark:text-white">
                 Observações para o Cliente
               </h2>
             </div>
@@ -1604,9 +1604,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 placeholder="Exemplo: Lembre-se de enviar todos os documentos em boa qualidade. Para dúvidas específicas, entre em contato através do chat..."
               />
               
-              <div className="flex items-start space-x-2 p-3 bg-green-100 rounded-lg">
-                <Info className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                <p className="text-xs text-green-700">
+              <div className="flex items-start space-x-2 p-3 bg-gray-600 rounded-lg">
+                <Info className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-gray-300">
                   <strong>Estas observações aparecerão</strong> na seção "Observações do Vendedor" quando o cliente acessar o formulário de preenchimento de dados.
                 </p>
               </div>
@@ -1634,7 +1634,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               />
               <label htmlFor="file-upload-cotacao" className="cursor-pointer">
                 <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <p className="text-lg font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Arraste arquivos aqui ou escolha uma opção
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
@@ -1645,7 +1645,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-700 dark:bg-gray-800 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -1659,7 +1659,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 <span className="text-xs text-blue-600">Do computador/celular</span>
               </label>
 
-              <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg cursor-pointer hover:bg-green-100 transition-colors">
+              <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-gray-700 dark:bg-gray-800 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors">
                 <input
                   type="file"
                   accept="image/*"
@@ -1668,9 +1668,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   className="hidden"
                   id="tirar-foto"
                 />
-                <Camera className="w-8 h-8 text-green-600 mb-2" />
-                <span className="text-sm font-medium text-green-700">Tirar Foto</span>
-                <span className="text-xs text-green-600">Câmera do dispositivo</span>
+                <Camera className="w-8 h-8 text-gray-300 mb-2" />
+                <span className="text-sm font-medium text-gray-300">Tirar Foto</span>
+                <span className="text-xs text-gray-400">Câmera do dispositivo</span>
               </label>
 
               <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg cursor-pointer hover:bg-purple-100 transition-colors">
@@ -1692,7 +1692,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Operadora */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Operadora *
                 </label>
                 <select
@@ -1715,7 +1715,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Tipo do Plano */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Tipo do Plano *
                 </label>
                 <select
@@ -1733,7 +1733,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Número de Vidas */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Número de Vidas *
                 </label>
                 <input
@@ -1748,7 +1748,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Valor */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Valor (R$) *
                 </label>
                 <input
@@ -1765,7 +1765,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Validade da Cotação */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Validade da Cotação *
                 </label>
                 <input
@@ -1778,7 +1778,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Data de Envio */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
                   Data de Envio *
                 </label>
                 <input
@@ -1793,7 +1793,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             {/* Lista de Arquivos Anexados */}
             {arquivosAnexados.length > 0 && (
               <div className="mb-6 space-y-2">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <p className="text-sm font-medium text-gray-300 dark:text-gray-300">
                   Arquivos Anexados ({arquivosAnexados.length})
                 </p>
                 <div className="space-y-2">
@@ -1801,7 +1801,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
                       <div className="flex items-center">
                         <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white mr-2" />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">{arquivo.name}</span>
+                        <span className="text-sm text-gray-300 dark:text-gray-300">{arquivo.name}</span>
                         <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
                       </div>
                       <button
@@ -1820,7 +1820,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex justify-end">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -1904,7 +1904,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     <div className="flex justify-end space-x-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                       <button
                         onClick={() => enviarWhatsApp(cotacao)}
-                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                       >
                         <Phone className="w-4 h-4 mr-2" />
                         WhatsApp
@@ -1928,7 +1928,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex space-x-3">
               <button
                 onClick={handleSave}
-                className="flex items-center px-6 py-3 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Rascunho
