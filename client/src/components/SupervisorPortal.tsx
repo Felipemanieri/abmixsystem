@@ -2867,7 +2867,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-8">
             {/* Logo Abmix */}
@@ -2881,27 +2881,27 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             {/* Texto separado */}
             <div>
-              <h1 className="text-white dark:text-white xl font-semibold text-white dark:text-white leading-tight">
-                <span className="text-white dark:text-white [#0AB3B8] font-bold">Ab</span><span className="text-white dark:text-white white">mix</span> Portal Supervisor
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white leading-tight">
+                <span className="text-cyan-600 dark:text-cyan-400 font-bold">Ab</span><span className="text-gray-900 dark:text-white">mix</span> Portal Supervisor
               </h1>
-              <p className="text-white dark:text-white sm text-white">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg relative"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
             >
               <Bell size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 3
               </span>
             </button>
             
             <button
               onClick={() => setShowInternalMessage(!showInternalMessage)}
-              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <MessageSquare size={20} />
             </button>
@@ -2910,7 +2910,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={onLogout}
-              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <LogOut size={20} />
             </button>
@@ -2919,7 +2919,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       </header>
 
       {/* Navigation Tabs */}
-      <nav className="bg-gray-800 border-b shadow-sm dark:shadow-gray-900/30">
+      <nav className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="px-6">
           <div className="flex space-x-8 overflow-x-auto">
             <button
