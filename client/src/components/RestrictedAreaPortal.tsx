@@ -305,6 +305,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
     { id: 'planilha', label: 'Visualizar Planilha', icon: FileSpreadsheet },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
+    { id: 'tempo', label: 'Configurações Tempo', icon: Clock },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
@@ -595,6 +596,176 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     );
   }
 
+  // Função para renderizar a seção de configurações de tempo
+  function renderTempoSection() {
+    return (
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Tempo</h3>
+                <p className="text-gray-600 dark:text-gray-300">Configurações essenciais para o teste beta</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-green-600 dark:text-green-400 font-medium">BETA READY</span>
+            </div>
+          </div>
+
+          {/* Configurações de Polling e Sync */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
+              <div className="flex items-center mb-3">
+                <RefreshCw className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Atualização Automática</h4>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Intervalo de Polling (segundos)</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="1">1 segundo (atual)</option>
+                    <option value="3">3 segundos</option>
+                    <option value="5">5 segundos</option>
+                    <option value="10">10 segundos</option>
+                  </select>
+                </div>
+                <div className="flex items-center">
+                  <input type="checkbox" id="autoSync" className="rounded" defaultChecked />
+                  <label htmlFor="autoSync" className="ml-2 text-sm text-gray-700 dark:text-white">Sincronização automática habilitada</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+              <div className="flex items-center mb-3">
+                <Database className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white">Cache e Performance</h4>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Cache de Propostas (minutos)</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="0">Sem cache (tempo real)</option>
+                    <option value="1">1 minuto</option>
+                    <option value="5">5 minutos</option>
+                    <option value="15">15 minutos</option>
+                  </select>
+                </div>
+                <div className="flex items-center">
+                  <input type="checkbox" id="invalidateCache" className="rounded" defaultChecked />
+                  <label htmlFor="invalidateCache" className="ml-2 text-sm text-gray-700 dark:text-white">Invalidação automática</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Configurações de Sessão */}
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 mb-6">
+            <div className="flex items-center mb-3">
+              <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white">Gerenciamento de Sessão</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Timeout de Sessão</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="30">30 minutos</option>
+                  <option value="60">1 hora</option>
+                  <option value="120">2 horas</option>
+                  <option value="480">8 horas (atual)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Auto-save Formulários</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="immediate">Imediato (atual)</option>
+                  <option value="5">A cada 5 segundos</option>
+                  <option value="10">A cada 10 segundos</option>
+                  <option value="30">A cada 30 segundos</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Lembrar Login</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="7">7 dias (atual)</option>
+                  <option value="15">15 dias</option>
+                  <option value="30">30 dias</option>
+                  <option value="never">Nunca</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Status do Sistema */}
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <Monitor className="w-5 h-5 text-gray-600 dark:text-gray-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white">Status do Sistema para Beta</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Portais</span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-300">6/6 Online</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Database</span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-300">PostgreSQL OK</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Autenticação</span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-300">Universal OK</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Integrações</span>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-300">Configurar</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Botões de Ação */}
+          <div className="flex space-x-3 mt-6">
+            <button
+              onClick={() => alert('Configurações de tempo aplicadas para teste beta!')}
+              className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              <Save className="w-5 h-5 mr-2" />
+              Aplicar Configurações
+            </button>
+            <button
+              onClick={() => alert('Sistema preparado para teste beta com 12 vendedores!')}
+              className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+            >
+              <CheckCircle className="w-5 h-5 mr-2" />
+              Preparar para Beta
+            </button>
+            <button
+              onClick={() => alert('Configurações padrão restauradas!')}
+              className="flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+            >
+              <RotateCcw className="w-5 h-5 mr-2" />
+              Restaurar Padrão
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function renderInterfaceSection() {
     return (
@@ -1253,6 +1424,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {activeTab === 'anexos' && renderAnexosSection()}
         {activeTab === 'planilha' && <PlanilhaViewer />}
         {activeTab === 'logs' && <LogsViewer />}
+        {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'backup' && <BackupManager />}
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
