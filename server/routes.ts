@@ -1015,10 +1015,12 @@ router.post("/proposals", async (req, res) => {
   });
 
   // Update user (unified API)
-  router.patch("auth/users/:id", async (req, res) => {
+  router.patch("/auth/users/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const { userType, ...userData } = req.body;
+      const { userType, userData } = req.body;
+      
+      console.log("Atualizando usuário:", { id, userType, userData });
       
       if (userType === 'vendor') {
         const { insertVendorSchema } = await import("@shared/schema");

@@ -161,9 +161,14 @@ export default function UnifiedUserManagement() {
       const userToUpdate = allCombinedUsers.find(u => u.id === id);
       if (!userToUpdate) throw new Error('User not found');
       
+      console.log("Enviando atualização:", { id, userData, userType: userToUpdate.userType });
+      
       return apiRequest(`/api/auth/users/${id}`, {
         method: 'PATCH',
-        body: { ...userData, userType: userToUpdate.userType }
+        body: { 
+          userType: userToUpdate.userType,
+          userData: userData
+        }
       });
     },
     onSuccess: () => {
@@ -282,6 +287,7 @@ export default function UnifiedUserManagement() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingUser) {
+      console.log("Salvando alterações do usuário:", { id: editingUser.id, formData });
       updateUserMutation.mutate({ id: editingUser.id, userData: formData });
     } else {
       createUserMutation.mutate(formData);
