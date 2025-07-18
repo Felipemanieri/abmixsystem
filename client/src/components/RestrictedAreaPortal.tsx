@@ -55,11 +55,7 @@ import {
   ChevronUp,
   Copy,
   MessageSquare,
-  Bell,
-  User,
-  UserPlus,
-  Minus,
-  Key
+  Bell
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
@@ -142,14 +138,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
   const [notifications, setNotifications] = useState([]);
   
-  // Estados para configurações de tempo RESTAURADAS - suas configurações estendidas
+  // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
   const [timeConfigs, setTimeConfigs] = useState({
-    googleDrive: { active: true, interval: '24h' },
-    googleSheets: { active: true, interval: '18h' },
-    googleForms: { active: true, interval: '12h' },
-    googleDocs: { active: true, interval: '8h' },
-    backupAuto: { active: true, interval: '6h' },
-    apiRequests: { active: true, interval: '4h' }
+    googleDrive: { active: true, interval: '30s' },
+    googleSheets: { active: true, interval: '1s' },
+    googleForms: { active: true, interval: '10m' },
+    googleDocs: { active: true, interval: '5m' },
+    backupAuto: { active: true, interval: '24h' },
+    apiRequests: { active: true, interval: '1s' }
   });
   
   const [allPaused, setAllPaused] = useState(false);
@@ -338,13 +334,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
     { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
-    { id: 'senhas', label: 'Controle Senhas', icon: Lock },
+    { id: 'senhas', label: 'Controle Senhas', icon: Key },
     { id: 'visualizar-planilha', label: 'Visualizar Planilha', icon: FileSpreadsheet },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'planilhas', label: 'Config Planilhas', icon: Settings },
-    { id: 'drive', label: 'Conexões Google', icon: HardDrive },
+    { id: 'drive', label: 'Google Drive', icon: HardDrive },
+    { id: 'backup', label: 'Backup & Restore', icon: Database },
+    { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
@@ -1253,7 +1251,195 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     );
   }
 
-  // Funções removidas - agora usando renderização inline mais simples
+  // Funções de renderização das abas faltantes
+  function renderSenhasSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Key className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Controle de Senhas</h3>
+          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            Sistema de gestão de senhas: {users.length} usuários do sistema • {vendors.length} vendedores
+          </div>
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              Gerenciamento de senhas está disponível na aba "Gestão Usuários" com funcionalidade completa.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderPlanilhaSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Visualizar Planilha</h3>
+            </div>
+            <div className="flex space-x-3">
+              <button 
+                onClick={() => {
+                  const csvContent = "data:text/csv;charset=utf-8," + 
+                    encodeURIComponent("ID,Empresa,Status,Vendedor,Plano,Valor\n" + 
+                    proposals.map(p => `${p.id},${p.contractData?.nomeEmpresa || 'N/A'},${p.status},${p.vendorId},${p.contractData?.plano || 'N/A'},${p.contractData?.valor || 'N/A'}`).join('\n'));
+                  const link = document.createElement("a");
+                  link.setAttribute("href", csvContent);
+                  link.setAttribute("download", "planilha_abmix.csv");
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+          <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+            <PlanilhaViewer />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderPlanilhasSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Settings className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Planilhas</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-3">Estrutura da Planilha</h4>
+              <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                Detecção automática: {proposals.length} propostas analisadas
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Campos fixos:</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">12 campos</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Campos dinâmicos:</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Auto-detectados</span>
+                </div>
+              </div>
+            </div>
+            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-3">Sincronização</h4>
+              <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                Última sincronização: agora
+              </div>
+              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                Sincronizar Agora
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderTempoSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações do Tempo</h3>
+            </div>
+            <div className="flex space-x-3">
+              <button 
+                onClick={() => setAllPaused(!allPaused)}
+                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                  allPaused 
+                    ? 'bg-green-600 text-white hover:bg-green-700' 
+                    : 'bg-red-600 text-white hover:bg-red-700'
+                }`}
+              >
+                {allPaused ? <Play className="w-4 h-4 mr-2" /> : <Pause className="w-4 h-4 mr-2" />}
+                {allPaused ? 'Iniciar Todos' : 'Parar Todos'}
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Object.entries(timeConfigs).map(([key, config]) => (
+              <div key={key} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white">
+                    {key === 'googleDrive' ? 'Google Drive' :
+                     key === 'googleSheets' ? 'Google Sheets' :
+                     key === 'googleForms' ? 'Google Forms' :
+                     key === 'googleDocs' ? 'Google Docs' :
+                     key === 'backupAuto' ? 'Backup Automático' :
+                     key === 'apiRequests' ? 'API Requests' : key}
+                  </h4>
+                  <div className={`w-3 h-3 rounded-full ${config.active ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                </div>
+                <div className="space-y-2">
+                  <select 
+                    value={config.interval}
+                    onChange={(e) => setTimeConfigs(prev => ({
+                      ...prev,
+                      [key]: { ...prev[key], interval: e.target.value }
+                    }))}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  >
+                    <option value="1s">1 segundo</option>
+                    <option value="5s">5 segundos</option>
+                    <option value="30s">30 segundos</option>
+                    <option value="1m">1 minuto</option>
+                    <option value="5m">5 minutos</option>
+                    <option value="10m">10 minutos</option>
+                    <option value="30m">30 minutos</option>
+                    <option value="1h">1 hora</option>
+                    <option value="manual">Manual</option>
+                  </select>
+                  <button 
+                    onClick={() => setTimeConfigs(prev => ({
+                      ...prev,
+                      [key]: { ...prev[key], active: !prev[key].active }
+                    }))}
+                    className={`w-full px-3 py-2 text-sm rounded-lg transition-colors ${
+                      config.active 
+                        ? 'bg-red-600 text-white hover:bg-red-700' 
+                        : 'bg-green-600 text-white hover:bg-green-700'
+                    }`}
+                  >
+                    {config.active ? 'Pausar' : 'Ativar'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
+            <div className="flex items-center mb-2">
+              <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-yellow-800 dark:text-yellow-200">Informações Importantes</h4>
+            </div>
+            <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+              <li>• Controle manual permite pausar requisições para manutenção</li>
+              <li>• Configurações específicas ajudam a controlar quotas da API Google</li>
+              <li>• Módulos ativos: {Object.values(timeConfigs).filter(c => c.active).length} de {Object.keys(timeConfigs).length}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Funções para configurações de tempo - MOVIDAS PARA O NÍVEL PRINCIPAL
   const toggleModule = (module: string) => {
@@ -1618,597 +1804,17 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'interface' && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <Monitor className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Sistema</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Status:</span><span className="text-green-600">Online</span></div>
-                  <div className="flex justify-between"><span>Uptime:</span><span>99.9%</span></div>
-                  <div className="flex justify-between"><span>Última atualização:</span><span>Agora</span></div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <Users className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Usuários</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Sistema:</span><span className="text-blue-600">{users.length}</span></div>
-                  <div className="flex justify-between"><span>Vendedores:</span><span className="text-green-600">{vendors.length}</span></div>
-                  <div className="flex justify-between"><span>Total:</span><span className="text-purple-600">{users.length + vendors.length}</span></div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <FileSpreadsheet className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Propostas</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Ativas:</span><span className="text-blue-600">{proposals.length}</span></div>
-                  <div className="flex justify-between"><span>Processadas:</span><span className="text-green-600">{proposals.filter(p => p.status === 'IMPLANTADO').length}</span></div>
-                  <div className="flex justify-between"><span>Pendentes:</span><span className="text-orange-600">{proposals.filter(p => p.status === 'PENDENCIA').length}</span></div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <Cloud className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Google Drive</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Pastas:</span><span className="text-blue-600">247</span></div>
-                  <div className="flex justify-between"><span>Documentos:</span><span className="text-green-600">1,834</span></div>
-                  <div className="flex justify-between"><span>Espaço:</span><span className="text-purple-600">8.2 GB</span></div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <Database className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Backup</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Último:</span><span className="text-green-600">23h atrás</span></div>
-                  <div className="flex justify-between"><span>Quantidade:</span><span className="text-blue-600">847</span></div>
-                  <div className="flex justify-between"><span>Tamanho:</span><span className="text-purple-600">24.8 GB</span></div>
-                </div>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-3">
-                  <Clock className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Tempo Real</h3>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-                  <div className="flex justify-between"><span>Módulos ativos:</span><span className="text-green-600">5/6</span></div>
-                  <div className="flex justify-between"><span>Sincronização:</span><span className="text-blue-600">98.3%</span></div>
-                  <div className="flex justify-between"><span>Última exec:</span><span className="text-purple-600">Agora</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
+        {activeTab === 'interface' && renderInterfaceSection()}
         {activeTab === 'usuarios' && <UnifiedUserManagement />}
-        
-        {activeTab === 'senhas' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center mb-4">
-                <Lock className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Controle de Senhas</h3>
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Gerenciamento está disponível na aba "Gestão Usuários" com funcionalidade completa.
-              </div>
-              <button
-                onClick={() => setActiveTab('usuarios')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Ir para Gestão Usuários
-              </button>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'visualizar-planilha' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Planilha do Sistema</h3>
-                </div>
-                <button 
-                  onClick={() => {
-                    const csvContent = "data:text/csv;charset=utf-8," + 
-                      encodeURIComponent("ID,Empresa,Status,Vendedor,Plano,Valor\n" + 
-                      proposals.map(p => `${p.id},${p.contractData?.nomeEmpresa || 'N/A'},${p.status},${p.vendorId},${p.contractData?.plano || 'N/A'},${p.contractData?.valor || 'N/A'}`).join('\n'));
-                    const link = document.createElement("a");
-                    link.setAttribute("href", csvContent);
-                    link.setAttribute("download", "planilha_abmix.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }}
-                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Exportar CSV
-                </button>
-              </div>
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                <PlanilhaViewer />
-              </div>
-            </div>
-          </div>
-        )}
-        
+        {activeTab === 'senhas' && renderSenhasSection()}
+        {activeTab === 'visualizar-planilha' && renderPlanilhaSection()}
         {activeTab === 'logs' && <LogsViewer />}
-        
-        {activeTab === 'automacao' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center mb-4">
-                <Bot className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Automação</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Regras Ativas</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex justify-between mb-1"><span>Notificações:</span><span className="text-green-600">Ativo</span></div>
-                    <div className="flex justify-between mb-1"><span>Sync Google:</span><span className="text-green-600">Ativo</span></div>
-                    <div className="flex justify-between mb-1"><span>Backup Auto:</span><span className="text-green-600">Ativo</span></div>
-                    <div className="flex justify-between"><span>Validação:</span><span className="text-orange-600">Pausado</span></div>
-                  </div>
-                </div>
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Estatísticas</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex justify-between mb-1"><span>Execuções hoje:</span><span className="text-blue-600">1,247</span></div>
-                    <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">98.3%</span></div>
-                    <div className="flex justify-between mb-1"><span>Falhas:</span><span className="text-red-600">1.7%</span></div>
-                    <div className="flex justify-between"><span>Tempo médio:</span><span className="text-purple-600">2.1s</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'integracoes' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center mb-4">
-                <Link className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Integrações</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Google Services</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex justify-between mb-1"><span>Drive:</span><span className="text-green-600">Conectado</span></div>
-                    <div className="flex justify-between mb-1"><span>Sheets:</span><span className="text-green-600">Conectado</span></div>
-                    <div className="flex justify-between mb-1"><span>Forms:</span><span className="text-green-600">Conectado</span></div>
-                    <div className="flex justify-between"><span>Docs:</span><span className="text-orange-600">Pausado</span></div>
-                  </div>
-                </div>
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">APIs Externas</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex justify-between mb-1"><span>Make.com:</span><span className="text-green-600">Conectado</span></div>
-                    <div className="flex justify-between mb-1"><span>Webhooks:</span><span className="text-green-600">Ativo</span></div>
-                    <div className="flex justify-between mb-1"><span>SendGrid:</span><span className="text-yellow-600">Configurar</span></div>
-                    <div className="flex justify-between"><span>Twilio:</span><span className="text-yellow-600">Configurar</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'planilhas' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center mb-4">
-                <Settings className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Configurações de Planilhas</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Estrutura</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex justify-between mb-1"><span>Campos fixos:</span><span className="text-blue-600">12</span></div>
-                    <div className="flex justify-between mb-1"><span>Campos dinâmicos:</span><span className="text-green-600">Auto-detectados</span></div>
-                    <div className="flex justify-between"><span>Propostas:</span><span className="text-purple-600">{proposals.length}</span></div>
-                  </div>
-                </div>
-                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-2">Sincronização</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    Última sincronização: agora
-                  </div>
-                  <button className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    Sincronizar Agora
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'drive' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <HardDrive className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Conexões Google</h3>
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => {
-                      // Testar conexão Google
-                      alert('Testando conexão Google...');
-                    }}
-                    className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Testar Conexão
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('visualizar-planilha')}
-                    className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <FileSpreadsheet className="w-4 h-4 mr-2" />
-                    Visualizar Planilha
-                  </button>
-                </div>
-              </div>
-              
-              {/* Google Drive */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-blue-600">Google Drive</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Drive
-                      alert('Adicionando integração Google Drive...');
-                    }}
-                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Pastas:</span><span className="text-blue-600">247</span></div>
-                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-green-600">1,834</span></div>
-                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">8.2 GB</span></div>
-                      <div className="flex justify-between"><span>Sync:</span><span className="text-green-600">99.1%</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>Drives:</span><span className="text-purple-600">3</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Sheets */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-green-600">Google Sheets</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Sheets
-                      alert('Adicionando integração Google Sheets...');
-                    }}
-                    className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Planilhas:</span><span className="text-green-600">47</span></div>
-                      <div className="flex justify-between mb-1"><span>Linhas:</span><span className="text-blue-600">2,847</span></div>
-                      <div className="flex justify-between mb-1"><span>Sync:</span><span className="text-green-600">98.3%</span></div>
-                      <div className="flex justify-between"><span>Tempo:</span><span className="text-purple-600">2.1s</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Forms */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-purple-600">Google Forms</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Forms
-                      alert('Adicionando integração Google Forms...');
-                    }}
-                    className="px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Forms:</span><span className="text-purple-600">23</span></div>
-                      <div className="flex justify-between mb-1"><span>Respostas:</span><span className="text-blue-600">1,247</span></div>
-                      <div className="flex justify-between mb-1"><span>Ativos:</span><span className="text-green-600">18</span></div>
-                      <div className="flex justify-between"><span>Inativos:</span><span className="text-red-600">5</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>Webhook:</span><span className="text-green-600">Ativo</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Docs */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-orange-600">Google Docs</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Google Docs
-                      alert('Adicionando integração Google Docs...');
-                    }}
-                    className="px-3 py-1 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-orange-600">384</span></div>
-                      <div className="flex justify-between mb-1"><span>Templates:</span><span className="text-blue-600">12</span></div>
-                      <div className="flex justify-between mb-1"><span>Compartilhados:</span><span className="text-green-600">247</span></div>
-                      <div className="flex justify-between"><span>Privados:</span><span className="text-purple-600">137</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
-                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Backup Automático */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-red-600">Backup Automático</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração Backup
-                      alert('Adicionando integração Backup...');
-                    }}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Backups:</span><span className="text-red-600">847</span></div>
-                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.7%</span></div>
-                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">24.8 GB</span></div>
-                      <div className="flex justify-between"><span>Último:</span><span className="text-blue-600">23h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Frequência:</span><span className="text-blue-600">24h</span></div>
-                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0.3%</span></div>
-                      <div className="flex justify-between"><span>Próximo:</span><span className="text-purple-600">1h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* API Google */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white text-indigo-600">API Google</h4>
-                  <button
-                    onClick={() => {
-                      // Adicionar integração API Google
-                      alert('Adicionando integração API Google...');
-                    }}
-                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                  >
-                    + Adicionar Integração
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Requisições:</span><span className="text-indigo-600">847,392</span></div>
-                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.8%</span></div>
-                      <div className="flex justify-between mb-1"><span>Tempo:</span><span className="text-purple-600">1.2s</span></div>
-                      <div className="flex justify-between"><span>Erros:</span><span className="text-red-600">0.2%</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
-                      <div className="flex justify-between mb-1"><span>Quota:</span><span className="text-blue-600">78%</span></div>
-                      <div className="flex justify-between mb-1"><span>Limite:</span><span className="text-orange-600">1M/dia</span></div>
-                      <div className="flex justify-between"><span>Reset:</span><span className="text-purple-600">6h</span></div>
-                    </div>
-                  </div>
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    <button className="w-full px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
+        {activeTab === 'automacao' && renderAutomacaoSection()}
+        {activeTab === 'integracoes' && renderIntegracoesSection()}
+        {activeTab === 'planilhas' && renderPlanilhasSection()}
+        {activeTab === 'drive' && renderDriveSection()}
         {activeTab === 'backup' && <BackupManager />}
-        
-        {activeTab === 'tempo' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Configurações do Tempo</h3>
-                </div>
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => setAllPaused(!allPaused)}
-                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
-                      allPaused 
-                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                        : 'bg-red-600 text-white hover:bg-red-700'
-                    }`}
-                  >
-                    {allPaused ? <Play className="w-4 h-4 mr-1" /> : <Pause className="w-4 h-4 mr-1" />}
-                    {allPaused ? 'Iniciar Todos' : 'Parar Todos'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Object.entries(timeConfigs).map(([key, config]) => (
-                  <div key={key} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-                        {key === 'googleDrive' ? 'Google Drive' :
-                         key === 'googleSheets' ? 'Google Sheets' :
-                         key === 'googleForms' ? 'Google Forms' :
-                         key === 'googleDocs' ? 'Google Docs' :
-                         key === 'backupAuto' ? 'Backup Automático' :
-                         key === 'apiRequests' ? 'API Requests' : key}
-                      </h4>
-                      <div className={`w-2 h-2 rounded-full ${config.active ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                    </div>
-                    <div className="space-y-2">
-                      <select 
-                        value={config.interval}
-                        onChange={(e) => setTimeConfigs(prev => ({
-                          ...prev,
-                          [key]: { ...prev[key], interval: e.target.value }
-                        }))}
-                        className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      >
-                        <option value="1s">1 segundo</option>
-                        <option value="5s">5 segundos</option>
-                        <option value="30s">30 segundos</option>
-                        <option value="1m">1 minuto</option>
-                        <option value="5m">5 minutos</option>
-                        <option value="10m">10 minutos</option>
-                        <option value="30m">30 minutos</option>
-                        <option value="1h">1 hora</option>
-                        <option value="2h">2 horas</option>
-                        <option value="3h">3 horas</option>
-                        <option value="4h">4 horas</option>
-                        <option value="6h">6 horas</option>
-                        <option value="8h">8 horas</option>
-                        <option value="12h">12 horas</option>
-                        <option value="18h">18 horas</option>
-                        <option value="24h">24 horas</option>
-                        <option value="manual">Manual</option>
-                        <option value="desligado">Desligado</option>
-                      </select>
-                      <button 
-                        onClick={() => setTimeConfigs(prev => ({
-                          ...prev,
-                          [key]: { ...prev[key], active: !prev[key].active }
-                        }))}
-                        className={`w-full px-2 py-1 text-xs rounded transition-colors ${
-                          config.active 
-                            ? 'bg-red-600 text-white hover:bg-red-700' 
-                            : 'bg-green-600 text-white hover:bg-green-700'
-                        }`}
-                      >
-                        {config.active ? 'Pausar' : 'Ativar'}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Info className="w-4 h-4 text-yellow-600 dark:text-yellow-400 mr-2" />
-                  <h4 className="font-medium text-yellow-800 dark:text-yellow-200 text-sm">Informações</h4>
-                </div>
-                <div className="text-xs text-yellow-700 dark:text-yellow-300">
-                  <div>• Controle manual permite pausar requisições para manutenção</div>
-                  <div>• Módulos ativos: {Object.values(timeConfigs).filter(c => c.active).length} de {Object.keys(timeConfigs).length}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 'tempo' && renderTempoSection()}
       </main>
 
       {/* Modal de Gerenciamento de Drive */}
