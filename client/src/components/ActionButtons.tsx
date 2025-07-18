@@ -1,5 +1,117 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2, Zap, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
+
+// Componente separado para o botão de mensagem com notificação
+const MessageButton: React.FC<{ onClick: () => void; userRole?: string }> = ({ onClick, userRole }) => {
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const checkUnreadMessages = () => {
+      const savedMessages = localStorage.getItem('internalMessages');
+      if (savedMessages) {
+        try {
+          const messages = JSON.parse(savedMessages);
+          // Determinar nome do usuário baseado no papel - usar NOMES REAIS
+          let currentUserName = '';
+          switch (userRole) {
+            case 'financial':
+              currentUserName = 'Michelle Manieri '; // Nome real da usuária financeira
+              break;
+            case 'supervisor':
+              currentUserName = 'Usuário Supervisor';
+              break;
+            case 'implementation':
+              currentUserName = 'Usuário Implementação';
+              break;
+            case 'vendor':
+              currentUserName = 'Usuário Vendedor';
+              break;
+            case 'client':
+              currentUserName = 'Usuário Cliente';
+              break;
+            default:
+              currentUserName = 'Usuário Sistema';
+          }
+
+          const unread = messages.filter((msg: any) => 
+            msg.recipient === currentUserName && !msg.read
+          ).length;
+          
+          setUnreadCount(unread);
+          if (unread > 0) {
+            console.log(`${currentUserName} tem ${unread} mensagens não lidas`);
+          }
+        } catch (error) {
+          console.error('Erro ao verificar mensagens:', error);
+        }
+      }
+    };
+
+    // Verificar imediatamente
+    checkUnreadMessages();
+    
+    // Verificar a cada 2 segundos
+    const interval = setInterval(checkUnreadMessages, 2000);
+    
+    return () => clearInterval(interval);
+  }, [userRole]);
+
+  const handleClick = () => {
+    // Marcar todas as mensagens como lidas quando abrir
+    const savedMessages = localStorage.getItem('internalMessages');
+    if (savedMessages) {
+      try {
+        const messages = JSON.parse(savedMessages);
+        let currentUserName = '';
+        switch (userRole) {
+          case 'financial':
+            currentUserName = 'Michelle Manieri '; // Nome real da usuária financeira
+            break;
+          case 'supervisor':
+            currentUserName = 'Usuário Supervisor';
+            break;
+          case 'implementation':
+            currentUserName = 'Usuário Implementação';
+            break;
+          case 'vendor':
+            currentUserName = 'Usuário Vendedor';
+            break;
+          case 'client':
+            currentUserName = 'Usuário Cliente';
+            break;
+          default:
+            currentUserName = 'Usuário Sistema';
+        }
+
+        const updatedMessages = messages.map((msg: any) => 
+          msg.recipient === currentUserName ? { ...msg, read: true } : msg
+        );
+        
+        localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+        setUnreadCount(0);
+      } catch (error) {
+        console.error('Erro ao marcar mensagens como lidas:', error);
+      }
+    }
+    
+    onClick();
+  };
+
+  return (
+    <button 
+      onClick={handleClick}
+      className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors relative"
+      title="Mensagem Interna"
+    >
+      <MessageSquare className="w-4 h-4" />
+      {unreadCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+          {unreadCount}
+        </span>
+      )}
+    </button>
+  );
+};
 
 interface ActionButtonsProps {
   onView?: () => void;
@@ -185,14 +297,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       )}
       
       {onMessage && (
-        <button 
-          onClick={onMessage}
-          className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
-          title="Mensagem Interna"
-        >
-          <MessageSquare className="w-4 h-4" />
-          {/* CONTADOR DE NOTIFICAÇÃO REMOVIDO */}
-        </button>
+        <MessageButton onClick={onMessage} userRole={userRole} />
       )}
     </div>
   );
