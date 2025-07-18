@@ -312,7 +312,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
   const downloadQuotation = () => {
     // Simular download da cotação
-    const quotationData = {
+    const quotationDataExport = {
       numeroVidas: quotationData.numeroVidas,
       operadora: quotationData.operadora,
       idades: quotationData.idades,
@@ -320,7 +320,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       dataGeracao: new Date().toLocaleDateString('pt-BR')
     };
     
-    const dataStr = JSON.stringify(quotationData, null, 2);
+    const dataStr = JSON.stringify(quotationDataExport, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -841,7 +841,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="flex justify-end mt-6">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-2 bg-blue-800 dark:bg-blue-900 text-white dark:bg-gray-800 dark:bg-gray-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -928,7 +928,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={generateQuotation}
-            className="flex items-center px-6 py-2 bg-blue-800 dark:bg-blue-900 text-white dark:bg-gray-800 dark:bg-gray-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
           >
             <Calculator className="w-4 h-4 mr-2" />
             Gerar Cotação
@@ -936,7 +936,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={salvarCotacao}
-            className="flex items-center px-6 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-md hover:bg-green-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             Salvar Cotação
@@ -944,7 +944,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-6 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
           >
             <Download className="w-4 h-4 mr-2" />
             Baixar Cotação
