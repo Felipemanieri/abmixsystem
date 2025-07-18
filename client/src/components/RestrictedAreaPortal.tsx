@@ -25,7 +25,25 @@ import {
   Wifi,
   Calendar,
   DollarSign,
-  Crown
+  Crown,
+  Paperclip,
+  Search,
+  Filter,
+  Download,
+  Upload,
+  Tag,
+  Image,
+  FileImage,
+  FileSpreadsheet,
+  Clock,
+  RefreshCw,
+  ExternalLink,
+  Plus,
+  Edit,
+  Trash2,
+  X,
+  Folder,
+  FileCheck
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
@@ -167,6 +185,119 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     savePortalVisibility(defaultVisibility);
   };
 
+  // Estados para o sistema de anexos
+  const [attachments, setAttachments] = useState([
+    {
+      id: 1,
+      nome: 'CNH João Silva.pdf',
+      proposta: 'Soluções Tecnológicas Ltda',
+      categoria: 'identificacao',
+      tamanho: '1,95 MB',
+      status: 'pendente',
+      enviadoPor: 'cliente',
+      data: '16/07/2025'
+    },
+    {
+      id: 2,
+      nome: 'Comprovante de Residência.pdf',
+      proposta: 'Soluções Tecnológicas Ltda',
+      categoria: 'comprovante',
+      tamanho: '1000,75 KB',
+      status: 'aprovado',
+      enviadoPor: 'cliente',
+      data: '16/07/2025'
+    },
+    {
+      id: 3,
+      nome: 'Contrato Plano Saúde.pdf',
+      proposta: 'Consultoria Empresarial SA',
+      categoria: 'contrato',
+      tamanho: '2,93 MB',
+      status: 'aprovado',
+      enviadoPor: 'vendedor',
+      data: '16/07/2025'
+    }
+  ]);
+
+  const [filtros, setFiltros] = useState({
+    pesquisa: '',
+    categoria: 'todas',
+    status: 'todos',
+    proposta: 'todas',
+    drive: 'todos'
+  });
+
+  // Dados dos status (conforme imagem fornecida)
+  const statusOptions = [
+    { value: 'todos', label: 'Todos os status', color: 'gray' },
+    { value: 'OBSERVACAO', label: 'OBSERVAÇÃO', color: 'blue' },
+    { value: 'ANALISAR', label: 'ANALISAR', color: 'green' },
+    { value: 'ASSINATURA_DS', label: 'ASSINATURA DS', color: 'yellow' },
+    { value: 'EXPIRADO', label: 'EXPIRADO', color: 'blue' },
+    { value: 'IMPLANTADO', label: 'IMPLANTADO', color: 'blue' },
+    { value: 'AGUAR_PAGAMENTO', label: 'AGUAR PAGAMENTO', color: 'pink' },
+    { value: 'ASSINATURA_PROPOSTA', label: 'ASSINATURA PROPOSTA', color: 'yellow' },
+    { value: 'AGUAR_SELECAO_VIGENCIA', label: 'AGUAR SELEÇÃO DE VIGÊNCIA', color: 'orange' },
+    { value: 'PENDENCIA', label: 'PENDÊNCIA', color: 'red' },
+    { value: 'DECLINADO', label: 'DECLINADO', color: 'purple' },
+    { value: 'AGUAR_VIGENCIA', label: 'AGUAR VIGÊNCIA', color: 'cyan' }
+  ];
+
+  const categoriaOptions = [
+    { value: 'todas', label: 'Todas as categorias', icon: Folder },
+    { value: 'documentos', label: 'Documentos', icon: FileText },
+    { value: 'imagem', label: 'Imagem', icon: Image },
+    { value: 'contrato', label: 'Contrato', icon: FileText },
+    { value: 'identificacao', label: 'Identificação', icon: FileSpreadsheet },
+    { value: 'comprovante', label: 'Comprovante', icon: FileCheck },
+    { value: 'cotacao', label: 'Cotação', icon: Tag }
+  ];
+
+  const driveOptions = [
+    { value: 'todos', label: 'Todos os drives' },
+    { value: 'drive1', label: 'Drive Principal' },
+    { value: 'drive2', label: 'Drive Backup' },
+    { value: 'drive3', label: 'Drive Arquivo' }
+  ];
+
+  const proposalOptions = [
+    { value: 'todas', label: 'Todas as propostas' },
+    { value: 'solucoes-tech', label: 'Soluções Tecnológicas Ltda' },
+    { value: 'consultoria-sa', label: 'Consultoria Empresarial SA' }
+  ];
+
+  // Função para filtrar anexos
+  const anexosFiltrados = attachments.filter(anexo => {
+    const matchPesquisa = anexo.nome.toLowerCase().includes(filtros.pesquisa.toLowerCase()) ||
+                         anexo.proposta.toLowerCase().includes(filtros.pesquisa.toLowerCase());
+    const matchCategoria = filtros.categoria === 'todas' || anexo.categoria === filtros.categoria;
+    const matchStatus = filtros.status === 'todos' || anexo.status === filtros.status.toLowerCase();
+    const matchProposta = filtros.proposta === 'todas' || anexo.proposta.includes(filtros.proposta);
+    
+    return matchPesquisa && matchCategoria && matchStatus && matchProposta;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pendente': return 'bg-yellow-100 text-yellow-800';
+      case 'aprovado': return 'bg-green-100 text-green-800';
+      case 'rejeitado': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getCategoriaIcon = (categoria: string) => {
+    switch (categoria) {
+      case 'identificacao': return FileSpreadsheet;
+      case 'comprovante': return FileCheck;
+      case 'contrato': return FileText;
+      case 'imagem': return Image;
+      case 'documentos': return FileText;
+      case 'cotacao': return Tag;
+      default: return Folder;
+    }
+  };
+
   // Funções para abrir serviços reais
   const openGoogleSheets = () => {
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetsConfig.sheetId}/edit#gid=0`;
@@ -210,9 +341,214 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     }
   };
 
+  // Função para renderizar a seção de gerenciamento de anexos
+  function renderAnexosSection() {
+    return (
+      <div className="space-y-6">
+        {/* Header com estatísticas */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Paperclip className="w-6 h-6 text-blue-600 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900">Gerenciamento de Anexos</h3>
+            </div>
+            <div className="flex space-x-3">
+              <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <Database className="w-4 h-4 mr-2" />
+                Configurar unidades
+              </button>
+              <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <Download className="w-4 h-4 mr-2" />
+                Carregar arquivo
+              </button>
+            </div>
+          </div>
+
+          {/* Estatísticas de anexos */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Database className="w-8 h-8 text-gray-600" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900">6</div>
+              <div className="text-sm text-gray-600">Total</div>
+            </div>
+            
+            <div className="bg-yellow-50 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Clock className="w-8 h-8 text-yellow-600" />
+              </div>
+              <div className="text-2xl font-bold text-yellow-900">2</div>
+              <div className="text-sm text-yellow-600">Pingentes</div>
+            </div>
+            
+            <div className="bg-green-50 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+              <div className="text-2xl font-bold text-green-900">3</div>
+              <div className="text-sm text-green-600">Aprovados</div>
+            </div>
+            
+            <div className="bg-red-50 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <X className="w-8 h-8 text-red-600" />
+              </div>
+              <div className="text-2xl font-bold text-red-900">1</div>
+              <div className="text-sm text-red-600">Rejeitados</div>
+            </div>
+            
+            <div className="bg-blue-50 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Cloud className="w-8 h-8 text-blue-600" />
+              </div>
+              <div className="text-2xl font-bold text-blue-900">6,72 MB</div>
+              <div className="text-sm text-blue-600">Tamanho Total</div>
+            </div>
+          </div>
+
+          {/* Filtros */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            {/* Pesquisa */}
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Pesquisar arquivos..."
+                value={filtros.pesquisa}
+                onChange={(e) => setFiltros({...filtros, pesquisa: e.target.value})}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Categoria */}
+            <select
+              value={filtros.categoria}
+              onChange={(e) => setFiltros({...filtros, categoria: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {categoriaOptions.map(cat => (
+                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              ))}
+            </select>
+
+            {/* Status */}
+            <select
+              value={filtros.status}
+              onChange={(e) => setFiltros({...filtros, status: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {statusOptions.map(status => (
+                <option key={status.value} value={status.value}>{status.label}</option>
+              ))}
+            </select>
+
+            {/* Propostas */}
+            <select
+              value={filtros.proposta}
+              onChange={(e) => setFiltros({...filtros, proposta: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {proposalOptions.map(prop => (
+                <option key={prop.value} value={prop.value}>{prop.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Drive Filter */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <select
+              value={filtros.drive}
+              onChange={(e) => setFiltros({...filtros, drive: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {driveOptions.map(drive => (
+                <option key={drive.value} value={drive.value}>{drive.label}</option>
+              ))}
+            </select>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+
+          {/* Tabela de anexos */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">ARQUIVO</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">PROPOSTA</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">CATEGORIA</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">TAMANHO</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">STATUS</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">ENVIADO POR</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">DADOS</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">AÇÕES</th>
+                </tr>
+              </thead>
+              <tbody>
+                {anexosFiltrados.map((anexo) => {
+                  const CategoriaIcon = getCategoriaIcon(anexo.categoria);
+                  return (
+                    <tr key={anexo.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center">
+                          <FileText className="w-5 h-5 text-red-500 mr-2" />
+                          <span className="text-sm text-gray-900">{anexo.nome}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="text-sm text-gray-900">{anexo.proposta}</div>
+                        <div className="text-xs text-gray-500">ID: FKCP-{anexo.id}75262843668-oxfqpnv</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center">
+                          <CategoriaIcon className="w-4 h-4 mr-1 text-gray-600" />
+                          <span className="text-sm text-gray-900 capitalize">{anexo.categoria}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-sm text-gray-900">{anexo.tamanho}</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(anexo.status)}`}>
+                          {anexo.status === 'pendente' ? 'Pendente' : anexo.status === 'aprovado' ? 'Aprovado' : 'Rejeitado'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-sm text-gray-900 capitalize">{anexo.enviadoPor}</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-sm text-gray-500">{anexo.data}</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <button className="flex items-center px-3 py-1 text-blue-600 hover:text-blue-800 transition-colors">
+                          <ExternalLink className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {anexosFiltrados.length === 0 && (
+            <div className="text-center py-8">
+              <Folder className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum anexo encontrado</h3>
+              <p className="text-gray-500">Tente ajustar os filtros para encontrar os anexos desejados.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
     { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
+    { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
     { id: 'planilha', label: 'Visualizar Planilha', icon: FileText },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
@@ -755,6 +1091,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && renderInterfaceSection()}
         {activeTab === 'usuarios' && <UnifiedUserManagement />}
+        {activeTab === 'anexos' && renderAnexosSection()}
         {activeTab === 'planilha' && <PlanilhaViewer />}
         {activeTab === 'logs' && <LogsViewer />}
         {activeTab === 'backup' && <BackupManager />}
