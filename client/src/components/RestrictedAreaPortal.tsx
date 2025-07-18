@@ -1231,13 +1231,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
-                    className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                    className="px-1 py-0.5 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                   >
                     Abrir Forms
                   </button>
                   <button 
                     onClick={() => setShowFormsConfigModal(true)}
-                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-1 py-0.5 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Configurações
                   </button>
