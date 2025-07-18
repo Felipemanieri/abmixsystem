@@ -1767,9 +1767,18 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               
               <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
                 <div className="bg-gray-50 dark:bg-gray-700 p-3 border-b border-gray-200 dark:border-gray-600">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Cabeçalho da Planilha</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white">📊 Planilha Completa - Cabeçalho com TODOS os Campos</h4>
                   <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                    Campos fixos + Campos dinâmicos baseados em dados reais
+                    🔥 VISUALIZAÇÃO EM TEMPO REAL: ID • LINK_CLIENTE • EMPRESA • CNPJ • VENDEDOR • PLANO • VALOR • STATUS • ODONTO_CONJUGADO • LIVRE_ADESAO • COMPULSORIO • APROVEITAMENTO_CONGENERE • INICIO_VIGENCIA • PERIODO_MINIMO • REUNIAO_REALIZADA • NOME_REUNIAO • VENDA_DUPLA • VENDEDOR_DUPLA • DESCONTO_PERCENT • ORIGEM_VENDA • AUTORIZADOR_DESCONTO • OBS_FINANCEIRAS • OBS_CLIENTE • TITULAR1_NOME • TITULAR1_CPF • TITULAR1_RG • TITULAR1_EMAIL • TITULAR1_TELEFONE • TITULAR2_NOME • TITULAR2_CPF • TITULAR2_RG • TITULAR2_EMAIL • TITULAR2_TELEFONE • TITULAR3_NOME • TITULAR3_CPF • TITULAR3_RG • TITULAR3_EMAIL • TITULAR3_TELEFONE • DEPENDENTE1_NOME • DEPENDENTE1_CPF • DEPENDENTE1_PARENTESCO • DEPENDENTE2_NOME • DEPENDENTE2_CPF • DEPENDENTE2_PARENTESCO • DEPENDENTE3_NOME • DEPENDENTE3_CPF • DEPENDENTE3_PARENTESCO • DEPENDENTE4_NOME • DEPENDENTE4_CPF • DEPENDENTE4_PARENTESCO • DEPENDENTE5_NOME • DEPENDENTE5_CPF • DEPENDENTE5_PARENTESCO • ANEXOS • DATA_CONTRATO
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center text-sm text-green-600 dark:text-green-400">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                      TEMPO REAL ATIVO - Atualização: 0.5s
+                    </div>
+                    <div className="text-sm text-blue-600 dark:text-blue-400">
+                      Total: 52+ colunas dinâmicas
+                    </div>
                   </div>
                 </div>
                 <div className="p-4">
