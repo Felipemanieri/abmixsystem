@@ -317,14 +317,14 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                           <td className="p-3 font-medium">{user.name}</td>
                           <td className="p-3">
                             <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                              <Mail className="h-4 w-4 text-black dark:text-white" />
                               {user.email}
                             </div>
                           </td>
                           {showPasswords && (
                             <td className="p-3">
                               <div className="flex items-center gap-2">
-                                <Key className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                <Key className="h-4 w-4 text-black dark:text-white" />
                                 <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">
                                   {user.password}
                                 </code>
