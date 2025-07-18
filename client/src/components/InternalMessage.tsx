@@ -250,6 +250,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     );
     setMessages(updatedMessages);
     localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
+    
+    // Atualizar contador imediatamente
+    const unread = updatedMessages.filter(msg => 
+      msg.recipient === safeCurrentUser.name && !msg.read
+    ).length;
+    setUnreadCount(unread);
   };
 
   const handleDeleteMessage = (messageId: string) => {
@@ -402,6 +408,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                     key={message.id}
                     onClick={() => {
                       setSelectedMessage(message);
+                      // Marcar como lida automaticamente quando abrir
                       if (!message.read && message.recipient === safeCurrentUser.name) {
                         handleMarkAsRead(message.id);
                       }
