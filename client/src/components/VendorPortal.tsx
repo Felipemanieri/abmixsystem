@@ -520,6 +520,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     );
   };
 
+  const handleDeleteNotification = (id: string) => {
+    setNotifications(prev => 
+      prev.filter(notification => notification.id !== id)
+    );
+  };
+
   const handleViewProposal = (proposal: Proposal) => {
     setSelectedProposal(proposal);
     
@@ -1593,6 +1599,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   notifications={notifications}
                   onMarkAsRead={handleMarkAsRead}
                   onMarkAllAsRead={handleMarkAllAsRead}
+                  onDeleteNotification={handleDeleteNotification}
                   onClose={() => setShowNotifications(false)}
                 />
               )}

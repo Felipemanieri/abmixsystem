@@ -62,6 +62,7 @@ import SystemFooter from './SystemFooter';
 import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
+import InternalMessage from './InternalMessage';
 
 import BackupManager from './BackupManager';
 
@@ -111,6 +112,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showBackupConfigModal, setShowBackupConfigModal] = useState(false);
   const [showDriveManagementModal, setShowDriveManagementModal] = useState(false);
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
+  const [showInternalMessage, setShowInternalMessage] = useState(false);
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -1165,6 +1167,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
               
               <button
+                onClick={() => setShowInternalMessage(true)}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
+              </button>
+              
+              <button
                 onClick={() => {
                   const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
                   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1690,6 +1699,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       {showUserManagementModal && (
         <UserManagementDashboard 
           onClose={() => setShowUserManagementModal(false)} 
+        />
+      )}
+      
+      {/* Sistema de Mensagens Internas */}
+      {showInternalMessage && (
+        <InternalMessage 
+          onClose={() => setShowInternalMessage(false)}
+          userRole="admin"
         />
       )}
       
