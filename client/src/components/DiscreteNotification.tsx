@@ -21,6 +21,7 @@ const DiscreteNotification: React.FC<DiscreteNotificationProps> = ({
   useEffect(() => {
     if (show) {
       setIsVisible(true);
+      console.log('DiscreteNotification ATIVADA:', message);
       if (duration > 0) {
         const timer = setTimeout(() => {
           setIsVisible(false);
@@ -28,10 +29,17 @@ const DiscreteNotification: React.FC<DiscreteNotificationProps> = ({
         }, duration);
         return () => clearTimeout(timer);
       }
+    } else {
+      setIsVisible(false);
     }
-  }, [show, duration, onClose]);
+  }, [show, duration, onClose, message]);
 
-  if (!isVisible) return null;
+  if (!isVisible || !show) {
+    console.log('DiscreteNotification NÃO VISÍVEL:', { isVisible, show, message });
+    return null;
+  }
+  
+  console.log('DiscreteNotification RENDERIZANDO:', message);
 
   const getColors = () => {
     switch (type) {
@@ -47,18 +55,21 @@ const DiscreteNotification: React.FC<DiscreteNotificationProps> = ({
   };
 
   return (
-    <div className="fixed top-4 right-4 z-[9999] max-w-sm shadow-lg">
-      <div className={`${getColors()} border rounded-lg p-4 shadow-md flex items-center space-x-3 animate-in slide-in-from-right-2 duration-300`}>
-        <CheckCircle className="w-5 h-5 flex-shrink-0" />
-        <span className="text-sm font-medium flex-1">{message}</span>
+    <div 
+      className="fixed top-20 right-4 z-[99999] max-w-sm"
+      style={{ position: 'fixed', top: '80px', right: '16px', zIndex: 99999 }}
+    >
+      <div className="bg-green-100 border-2 border-green-300 text-green-800 rounded-lg p-4 shadow-2xl flex items-center space-x-3">
+        <CheckCircle className="w-6 h-6 flex-shrink-0 text-green-600" />
+        <span className="text-base font-bold flex-1">{message}</span>
         <button
           onClick={() => {
             setIsVisible(false);
             if (onClose) onClose();
           }}
-          className="text-gray-400 hover:text-gray-600 transition-colors ml-2"
+          className="text-green-600 hover:text-green-800 transition-colors ml-2"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
       </div>
     </div>
