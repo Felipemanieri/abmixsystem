@@ -386,7 +386,7 @@ function App() {
               <img 
                 src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                 alt="Abmix" 
-                className="h-12 w-auto"
+                className="h-16 w-auto"
               />
               <div className="flex flex-col space-y-1">
                 <span className="font-medium text-gray-700 dark:text-gray-300">Sistema Interno v2.0</span>
