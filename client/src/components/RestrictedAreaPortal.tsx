@@ -1056,213 +1056,53 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
 
-          {/* Estatísticas do Drive */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Folder className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">247</div>
-              <div className="text-sm text-blue-600 dark:text-blue-400">Pastas Criadas</div>
+          {/* Estatísticas compactas */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-blue-900 dark:text-blue-200">247</div>
+              <div className="text-xs text-blue-600 dark:text-blue-400">Pastas</div>
             </div>
-            
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <FileText className="w-8 h-8 text-green-600 dark:text-green-400" />
-              </div>
-              <div className="text-2xl font-bold text-green-900 dark:text-green-200">1,834</div>
-              <div className="text-sm text-green-600 dark:text-green-400">Documentos</div>
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-green-900 dark:text-green-200">1,834</div>
+              <div className="text-xs text-green-600 dark:text-green-400">Documentos</div>
             </div>
-            
-            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Cloud className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
-              <div className="text-sm text-purple-600 dark:text-purple-400">Armazenamento</div>
+            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
+              <div className="text-xs text-purple-600 dark:text-purple-400">Armazenamento</div>
             </div>
-            
-            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 text-center">
-              <div className="flex items-center justify-center mb-2">
-                <CheckCircle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
-              </div>
-              <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">99.1%</div>
-              <div className="text-sm text-orange-600 dark:text-orange-400">Sync Rate</div>
+            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-orange-900 dark:text-orange-200">99.1%</div>
+              <div className="text-xs text-orange-600 dark:text-orange-400">Sync Rate</div>
             </div>
           </div>
 
-          {/* Google Sheets */}
-          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-green-900 dark:text-green-200 mb-4 flex items-center">
+          {/* Google Sheets - Única seção */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+            <h4 className="font-medium text-green-900 dark:text-green-200 mb-3 flex items-center">
               <FileSpreadsheet className="w-5 h-5 mr-2" />
               Google Sheets
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">47</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Planilhas Ativas</div>
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-green-600 dark:text-green-400">
+                47 planilhas • 2,847 linhas • 98.3% sync
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">2,847</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Linhas</div>
+              <div className="flex space-x-2">
+                <button 
+                  onClick={() => setAbaAtiva('visualizar-planilha')}
+                  className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                >
+                  Visualizar
+                </button>
+                <button 
+                  onClick={() => {
+                    setAbaAtiva('sheets');
+                    setShowDriveManagementModal(true);
+                  }}
+                  className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Configurações
+                </button>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">98.3%</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Sync Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">2.1s</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Tempo Médio</div>
-              </div>
-            </div>
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => setActiveTab('google-sheets')}
-                className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-              >
-                Visualizar
-              </button>
-              <button 
-                onClick={() => {
-                  setAbaAtiva('sheets');
-                  setShowDriveManagementModal(true);
-                }}
-                className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-              >
-                Configurações
-              </button>
-            </div>
-          </div>
-
-          {/* Google Forms */}
-          <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-purple-900 dark:text-purple-200 mb-4 flex items-center">
-              <FileText className="w-5 h-5 mr-2" />
-              Google Forms
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">23</div>
-                <div className="text-sm text-purple-600 dark:text-purple-400">Forms Ativos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">1,247</div>
-                <div className="text-sm text-purple-600 dark:text-purple-400">Respostas</div>
-              </div>
-            </div>
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => {
-                  setAbaAtiva('forms');
-                  setShowDriveManagementModal(true);
-                }}
-                className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
-              >
-                Configurações
-              </button>
-            </div>
-          </div>
-
-          {/* Google Docs */}
-          <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-orange-900 dark:text-orange-200 mb-4 flex items-center">
-              <FileText className="w-5 h-5 mr-2" />
-              Google Docs
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">384</div>
-                <div className="text-sm text-orange-600 dark:text-orange-400">Documentos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">12</div>
-                <div className="text-sm text-orange-600 dark:text-orange-400">Templates</div>
-              </div>
-            </div>
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => {
-                  setAbaAtiva('docs');
-                  setShowDriveManagementModal(true);
-                }}
-                className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
-              >
-                Configurações
-              </button>
-            </div>
-          </div>
-
-          {/* Backup Automático */}
-          <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-red-900 dark:text-red-200 mb-4 flex items-center">
-              <Database className="w-5 h-5 mr-2" />
-              Backup Automático
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">847</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Backups</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">99.7%</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Sucesso</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">24.8 GB</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Espaço</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">23h</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Último</div>
-              </div>
-            </div>
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => {
-                  setAbaAtiva('backup');
-                  setShowDriveManagementModal(true);
-                }}
-                className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-              >
-                Configurações
-              </button>
-            </div>
-          </div>
-
-          {/* API Google */}
-          <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-indigo-900 dark:text-indigo-200 mb-4 flex items-center">
-              <Globe className="w-5 h-5 mr-2" />
-              API Google
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">847,392</div>
-                <div className="text-sm text-indigo-600 dark:text-indigo-400">Req/Mês</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">99.8%</div>
-                <div className="text-sm text-indigo-600 dark:text-indigo-400">Sucesso</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">1.2s</div>
-                <div className="text-sm text-indigo-600 dark:text-indigo-400">Tempo Médio</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">0.2%</div>
-                <div className="text-sm text-indigo-600 dark:text-indigo-400">Erro</div>
-              </div>
-            </div>
-            <div className="mt-4 flex space-x-2">
-              <button 
-                onClick={() => {
-                  setAbaAtiva('api');
-                  setShowDriveManagementModal(true);
-                }}
-                className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
-              >
-                Configurações
-              </button>
             </div>
           </div>
 

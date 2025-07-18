@@ -38,12 +38,7 @@ export default function PlanilhaViewer() {
       const sheetData = generateDynamicSheet(proposalsWithVendor);
       setDynamicSheetData(sheetData);
       
-      console.log('🔄 Planilha dinâmica atualizada:', {
-        totalPropostas: proposals.length,
-        maxTitulares: sheetData.maxTitulares,
-        maxDependentes: sheetData.maxDependentes,
-        totalColunas: sheetData.totalColumns
-      });
+      // Planilha dinâmica atualizada silenciosamente
     }
   }, [proposals, vendors]);
 
