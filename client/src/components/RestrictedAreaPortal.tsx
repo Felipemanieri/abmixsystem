@@ -1051,7 +1051,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Configurar
+                Editar
               </button>
             </div>
           </div>
