@@ -2105,6 +2105,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
         )}
