@@ -1583,7 +1583,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Observações para o Cliente */}
-          <div className="bg-gray-700 dark:bg-gray-800 p-6 rounded-lg">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center mb-4">
               <Info className="w-5 h-5 text-gray-600 dark:text-gray-300 mr-2" />
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -1592,21 +1592,21 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             </div>
             
             <div className="space-y-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Escreva instruções específicas que aparecerão para o cliente ao completar a proposta.
               </p>
               
               <textarea
                 value={internalData.observacoesCliente}
                 onChange={(e) => setInternalData(prev => ({ ...prev, observacoesCliente: e.target.value }))}
-                className="w-full p-4 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none"
                 rows={4}
                 placeholder="Exemplo: Lembre-se de enviar todos os documentos em boa qualidade. Para dúvidas específicas, entre em contato através do chat..."
               />
               
-              <div className="flex items-start space-x-2 p-3 bg-gray-600 rounded-lg">
-                <Info className="w-4 h-4 text-gray-300 mt-0.5 flex-shrink-0" />
-                <p className="text-xs text-gray-300">
+              <div className="flex items-start space-x-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                <Info className="w-4 h-4 text-gray-600 dark:text-gray-300 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-gray-700 dark:text-gray-300">
                   <strong>Estas observações aparecerão</strong> na seção "Observações do Vendedor" quando o cliente acessar o formulário de preenchimento de dados.
                 </p>
               </div>
@@ -1669,8 +1669,8 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   id="tirar-foto"
                 />
                 <Camera className="w-8 h-8 text-gray-300 mb-2" />
-                <span className="text-sm font-medium text-gray-300">Tirar Foto</span>
-                <span className="text-xs text-gray-400">Câmera do dispositivo</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tirar Foto</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">Câmera do dispositivo</span>
               </label>
 
               <label htmlFor="da-galeria" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
