@@ -922,11 +922,11 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Status:</span>
-                  <span className="text-green-600 dark:text-green-400 font-medium">Sincronizada</span>
+                  <span className="text-red-600 dark:text-red-400 font-medium">Não configurada</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Última atualização:</span>
-                  <span className="text-gray-600 dark:text-gray-300">2 min atrás</span>
+                  <span className="text-gray-600 dark:text-gray-300">Nunca</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Total de registros:</span>
@@ -960,7 +960,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Status:</span>
-                  <span className="text-green-600 dark:text-green-400 font-medium">Ativa</span>
+                  <span className="text-red-600 dark:text-red-400 font-medium">Não configurada</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Relatórios gerados:</span>
@@ -968,7 +968,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Frequência:</span>
-                  <span className="text-gray-600 dark:text-gray-300">Diária</span>
+                  <span className="text-gray-600 dark:text-gray-300">Não configurada</span>
                 </div>
               </div>
               <div className="mt-4 flex space-x-2">
@@ -1113,6 +1113,39 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 </button>
               </div>
             </div>
+            
+            {/* Caixas informativas para Google Sheets */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div className="bg-green-100 dark:bg-green-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-xl font-bold text-green-900 dark:text-green-200">0</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Planilhas</div>
+              </div>
+              <div className="bg-green-100 dark:bg-green-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Grid className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-xl font-bold text-green-900 dark:text-green-200">0</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Linhas</div>
+              </div>
+              <div className="bg-green-100 dark:bg-green-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-xl font-bold text-green-900 dark:text-green-200">0%</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Sync</div>
+              </div>
+              <div className="bg-green-100 dark:bg-green-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Clock className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-xl font-bold text-green-900 dark:text-green-200">0s</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Tempo</div>
+              </div>
+            </div>
+
             <div className="space-y-3">
               <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                 <div className="flex items-center">
@@ -1211,6 +1244,38 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   </button>
                 </div>
               </div>
+              {/* Caixas informativas para Google Forms */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div className="bg-purple-100 dark:bg-purple-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div className="text-xl font-bold text-purple-900 dark:text-purple-200">0</div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400">Forms Ativos</div>
+                </div>
+                <div className="bg-purple-100 dark:bg-purple-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div className="text-xl font-bold text-purple-900 dark:text-purple-200">0</div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400">Respostas</div>
+                </div>
+                <div className="bg-purple-100 dark:bg-purple-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Clock className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div className="text-xl font-bold text-purple-900 dark:text-purple-200">0%</div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400">Taxa Resposta</div>
+                </div>
+                <div className="bg-purple-100 dark:bg-purple-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CheckCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div className="text-xl font-bold text-purple-900 dark:text-purple-200">0%</div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400">Integração</div>
+                </div>
+              </div>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div className="flex items-center">
@@ -1283,6 +1348,39 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   </button>
                 </div>
               </div>
+              
+              {/* Caixas informativas para Google Docs */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div className="bg-orange-100 dark:bg-orange-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <FileCheck className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div className="text-xl font-bold text-orange-900 dark:text-orange-200">0</div>
+                  <div className="text-sm text-orange-600 dark:text-orange-400">Documentos</div>
+                </div>
+                <div className="bg-orange-100 dark:bg-orange-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Copy className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div className="text-xl font-bold text-orange-900 dark:text-orange-200">0</div>
+                  <div className="text-sm text-orange-600 dark:text-orange-400">Templates</div>
+                </div>
+                <div className="bg-orange-100 dark:bg-orange-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div className="text-xl font-bold text-orange-900 dark:text-orange-200">0</div>
+                  <div className="text-sm text-orange-600 dark:text-orange-400">Colaboradores</div>
+                </div>
+                <div className="bg-orange-100 dark:bg-orange-800 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CheckCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div className="text-xl font-bold text-orange-900 dark:text-orange-200">0%</div>
+                  <div className="text-sm text-orange-600 dark:text-orange-400">Integração</div>
+                </div>
+              </div>
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div className="flex items-center">
@@ -1358,6 +1456,39 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 </button>
               </div>
             </div>
+            
+            {/* Caixas informativas para Backup Automático */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div className="bg-red-100 dark:bg-red-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Database className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="text-xl font-bold text-red-900 dark:text-red-200">0</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Backups</div>
+              </div>
+              <div className="bg-red-100 dark:bg-red-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <CheckCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="text-xl font-bold text-red-900 dark:text-red-200">0%</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Sucesso</div>
+              </div>
+              <div className="bg-red-100 dark:bg-red-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <HardDrive className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="text-xl font-bold text-red-900 dark:text-red-200">0 GB</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Tamanho Total</div>
+              </div>
+              <div className="bg-red-100 dark:bg-red-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Clock className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="text-xl font-bold text-red-900 dark:text-red-200">Nunca</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Último</div>
+              </div>
+            </div>
+
             <div className="space-y-3">
               <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                 <div className="flex items-center">
@@ -1430,15 +1561,41 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   <Settings className="w-3 h-3 mr-1" />
                   Configurações
                 </button>
-                <button 
-                  onClick={() => setShowApiConfigModal(true)}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Settings className="w-4 h-4 mr-2" />
-                  Configurações
-                </button>
               </div>
             </div>
+            
+            {/* Caixas informativas para API Google - SEM PASTAS/DRIVE */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div className="bg-indigo-100 dark:bg-indigo-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Globe className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="text-xl font-bold text-indigo-900 dark:text-indigo-200">0</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Requisições</div>
+              </div>
+              <div className="bg-indigo-100 dark:bg-indigo-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <CheckCircle className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="text-xl font-bold text-indigo-900 dark:text-indigo-200">0%</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Sucesso</div>
+              </div>
+              <div className="bg-indigo-100 dark:bg-indigo-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="text-xl font-bold text-indigo-900 dark:text-indigo-200">0s</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Tempo Médio</div>
+              </div>
+              <div className="bg-indigo-100 dark:bg-indigo-800 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <AlertCircle className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="text-xl font-bold text-indigo-900 dark:text-indigo-200">0%</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Erro</div>
+              </div>
+            </div>
+
             <div className="space-y-3">
               <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                 <div className="flex items-center">
