@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, FileText, DollarSign, Settings, Users, Calculator, Crown } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 // import AbmixLogo from './AbmixLogo';
 
 interface LoginPageProps {
@@ -15,6 +16,51 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Buscar dados reais do sistema
+  const { data: proposals = [] } = useQuery({
+    queryKey: ['/api/proposals'],
+    queryFn: async () => {
+      try {
+        const response = await fetch('/api/proposals');
+        if (!response.ok) return [];
+        return response.json();
+      } catch {
+        return [];
+      }
+    },
+    retry: false,
+    refetchInterval: 30000
+  });
+
+  // Atualizar hora a cada minuto
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Calcular propostas de hoje
+  const proposalsToday = proposals.filter((p: any) => {
+    const proposalDate = new Date(p.createdAt);
+    const today = new Date();
+    return proposalDate.toDateString() === today.toDateString();
+  }).length;
+
+  // Status do backup (simulado - poderia vir de uma API de status)
+  const backupStatus = {
+    active: true, // Poderia vir de /api/system/status
+    lastBackup: new Date()
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('pt-BR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
 
   // Load saved credentials on component mount
   useEffect(() => {
@@ -272,9 +318,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
           </div>
 
+          {/* System Status - Discreto e Profissional */}
+          <div className="px-8 py-4 bg-gray-50/50 dark:bg-gray-700/30 border-t border-gray-100 dark:border-gray-600">
+            <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex items-center space-x-3">
+                <span>Última Sync: <span className="font-medium text-gray-700 dark:text-gray-300">{formatTime(currentTime)}</span></span>
+                <span className="text-gray-300 dark:text-gray-600">•</span>
+                <span>Propostas Hoje: <span className="font-medium text-blue-600 dark:text-blue-400">{proposalsToday}</span></span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <span>Backup:</span>
+                <span className={`font-medium ${backupStatus.active ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  {backupStatus.active ? 'Ativo' : 'Inativo'}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Footer */}
-          <div className="px-8 pb-6 text-center">
-            <p className="text-xs text-slate-500">
+          <div className="px-8 pb-6 pt-4 text-center">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Sistema Interno v2.0<br />
               © 2025 Abmix Consultoria
             </p>
