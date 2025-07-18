@@ -2148,22 +2148,22 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     return (
       <div className="space-y-6">
         {/* Header Profissional com Conexão Google Sheets */}
-        <div className="bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 dark:border-gray-600 shadow-sm dark:shadow-gray-900/30">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm dark:shadow-gray-900/30">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-white dark:text-white xl font-semibold text-white dark:text-white flex items-center gap-3">
-                  <BarChart3 size={24} className="text-white dark:text-white green-600 dark:text-green-400" />
+                <h2 className="text-gray-900 dark:text-white text-xl font-semibold flex items-center gap-3">
+                  <BarChart3 size={24} className="text-green-600 dark:text-green-400" />
                   Sistema de Relatórios
                 </h2>
-                <p className="text-white dark:text-white white mt-1">Dados em tempo real da planilha Google Sheets</p>
+                <p className="text-gray-600 dark:text-gray-300 mt-1">Dados em tempo real da planilha Google Sheets</p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="text-white dark:text-white right">
-                  <span className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{filteredData.length} registros disponíveis</span>
+                <div className="text-right">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">{filteredData.length} registros disponíveis</span>
                   <div className="flex items-center gap-2 mt-1">
-                    <div className="w-2 h-2 bg-green-50 dark:bg-green-9000 rounded-full animate-pulse"></div>
-                    <span className="text-white dark:text-white xs text-green-600 dark:text-green-400">Conectado</span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-600 dark:text-green-400">Conectado</span>
                   </div>
                 </div>
                 <button
@@ -2181,10 +2181,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Filtros Avançados com Sincronização Google Sheets */}
-        <div className="bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
             <div className="flex items-center justify-between">
-              <h3 className="text-white dark:text-white base font-semibold text-white dark:text-white flex items-center gap-2">
+              <h3 className="text-gray-900 dark:text-white text-base font-semibold flex items-center gap-2">
                 <Filter size={18} />
                 Filtros de Relatório
               </h3>
@@ -2194,7 +2194,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     realTimeSync.forceRefresh();
                     showNotification('Sincronização com Google Sheets iniciada', 'success');
                   }}
-                  className="text-white dark:text-white sm bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-white hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
+                  className="text-sm bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-white hover:bg-blue-100 dark:hover:bg-blue-800 px-3 py-1 rounded-md flex items-center gap-1"
                 >
                   <RefreshCw size={14} />
                   Sincronizar
@@ -2203,7 +2203,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   onClick={() => setReportFilters({
                     dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                   })}
-                  className="text-white dark:text-white sm bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md flex items-center gap-1"
+                  className="text-sm bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 px-2 py-1 rounded-md flex items-center gap-1"
                 >
                   <X size={12} />
                   Limpar
@@ -2217,11 +2217,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Primeira linha: Tipo de Relatório, Vendedor, Status */}
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Tipo de Relatório</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Relatório</label>
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="completo">📊 Relatório Completo</option>
                     <option className="text-black bg-white" value="individual">👤 Por Vendedor Individual</option>
@@ -2232,11 +2232,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Vendedor</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Vendedor</label>
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="">Todos os Vendedores</option>
                     {uniqueVendors && uniqueVendors.map(vendor => (
@@ -2246,11 +2246,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="">Todos os Status</option> className="text-white"
                     {STATUS_CONFIG && Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2263,29 +2263,29 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Segunda linha: Data Início, Data Fim, Limpar Filtros */}
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Data Início</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data Início</label>
                   <input
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                     placeholder="Exemplo"
                   />
                 </div>
 
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Data Fim</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Data Fim</label>
                   <input
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                     placeholder="Exemplo"
                   />
                 </div>
 
                 <div>
-                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Atalhos de Período</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Atalhos de Período</label>
                   <div className="flex gap-1">
                     <button
                       onClick={() => {
@@ -2297,7 +2297,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium bg-blue-600 text-white border border-blue-200 rounded hover:bg-blue-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-blue-600 text-white border border-blue-600 rounded hover:bg-blue-700 transition-colors"
                     >
                       7 dias
                     </button>
@@ -2311,7 +2311,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium bg-green-600 text-white border border-green-200 rounded hover:bg-green-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-green-600 text-white border border-green-600 rounded hover:bg-green-700 transition-colors"
                     >
                       15 dias
                     </button>
@@ -2325,7 +2325,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium bg-purple-600 text-white border border-purple-200 rounded hover:bg-purple-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-purple-600 text-white border border-purple-600 rounded hover:bg-purple-700 transition-colors"
                     >
                       30 dias
                     </button>
@@ -2357,7 +2357,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       window.open(sheetsUrl, '_blank');
                       showNotification('Abrindo Google Sheets com dados filtrados', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-green-600 text-white border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-green-600 text-white border border-green-600 rounded-lg hover:bg-green-700 transition-colors"
                   >
                     📋 Abrir Google Sheets
                   </button>
@@ -2379,7 +2379,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       document.body.removeChild(link);
                       showNotification('Arquivo Excel baixado com sucesso!', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-blue-600 text-white border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-blue-600 text-white border border-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     💾 Salvar em Excel
                   </button>
@@ -2391,7 +2391,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       window.open(driveUrl, '_blank');
                       showNotification('Abrindo Google Drive - Pasta Propostas', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-purple-600 text-white border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-purple-600 text-white border border-purple-600 rounded-lg hover:bg-purple-700 transition-colors"
                   >
                     📁 Abrir Google Drive
                   </button>
@@ -2402,9 +2402,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
 
         {/* Dashboard Visual com Dados Google Sheets */}
-        <div className="bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
-            <h3 className="text-white dark:text-white base font-semibold text-white dark:text-white flex items-center gap-2">
+            <h3 className="text-gray-900 dark:text-white text-base font-semibold flex items-center gap-2">
               <PieChart size={18} />
               Painel de Dados em Tempo Real
               <span className="ml-2 text-xs bg-green-700 text-white px-2 py-1 rounded-full">
@@ -2415,45 +2415,45 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="p-6">
             {/* KPIs Principais - Versão Compacta */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-              <div className="bg-blue-800 p-3 rounded-lg border border-blue-600">
+              <div className="bg-blue-50 dark:bg-blue-800 p-3 rounded-lg border border-blue-200 dark:border-blue-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-blue-100">Total de Propostas</p>
-                    <p className="text-xl font-bold text-white">{reportData.total}</p>
+                    <p className="text-xs font-medium text-blue-600 dark:text-blue-100">Total de Propostas</p>
+                    <p className="text-xl font-bold text-blue-900 dark:text-white">{reportData.total}</p>
                   </div>
-                  <FileText className="h-6 w-6 text-blue-300" />
+                  <FileText className="h-6 w-6 text-blue-500 dark:text-blue-300" />
                 </div>
               </div>
               
-              <div className="bg-green-800 p-3 rounded-lg border border-green-600">
+              <div className="bg-green-50 dark:bg-green-800 p-3 rounded-lg border border-green-200 dark:border-green-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-green-100">Faturamento Total</p>
-                    <p className="text-xl font-bold text-white">{formatCurrency(reportData.faturamento.toString())}</p>
+                    <p className="text-xs font-medium text-green-600 dark:text-green-100">Faturamento Total</p>
+                    <p className="text-xl font-bold text-green-900 dark:text-white">{formatCurrency(reportData.faturamento.toString())}</p>
                   </div>
-                  <DollarSign className="h-6 w-6 text-green-300" />
+                  <DollarSign className="h-6 w-6 text-green-500 dark:text-green-300" />
                 </div>
               </div>
               
-              <div className="bg-purple-800 p-3 rounded-lg border border-purple-600">
+              <div className="bg-purple-50 dark:bg-purple-800 p-3 rounded-lg border border-purple-200 dark:border-purple-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-purple-100">Ticket Médio</p>
-                    <p className="text-xl font-bold text-white">
+                    <p className="text-xs font-medium text-purple-600 dark:text-purple-100">Ticket Médio</p>
+                    <p className="text-xl font-bold text-purple-900 dark:text-white">
                       {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
                     </p>
                   </div>
-                  <Calculator className="h-6 w-6 text-purple-300" />
+                  <Calculator className="h-6 w-6 text-purple-500 dark:text-purple-300" />
                 </div>
               </div>
               
-              <div className="bg-orange-800 p-3 rounded-lg border border-orange-600">
+              <div className="bg-orange-50 dark:bg-orange-800 p-3 rounded-lg border border-orange-200 dark:border-orange-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-orange-100">Vendedores Ativos</p>
-                    <p className="text-xl font-bold text-white">{uniqueVendors.length}</p>
+                    <p className="text-xs font-medium text-orange-600 dark:text-orange-100">Vendedores Ativos</p>
+                    <p className="text-xl font-bold text-orange-900 dark:text-white">{uniqueVendors.length}</p>
                   </div>
-                  <Users className="h-6 w-6 text-orange-300" />
+                  <Users className="h-6 w-6 text-orange-500 dark:text-orange-300" />
                 </div>
               </div>
             </div>
