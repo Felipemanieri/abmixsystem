@@ -177,7 +177,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     {
       name: 'Propostas Ativas',
       value: realProposals?.length?.toString() || '0',
-      change: '+3 hoje',
+      change: '',
       changeType: 'positive',
       icon: FileText,
       color: 'blue',
@@ -201,7 +201,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     {
       name: 'Finalizadas',
       value: realProposals?.filter(p => p.clientCompleted)?.length?.toString() || '0',
-      change: '+2 hoje',
+      change: '',
       changeType: 'positive',
       icon: CheckCircle,
       color: 'green',
@@ -920,7 +920,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="flex justify-end space-x-4 mt-8">
           <button
             onClick={limparFormulario}
-            className="flex items-center px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
           >
             <X className="w-4 h-4 mr-2" />
             Limpar Formulário
