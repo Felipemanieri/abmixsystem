@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const SystemFooter: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [proposalsToday] = useState(45); // This could be dynamic from API
+  const [proposalsToday] = useState(0); // Zerado após limpeza do banco
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -76,7 +76,7 @@ const SystemFooter: React.FC = () => {
               <span>Última Sync: <span className="font-medium">{formatTime(currentTime)}</span></span>
             </div>
             <div className="flex items-center space-x-4">
-              <span>Propostas Hoje: <span className="font-medium text-blue-600">{proposalsToday}</span></span>
+              <span>Propostas Hoje: <span className="font-medium text-blue-600">0</span></span>
             </div>
             <div className="flex items-center space-x-4">
               <span>Backup: <span className="font-medium text-green-600">Ativo</span></span>

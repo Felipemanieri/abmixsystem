@@ -1,4 +1,3 @@
-import React from "react";
 import React, { useState, useEffect } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell, MessageSquare } from 'lucide-react';
 // import AbmixLogo from './AbmixLogo';
@@ -7,6 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
+import SystemStatusIndicator from './SystemStatusIndicator';
 import ClientForm from './ClientForm';
 import ProposalForm from './ProposalForm';
 import ProgressBar from './ProgressBar';
@@ -536,6 +536,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <SystemStatusIndicator />
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

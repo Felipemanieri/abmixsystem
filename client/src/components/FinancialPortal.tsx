@@ -4,6 +4,7 @@ import { LogOut, DollarSign, TrendingUp, CheckCircle, AlertCircle, Eye, Calculat
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import FinancialAutomationModal from './FinancialAutomationModal';
+import SystemStatusIndicator from './SystemStatusIndicator';
 // NotificationCenter removido
 import ClientForm from './ClientForm';
 import ProgressBar from './ProgressBar';
@@ -755,6 +756,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 dark:bg-gray-900">
+      <SystemStatusIndicator />
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
