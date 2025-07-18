@@ -1555,9 +1555,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 dark:border-gray-700">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -1568,21 +1568,21 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   className="h-10 w-auto mr-3"
                 />
                 <div>
-                  <h1 className="text-xl font-bold text-white dark:text-white">Portal Vendedor</h1>
-                  <p className="text-sm text-white dark:text-gray-500 dark:text-white">
-                    Bem-vinda(o), <span className="font-medium text-teal-600 dark:text-white">{user?.name || 'Vendedor'}</span>
+                  <h1 className="text-xl font-bold text-gray-900">Portal Vendedor</h1>
+                  <p className="text-sm text-gray-600">
+                    Bem-vinda(o), <span className="font-medium text-teal-600">{user?.name || 'Vendedor'}</span>
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-white dark:text-gray-500 dark:text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
                 {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {notifications.filter(n => !n.read).length}
                   </span>
                 )}
@@ -1599,18 +1599,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-white dark:text-gray-500 dark:text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-white dark:text-gray-500 dark:text-white">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-white dark:text-gray-500 dark:text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
