@@ -2927,7 +2927,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'dashboard' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <BarChart3 size={18} className="mr-2" />
@@ -2939,7 +2939,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'metas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <Target size={18} className="mr-2" />
@@ -2951,7 +2951,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'premiacao' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <Award size={18} className="mr-2" />
@@ -2963,7 +2963,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'analytics' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <PieChart size={18} className="mr-2" />
@@ -2975,7 +2975,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'team' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <Users size={18} className="mr-2" />
@@ -2987,7 +2987,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'propostas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <FileText size={18} className="mr-2" />
@@ -2999,7 +2999,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'relatorios' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               <Calculator size={18} className="mr-2" />
