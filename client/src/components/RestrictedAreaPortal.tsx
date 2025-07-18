@@ -43,7 +43,16 @@ import {
   Trash2,
   X,
   Folder,
-  FileCheck
+  FileCheck,
+  Sun,
+  Moon,
+  Play,
+  Pause,
+  RotateCw,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  Copy
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
@@ -1154,6 +1163,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
+              
+              <button
+                onClick={() => {
+                  const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                  document.documentElement.classList.toggle('dark');
+                  localStorage.setItem('theme', newTheme);
+                }}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                <Sun className="w-5 h-5 dark:hidden" />
+                <Moon className="w-5 h-5 hidden dark:block" />
+              </button>
               
               <button
                 onClick={onLogout}
