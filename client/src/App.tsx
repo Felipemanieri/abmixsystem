@@ -296,7 +296,7 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16 px-4">
+        <div className="flex flex-wrap justify-center gap-8 mb-16 px-4">
           {/* Portal do Cliente - Condicional */}
           {portalVisibility.showClientPortal && (
             <div 

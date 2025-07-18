@@ -486,18 +486,28 @@ export class DatabaseStorage implements IStorage {
 
   // System Settings operations
   async getSystemSetting(key: string): Promise<string | null> {
-    const [setting] = await db.select().from(systemSettings).where(eq(systemSettings.key, key));
-    return setting?.value || null;
+    try {
+      const [setting] = await db.select().from(systemSettings).where(eq(systemSettings.key, key));
+      return setting?.value || null;
+    } catch (error) {
+      console.error('Erro ao buscar configuração:', error);
+      return null;
+    }
   }
 
   async setSystemSetting(key: string, value: string): Promise<void> {
-    await db
-      .insert(systemSettings)
-      .values({ key, value })
-      .onConflictDoUpdate({
-        target: systemSettings.key,
-        set: { value, updatedAt: new Date() }
-      });
+    try {
+      await db
+        .insert(systemSettings)
+        .values({ key, value })
+        .onConflictDoUpdate({
+          target: systemSettings.key,
+          set: { value, updatedAt: new Date() }
+        });
+    } catch (error) {
+      console.error('Erro ao salvar configuração:', error);
+      throw error;
+    }
   }
 }
 
