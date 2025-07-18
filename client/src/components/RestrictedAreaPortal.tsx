@@ -1152,7 +1152,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1191,8 +1191,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
       {/* Tabs Navigation */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+          <nav className="flex space-x-8 min-w-fit">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -1343,7 +1343,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                           <div className="flex space-x-2">
                             <button
                               onClick={() => window.open(drive.url, '_blank')}
-                              className="text-blue-600 hover:text-blue-800 dark:text-white transition-colors"
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                               title="Abrir Drive"
                             >
                               <ExternalLink className="w-4 h-4" />
@@ -1357,7 +1357,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                                 );
                                 setDrives(updatedDrives);
                               }}
-                              className="text-yellow-600 hover:text-yellow-800 dark:text-white transition-colors"
+                              className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors"
                               title={drive.status === 'ativo' ? 'Desativar' : 'Ativar'}
                             >
                               <Settings className="w-4 h-4" />
@@ -1369,7 +1369,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                                   alert('Drive excluído com sucesso!');
                                 }
                               }}
-                              className="text-red-600 hover:text-red-800 dark:text-white transition-colors"
+                              className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                               title="Excluir Drive"
                             >
                               <Trash2 className="w-4 h-4" />
