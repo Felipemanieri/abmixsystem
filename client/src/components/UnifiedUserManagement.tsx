@@ -242,6 +242,19 @@ export default function UnifiedUserManagement() {
     return password;
   };
 
+  // Função para traduzir roles para português
+  const translateRole = (role: string) => {
+    switch (role) {
+      case 'financial': return 'Financeiro';
+      case 'supervisor': return 'Supervisão';
+      case 'implementation': return 'Implementação';
+      case 'vendor': return 'Comercial';
+      case 'client': return 'Cliente';
+      case 'restricted': return 'Área Restrita';
+      default: return role;
+    }
+  };
+
   // Handle password editing for specific user
   const handleEditPassword = (user: User) => {
     const newPassword = generatePassword();
@@ -521,7 +534,7 @@ export default function UnifiedUserManagement() {
                         </div>
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">{user.role}</div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">{translateRole(user.role)}</div>
                         </div>
                       </div>
                     </td>
