@@ -165,48 +165,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     console.log('NOTIFICAÇÕES COMPLETAMENTE LIMPAS PARA:', user.name);
   }, [user.name]);
 
-  // SISTEMA CORRIGIDO: Carregar apenas mensagens do usuário atual
+  // DESABILITADO: Sistema de notificações automáticas
+  // Não carregar nenhuma mensagem automaticamente
   useEffect(() => {
-    const loadInternalMessages = () => {
-      try {
-        const storedMessages = localStorage.getItem('internalMessages');
-        if (storedMessages) {
-          const messages = JSON.parse(storedMessages);
-          // FILTRO CORRETO: Apenas mensagens para este usuário específico que não foram lidas
-          const userMessages = messages
-            .filter(msg => {
-              const isForThisUser = msg.recipient === user.name;
-              const isUnread = !msg.read;
-              console.log(`Verificando mensagem: destinatário=${msg.recipient}, usuário=${user.name}, lida=${msg.read}, para este usuário=${isForThisUser}, não lida=${isUnread}`);
-              return isForThisUser && isUnread;
-            })
-            .map(msg => ({
-              id: msg.id,
-              title: `Nova mensagem de ${msg.sender}`,
-              message: msg.subject,
-              type: 'message',
-              timestamp: new Date(msg.timestamp),
-              read: false,
-              link: null
-            }));
-          
-          console.log(`Usuário ${user.name} tem ${userMessages.length} notificações não lidas`);
-          setNotifications(userMessages);
-        } else {
-          setNotifications([]);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar mensagens:', error);
-        setNotifications([]);
-      }
-    };
-
-    loadInternalMessages();
-    
-    // Verificar a cada 2 segundos por novas mensagens
-    const interval = setInterval(loadInternalMessages, 2000);
-    
-    return () => clearInterval(interval);
+    // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
+    setNotifications([]);
+    console.log(`Notificações DESABILITADAS para ${user.name}`);
   }, [user.name]);
 
   const stats = [
@@ -1665,16 +1629,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.filter(n => !n.read).length}
-                  </span>
-                )}
+                {/* DESABILITADO: Contador de notificações */}
               </button>
               
               {showNotifications && (
                 <NotificationCenter 
-                  notifications={notifications}
+                  notifications={[]}
                   onMarkAsRead={handleMarkAsRead}
                   onMarkAllAsRead={handleMarkAllAsRead}
                   onDeleteNotification={handleDeleteNotification}
