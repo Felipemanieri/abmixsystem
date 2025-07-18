@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe, Crown, Database, Clock, Award, Lock } from 'lucide-react';
+import { Users, FileText, DollarSign, Zap, Shield, ArrowRight, CheckCircle, MessageCircle, Bot, X, Send, Phone, Mail, MapPin, Globe, Crown, Database, Clock, Award, Lock, Calculator, BarChart3, TrendingUp, PieChart, Briefcase, Settings } from 'lucide-react';
 import LoginPage from './components/LoginPage';
 import VendorPortal from './components/VendorPortal';
 import ClientPortal from './components/ClientPortal';
@@ -344,7 +344,7 @@ function App() {
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
-                <Zap className="w-8 h-8 text-teal-600 dark:text-teal-400" />
+                <Settings className="w-8 h-8 text-teal-600 dark:text-teal-400" />
               </div>
               <h3 className="text-xl font-bold text-teal-900 dark:text-teal-300 mb-3 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">Portal Implantação</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
@@ -366,7 +366,7 @@ function App() {
           >
             <div className="relative z-10">
               <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
-                <DollarSign className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                <Calculator className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">Portal Financeiro</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
