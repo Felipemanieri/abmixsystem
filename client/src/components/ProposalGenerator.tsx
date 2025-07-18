@@ -1880,38 +1880,38 @@ Validade: ${quotationData.validade ? new Date(quotationData.validade).toLocaleDa
             )}
 
             {/* Botões de Cotação */}
-            <div className="flex gap-3 mt-6">
+            <div className="flex flex-wrap items-center gap-2 mt-6">
               <button
                 onClick={limparFormulario}
-                className="flex items-center px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md"
+                className="flex items-center px-4 py-2.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md text-sm"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Limpar Formulário
               </button>
               <button
                 onClick={gerarCotacao}
-                className="flex items-center px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md"
+                className="flex items-center px-4 py-2.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md text-sm"
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Gerar Cotação
               </button>
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md"
+                className="flex items-center px-4 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Cotação
               </button>
               <button
                 onClick={baixarCotacao}
-                className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md"
+                className="flex items-center px-4 py-2.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md text-sm"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Baixar Cotação
               </button>
               <button
                 onClick={adicionarCotacao}
-                className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md"
+                className="flex items-center px-4 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm ml-auto"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
