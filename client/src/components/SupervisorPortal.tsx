@@ -10,6 +10,7 @@ import ActionButtons from './ActionButtons';
 import NotificationCenter from './NotificationCenter';
 import InternalMessage from './InternalMessage';
 import SystemFooter from './SystemFooter';
+import ThemeToggle from './ThemeToggle';
 import StatusManager, { ProposalStatus, STATUS_CONFIG } from '@shared/statusSystem';
 import StatusBadge from './StatusBadge';
 import { apiRequest } from '@/lib/queryClient';
@@ -2890,7 +2891,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg relative"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
             >
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -2900,14 +2901,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={() => setShowInternalMessage(!showInternalMessage)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <MessageSquare size={20} />
             </button>
             
+            <ThemeToggle />
+            
             <button
               onClick={onLogout}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <LogOut size={20} />
             </button>

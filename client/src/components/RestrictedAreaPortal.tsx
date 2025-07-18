@@ -49,6 +49,7 @@ import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
 import UserManagementDashboard from './UserManagementDashboard';
 import SystemFooter from './SystemFooter';
+import ThemeToggle from './ThemeToggle';
 import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
@@ -1060,9 +1061,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
+              
+              <ThemeToggle />
+              
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair

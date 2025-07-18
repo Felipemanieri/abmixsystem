@@ -179,7 +179,6 @@ function App() {
   if (clientProposalToken) {
     return (
       <ThemeProvider>
-        <ThemeToggle />
         <ClientProposalView token={clientProposalToken} />
       </ThemeProvider>
     );
@@ -189,7 +188,6 @@ function App() {
   if (!currentUser && currentPortal !== 'home') {
     return (
       <ThemeProvider>
-        <ThemeToggle />
         <LoginPage portal={currentPortal} onLogin={handleLogin} onBack={() => setCurrentPortal('home')} />
       </ThemeProvider>
     );
@@ -199,7 +197,6 @@ function App() {
   if (currentUser) {
     return (
       <ThemeProvider>
-        <ThemeToggle />
         {(() => {
           switch (currentUser.role) {
             case 'vendor':

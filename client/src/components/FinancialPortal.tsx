@@ -10,6 +10,7 @@ import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
 import ProposalProgressTracker from './ProposalProgressTracker';
 import SystemFooter from './SystemFooter';
+import ThemeToggle from './ThemeToggle';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
 import { showNotification } from '../utils/notifications';
 import { useProposals, useRealTimeProposals } from '../hooks/useProposals';
@@ -834,12 +835,15 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               
               <div className="flex items-center space-x-3">
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">{user?.name || 'Usuário Financeiro'}</p>
-                  <p className="text-xs text-gray-500">Área Financeira</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name || 'Usuário Financeiro'}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-300">Área Financeira</p>
                 </div>
+                
+                <ThemeToggle />
+                
                 <button
                   onClick={onLogout}
-                  className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                  className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair

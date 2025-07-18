@@ -10,6 +10,7 @@ import QuotationPanel from './QuotationPanel';
 import ProgressBar from './ProgressBar';
 import StatusBadge from './StatusBadge';
 import SystemFooter from './SystemFooter';
+import ThemeToggle from './ThemeToggle';
 
 import { showNotification } from '../utils/notifications';
 import { useGoogleDrive } from '../hooks/useGoogleDrive';
@@ -1605,6 +1606,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <span className="text-sm text-gray-600 dark:text-gray-300">Olá, {user.name}</span>
               
+              <ThemeToggle />
+              
               <button
                 onClick={onLogout}
                 className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
@@ -1621,8 +1624,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeView === 'dashboard' && (
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard do Vendedor</h1>
-            <p className="text-gray-600">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard do Vendedor</h1>
+            <p className="text-gray-600 dark:text-gray-300">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
           </div>
         )}
         
@@ -1632,10 +1635,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       {/* Modal de Visualização da Proposta */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Detalhes da Proposta
                 </h3>
                 <button 
@@ -1649,7 +1652,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 border-b pb-2">Informações Básicas</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-white border-b dark:border-gray-600 pb-2">Informações Básicas</h4>
                     <div className="space-y-2 text-sm">
                       <div><span className="font-medium text-gray-700">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
                       <div><span className="font-medium text-gray-700">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>

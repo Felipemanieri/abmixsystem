@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LogOut, Upload, Camera, FileText, Check, User, Phone, Mail, MapPin, Calendar, Plus, Trash2, Info, AlertCircle, CheckCircle2, Clock, Download, MessageCircle, Bot, X, Send, Bell, MessageSquare } from 'lucide-react';
 // import AbmixLogo from './AbmixLogo';
 import SystemFooter from './SystemFooter';
+import ThemeToggle from './ThemeToggle';
 import ActionButtons from './ActionButtons';
 import InternalMessage from './InternalMessage';
 import NotificationCenter from './NotificationCenter';
@@ -593,9 +594,11 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <span className="text-sm text-gray-600">Olá, {user.name}</span>
               
+              <ThemeToggle />
+              
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
