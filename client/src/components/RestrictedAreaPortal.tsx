@@ -124,7 +124,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
     // Notificações removidas
-  }, [user.name]);
+  }, []);
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -1176,7 +1176,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Área Restrita</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
+              <span className="text-gray-600 dark:text-gray-300">Bem-vindo, Felipe</span>
               
               <div className="relative">
                 <button
@@ -1731,7 +1731,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
         <InternalMessage 
           isOpen={true}
           onClose={() => setShowInternalMessage(false)}
-          currentUser={{ name: user.name, role: 'admin' }}
+          currentUser={{ name: 'Felipe', role: 'admin' }}
         />
       )}
       
