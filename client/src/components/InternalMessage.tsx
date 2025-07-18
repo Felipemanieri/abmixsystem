@@ -48,8 +48,23 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
   const [unreadCount, setUnreadCount] = useState(0);
 
+  // Sistema de mensagens limpo - sem dados demo
+  const [messages, setMessages] = useState<Message[]>([]);
+  
   // Sistema de detecção automática de usuários do banco de dados
   const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+
+  const getDepartmentFromRole = (role: string) => {
+    switch (role) {
+      case 'vendor': return 'Comercial';
+      case 'supervisor': return 'Supervisão';
+      case 'financial': return 'Financeiro';
+      case 'implementation': return 'Implementação';
+      case 'admin': return 'Administração';
+      case 'system': return 'Sistema';
+      default: return 'Geral';
+    }
+  };
 
   // Carregar usuários automaticamente do banco de dados
   useEffect(() => {
@@ -66,12 +81,14 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
         // Combinar e formatar usuários
         const allUsers: User[] = [
           // Usuários do sistema
-          ...systemUsers.map((user: any) => ({
-            name: user.username || user.email?.split('@')[0] || 'Usuário',
-            role: user.type || 'system',
-            department: getDepartmentFromRole(user.type || 'system'),
-            email: user.email
-          })),
+          ...systemUsers
+            .filter((user: any) => user.userType === 'system')
+            .map((user: any) => ({
+              name: user.name || user.email?.split('@')[0] || 'Usuário',
+              role: user.role || 'system',
+              department: getDepartmentFromRole(user.role || 'system'),
+              email: user.email
+            })),
           // Vendedores
           ...vendors.map((vendor: any) => ({
             name: vendor.name || vendor.email?.split('@')[0] || 'Vendedor',
@@ -82,14 +99,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
         ];
 
         setAvailableUsers(allUsers);
+        console.log('Usuários carregados automaticamente:', allUsers.length);
       } catch (error) {
         console.error('Erro ao carregar usuários:', error);
-        // Fallback para usuários padrão
+        // Fallback para usuários básicos (apenas em caso de erro de API)
         setAvailableUsers([
-          { name: 'Supervisor Abmix', role: 'supervisor', department: 'Supervisão', email: 'supervisao@abmix.com.br' },
-          { name: 'Financeiro Abmix', role: 'financial', department: 'Financeiro', email: 'financeiro@abmix.com.br' },
-          { name: 'Implementação Abmix', role: 'implementation', department: 'Implementação', email: 'implementacao@abmix.com.br' },
-          { name: 'Felipe Admin', role: 'admin', department: 'Administração', email: 'felipe@abmix.com.br' }
+          { name: 'Sistema', role: 'system', department: 'Sistema', email: 'sistema@abmix.com.br' }
         ]);
       }
     };
@@ -103,6 +118,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
 
   // Detectar novos usuários em mensagens
   useEffect(() => {
+    if (availableUsers.length === 0) return;
+
     const detectMessageUsers = () => {
       const existingMessages = JSON.parse(localStorage.getItem('internalMessages') || '[]');
       const existingUserNames = new Set(availableUsers.map(u => u.name));
@@ -134,28 +151,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
 
       if (newUsers.length > 0) {
         setAvailableUsers(prev => [...prev, ...newUsers]);
+        console.log('Novos usuários detectados:', newUsers.length);
       }
     };
 
-    if (availableUsers.length > 0) {
-      detectMessageUsers();
-    }
-  }, [messages, availableUsers]);
-
-  const getDepartmentFromRole = (role: string) => {
-    switch (role) {
-      case 'vendor': return 'Comercial';
-      case 'supervisor': return 'Supervisão';
-      case 'financial': return 'Financeiro';
-      case 'implementation': return 'Implementação';
-      case 'admin': return 'Administração';
-      case 'system': return 'Sistema';
-      default: return 'Geral';
-    }
-  };
-
-  // Sistema de mensagens limpo - sem dados demo
-  const [messages, setMessages] = useState<Message[]>([]);
+    detectMessageUsers();
+  }, [messages, availableUsers, safeCurrentUser.name]);
 
   // Carregar mensagens do localStorage na inicialização
   useEffect(() => {
@@ -202,10 +203,11 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       return;
     }
 
-    // Se for mensagem geral, enviar para todos os usuários
+    // Se for mensagem geral, enviar para todos os usuários (exceto o próprio remetente)
     if (composeData.recipient === 'Mensagem Geral') {
-      const newMessages: Message[] = availableUsers.map(user => ({
-        id: `${Date.now()}-${user.name}`,
+      const recipients = availableUsers.filter(user => user.name !== safeCurrentUser.name);
+      const newMessages: Message[] = recipients.map((user, index) => ({
+        id: `${Date.now()}-${index}-${user.name.replace(/\s+/g, '')}`,
         sender: safeCurrentUser.name,
         senderRole: safeCurrentUser.role,
         recipient: user.name,
@@ -225,7 +227,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       setMessages(updatedMessages);
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
       
-      alert(`Mensagem enviada para ${availableUsers.length} usuários!`);
+      console.log(`Mensagem geral enviada para ${recipients.length} usuários`);
+      alert(`Mensagem enviada para ${recipients.length} usuários!`);
     } else {
       // Mensagem individual
       const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
@@ -235,7 +238,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       }
 
       const newMessage: Message = {
-        id: Date.now().toString(),
+        id: `${Date.now()}-individual-${selectedUser.name.replace(/\s+/g, '')}`,
         sender: safeCurrentUser.name,
         senderRole: safeCurrentUser.role,
         recipient: composeData.recipient,
@@ -255,6 +258,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       setMessages(updatedMessages);
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
 
+      console.log(`Mensagem individual enviada para: ${selectedUser.name} (${selectedUser.department})`);
       alert('Mensagem enviada com sucesso!');
     }
 
