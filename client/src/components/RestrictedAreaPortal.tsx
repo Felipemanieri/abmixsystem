@@ -274,6 +274,21 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { value: 'consultoria-sa', label: 'Consultoria Empresarial SA' }
   ];
 
+  // Definição das abas do sistema
+  const tabs = [
+    { id: 'interface', label: 'Interface', icon: Eye },
+    { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
+    { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
+    { id: 'planilha', label: 'Visualizar Planilha', icon: FileSpreadsheet },
+    { id: 'logs', label: 'Logs Sistema', icon: Monitor },
+    { id: 'automacao', label: 'Automação', icon: Bot },
+    { id: 'integracoes', label: 'Integrações', icon: Link },
+    { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
+    { id: 'drive', label: 'Google Drive', icon: HardDrive },
+    { id: 'backup', label: 'Backup & Restore', icon: Database },
+    { id: 'sistema', label: 'Sistema', icon: Settings }
+  ];
+
   // Função para filtrar anexos
   const anexosFiltrados = attachments.filter(anexo => {
     const matchPesquisa = anexo.nome.toLowerCase().includes(filtros.pesquisa.toLowerCase()) ||
@@ -556,19 +571,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     );
   }
 
-  const tabs = [
-    { id: 'interface', label: 'Interface', icon: Eye },
-    { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
-    { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
-    { id: 'planilha', label: 'Visualizar Planilha', icon: FileText },
-    { id: 'logs', label: 'Logs Sistema', icon: Monitor },
-    { id: 'automacao', label: 'Automação', icon: Bot },
-    { id: 'integracoes', label: 'Integrações', icon: Link },
-    { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
-    { id: 'drive', label: 'Google Drive', icon: HardDrive },
-    { id: 'backup', label: 'Backup & Restore', icon: Database },
-    { id: 'sistema', label: 'Sistema', icon: Settings }
-  ];
 
   function renderInterfaceSection() {
     return (
@@ -787,7 +789,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('drive')}
-                  className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -806,7 +808,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -825,7 +827,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('whatsapp')}
-                  className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -844,7 +846,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <span className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Ativo</span>
                 <button 
                   onClick={() => configureAutomation('backup')}
-                  className="px-3 py-1 text-xs bg-blue-100 text-blue-700 dark:text-white rounded-lg hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1 text-xs bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
                 >
                   Configurar
                 </button>
@@ -910,7 +912,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </button>
                 <button 
                   onClick={syncGoogleSheets}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
                 >
                   Sync
                 </button>
@@ -942,13 +944,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="mt-4 flex space-x-2">
                 <button 
                   onClick={() => window.open('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=1', '_blank')}
-                  className="flex-1 px-3 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
+                  className="flex-1 px-3 py-2 bg-purple-600 text-white dark:bg-purple-600 dark:text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   Ver Relatórios
                 </button>
                 <button 
                   onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
                 >
                   Config
                 </button>
@@ -961,7 +963,98 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   }
 
   function renderDriveSection() {
-    return <GoogleDriveSetup />;
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciamento do Google Drive</h3>
+            </div>
+            <div className="flex space-x-3">
+              <button 
+                onClick={openGoogleDrive}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Abrir Drive
+              </button>
+              <button 
+                onClick={() => setShowDriveManagementModal(true)}
+                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Configurar
+              </button>
+            </div>
+          </div>
+
+          {/* Estatísticas do Drive */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Folder className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">247</div>
+              <div className="text-sm text-blue-600 dark:text-blue-400">Pastas Criadas</div>
+            </div>
+            
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <FileText className="w-8 h-8 text-green-600 dark:text-green-400" />
+              </div>
+              <div className="text-2xl font-bold text-green-900 dark:text-green-200">1,834</div>
+              <div className="text-sm text-green-600 dark:text-green-400">Documentos</div>
+            </div>
+            
+            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <Cloud className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
+              <div className="text-sm text-purple-600 dark:text-purple-400">Armazenamento</div>
+            </div>
+            
+            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center mb-2">
+                <CheckCircle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              </div>
+              <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">99.1%</div>
+              <div className="text-sm text-orange-600 dark:text-orange-400">Sync Rate</div>
+            </div>
+          </div>
+
+          {/* Lista de Drives Configurados */}
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 dark:text-white mb-4">Drives Configurados</h4>
+            <div className="space-y-3">
+              {drives.map((drive) => (
+                <div key={drive.id} className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                  <div className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full mr-3 ${drive.status === 'ativo' ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">{drive.nome}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{drive.usado} / {drive.espaco}</div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => window.open(drive.url, '_blank')}
+                      className="px-3 py-1 text-sm bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button className="px-3 py-1 text-sm bg-gray-600 text-white dark:bg-gray-600 dark:text-white rounded hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors">
+                      Editar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   function renderSistemaSection() {
