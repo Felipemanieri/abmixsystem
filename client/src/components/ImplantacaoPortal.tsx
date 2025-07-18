@@ -138,6 +138,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   ]);
   const [newMessage, setNewMessage] = useState('');
 
+  // Use dados reais do banco de dados
+  const [automationRules] = useState<AutomationRule[]>([]);
+  
+  // Estatísticas baseadas nos dados reais do banco de dados
+  const realProposalsData = realProposals || [];
+
   // Inicializar status dos proposals reais e escutar mudanças
   useEffect(() => {
     const initializeStatuses = () => {
@@ -178,12 +184,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const handleSaveProposal = (data: any) => {
     showNotification('Proposta salva e sincronizada com Google Sheets!', 'success');
   };
-
-  // Use dados reais do banco de dados
-  const [automationRules] = useState<AutomationRule[]>([]);
-  
-  // Estatísticas baseadas nos dados reais do banco de dados
-  const realProposalsData = realProposals || [];
   
   const implantacaoStats = [
     {
