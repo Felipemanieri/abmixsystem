@@ -930,7 +930,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Total de registros:</span>
-                  <span className="text-gray-600 dark:text-gray-300">247</span>
+                  <span className="text-gray-600 dark:text-gray-300">0</span>
                 </div>
               </div>
               <div className="mt-4 flex space-x-2">
@@ -964,7 +964,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Relatórios gerados:</span>
-                  <span className="text-gray-600 dark:text-gray-300">15</span>
+                  <span className="text-gray-600 dark:text-gray-300">0</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Frequência:</span>
@@ -1001,20 +1001,20 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações Google APIs</h3>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex space-x-2">
               <button 
                 onClick={openGoogleDrive}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
+                <ExternalLink className="w-3 h-3 mr-1" />
                 Abrir Drive
               </button>
               <button 
                 onClick={() => setShowDriveManagementModal(true)}
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
               >
-                <Settings className="w-4 h-4 mr-2" />
-                Configurar APIs
+                <Settings className="w-3 h-3 mr-1" />
+                Configurações
               </button>
             </div>
           </div>
@@ -1025,7 +1025,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="flex items-center justify-center mb-2">
                 <Folder className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">247</div>
+              <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">0</div>
               <div className="text-sm text-blue-600 dark:text-blue-400">Pastas Criadas</div>
             </div>
             
@@ -1033,7 +1033,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="flex items-center justify-center mb-2">
                 <FileText className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>
-              <div className="text-2xl font-bold text-green-900 dark:text-green-200">1,834</div>
+              <div className="text-2xl font-bold text-green-900 dark:text-green-200">0</div>
               <div className="text-sm text-green-600 dark:text-green-400">Documentos</div>
             </div>
             
@@ -1041,7 +1041,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="flex items-center justify-center mb-2">
                 <Cloud className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
-              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
+              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">0 GB</div>
               <div className="text-sm text-purple-600 dark:text-purple-400">Armazenamento</div>
             </div>
             
@@ -1049,7 +1049,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
               <div className="flex items-center justify-center mb-2">
                 <CheckCircle className="w-8 h-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">99.1%</div>
+              <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">0%</div>
               <div className="text-sm text-orange-600 dark:text-orange-400">Sync Rate</div>
             </div>
           </div>
@@ -1096,19 +1096,19 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Sheets - Integrações</h4>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 <button 
                   onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
-                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="flex items-center px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                  <ExternalLink className="w-3 h-3 mr-1" />
                   Abrir Sheets
                 </button>
                 <button 
                   onClick={() => setShowSheetsConfigModal(true)}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
                 >
-                  <Settings className="w-4 h-4 mr-2" />
+                  <Settings className="w-3 h-3 mr-1" />
                   Configurações
                 </button>
               </div>
@@ -1204,10 +1204,10 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   </button>
                   <button 
                     onClick={() => setShowFormsConfigModal(true)}
-                    className="flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
+                    className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
                   >
                     <Settings className="w-3 h-3 mr-1" />
-                    Config
+                    Configurações
                   </button>
                 </div>
               </div>
@@ -1276,10 +1276,10 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   </button>
                   <button 
                     onClick={() => setShowDocsConfigModal(true)}
-                    className="flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
+                    className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
                   >
                     <Settings className="w-3 h-3 mr-1" />
-                    Config
+                    Configurações
                   </button>
                 </div>
               </div>
@@ -1341,19 +1341,19 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <Database className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white text-lg">Backup Automático - Integrações</h4>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 <button 
                   onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
-                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="flex items-center px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                  <ExternalLink className="w-3 h-3 mr-1" />
                   Abrir Backup
                 </button>
                 <button 
                   onClick={() => setShowBackupConfigModal(true)}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
                 >
-                  <Settings className="w-4 h-4 mr-2" />
+                  <Settings className="w-3 h-3 mr-1" />
                   Configurações
                 </button>
               </div>
@@ -1415,13 +1415,20 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
                 <h4 className="font-medium text-gray-900 dark:text-white text-lg">API Google - Integrações Gerais</h4>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 <button 
                   onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
-                  className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="flex items-center px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors text-sm"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                  <ExternalLink className="w-3 h-3 mr-1" />
                   Abrir Console API
+                </button>
+                <button 
+                  onClick={() => setShowApiConfigModal(true)}
+                  className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
+                >
+                  <Settings className="w-3 h-3 mr-1" />
+                  Configurações
                 </button>
                 <button 
                   onClick={() => setShowApiConfigModal(true)}
