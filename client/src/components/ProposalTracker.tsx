@@ -154,9 +154,9 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       </button>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">Acompanhamento de Propostas</h1>
-        <p className="text-blue-100">Monitore o progresso de todas as suas propostas em tempo real</p>
+        <p className="text-gray-300">Monitore o progresso de todas as suas propostas em tempo real</p>
       </div>
 
       {/* Stats */}

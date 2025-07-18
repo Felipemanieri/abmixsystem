@@ -569,9 +569,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         </button>
       </div>
 
-      <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 text-white">
         <h1 className="text-2xl font-bold mb-2">Módulo de Cotação</h1>
-        <p className="text-green-100 dark:text-white">Gere cotações personalizadas para seus clientes</p>
+        <p className="text-gray-300">Gere cotações personalizadas para seus clientes</p>
       </div>
 
       <div className="bg-gray-800 dark:bg-gray-900 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
