@@ -258,7 +258,7 @@ export default function UnifiedUserManagement() {
       name: '',
       email: '',
       password: '120784', // Default password
-      role: activePanel === 'vendor' ? 'vendor' : activePanel,
+      role: activePanel === 'vendor' ? 'vendor' : activePanel === 'financial' ? 'financeiro' : activePanel,
       panel: activePanel,
       active: true
     });
