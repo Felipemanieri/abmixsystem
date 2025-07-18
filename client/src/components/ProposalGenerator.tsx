@@ -1880,42 +1880,44 @@ Validade: ${quotationData.validade ? new Date(quotationData.validade).toLocaleDa
             )}
 
             {/* Botões de Cotação */}
-            <div className="flex flex-nowrap items-center gap-1 mt-6">
-              <button
-                onClick={adicionarCotacao}
-                className="whitespace-nowrap flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Adicionar Cotação
-              </button>
-              <button
-                onClick={limparFormulario}
-                className="whitespace-nowrap flex items-center px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md text-sm"
-              >
-                <Trash2 className="w-4 h-4 mr-1" />
-                Limpar Formulário
-              </button>
-              <button
-                onClick={gerarCotacao}
-                className="whitespace-nowrap flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md text-sm"
-              >
-                <FileText className="w-4 h-4 mr-1" />
-                Gerar Cotação
-              </button>
-              <button
-                onClick={salvarCotacao}
-                className="whitespace-nowrap flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
-              >
-                <Save className="w-4 h-4 mr-1" />
-                Salvar Cotação
-              </button>
-              <button
-                onClick={baixarCotacao}
-                className="whitespace-nowrap flex items-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md text-sm"
-              >
-                <Download className="w-4 h-4 mr-1" />
-                Baixar Cotação
-              </button>
+            <div className="w-full overflow-x-auto mt-6">
+              <div className="flex items-center gap-2 min-w-fit">
+                <button
+                  onClick={adicionarCotacao}
+                  className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Adicionar Cotação
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  className="flex items-center px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md text-sm"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" />
+                  Limpar Formulário
+                </button>
+                <button
+                  onClick={gerarCotacao}
+                  className="flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md text-sm"
+                >
+                  <FileText className="w-4 h-4 mr-1" />
+                  Gerar Cotação
+                </button>
+                <button
+                  onClick={salvarCotacao}
+                  className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
+                >
+                  <Save className="w-4 h-4 mr-1" />
+                  Salvar Cotação
+                </button>
+                <button
+                  onClick={baixarCotacao}
+                  className="flex items-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md text-sm"
+                >
+                  <Download className="w-4 h-4 mr-1" />
+                  Baixar Cotação
+                </button>
+              </div>
             </div>
           </div>
 
