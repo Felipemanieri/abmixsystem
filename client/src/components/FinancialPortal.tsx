@@ -41,7 +41,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   const [showAutomationModal, setShowAutomationModal] = useState(false);
   const [selectedProposalForAutomation, setSelectedProposalForAutomation] = useState<{id: string, client: string} | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'proposals' | 'clients' | 'analysis' | 'forms'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'proposals' | 'clients' | 'analysis'>('dashboard');
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [showFinancialArea, setShowFinancialArea] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -751,14 +751,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
     </div>
   );
 
-  const renderForms = () => (
-    <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white mb-4">Formulários Financeiros</h3>
-        <ClientForm />
-      </div>
-    </div>
-  );
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 dark:bg-gray-900">
@@ -829,8 +822,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
               { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
               { id: 'proposals', label: 'Propostas', icon: FileText },
               { id: 'clients', label: 'Clientes', icon: Users },
-              { id: 'analysis', label: 'Análises', icon: PieChart },
-              { id: 'forms', label: 'Formulários', icon: Calculator }
+              { id: 'analysis', label: 'Análises', icon: PieChart }
             ].map((tab) => {
               const Icon = tab.icon;
               return (
@@ -913,7 +905,6 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
         {activeTab === 'proposals' && renderProposals()}
         {activeTab === 'clients' && renderClients()}
         {activeTab === 'analysis' && renderAnalysis()}
-        {activeTab === 'forms' && renderForms()}
       </main>
 
       {/* Internal Message Modal */}
