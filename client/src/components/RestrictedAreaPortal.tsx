@@ -1719,73 +1719,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         )}
         
         {activeTab === 'visualizar-planilha' && (
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Planilha do Sistema - Visualização em Tempo Real</h3>
-                </div>
-                <div className="flex space-x-2">
-                  <div className="flex items-center px-3 py-2 bg-green-100 dark:bg-green-800 rounded-lg">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                    <span className="text-sm text-green-700 dark:text-green-300">Tempo Real</span>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      const csvContent = "data:text/csv;charset=utf-8," + 
-                        encodeURIComponent("ID,Empresa,Status,Vendedor,Plano,Valor\n" + 
-                        proposals.map(p => `${p.id},${p.contractData?.nomeEmpresa || 'N/A'},${p.status},${p.vendorId},${p.contractData?.plano || 'N/A'},${p.contractData?.valor || 'N/A'}`).join('\n'));
-                      const link = document.createElement("a");
-                      link.setAttribute("href", csvContent);
-                      link.setAttribute("download", "planilha_abmix.csv");
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
-                    className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Exportar CSV
-                  </button>
-                </div>
-              </div>
-              
-              <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 mr-2" />
-                    <span className="text-sm text-blue-700 dark:text-blue-300">
-                      Estrutura Dinâmica: {proposals.length} propostas • Colunas detectadas automaticamente
-                    </span>
-                  </div>
-                  <div className="text-sm text-blue-600 dark:text-blue-400">
-                    Última atualização: {new Date().toLocaleTimeString()}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 dark:bg-gray-700 p-3 border-b border-gray-200 dark:border-gray-600">
-                  <h4 className="font-medium text-gray-900 dark:text-white">📊 Planilha Completa - Cabeçalho com TODOS os Campos</h4>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                    🔥 VISUALIZAÇÃO EM TEMPO REAL: ID • LINK_CLIENTE • EMPRESA • CNPJ • VENDEDOR • PLANO • VALOR • STATUS • ODONTO_CONJUGADO • LIVRE_ADESAO • COMPULSORIO • APROVEITAMENTO_CONGENERE • INICIO_VIGENCIA • PERIODO_MINIMO • REUNIAO_REALIZADA • NOME_REUNIAO • VENDA_DUPLA • VENDEDOR_DUPLA • DESCONTO_PERCENT • ORIGEM_VENDA • AUTORIZADOR_DESCONTO • OBS_FINANCEIRAS • OBS_CLIENTE • TITULAR1_NOME • TITULAR1_CPF • TITULAR1_RG • TITULAR1_EMAIL • TITULAR1_TELEFONE • TITULAR2_NOME • TITULAR2_CPF • TITULAR2_RG • TITULAR2_EMAIL • TITULAR2_TELEFONE • TITULAR3_NOME • TITULAR3_CPF • TITULAR3_RG • TITULAR3_EMAIL • TITULAR3_TELEFONE • DEPENDENTE1_NOME • DEPENDENTE1_CPF • DEPENDENTE1_PARENTESCO • DEPENDENTE2_NOME • DEPENDENTE2_CPF • DEPENDENTE2_PARENTESCO • DEPENDENTE3_NOME • DEPENDENTE3_CPF • DEPENDENTE3_PARENTESCO • DEPENDENTE4_NOME • DEPENDENTE4_CPF • DEPENDENTE4_PARENTESCO • DEPENDENTE5_NOME • DEPENDENTE5_CPF • DEPENDENTE5_PARENTESCO • ANEXOS • DATA_CONTRATO
-                  </div>
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center text-sm text-green-600 dark:text-green-400">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
-                      TEMPO REAL ATIVO - Atualização: 0.5s
-                    </div>
-                    <div className="text-sm text-blue-600 dark:text-blue-400">
-                      Total: 52+ colunas dinâmicas
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <PlanilhaViewer />
-                </div>
-              </div>
-            </div>
+          <div className="h-full">
+            <PlanilhaViewer />
           </div>
         )}
         
