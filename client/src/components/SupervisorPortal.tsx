@@ -936,14 +936,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex space-x-2">
             <button
               onClick={() => setShowAddTargetForm(true)}
-              className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
             >
               <Plus size={16} />
               Meta Individual
             </button>
             <button
               onClick={() => setShowAddTeamTargetForm(true)}
-              className="bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2"
+              className="bg-green-600 text-white bg-green-800 dark:bg-green-900 px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2"
             >
               <Plus size={16} />
               Meta da Equipe
@@ -1169,7 +1169,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddTarget}
-                className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
               >
                 Salvar Meta
               </button>
@@ -1264,7 +1264,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddTeamTarget}
-                className="px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700"
+                className="px-4 py-2 bg-green-600 text-white bg-green-800 dark:bg-green-900 rounded-lg hover:bg-green-700"
               >
                 Salvar Meta
               </button>
@@ -2024,7 +2024,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </button>
                 <button
                   onClick={exportReport}
-                  className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
                 >
                   Exportar
                 </button>
@@ -2068,7 +2068,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </button>
                 <button
                   onClick={saveCurrentFilter}
-                  className="px-4 py-2 bg-green-600 text-white dark:bg-green-50 dark:bg-green-9000 dark:text-white rounded-lg hover:bg-green-700"
+                  className="px-4 py-2 bg-green-600 text-white bg-green-800 dark:bg-green-900 rounded-lg hover:bg-green-700"
                 >
                   Salvar
                 </button>
@@ -2533,7 +2533,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <h3 className="text-white dark:text-white lg font-semibold">Gerenciar Equipe</h3>
           <button
             onClick={() => setShowAddVendorForm(true)}
-            className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
           >
             <UserPlus size={16} />
             Adicionar Vendedor
@@ -2645,7 +2645,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddVendor}
-                className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
               >
                 Adicionar
               </button>
@@ -3019,7 +3019,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-7xl h-[90vh] overflow-y-auto">
             {/* Header do Modal */}
-            <div className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white p-4 rounded-t-lg flex justify-between items-center">
+            <div className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 p-4 rounded-t-lg flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <span className="text-white dark:text-white 2xl">👁️</span>
                 <h2 className="text-white dark:text-white xl font-bold">Visualizar Relatório - EXCEL</h2>
