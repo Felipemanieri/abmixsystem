@@ -23,7 +23,9 @@ import {
   Layers,
   HardDrive,
   Wifi,
-  Calendar
+  Calendar,
+  DollarSign,
+  Crown
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
@@ -52,6 +54,18 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showClientPortal, setShowClientPortal] = useState(() => {
     return localStorage.getItem('showClientPortal') !== 'false';
   });
+  const [showVendorPortal, setShowVendorPortal] = useState(() => {
+    return localStorage.getItem('showVendorPortal') !== 'false';
+  });
+  const [showFinancialPortal, setShowFinancialPortal] = useState(() => {
+    return localStorage.getItem('showFinancialPortal') !== 'false';
+  });
+  const [showImplementationPortal, setShowImplementationPortal] = useState(() => {
+    return localStorage.getItem('showImplementationPortal') !== 'false';
+  });
+  const [showSupervisorPortal, setShowSupervisorPortal] = useState(() => {
+    return localStorage.getItem('showSupervisorPortal') !== 'false';
+  });
   
   // Estados para modais
   const [showDriveConfigModal, setShowDriveConfigModal] = useState(false);
@@ -79,13 +93,43 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     const newValue = !showClientPortal;
     setShowClientPortal(newValue);
     localStorage.setItem('showClientPortal', newValue.toString());
-    window.location.reload();
+  };
+
+  const handleToggleVendorPortal = () => {
+    const newValue = !showVendorPortal;
+    setShowVendorPortal(newValue);
+    localStorage.setItem('showVendorPortal', newValue.toString());
+  };
+
+  const handleToggleFinancialPortal = () => {
+    const newValue = !showFinancialPortal;
+    setShowFinancialPortal(newValue);
+    localStorage.setItem('showFinancialPortal', newValue.toString());
+  };
+
+  const handleToggleImplementationPortal = () => {
+    const newValue = !showImplementationPortal;
+    setShowImplementationPortal(newValue);
+    localStorage.setItem('showImplementationPortal', newValue.toString());
+  };
+
+  const handleToggleSupervisorPortal = () => {
+    const newValue = !showSupervisorPortal;
+    setShowSupervisorPortal(newValue);
+    localStorage.setItem('showSupervisorPortal', newValue.toString());
   };
 
   const resetToDefault = () => {
     setShowClientPortal(true);
+    setShowVendorPortal(true);
+    setShowFinancialPortal(true);
+    setShowImplementationPortal(true);
+    setShowSupervisorPortal(true);
     localStorage.removeItem('showClientPortal');
-    window.location.reload();
+    localStorage.removeItem('showVendorPortal');
+    localStorage.removeItem('showFinancialPortal');
+    localStorage.removeItem('showImplementationPortal');
+    localStorage.removeItem('showSupervisorPortal');
   };
 
   // Funções para abrir serviços reais
@@ -153,54 +197,175 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <h3 className="text-xl font-bold text-gray-900">Configurações de Interface</h3>
           </div>
 
-          <div className="border border-gray-200 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center">
-                  <Users className="w-5 h-5 text-blue-600 mr-2" />
-                  <span className="font-medium text-gray-900">Portal do Cliente</span>
+          <div className="space-y-4">
+            {/* Portal do Cliente */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <Users className="w-5 h-5 text-blue-600 mr-2" />
+                    <span className="font-medium text-gray-900">Portal do Cliente</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {showClientPortal ? (
+                      <>
+                        <Eye className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-green-600 font-medium">Visível</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-4 h-4 text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Oculto</span>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  {showClientPortal ? (
-                    <>
-                      <Eye className="w-4 h-4 text-green-600" />
-                      <span className="text-sm text-green-600 font-medium">Visível</span>
-                    </>
-                  ) : (
-                    <>
-                      <EyeOff className="w-4 h-4 text-red-600" />
-                      <span className="text-sm text-red-600 font-medium">Oculto</span>
-                    </>
-                  )}
-                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showClientPortal}
+                    onChange={handleToggleClientPortal}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
               </div>
-              
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showClientPortal}
-                  onChange={handleToggleClientPortal}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
             </div>
-            
-            <div className="mt-4">
-              <p className="text-sm text-gray-600">
-                {showClientPortal 
-                  ? 'O Portal do Cliente está visível na tela inicial para acesso direto.'
-                  : 'O Portal do Cliente está oculto da tela inicial. Clientes ainda podem acessar via links diretos.'
-                }
-              </p>
-              
-              {!showClientPortal && (
-                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-700">
-                    <strong>Nota:</strong> Clientes continuam acessando o sistema normalmente através dos links diretos das propostas.
-                  </p>
+
+            {/* Portal Vendedor */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <FileText className="w-5 h-5 text-green-600 mr-2" />
+                    <span className="font-medium text-gray-900">Portal Vendedor</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {showVendorPortal ? (
+                      <>
+                        <Eye className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-green-600 font-medium">Visível</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-4 h-4 text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Oculto</span>
+                      </>
+                    )}
+                  </div>
                 </div>
-              )}
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showVendorPortal}
+                    onChange={handleToggleVendorPortal}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+            </div>
+
+            {/* Portal Financeiro */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <DollarSign className="w-5 h-5 text-purple-600 mr-2" />
+                    <span className="font-medium text-gray-900">Portal Financeiro</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {showFinancialPortal ? (
+                      <>
+                        <Eye className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-green-600 font-medium">Visível</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-4 h-4 text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Oculto</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showFinancialPortal}
+                    onChange={handleToggleFinancialPortal}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+            </div>
+
+            {/* Portal Implantação */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <Zap className="w-5 h-5 text-teal-600 mr-2" />
+                    <span className="font-medium text-gray-900">Portal Implantação</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {showImplementationPortal ? (
+                      <>
+                        <Eye className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-green-600 font-medium">Visível</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-4 h-4 text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Oculto</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showImplementationPortal}
+                    onChange={handleToggleImplementationPortal}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                </label>
+              </div>
+            </div>
+
+            {/* Portal Supervisor */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <Crown className="w-5 h-5 text-gray-600 mr-2" />
+                    <span className="font-medium text-gray-900">Portal Supervisor</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {showSupervisorPortal ? (
+                      <>
+                        <Eye className="w-4 h-4 text-green-600" />
+                        <span className="text-sm text-green-600 font-medium">Visível</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-4 h-4 text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Oculto</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showSupervisorPortal}
+                    onChange={handleToggleSupervisorPortal}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-600"></div>
+                </label>
+              </div>
             </div>
           </div>
 

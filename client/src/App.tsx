@@ -44,6 +44,18 @@ function App() {
   const [showClientPortal, setShowClientPortal] = useState(() => {
     return localStorage.getItem('showClientPortal') !== 'false';
   });
+  const [showVendorPortal, setShowVendorPortal] = useState(() => {
+    return localStorage.getItem('showVendorPortal') !== 'false';
+  });
+  const [showFinancialPortal, setShowFinancialPortal] = useState(() => {
+    return localStorage.getItem('showFinancialPortal') !== 'false';
+  });
+  const [showImplementationPortal, setShowImplementationPortal] = useState(() => {
+    return localStorage.getItem('showImplementationPortal') !== 'false';
+  });
+  const [showSupervisorPortal, setShowSupervisorPortal] = useState(() => {
+    return localStorage.getItem('showSupervisorPortal') !== 'false';
+  });
 
   // Check for client proposal token in URL
   useEffect(() => {
@@ -225,7 +237,7 @@ function App() {
         </div>
 
         {/* Portal Cards */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 ${showClientPortal ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-8 mb-16 px-4`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16 px-4">
           {/* Portal do Cliente - Condicional */}
           {showClientPortal && (
             <div 
@@ -249,6 +261,7 @@ function App() {
           )}
 
           {/* Portal Vendedor */}
+          {showVendorPortal && (
           <div 
             onClick={() => setCurrentPortal('vendor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400"
@@ -267,8 +280,10 @@ function App() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Portal Implantação */}
+          {showImplementationPortal && (
           <div 
             onClick={() => setCurrentPortal('implementation')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400"
@@ -287,8 +302,10 @@ function App() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Portal Financeiro */}
+          {showFinancialPortal && (
           <div 
             onClick={() => setCurrentPortal('financial')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400"
@@ -307,8 +324,10 @@ function App() {
               </div>
             </div>
           </div>
+          )}
 
           {/* Portal Supervisor */}
+          {showSupervisorPortal && (
           <div 
             onClick={() => setCurrentPortal('supervisor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400"
@@ -327,6 +346,7 @@ function App() {
               </div>
             </div>
           </div>
+          )}
         </div>
 
         {/* Features Section */}
