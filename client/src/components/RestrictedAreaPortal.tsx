@@ -124,7 +124,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS no RestrictedAreaPortal para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
   
   // Estados para configurações

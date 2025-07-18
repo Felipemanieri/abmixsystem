@@ -63,7 +63,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS no ImplantacaoPortal para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
   
   // Ativar sincronização em tempo real

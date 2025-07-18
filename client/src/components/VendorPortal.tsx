@@ -108,7 +108,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS no VendorPortal para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
@@ -178,7 +178,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
 
   const stats = [

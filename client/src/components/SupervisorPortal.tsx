@@ -69,7 +69,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS no SupervisorPortal para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState<string | null>(null);

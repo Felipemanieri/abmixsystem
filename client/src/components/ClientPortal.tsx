@@ -59,7 +59,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
-    console.log(`Notificações DESABILITADAS no ClientPortal para ${user.name}`);
+    // Notificações removidas
   }, [user.name]);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [statusManager] = useState(() => StatusManager.getInstance());
