@@ -482,7 +482,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       case 'baixa':
         return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-white dark:text-white';
     }
   };
   
@@ -861,8 +861,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-white">Faturamento Total</p>
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(teamStats.totalValue || 0)}</p>
+              <p className="text-white dark:text-white sm font-medium text-white">Faturamento Total</p>
+              <p className="text-white dark:text-white 2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(teamStats.totalValue || 0)}</p>
             </div>
             <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
@@ -871,8 +871,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-white">Total Propostas</p>
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{teamStats.totalProposals || 0}</p>
+              <p className="text-white dark:text-white sm font-medium text-white">Total Propostas</p>
+              <p className="text-white dark:text-white 2xl font-bold text-blue-600 dark:text-blue-400">{teamStats.totalProposals || 0}</p>
             </div>
             <FileText className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
@@ -881,8 +881,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-white">Ticket Médio</p>
-              <p className="text-2xl font-bold text-purple-600 dark:text-white">{formatCurrency(teamStats.averageValue || 0)}</p>
+              <p className="text-white dark:text-white sm font-medium text-white">Ticket Médio</p>
+              <p className="text-white dark:text-white 2xl font-bold text-purple-600 dark:text-white">{formatCurrency(teamStats.averageValue || 0)}</p>
             </div>
             <TrendingUp className="h-8 w-8 text-purple-600 dark:text-white" />
           </div>
@@ -891,8 +891,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-white">Vendedores Ativos</p>
-              <p className="text-2xl font-bold text-orange-600 dark:text-white">{teamStats.totalVendors || 0}</p>
+              <p className="text-white dark:text-white sm font-medium text-white">Vendedores Ativos</p>
+              <p className="text-white dark:text-white 2xl font-bold text-orange-600 dark:text-white">{teamStats.totalVendors || 0}</p>
             </div>
             <Users className="h-8 w-8 text-orange-600 dark:text-white" />
           </div>
@@ -901,7 +901,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
       {/* Performance por Vendedor */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Performance por Vendedor</h3>
+        <h3 className="text-white dark:text-white lg font-semibold mb-4">Performance por Vendedor</h3>
         <div className="space-y-4">
           {vendors.map(vendor => {
             const stats = getVendorStats(vendor.id);
@@ -912,11 +912,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div key={vendor.id} className="border rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-medium">{vendor.name}</span>
-                  <span className="text-sm text-gray-600 dark:text-white">{stats.totalProposals} propostas</span>
+                  <span className="text-white dark:text-white sm text-white">{stats.totalProposals} propostas</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-600 dark:text-white">Faturamento: {formatCurrency(stats.totalValue.toString())}</span>
-                  <span className="text-sm font-medium">{progress.toFixed(1)}% da meta</span>
+                  <span className="text-white dark:text-white sm text-white">Faturamento: {formatCurrency(stats.totalValue.toString())}</span>
+                  <span className="text-white dark:text-white sm font-medium">{progress.toFixed(1)}% da meta</span>
                 </div>
                 <SimpleProgressBar percentage={progress} />
               </div>
@@ -932,7 +932,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       {/* Controles */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Gerenciar Metas</h3>
+          <h3 className="text-white dark:text-white lg font-semibold">Gerenciar Metas</h3>
           <div className="flex space-x-2">
             <button
               onClick={() => setShowAddTargetForm(true)}
@@ -978,37 +978,37 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
       {/* Metas dos Vendedores */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Metas Individuais</h3>
+        <h3 className="text-white dark:text-white lg font-semibold mb-4">Metas Individuais</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2">Vendedor</th>
-                <th className="text-left py-2">Período</th>
-                <th className="text-left py-2">Meta Valor</th>
-                <th className="text-left py-2">Meta Propostas</th>
-                <th className="text-left py-2">Bônus</th>
-                <th className="text-left py-2">Progresso</th>
-                <th className="text-left py-2">Ações</th>
+                <th className="text-white text-white dark:text-white left py-2">Vendedor</th>
+                <th className="text-white text-white dark:text-white left py-2">Período</th>
+                <th className="text-white text-white dark:text-white left py-2">Meta Valor</th>
+                <th className="text-white text-white dark:text-white left py-2">Meta Propostas</th>
+                <th className="text-white text-white dark:text-white left py-2">Bônus</th>
+                <th className="text-white text-white dark:text-white left py-2">Progresso</th>
+                <th className="text-white text-white dark:text-white left py-2">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendorTargets.map(target => (
                 <tr key={target.id} className="border-b">
-                  <td className="py-2">{getVendorName(target.vendorId)}</td>
-                  <td className="py-2">{getMonthName(target.month)}/{target.year}</td>
-                  <td className="py-2">{formatCurrency(target.targetValue)}</td>
-                  <td className="py-2">{target.targetProposals}</td>
-                  <td className="py-2">{formatCurrency(target.bonus)}</td>
-                  <td className="py-2">
+                  <td className="text-white py-2">{getVendorName(target.vendorId)}</td>
+                  <td className="text-white py-2">{getMonthName(target.month)}/{target.year}</td>
+                  <td className="text-white py-2">{formatCurrency(target.targetValue)}</td>
+                  <td className="text-white py-2">{target.targetProposals}</td>
+                  <td className="text-white py-2">{formatCurrency(target.bonus)}</td>
+                  <td className="text-white py-2">
                     <div className="w-24">
                       <SimpleProgressBar percentage={calculateProgress(target.vendorId, target)} />
                     </div>
                   </td>
-                  <td className="py-2">
+                  <td className="text-white py-2">
                     <button
                       onClick={() => deleteTargetMutation.mutate(target.id)}
-                      className="text-red-600 hover:text-red-800 dark:text-white"
+                      className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -1022,17 +1022,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
       {/* Metas da Equipe */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Metas da Equipe</h3>
+        <h3 className="text-white dark:text-white lg font-semibold mb-4">Metas da Equipe</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2">Período</th>
-                <th className="text-left py-2">Meta Valor</th>
-                <th className="text-left py-2">Meta Propostas</th>
-                <th className="text-left py-2">Bônus da Equipe</th>
-                <th className="text-left py-2">Progresso</th>
-                <th className="text-left py-2">Ações</th>
+                <th className="text-white text-white dark:text-white left py-2">Período</th>
+                <th className="text-white text-white dark:text-white left py-2">Meta Valor</th>
+                <th className="text-white text-white dark:text-white left py-2">Meta Propostas</th>
+                <th className="text-white text-white dark:text-white left py-2">Bônus da Equipe</th>
+                <th className="text-white text-white dark:text-white left py-2">Progresso</th>
+                <th className="text-white text-white dark:text-white left py-2">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -1044,19 +1044,19 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 
                 return (
                   <tr key={target.id} className="border-b">
-                    <td className="py-2">{getMonthName(target.month)}/{target.year}</td>
-                    <td className="py-2">{formatCurrency(target.targetValue)}</td>
-                    <td className="py-2">{target.targetProposals}</td>
-                    <td className="py-2">{formatCurrency(target.teamBonus)}</td>
-                    <td className="py-2">
+                    <td className="text-white py-2">{getMonthName(target.month)}/{target.year}</td>
+                    <td className="text-white py-2">{formatCurrency(target.targetValue)}</td>
+                    <td className="text-white py-2">{target.targetProposals}</td>
+                    <td className="text-white py-2">{formatCurrency(target.teamBonus)}</td>
+                    <td className="text-white py-2">
                       <div className="w-24">
                         <SimpleProgressBar percentage={Math.min(teamProgress, 100)} />
                       </div>
                     </td>
-                    <td className="py-2">
+                    <td className="text-white py-2">
                       <button
                         onClick={() => console.log('Delete team target', target.id)}
-                        className="text-red-600 hover:text-red-800 dark:text-white"
+                        className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -1074,10 +1074,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Nova Meta Individual</h3>
+              <h3 className="text-white dark:text-white lg font-semibold">Nova Meta Individual</h3>
               <button
                 onClick={() => setShowAddTargetForm(false)}
-                className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1085,7 +1085,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Vendedor</label>
+                <label className="text-white block text-sm font-medium mb-1">Vendedor</label>
                 <select
                   value={newTargetData.vendorId}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
@@ -1100,7 +1100,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Mês</label>
+                  <label className="text-white block text-sm font-medium mb-1">Mês</label>
                   <select
                     value={newTargetData.month}
                     onChange={(e) => setNewTargetData(prev => ({ ...prev, month: parseInt(e.target.value) }))}
@@ -1113,7 +1113,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Ano</label>
+                  <label className="text-white block text-sm font-medium mb-1">Ano</label>
                   <select
                     value={newTargetData.year}
                     onChange={(e) => setNewTargetData(prev => ({ ...prev, year: parseInt(e.target.value) }))}
@@ -1127,34 +1127,34 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Meta de Valor (R$)</label>
+                <label className="text-white block text-sm font-medium mb-1">Meta de Valor (R$)</label>
                 <input
                   type="text"
                   value={newTargetData.targetValue}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
-                  placeholder="Ex: 50000"
+                  placeholder="text-white Ex: 50000"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Meta de Propostas</label>
+                <label className="text-white block text-sm font-medium mb-1">Meta de Propostas</label>
                 <input
                   type="number"
                   value={newTargetData.targetProposals}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
-                  placeholder="Ex: 10"
+                  placeholder="text-white Ex: 10"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Bônus (R$)</label>
+                <label className="text-white block text-sm font-medium mb-1">Bônus (R$)</label>
                 <input
                   type="text"
                   value={newTargetData.bonus}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
-                  placeholder="Ex: 5000"
+                  placeholder="text-white Ex: 5000"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
@@ -1163,7 +1163,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="flex justify-end space-x-2 mt-6">
               <button
                 onClick={() => setShowAddTargetForm(false)}
-                className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                className="px-4 py-2 text-white hover:text-white dark:text-white"
               >
                 Cancelar
               </button>
@@ -1183,10 +1183,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Nova Meta da Equipe</h3>
+              <h3 className="text-white dark:text-white lg font-semibold">Nova Meta da Equipe</h3>
               <button
                 onClick={() => setShowAddTeamTargetForm(false)}
-                className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1195,7 +1195,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Mês</label>
+                  <label className="text-white block text-sm font-medium mb-1">Mês</label>
                   <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
@@ -1208,7 +1208,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Ano</label>
+                  <label className="text-white block text-sm font-medium mb-1">Ano</label>
                   <select
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
@@ -1222,34 +1222,34 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Meta de Valor (R$)</label>
+                <label className="text-white block text-sm font-medium mb-1">Meta de Valor (R$)</label>
                 <input
                   type="text"
                   value={newTargetData.targetValue}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
-                  placeholder="Ex: 500000"
+                  placeholder="text-white Ex: 500000"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Meta de Propostas</label>
+                <label className="text-white block text-sm font-medium mb-1">Meta de Propostas</label>
                 <input
                   type="number"
                   value={newTargetData.targetProposals}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
-                  placeholder="Ex: 100"
+                  placeholder="text-white Ex: 100"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Bônus da Equipe (R$)</label>
+                <label className="text-white block text-sm font-medium mb-1">Bônus da Equipe (R$)</label>
                 <input
                   type="text"
                   value={newTargetData.bonus}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
-                  placeholder="Ex: 20000"
+                  placeholder="text-white Ex: 20000"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
@@ -1258,7 +1258,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="flex justify-end space-x-2 mt-6">
               <button
                 onClick={() => setShowAddTeamTargetForm(false)}
-                className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                className="px-4 py-2 text-white hover:text-white dark:text-white"
               >
                 Cancelar
               </button>
@@ -1280,7 +1280,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
       {/* Controles */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Sistema de Premiação</h3>
+          <h3 className="text-white dark:text-white lg font-semibold">Sistema de Premiação</h3>
           <button
             onClick={() => setShowAddAwardForm(true)}
             className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 flex items-center gap-2"
@@ -1293,7 +1293,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
       {/* Lista de Premiações */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Premiações Concedidas</h3>
+        <h3 className="text-white dark:text-white lg font-semibold mb-4">Premiações Concedidas</h3>
         <div className="space-y-4">
           {awards.map(award => (
             <div key={award.id} className="border rounded-lg p-4 flex items-center justify-between">
@@ -1307,16 +1307,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
                 <div>
                   <h4 className="font-medium">{award.title}</h4>
-                  <p className="text-sm text-gray-600 dark:text-white">{getVendorName(award.vendorId)}</p>
-                  <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{award.description}</p>
+                  <p className="text-white dark:text-white sm text-white">{getVendorName(award.vendorId)}</p>
+                  <p className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{award.description}</p>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-white dark:text-white right">
                 <p className="font-medium">{formatCurrency(award.value)}</p>
-                <p className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{new Date(award.dateAwarded).toLocaleDateString('pt-BR')}</p>
+                <p className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{new Date(award.dateAwarded).toLocaleDateString('pt-BR')}</p>
                 <button
                   onClick={() => deleteAwardMutation.mutate(award.id)}
-                  className="text-red-600 hover:text-red-800 dark:text-white mt-2"
+                  className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white mt-2"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -1331,10 +1331,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Nova Premiação</h3>
+              <h3 className="text-white dark:text-white lg font-semibold">Nova Premiação</h3>
               <button
                 onClick={() => setShowAddAwardForm(false)}
-                className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1342,7 +1342,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Vendedor</label>
+                <label className="text-white block text-sm font-medium mb-1">Vendedor</label>
                 <select
                   value={newAwardData.vendorId}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
@@ -1356,47 +1356,47 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Tipo de Premiação</label>
+                <label className="text-white block text-sm font-medium mb-1">Tipo de Premiação</label>
                 <select
                   value={newAwardData.type}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, type: e.target.value as 'monetary' | 'recognition' | 'bonus' }))}
                   className="w-full border rounded-lg px-3 py-2"
                 >
-                  <option value="recognition">Reconhecimento</option>
-                  <option value="monetary">Monetária</option>
-                  <option value="bonus">Bônus</option>
+                  <option className="text-white" value="recognition">Reconhecimento</option>
+                  <option className="text-white" value="monetary">Monetária</option>
+                  <option className="text-white" value="bonus">Bônus</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Título</label>
+                <label className="text-white block text-sm font-medium mb-1">Título</label>
                 <input
                   type="text"
                   value={newAwardData.title}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="Ex: Vendedor do Mês"
+                  placeholder="text-white Ex: Vendedor do Mês"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Descrição</label>
+                <label className="text-white block text-sm font-medium mb-1">Descrição</label>
                 <textarea
                   value={newAwardData.description}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Detalhes da premiação..."
+                  placeholder="text-white Detalhes da premiação..."
                   rows={3}
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Valor (R$)</label>
+                <label className="text-white block text-sm font-medium mb-1">Valor (R$)</label>
                 <input
                   type="text"
                   value={newAwardData.value}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, value: e.target.value }))}
-                  placeholder="Ex: 1000"
+                  placeholder="text-white Ex: 1000"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
@@ -1405,7 +1405,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             <div className="flex justify-end space-x-2 mt-6">
               <button
                 onClick={() => setShowAddAwardForm(false)}
-                className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                className="px-4 py-2 text-white hover:text-white dark:text-white"
               >
                 Cancelar
               </button>
@@ -1673,11 +1673,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 pb-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white dark:text-white">Analytics & Performance</h2>
-              <p className="text-gray-600 dark:text-white mt-1">Análise de {analyticsData.length} propostas</p>
+              <h2 className="text-white dark:text-white 2xl font-semibold text-white dark:text-white">Analytics & Performance</h2>
+              <p className="text-white dark:text-white white mt-1">Análise de {analyticsData.length} propostas</p>
             </div>
-            <div className="text-right">
-              <span className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{new Date().toLocaleDateString('pt-BR')}</span>
+            <div className="text-white dark:text-white right">
+              <span className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{new Date().toLocaleDateString('pt-BR')}</span>
             </div>
           </div>
         </div>
@@ -1685,13 +1685,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Filtros */}
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
-            <h3 className="text-base font-medium text-gray-700 dark:text-white dark:text-white">Filtros</h3>
+            <h3 className="text-white dark:text-white base font-medium text-white dark:text-white">Filtros</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {/* Vendedores */}
               <div>
-                <label className="block text-sm text-gray-600 dark:text-white mb-2">Vendedores</label>
+                <label className="text-white block text-sm text-white mb-2">Vendedores</label>
                 <select
                   value={selectedVendorForChart}
                   onChange={(e) => {
@@ -1700,8 +1700,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   }}
                   className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Selecione um vendedor</option>
-                  <option value="all">Todos os Vendedores</option>
+                  <option className="text-white" value="">Selecione um vendedor</option>
+                  <option className="text-white" value="all">Todos os Vendedores</option>
                   {uniqueVendors.map(vendor => (
                     <option key={vendor} value={vendor}>{vendor}</option>
                   ))}
@@ -1710,7 +1710,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Data Início */}
               <div>
-                <label className="block text-sm text-gray-600 dark:text-white mb-2">Data Início</label>
+                <label className="text-white block text-sm text-white mb-2">Data Início</label>
                 <input
                   type="date"
                   value={dataInicio}
@@ -1721,7 +1721,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Data Fim */}
               <div>
-                <label className="block text-sm text-gray-600 dark:text-white mb-2">Data Fim</label>
+                <label className="text-white block text-sm text-white mb-2">Data Fim</label>
                 <input
                   type="date"
                   value={dataFim}
@@ -1732,7 +1732,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Status */}
               <div>
-                <label className="block text-sm text-gray-600 dark:text-white mb-2">Status</label>
+                <label className="text-white block text-sm text-white mb-2">Status</label>
                 <select
                   value={selectedStatusForChart}
                   onChange={(e) => {
@@ -1741,8 +1741,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   }}
                   className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="">Selecione um status</option>
-                  <option value="all">Todos os Status</option>
+                  <option className="text-white" value="">Selecione um status</option>
+                  <option className="text-white" value="all">Todos os Status</option> className="text-white"
                   {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
                   ))}
@@ -1760,7 +1760,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   setDataFim('');
                   setShowChart(false);
                 }}
-                className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white text-sm border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700"
+                className="px-4 py-2 text-white hover:text-white dark:text-white text-sm border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700"
               >
                 Limpar Filtros
               </button>
@@ -1771,34 +1771,34 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Métricas Principais */}
         <div className="bg-white dark:bg-gray-800 border border-slate-200">
           <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-medium text-slate-800 dark:text-white dark:text-white">Resumo Executivo</h2>
+            <h2 className="text-white dark:text-white lg font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">Resumo Executivo</h2>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="text-2xl font-semibold text-slate-800 dark:text-white dark:text-white mb-1">{teamMetrics.totalConvertidas}</div>
-                <div className="text-sm text-slate-600 dark:text-white dark:text-white mb-2">Convertidas</div>
-                <div className="text-xs text-emerald-600 dark:text-white font-medium">{teamMetrics.taxaConversao.toFixed(1)}% conversão</div>
+              <div className="text-white dark:text-white center">
+                <div className="text-white dark:text-white 2xl font-semibold text-slate- dark:text-white800 dark:text-white dark:text-white mb-1">{teamMetrics.totalConvertidas}</div>
+                <div className="text-white dark:text-white sm text-slate- dark:text-white600 dark:text-white dark:text-white mb-2">Convertidas</div>
+                <div className="text-white dark:text-white xs text-emerald-600 dark:text-white font-medium">{teamMetrics.taxaConversao.toFixed(1)}% conversão</div>
               </div>
               
-              <div className="text-center">
-                <div className="text-2xl font-semibold text-slate-800 dark:text-white dark:text-white mb-1">{teamMetrics.totalPerdidas}</div>
-                <div className="text-sm text-slate-600 dark:text-white dark:text-white mb-2">Perdidas</div>
-                <div className="text-xs text-slate-500 dark:text-white">
+              <div className="text-white dark:text-white center">
+                <div className="text-white dark:text-white 2xl font-semibold text-slate- dark:text-white800 dark:text-white dark:text-white mb-1">{teamMetrics.totalPerdidas}</div>
+                <div className="text-white dark:text-white sm text-slate- dark:text-white600 dark:text-white dark:text-white mb-2">Perdidas</div>
+                <div className="text-white dark:text-white xs text-slate- dark:text-white500 dark:text-white">
                   {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPerdidas / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% do total
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="text-xl font-semibold text-slate-800 dark:text-white dark:text-white mb-1">{formatCurrency(teamMetrics.totalFaturamento.toString())}</div>
-                <div className="text-sm text-slate-600 dark:text-white dark:text-white mb-2">Faturamento</div>
-                <div className="text-xs text-slate-500 dark:text-white">Média: {formatCurrency(teamMetrics.ticketMedio.toString())}</div>
+              <div className="text-white dark:text-white center">
+                <div className="text-white dark:text-white xl font-semibold text-slate- dark:text-white800 dark:text-white dark:text-white mb-1">{formatCurrency(teamMetrics.totalFaturamento.toString())}</div>
+                <div className="text-white dark:text-white sm text-slate- dark:text-white600 dark:text-white dark:text-white mb-2">Faturamento</div>
+                <div className="text-white dark:text-white xs text-slate- dark:text-white500 dark:text-white">Média: {formatCurrency(teamMetrics.ticketMedio.toString())}</div>
               </div>
 
-              <div className="text-center">
-                <div className="text-2xl font-semibold text-slate-800 dark:text-white dark:text-white mb-1">{teamMetrics.totalPendentes}</div>
-                <div className="text-sm text-slate-600 dark:text-white dark:text-white mb-2">Em andamento</div>
-                <div className="text-xs text-slate-500 dark:text-white">
+              <div className="text-white dark:text-white center">
+                <div className="text-white dark:text-white 2xl font-semibold text-slate- dark:text-white800 dark:text-white dark:text-white mb-1">{teamMetrics.totalPendentes}</div>
+                <div className="text-white dark:text-white sm text-slate- dark:text-white600 dark:text-white dark:text-white mb-2">Em andamento</div>
+                <div className="text-white dark:text-white xs text-slate- dark:text-white500 dark:text-white">
                   {teamMetrics.totalPropostas > 0 ? ((teamMetrics.totalPendentes / teamMetrics.totalPropostas) * 100).toFixed(1) : 0}% ativas
                 </div>
               </div>
@@ -1809,7 +1809,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Distribuição por Status */}
         <div className="bg-white dark:bg-gray-800 border border-slate-200">
           <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-medium text-slate-800 dark:text-white dark:text-white">Distribuição por Status</h2>
+            <h2 className="text-white dark:text-white lg font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">Distribuição por Status</h2>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
@@ -1820,10 +1820,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   const percentage = analyticsData.length > 0 ? (count / analyticsData.length * 100) : 0;
                   
                   return (
-                    <div key={status} className="text-center">
-                      <div className="text-lg font-semibold text-slate-800 dark:text-white dark:text-white mb-1">{count}</div>
-                      <div className="text-xs text-slate-600 dark:text-white dark:text-white mb-1">{config.label}</div>
-                      <div className="text-xs text-slate-500 dark:text-white">{percentage.toFixed(0)}%</div>
+                    <div key={status} className="text-white dark:text-white center">
+                      <div className="text-white dark:text-white lg font-semibold text-slate- dark:text-white800 dark:text-white dark:text-white mb-1">{count}</div>
+                      <div className="text-white dark:text-white xs text-slate- dark:text-white600 dark:text-white dark:text-white mb-1">{config.label}</div>
+                      <div className="text-white dark:text-white xs text-slate- dark:text-white500 dark:text-white">{percentage.toFixed(0)}%</div>
                     </div>
                   );
                 })}
@@ -1834,7 +1834,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Performance Individual */}
         <div className="bg-white dark:bg-gray-800 border border-slate-200">
           <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-medium text-slate-800 dark:text-white dark:text-white">Performance Individual</h2>
+            <h2 className="text-white dark:text-white lg font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">Performance Individual</h2>
           </div>
           <div className="p-6">
             <div className="space-y-4">
@@ -1851,13 +1851,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       ></div>
                     </div>
                     <div>
-                      <div className="font-medium text-slate-800 dark:text-white dark:text-white">{vendor}</div>
-                      <div className="text-sm text-slate-500 dark:text-white">{data.total} propostas</div>
+                      <div className="font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">{vendor}</div>
+                      <div className="text-white dark:text-white sm text-slate- dark:text-white500 dark:text-white">{data.total} propostas</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-medium text-slate-800 dark:text-white dark:text-white">{data.taxaConversao.toFixed(1)}%</div>
-                    <div className="text-sm text-slate-500 dark:text-white">{formatCurrency(data.faturamento.toString())}</div>
+                  <div className="text-white dark:text-white right">
+                    <div className="font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">{data.taxaConversao.toFixed(1)}%</div>
+                    <div className="text-white dark:text-white sm text-slate- dark:text-white500 dark:text-white">{formatCurrency(data.faturamento.toString())}</div>
                   </div>
                 </div>
               ))}
@@ -1872,7 +1872,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {showChart && (selectedStatusForChart || selectedVendorForChart) && (
           <div className="bg-white dark:bg-gray-800 border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
-              <h2 className="text-lg font-medium text-slate-800 dark:text-white dark:text-white">
+              <h2 className="text-white dark:text-white lg font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">
                 {selectedVendorForChart && selectedVendorForChart !== 'all' 
                   ? `Distribuição de Status - ${selectedVendorForChart}`
                   : selectedStatusForChart && selectedStatusForChart !== 'all'
@@ -1883,8 +1883,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
             <div className="p-6">
               {chartData.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-slate-500 dark:text-white">Nenhum dado encontrado para os filtros selecionados.</p>
+                <div className="text-white dark:text-white center py-12">
+                  <p className="text-white dark:text-white slate- dark:text-white500 dark:text-white">Nenhum dado encontrado para os filtros selecionados.</p>
                 </div>
               ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1925,7 +1925,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
                 {/* Legenda */}
                 <div className="space-y-3">
-                  <h3 className="font-medium text-slate-700 dark:text-white dark:text-white mb-4">Legenda</h3>
+                  <h3 className="font-medium text-slate- dark:text-white700 dark:text-white dark:text-white mb-4">Legenda</h3>
                   {chartData.map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -1933,11 +1933,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           className="w-4 h-4 rounded-full"
                           style={{ backgroundColor: item.color }}
                         ></div>
-                        <span className="text-sm text-slate-700 dark:text-white dark:text-white">{item.name}</span>
+                        <span className="text-white dark:text-white sm text-slate- dark:text-white700 dark:text-white dark:text-white">{item.name}</span>
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm font-medium text-slate-800 dark:text-white dark:text-white">{item.value}</div>
-                        <div className="text-xs text-slate-500 dark:text-white">
+                      <div className="text-white dark:text-white right">
+                        <div className="text-white dark:text-white sm font-medium text-slate- dark:text-white800 dark:text-white dark:text-white">{item.value}</div>
+                        <div className="text-white dark:text-white xs text-slate- dark:text-white500 dark:text-white">
                           {chartData.reduce((sum, d) => sum + d.value, 0) > 0 
                             ? ((item.value / chartData.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)
                             : 0}%
@@ -1957,10 +1957,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Exportar Relatório</h3>
+                <h3 className="text-white dark:text-white lg font-semibold">Exportar Relatório</h3>
                 <button
                   onClick={() => setShowExportModal(false)}
-                  className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
                 >
                   <X size={20} />
                 </button>
@@ -1968,20 +1968,20 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Formato</label>
+                  <label className="text-white block text-sm font-medium mb-2">Formato</label>
                   <select
                     value={exportFormat}
                     onChange={(e) => setExportFormat(e.target.value)}
                     className="w-full border rounded-lg px-3 py-2"
                   >
-                    <option value="PDF">PDF</option>
-                    <option value="Excel">Excel</option>
-                    <option value="CSV">CSV</option>
+                    <option className="text-white" value="PDF">PDF</option>
+                    <option className="text-white" value="Excel">Excel</option>
+                    <option className="text-white" value="CSV">CSV</option>
                   </select>
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <p className="text-sm font-medium">Enviar para:</p>
+                  <p className="text-white dark:text-white sm font-medium">Enviar para:</p>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={exportReport}
@@ -2018,7 +2018,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="flex justify-end gap-2 mt-6">
                 <button
                   onClick={() => setShowExportModal(false)}
-                  className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                  className="px-4 py-2 text-white hover:text-white dark:text-white"
                 >
                   Cancelar
                 </button>
@@ -2037,10 +2037,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Salvar Filtro</h3>
+                <h3 className="text-white dark:text-white lg font-semibold">Salvar Filtro</h3>
                 <button
                   onClick={() => setShowSaveFilter(false)}
-                  className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
                 >
                   <X size={20} />
                 </button>
@@ -2048,12 +2048,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Nome do Filtro</label>
+                  <label className="text-white block text-sm font-medium mb-2">Nome do Filtro</label>
                   <input
                     type="text"
                     value={filterName}
                     onChange={(e) => setFilterName(e.target.value)}
-                    placeholder="Ex: Vendas Janeiro 2025"
+                    placeholder="text-white Ex: Vendas Janeiro 2025"
                     className="w-full border rounded-lg px-3 py-2"
                   />
                 </div>
@@ -2062,7 +2062,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="flex justify-end gap-2 mt-6">
                 <button
                   onClick={() => setShowSaveFilter(false)}
-                  className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                  className="px-4 py-2 text-white hover:text-white dark:text-white"
                 >
                   Cancelar
                 </button>
@@ -2152,18 +2152,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white flex items-center gap-3">
-                  <BarChart3 size={24} className="text-green-600 dark:text-green-400" />
+                <h2 className="text-white dark:text-white xl font-semibold text-white dark:text-white flex items-center gap-3">
+                  <BarChart3 size={24} className="text-white dark:text-white green-600 dark:text-green-400" />
                   Sistema de Relatórios
                 </h2>
-                <p className="text-gray-600 dark:text-white mt-1">Dados em tempo real da planilha Google Sheets</p>
+                <p className="text-white dark:text-white white mt-1">Dados em tempo real da planilha Google Sheets</p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <span className="text-sm text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{filteredData.length} registros disponíveis</span>
+                <div className="text-white dark:text-white right">
+                  <span className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{filteredData.length} registros disponíveis</span>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-2 h-2 bg-green-50 dark:bg-green-9000 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400">Conectado</span>
+                    <span className="text-white dark:text-white xs text-green-600 dark:text-green-400">Conectado</span>
                   </div>
                 </div>
                 <button
@@ -2184,7 +2184,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-800 dark:text-white dark:text-white flex items-center gap-2">
+              <h3 className="text-white dark:text-white base font-semibold text-white dark:text-white flex items-center gap-2">
                 <Filter size={18} />
                 Filtros de Relatório
               </h3>
@@ -2194,7 +2194,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     realTimeSync.forceRefresh();
                     showNotification('Sincronização com Google Sheets iniciada', 'success');
                   }}
-                  className="text-sm bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-white hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
+                  className="text-white dark:text-white sm bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-white hover:bg-blue-100 px-3 py-1 rounded-md flex items-center gap-1"
                 >
                   <RefreshCw size={14} />
                   Sincronizar
@@ -2203,7 +2203,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   onClick={() => setReportFilters({
                     dataInicio: '', dataFim: '', vendedor: '', status: '', tipo: 'completo'
                   })}
-                  className="text-sm bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 text-gray-600 dark:text-white hover:bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md flex items-center gap-1"
+                  className="text-white dark:text-white sm bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 text-white hover:bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md flex items-center gap-1"
                 >
                   <X size={12} />
                   Limpar
@@ -2217,28 +2217,28 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Primeira linha: Tipo de Relatório, Vendedor, Status */}
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Tipo de Relatório</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Tipo de Relatório</label>
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
-                    <option value="completo">📊 Relatório Completo</option>
-                    <option value="individual">👤 Por Vendedor Individual</option>
-                    <option value="equipe">👥 Por Equipe</option>
-                    <option value="financeiro">💰 Relatório Financeiro</option>
-                    <option value="status">📋 Por Status</option>
+                    <option className="text-white" value="completo">📊 Relatório Completo</option>
+                    <option className="text-white" value="individual">👤 Por Vendedor Individual</option>
+                    <option className="text-white" value="equipe">👥 Por Equipe</option>
+                    <option className="text-white" value="financeiro">💰 Relatório Financeiro</option>
+                    <option className="text-white" value="status">📋 Por Status</option> className="text-white"
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Vendedor</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Vendedor</label>
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
-                    <option value="">Todos os Vendedores</option>
+                    <option className="text-white" value="">Todos os Vendedores</option>
                     {uniqueVendors && uniqueVendors.map(vendor => (
                       <option key={vendor} value={vendor}>{vendor}</option>
                     ))}
@@ -2246,13 +2246,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Status</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Status</label>
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
-                    <option value="">Todos os Status</option>
+                    <option className="text-white" value="">Todos os Status</option> className="text-white"
                     {STATUS_CONFIG && Object.entries(STATUS_CONFIG).map(([key, config]) => (
                       <option key={key} value={key}>{config.label}</option>
                     ))}
@@ -2263,29 +2263,29 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               {/* Segunda linha: Data Início, Data Fim, Limpar Filtros */}
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Data Início</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Data Início</label>
                   <input
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                    placeholder="dd/mm/aaaa"
+                    placeholder="text-white dd/mm/aaaa"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Data Fim</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Data Fim</label>
                   <input
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                    placeholder="dd/mm/aaaa"
+                    placeholder="text-white dd/mm/aaaa"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Atalhos de Período</label>
+                  <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Atalhos de Período</label>
                   <div className="flex gap-1">
                     <button
                       onClick={() => {
@@ -2404,7 +2404,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         {/* Dashboard Visual com Dados Google Sheets */}
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg shadow-sm dark:shadow-gray-900/30">
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600">
-            <h3 className="text-base font-semibold text-gray-800 dark:text-white dark:text-white flex items-center gap-2">
+            <h3 className="text-white dark:text-white base font-semibold text-white dark:text-white flex items-center gap-2">
               <PieChart size={18} />
               Painel de Dados em Tempo Real
               <span className="ml-2 text-xs bg-green-100 text-green-700 dark:text-white px-2 py-1 rounded-full">
@@ -2418,8 +2418,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-blue-700 dark:text-white">Total de Propostas</p>
-                    <p className="text-xl font-bold text-blue-900 dark:text-white">{reportData.total}</p>
+                    <p className="text-white dark:text-white xs font-medium text-blue-700 dark:text-white">Total de Propostas</p>
+                    <p className="text-white dark:text-white xl font-bold text-blue-900 dark:text-white">{reportData.total}</p>
                   </div>
                   <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
@@ -2428,8 +2428,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg border border-green-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-green-700 dark:text-white">Faturamento Total</p>
-                    <p className="text-xl font-bold text-green-900 dark:text-white">{formatCurrency(reportData.faturamento.toString())}</p>
+                    <p className="text-white dark:text-white xs font-medium text-green-700 dark:text-white">Faturamento Total</p>
+                    <p className="text-white dark:text-white xl font-bold text-green-900 dark:text-white">{formatCurrency(reportData.faturamento.toString())}</p>
                   </div>
                   <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
@@ -2438,8 +2438,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg border border-purple-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-purple-700 dark:text-white">Ticket Médio</p>
-                    <p className="text-xl font-bold text-purple-900 dark:text-white">
+                    <p className="text-white dark:text-white xs font-medium text-purple-700 dark:text-white">Ticket Médio</p>
+                    <p className="text-white dark:text-white xl font-bold text-purple-900 dark:text-white">
                       {formatCurrency((reportData.faturamento / (reportData.total || 1)).toString())}
                     </p>
                   </div>
@@ -2450,8 +2450,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-3 rounded-lg border border-orange-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium text-orange-700 dark:text-white">Vendedores Ativos</p>
-                    <p className="text-xl font-bold text-orange-900 dark:text-white">{uniqueVendors.length}</p>
+                    <p className="text-white dark:text-white xs font-medium text-orange-700 dark:text-white">Vendedores Ativos</p>
+                    <p className="text-white dark:text-white xl font-bold text-orange-900 dark:text-white">{uniqueVendors.length}</p>
                   </div>
                   <Users className="h-6 w-6 text-orange-600 dark:text-white" />
                 </div>
@@ -2461,7 +2461,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             {/* Distribuição por Status */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
-                <h4 className="text-base font-semibold text-gray-800 dark:text-white dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-white dark:text-white base font-semibold text-white dark:text-white mb-4 flex items-center gap-2">
                   <BarChart3 size={16} />
                   Distribuição por Status
                 </h4>
@@ -2476,11 +2476,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                             className="w-4 h-4 rounded-full"
                             style={{ backgroundColor: statusConfig?.color || '#6B7280' }}
                           ></div>
-                          <span className="text-sm font-medium text-gray-700 dark:text-white dark:text-white">{status}</span>
+                          <span className="text-white dark:text-white sm font-medium text-white dark:text-white">{status}</span>
                         </div>
-                        <div className="text-right">
-                          <span className="text-lg font-bold text-gray-900 dark:text-white dark:text-white">{count}</span>
-                          <span className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white ml-1">({percentage}%)</span>
+                        <div className="text-white dark:text-white right">
+                          <span className="text-white dark:text-white lg font-bold text-white dark:text-white">{count}</span>
+                          <span className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white ml-1">({percentage}%)</span>
                         </div>
                       </div>
                     );
@@ -2489,7 +2489,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
 
               <div>
-                <h4 className="text-base font-semibold text-gray-800 dark:text-white dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-white dark:text-white base font-semibold text-white dark:text-white mb-4 flex items-center gap-2">
                   <Award size={16} />
                   Ranking de Vendedores
                 </h4>
@@ -2507,11 +2507,11 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         }`}>
                           {index + 1}
                         </span>
-                        <span className="text-sm font-medium text-gray-700 dark:text-white dark:text-white">{vendor}</span>
+                        <span className="text-white dark:text-white sm font-medium text-white dark:text-white">{vendor}</span>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-gray-900 dark:text-white dark:text-white">{data.count}</div>
-                        <div className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">{formatCurrency(data.value.toString())}</div>
+                      <div className="text-white dark:text-white right">
+                        <div className="text-white dark:text-white lg font-bold text-white dark:text-white">{data.count}</div>
+                        <div className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{formatCurrency(data.value.toString())}</div>
                       </div>
                     </div>
                   ))}
@@ -2530,7 +2530,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Gerenciar Equipe</h3>
+          <h3 className="text-white dark:text-white lg font-semibold">Gerenciar Equipe</h3>
           <button
             onClick={() => setShowAddVendorForm(true)}
             className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
@@ -2544,35 +2544,35 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2">Nome</th>
-                <th className="text-left py-2">Email</th>
-                <th className="text-left py-2">Senha</th>
-                <th className="text-left py-2">Status</th>
-                <th className="text-left py-2">Data de Criação</th>
-                <th className="text-left py-2">Ações</th>
+                <th className="text-white text-white dark:text-white left py-2">Nome</th>
+                <th className="text-white text-white dark:text-white left py-2">Email</th>
+                <th className="text-white text-white dark:text-white left py-2">Senha</th>
+                <th className="text-white text-white dark:text-white left py-2">Status</th>
+                <th className="text-white text-white dark:text-white left py-2">Data de Criação</th>
+                <th className="text-white text-white dark:text-white left py-2">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendors.map(vendor => {
                 return (
                   <tr key={vendor.id} className="border-b">
-                    <td className="py-2 font-medium">{vendor.name}</td>
-                    <td className="py-2">{vendor.email}</td>
-                    <td className="py-2 text-sm text-gray-600 dark:text-white">120784</td>
-                    <td className="py-2">
+                    <td className="text-white py-2 font-medium">{vendor.name}</td>
+                    <td className="text-white py-2">{vendor.email}</td>
+                    <td className="text-white py-2 text-sm text-white">120784</td>
+                    <td className="text-white py-2">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         vendor.active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
                       }`}>
                         {vendor.active ? 'Ativo' : 'Inativo'}
                       </span>
                     </td>
-                    <td className="py-2 text-sm text-gray-600 dark:text-white">
+                    <td className="text-white py-2 text-sm text-white">
                       {new Date(vendor.createdAt).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className="py-2">
+                    <td className="text-white py-2">
                       <button
                         onClick={() => handleRemoveVendor(vendor.id)}
-                        className="text-red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 p-1 rounded"
+                        className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 p-1 rounded"
                         title="Remover Vendedor"
                       >
                         <Trash2 size={16} />
@@ -2591,10 +2591,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Adicionar Vendedor</h3>
+              <h3 className="text-white dark:text-white lg font-semibold">Adicionar Vendedor</h3>
               <button
                 onClick={() => setShowAddVendorForm(false)}
-                className="text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -2602,44 +2602,44 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Nome</label>
+                <label className="text-white block text-sm font-medium mb-1">Nome</label>
                 <input
                   type="text"
                   value={newVendorData.name}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Nome completo"
+                  placeholder="text-white Nome completo"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="text-white block text-sm font-medium mb-1">Email</label>
                 <input
                   type="email"
                   value={newVendorData.email}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="email@exemplo.com"
+                  placeholder="text-white email@exemplo.com"
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium mb-1">Senha</label>
+                <label className="text-white block text-sm font-medium mb-1">Senha</label>
                 <input
                   type="text"
                   value={newVendorData.password}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, password: e.target.value }))}
-                  placeholder="Digite a senha"
+                  placeholder="text-white Digite a senha"
                   className="w-full border rounded-lg px-3 py-2"
                 />
-                <p className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white mt-1">Senha para o vendedor (editável)</p>
+                <p className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white mt-1">Senha para o vendedor (editável)</p>
               </div>
             </div>
             
             <div className="flex justify-end space-x-2 mt-6">
               <button
                 onClick={() => setShowAddVendorForm(false)}
-                className="px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white dark:text-white"
+                className="px-4 py-2 text-white hover:text-white dark:text-white"
               >
                 Cancelar
               </button>
@@ -2660,13 +2660,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
     <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Propostas ({filteredProposals.length})</h3>
+          <h3 className="text-white dark:text-white lg font-semibold">Propostas ({filteredProposals.length})</h3>
         </div>
         
         {/* Filtros compactos em linha única */}
         <div className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-white dark:text-white flex items-center gap-2">
+            <h4 className="text-white dark:text-white sm font-medium text-white dark:text-white flex items-center gap-2">
               <Filter size={16} />
               Filtros
             </h4>
@@ -2676,7 +2676,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 setFilterStatus('');
                 setFilterDate('');
               }}
-              className="text-xs text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white flex items-center gap-1"
+              className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white flex items-center gap-1"
             >
               <X size={12} />
               Limpar
@@ -2686,13 +2686,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           {/* Três filtros em linha única - Vendedor, Status, Data */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Vendedor</label>
+              <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Vendedor</label>
               <select
                 value={filterVendor}
                 onChange={(e) => setFilterVendor(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="">Todos os vendedores</option>
+                <option className="text-white" value="">Todos os vendedores</option>
                 {vendors.map(vendor => (
                   <option key={vendor.id} value={vendor.id}>{vendor.name}</option>
                 ))}
@@ -2700,13 +2700,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Status</label>
+              <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Status</label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="">Todos os status</option>
+                <option className="text-white" value="">Todos os status</option>
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                   <option key={key} value={key}>{config.label}</option>
                 ))}
@@ -2714,13 +2714,13 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white dark:text-white mb-1">Data</label>
+              <label className="text-white block text-sm font-medium text-white dark:text-white mb-1">Data</label>
               <input
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="dd/mm/aaaa"
+                placeholder="text-white dd/mm/aaaa"
               />
             </div>
           </div>
@@ -2731,15 +2731,15 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
-                <th className="text-left py-3 px-4 font-medium">ID</th>
-                <th className="text-left py-3 px-4 font-medium">CLIENTE</th>
-                <th className="text-left py-3 px-4 font-medium">VENDEDOR</th>
-                <th className="text-left py-3 px-4 font-medium">PLANO</th>
-                <th className="text-left py-3 px-4 font-medium">VALOR</th>
-                <th className="text-left py-3 px-4 font-medium">STATUS</th>
-                <th className="text-left py-3 px-4 font-medium">PRIORIDADE</th>
-                <th className="text-left py-3 px-4 font-medium">PROGRESSO</th>
-                <th className="text-left py-3 px-4 font-medium">AÇÕES</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">ID</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">CLIENTE</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">VENDEDOR</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PLANO</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">VALOR</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">STATUS</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PRIORIDADE</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PROGRESSO</th>
+                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">AÇÕES</th>
               </tr>
             </thead>
             <tbody>
@@ -2751,40 +2751,40 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 
                 return (
                   <tr key={proposal.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700">
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <button
                         onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                        className="text-blue-600 hover:text-blue-800 dark:text-white font-medium"
+                        className="text-white dark:text-white blue-600 hover:text-blue-800 dark:text-white font-medium"
                         title="Ver Drive"
                       >
                         {abmId}
                       </button>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <div className="font-medium">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                          <span className="text-green-600 dark:text-green-400 text-xs font-medium">
+                          <span className="text-white dark:text-white green-600 dark:text-green-400 text-xs font-medium">
                             {getVendorName(proposal.vendorId).charAt(0)}
                           </span>
                         </div>
-                        <span className="text-sm">{getVendorName(proposal.vendorId)}</span>
+                        <span className="text-white dark:text-white sm">{getVendorName(proposal.vendorId)}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-sm">
+                    <td className="text-white py-3 px-4 text-sm">
                       {contractData.planoContratado || 'Plano não informado'}
                     </td>
-                    <td className="py-3 px-4 font-medium">
+                    <td className="text-white py-3 px-4 font-medium">
                       {contractData.valor || 'R$ 0,00'}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <StatusBadge 
                         status={currentStatus}
                       />
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <select
                         value={proposalPriorities[proposal.id] || 'media'}
                         onChange={(e) => handlePriorityChange(proposal.id, e.target.value as 'alta' | 'media' | 'baixa')}
@@ -2792,12 +2792,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           getPriorityColor(proposalPriorities[proposal.id] || 'media')
                         }`}
                       >
-                        <option value="alta">Alta</option>
-                        <option value="media">Média</option>
-                        <option value="baixa">Baixa</option>
+                        <option className="text-white" value="alta">Alta</option>
+                        <option className="text-white" value="media">Média</option>
+                        <option className="text-white" value="baixa">Baixa</option>
                       </select>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <ProgressBar 
                         proposal={proposal} 
                         size="sm" 
@@ -2805,7 +2805,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         className="max-w-24"
                       />
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="text-white py-3 px-4">
                       <div className="flex space-x-2">
                         <button
                           onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
@@ -2831,7 +2831,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
         
         {filteredProposals.length === 0 && (
-          <div className="text-center py-8 text-gray-500 dark:text-white dark:text-gray-500 dark:text-white">
+          <div className="text-white dark:text-white center py-8 text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">
             Nenhuma proposta encontrada com os filtros aplicados.
           </div>
         )}
@@ -2881,17 +2881,17 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             {/* Texto separado */}
             <div>
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white leading-tight">
-                <span className="text-[#0AB3B8] font-bold">Ab</span><span className="text-gray-600 dark:text-white">mix</span> Portal Supervisor
+              <h1 className="text-white dark:text-white xl font-semibold text-white dark:text-white leading-tight">
+                <span className="text-white dark:text-white [#0AB3B8] font-bold">Ab</span><span className="text-white dark:text-white white">mix</span> Portal Supervisor
               </h1>
-              <p className="text-sm text-gray-600 dark:text-white">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
+              <p className="text-white dark:text-white sm text-white">Bem-vindo(a), {user?.name || 'Supervisor'}</p>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg relative"
+              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg relative"
             >
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -2901,7 +2901,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={() => setShowInternalMessage(!showInternalMessage)}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
             >
               <MessageSquare size={20} />
             </button>
@@ -2910,7 +2910,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             
             <button
               onClick={onLogout}
-              className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
+              className="p-2 text-white hover:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-lg"
             >
               <LogOut size={20} />
             </button>
@@ -2927,7 +2927,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'dashboard' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <BarChart3 size={18} className="mr-2" />
@@ -2939,7 +2939,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'metas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Target size={18} className="mr-2" />
@@ -2951,7 +2951,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'premiacao' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Award size={18} className="mr-2" />
@@ -2963,7 +2963,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'analytics' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <PieChart size={18} className="mr-2" />
@@ -2975,7 +2975,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'team' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Users size={18} className="mr-2" />
@@ -2987,7 +2987,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'propostas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <FileText size={18} className="mr-2" />
@@ -2999,7 +2999,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'relatorios' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-700 dark:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Calculator size={18} className="mr-2" />
@@ -3021,12 +3021,12 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             {/* Header do Modal */}
             <div className="bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white p-4 rounded-t-lg flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">👁️</span>
-                <h2 className="text-xl font-bold">Visualizar Relatório - EXCEL</h2>
+                <span className="text-white dark:text-white 2xl">👁️</span>
+                <h2 className="text-white dark:text-white xl font-bold">Visualizar Relatório - EXCEL</h2>
               </div>
               <button
                 onClick={() => setShowReportModal(false)}
-                className="text-white hover:text-gray-200 dark:text-white"
+                className="text-white dark:text-white white hover:text-gray-200 dark:text-white"
               >
                 <X size={24} />
               </button>
@@ -3040,7 +3040,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <div className="mb-2"><strong>Total de Propostas:</strong> {reportData.length}</div>
                   <div className="mb-2">
                     <strong>Faturamento Total:</strong> 
-                    <span className="text-green-600 dark:text-green-400 font-bold ml-2">
+                    <span className="text-white dark:text-white green-600 dark:text-green-400 font-bold ml-2">
                       R$ {reportData.reduce((sum, item) => sum + (parseFloat(item.valor.toString().replace(/[^0-9,]/g, '').replace(',', '.')) || 0), 0).toFixed(2).replace('.', ',')}
                     </span>
                   </div>
@@ -3063,42 +3063,42 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Tabela de Propostas */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-4">Preview dos Dados (Primeiras {Math.min(reportData.length, 5)} propostas)</h3>
+                <h3 className="text-white dark:text-white lg font-semibold mb-4">Preview dos Dados (Primeiras {Math.min(reportData.length, 5)} propostas)</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse border border-gray-300 dark:border-gray-600 dark:border-gray-600">
                     <thead className="bg-gray-100 dark:bg-gray-700">
                       <tr>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">ID</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Cliente</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">CNPJ</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Vendedor</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Valor</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Plano</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Status</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Desconto</th>
-                        <th className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Observações</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">ID</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Cliente</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">CNPJ</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Vendedor</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Valor</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Plano</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Status</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Desconto</th>
+                        <th className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 text-left font-semibold">Observações</th>
                       </tr>
                     </thead>
                     <tbody>
                       {reportData.slice(0, 5).map((item, index) => (
                         <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900 dark:bg-gray-700'}>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.abmId}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.cliente}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.cnpj}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.abmId}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.cliente}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.cnpj}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 dark:text-white">
                               {item.vendedor}
                             </span>
                           </td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 font-semibold">R$ {item.valor}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.plano}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3 font-semibold">R$ {item.valor}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.plano}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
                             <StatusBadge 
                               status={item.status as ProposalStatus}
                             />
                           </td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.desconto}</td>
-                          <td className="border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">{item.desconto}</td>
+                          <td className="text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 p-3">
                             <input
                               type="text"
                               value={reportObservations[item.abmId] || ''}
@@ -3106,7 +3106,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                                 ...prev,
                                 [item.abmId]: e.target.value
                               }))}
-                              placeholder="Adicionar comentário"
+                              placeholder="text-white Adicionar comentário"
                               className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded"
                             />
                           </td>
@@ -3119,42 +3119,42 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
               {/* Botões de Ação */}
               <div className="border-t pt-6">
-                <h4 className="text-lg font-semibold mb-4">Escolha como enviar ou compartilhar:</h4>
+                <h4 className="text-white dark:text-white lg font-semibold mb-4">Escolha como enviar ou compartilhar:</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <button
                     onClick={sendToFinanceiro}
                     className="flex flex-col items-center p-4 bg-blue-50 dark:bg-blue-900 border-2 border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                   >
-                    <div className="text-2xl mb-2">💼</div>
-                    <span className="text-sm font-medium text-blue-700 dark:text-white">Enviar para Financeiro</span>
-                    <span className="text-xs text-blue-600 dark:text-blue-400 mt-1">Sistema interno</span>
+                    <div className="text-white dark:text-white 2xl mb-2">💼</div>
+                    <span className="text-white dark:text-white sm font-medium text-blue-700 dark:text-white">Enviar para Financeiro</span>
+                    <span className="text-white dark:text-white xs text-blue-600 dark:text-blue-400 mt-1">Sistema interno</span>
                   </button>
 
                   <button
                     onClick={sendViaWhatsApp}
                     className="flex flex-col items-center p-4 bg-green-50 dark:bg-green-900 border-2 border-green-200 rounded-lg hover:bg-green-100 transition-colors"
                   >
-                    <div className="text-2xl mb-2">📱</div>
-                    <span className="text-sm font-medium text-green-700 dark:text-white">WhatsApp</span>
-                    <span className="text-xs text-green-600 dark:text-green-400 mt-1">Compartilhar via WhatsApp</span>
+                    <div className="text-white dark:text-white 2xl mb-2">📱</div>
+                    <span className="text-white dark:text-white sm font-medium text-green-700 dark:text-white">WhatsApp</span>
+                    <span className="text-white dark:text-white xs text-green-600 dark:text-green-400 mt-1">Compartilhar via WhatsApp</span>
                   </button>
 
                   <button
                     onClick={sendViaEmail}
                     className="flex flex-col items-center p-4 bg-purple-50 dark:bg-purple-900 border-2 border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
                   >
-                    <div className="text-2xl mb-2">📧</div>
-                    <span className="text-sm font-medium text-purple-700 dark:text-white">Email</span>
-                    <span className="text-xs text-purple-600 dark:text-white mt-1">Enviar por email</span>
+                    <div className="text-white dark:text-white 2xl mb-2">📧</div>
+                    <span className="text-white dark:text-white sm font-medium text-purple-700 dark:text-white">Email</span>
+                    <span className="text-white dark:text-white xs text-purple-600 dark:text-white mt-1">Enviar por email</span>
                   </button>
 
                   <button
                     onClick={downloadReport}
                     className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:bg-gray-700 transition-colors"
                   >
-                    <div className="text-2xl mb-2">💾</div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-white dark:text-white">Baixar</span>
-                    <span className="text-xs text-gray-600 dark:text-white mt-1">Download CSV</span>
+                    <div className="text-white dark:text-white 2xl mb-2">💾</div>
+                    <span className="text-white dark:text-white sm font-medium text-white dark:text-white">Baixar</span>
+                    <span className="text-white dark:text-white xs text-white mt-1">Download CSV</span>
                   </button>
                 </div>
               </div>
