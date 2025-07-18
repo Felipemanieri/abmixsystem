@@ -320,7 +320,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
-    { id: 'google-conexoes', label: 'Google Conexões', icon: Globe },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
@@ -1031,7 +1030,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Gerenciamento do Google Drive</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Integrações Google - Completas</h3>
             </div>
             <div className="flex space-x-3">
               <button 
@@ -1083,6 +1082,145 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </div>
               <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">99.1%</div>
               <div className="text-sm text-orange-600 dark:text-orange-400">Sync Rate</div>
+            </div>
+          </div>
+
+          {/* Google Sheets */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-green-900 dark:text-green-200 mb-4 flex items-center">
+              <FileSpreadsheet className="w-5 h-5 mr-2" />
+              Google Sheets
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-900 dark:text-green-200">47</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Planilhas Ativas</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-900 dark:text-green-200">2,847</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Linhas</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-900 dark:text-green-200">98.3%</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Sync Rate</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-900 dark:text-green-200">2.1s</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Tempo Médio</div>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                Editar
+              </button>
+            </div>
+          </div>
+
+          {/* Google Forms */}
+          <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-purple-900 dark:text-purple-200 mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2" />
+              Google Forms
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">23</div>
+                <div className="text-sm text-purple-600 dark:text-purple-400">Forms Ativos</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">1,247</div>
+                <div className="text-sm text-purple-600 dark:text-purple-400">Respostas</div>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors">
+                Editar
+              </button>
+            </div>
+          </div>
+
+          {/* Google Docs */}
+          <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-orange-900 dark:text-orange-200 mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2" />
+              Google Docs
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">384</div>
+                <div className="text-sm text-orange-600 dark:text-orange-400">Documentos</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">12</div>
+                <div className="text-sm text-orange-600 dark:text-orange-400">Templates</div>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
+                Editar
+              </button>
+            </div>
+          </div>
+
+          {/* Backup Automático */}
+          <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-red-900 dark:text-red-200 mb-4 flex items-center">
+              <Database className="w-5 h-5 mr-2" />
+              Backup Automático
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-900 dark:text-red-200">847</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Backups</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-900 dark:text-red-200">99.7%</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Sucesso</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-900 dark:text-red-200">24.8 GB</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Espaço</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-900 dark:text-red-200">23h</div>
+                <div className="text-sm text-red-600 dark:text-red-400">Último</div>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
+                Editar
+              </button>
+            </div>
+          </div>
+
+          {/* API Google */}
+          <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-indigo-900 dark:text-indigo-200 mb-4 flex items-center">
+              <Globe className="w-5 h-5 mr-2" />
+              API Google
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">847,392</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Req/Mês</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">99.8%</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Sucesso</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">1.2s</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Tempo Médio</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">0.2%</div>
+                <div className="text-sm text-indigo-600 dark:text-indigo-400">Erro</div>
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <button className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
+                Editar
+              </button>
             </div>
           </div>
 
@@ -1192,175 +1330,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     return options[module] || ['1s', '5s', '30s', 'manual'];
   };
 
-  function renderGoogleConexoesSection() {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Globe className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" />
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Conexões</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Configurações e integrações com serviços Google</p>
-            </div>
-          </div>
 
-          {/* Status das Integrações */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Drive</span>
-                </div>
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
-            </div>
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Sheets</span>
-                </div>
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
-            </div>
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Forms</span>
-                </div>
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
-            </div>
-          </div>
-
-          {/* Configurações de API */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Configurações de API</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google Client ID</label>
-                <input
-                  type="text"
-                  placeholder="seu-google-client-id"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google Client Secret</label>
-                <input
-                  type="password"
-                  placeholder="••••••••••••••••"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google API Key</label>
-              <input
-                type="password"
-                placeholder="••••••••••••••••••••••••••••••••••••••••"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-            <div className="mt-4 flex space-x-3">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Salvar Configurações
-              </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                Testar Conexão
-              </button>
-            </div>
-          </div>
-
-          {/* Serviços Google */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Google Drive */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-              <div className="flex items-center mb-3">
-                <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-2" />
-                <h4 className="font-semibold text-gray-900 dark:text-white">Google Drive</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Armazenamento e organização de documentos</p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Espaço usado:</span>
-                  <span className="text-gray-900 dark:text-white">8.2 GB / 15 GB</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Arquivos:</span>
-                  <span className="text-gray-900 dark:text-white">1,834 arquivos</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Pastas:</span>
-                  <span className="text-gray-900 dark:text-white">247 pastas</span>
-                </div>
-              </div>
-              <button className="w-full mt-3 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
-                Configurar Drive
-              </button>
-            </div>
-
-            {/* Google Sheets */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-              <div className="flex items-center mb-3">
-                <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
-                <h4 className="font-semibold text-gray-900 dark:text-white">Google Sheets</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Planilhas e dados em tempo real</p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Planilhas:</span>
-                  <span className="text-gray-900 dark:text-white">47 ativas</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Linhas:</span>
-                  <span className="text-gray-900 dark:text-white">2,847 linhas</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Sync:</span>
-                  <span className="text-gray-900 dark:text-white">98.3% sucesso</span>
-                </div>
-              </div>
-              <button className="w-full mt-3 px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors">
-                Configurar Sheets
-              </button>
-            </div>
-
-            {/* Google Forms */}
-            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-              <div className="flex items-center mb-3">
-                <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
-                <h4 className="font-semibold text-gray-900 dark:text-white">Google Forms</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Formulários e coleta de dados</p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Forms:</span>
-                  <span className="text-gray-900 dark:text-white">23 ativos</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Respostas:</span>
-                  <span className="text-gray-900 dark:text-white">1,247 respostas</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Status:</span>
-                  <span className="text-gray-900 dark:text-white">Ativo</span>
-                </div>
-              </div>
-              <button className="w-full mt-3 px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors">
-                Configurar Forms
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   function renderTempoSection() {
     const activeModules = Object.keys(timeConfigs).filter(module => timeConfigs[module].active).length;
@@ -1659,7 +1629,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'drive' && renderDriveSection()}
-        {activeTab === 'google-conexoes' && renderGoogleConexoesSection()}
         {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'sistema' && renderSistemaSection()}
       </main>
