@@ -49,8 +49,18 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   const [unreadCount, setUnreadCount] = useState(0);
   const [dragActive, setDragActive] = useState(false);
 
-  // Sistema de mensagens limpo - sem dados demo
+  // Sistema de mensagens limpo - FORÇAR LIMPEZA TOTAL
   const [messages, setMessages] = useState<Message[]>([]);
+
+  // LIMPAR TUDO AO CARREGAR
+  useEffect(() => {
+    localStorage.removeItem('internalMessages');
+    localStorage.removeItem('notifications');
+    localStorage.removeItem('userNotifications');
+    setMessages([]);
+    setUnreadCount(0);
+    console.log('TODAS AS MENSAGENS E NOTIFICAÇÕES FORAM APAGADAS');
+  }, []);
   
   // Sistema de detecção automática de usuários do banco de dados
   const [availableUsers, setAvailableUsers] = useState<User[]>([]);
@@ -437,9 +447,12 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                     key={message.id}
                     onClick={() => {
                       setSelectedMessage(message);
-                      // Marcar como lida automaticamente quando abrir
+                      // FORÇAR MARCAÇÃO COMO LIDA E REMOVER NOTIFICAÇÃO
                       if (!message.read && message.recipient === safeCurrentUser.name) {
+                        console.log('MARCANDO COMO LIDA E REMOVENDO NOTIFICAÇÃO:', message.id);
                         handleMarkAsRead(message.id);
+                        // Forçar atualização do contador
+                        setUnreadCount(prev => Math.max(0, prev - 1));
                       }
                     }}
                     className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 group ${

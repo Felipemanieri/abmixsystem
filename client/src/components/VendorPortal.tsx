@@ -153,8 +153,17 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     };
   }, [statusManager]);
 
-  // Sistema de notificações baseado em mensagens internas
+  // Sistema de notificações LIMPO E CORRIGIDO
   const [notifications, setNotifications] = useState([]);
+
+  // FORÇAR LIMPEZA TOTAL AO CARREGAR
+  useEffect(() => {
+    localStorage.removeItem('internalMessages');
+    localStorage.removeItem('notifications');
+    localStorage.removeItem('userNotifications');
+    setNotifications([]);
+    console.log('NOTIFICAÇÕES COMPLETAMENTE LIMPAS PARA:', user.name);
+  }, [user.name]);
 
   // SISTEMA CORRIGIDO: Carregar apenas mensagens do usuário atual
   useEffect(() => {

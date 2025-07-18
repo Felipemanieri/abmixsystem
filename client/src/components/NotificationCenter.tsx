@@ -32,10 +32,15 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 }) => {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   
+  // FORÇAR LIMPEZA E FILTRO CORRETO
   const filteredNotifications = (notifications || []).filter(notification => {
     if (filter === 'unread') return !notification.read;
     return true;
   });
+
+  // Log para debug
+  console.log('NotificationCenter - Total notificações:', notifications?.length || 0);
+  console.log('NotificationCenter - Filtradas:', filteredNotifications.length);
   
   const getNotificationIcon = (type: string) => {
     switch (type) {
