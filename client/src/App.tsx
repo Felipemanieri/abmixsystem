@@ -169,9 +169,8 @@ function App() {
               </div>
               <button
                 onClick={() => setCurrentPortal('restricted')}
-                className="flex items-center text-sm font-medium text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 transition-colors"
+                className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors"
               >
-                <Lock className="w-4 h-4 mr-1.5" />
                 Área Restrita
               </button>
             </div>
