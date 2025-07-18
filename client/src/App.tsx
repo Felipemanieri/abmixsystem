@@ -230,13 +230,11 @@ function App() {
           {showClientPortal && (
             <div 
               onClick={() => setCurrentPortal('client')}
-              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400 dark:hover:border-blue-500"
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400"
             >
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Users className="w-8 h-8 text-teal-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
+                <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-xl font-bold text-teal-800 dark:text-teal-300 mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Portal do Cliente</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
@@ -253,13 +251,11 @@ function App() {
           {/* Portal Vendedor */}
           <div 
             onClick={() => setCurrentPortal('vendor')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-400 dark:hover:border-green-500"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-green-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-green-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <FileText className="w-8 h-8 text-green-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
+                <FileText className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-xl font-bold text-green-900 dark:text-green-300 mb-3 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Portal Vendedor</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
@@ -275,13 +271,11 @@ function App() {
           {/* Portal Implantação */}
           <div 
             onClick={() => setCurrentPortal('implementation')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-400 dark:hover:border-teal-500"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Zap className="w-8 h-8 text-teal-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
+                <Zap className="w-8 h-8 text-teal-600 dark:text-teal-400" />
               </div>
               <h3 className="text-xl font-bold text-teal-900 dark:text-teal-300 mb-3 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">Portal Implantação</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
@@ -297,13 +291,11 @@ function App() {
           {/* Portal Financeiro */}
           <div 
             onClick={() => setCurrentPortal('financial')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-400 dark:hover:border-purple-500"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-300 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-purple-200 group-hover:to-purple-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <DollarSign className="w-8 h-8 text-purple-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
+                <DollarSign className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">Portal Financeiro</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
@@ -319,13 +311,11 @@ function App() {
           {/* Portal Supervisor */}
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-500 dark:hover:border-gray-400"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-400 rounded-3xl transition-all duration-500"></div>
             <div className="relative z-10">
-              <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-gray-200 group-hover:to-gray-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
-                <Crown className="w-8 h-8 text-gray-600" />
+              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mb-6 transition-all shadow-xl">
+                <Crown className="w-8 h-8 text-gray-600 dark:text-gray-400" />
               </div>
               <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3 group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors">Portal Supervisor</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
