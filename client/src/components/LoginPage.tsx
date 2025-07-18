@@ -237,7 +237,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-700 dark:text-gray-300" />
                   <input
                     type="email"
                     required
@@ -255,7 +255,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-700 dark:text-gray-300" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
@@ -267,7 +267,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
