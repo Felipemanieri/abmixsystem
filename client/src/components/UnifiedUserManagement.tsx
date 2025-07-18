@@ -66,39 +66,39 @@ export default function UnifiedUserManagement() {
   // Configuração dos painéis
   const panels = {
     supervisor: {
-      name: 'Supervisor',
+      name: 'Supervisão',
       icon: Shield,
-      color: 'blue',
+      color: 'gray',
       description: 'Gestão de equipe e relatórios'
     },
     financial: {
       name: 'Financeiro',
       icon: Briefcase,
-      color: 'green',
+      color: 'gray',
       description: 'Validação e análises financeiras'
     },
     implementation: {
-      name: 'Implantação',
+      name: 'Implementação',
       icon: Settings,
-      color: 'purple',
+      color: 'gray',
       description: 'Processamento e implementação'
     },
     vendor: {
-      name: 'Vendedor',
+      name: 'Comercial',
       icon: UserCheck,
-      color: 'orange',
+      color: 'gray',
       description: 'Criação de propostas'
     },
     client: {
       name: 'Cliente',
       icon: Users,
-      color: 'pink',
+      color: 'gray',
       description: 'Portal do cliente'
     },
     restricted: {
       name: 'Área Restrita',
       icon: Monitor,
-      color: 'red',
+      color: 'gray',
       description: 'Administração do sistema'
     }
   };
