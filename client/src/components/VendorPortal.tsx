@@ -562,7 +562,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <div className="flex items-center justify-between">
         <button
           onClick={() => setActiveView('dashboard')}
-          className="flex items-center text-white dark:text-gray-500 dark:text-white hover:text-white dark:text-white transition-colors"
+          className="flex items-center text-white dark:text-white hover:text-gray-200 dark:hover:text-gray-300 transition-colors bg-black/20 px-3 py-2 rounded-lg hover:bg-black/30"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar ao Dashboard
@@ -1316,7 +1316,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       case 'tracker':
         return <ProposalTracker onBack={() => setActiveView('dashboard')} />;
       case 'quotations':
-        return <QuotationPanel />;
+        return renderQuotationModule();
       default:
         return (
           <div className="space-y-6">
