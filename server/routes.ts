@@ -670,6 +670,44 @@ router.post("/proposals", async (req, res) => {
       res.status(500).json({ error: "Erro interno do servidor" });
     }
   });
+
+  // Teste de conectividade com Google Sheets
+  router.get("test/sheets", async (req, res) => {
+    try {
+      // Teste simples de conectividade usando planilha pública do Google
+      const testSpreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
+      const testApiKey = process.env.GOOGLE_API_KEY || "AIzaSyABC123_fake_key";
+      
+      const testUrl = `https://sheets.googleapis.com/v4/spreadsheets/${testSpreadsheetId}/values/A1:B2?key=${testApiKey}`;
+      
+      const response = await fetch(testUrl);
+      const data = await response.json();
+      
+      if (response.ok) {
+        res.json({ 
+          success: true, 
+          connected: true,
+          message: "Conectado com Google Sheets",
+          testData: data 
+        });
+      } else {
+        res.json({ 
+          success: false, 
+          connected: false,
+          message: "Erro na conexão com Google Sheets",
+          error: data 
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao testar Google Sheets:", error);
+      res.status(500).json({ 
+        success: false, 
+        connected: false,
+        message: "Erro interno ao testar conexão",
+        error: error.message 
+      });
+    }
+  });
   
   // Integração com sistema financeiro
   router.post("integration/financial", async (req, res) => {

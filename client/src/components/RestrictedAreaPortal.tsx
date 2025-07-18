@@ -132,6 +132,22 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     setNotifications([]);
     // Notificações removidas
   }, []);
+
+  // Função para testar conexão com Google Sheets
+  const testSheetsConnection = async () => {
+    try {
+      const response = await fetch('/api/test/sheets');
+      const data = await response.json();
+      
+      if (data.success && data.connected) {
+        alert('✅ CONECTADO COM GOOGLE SHEETS!\n\nStatus: Funcionando\nDados de teste: ' + JSON.stringify(data.testData, null, 2));
+      } else {
+        alert('❌ ERRO NA CONEXÃO\n\n' + data.message + '\n\nErro: ' + JSON.stringify(data.error, null, 2));
+      }
+    } catch (error) {
+      alert('❌ ERRO DE REDE\n\nNão foi possível conectar com a API:\n' + error.message);
+    }
+  };
   
   // Estados para configurações
   const [driveConfig, setDriveConfig] = useState({
@@ -1180,6 +1196,12 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   </div>
                 </div>
                 <div className="flex space-x-2">
+                  <button 
+                    onClick={testSheetsConnection}
+                    className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Testar
+                  </button>
                   <button 
                     onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
                     className="px-2 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
