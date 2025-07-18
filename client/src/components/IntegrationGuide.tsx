@@ -78,8 +78,8 @@ const IntegrationGuide: React.FC = () => {
                 <span className="text-teal-600 font-medium">2</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Criar Planilha no Google Sheets</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Criar Planilha no Google Sheets</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Crie uma nova planilha no Google Sheets e configure as colunas de acordo com os dados que deseja sincronizar.
                 </p>
               </div>
@@ -90,8 +90,8 @@ const IntegrationGuide: React.FC = () => {
                 <span className="text-teal-600 font-medium">3</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Instalar Add-on do Abmix</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Instalar Add-on do Abmix</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   No Google Sheets, vá para "Extensões" → "Add-ons" → "Obter add-ons" e busque por "Abmix Connector".
                 </p>
               </div>
@@ -102,8 +102,8 @@ const IntegrationGuide: React.FC = () => {
                 <span className="text-teal-600 font-medium">4</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Configurar Sincronização</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Configurar Sincronização</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   No add-on, insira sua chave de API e selecione quais dados deseja sincronizar e com qual frequência.
                 </p>
               </div>
@@ -114,8 +114,8 @@ const IntegrationGuide: React.FC = () => {
             <div className="flex items-start">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm text-green-700 font-medium">Exemplos de uso:</p>
-                <ul className="text-sm text-green-700 mt-1 list-disc list-inside">
+                <p className="text-sm text-green-700 dark:text-green-200 font-medium">Exemplos de uso:</p>
+                <ul className="text-sm text-green-700 dark:text-green-200 mt-1 list-disc list-inside">
                   <li>Relatórios de vendas automáticos</li>
                   <li>Dashboard de performance de vendedores</li>
                   <li>Acompanhamento de propostas pendentes</li>
@@ -128,77 +128,77 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Make */}
-      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Integração com Make</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-600 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Integração com Make</h2>
         
         <div className="space-y-6">
           <div className="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
             <div className="flex items-start">
-              <Info className="w-5 h-5 text-purple-600 mr-2 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-purple-700">
+              <Info className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-purple-700 dark:text-purple-200">
                 O Make (anteriormente Integromat) é uma plataforma de automação que permite conectar o Abmix com centenas de outros aplicativos e serviços sem necessidade de programação.
               </p>
             </div>
           </div>
           
-          <h3 className="text-lg font-medium text-gray-900">Passo a Passo</h3>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Passo a Passo</h3>
           
           <div className="space-y-4">
             <div className="flex">
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 font-medium">1</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-300 font-medium">1</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Criar conta no Make</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Criar conta no Make</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Acesse make.com e crie uma conta ou faça login se já tiver uma.
                 </p>
               </div>
             </div>
             
             <div className="flex">
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 font-medium">2</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-300 font-medium">2</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Configurar Webhook no Abmix</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Configurar Webhook no Abmix</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   No portal do Supervisor, acesse "Configurações" → "Integrações" → "Make" e gere um webhook URL.
                 </p>
               </div>
             </div>
             
             <div className="flex">
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 font-medium">3</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-300 font-medium">3</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Criar Cenário no Make</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Criar Cenário no Make</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   No Make, crie um novo cenário e adicione um trigger de webhook. Use o URL gerado no Abmix.
                 </p>
               </div>
             </div>
             
             <div className="flex">
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 font-medium">4</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-300 font-medium">4</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Configurar Ações</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Configurar Ações</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Adicione ações ao seu cenário para processar os dados recebidos do Abmix e enviá-los para outros serviços.
                 </p>
               </div>
             </div>
             
             <div className="flex">
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 font-medium">5</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-300 font-medium">5</span>
               </div>
               <div className="ml-4">
-                <h4 className="text-md font-medium text-gray-900">Ativar o Cenário</h4>
-                <p className="text-sm text-gray-600 mt-1">
+                <h4 className="text-md font-medium text-gray-900 dark:text-white">Ativar o Cenário</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Salve e ative seu cenário. Agora, sempre que um evento ocorrer no Abmix, o Make executará as ações configuradas.
                 </p>
               </div>
@@ -209,8 +209,8 @@ const IntegrationGuide: React.FC = () => {
             <div className="flex items-start">
               <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm text-green-700 font-medium">Exemplos de automações:</p>
-                <ul className="text-sm text-green-700 mt-1 list-disc list-inside">
+                <p className="text-sm text-green-700 dark:text-green-200 font-medium">Exemplos de automações:</p>
+                <ul className="text-sm text-green-700 dark:text-green-200 mt-1 list-disc list-inside">
                   <li>Enviar notificações por WhatsApp quando uma proposta for criada</li>
                   <li>Criar tarefas no Trello para acompanhamento de propostas</li>
                   <li>Adicionar clientes ao Mailchimp quando uma proposta for aprovada</li>
