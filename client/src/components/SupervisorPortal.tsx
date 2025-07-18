@@ -2543,33 +2543,33 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border bg-gray-700 text-white-b">
-                <th className="text-white text-white dark:text-white left py-2">Nome</th>
-                <th className="text-white text-white dark:text-white left py-2">Email</th>
-                <th className="text-white text-white dark:text-white left py-2">Senha</th>
-                <th className="text-white text-white dark:text-white left py-2">Status</th>
-                <th className="text-white text-white dark:text-white left py-2">Data de Criação</th>
-                <th className="text-white text-white dark:text-white left py-2">Ações</th>
+              <tr className="border-b border-gray-200 dark:border-gray-600">
+                <th className="text-left py-2 text-gray-900 dark:text-white">Nome</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Email</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Senha</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Status</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Data de Criação</th>
+                <th className="text-left py-2 text-gray-900 dark:text-white">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendors.map(vendor => {
                 return (
-                  <tr key={vendor.id} className="border bg-gray-700 text-white-b">
-                    <td className="text-white py-2 font-medium">{vendor.name}</td>
-                    <td className="text-white py-2">{vendor.email}</td>
-                    <td className="text-white py-2 text-sm text-white">120784</td>
-                    <td className="text-white py-2">
+                  <tr key={vendor.id} className="border-b border-gray-200 dark:border-gray-600">
+                    <td className="py-2 font-medium text-gray-900 dark:text-white">{vendor.name}</td>
+                    <td className="py-2 text-gray-900 dark:text-white">{vendor.email}</td>
+                    <td className="py-2 text-sm text-gray-900 dark:text-white">120784</td>
+                    <td className="py-2">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         vendor.active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
                       }`}>
                         {vendor.active ? 'Ativo' : 'Inativo'}
                       </span>
                     </td>
-                    <td className="text-white py-2 text-sm text-white">
+                    <td className="py-2 text-sm text-gray-900 dark:text-white">
                       {new Date(vendor.createdAt).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className="text-white py-2">
+                    <td className="py-2">
                       <button
                         onClick={() => handleRemoveVendor(vendor.id)}
                         className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white hover:bg-red-50 dark:hover:bg-red-800 dark:bg-red-900 p-1 rounded"
@@ -2704,7 +2704,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
               >
                 <option className="text-black bg-white" value="">Todos os status</option>
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2719,7 +2719,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 placeholder="Exemplo"
               />
             </div>
