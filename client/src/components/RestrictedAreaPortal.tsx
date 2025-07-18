@@ -57,7 +57,8 @@ import {
   Bell,
   TableProperties,
   FileType,
-  AlertCircle
+  AlertCircle,
+  Grid
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
