@@ -270,10 +270,10 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   const renderCotacoesTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Minhas Cotações</h2>
-          <p className="text-sm text-gray-600 mt-1">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Minhas Cotações</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
             Visualize todas as cotações criadas pelo seu vendedor
           </p>
         </div>
@@ -281,48 +281,48 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         {cotacoes.length === 0 ? (
           <div className="p-8 text-center">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma cotação disponível</h3>
-            <p className="text-gray-600">Aguarde seu vendedor criar suas primeiras cotações.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma cotação disponível</h3>
+            <p className="text-gray-600 dark:text-gray-300">Aguarde seu vendedor criar suas primeiras cotações.</p>
           </div>
         ) : (
           <div className="space-y-4 p-6">
             {cotacoes.map((cotacao) => (
-              <div key={cotacao.id} className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+              <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 border border-gray-200 dark:border-gray-600">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Data de Envio</label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Envio</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Operadora</label>
-                    <p className="text-sm text-gray-900 mt-1 font-medium">{cotacao.operadora}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Operadora</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1 font-medium">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Tipo do Plano</label>
-                    <p className="text-sm text-gray-900 mt-1">{cotacao.tipoplano}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo do Plano</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1">{cotacao.tipoplano}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Número de Vidas</label>
-                    <p className="text-sm text-gray-900 mt-1 font-medium">{cotacao.numeroVidas}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Número de Vidas</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1 font-medium">{cotacao.numeroVidas}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Valor</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Valor</label>
                     <p className="text-lg font-bold text-green-600 mt-1">R$ {cotacao.valor}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Validade da Cotação</label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Validade da Cotação</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1">
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Arquivos Anexados</label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Arquivos Anexados</label>
+                    <p className="text-sm text-gray-900 dark:text-white mt-1">
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         <FileText className="w-3 h-3 mr-1" />
                         {cotacao.arquivos.length} arquivo(s)
@@ -336,7 +336,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
 
                 {/* Ações - Mesmos ícones do ActionButtons */}
-                <div className="flex justify-end border-t border-gray-200 pt-4">
+                <div className="flex justify-end border-t border-gray-200 dark:border-gray-600 pt-4">
                   <ActionButtons
                     onView={() => {
                       showNotification('Visualizando detalhes da cotação', 'info');
@@ -418,18 +418,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   const renderProfileTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Meu Perfil</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Meu Perfil</h2>
         
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-1/3">
-            <div className="bg-gray-50 p-6 rounded-lg text-center">
+            <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg text-center">
               <div className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="w-12 h-12 text-teal-600" />
               </div>
-              <h3 className="font-medium text-gray-900 mb-1">{user.name}</h3>
-              <p className="text-sm text-gray-600 mb-4">{user.email}</p>
-              <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm">
+              <h3 className="font-medium text-gray-900 dark:text-white mb-1">{user.name}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{user.email}</p>
+              <button className="w-full px-4 py-2 bg-gray-200 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 transition-colors text-sm">
                 Alterar Foto
               </button>
             </div>
@@ -439,48 +439,48 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
             <form className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
                   <input
                     type="text"
                     defaultValue={user.name}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                   <input
                     type="email"
                     defaultValue={user.email}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telefone</label>
                   <input
                     type="tel"
                     defaultValue="(11) 99999-9999"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CPF</label>
                   <input
                     type="text"
                     defaultValue="123.456.789-00"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Endereço</label>
                 <input
                   type="text"
                   defaultValue="Rua das Flores, 123 - Centro, São Paulo - SP"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               
@@ -497,43 +497,43 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         </div>
       </div>
       
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Preferências de Notificação</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preferências de Notificação</h2>
         
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Notificações por Email</p>
-              <p className="text-sm text-gray-600">Receba atualizações sobre suas propostas</p>
+              <p className="font-medium text-gray-900 dark:text-white">Notificações por Email</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Receba atualizações sobre suas propostas</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-email" className="sr-only" defaultChecked />
               <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
-              <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+              <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
           
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Notificações por WhatsApp</p>
-              <p className="text-sm text-gray-600">Receba mensagens sobre status de propostas</p>
+              <p className="font-medium text-gray-900 dark:text-white">Notificações por WhatsApp</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Receba mensagens sobre status de propostas</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-whatsapp" className="sr-only" defaultChecked />
               <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
-              <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+              <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
           
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-gray-900">Lembretes de Documentos</p>
-              <p className="text-sm text-gray-600">Receba lembretes sobre documentos pendentes</p>
+              <p className="font-medium text-gray-900 dark:text-white">Lembretes de Documentos</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Receba lembretes sobre documentos pendentes</p>
             </div>
             <div className="relative inline-block w-12 h-6">
               <input type="checkbox" id="toggle-reminders" className="sr-only" defaultChecked />
               <div className="block bg-gray-300 w-12 h-6 rounded-full"></div>
-              <div className="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+              <div className="dot absolute left-1 top-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full transition"></div>
             </div>
           </div>
         </div>
@@ -546,7 +546,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -565,7 +565,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -587,18 +587,18 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -611,20 +611,20 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Área do Cliente</h1>
-          <p className="text-gray-600">Gerencie suas propostas e documentos</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Área do Cliente</h1>
+          <p className="text-gray-600 dark:text-gray-300">Gerencie suas propostas e documentos</p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-6">
-          <div className="border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6">
+          <div className="border-b border-gray-200 dark:border-gray-600">
             <nav className="flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab('cotacoes')}
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'cotacoes'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <FileText className="w-4 h-4 mr-2" />
@@ -636,7 +636,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'complete-proposal'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <Check className="w-4 h-4 mr-2" />
@@ -647,7 +647,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'profile'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
                 }`}
               >
                 <User className="w-4 h-4 mr-2" />
@@ -695,10 +695,10 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-600 w-96 h-96 flex flex-col">
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-white dark:bg-gray-800/20 rounded-full flex items-center justify-center">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="ml-3">
@@ -733,7 +733,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               ))}
             </div>
 
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-600">
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
@@ -741,7 +741,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   onClick={sendMessage}

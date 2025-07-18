@@ -486,7 +486,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   const renderProposalsTab = () => (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -496,13 +496,13 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 placeholder="Buscar propostas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="all">Todos os Status</option>
               <option value="observacao">OBSERVAÇÃO</option>
@@ -531,15 +531,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       </div>
 
       {/* Proposals Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Propostas ({filteredProposals.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   ID
@@ -570,9 +570,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
               {filteredProposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={proposal.id} className="hover:bg-gray-50 dark:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button 
                       onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
@@ -584,7 +584,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{proposal.cliente}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{proposal.cliente}</div>
                         <div className="text-sm text-gray-500">CNPJ: {proposal.contractData?.cnpj}</div>
                       </div>
                     </div>
@@ -592,20 +592,20 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <User className="w-4 h-4 text-gray-400 mr-2" />
-                      <div className="text-sm text-gray-900">{proposal.vendedor}</div>
+                      <div className="text-sm text-gray-900 dark:text-white">{proposal.vendedor}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.plano}</div>
+                    <div className="text-sm text-gray-900 dark:text-white">{proposal.plano}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">R$ {proposal.valor}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">R$ {proposal.valor}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
                       value={proposal.status}
                       onChange={(e) => handleStatusUpdate(proposal.id, e.target.value as ProposalStatus)}
-                      className="text-sm font-medium rounded-md border-gray-300 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
+                      className="text-sm font-medium rounded-md border-gray-300 dark:border-gray-600 focus:border-teal-500 focus:ring-teal-500 px-3 py-2"
                       style={{
                         backgroundColor: (() => {
                           const currentStatus = proposalStatuses.get(proposal.id) || proposal.status;
@@ -746,7 +746,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         navigator.clipboard.writeText(`${window.location.origin}/cliente/proposta/${proposal.clientToken}`);
                         showNotification('Link copiado para área de transferência!', 'success');
                       }}
-                      className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
+                      className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 hover:bg-gray-50 dark:bg-gray-700 rounded-md transition-colors"
                       title="Copiar Link"
                     >
                       <Copy className="w-4 h-4" />
@@ -845,9 +845,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
   const renderAutomationTab = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-lg font-semibold text-gray-900">Regras de Automação</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Regras de Automação</h2>
           <button
             onClick={() => showNotification('Nova regra criada!', 'success')}
             className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
@@ -859,21 +859,21 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
         
         <div className="space-y-4">
           {automationRules.map((rule) => (
-            <div key={rule.id} className="border border-gray-200 rounded-lg p-4">
+            <div key={rule.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3">
-                    <h3 className="text-sm font-medium text-gray-900">{rule.name}</h3>
+                    <h3 className="text-sm font-medium text-gray-900 dark:text-white">{rule.name}</h3>
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                       rule.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-800'
                     }`}>
                       {rule.status === 'active' ? 'Ativo' : 'Inativo'}
                     </span>
                   </div>
-                  <div className="mt-1 text-sm text-gray-600">
+                  <div className="mt-1 text-sm text-gray-600 dark:text-gray-300">
                     <span className="font-medium">Gatilho:</span> {rule.trigger}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
                     <span className="font-medium">Ação:</span> {rule.action}
                   </div>
                   <div className="text-xs text-gray-500 mt-2">
@@ -901,9 +901,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       </div>
       
       {/* Botão para ir para automação */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Automação Manual</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Automação Manual</h2>
           <button
             onClick={() => showNotification('Acessando sistema de automação...', 'info')}
             className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
@@ -913,16 +913,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </button>
         </div>
         
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
           Selecione uma proposta para verificar se está completa e enviar para automação manualmente.
         </p>
         
         <div className="space-y-4">
           {proposals.filter(p => p.status === 'validated').map((proposal) => (
-            <div key={proposal.id} className="border border-gray-200 rounded-lg p-4">
+            <div key={proposal.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900">{proposal.client}</h3>
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">{proposal.client}</h3>
                   <p className="text-xs text-gray-500">{proposal.id}</p>
                 </div>
                 <div className="flex space-x-2">
@@ -972,7 +972,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     style={{ width: '100%' }}
                   ></div>
                 </div>
-                <span className="text-xs text-gray-600">Completo</span>
+                <span className="text-xs text-gray-600 dark:text-gray-300">Completo</span>
               </div>
             </div>
           ))}
@@ -988,9 +988,9 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-700 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -1009,7 +1009,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -1031,7 +1031,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
@@ -1042,7 +1042,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1055,8 +1055,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Implantação</h1>
-          <p className="text-gray-600">Valide propostas, configure automações e gerencie integrações</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard Implantação</h1>
+          <p className="text-gray-600 dark:text-gray-300">Valide propostas, configure automações e gerencie integrações</p>
         </div>
 
         <div className="space-y-6">
@@ -1065,11 +1065,11 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
             {implantacaoStats.map((stat) => {
               const Icon = stat.icon;
               return (
-                <div key={stat.name} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div key={stat.name} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">{stat.name}</p>
+                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                     </div>
                     <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
                       <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -1078,7 +1078,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="mt-4 flex items-center">
                     <span className={`text-sm font-medium ${
                       stat.changeType === 'positive' ? 'text-green-600' : 
-                      stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600'
+                      stat.changeType === 'warning' ? 'text-orange-600' : 'text-gray-600 dark:text-gray-300'
                     }`}>
                       {stat.change}
                     </span>
@@ -1089,8 +1089,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 mb-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-4">Ações Rápidas</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-5 mb-6">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Ações Rápidas</h3>
             <div className="flex space-x-4">
               <button
                 onClick={() => setShowProposalSelector(true)}
@@ -1113,8 +1113,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
           </div>
 
           {/* Navigation Tabs */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="border-b border-gray-200 dark:border-gray-600">
               <nav className="flex space-x-8 px-6">
                 {[
                   { id: 'proposals', label: 'Propostas', icon: FileText },
@@ -1128,7 +1128,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                       className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                         activeTab === tab.id
                           ? 'border-teal-500 text-teal-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:border-gray-600'
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-2" />
@@ -1145,12 +1145,12 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               {activeTab === 'editor' && editingProposalId && (
                 <div className="h-full">
                   <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-900">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                       Editor de Proposta - {editingProposalId}
                     </h2>
                     <button
                       onClick={handleBackFromEditor}
-                      className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                      className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 transition-colors"
                     >
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       Voltar para Lista
@@ -1167,8 +1167,8 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               {activeTab === 'editor' && !editingProposalId && (
                 <div className="text-center py-12">
                   <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma proposta selecionada</h3>
-                  <p className="text-gray-600">Use o botão "Selecionar Proposta" para escolher uma proposta para edição.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma proposta selecionada</h3>
+                  <p className="text-gray-600 dark:text-gray-300">Use o botão "Selecionar Proposta" para escolher uma proposta para edição.</p>
                 </div>
               )}
             </div>
@@ -1179,15 +1179,15 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       {/* Proposal Detail Modal */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Validação da Proposta
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 dark:text-gray-300"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1201,23 +1201,23 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="font-medium text-gray-700">Cliente:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Cliente:</span>
                         <span className="ml-2">{proposal.client}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Vendedor:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Vendedor:</span>
                         <span className="ml-2">{proposal.vendor}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Plano:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Plano:</span>
                         <span className="ml-2">{proposal.plan}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Valor:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Valor:</span>
                         <span className="ml-2">{proposal.value}</span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Prioridade:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Prioridade:</span>
                         <span className={`ml-2 inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                           proposal.priority === 'high' ? 'bg-red-100 text-red-800' :
                           proposal.priority === 'medium' ? 'bg-amber-100 text-amber-700' :
@@ -1228,20 +1228,20 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                         </span>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Previsão:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Previsão:</span>
                         <span className="ml-2">{new Date(proposal.estimatedCompletion).toLocaleDateString('pt-BR')}</span>
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Observações de Implantação
                       </label>
                       <textarea
                         value={observations}
                         onChange={(e) => setObservations(e.target.value)}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                         placeholder="Adicione observações sobre a validação e implantação..."
                       />
                     </div>
@@ -1249,7 +1249,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                     <div className="flex justify-end space-x-4">
                       <button
                         onClick={() => setSelectedProposal(null)}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 rounded-md hover:bg-gray-200"
                       >
                         Cancelar
                       </button>
@@ -1300,10 +1300,10 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-600 w-96 h-96 flex flex-col">
             <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-white dark:bg-gray-800/20 rounded-full flex items-center justify-center">
                   <Bot className="w-5 h-5" />
                 </div>
                 <div className="ml-3">
@@ -1338,7 +1338,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
               ))}
             </div>
 
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-600">
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
@@ -1346,7 +1346,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
                 <button
                   onClick={sendMessage}
