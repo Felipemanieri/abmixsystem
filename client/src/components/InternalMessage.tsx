@@ -224,7 +224,10 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
 
   const handleSendMessage = () => {
+    console.log("Tentando enviar mensagem:", composeData);
+    
     if (!composeData.recipient || !composeData.subject || !composeData.content) {
+      console.log("Campos obrigatórios não preenchidos:", { recipient: composeData.recipient, subject: composeData.subject, content: composeData.content });
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -623,7 +626,10 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                       Cancelar
                     </button>
                     <button
-                      onClick={handleSendMessage}
+                      onClick={() => {
+                        console.log("Botão enviar clicado");
+                        handleSendMessage();
+                      }}
                       className="flex items-center px-4 py-2 text-sm text-white bg-gray-600 dark:bg-gray-700 rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
                     >
                       <Send className="w-4 h-4 mr-2" />
