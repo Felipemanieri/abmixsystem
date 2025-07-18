@@ -1698,7 +1698,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     setSelectedVendorForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 >
                   <option className="text-black bg-white" value="">Selecione um vendedor</option>
                   <option className="text-black bg-white" value="all">Todos os Vendedores</option>
@@ -1715,7 +1715,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="date"
                   value={dataInicio}
                   onChange={(e) => setDataInicio(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 />
               </div>
 
@@ -1726,7 +1726,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="date"
                   value={dataFim}
                   onChange={(e) => setDataFim(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 />
               </div>
 
@@ -1739,7 +1739,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     setSelectedStatusForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 >
                   <option className="text-black bg-white" value="">Selecione um status</option>
                   <option className="text-black bg-white" value="all">Todos os Status</option> className="text-white"
@@ -2221,7 +2221,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="completo">📊 Relatório Completo</option>
                     <option className="text-black bg-white" value="individual">👤 Por Vendedor Individual</option>
@@ -2236,7 +2236,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="">Todos os Vendedores</option>
                     {uniqueVendors && uniqueVendors.map(vendor => (
@@ -2250,7 +2250,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                   >
                     <option className="text-black bg-white" value="">Todos os Status</option> className="text-white"
                     {STATUS_CONFIG && Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2268,7 +2268,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                     placeholder="Exemplo"
                   />
                 </div>
@@ -2279,7 +2279,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400" 
                     placeholder="Exemplo"
                   />
                 </div>
@@ -2690,7 +2690,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <select
                 value={filterVendor}
                 onChange={(e) => setFilterVendor(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
               >
                 <option className="text-black bg-white" value="">Todos os vendedores</option>
                 {vendors.map(vendor => (
@@ -2704,7 +2704,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
               >
                 <option className="text-black bg-white" value="">Todos os status</option>
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2719,7 +2719,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
+                className="w-full border rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"  
                 placeholder="Exemplo"
               />
             </div>
