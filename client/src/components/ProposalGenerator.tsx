@@ -1937,7 +1937,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               <button
                 onClick={handleClearDraft}
                 disabled={isClearingDraft}
-                className="flex items-center px-6 py-3 bg-red-600 text-white dark:bg-red-50 dark:bg-red-9000 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 {isClearingDraft ? (
                   <>
@@ -1955,7 +1955,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             <button
               onClick={handleSend}
-              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-50 dark:bg-blue-9000 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               <Send className="w-4 h-4 mr-2" />
               Gerar Link para Cliente
@@ -1978,7 +1978,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       {lastSaved && (
         <div className="fixed bottom-4 right-4 z-50">
           <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2">
-            <div className="flex items-center text-xs text-green-600">
+            <div className="flex items-center text-xs text-green-600 dark:text-green-400">
               <button
                 onClick={() => {
                   if (currentVendor) {
@@ -2000,7 +2000,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     showNotification('Rascunho salvo manualmente', 'success');
                   }
                 }}
-                className="flex items-center hover:text-green-700 transition-colors"
+                className="flex items-center hover:text-green-700 dark:hover:text-green-300 transition-colors"
                 title="Salvar rascunho manualmente"
               >
                 <CheckCircle className="w-3 h-3 mr-1" />
