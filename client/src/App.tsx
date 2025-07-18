@@ -164,7 +164,7 @@ function App() {
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                   alt="Abmix" 
-                  className="h-12 w-auto"
+                  className="h-16 w-auto"
                 />
               </div>
               <button
@@ -230,7 +230,7 @@ function App() {
           {showClientPortal && (
             <div 
               onClick={() => setCurrentPortal('client')}
-              className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400"
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-blue-400 dark:hover:border-blue-500"
             >
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
@@ -238,8 +238,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <Users className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-teal-800 mb-3 group-hover:text-teal-600 transition-colors">Portal do Cliente</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-teal-800 dark:text-teal-300 mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Portal do Cliente</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
                 Acompanhe suas propostas e documentos
               </p>
               <div className="flex items-center text-teal-600 font-bold group-hover:text-teal-700 transition-colors">
@@ -253,7 +253,7 @@ function App() {
           {/* Portal Vendedor */}
           <div 
             onClick={() => setCurrentPortal('vendor')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-400"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-green-400 dark:hover:border-green-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-green-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-green-300 rounded-3xl transition-all duration-500"></div>
@@ -261,8 +261,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-green-200 group-hover:to-green-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-green-900 mb-3 group-hover:text-green-700 transition-colors">Portal Vendedor</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-green-900 dark:text-green-300 mb-3 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Portal Vendedor</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
                 Gerencie propostas e clientes
               </p>
               <div className="flex items-center text-green-700 font-bold group-hover:text-green-800 transition-colors">
@@ -275,7 +275,7 @@ function App() {
           {/* Portal Implantação */}
           <div 
             onClick={() => setCurrentPortal('implementation')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-400"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-teal-400 dark:hover:border-teal-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-teal-300 rounded-3xl transition-all duration-500"></div>
@@ -283,8 +283,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-teal-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-teal-200 group-hover:to-teal-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <Zap className="w-8 h-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-bold text-teal-900 mb-3 group-hover:text-teal-700 transition-colors">Portal Implantação</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-teal-900 dark:text-teal-300 mb-3 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">Portal Implantação</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
                 Validação e automação de propostas
               </p>
               <div className="flex items-center text-teal-700 font-bold group-hover:text-teal-800 transition-colors">
@@ -297,7 +297,7 @@ function App() {
           {/* Portal Financeiro */}
           <div 
             onClick={() => setCurrentPortal('financial')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-400"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-purple-400 dark:hover:border-purple-500"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-purple-300 rounded-3xl transition-all duration-500"></div>
@@ -305,8 +305,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-purple-200 group-hover:to-purple-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <DollarSign className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-bold text-purple-900 mb-3 group-hover:text-purple-700 transition-colors">Portal Financeiro</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">Portal Financeiro</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
                 Análise financeira e relatórios
               </p>
               <div className="flex items-center text-purple-700 font-bold group-hover:text-purple-800 transition-colors">
@@ -319,7 +319,7 @@ function App() {
           {/* Portal Supervisor */}
           <div 
             onClick={() => setCurrentPortal('supervisor')}
-            className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-500"
+            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-8 hover:shadow-3xl transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 relative overflow-hidden hover:border-gray-500 dark:hover:border-gray-400"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-600/20 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="absolute inset-0 border-2 border-transparent group-hover:border-gray-400 rounded-3xl transition-all duration-500"></div>
@@ -327,8 +327,8 @@ function App() {
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-6 group-hover:from-gray-200 group-hover:to-gray-300 transition-all shadow-xl group-hover:shadow-2xl group-hover:scale-110">
                 <Crown className="w-8 h-8 text-gray-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-700 mb-3 group-hover:text-gray-600 transition-colors">Portal Supervisor</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed font-medium">
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3 group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors">Portal Supervisor</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed font-medium">
                 Supervisão e relatórios gerenciais
               </p>
               <div className="flex items-center text-gray-700 font-bold group-hover:text-gray-800 transition-colors">
@@ -389,8 +389,8 @@ function App() {
                 className="h-12 w-auto"
               />
               <div className="flex flex-col space-y-1">
-                <span className="font-medium text-gray-700">Sistema Interno v2.0</span>
-                <span className="text-gray-500">© 2025 Abmix Consultoria</span>
+                <span className="font-medium text-gray-700 dark:text-gray-300">Sistema Interno v2.0</span>
+                <span className="text-gray-500 dark:text-gray-400">© 2025 Abmix Consultoria</span>
               </div>
             </div>
 
@@ -400,7 +400,7 @@ function App() {
                 <span>Suporte:</span>
                 <a 
                   href="mailto:suporte@abmix.com.br" 
-                  className="text-blue-600 hover:text-blue-800 transition-colors"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                 >
                   suporte@abmix.com.br
                 </a>
@@ -438,7 +438,7 @@ function App() {
       {/* Chatbot */}
       <div className="chatbot-container">
         {showChat ? (
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-96 h-96 flex flex-col">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 w-96 h-96 flex flex-col">
             {/* Chat Header */}
             <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center">
@@ -479,7 +479,7 @@ function App() {
             </div>
 
             {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-600">
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
@@ -487,7 +487,7 @@ function App() {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
                 <button
                   onClick={sendMessage}
