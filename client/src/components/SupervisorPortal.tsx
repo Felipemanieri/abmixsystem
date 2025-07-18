@@ -3165,11 +3165,21 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
 
       {/* Modals */}
       {showNotifications && (
-        <NotificationCenter onClose={() => setShowNotifications(false)} />
+        <NotificationCenter 
+          notifications={[]}
+          onMarkAsRead={() => {}}
+          onMarkAllAsRead={() => {}}
+          onDeleteNotification={() => {}}
+          onClose={() => setShowNotifications(false)} 
+        />
       )}
       
       {showInternalMessage && (
-        <InternalMessage onClose={() => setShowInternalMessage(false)} />
+        <InternalMessage 
+          isOpen={true}
+          onClose={() => setShowInternalMessage(false)}
+          currentUser={{ name: user.name, role: 'supervisor' }}
+        />
       )}
       
       {/* System Footer */}

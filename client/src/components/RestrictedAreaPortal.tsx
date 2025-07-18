@@ -52,7 +52,8 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
-  Copy
+  Copy,
+  MessageSquare
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';

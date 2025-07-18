@@ -153,25 +153,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     };
   }, [statusManager]);
 
-  // Notificações simuladas
-  const [notifications, setNotifications] = useState([
-    {
-      id: '1',
-      title: 'Nova mensagem',
-      message: 'Ana Caroline enviou uma mensagem sobre a proposta VEND001-PROP123',
-      type: 'message',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
-      read: false,
-    },
-    {
-      id: '2',
-      title: 'Documento pendente',
-      message: 'A proposta VEND001-PROP124 está aguardando documentos há 3 dias',
-      type: 'document',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
-      read: false,
-    },
-  ]);
+  // Sistema de notificações limpo
+  const [notifications, setNotifications] = useState([]);
 
   const stats = [
     {

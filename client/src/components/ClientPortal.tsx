@@ -95,25 +95,8 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
     };
   }, [statusManager]);
   
-  // Notificações simuladas
-  const [notifications, setNotifications] = useState([
-    {
-      id: '1',
-      title: 'Nova Cotação Recebida',
-      message: 'Você recebeu uma nova cotação da Amil - R$ 1.250,00',
-      type: 'document',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutos atrás
-      read: false,
-    },
-    {
-      id: '2',
-      title: 'Cotação Atualizada',
-      message: 'A cotação da Bradesco foi atualizada com novas condições',
-      type: 'approval',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 horas atrás
-      read: false,
-    },
-  ]);
+  // Sistema de notificações limpo
+  const [notifications, setNotifications] = useState([]);
 
   // Dados de cotações criadas pelo vendedor (sincronizadas do ProposalGenerator)
   const cotacoes: Cotacao[] = [
