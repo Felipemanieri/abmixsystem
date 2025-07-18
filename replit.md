@@ -154,6 +154,28 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Sistema de Tempo Integrado no Portal Restrito (Jan 18, 2025)
+- **Implementado Sistema de Tempo Integrado completo na aba "Configurações do Tempo"**:
+  - Controle manual completo para todos os módulos Google (Drive, Sheets, Forms)
+  - Botões "Parar Todos" e "Iniciar Todos" para controle geral do sistema
+  - Configurações específicas por módulo com dropdowns de tempo
+  - Estatísticas em tempo real: 6 módulos totais, 5 ativos, 3 Google conectados
+  - Interface intuitiva com cores específicas para cada módulo
+  - Botões de pausa individual por módulo com notificações
+  - Aviso sobre controle manual das requisições para manutenção
+  - Sistema permite pausar manualmente requisições quando necessário para quotas
+
+- **Correção de problemas críticos de build**:
+  - Resolvido erro de sintaxe JSX que impedia carregamento da aplicação
+  - Restaurado arquivo funcional com backup seguro
+  - Implementação simples e estável do sistema de tempo
+
+- **Funcionalidades do Sistema de Tempo**:
+  - Google Drive: Configurações de 30 segundos, 1 minuto, 5 minutos, manual
+  - Google Sheets: Configurações de 1 segundo, 5 segundos, 30 segundos, manual
+  - Google Forms: Configurações de 5 minutos, 10 minutos, 30 minutos, manual
+  - Controle manual para manutenção e controle de quotas da API Google
+
 ### Expansão Completa da Aba Google Drive com Todas as Integrações (Jan 18, 2025)
 - **Aba Google Drive expandida para incluir todas as configurações Google solicitadas**:
   - Google Drive: Estatísticas (247 pastas, 1,834 documentos, 8.2 GB, 99.1% sync) + lista de drives configurados
