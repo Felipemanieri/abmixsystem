@@ -47,7 +47,6 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
   // Buscar vendedores reais do banco de dados
   const { data: vendors = [] } = useQuery({
     queryKey: ['/api/vendors'],
-    queryFn: () => apiRequest('/api/vendors'),
     retry: false,
   });
 

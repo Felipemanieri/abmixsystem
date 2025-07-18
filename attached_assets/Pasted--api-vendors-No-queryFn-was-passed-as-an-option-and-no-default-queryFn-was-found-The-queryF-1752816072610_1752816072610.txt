@@ -1,0 +1,52 @@
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
+Dados recebidos da API: 
+Array []
+[["/api/vendors"]]: No queryFn was passed as an option, and no default queryFn was found. The queryFn parameter is only optional when using a default queryFn. More info here: https://tanstack.com/query/latest/docs/framework/react/guides/default-query-function
+Propostas no ImplantacaoPortal: 
+Array []
+Loading status: false
