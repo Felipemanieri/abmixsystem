@@ -155,7 +155,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-slate-800 dark:bg-slate-900 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -163,29 +163,24 @@ function App() {
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                   alt="Abmix" 
-                  className="h-20 w-auto"
+                  className="h-8 w-auto"
                 />
               </div>
               <button
                 onClick={() => setCurrentPortal('restricted')}
-                className="flex items-center px-4 py-2 text-sm font-bold text-white bg-gray-700 hover:bg-gray-800 rounded-lg transition-colors shadow-sm"
+                className="flex items-center px-3 py-1.5 text-sm font-medium text-white bg-slate-700 hover:bg-slate-600 rounded-md transition-colors"
               >
-                <Lock className="w-4 h-4 mr-2" />
+                <Lock className="w-4 h-4 mr-1.5" />
                 Área Restrita
               </button>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Sobre</a>
-                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Contato</a>
-                <a href="#" className="text-gray-600 hover:text-gray-800 font-bold transition-colors">Suporte</a>
+                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Sobre</a>
+                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Suporte</a>
+                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Atualizar</a>
               </div>
-              <button 
-                onClick={() => window.open('https://wa.me/5511988888888?text=Olá! Gostaria de conhecer o Sistema Abmix.', '_blank')}
-                className="bg-gradient-to-r from-teal-400 to-teal-500 text-white px-6 py-3 rounded-xl hover:from-teal-500 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl font-bold"
-              >
-                Solicitar Demonstração
-              </button>
+              <ThemeToggle />
             </div>
           </div>
         </div>

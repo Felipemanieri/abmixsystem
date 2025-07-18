@@ -30,7 +30,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 }) => {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   
-  const filteredNotifications = notifications.filter(notification => {
+  const filteredNotifications = (notifications || []).filter(notification => {
     if (filter === 'unread') return !notification.read;
     return true;
   });
