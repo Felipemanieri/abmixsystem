@@ -911,7 +911,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
             return (
               <div key={vendor.id} className="border rounded-lg p-4">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium">{vendor.name}</span>
+                  <span className="font-medium text-white">{vendor.name}</span>
                   <span className="text-white dark:text-white sm text-white">{stats.totalProposals} propostas</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
@@ -956,7 +956,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-            className="border rounded-lg px-3 py-2"
+            className="border rounded-lg px-3 py-2 bg-gray-700 text-white"
           >
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i + 1} value={i + 1}>
@@ -967,7 +967,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            className="border rounded-lg px-3 py-2"
+            className="border rounded-lg px-3 py-2 bg-gray-700 text-white"
           >
             <option value={2024}>2024</option>
             <option value={2025}>2025</option>
@@ -1077,7 +1077,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <h3 className="text-white dark:text-white lg font-semibold">Nova Meta Individual</h3>
               <button
                 onClick={() => setShowAddTargetForm(false)}
-                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1089,7 +1089,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <select
                   value={newTargetData.vendorId}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 >
                   <option value={0}>Selecione um vendedor</option>
                   {vendors.map(vendor => (
@@ -1104,7 +1104,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={newTargetData.month}
                     onChange={(e) => setNewTargetData(prev => ({ ...prev, month: parseInt(e.target.value) }))}
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   >
                     {Array.from({ length: 12 }, (_, i) => (
                       <option key={i + 1} value={i + 1}>{getMonthName(i + 1)}</option>
@@ -1117,7 +1117,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={newTargetData.year}
                     onChange={(e) => setNewTargetData(prev => ({ ...prev, year: parseInt(e.target.value) }))}
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   >
                     <option value={2024}>2024</option>
                     <option value={2025}>2025</option>
@@ -1132,8 +1132,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newTargetData.targetValue}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
-                  placeholder="text-white Ex: 50000"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 50000"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1143,8 +1143,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="number"
                   value={newTargetData.targetProposals}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
-                  placeholder="text-white Ex: 10"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 10"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1154,8 +1154,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newTargetData.bonus}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
-                  placeholder="text-white Ex: 5000"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 5000"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
             </div>
@@ -1186,7 +1186,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <h3 className="text-white dark:text-white lg font-semibold">Nova Meta da Equipe</h3>
               <button
                 onClick={() => setShowAddTeamTargetForm(false)}
-                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1199,7 +1199,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   >
                     {Array.from({ length: 12 }, (_, i) => (
                       <option key={i + 1} value={i + 1}>{getMonthName(i + 1)}</option>
@@ -1212,7 +1212,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   >
                     <option value={2024}>2024</option>
                     <option value={2025}>2025</option>
@@ -1227,8 +1227,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newTargetData.targetValue}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetValue: e.target.value }))}
-                  placeholder="text-white Ex: 500000"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 500000"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1238,8 +1238,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="number"
                   value={newTargetData.targetProposals}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, targetProposals: parseInt(e.target.value) }))}
-                  placeholder="text-white Ex: 100"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 100"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1249,8 +1249,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newTargetData.bonus}
                   onChange={(e) => setNewTargetData(prev => ({ ...prev, bonus: e.target.value }))}
-                  placeholder="text-white Ex: 20000"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 20000"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
             </div>
@@ -1306,14 +1306,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <Award size={20} />
                 </div>
                 <div>
-                  <h4 className="font-medium">{award.title}</h4>
+                  <h4 className="font-medium text-white">{award.title}</h4>
                   <p className="text-white dark:text-white sm text-white">{getVendorName(award.vendorId)}</p>
-                  <p className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{award.description}</p>
+                  <p className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{award.description}</p>
                 </div>
               </div>
               <div className="text-white dark:text-white right">
-                <p className="font-medium">{formatCurrency(award.value)}</p>
-                <p className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{new Date(award.dateAwarded).toLocaleDateString('pt-BR')}</p>
+                <p className="font-medium text-white">{formatCurrency(award.value)}</p>
+                <p className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{new Date(award.dateAwarded).toLocaleDateString('pt-BR')}</p>
                 <button
                   onClick={() => deleteAwardMutation.mutate(award.id)}
                   className="text-white dark:text-white red-600 hover:text-red-800 dark:text-white mt-2"
@@ -1334,7 +1334,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <h3 className="text-white dark:text-white lg font-semibold">Nova Premiação</h3>
               <button
                 onClick={() => setShowAddAwardForm(false)}
-                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -1346,7 +1346,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <select
                   value={newAwardData.vendorId}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, vendorId: parseInt(e.target.value) }))}
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 >
                   <option value={0}>Selecione um vendedor</option>
                   {vendors.map(vendor => (
@@ -1360,7 +1360,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <select
                   value={newAwardData.type}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, type: e.target.value as 'monetary' | 'recognition' | 'bonus' }))}
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 >
                   <option className="text-white" value="recognition">Reconhecimento</option>
                   <option className="text-white" value="monetary">Monetária</option>
@@ -1374,8 +1374,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newAwardData.title}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="text-white Ex: Vendedor do Mês"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: Vendedor do Mês"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1384,9 +1384,9 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <textarea
                   value={newAwardData.description}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="text-white Detalhes da premiação..."
+                  placeholder="Detalhes da premiação..."
                   rows={3}
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -1396,8 +1396,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newAwardData.value}
                   onChange={(e) => setNewAwardData(prev => ({ ...prev, value: e.target.value }))}
-                  placeholder="text-white Ex: 1000"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Ex: 1000"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
             </div>
@@ -1677,7 +1677,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <p className="text-white dark:text-white white mt-1">Análise de {analyticsData.length} propostas</p>
             </div>
             <div className="text-white dark:text-white right">
-              <span className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{new Date().toLocaleDateString('pt-BR')}</span>
+              <span className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{new Date().toLocaleDateString('pt-BR')}</span>
             </div>
           </div>
         </div>
@@ -1960,7 +1960,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <h3 className="text-white dark:text-white lg font-semibold">Exportar Relatório</h3>
                 <button
                   onClick={() => setShowExportModal(false)}
-                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
                 >
                   <X size={20} />
                 </button>
@@ -1972,7 +1972,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={exportFormat}
                     onChange={(e) => setExportFormat(e.target.value)}
-                    className="w-full border rounded-lg px-3 py-2"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   >
                     <option className="text-white" value="PDF">PDF</option>
                     <option className="text-white" value="Excel">Excel</option>
@@ -2040,7 +2040,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 <h3 className="text-white dark:text-white lg font-semibold">Salvar Filtro</h3>
                 <button
                   onClick={() => setShowSaveFilter(false)}
-                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                  className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
                 >
                   <X size={20} />
                 </button>
@@ -2053,8 +2053,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="text"
                     value={filterName}
                     onChange={(e) => setFilterName(e.target.value)}
-                    placeholder="text-white Ex: Vendas Janeiro 2025"
-                    className="w-full border rounded-lg px-3 py-2"
+                    placeholder="Ex: Vendas Janeiro 2025"
+                    className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                   />
                 </div>
               </div>
@@ -2160,7 +2160,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-white dark:text-white right">
-                  <span className="text-white dark:text-white sm text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{filteredData.length} registros disponíveis</span>
+                  <span className="text-white dark:text-white sm text-white dark:text-white dark:text-white dark:text-white">{filteredData.length} registros disponíveis</span>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="w-2 h-2 bg-green-50 dark:bg-green-9000 rounded-full animate-pulse"></div>
                     <span className="text-white dark:text-white xs text-green-600 dark:text-green-400">Conectado</span>
@@ -2269,7 +2269,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                    placeholder="text-white dd/mm/aaaa"
+                    placeholder="Exemplo"
                   />
                 </div>
 
@@ -2280,7 +2280,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
                     className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                    placeholder="text-white dd/mm/aaaa"
+                    placeholder="Exemplo"
                   />
                 </div>
 
@@ -2480,7 +2480,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         </div>
                         <div className="text-white dark:text-white right">
                           <span className="text-white dark:text-white lg font-bold text-white dark:text-white">{count}</span>
-                          <span className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white ml-1">({percentage}%)</span>
+                          <span className="text-white dark:text-white xs text-white dark:text-white dark:text-white dark:text-white ml-1">({percentage}%)</span>
                         </div>
                       </div>
                     );
@@ -2511,7 +2511,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </div>
                       <div className="text-white dark:text-white right">
                         <div className="text-white dark:text-white lg font-bold text-white dark:text-white">{data.count}</div>
-                        <div className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">{formatCurrency(data.value.toString())}</div>
+                        <div className="text-white dark:text-white xs text-white dark:text-white dark:text-white dark:text-white">{formatCurrency(data.value.toString())}</div>
                       </div>
                     </div>
                   ))}
@@ -2594,7 +2594,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <h3 className="text-white dark:text-white lg font-semibold">Adicionar Vendedor</h3>
               <button
                 onClick={() => setShowAddVendorForm(false)}
-                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white"
+                className="text-white dark:text-white gray-500 dark:text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white"
               >
                 <X size={20} />
               </button>
@@ -2607,8 +2607,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newVendorData.name}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="text-white Nome completo"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Exemplo"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -2618,8 +2618,8 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="email"
                   value={newVendorData.email}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="text-white email@exemplo.com"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Exemplo"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
               </div>
               
@@ -2629,10 +2629,10 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="text"
                   value={newVendorData.password}
                   onChange={(e) => setNewVendorData(prev => ({ ...prev, password: e.target.value }))}
-                  placeholder="text-white Digite a senha"
-                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Exemplo"
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-700 text-white"
                 />
-                <p className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white mt-1">Senha para o vendedor (editável)</p>
+                <p className="text-white dark:text-white xs text-white dark:text-white dark:text-white dark:text-white mt-1">Senha para o vendedor (editável)</p>
               </div>
             </div>
             
@@ -2676,7 +2676,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 setFilterStatus('');
                 setFilterDate('');
               }}
-              className="text-white dark:text-white xs text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white flex items-center gap-1"
+              className="text-white dark:text-white xs text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white flex items-center gap-1"
             >
               <X size={12} />
               Limpar
@@ -2720,7 +2720,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="text-white dd/mm/aaaa"
+                placeholder="Exemplo"
               />
             </div>
           </div>
@@ -2761,7 +2761,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       </button>
                     </td>
                     <td className="text-white py-3 px-4">
-                      <div className="font-medium">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
+                      <div className="font-medium text-white">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
                     </td>
                     <td className="text-white py-3 px-4">
                       <div className="flex items-center space-x-2">
@@ -2831,7 +2831,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
         
         {filteredProposals.length === 0 && (
-          <div className="text-white dark:text-white center py-8 text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white">
+          <div className="text-white dark:text-white center py-8 text-white dark:text-white dark:text-white dark:text-white">
             Nenhuma proposta encontrada com os filtros aplicados.
           </div>
         )}
@@ -2927,7 +2927,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'dashboard' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <BarChart3 size={18} className="mr-2" />
@@ -2939,7 +2939,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'metas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Target size={18} className="mr-2" />
@@ -2951,7 +2951,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'premiacao' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Award size={18} className="mr-2" />
@@ -2963,7 +2963,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'analytics' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <PieChart size={18} className="mr-2" />
@@ -2975,7 +2975,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'team' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Users size={18} className="mr-2" />
@@ -2987,7 +2987,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'propostas' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <FileText size={18} className="mr-2" />
@@ -2999,7 +2999,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               className={`flex items-center px-3 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeView === 'relatorios' 
                   ? 'border-blue-500 text-blue-600' 
-                  : 'border-transparent text-gray-500 dark:text-white dark:text-white dark:text-gray-500 dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
+                  : 'border-transparent text-white dark:text-white dark:text-white dark:text-white hover:text-white dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
               }`}
             >
               <Calculator size={18} className="mr-2" />
@@ -3106,7 +3106,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                                 ...prev,
                                 [item.abmId]: e.target.value
                               }))}
-                              placeholder="text-white Adicionar comentário"
+                              placeholder="Exemplo"
                               className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded"
                             />
                           </td>
