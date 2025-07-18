@@ -309,6 +309,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     { id: 'planilhas', label: 'Config Planilhas', icon: BarChart3 },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
+    { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
   ];
 
@@ -1080,6 +1081,369 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
     );
   }
 
+  function renderTempoSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <Clock className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações do Tempo</h3>
+            </div>
+            <button
+              onClick={() => showNotification('Configurações do Tempo', 'Configurações atualizadas com sucesso!', 'success')}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Salvar Configurações
+            </button>
+          </div>
+
+          {/* Sincronização em Tempo Real */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <RefreshCw className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Sincronização em Tempo Real</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Portal Vendedores</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                  <option value="1">1 segundo (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Portal Clientes</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                  <option value="5">5 segundos (atual)</option>
+                  <option value="1">1 segundo</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Portais Internos</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                  <option value="1">1 segundo (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Notificações e Alertas */}
+          <div className="bg-red-50 dark:bg-red-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Notificações e Alertas</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Notificações Push</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="realtime">Tempo Real (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Alertas de Status</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="30">30 segundos (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="180">3 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Verificação de Email</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="600">10 minutos (atual)</option>
+                  <option value="300">5 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="43200">12 horas</option>
+                  <option value="86400">24 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Backup e Segurança */}
+          <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Backup e Segurança</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Backup Automático</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="86400">24 horas (atual)</option>
+                  <option value="43200">12 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="10800">3 horas</option>
+                  <option value="3600">1 hora</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Verificação de Segurança</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="3600">1 hora (atual)</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="43200">12 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Log de Auditoria</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="realtime">Tempo Real (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Configurações Múltiplas Google APIs */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Configurações Múltiplas Google APIs</h4>
+            </div>
+            
+            {/* 3 Google Drives */}
+            <div className="mb-6">
+              <h5 className="font-medium text-blue-700 dark:text-blue-300 mb-3 flex items-center">
+                <HardDrive className="w-4 h-4 mr-2" />
+                Google Drive - Múltiplas Instâncias
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Drive 1 - Principal</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="realtime">Tempo Real (atual)</option>
+                    <option value="5">5 segundos</option>
+                    <option value="10">10 segundos</option>
+                    <option value="30">30 segundos</option>
+                    <option value="60">1 minuto</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Drive 2 - Backup</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="300">5 minutos (atual)</option>
+                    <option value="60">1 minuto</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="10800">3 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="43200">12 horas</option>
+                    <option value="86400">24 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Google Drive 3 - Arquivo</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="86400">24 horas (atual)</option>
+                    <option value="43200">12 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="10800">3 horas</option>
+                    <option value="3600">1 hora</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="604800">7 dias</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* 3 Google Sheets */}
+            <div className="mb-6">
+              <h5 className="font-medium text-green-700 dark:text-green-300 mb-3 flex items-center">
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Google Sheets - Múltiplas Planilhas
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 1 - Operacional</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="manual">Manual (atual)</option>
+                    <option value="realtime">Tempo Real</option>
+                    <option value="30">30 segundos</option>
+                    <option value="60">1 minuto</option>
+                    <option value="180">3 minutos</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 2 - Financeiro</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="3600">1 hora (atual)</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="300">5 minutos</option>
+                    <option value="7200">2 horas</option>
+                    <option value="10800">3 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="43200">12 horas</option>
+                    <option value="86400">24 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Planilha 3 - Relatórios</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="86400">24 horas (atual)</option>
+                    <option value="43200">12 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="10800">3 horas</option>
+                    <option value="7200">2 horas</option>
+                    <option value="3600">1 hora</option>
+                    <option value="604800">7 dias</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Google Forms e Google Docs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-medium text-purple-700 dark:text-purple-300 mb-3 flex items-center">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Google Forms
+                </h5>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Coleta de Respostas</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500">
+                    <option value="300">5 minutos (atual)</option>
+                    <option value="60">1 minuto</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="10800">3 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <h5 className="font-medium text-orange-700 dark:text-orange-300 mb-3 flex items-center">
+                  <FileCheck className="w-4 h-4 mr-2" />
+                  Google Docs
+                </h5>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Geração de Documentos</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
+                    <option value="manual">Manual (atual)</option>
+                    <option value="realtime">Tempo Real</option>
+                    <option value="60">1 minuto</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Configurações Avançadas de Performance */}
+          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+            <div className="flex items-center mb-4">
+              <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Configurações Avançadas de Performance</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Cache de Dados</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500">
+                  <option value="300">5 minutos (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Timeout de Conexão</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-gray-500">
+                  <option value="30">30 segundos (atual)</option>
+                  <option value="10">10 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="120">2 minutos</option>
+                  <option value="300">5 minutos</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function renderSistemaSection() {
     return (
       <div className="space-y-6">
@@ -1257,6 +1621,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'planilhas' && renderPlanilhasSection()}
         {activeTab === 'drive' && renderDriveSection()}
+        {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'sistema' && renderSistemaSection()}
       </main>
 
