@@ -64,6 +64,7 @@ export function useProposals() {
       }));
     },
     refetchInterval: 1000, // Atualizar a cada 1 segundo para tempo real
+    refetchIntervalInBackground: true, // Continuar atualizando em background
   });
 
   const { data: vendors = [] } = useQuery({
@@ -108,6 +109,7 @@ export function useVendorProposals(vendorId: number) {
       }));
     },
     refetchInterval: 1000, // Atualizar a cada 1 segundo para tempo real
+    refetchIntervalInBackground: true, // Continuar atualizando em background
     enabled: vendorId > 0, // Só fazer a consulta se o vendorId for válido
   });
 
