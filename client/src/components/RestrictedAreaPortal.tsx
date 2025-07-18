@@ -1843,11 +1843,65 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Google Drive API */}
+            <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+              <div className="flex items-center justify-between mb-3">
+                <h5 className="font-medium text-blue-800 dark:text-blue-200">Google Drive API</h5>
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={() => alert('Adicionando nova instância do Google Drive...')}
+                    className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    title="Adicionar nova instância"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <input 
+                  type="text" 
+                  placeholder="Service Account Email"
+                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="password" 
+                  placeholder="Private Key JSON"
+                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <input 
+                  type="text" 
+                  placeholder="Folder ID Principal"
+                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="read-write">Read/Write</option>
+                  <option value="read-only">Read Only</option>
+                  <option value="write-only">Write Only</option>
+                </select>
+                <button 
+                  onClick={() => alert('Configurando Google Drive API...')}
+                  className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+                >
+                  Configurar Drive
+                </button>
+              </div>
+            </div>
+
             {/* WhatsApp Business API */}
             <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
               <div className="flex items-center justify-between mb-3">
                 <h5 className="font-medium text-green-800 dark:text-green-200">WhatsApp Business</h5>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={() => alert('Adicionando nova instância do WhatsApp...')}
+                    className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors"
+                    title="Adicionar nova instância"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
               </div>
               <div className="space-y-2">
                 <input 
@@ -1860,31 +1914,61 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   placeholder="Access Token"
                   className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
-                <button className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
-                  Configurar
+                <input 
+                  type="text" 
+                  placeholder="Webhook Verify Token"
+                  className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <button 
+                  onClick={() => alert('Configurando WhatsApp Business API...')}
+                  className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                >
+                  Configurar WhatsApp
                 </button>
               </div>
             </div>
 
             {/* SendGrid Email */}
-            <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+            <div className="border border-red-200 dark:border-red-600 rounded-lg p-4 bg-red-50 dark:bg-red-900">
               <div className="flex items-center justify-between mb-3">
-                <h5 className="font-medium text-blue-800 dark:text-blue-200">SendGrid Email</h5>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <h5 className="font-medium text-red-800 dark:text-red-200">SendGrid Email</h5>
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={() => alert('Adicionando nova instância do SendGrid...')}
+                    className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
+                    title="Adicionar nova instância"
+                  >
+                    <span className="text-xs">+</span>
+                  </button>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
               </div>
               <div className="space-y-2">
                 <input 
                   type="text" 
                   placeholder="From Email"
-                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
                 <input 
                   type="password" 
                   placeholder="API Key"
-                  className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
-                <button className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
-                  Configurar
+                <input 
+                  type="text" 
+                  placeholder="From Name"
+                  className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+                <select className="w-full px-2 py-1 text-xs border border-red-300 dark:border-red-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                  <option value="transactional">Transacional</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="both">Ambos</option>
+                </select>
+                <button 
+                  onClick={() => alert('Configurando SendGrid Email...')}
+                  className="w-full px-3 py-2 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+                >
+                  Configurar Email
                 </button>
               </div>
             </div>
