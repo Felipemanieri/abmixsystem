@@ -275,7 +275,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
           {/* Footer */}
           <div className="px-8 pb-6 text-center">
             <p className="text-xs text-slate-500">
-              &copy; 2024 Abmix • Consultoria em Benefícios
+              Sistema Interno v2.0<br />
+              © 2025 Abmix Consultoria
             </p>
           </div>
         </div>
