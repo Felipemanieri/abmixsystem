@@ -973,37 +973,41 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           )}
         </div>
 
-        {/* Botões de Ação */}
-        <div className="flex justify-end space-x-4 mt-8">
+        {/* Botões de Ação - Todos na mesma linha */}
+        <div className="flex items-center gap-2 mt-8">
+          <button
+            onClick={adicionarCotacao}
+            className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs"
+          >
+            <Plus className="w-3 h-3 mr-1" />
+            Adicionar Cotação
+          </button>
           <button
             onClick={limparFormulario}
-            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="flex items-center px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs"
           >
-            <X className="w-4 h-4 mr-2" />
+            <X className="w-3 h-3 mr-1" />
             Limpar Formulário
           </button>
-
           <button
             onClick={generateQuotation}
-            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs"
           >
-            <Calculator className="w-4 h-4 mr-2" />
+            <Calculator className="w-3 h-3 mr-1" />
             Gerar Cotação
           </button>
-
           <button
             onClick={salvarCotacao}
-            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs"
           >
-            <CheckCircle className="w-4 h-4 mr-2" />
+            <CheckCircle className="w-3 h-3 mr-1" />
             Salvar Cotação
           </button>
-          
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="flex items-center px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-xs"
           >
-            <Download className="w-4 h-4 mr-2" />
+            <Download className="w-3 h-3 mr-1" />
             Baixar Cotação
           </button>
         </div>

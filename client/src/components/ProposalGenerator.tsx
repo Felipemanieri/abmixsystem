@@ -1880,40 +1880,40 @@ Validade: ${quotationData.validade ? new Date(quotationData.validade).toLocaleDa
             )}
 
             {/* Botões de Cotação */}
-            <div className="flex items-center gap-1 mt-6">
+            <div className="flex flex-wrap items-center gap-3 mt-6">
               <button
                 onClick={adicionarCotacao}
-                className="flex items-center px-2 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-xs"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
               >
-                <Plus className="w-3 h-3 mr-1" />
+                <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
               </button>
               <button
                 onClick={limparFormulario}
-                className="flex items-center px-2 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md text-xs"
+                className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium shadow-md text-sm"
               >
-                <Trash2 className="w-3 h-3 mr-1" />
+                <Trash2 className="w-4 h-4 mr-2" />
                 Limpar Formulário
               </button>
               <button
                 onClick={gerarCotacao}
-                className="flex items-center px-2 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md text-xs"
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium shadow-md text-sm"
               >
-                <FileText className="w-3 h-3 mr-1" />
+                <FileText className="w-4 h-4 mr-2" />
                 Gerar Cotação
               </button>
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-2 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-xs"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium shadow-md text-sm"
               >
-                <Save className="w-3 h-3 mr-1" />
+                <Save className="w-4 h-4 mr-2" />
                 Salvar Cotação
               </button>
               <button
                 onClick={baixarCotacao}
-                className="flex items-center px-2 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md text-xs"
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-medium shadow-md text-sm"
               >
-                <Download className="w-3 h-3 mr-1" />
+                <Download className="w-4 h-4 mr-2" />
                 Baixar Cotação
               </button>
             </div>
