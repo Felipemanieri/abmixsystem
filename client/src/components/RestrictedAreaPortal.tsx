@@ -261,9 +261,9 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
 
   // Estados para gerenciamento de drives
   const [drives, setDrives] = useState([
-    { id: 1, nome: 'Drive Principal', url: 'https://drive.google.com/drive/folders/1FAIpQLScQKE8BjIZJ-abmix-proposals', status: 'ativo', espaco: '15 GB', usado: '8.2 GB' },
-    { id: 2, nome: 'Drive Backup', url: 'https://drive.google.com/drive/folders/1FAIpQLScQKE8BjIZJ-backup', status: 'ativo', espaco: '15 GB', usado: '3.1 GB' },
-    { id: 3, nome: 'Drive Arquivo', url: 'https://drive.google.com/drive/folders/1FAIpQLScQKE8BjIZJ-arquivo', status: 'inativo', espaco: '15 GB', usado: '12.8 GB' }
+    { id: 1, nome: 'Drive Principal', url: 'https://drive.google.com/drive/folders/', status: 'configurar', espaco: '0 GB', usado: '0 GB' },
+    { id: 2, nome: 'Drive Backup', url: 'https://drive.google.com/drive/folders/', status: 'configurar', espaco: '0 GB', usado: '0 GB' },
+    { id: 3, nome: 'Drive Arquivo', url: 'https://drive.google.com/drive/folders/', status: 'configurar', espaco: '0 GB', usado: '0 GB' }
   ]);
   const [novoDrive, setNovoDrive] = useState({ nome: '', url: '' });
 
@@ -1231,13 +1231,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
-                    className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                   >
                     Abrir Forms
                   </button>
                   <button 
                     onClick={() => setShowFormsConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Configurações
                   </button>
@@ -1333,13 +1333,13 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/document/', '_blank')}
-                    className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
                   >
                     Abrir Docs
                   </button>
                   <button 
                     onClick={() => setShowDocsConfigModal(true)}
-                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    className="px-2 py-1 text-xs bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
                     Configurações
                   </button>
