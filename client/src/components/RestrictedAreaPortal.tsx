@@ -1231,16 +1231,14 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
-                    className="flex items-center px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors text-sm"
+                    className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
                     Abrir Forms
                   </button>
                   <button 
                     onClick={() => setShowFormsConfigModal(true)}
-                    className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
-                    <Settings className="w-3 h-3 mr-1" />
                     Configurações
                   </button>
                 </div>
@@ -1335,16 +1333,14 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => window.open('https://docs.google.com/document/', '_blank')}
-                    className="flex items-center px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors text-sm"
+                    className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
                     Abrir Docs
                   </button>
                   <button 
                     onClick={() => setShowDocsConfigModal(true)}
-                    className="flex items-center px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors text-sm"
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
                   >
-                    <Settings className="w-3 h-3 mr-1" />
                     Configurações
                   </button>
                 </div>
@@ -1545,7 +1541,7 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white text-lg">API Google - Integrações Gerais</h4>
+                <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Drive - Integrações</h4>
               </div>
               <div className="flex space-x-2">
                 <button 
