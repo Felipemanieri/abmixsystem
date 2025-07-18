@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { 
   Settings, 
   LogOut, 
@@ -84,22 +83,6 @@ interface RestrictedAreaPortalProps {
 
 export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaPortalProps) {
   const [activeTab, setActiveTab] = useState('interface');
-  
-  // Consultas reais do banco de dados
-  const { data: proposals = [] } = useQuery({
-    queryKey: ['/api/proposals'],
-    refetchInterval: 5000
-  });
-  
-  const { data: vendors = [] } = useQuery({
-    queryKey: ['/api/vendors'],
-    refetchInterval: 5000
-  });
-  
-  const { data: users = [] } = useQuery({
-    queryKey: ['/api/users'],
-    refetchInterval: 5000
-  });
   const [portalVisibility, setPortalVisibility] = useState({
     showClientPortal: true,
     showVendorPortal: true,
@@ -334,15 +317,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const tabs = [
     { id: 'interface', label: 'Interface', icon: Eye },
     { id: 'usuarios', label: 'Gestão Usuários', icon: Users },
-    { id: 'senhas', label: 'Controle Senhas', icon: Key },
-    { id: 'visualizar-planilha', label: 'Visualizar Planilha', icon: FileSpreadsheet },
+    { id: 'anexos', label: 'Gerenciar Anexos', icon: Paperclip },
+    { id: 'google-sheets', label: 'Google Sheets', icon: FileSpreadsheet },
     { id: 'logs', label: 'Logs Sistema', icon: Monitor },
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
-    { id: 'planilhas', label: 'Config Planilhas', icon: Settings },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
-    { id: 'backup', label: 'Backup & Restore', icon: Database },
-    { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
@@ -1048,12 +1028,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   function renderDriveSection() {
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Conexões Google - Completas</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Integrações Google - Completas</h3>
             </div>
             <div className="flex space-x-3">
               <button 
@@ -1076,44 +1056,40 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
 
-          {/* Módulos Google - Caixas pequenas organizadas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            
-            {/* Google Drive */}
-            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
-              <h4 className="font-medium text-blue-900 dark:text-blue-200 mb-2 flex items-center">
-                <HardDrive className="w-4 h-4 mr-2" />
-                Google Drive
-              </h4>
-              <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
-                {drives.length} drives • {proposals.length} pastas • Conectado
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('drive');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
+          {/* Estatísticas compactas */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-blue-900 dark:text-blue-200">247</div>
+              <div className="text-xs text-blue-600 dark:text-blue-400">Pastas</div>
             </div>
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-green-900 dark:text-green-200">1,834</div>
+              <div className="text-xs text-green-600 dark:text-green-400">Documentos</div>
+            </div>
+            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
+              <div className="text-xs text-purple-600 dark:text-purple-400">Armazenamento</div>
+            </div>
+            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-orange-900 dark:text-orange-200">99.1%</div>
+              <div className="text-xs text-orange-600 dark:text-orange-400">Sync Rate</div>
+            </div>
+          </div>
 
-            {/* Google Sheets */}
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-              <h4 className="font-medium text-green-900 dark:text-green-200 mb-2 flex items-center">
-                <FileSpreadsheet className="w-4 h-4 mr-2" />
-                Google Sheets
-              </h4>
-              <div className="text-sm text-green-600 dark:text-green-400 mb-3">
-                1 planilha • {proposals.length} linhas • Conectado
+          {/* Google Sheets - Única seção */}
+          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+            <h4 className="font-medium text-green-900 dark:text-green-200 mb-3 flex items-center">
+              <FileSpreadsheet className="w-5 h-5 mr-2" />
+              Google Sheets
+            </h4>
+            <div className="flex justify-between items-center">
+              <div className="text-sm text-green-600 dark:text-green-400">
+                47 planilhas • 2,847 linhas • 98.3% sync
               </div>
               <div className="flex space-x-2">
                 <button 
-                  onClick={() => setActiveTab('visualizar-planilha')}
-                  className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  onClick={() => setAbaAtiva('visualizar-planilha')}
+                  className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                 >
                   Visualizar
                 </button>
@@ -1122,95 +1098,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     setAbaAtiva('sheets');
                     setShowDriveManagementModal(true);
                   }}
-                  className="px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
-            </div>
-
-            {/* Google Forms */}
-            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4">
-              <h4 className="font-medium text-purple-900 dark:text-purple-200 mb-2 flex items-center">
-                <FileText className="w-4 h-4 mr-2" />
-                Google Forms
-              </h4>
-              <div className="text-sm text-purple-600 dark:text-purple-400 mb-3">
-                {vendors.length} formulários • {proposals.length} respostas • Conectado
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('forms');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-xs bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
-            </div>
-
-            {/* Google Docs */}
-            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4">
-              <h4 className="font-medium text-orange-900 dark:text-orange-200 mb-2 flex items-center">
-                <FileText className="w-4 h-4 mr-2" />
-                Google Docs
-              </h4>
-              <div className="text-sm text-orange-600 dark:text-orange-400 mb-3">
-                {users.length} documentos • 3 templates • Conectado
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('docs');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-xs bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
-            </div>
-
-            {/* Backup Automático */}
-            <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4">
-              <h4 className="font-medium text-red-900 dark:text-red-200 mb-2 flex items-center">
-                <Database className="w-4 h-4 mr-2" />
-                Backup Automático
-              </h4>
-              <div className="text-sm text-red-600 dark:text-red-400 mb-3">
-                Diário • Último: hoje • Conectado
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('backup');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
-            </div>
-
-            {/* API Google */}
-            <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4">
-              <h4 className="font-medium text-indigo-900 dark:text-indigo-200 mb-2 flex items-center">
-                <Globe className="w-4 h-4 mr-2" />
-                API Google
-              </h4>
-              <div className="text-sm text-indigo-600 dark:text-indigo-400 mb-3">
-                Ativo • Sem erros • Conectado
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('api');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                  className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                 >
                   Configurações
                 </button>
@@ -1219,7 +1107,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
 
           {/* Lista de Drives Configurados */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mt-6">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 dark:text-white mb-4">Drives Configurados</h4>
             <div className="space-y-3">
               {drives.map((drive) => (
@@ -1239,202 +1127,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       Abrir
                     </button>
                     <button className="px-3 py-1 text-sm bg-gray-600 text-white dark:bg-gray-600 dark:text-white rounded hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors">
-                      Configurações
+                      Editar
                     </button>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Funções de renderização das abas faltantes
-  function renderSenhasSection() {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Key className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Controle de Senhas</h3>
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            Sistema de gestão de senhas: {users.length} usuários do sistema • {vendors.length} vendedores
-          </div>
-          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              Gerenciamento de senhas está disponível na aba "Gestão Usuários" com funcionalidade completa.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderPlanilhaSection() {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Visualizar Planilha</h3>
-            </div>
-            <div className="flex space-x-3">
-              <button 
-                onClick={() => {
-                  const csvContent = "data:text/csv;charset=utf-8," + 
-                    encodeURIComponent("ID,Empresa,Status,Vendedor,Plano,Valor\n" + 
-                    proposals.map(p => `${p.id},${p.contractData?.nomeEmpresa || 'N/A'},${p.status},${p.vendorId},${p.contractData?.plano || 'N/A'},${p.contractData?.valor || 'N/A'}`).join('\n'));
-                  const link = document.createElement("a");
-                  link.setAttribute("href", csvContent);
-                  link.setAttribute("download", "planilha_abmix.csv");
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }}
-                className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Exportar CSV
-              </button>
-            </div>
-          </div>
-          <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-            <PlanilhaViewer />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderPlanilhasSection() {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center mb-6">
-            <Settings className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-3" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações de Planilhas</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-              <h4 className="font-medium text-gray-900 dark:text-white mb-3">Estrutura da Planilha</h4>
-              <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                Detecção automática: {proposals.length} propostas analisadas
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Campos fixos:</span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">12 campos</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300">Campos dinâmicos:</span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">Auto-detectados</span>
-                </div>
-              </div>
-            </div>
-            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-              <h4 className="font-medium text-gray-900 dark:text-white mb-3">Sincronização</h4>
-              <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                Última sincronização: agora
-              </div>
-              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                Sincronizar Agora
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderTempoSection() {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações do Tempo</h3>
-            </div>
-            <div className="flex space-x-3">
-              <button 
-                onClick={() => setAllPaused(!allPaused)}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                  allPaused 
-                    ? 'bg-green-600 text-white hover:bg-green-700' 
-                    : 'bg-red-600 text-white hover:bg-red-700'
-                }`}
-              >
-                {allPaused ? <Play className="w-4 h-4 mr-2" /> : <Pause className="w-4 h-4 mr-2" />}
-                {allPaused ? 'Iniciar Todos' : 'Parar Todos'}
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(timeConfigs).map(([key, config]) => (
-              <div key={key} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900 dark:text-white">
-                    {key === 'googleDrive' ? 'Google Drive' :
-                     key === 'googleSheets' ? 'Google Sheets' :
-                     key === 'googleForms' ? 'Google Forms' :
-                     key === 'googleDocs' ? 'Google Docs' :
-                     key === 'backupAuto' ? 'Backup Automático' :
-                     key === 'apiRequests' ? 'API Requests' : key}
-                  </h4>
-                  <div className={`w-3 h-3 rounded-full ${config.active ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                </div>
-                <div className="space-y-2">
-                  <select 
-                    value={config.interval}
-                    onChange={(e) => setTimeConfigs(prev => ({
-                      ...prev,
-                      [key]: { ...prev[key], interval: e.target.value }
-                    }))}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    <option value="1s">1 segundo</option>
-                    <option value="5s">5 segundos</option>
-                    <option value="30s">30 segundos</option>
-                    <option value="1m">1 minuto</option>
-                    <option value="5m">5 minutos</option>
-                    <option value="10m">10 minutos</option>
-                    <option value="30m">30 minutos</option>
-                    <option value="1h">1 hora</option>
-                    <option value="manual">Manual</option>
-                  </select>
-                  <button 
-                    onClick={() => setTimeConfigs(prev => ({
-                      ...prev,
-                      [key]: { ...prev[key], active: !prev[key].active }
-                    }))}
-                    className={`w-full px-3 py-2 text-sm rounded-lg transition-colors ${
-                      config.active 
-                        ? 'bg-red-600 text-white hover:bg-red-700' 
-                        : 'bg-green-600 text-white hover:bg-green-700'
-                    }`}
-                  >
-                    {config.active ? 'Pausar' : 'Ativar'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
-            <div className="flex items-center mb-2">
-              <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
-              <h4 className="font-medium text-yellow-800 dark:text-yellow-200">Informações Importantes</h4>
-            </div>
-            <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-              <li>• Controle manual permite pausar requisições para manutenção</li>
-              <li>• Configurações específicas ajudam a controlar quotas da API Google</li>
-              <li>• Módulos ativos: {Object.values(timeConfigs).filter(c => c.active).length} de {Object.keys(timeConfigs).length}</li>
-            </ul>
           </div>
         </div>
       </div>
@@ -1806,15 +1504,15 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && renderInterfaceSection()}
         {activeTab === 'usuarios' && <UnifiedUserManagement />}
-        {activeTab === 'senhas' && renderSenhasSection()}
-        {activeTab === 'visualizar-planilha' && renderPlanilhaSection()}
+        {activeTab === 'anexos' && renderAnexosSection()}
+        {activeTab === 'google-sheets' && renderGoogleSheetsSection()}
         {activeTab === 'logs' && <LogsViewer />}
+        {activeTab === 'backup' && <BackupManager />}
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
-        {activeTab === 'planilhas' && renderPlanilhasSection()}
         {activeTab === 'drive' && renderDriveSection()}
-        {activeTab === 'backup' && <BackupManager />}
         {activeTab === 'tempo' && renderTempoSection()}
+        {activeTab === 'sistema' && renderSistemaSection()}
       </main>
 
       {/* Modal de Gerenciamento de Drive */}
