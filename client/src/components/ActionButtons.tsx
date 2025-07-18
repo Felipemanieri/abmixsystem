@@ -1,4 +1,3 @@
-import React from "react";
 import React from 'react';
 import { Eye, Link, MessageSquare, Mail, Download, FileText, Edit, Trash2, ExternalLink, Send, Copy, Share2, Zap, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
@@ -188,15 +187,11 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       {onMessage && (
         <button 
           onClick={onMessage}
-          className={`text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors ${userRole ? 'relative' : ''}`}
+          className="text-teal-600 hover:text-teal-900 p-1 rounded hover:bg-teal-50 transition-colors"
           title="Mensagem Interna"
         >
           <MessageSquare className="w-4 h-4" />
-          {userRole && (
-            <span className="absolute -top-1 -right-1 bg-red-500 dark:bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              2
-            </span>
-          )}
+          {/* CONTADOR DE NOTIFICAÇÃO REMOVIDO */}
         </button>
       )}
     </div>
