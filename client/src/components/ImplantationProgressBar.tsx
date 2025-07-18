@@ -116,7 +116,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
         </span>
       </div>
       
-      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden mb-3">
+      <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden mb-3">
         <div 
           className={`h-2 rounded-full transition-all duration-500 ease-in-out ${getProgressColor()}`}
           style={{ width: `${progress}%` }}
@@ -138,7 +138,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
                   ? 'bg-emerald-100 text-emerald-600' 
                   : status === 'in-progress'
                   ? 'bg-amber-100 text-amber-600'
-                  : 'bg-gray-100 text-gray-400 dark:text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 dark:text-white'
               }`}>
                 {status === 'completed' ? (
                   <CheckCircle className="w-3 h-3" />
@@ -154,7 +154,7 @@ const ImplantationProgressBar: React.FC<ImplantationProgressBarProps> = ({ propo
                   <span className="text-xs text-gray-700 font-medium">{stage.name}</span>
                   <span className="text-xs text-gray-500 dark:text-white">{stageProgress}%</span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-1 mt-1">
+                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1 mt-1">
                   <div 
                     className={`h-1 rounded-full transition-all duration-300 ${
                       status === 'completed' 

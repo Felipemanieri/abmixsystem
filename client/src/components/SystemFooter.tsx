@@ -20,7 +20,7 @@ const SystemFooter: React.FC = () => {
   };
 
   return (
-    <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-3 px-6">
+    <footer className="bg-gray-100 dark:bg-gray-700 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-3 px-6">
       <div className="max-w-full mx-auto">
         <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300">
           
@@ -55,11 +55,11 @@ const SystemFooter: React.FC = () => {
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 Manual do Sistema
               </a>
-              <span className="text-gray-400 dark:text-white">|</span>
+              <span className="text-gray-400 dark:text-gray-500 dark:text-white">|</span>
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 FAQ
               </a>
-              <span className="text-gray-400 dark:text-white">|</span>
+              <span className="text-gray-400 dark:text-gray-500 dark:text-white">|</span>
               <a href="#" className="text-blue-600 hover:text-blue-800 transition-colors">
                 Configurações
               </a>

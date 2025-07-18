@@ -89,7 +89,7 @@ const DocumentManager: React.FC = () => {
       </div>
 
       {/* Proposal Selector */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Selecionar Proposta</h2>
@@ -98,7 +98,7 @@ const DocumentManager: React.FC = () => {
           <select
             value={selectedProposal}
             onChange={(e) => setSelectedProposal(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
           >
             {proposals.map(proposal => (
               <option key={proposal.id} value={proposal.id}>
@@ -111,7 +111,7 @@ const DocumentManager: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Uploaded Documents */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Documentos Enviados pelo Cliente
           </h2>
@@ -124,7 +124,7 @@ const DocumentManager: React.FC = () => {
               <div
                 key={doc.id}
                 draggable
-                className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-move hover:bg-gray-100 transition-colors"
+                className="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-move hover:bg-gray-100 dark:bg-gray-700 transition-colors"
               >
                 <div className="text-gray-500 dark:text-white mr-3">
                   {getDocumentIcon(doc.type)}
@@ -138,10 +138,10 @@ const DocumentManager: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex space-x-2">
-                  <button className="text-gray-400 dark:text-white hover:text-gray-600">
+                  <button className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button className="text-gray-400 dark:text-white hover:text-gray-600">
+                  <button className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600">
                     <Download className="w-4 h-4" />
                   </button>
                 </div>
@@ -151,7 +151,7 @@ const DocumentManager: React.FC = () => {
         </div>
 
         {/* Document Fields */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Campos de Documentos
           </h2>
@@ -168,7 +168,7 @@ const DocumentManager: React.FC = () => {
                     ? 'border-green-300 bg-green-50' 
                     : field.required 
                       ? 'border-red-300 bg-red-50' 
-                      : 'border-gray-300 bg-gray-50'
+                      : 'border-gray-300 dark:border-gray-600 bg-gray-50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -210,7 +210,7 @@ const DocumentManager: React.FC = () => {
                     <p className="text-sm text-gray-500 dark:text-white">
                       {field.required ? 'Documento obrigatório' : 'Documento opcional'}
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-white mt-1">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 dark:text-white mt-1">
                       Arraste um documento aqui
                     </p>
                   </div>
@@ -222,7 +222,7 @@ const DocumentManager: React.FC = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Status da Organização</h3>
@@ -232,7 +232,7 @@ const DocumentManager: React.FC = () => {
           </div>
           
           <div className="flex space-x-4">
-            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors">
+            <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors">
               Salvar Progresso
             </button>
             <button
@@ -247,7 +247,7 @@ const DocumentManager: React.FC = () => {
         
         {/* Progress Bar */}
         <div className="mt-4">
-          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
             <div 
               className="bg-teal-600 h-2 rounded-full transition-all duration-300" 
               style={{ 

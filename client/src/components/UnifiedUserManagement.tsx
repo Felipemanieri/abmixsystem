@@ -322,14 +322,14 @@ export default function UnifiedUserManagement() {
             <button
               onClick={() => refetch()}
               disabled={isLoading}
-              className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
               Atualizar
             </button>
             <button
               onClick={exportUsers}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar
@@ -355,7 +355,7 @@ export default function UnifiedUserManagement() {
                     : panel.color === 'pink' ? 'border-pink-500 bg-pink-50 text-pink-700'
                     : panel.color === 'red' ? 'border-red-500 bg-red-50 text-red-700'
                     : 'border-gray-500 bg-gray-50 text-gray-700'
-                    : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                    : 'border-gray-200 hover:border-gray-300 dark:border-gray-600 text-gray-600'
                 }`}
               >
                 <Icon className="w-5 h-5 mx-auto mb-1" />
@@ -416,13 +416,13 @@ export default function UnifiedUserManagement() {
         {/* Search and Controls */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-white" />
+            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 dark:text-white" />
             <input
               type="text"
               placeholder="Buscar por nome ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div className="flex gap-2">
@@ -431,7 +431,7 @@ export default function UnifiedUserManagement() {
               className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${
                 showPasswords
                   ? 'border-orange-300 bg-orange-50 text-orange-700'
-                  : 'border-gray-300 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               {showPasswords ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
@@ -439,7 +439,7 @@ export default function UnifiedUserManagement() {
             </button>
             <button
               onClick={handleCreateUser}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
               Novo Usuário
@@ -485,13 +485,13 @@ export default function UnifiedUserManagement() {
               ) : filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-4 text-center text-gray-500 dark:text-white">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-white" />
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500 dark:text-white" />
                     Nenhum usuário encontrado para este painel
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className={`w-8 h-8 rounded-full bg-${currentPanel.color}-100 flex items-center justify-center mr-3`}>
@@ -508,18 +508,18 @@ export default function UnifiedUserManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {showPasswords ? (
-                        <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                        <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                           {user.password || (user.role === 'vendor' ? '120784' : 'N/A')}
                         </span>
                       ) : (
-                        <span className="text-gray-400 dark:text-white">••••••••</span>
+                        <span className="text-gray-400 dark:text-gray-500 dark:text-white">••••••••</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         user.active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                          : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
                       }`}>
                         {user.active ? (
                           <>
@@ -567,7 +567,7 @@ export default function UnifiedUserManagement() {
       {/* User Modal */}
       {showUserModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="bg-white rounded-lg shadow-xl dark:shadow-gray-900/50 max-w-md w-full mx-4">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -575,7 +575,7 @@ export default function UnifiedUserManagement() {
                 </h3>
                 <button
                   onClick={() => setShowUserModal(false)}
-                  className="text-gray-400 dark:text-white hover:text-gray-600"
+                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -590,7 +590,7 @@ export default function UnifiedUserManagement() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -603,7 +603,7 @@ export default function UnifiedUserManagement() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -616,7 +616,7 @@ export default function UnifiedUserManagement() {
                     type="text"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>
@@ -628,7 +628,7 @@ export default function UnifiedUserManagement() {
                   <select
                     value={formData.panel}
                     onChange={(e) => setFormData({ ...formData, panel: e.target.value, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   >
                     {Object.entries(panels).map(([key, panel]) => (
@@ -645,7 +645,7 @@ export default function UnifiedUserManagement() {
                     id="active"
                     checked={formData.active}
                     onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                   />
                   <label htmlFor="active" className="ml-2 text-sm text-gray-700">
                     Usuário ativo
@@ -656,14 +656,14 @@ export default function UnifiedUserManagement() {
                   <button
                     type="button"
                     onClick={() => setShowUserModal(false)}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     disabled={createUserMutation.isPending || updateUserMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                   >
                     <Save className="w-4 h-4 mr-2 inline" />
                     {editingUser ? 'Salvar' : 'Criar'}

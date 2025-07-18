@@ -89,13 +89,13 @@ Abmix Consultoria em Benefícios`;
                 />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Abmix Consultoria em Benefícios</h2>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 dark:text-white">Abmix Consultoria em Benefícios</h2>
                 <p className="text-gray-600">Formulário de Proposta</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 dark:text-white hover:text-gray-600 p-2 rounded-full hover:bg-gray-100"
+              className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 dark:bg-gray-700"
             >
               ✕
             </button>
@@ -108,7 +108,7 @@ Abmix Consultoria em Benefícios`;
                 <CheckCircle className="w-6 h-6 text-green-600 mt-1" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 dark:text-white mb-2">
                   Segue o link do formulário para completar sua proposta
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
@@ -128,7 +128,7 @@ Abmix Consultoria em Benefícios`;
                 <Shield className="w-5 h-5 text-blue-600" />
                 <Lock className="w-5 h-5 text-green-600" />
               </div>
-              <h4 className="font-semibold text-gray-800 dark:text-white">Segurança Garantida</h4>
+              <h4 className="font-semibold text-gray-800 dark:text-gray-200 dark:text-white">Segurança Garantida</h4>
             </div>
             <p className="text-gray-700 text-sm leading-relaxed">
               🔒 <strong>Seus dados estão protegidos</strong> com criptografia de ponta a ponta e armazenamento seguro.
@@ -147,14 +147,14 @@ Abmix Consultoria em Benefícios`;
                 type="text"
                 value={clientLink}
                 readOnly
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 text-sm"
               />
               <button
                 onClick={handleCopy}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   copied 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-green-600 text-white dark:bg-green-500 dark:text-white' 
+                    : 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white hover:bg-blue-700'
                 }`}
               >
                 {copied ? <Check size={16} /> : <Copy size={16} />}
@@ -174,7 +174,7 @@ Abmix Consultoria em Benefícios`;
             
             <button
               onClick={handleWhatsApp}
-              className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <MessageCircle size={18} />
               <span className="font-medium">WhatsApp</span>
@@ -182,7 +182,7 @@ Abmix Consultoria em Benefícios`;
             
             <button
               onClick={handleEmail}
-              className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Mail size={18} />
               <span className="font-medium">Email</span>

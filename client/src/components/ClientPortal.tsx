@@ -216,7 +216,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg dark:shadow-gray-900/50 text-white font-medium ${
       type === 'success' ? 'bg-green-500' : 
       type === 'error' ? 'bg-red-500' : 'bg-blue-500'
     }`;
@@ -245,13 +245,13 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
       case 'approved':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       case 'rejected':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
       default:
-        return 'bg-gray-100 text-gray-800 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -270,7 +270,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   const renderCotacoesTab = () => (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Minhas Cotações</h2>
           <p className="text-sm text-gray-600 dark:text-white mt-1">
@@ -280,7 +280,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         
         {cotacoes.length === 0 ? (
           <div className="p-8 text-center">
-            <FileText className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
+            <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma cotação disponível</h3>
             <p className="text-gray-600 dark:text-white">Aguarde seu vendedor criar suas primeiras cotações.</p>
           </div>
@@ -323,7 +323,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-white">Arquivos Anexados</label>
                     <p className="text-sm text-gray-900 dark:text-white mt-1">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:text-white">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 dark:text-white">
                         <FileText className="w-3 h-3 mr-1" />
                         {cotacao.arquivos.length} arquivo(s)
                       </span>
@@ -418,7 +418,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
   const renderProfileTab = () => (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Meu Perfil</h2>
         
         <div className="flex flex-col md:flex-row gap-8">
@@ -429,7 +429,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               </div>
               <h3 className="font-medium text-gray-900 dark:text-white mb-1">{user.name}</h3>
               <p className="text-sm text-gray-600 dark:text-white mb-4">{user.email}</p>
-              <button className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors text-sm">
+              <button className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors text-sm">
                 Alterar Foto
               </button>
             </div>
@@ -443,7 +443,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <input
                     type="text"
                     defaultValue={user.name}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
@@ -452,7 +452,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <input
                     type="email"
                     defaultValue={user.email}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
@@ -461,7 +461,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <input
                     type="tel"
                     defaultValue="(11) 99999-9999"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 
@@ -470,7 +470,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   <input
                     type="text"
                     defaultValue="123.456.789-00"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -480,7 +480,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <input
                   type="text"
                   defaultValue="Rua das Flores, 123 - Centro, São Paulo - SP"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               
@@ -497,7 +497,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         </div>
       </div>
       
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preferências de Notificação</h2>
         
         <div className="space-y-3">
@@ -546,7 +546,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -565,7 +565,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
 
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -587,7 +587,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
@@ -598,7 +598,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -616,7 +616,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 mb-6">
           <div className="border-b border-gray-200 dark:border-gray-600">
             <nav className="flex space-x-8 px-6">
               <button
@@ -624,7 +624,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'cotacoes'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
                 }`}
               >
                 <FileText className="w-4 h-4 mr-2" />
@@ -636,7 +636,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'complete-proposal'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
                 }`}
               >
                 <Check className="w-4 h-4 mr-2" />
@@ -647,7 +647,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === 'profile'
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600'
+                    : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600 dark:border-gray-600'
                 }`}
               >
                 <User className="w-4 h-4 mr-2" />
@@ -719,7 +719,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
                   <div className={`max-w-xs p-3 rounded-2xl ${
                     message.isBot 
-                      ? 'bg-gray-100 text-gray-800 dark:text-white' 
+                      ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white' 
                       : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
                   }`}>
                     <p className="text-sm">{message.text}</p>
@@ -741,7 +741,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   onClick={sendMessage}

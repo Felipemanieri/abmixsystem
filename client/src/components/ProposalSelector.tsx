@@ -102,13 +102,13 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
       case 'low':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       default:
-        return 'bg-gray-100 text-gray-800 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -132,14 +132,14 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
       <div className="absolute inset-0 flex">
         <div className="w-full h-full">
-          <div className="h-full flex flex-col bg-white shadow-xl">
+          <div className="h-full flex flex-col bg-white shadow-xl dark:shadow-gray-900/50">
             {/* Header */}
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">Selecionar Proposta</h2>
                 <button
                   onClick={onClose}
-                  className="p-2 text-gray-400 dark:text-white hover:text-gray-600 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
+                  className="p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -151,13 +151,13 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-white" />
                   <input
                     type="text"
                     placeholder="Buscar por ID, cliente ou vendedor..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -165,7 +165,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">Todos os Status</option>
                   <option value="observacao">OBSERVAÇÃO</option>
@@ -185,7 +185,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                 <select
                   value={priorityFilter}
                   onChange={(e) => setPriorityFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">Todas as Prioridades</option>
                   <option value="high">Alta</option>
@@ -197,7 +197,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                 <select
                   value={vendorFilter}
                   onChange={(e) => setVendorFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">Todos os Vendedores</option>
                   {allVendorNames.map(vendorName => (
@@ -227,7 +227,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                   {filteredProposals.map((proposal) => (
                     <div
                       key={proposal.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                      className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                       onClick={() => {
                         onSelectProposal(proposal.id);
                         onClose();
@@ -271,7 +271,7 @@ const ProposalSelector: React.FC<ProposalSelectorProps> = ({ isOpen, onClose, on
                           <div className="text-sm text-gray-600">
                             Progresso: {proposal.progress}%
                           </div>
-                          <div className="w-24 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                          <div className="w-24 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
                             <div
                               className="bg-blue-600 h-2 rounded-full transition-all"
                               style={{ width: `${proposal.progress}%` }}

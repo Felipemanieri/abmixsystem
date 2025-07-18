@@ -188,13 +188,13 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
             {/* Search */}
             <div className="p-3 border-b border-gray-200">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-white" />
                 <input
                   type="text"
                   placeholder="Buscar mensagens..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <div
                     key={message.id}
                     onClick={() => setSelectedMessage(message)}
-                    className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${
+                    className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
                       selectedMessage?.id === message.id ? 'bg-gray-50' : ''
                     } ${!message.read && activeTab === 'inbox' ? 'bg-blue-50' : ''}`}
                   >
@@ -264,7 +264,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <select
                     value={composeData.recipient}
                     onChange={(e) => setComposeData({...composeData, recipient: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   >
                     <option value="">Selecione um destinatário</option>
                     <option value="Ana Caroline">Ana Caroline (Vendedor)</option>
@@ -282,7 +282,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                     type="text"
                     value={composeData.subject}
                     onChange={(e) => setComposeData({...composeData, subject: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                     placeholder="Assunto da mensagem"
                   />
                 </div>
@@ -294,14 +294,14 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <textarea
                     value={composeData.content}
                     onChange={(e) => setComposeData({...composeData, content: e.target.value})}
-                    className="w-full h-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                    className="w-full h-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
                     placeholder="Digite sua mensagem aqui..."
                   />
                 </div>
                 
                 <div className="flex justify-between items-center">
                   <div>
-                    <button className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors">
+                    <button className="flex items-center px-3 py-2 text-sm text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors">
                       <FileText className="w-4 h-4 mr-2" />
                       Anexar Arquivo
                     </button>
@@ -310,7 +310,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setActiveTab('inbox')}
-                      className="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
+                      className="px-4 py-2 text-sm text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
                     >
                       Cancelar
                     </button>
@@ -343,10 +343,10 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      <button className="text-gray-400 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                      <button className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100 dark:bg-gray-700">
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                      <button className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 p-1 rounded hover:bg-gray-100 dark:bg-gray-700">
                         <Download className="w-4 h-4" />
                       </button>
                     </div>
@@ -354,7 +354,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                 </div>
                 
                 <div className="flex-1 mb-4">
-                  <div className="text-sm text-gray-800 dark:text-white whitespace-pre-line">
+                  <div className="text-sm text-gray-800 dark:text-gray-200 dark:text-white whitespace-pre-line">
                     {selectedMessage.content}
                   </div>
                 </div>

@@ -49,7 +49,7 @@ import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
 import UserManagementDashboard from './UserManagementDashboard';
 import SystemFooter from './SystemFooter';
-import ThemeToggle from './ThemeToggle';
+
 import UnifiedUserManagement from './UnifiedUserManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
@@ -287,10 +287,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pendente': return 'bg-yellow-100 text-yellow-800';
-      case 'aprovado': return 'bg-green-100 text-green-800';
-      case 'rejeitado': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800 dark:text-white';
+      case 'pendente': return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
+      case 'aprovado': return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
+      case 'rejeitado': return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -363,12 +363,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3">
               <button 
                 onClick={() => setShowDriveManagementModal(true)}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <HardDrive className="w-4 h-4 mr-2" />
                 Gerenciar Drive
               </button>
-              <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <button className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors">
                 <Download className="w-4 h-4 mr-2" />
                 Carregar arquivo
               </button>
@@ -422,13 +422,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             {/* Pesquisa */}
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-white" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 dark:text-white" />
               <input
                 type="text"
                 placeholder="Pesquisar arquivos..."
                 value={filtros.pesquisa}
                 onChange={(e) => setFiltros({...filtros, pesquisa: e.target.value})}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -436,7 +436,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <select
               value={filtros.categoria}
               onChange={(e) => setFiltros({...filtros, categoria: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {categoriaOptions.map(cat => (
                 <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -447,7 +447,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <select
               value={filtros.status}
               onChange={(e) => setFiltros({...filtros, status: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {statusOptions.map(status => (
                 <option key={status.value} value={status.value}>{status.label}</option>
@@ -458,7 +458,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <select
               value={filtros.proposta}
               onChange={(e) => setFiltros({...filtros, proposta: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {proposalOptions.map(prop => (
                 <option key={prop.value} value={prop.value}>{prop.label}</option>
@@ -471,7 +471,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <select
               value={filtros.drive}
               onChange={(e) => setFiltros({...filtros, drive: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {driveOptions.map(drive => (
                 <option key={drive.value} value={drive.value}>{drive.label}</option>
@@ -501,7 +501,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 {anexosFiltrados.map((anexo) => {
                   const CategoriaIcon = getCategoriaIcon(anexo.categoria);
                   return (
-                    <tr key={anexo.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr key={anexo.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:bg-gray-600">
                       <td className="py-3 px-4">
                         <div className="flex items-center">
                           <FileText className="w-5 h-5 text-red-500 dark:text-red-400 mr-2" />
@@ -546,7 +546,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
           {anexosFiltrados.length === 0 && (
             <div className="text-center py-8">
-              <Folder className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
+              <Folder className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum anexo encontrado</h3>
               <p className="text-gray-500 dark:text-white">Tente ajustar os filtros para encontrar os anexos desejados.</p>
             </div>
@@ -609,7 +609,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={handleToggleClientPortal}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
             </div>
@@ -643,7 +643,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={handleToggleVendorPortal}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
             </div>
@@ -677,7 +677,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={handleToggleFinancialPortal}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                 </label>
               </div>
             </div>
@@ -711,7 +711,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={handleToggleImplementationPortal}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
                 </label>
               </div>
             </div>
@@ -745,7 +745,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={handleToggleSupervisorPortal}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-600"></div>
                 </label>
               </div>
             </div>
@@ -754,7 +754,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-600 mt-6">
             <button
               onClick={resetToDefault}
-              className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+              className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-gray-200 dark:text-white border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               Restaurar Padrão
@@ -871,7 +871,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <button 
               onClick={openGoogleSheets}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Globe className="w-4 h-4 mr-2" />
               Abrir Google Sheets
@@ -904,13 +904,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="mt-4 flex space-x-2">
                 <button 
                   onClick={openGoogleSheets}
-                  className="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex-1 px-3 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Abrir
                 </button>
                 <button 
                   onClick={syncGoogleSheets}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
                 >
                   Sync
                 </button>
@@ -942,13 +942,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <div className="mt-4 flex space-x-2">
                 <button 
                   onClick={() => window.open('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=1', '_blank')}
-                  className="flex-1 px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
+                  className="flex-1 px-3 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   Ver Relatórios
                 </button>
                 <button 
                   onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
                 >
                   Config
                 </button>
@@ -1033,13 +1033,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-600">
             <div className="flex space-x-4">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Exportar Dados
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <button className="px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors">
                 Backup Manual
               </button>
-              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors">
+              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors">
                 Logs do Sistema
               </button>
             </div>
@@ -1052,7 +1052,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -1064,7 +1064,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:hover:text-white transition-colors"
+                className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-800 dark:text-gray-200 dark:hover:text-white transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1087,7 +1087,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   className={`flex items-center px-1 py-4 border-b-2 font-medium text-sm transition-colors ${
                     activeTab === tab.id
                       ? 'border-red-500 text-red-600'
-                      : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:hover:border-gray-500'
+                      : 'border-transparent text-gray-500 dark:text-white hover:text-gray-700 dark:text-white hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500'
                   }`}
                 >
                   <Icon className="w-5 h-5 mr-2" />
@@ -1125,7 +1125,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </div>
               <button
                 onClick={() => setShowDriveManagementModal(false)}
-                className="text-gray-400 dark:text-white hover:text-gray-600 dark:text-white"
+                className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 dark:text-white"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -1142,7 +1142,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     value={novoDrive.nome}
                     onChange={(e) => setNovoDrive({...novoDrive, nome: e.target.value})}
                     placeholder="Ex: Drive Documentos"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -1152,7 +1152,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     value={novoDrive.url}
                     onChange={(e) => setNovoDrive({...novoDrive, url: e.target.value})}
                     placeholder="https://drive.google.com/drive/folders/..."
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -1175,7 +1175,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       alert('Preencha todos os campos obrigatórios.');
                     }
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2 inline" />
                   Adicionar Drive
@@ -1199,7 +1199,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   </thead>
                   <tbody>
                     {drives.map((drive) => (
-                      <tr key={drive.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <tr key={drive.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:bg-gray-600">
                         <td className="py-3 px-4">
                           <div className="flex items-center">
                             <HardDrive className="w-5 h-5 text-blue-500 dark:text-blue-400 mr-2" />
@@ -1212,8 +1212,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         <td className="py-3 px-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                             drive.status === 'ativo' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
+                              ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
+                              : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
                           }`}>
                             {drive.status === 'ativo' ? 'Ativo' : 'Inativo'}
                           </span>
@@ -1313,7 +1313,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <select 
                   value={driveConfig.folderStructure}
                   onChange={(e) => setDriveConfig({...driveConfig, folderStructure: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="Por Cliente">Por Cliente</option>
                   <option value="Por Data">Por Data</option>
@@ -1330,7 +1330,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={(e) => setDriveConfig({...driveConfig, autoSync: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
 
@@ -1339,7 +1339,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <select 
                   value={driveConfig.backupFrequency}
                   onChange={(e) => setDriveConfig({...driveConfig, backupFrequency: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="Tempo Real">Tempo Real</option>
                   <option value="Diário">Diário</option>
@@ -1351,7 +1351,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowDriveConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1360,7 +1360,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   openGoogleDrive();
                   setShowDriveConfigModal(false);
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Salvar e Abrir Drive
               </button>
@@ -1385,7 +1385,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   value={sheetsConfig.sheetId}
                   onChange={(e) => setSheetsConfig({...sheetsConfig, sheetId: e.target.value})}
                   placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
                 />
               </div>
               
@@ -1398,7 +1398,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     onChange={(e) => setSheetsConfig({...sheetsConfig, autoUpdate: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 dark:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
@@ -1407,7 +1407,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <select 
                   value={sheetsConfig.syncFrequency}
                   onChange={(e) => setSheetsConfig({...sheetsConfig, syncFrequency: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
                 >
                   <option value="Tempo Real">Tempo Real</option>
                   <option value="5 Minutos">A cada 5 minutos</option>
@@ -1419,7 +1419,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowSheetsConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1428,7 +1428,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   syncGoogleSheets();
                   setShowSheetsConfigModal(false);
                 }}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 Salvar e Sincronizar
               </button>
@@ -1451,7 +1451,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <input
                   type="password"
                   placeholder="Token do WhatsApp Business API"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               
@@ -1460,7 +1460,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <input
                   type="text"
                   placeholder="+55 11 99999-9999"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -1486,7 +1486,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowWhatsAppConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>
@@ -1495,7 +1495,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   alert('Configurações do WhatsApp salvas com sucesso!');
                   setShowWhatsAppConfigModal(false);
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Salvar
               </button>
@@ -1515,7 +1515,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Frequência de Backup</label>
-                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500">
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
                   <option value="diario">Diário (às 02:00)</option>
                   <option value="semanal">Semanal (Domingo)</option>
                   <option value="mensal">Mensal (1º dia do mês)</option>
@@ -1524,7 +1524,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Retenção de Backups</label>
-                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500">
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
                   <option value="7">7 dias</option>
                   <option value="30">30 dias</option>
                   <option value="90">90 dias</option>
@@ -1553,7 +1553,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setShowBackupConfigModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:bg-gray-600 transition-colors"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-600 transition-colors"
               >
                 Cancelar
               </button>

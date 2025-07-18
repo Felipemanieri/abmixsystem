@@ -16,7 +16,7 @@ const SimpleProgressBar: React.FC<SimpleProgressBarProps> = ({
   return (
     <div className={`${className}`}>
       <div className="flex items-center space-x-2">
-        <div className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+        <div className="flex-1 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all duration-500 ${
               safePercentage < 30 ? 'bg-red-500' :

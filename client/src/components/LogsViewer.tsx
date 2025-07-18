@@ -169,7 +169,7 @@ export default function LogsViewer() {
               onClick={() => setIsLive(!isLive)}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 isLive 
-                  ? 'bg-green-600 text-white hover:bg-green-700' 
+                  ? 'bg-green-600 text-white dark:bg-green-500 dark:text-white hover:bg-green-700' 
                   : 'bg-gray-300 dark:bg-gray-600 text-gray-700 hover:bg-gray-400'
               }`}
             >
@@ -186,7 +186,7 @@ export default function LogsViewer() {
             <button
               onClick={exportLogs}
               disabled={filteredLogs.length === 0}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar
@@ -254,12 +254,12 @@ export default function LogsViewer() {
               placeholder="Buscar nos logs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg w-64"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-64"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="p-1 hover:bg-gray-100 rounded"
+                className="p-1 hover:bg-gray-100 dark:bg-gray-700 rounded"
               >
                 <X className="w-4 h-4 text-gray-500 dark:text-white" />
               </button>
@@ -271,7 +271,7 @@ export default function LogsViewer() {
             <select
               value={levelFilter}
               onChange={(e) => setLevelFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
             >
               <option value="all">Todos os níveis</option>
               <option value="info">Info</option>
@@ -285,7 +285,7 @@ export default function LogsViewer() {
             <select
               value={moduleFilter}
               onChange={(e) => setModuleFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
             >
               <option value="all">Todos os módulos</option>
               {uniqueModules.map(module => (
@@ -328,7 +328,7 @@ export default function LogsViewer() {
 
         <div className="max-h-96 overflow-y-auto bg-gray-900 text-gray-100 font-mono text-sm">
           {filteredLogs.length === 0 ? (
-            <div className="p-8 text-center text-gray-400 dark:text-white">
+            <div className="p-8 text-center text-gray-400 dark:text-gray-500 dark:text-white">
               <Monitor className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum log encontrado</p>
               {searchTerm && <p className="text-xs mt-2">Tente ajustar os filtros de busca</p>}
@@ -349,24 +349,24 @@ export default function LogsViewer() {
                         {log.timestamp.toLocaleTimeString('pt-BR')}
                       </span>
                       <span className={`px-2 py-0.5 text-xs rounded font-semibold ${
-                        log.level === 'error' ? 'bg-red-100 text-red-800' :
-                        log.level === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                        log.level === 'success' ? 'bg-green-100 text-green-800' :
-                        'bg-blue-100 text-blue-800'
+                        log.level === 'error' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' :
+                        log.level === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' :
+                        log.level === 'success' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                        'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
                       }`}>
                         {log.level.toUpperCase()}
                       </span>
-                      <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-800 dark:text-white rounded font-medium">
+                      <span className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white rounded font-medium">
                         {log.module}
                       </span>
                     </div>
-                    <p className="text-gray-800 dark:text-white break-words">{log.message}</p>
+                    <p className="text-gray-800 dark:text-gray-200 dark:text-white break-words">{log.message}</p>
                     {log.details && (
                       <details className="mt-2">
-                        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 dark:text-white">
+                        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 dark:text-gray-200 dark:text-white">
                           Detalhes técnicos
                         </summary>
-                        <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-x-auto">
+                        <pre className="mt-2 p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs overflow-x-auto">
                           {JSON.stringify(log.details, null, 2)}
                         </pre>
                       </details>

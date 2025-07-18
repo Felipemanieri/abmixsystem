@@ -11,7 +11,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className = '' }) => 
   
   if (!config) {
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 dark:text-white border-gray-300 ${className}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white border-gray-300 dark:border-gray-600 ${className}`}>
         {status || 'N/A'}
       </span>
     );

@@ -277,7 +277,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'nomeCompleto', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Nome completo sem abreviações"
           />
         </div>
@@ -296,7 +296,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'cpf', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="000.000.000-00"
           />
         </div>
@@ -315,7 +315,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'rg', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="00.000.000-0"
           />
         </div>
@@ -334,7 +334,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'dataNascimento', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
@@ -346,7 +346,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             <select
               value={person.parentesco || ''}
               onChange={(e) => updateDependente(index, 'parentesco', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Selecione</option>
               <option value="cônjuge">Cônjuge</option>
@@ -372,7 +372,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'nomeMae', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Nome completo da mãe"
           />
         </div>
@@ -390,7 +390,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'sexo', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="masculino">Masculino</option>
@@ -411,7 +411,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'estadoCivil', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="solteiro">Solteiro(a)</option>
@@ -435,7 +435,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'peso', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ex: 70"
           />
         </div>
@@ -454,7 +454,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'altura', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ex: 170"
           />
         </div>
@@ -473,7 +473,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'emailPessoal', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="email@exemplo.com"
           />
         </div>
@@ -492,7 +492,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'telefonePessoal', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="(00) 00000-0000"
           />
         </div>
@@ -511,7 +511,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'emailEmpresa', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="email@empresa.com"
           />
         </div>
@@ -530,7 +530,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'telefoneEmpresa', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="(00) 0000-0000"
           />
         </div>
@@ -570,7 +570,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 }
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="00000-000"
             maxLength={9}
           />
@@ -590,7 +590,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'enderecoCompleto', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Rua, número, complemento, bairro, cidade, estado"
           />
         </div>
@@ -608,7 +608,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                 updateDependente(index, 'dadosReembolso', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={3}
             placeholder="Banco, agência, conta, PIX..."
           />
@@ -620,7 +620,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
   if (isSubmitted) {
     return (
       <div className="max-w-2xl mx-auto p-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+        <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
@@ -638,7 +638,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             {isVendor ? 'Nova Proposta de Plano de Saúde' : 'Complete seus Dados Pessoais'}
@@ -685,8 +685,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="text"
                   value={contractData.nomeEmpresa}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -699,8 +699,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="text"
                   value={contractData.cnpj}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -713,8 +713,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="text"
                   value={contractData.planoContratado}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -727,8 +727,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="text"
                   value={contractData.valor}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -741,8 +741,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="date"
                   value={contractData.inicioVigencia}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -755,8 +755,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   type="text"
                   value={contractData.periodoMinimo || ''}
                   readOnly={!isVendor}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
-                    !isVendor ? 'bg-gray-100 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
+                    !isVendor ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   }`}
                 />
               </div>
@@ -768,7 +768,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                     checked={contractData.odontoConjugado}
                     readOnly={!isVendor}
                     disabled={!isVendor}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                   />
                   <label className="ml-2 text-sm text-gray-700">
                     Inclui cobertura odontológica
@@ -782,7 +782,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                       checked={contractData.livreAdesao || false}
                       readOnly={!isVendor}
                       disabled={!isVendor}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                     />
                     <label className="ml-2 text-sm text-gray-700">
                       Livre adesão
@@ -795,7 +795,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                       checked={contractData.compulsorio}
                       readOnly={!isVendor}
                       disabled={!isVendor}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                     />
                     <label className="ml-2 text-sm text-gray-700">
                       Compulsório
@@ -809,7 +809,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                     checked={contractData.aproveitamentoCongenere}
                     readOnly={!isVendor}
                     disabled={!isVendor}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                   />
                   <label className="ml-2 text-sm text-gray-700">
                     Aproveitamento de carência congênere
@@ -830,7 +830,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               </div>
               <button
                 onClick={adicionarTitular}
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Titular
@@ -855,7 +855,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               </div>
               <button
                 onClick={adicionarDependente}
-                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Dependente
@@ -865,7 +865,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
             {dependentes.length === 0 ? (
               <div className="bg-gray-50 p-6 rounded-lg text-center">
                 <p className="text-gray-500 dark:text-white">Nenhum dependente adicionado</p>
-                <p className="text-sm text-gray-400 dark:text-white mt-1">
+                <p className="text-sm text-gray-400 dark:text-gray-500 dark:text-white mt-1">
                   Clique em "Adicionar Dependente" para incluir familiares
                 </p>
               </div>
@@ -916,7 +916,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
             <div className="space-y-4">
               {/* Área de Upload com Drag & Drop */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center mb-4">
                 <input
                   type="file"
                   multiple
@@ -926,7 +926,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
                 <label htmlFor="file-upload-cliente" className="cursor-pointer">
-                  <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
+                  <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
                   <p className="text-lg font-medium text-gray-700 mb-2">
                     Arraste arquivos aqui ou escolha uma opção
                   </p>
@@ -1026,7 +1026,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
               <textarea
                 value={vendorObservations}
                 onChange={(e) => setVendorObservations(e.target.value)}
-                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                 rows={4}
                 placeholder="Adicione observações importantes para o cliente sobre os documentos ou processo..."
               />
@@ -1049,7 +1049,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
           <div className="flex justify-between">
             <button
               onClick={handleSave}
-              className="flex items-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
             >
               <Save className="w-4 h-4 mr-2" />
               Salvar Dados
@@ -1057,7 +1057,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({
 
             <button
               onClick={handleSubmit}
-              className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               <Send className="w-4 h-4 mr-2" />
               {isVendor ? 'Gerar Link para Cliente' : 'Enviar Proposta'}

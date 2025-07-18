@@ -210,7 +210,7 @@ const ClientForm: React.FC = () => {
   if (isSubmitted) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
@@ -242,7 +242,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.nome}
             onChange={(e) => updatePerson(type, person.id, 'nome', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -253,7 +253,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.cpf}
             onChange={(e) => updatePerson(type, person.id, 'cpf', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -264,7 +264,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.rg}
             onChange={(e) => updatePerson(type, person.id, 'rg', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -275,7 +275,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.dataNascimento}
             onChange={(e) => updatePerson(type, person.id, 'dataNascimento', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
 
@@ -286,7 +286,7 @@ const ClientForm: React.FC = () => {
               required
               value={person.parentesco || ''}
               onChange={(e) => updatePerson(type, person.id, 'parentesco', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
             >
               <option value="">Selecione</option>
               <option value="conjuge">Cônjuge</option>
@@ -306,7 +306,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.nomeMae}
             onChange={(e) => updatePerson(type, person.id, 'nomeMae', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -316,7 +316,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.sexo}
             onChange={(e) => updatePerson(type, person.id, 'sexo', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           >
             <option value="">Selecione</option>
             <option value="masculino">Masculino</option>
@@ -330,7 +330,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.estadoCivil}
             onChange={(e) => updatePerson(type, person.id, 'estadoCivil', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           >
             <option value="">Selecione</option>
             <option value="solteiro">Solteiro(a)</option>
@@ -346,7 +346,7 @@ const ClientForm: React.FC = () => {
             type="text"
             value={person.peso}
             onChange={(e) => updatePerson(type, person.id, 'peso', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -356,7 +356,7 @@ const ClientForm: React.FC = () => {
             type="text"
             value={person.altura}
             onChange={(e) => updatePerson(type, person.id, 'altura', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -367,7 +367,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.emailPessoal}
             onChange={(e) => updatePerson(type, person.id, 'emailPessoal', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
         
@@ -378,7 +378,7 @@ const ClientForm: React.FC = () => {
             required
             value={person.telefonePessoal}
             onChange={(e) => updatePerson(type, person.id, 'telefonePessoal', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
           />
         </div>
       </div>
@@ -388,7 +388,7 @@ const ClientForm: React.FC = () => {
   if (isUploading) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-8 text-center">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Upload className="w-8 h-8 text-blue-600" />
           </div>
@@ -398,7 +398,7 @@ const ClientForm: React.FC = () => {
           </p>
           
           <div className="mb-4">
-            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+            <div className="w-full bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-3">
               <div 
                 className="bg-teal-600 h-3 rounded-full transition-all duration-300" 
                 style={{ width: `${uploadProgress}%` }}
@@ -426,7 +426,7 @@ const ClientForm: React.FC = () => {
       </div>
 
       {/* Contract Info (Read Only) */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Dados do Contrato</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
@@ -458,7 +458,7 @@ const ClientForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Titulares */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">Titulares</h2>
             <button
@@ -476,7 +476,7 @@ const ClientForm: React.FC = () => {
         </div>
 
         {/* Dependentes */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">Dependentes</h2>
             <button
@@ -498,18 +498,18 @@ const ClientForm: React.FC = () => {
         </div>
 
         {/* Document Upload */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Documentos</h2>
           <p className="text-sm text-gray-600 mb-4">
             Anexe todos os documentos em um só lugar. O vendedor organizará depois.
           </p>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
             <div className="space-y-4">
               <div className="flex justify-center space-x-4">
-                <Upload className="w-8 h-8 text-gray-400 dark:text-white" />
-                <Camera className="w-8 h-8 text-gray-400 dark:text-white" />
-                <FileText className="w-8 h-8 text-gray-400 dark:text-white" />
+                <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 dark:text-white" />
+                <Camera className="w-8 h-8 text-gray-400 dark:text-gray-500 dark:text-white" />
+                <FileText className="w-8 h-8 text-gray-400 dark:text-gray-500 dark:text-white" />
               </div>
               
               <div>

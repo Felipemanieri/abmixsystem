@@ -50,7 +50,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
         </h3>
         <button 
           onClick={onClose}
-          className="text-gray-400 dark:text-white hover:text-gray-600"
+          className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
         >
           <X className="w-5 h-5" />
         </button>
@@ -95,7 +95,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
               id="clientData"
               checked={includeOptions.clientData}
               onChange={(e) => setIncludeOptions({...includeOptions, clientData: e.target.checked})}
-              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
             />
             <label htmlFor="clientData" className="ml-2 text-sm text-gray-700">
               Dados do Cliente (formulários, contatos, dependentes)
@@ -108,7 +108,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
               id="vendorData"
               checked={includeOptions.vendorData}
               onChange={(e) => setIncludeOptions({...includeOptions, vendorData: e.target.checked})}
-              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
             />
             <label htmlFor="vendorData" className="ml-2 text-sm text-gray-700">
               Dados do Vendedor (comissões, observações)
@@ -121,7 +121,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
               id="financialData"
               checked={includeOptions.financialData}
               onChange={(e) => setIncludeOptions({...includeOptions, financialData: e.target.checked})}
-              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
             />
             <label htmlFor="financialData" className="ml-2 text-sm text-gray-700">
               Dados Financeiros (valores, descontos, observações)
@@ -134,7 +134,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
               id="documents"
               checked={includeOptions.documents}
               onChange={(e) => setIncludeOptions({...includeOptions, documents: e.target.checked})}
-              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
             />
             <label htmlFor="documents" className="ml-2 text-sm text-gray-700">
               Links para Documentos (Google Drive)
@@ -147,7 +147,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
               id="implantationData"
               checked={includeOptions.implantationData}
               onChange={(e) => setIncludeOptions({...includeOptions, implantationData: e.target.checked})}
-              className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
             />
             <label htmlFor="implantationData" className="ml-2 text-sm text-gray-700">
               Dados de Implantação (status, observações)
@@ -159,7 +159,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
       <div className="flex justify-between pt-4 border-t border-gray-200">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
+          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600"
         >
           Cancelar
         </button>
@@ -196,7 +196,7 @@ const FinancialAutomationModal: React.FC<FinancialAutomationModalProps> = ({
       </div>
       
       <div className="mb-6">
-        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+        <div className="w-full bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-3">
           <div 
             className="bg-purple-600 h-3 rounded-full transition-all duration-300" 
             style={{ width: `${progress}%` }}

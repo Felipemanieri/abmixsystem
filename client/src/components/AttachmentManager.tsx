@@ -199,14 +199,14 @@ export default function AttachmentManager() {
         <div className="flex gap-3">
           <button
             onClick={() => setShowDriveModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Settings className="w-4 h-4" />
             Configurar Drive
           </button>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             <Upload className="w-4 h-4" />
             Upload Manual
@@ -271,13 +271,13 @@ export default function AttachmentManager() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-white w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 dark:text-white w-4 h-4" />
               <input
                 type="text"
                 placeholder="Nome do arquivo ou proposta..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function AttachmentManager() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todas as categorias</option>
               <option value="identity">Documentos de Identidade</option>
@@ -303,7 +303,7 @@ export default function AttachmentManager() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todos os status</option>
               <option value="pending">Pendente</option>
@@ -317,7 +317,7 @@ export default function AttachmentManager() {
             <select
               value={selectedProposal}
               onChange={(e) => setSelectedProposal(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todas as propostas</option>
               {proposals.map((proposal: any) => (
@@ -333,7 +333,7 @@ export default function AttachmentManager() {
             <select
               value={selectedDrive}
               onChange={(e) => setSelectedDrive(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Todos os drives</option>
               {driveConfigs.map((drive: DriveConfig) => (
@@ -364,7 +364,7 @@ export default function AttachmentManager() {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredAttachments.map((attachment: Attachment) => (
-                <tr key={attachment.id} className="hover:bg-gray-50">
+                <tr key={attachment.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {getFileIcon(attachment.fileType)}
@@ -378,7 +378,7 @@ export default function AttachmentManager() {
                     <span className="text-sm text-gray-900">{attachment.proposalId}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 dark:text-white rounded-full">
+                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white rounded-full">
                       {attachment.category}
                     </span>
                   </td>
@@ -455,7 +455,7 @@ export default function AttachmentManager() {
 
         {filteredAttachments.length === 0 && (
           <div className="text-center py-8">
-            <FolderOpen className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
+            <FolderOpen className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum anexo encontrado</h3>
             <p className="text-gray-500 dark:text-white">
               {attachments.length === 0 
@@ -480,7 +480,7 @@ export default function AttachmentManager() {
                   type="text"
                   value={newDrive.name}
                   onChange={(e) => setNewDrive({ ...newDrive, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ex: Drive Principal"
                 />
               </div>
@@ -491,7 +491,7 @@ export default function AttachmentManager() {
                   type="email"
                   value={newDrive.email}
                   onChange={(e) => setNewDrive({ ...newDrive, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="usuario@gmail.com"
                 />
               </div>
@@ -502,7 +502,7 @@ export default function AttachmentManager() {
                   type="text"
                   value={newDrive.folderId}
                   onChange={(e) => setNewDrive({ ...newDrive, folderId: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
                 />
               </div>
@@ -511,14 +511,14 @@ export default function AttachmentManager() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setShowDriveModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancelar
               </button>
               <button
                 onClick={() => addDriveConfigMutation.mutate(newDrive)}
                 disabled={!newDrive.name || !newDrive.email || !newDrive.folderId}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Salvar
               </button>

@@ -304,7 +304,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
               {label === 'Autorizador do Desconto' ? (
                 <select
                   defaultValue={value}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   onBlur={(e) => handleFieldEdit(label, e.target.value, section)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -325,7 +325,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                 <input
                   type={type}
                   defaultValue={value}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   onBlur={(e) => handleFieldEdit(label, e.target.value, section)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -340,7 +340,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
               )}
               <button
                 onClick={() => setEditingField(null)}
-                className="p-1 text-gray-400 dark:text-white hover:text-gray-600"
+                className="p-1 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -417,7 +417,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white shadow-sm dark:shadow-gray-900/30 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
@@ -436,7 +436,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <History className="w-4 h-4 mr-2" />
                 Histórico
@@ -445,7 +445,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                 onClick={() => {
                   showNotification('Dados sincronizados com Google Sheets', 'success');
                 }}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar Alterações
@@ -460,7 +460,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-8">
             {/* Dados do Contrato */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <div className="flex items-center mb-6">
                 <Building className="w-6 h-6 text-blue-600 mr-3" />
                 <h2 className="text-xl font-semibold text-gray-900">Dados do Contrato</h2>
@@ -476,7 +476,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             </div>
 
             {/* Dados dos Titulares */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <Users className="w-6 h-6 text-green-600 mr-3" />
@@ -505,7 +505,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                     };
                     setTitulares(prev => [...prev, newTitular]);
                   }}
-                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Titular
@@ -517,7 +517,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             </div>
 
             {/* Dados dos Dependentes */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <User className="w-6 h-6 text-purple-600 mr-3" />
@@ -547,7 +547,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                     };
                     setDependentes(prev => [...prev, newDependente]);
                   }}
-                  className="flex items-center px-3 py-2 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Dependente
@@ -566,7 +566,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             </div>
 
             {/* Controle Interno */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <div className="flex items-center mb-6">
                 <Settings className="w-6 h-6 text-orange-600 mr-3" />
                 <h2 className="text-xl font-semibold text-gray-900">Controle Interno</h2>
@@ -581,7 +581,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             </div>
 
             {/* Anexos */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <FileText className="w-6 h-6 text-indigo-600 mr-3" />
@@ -607,11 +607,11 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {attachments.map((attachment) => (
-                  <div key={attachment.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div key={attachment.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <FileText className="w-4 h-4 text-gray-400 dark:text-white" />
+                          <FileText className="w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-white" />
                           <span className="text-sm font-medium text-gray-900 truncate">{attachment.name}</span>
                         </div>
                         <div className="text-xs text-gray-500 dark:text-white space-y-1">
@@ -619,7 +619,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                           <div>Por: {attachment.uploadedBy}</div>
                           <div>{attachment.uploadDate}</div>
                           <div className={`inline-flex px-2 py-1 rounded-full text-xs ${
-                            attachment.category === 'vendor' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                            attachment.category === 'vendor' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                           }`}>
                             {attachment.category === 'vendor' ? 'Vendedor' : 'Cliente'}
                           </div>
@@ -628,21 +628,21 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
                       <div className="flex items-center space-x-1 ml-2">
                         <button
                           onClick={() => attachment.url && window.open(attachment.url, '_blank')}
-                          className="p-1 text-gray-400 dark:text-white hover:text-blue-600"
+                          className="p-1 text-gray-400 dark:text-gray-500 dark:text-white hover:text-blue-600"
                           title="Visualizar"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => showNotification(`Download de ${attachment.name} iniciado`, 'success')}
-                          className="p-1 text-gray-400 dark:text-white hover:text-green-600"
+                          className="p-1 text-gray-400 dark:text-gray-500 dark:text-white hover:text-green-600"
                           title="Download"
                         >
                           <Download className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteAttachment(attachment.id)}
-                          className="p-1 text-gray-400 dark:text-white hover:text-red-600"
+                          className="p-1 text-gray-400 dark:text-gray-500 dark:text-white hover:text-red-600"
                           title="Excluir"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -658,7 +658,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Progresso */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Progresso da Proposta</h3>
               <ProposalProgressTracker
                 contractData={contractData}
@@ -671,7 +671,7 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
 
             {/* Histórico de Alterações */}
             {showHistory && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Histórico de Alterações</h3>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {changeLog.map((change) => (
@@ -694,26 +694,26 @@ const ProposalEditor: React.FC<ProposalEditorProps> = ({ proposalId, onBack, onS
             )}
 
             {/* Ações Rápidas */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
               <div className="space-y-3">
                 <button
                   onClick={() => showNotification('Sincronização com Google Sheets iniciada', 'info')}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Sincronizar Sheets
                 </button>
                 <button
                   onClick={() => showNotification('Backup de documentos iniciado', 'info')}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Backup Drive
                 </button>
                 <button
                   onClick={() => window.open(`https://drive.google.com/drive/folders/${proposalId}`, '_blank')}
-                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Abrir no Drive

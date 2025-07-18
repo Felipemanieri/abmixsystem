@@ -187,10 +187,10 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'admin': return 'bg-red-600 text-white';
-      case 'supervisor': return 'bg-purple-600 text-white';
-      case 'financial': return 'bg-green-600 text-white';
-      case 'implementation': return 'bg-blue-600 text-white';
+      case 'admin': return 'bg-red-600 text-white dark:bg-red-500 dark:text-white';
+      case 'supervisor': return 'bg-purple-600 text-white dark:bg-purple-500 dark:text-white';
+      case 'financial': return 'bg-green-600 text-white dark:bg-green-500 dark:text-white';
+      case 'implementation': return 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white';
       case 'vendor': return 'bg-orange-600 text-white';
       case 'client': return 'bg-gray-600 text-white';
       default: return 'bg-gray-400 text-white';
@@ -313,19 +313,19 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                     </thead>
                     <tbody>
                       {users.map((user: SystemUser) => (
-                        <tr key={user.id} className="border-b hover:bg-gray-50">
+                        <tr key={user.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700">
                           <td className="p-3 font-medium">{user.name}</td>
                           <td className="p-3">
                             <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-gray-400 dark:text-white" />
+                              <Mail className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-white" />
                               {user.email}
                             </div>
                           </td>
                           {showPasswords && (
                             <td className="p-3">
                               <div className="flex items-center gap-2">
-                                <Key className="h-4 w-4 text-gray-400 dark:text-white" />
-                                <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                                <Key className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-white" />
+                                <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">
                                   {user.password}
                                 </code>
                               </div>
@@ -342,13 +342,13 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                             </span>
                           </td>
                           <td className="p-3">
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800 dark:text-white'}`}>
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${user.active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white'}`}>
                               {user.active ? "Ativo" : "Inativo"}
                             </span>
                           </td>
                           <td className="p-3">
                             <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-gray-400 dark:text-white" />
+                              <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-white" />
                               <span className="text-sm text-gray-600">
                                 {formatLastLogin(user.lastLogin)}
                               </span>
@@ -358,7 +358,7 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleEditUser(user)}
-                                className="p-1 border rounded hover:bg-gray-50"
+                                className="p-1 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"
                               >
                                 <Edit className="h-4 w-4" />
                               </button>
@@ -459,14 +459,14 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
             <div className="flex gap-2 mt-6">
               <button
                 onClick={() => setIsAddDialogOpen(false)}
-                className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleCreateUser}
                 disabled={createUserMutation.isPending}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {createUserMutation.isPending ? "Criando..." : "Criar Usuário"}
               </button>
@@ -564,14 +564,14 @@ export default function UserManagementDashboard({ onClose }: UserManagementDashb
             <div className="flex gap-2 mt-6">
               <button
                 onClick={() => setIsEditDialogOpen(false)}
-                className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleUpdateUser}
                 disabled={updateUserMutation.isPending}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
                 {updateUserMutation.isPending ? "Atualizando..." : "Atualizar Usuário"}
               </button>

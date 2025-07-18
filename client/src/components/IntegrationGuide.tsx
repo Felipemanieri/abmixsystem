@@ -10,7 +10,7 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Visão Geral */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Visão Geral das Integrações</h2>
         <p className="text-gray-600 mb-6">
           O sistema Abmix pode ser integrado com ferramentas externas para automatizar fluxos de trabalho e sincronizar dados.
@@ -45,7 +45,7 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Google Sheets */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Integração com Google Sheets</h2>
         
         <div className="space-y-6">
@@ -128,7 +128,7 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Make */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Integração com Make</h2>
         
         <div className="space-y-6">
@@ -224,7 +224,7 @@ const IntegrationGuide: React.FC = () => {
       </div>
 
       {/* Suporte */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Suporte para Integrações</h2>
         
         <div className="bg-orange-50 p-4 rounded-lg mb-6">

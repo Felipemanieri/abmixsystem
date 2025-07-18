@@ -45,7 +45,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   if (orientation === 'vertical') {
     return (
       <div className={`flex flex-col items-center space-y-2 ${className}`}>
-        <div className={`bg-gray-200 dark:bg-gray-600 rounded-full ${sizeConfig[size]} relative overflow-hidden`}>
+        <div className={`bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full ${sizeConfig[size]} relative overflow-hidden`}>
           <div 
             className={`${progressColor} transition-all duration-300 ease-in-out rounded-full absolute bottom-0 left-0 right-0`}
             style={{ height: `${progress}%` }}
@@ -74,7 +74,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         </span>
       </div>
       
-      <div className={`bg-gray-200 dark:bg-gray-600 rounded-full ${sizeConfig[size]} overflow-hidden`}>
+      <div className={`bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full ${sizeConfig[size]} overflow-hidden`}>
         <div 
           className={`${progressColor} transition-all duration-500 ease-in-out rounded-full h-full`}
           style={{ width: `${progress}%` }}

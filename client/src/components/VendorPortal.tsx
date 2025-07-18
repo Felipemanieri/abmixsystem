@@ -562,7 +562,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <div className="flex items-center justify-between">
         <button
           onClick={() => setActiveView('dashboard')}
-          className="flex items-center text-gray-600 dark:text-white hover:text-gray-800 dark:text-white transition-colors"
+          className="flex items-center text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-800 dark:text-gray-200 dark:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar ao Dashboard
@@ -574,12 +574,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <p className="text-green-100 dark:text-white">Gere cotações personalizadas para seus clientes</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Dados da Cotação</h2>
+      <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white mb-6">Dados da Cotação</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Número de Vidas
             </label>
             <input
@@ -587,18 +587,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               min="1"
               value={quotationData.numeroVidas}
               onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:bg-gray-700 text-gray-900 dark:text-white dark:text-white"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Operadora
             </label>
             <select
               value={quotationData.operadora}
               onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-800 dark:bg-gray-700 text-gray-900 dark:text-white dark:text-white"
             >
               <option value="">Selecione a operadora</option>
               <option value="unimed">Unimed</option>
@@ -612,12 +612,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">
               Idades dos Beneficiários
             </label>
             <button
               onClick={addIdade}
-              className="flex items-center px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-3 py-1 text-sm bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-1" />
               Adicionar Idade
@@ -633,7 +633,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   max="100"
                   value={idade}
                   onChange={(e) => updateIdade(index, parseInt(e.target.value) || 0)}
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="Idade"
                 />
                 {quotationData.idades.length > 1 && (
@@ -650,20 +650,20 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         </div>
 
         {/* Seção Adicionar Nova Cotação */}
-        <div className="border-t border-gray-200 dark:border-gray-600 pt-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Adicionar Nova Cotação</h3>
+        <div className="border-t border-gray-200 dark:border-gray-700 dark:border-gray-600 pt-6 mt-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white mb-6">Adicionar Nova Cotação</h3>
           
           {/* Campos da Nova Cotação */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             {/* Operadora */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Operadora *
               </label>
               <select
                 value={novaCotacao.operadora}
                 onChange={(e) => setNovaCotacao(prev => ({ ...prev, operadora: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Selecione a operadora</option>
                 <option value="Amil">Amil</option>
@@ -680,13 +680,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Tipo do Plano */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Tipo do Plano *
               </label>
               <select
                 value={novaCotacao.tipoplano}
                 onChange={(e) => setNovaCotacao(prev => ({ ...prev, tipoplano: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Selecione o tipo</option>
                 <option value="Empresarial">Empresarial</option>
@@ -698,7 +698,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Número de Vidas */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Número de Vidas *
               </label>
               <input
@@ -706,14 +706,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 min="1"
                 value={novaCotacao.numeroVidas}
                 onChange={(e) => setNovaCotacao(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="1"
               />
             </div>
 
             {/* Valor */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Valor (R$) *
               </label>
               <input
@@ -723,44 +723,44 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   const value = e.target.value.replace(/[^\d.,]/g, '');
                   setNovaCotacao(prev => ({ ...prev, valor: value }));
                 }}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Ex: 1.250,00"
               />
             </div>
 
             {/* Validade da Cotação */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Validade da Cotação *
               </label>
               <input
                 type="date"
                 value={novaCotacao.validade}
                 onChange={(e) => setNovaCotacao(prev => ({ ...prev, validade: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             {/* Data de Envio */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                 Data de Envio *
               </label>
               <input
                 type="date"
                 value={novaCotacao.dataEnvio}
                 onChange={(e) => setNovaCotacao(prev => ({ ...prev, dataEnvio: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           {/* Anexar Cotação */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-white mb-4">Anexar Cotação</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-4">Anexar Cotação</h4>
             
             {/* Área de Upload com Drag & Drop */}
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center mb-4">
+            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg p-8 text-center mb-4">
               <input
                 type="file"
                 multiple
@@ -770,11 +770,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               />
               <label htmlFor="file-upload-cotacao" className="cursor-pointer">
-                <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-700 dark:text-white mb-2">
+                <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
                   Arraste arquivos aqui ou escolha uma opção
                 </p>
-                <p className="text-sm text-gray-500 dark:text-white">
+                <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
                   Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                 </p>
               </label>
@@ -815,15 +815,15 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             {/* Arquivos anexados */}
             {novaCotacao.arquivos.length > 0 && (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700 dark:text-white">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">
                   Arquivos Anexados ({novaCotacao.arquivos.length})
                 </p>
                 <div className="space-y-2">
                   {novaCotacao.arquivos.map((arquivo, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 dark:border-gray-600 rounded-lg">
                       <div className="flex items-center">
-                        <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
-                        <span className="text-sm text-gray-700 dark:text-white">{arquivo.name}</span>
+                        <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white mr-2" />
+                        <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
                       </div>
                       <button
                         onClick={() => removerArquivoCotacao('', index)}
@@ -841,7 +841,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="flex justify-end mt-6">
               <button
                 onClick={salvarCotacao}
-                className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Cotação
@@ -851,59 +851,59 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Seção Cotações Cadastradas */}
           {cotacoes.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 dark:border-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white mb-4">
                 Cotações Cadastradas ({cotacoes.length})
               </h3>
 
               <div className="space-y-4">
                 {cotacoes.map((cotacao) => (
-                  <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-700 dark:border-gray-600">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Operadora</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.operadora}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Operadora</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.operadora}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Tipo do Plano</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.tipoplano}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Tipo do Plano</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.tipoplano}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Nº de Vidas</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.numeroVidas}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Nº de Vidas</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.numeroVidas}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Valor</span>
-                        <p className="text-sm text-gray-900 dark:text-white">R$ {cotacao.valor}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Valor</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">R$ {cotacao.valor}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Validade</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Validade</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Data de Envio</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Data de Envio</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600 dark:text-white">Arquivos Anexados</span>
-                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Arquivos Anexados</span>
+                        <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
                       </div>
                     </div>
 
                     <div className="flex justify-end space-x-3">
                       <button
                         onClick={() => enviarWhatsAppCotacao(cotacao)}
-                        className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors text-sm"
                       >
                         <MessageSquare className="w-4 h-4 mr-1" />
                         WhatsApp
                       </button>
                       <button
                         onClick={() => removerCotacao(cotacao.id)}
-                        className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                        className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-md hover:bg-red-700 transition-colors text-sm"
                       >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Remover
@@ -920,7 +920,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="flex justify-end space-x-4 mt-8">
           <button
             onClick={limparFormulario}
-            className="flex items-center px-6 py-2 bg-gray-50 dark:bg-gray-7000 text-white rounded-md hover:bg-gray-600 transition-colors"
+            className="flex items-center px-6 py-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-7000 text-white rounded-md hover:bg-gray-600 transition-colors"
           >
             <X className="w-4 h-4 mr-2" />
             Limpar Formulário
@@ -928,7 +928,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={generateQuotation}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Calculator className="w-4 h-4 mr-2" />
             Gerar Cotação
@@ -936,7 +936,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           <button
             onClick={salvarCotacao}
-            className="flex items-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             Salvar Cotação
@@ -944,7 +944,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           
           <button
             onClick={downloadQuotation}
-            className="flex items-center px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-md hover:bg-purple-700 transition-colors"
           >
             <Download className="w-4 h-4 mr-2" />
             Baixar Cotação
@@ -959,12 +959,12 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Cotações</h1>
-          <p className="text-gray-600 dark:text-white">Gerencie cotações para suas propostas</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white dark:text-white">Cotações</h1>
+          <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerencie cotações para suas propostas</p>
         </div>
         <button
           onClick={() => setActiveView('dashboard')}
-          className="flex items-center px-4 py-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 rounded-lg transition-colors"
+          className="flex items-center px-4 py-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
@@ -972,19 +972,19 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       </div>
 
       {/* Formulário para Nova Cotação */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Adicionar Nova Cotação</h2>
+      <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white mb-6">Adicionar Nova Cotação</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Operadora */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Operadora *
             </label>
             <select
               value={novaCotacao.operadora}
               onChange={(e) => setNovaCotacao(prev => ({ ...prev, operadora: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Selecione a operadora</option>
               <option value="Amil">Amil</option>
@@ -1001,13 +1001,13 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Tipo do Plano */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Tipo do Plano *
             </label>
             <select
               value={novaCotacao.tipoplano}
               onChange={(e) => setNovaCotacao(prev => ({ ...prev, tipoplano: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Selecione o tipo</option>
               <option value="Empresarial">Empresarial</option>
@@ -1019,7 +1019,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
           {/* Número de Vidas */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Número de Vidas *
             </label>
             <input
@@ -1027,14 +1027,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               min="1"
               value={novaCotacao.numeroVidas}
               onChange={(e) => setNovaCotacao(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Ex: 10"
             />
           </div>
 
           {/* Valor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Valor (R$) *
             </label>
             <input
@@ -1045,41 +1045,41 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 const value = e.target.value.replace(/[^\d.,]/g, '');
                 setNovaCotacao(prev => ({ ...prev, valor: value }));
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Ex: 1.250,00"
             />
           </div>
 
           {/* Validade */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Validade da Cotação *
             </label>
             <input
               type="date"
               value={novaCotacao.validade}
               onChange={(e) => setNovaCotacao(prev => ({ ...prev, validade: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* Data de Envio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">
               Data de Envio *
             </label>
             <input
               type="date"
               value={novaCotacao.dataEnvio}
               onChange={(e) => setNovaCotacao(prev => ({ ...prev, dataEnvio: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         {/* Upload de Arquivos Avançado */}
         <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 dark:text-white mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-4">
             Anexar Cotação
           </label>
           
@@ -1088,18 +1088,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive 
                 ? 'border-blue-500 bg-blue-50' 
-                : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
+                : 'border-gray-300 dark:border-gray-600 dark:border-gray-600 hover:border-gray-400'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}
             onDrop={handleDrop}
           >
-            <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">
               Arraste arquivos aqui ou escolha uma opção
             </h3>
-            <p className="text-sm text-gray-600 dark:text-white mb-6">
+            <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-6">
               Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
             </p>
 
@@ -1150,14 +1150,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         {/* Arquivos Anexados na Nova Cotação */}
         {novaCotacao.arquivos.length > 0 && (
           <div className="mt-6">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-white mb-2">Arquivos Anexados:</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white mb-2">Arquivos Anexados:</h4>
             <div className="space-y-2">
               {novaCotacao.arquivos.map((arquivo, index) => (
-                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded">
                   <div className="flex items-center space-x-2">
-                    <FileText className="w-4 h-4 text-gray-500 dark:text-white" />
-                    <span className="text-sm text-gray-700 dark:text-white">{arquivo.name}</span>
-                    <span className="text-xs text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
+                    <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
                   </div>
                   <button 
                     onClick={() => removerArquivoCotacao('', index)}
@@ -1176,7 +1176,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={adicionarCotacao}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-4 h-4 mr-2" />
             Adicionar Cotação
@@ -1186,55 +1186,55 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
       {/* Lista de Cotações */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white">
           Cotações Cadastradas ({cotacoes.length})
         </h2>
         
         {cotacoes.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8 text-center">
-            <FileText className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma cotação cadastrada</h3>
-            <p className="text-gray-600 dark:text-white">Adicione sua primeira cotação usando o formulário acima.</p>
+          <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-8 text-center">
+            <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">Nenhuma cotação cadastrada</h3>
+            <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Adicione sua primeira cotação usando o formulário acima.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {cotacoes.map((cotacao) => (
-              <div key={cotacao.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+              <div key={cotacao.id} className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Operadora</label>
-                    <p className="text-sm text-gray-900 dark:text-white">{cotacao.operadora}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Operadora</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Tipo do Plano</label>
-                    <p className="text-sm text-gray-900 dark:text-white">{cotacao.tipoplano}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Tipo do Plano</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.tipoplano}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Nº de Vidas</label>
-                    <p className="text-sm text-gray-900 dark:text-white">{cotacao.numeroVidas}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Nº de Vidas</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.numeroVidas}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Valor</label>
-                    <p className="text-sm text-gray-900 dark:text-white">R$ {cotacao.valor}</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Valor</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">R$ {cotacao.valor}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Validade</label>
-                    <p className="text-sm text-gray-900 dark:text-white">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Validade</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">
                       {new Date(cotacao.validade).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Data de Envio</label>
-                    <p className="text-sm text-gray-900 dark:text-white">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Data de Envio</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-white">Arquivos Anexados</label>
-                    <p className="text-sm text-gray-900 dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white">Arquivos Anexados</label>
+                    <p className="text-sm text-gray-900 dark:text-white dark:text-white">{cotacao.arquivos.length} arquivo(s)</p>
                   </div>
                 </div>
 
@@ -1243,11 +1243,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   <div className="mb-4">
                     <div className="space-y-2">
                       {cotacao.arquivos.map((arquivo, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded">
                           <div className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4 text-gray-500 dark:text-white" />
-                            <span className="text-sm text-gray-700 dark:text-white">{arquivo.name}</span>
-                            <span className="text-xs text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
+                            <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white" />
+                            <span className="text-sm text-gray-700 dark:text-gray-300 dark:text-white">{arquivo.name}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">({formatFileSize(arquivo.size)})</span>
                           </div>
                           <button 
                             onClick={() => removerArquivoCotacao(cotacao.id, index)}
@@ -1266,14 +1266,14 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 <div className="flex justify-end space-x-3">
                   <button
                     onClick={() => enviarWhatsAppCotacao(cotacao)}
-                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </button>
                   <button
                     onClick={() => removerCotacao(cotacao.id)}
-                    className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-md hover:bg-red-700 transition-colors"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Remover
@@ -1325,11 +1325,11 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <div key={stat.name} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
+                  <div key={stat.name} className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-white">{stat.name}</p>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">{stat.name}</p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white dark:text-white">{stat.value}</p>
                       </div>
                       <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
                         <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -1338,7 +1338,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                     <div className="mt-4 flex items-center">
                       <span className={`text-sm font-medium ${
                         stat.changeType === 'positive' ? 'text-green-600' : 
-                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-gray-600 dark:text-white'
+                        stat.changeType === 'warning' ? 'text-yellow-600' : 'text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white'
                       }`}>
                         {stat.change}
                       </span>
@@ -1352,67 +1352,67 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <button
                 onClick={() => setActiveView('new-proposal')}
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
                     <Plus className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Nova Proposta</h3>
-                    <p className="text-sm text-gray-500 dark:text-white">Criar proposta e cotações</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Nova Proposta</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Criar proposta e cotações</p>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setActiveView('tracker')}
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
                     <BarChart3 className="w-6 h-6 text-purple-600 dark:text-white" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Acompanhar</h3>
-                    <p className="text-sm text-gray-500 dark:text-white">Status propostas</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Acompanhar</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Status propostas</p>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setActiveView('quotations')}
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
+                className="bg-white dark:bg-gray-800 dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 text-left group hover:scale-105 cursor-pointer"
               >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
                     <Calculator className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Painel de Cotações</h3>
-                    <p className="text-sm text-gray-500 dark:text-white">Gerenciar cotações</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white">Painel de Cotações</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerenciar cotações</p>
                   </div>
                 </div>
               </button>
             </div>
 
             {/* Recent Proposals */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Propostas Recentes ({realProposals?.length || 0})</h2>
-                <div className="text-sm text-gray-500 dark:text-white">
+            <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white">Propostas Recentes ({realProposals?.length || 0})</h2>
+                <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
                   Atualização em tempo real • Suas propostas exclusivas
                 </div>
               </div>
               <div className="overflow-x-auto">
                 {realProposals?.length === 0 ? (
                   <div className="p-8 text-center">
-                    <FileText className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhuma proposta criada</h3>
-                    <p className="text-gray-600 dark:text-white mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
+                    <FileText className="w-12 h-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white dark:text-white mb-2">Nenhuma proposta criada</h3>
+                    <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white mb-4">Crie sua primeira proposta para começar a acompanhar o progresso.</p>
                     <button
                       onClick={() => setActiveView('new-proposal')}
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-md hover:bg-green-700 transition-colors"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Nova Proposta
@@ -1420,34 +1420,34 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   </div>
                 ) : (
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           ID Único
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Cliente
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Plano
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Data
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Progresso
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white uppercase tracking-wider">
                           Ações
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-gray-800 dark:bg-gray-800 divide-y divide-gray-200">
                       {realProposals?.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()).map((proposal) => (
-                        <tr key={proposal.id} className="hover:bg-gray-50 dark:bg-gray-700 transition-colors">
+                        <tr key={proposal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700 transition-colors">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button 
                               onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.abmId}`, '_blank')}
@@ -1460,25 +1460,25 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div>
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">{proposal.cliente}</div>
-                                <div className="text-sm text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
+                                <div className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{proposal.cliente}</div>
+                                <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">CNPJ: {proposal.contractData?.cnpj}</div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 dark:text-white">{proposal.plano}</div>
-                            <div className="text-sm text-gray-500 dark:text-white">R$ {proposal.valor}</div>
+                            <div className="text-sm text-gray-900 dark:text-white dark:text-white">{proposal.plano}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">R$ {proposal.valor}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <StatusBadge 
                               status={proposal.status}
                             />
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
-                            <div className="text-sm text-gray-900 dark:text-white">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
+                            <div className="text-sm text-gray-900 dark:text-white dark:text-white">
                               {new Date(proposal.createdAt).toLocaleDateString('pt-BR')}
                             </div>
-                            <div className="text-xs text-gray-500 dark:text-white">
+                            <div className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">
                               {new Date(proposal.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                           </td>
@@ -1536,8 +1536,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 )}
               </div>
               {realProposals?.length > 0 && (
-                <div className="px-6 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
-                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-white">
+                <div className="px-6 py-3 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-700 dark:border-gray-600">
+                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
                     <span>
                       Mostrando {realProposals.length} proposta{realProposals.length !== 1 ? 's' : ''} sua{realProposals.length !== 1 ? 's' : ''}
                     </span>
@@ -1555,9 +1555,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-700 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-600 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 border-b border-gray-200 dark:border-gray-700 dark:border-gray-600 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -1568,8 +1568,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                   className="h-10 w-auto mr-3"
                 />
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900 dark:text-white">Portal Vendedor</h1>
-                  <p className="text-sm text-gray-600 dark:text-white">
+                  <h1 className="text-xl font-bold text-gray-900 dark:text-white dark:text-white">Portal Vendedor</h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">
                     Bem-vinda(o), <span className="font-medium text-teal-600 dark:text-white">{user?.name || 'Vendedor'}</span>
                   </p>
                 </div>
@@ -1577,7 +1577,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
             </div>
             <div className="flex items-center space-x-4">
               <button 
-                className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="relative p-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
                 <Bell className="w-5 h-5" />
@@ -1599,18 +1599,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600 dark:text-white">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Olá, {user.name}</span>
               
               <ThemeToggle />
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:hover:text-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -1624,8 +1624,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeView === 'dashboard' && (
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard do Vendedor</h1>
-            <p className="text-gray-600 dark:text-white">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white dark:text-white mb-2">Dashboard do Vendedor</h1>
+            <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
           </div>
         )}
         
@@ -1635,15 +1635,15 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       {/* Modal de Visualização da Proposta */}
       {selectedProposal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white dark:text-white">
                   Detalhes da Proposta
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 dark:text-white hover:text-gray-600 dark:text-white"
+                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 dark:text-gray-400 dark:text-gray-500 dark:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1652,33 +1652,33 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white border-b dark:border-gray-600 pb-2">Informações Básicas</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-white dark:text-white border-b dark:border-gray-600 pb-2">Informações Básicas</h4>
                     <div className="space-y-2 text-sm">
-                      <div><span className="font-medium text-gray-700 dark:text-white">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">CNPJ:</span> <span className="ml-2">{selectedProposal.cnpj}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Plano:</span> <span className="ml-2">{selectedProposal.plan}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Valor:</span> <span className="ml-2">{selectedProposal.value}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Progresso:</span> <span className="ml-2">{selectedProposal.progress}%</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">ID:</span> <span className="ml-2">{selectedProposal.id}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Cliente:</span> <span className="ml-2">{selectedProposal.client}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">CNPJ:</span> <span className="ml-2">{selectedProposal.cnpj}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Plano:</span> <span className="ml-2">{selectedProposal.plan}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Valor:</span> <span className="ml-2">{selectedProposal.value}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Progresso:</span> <span className="ml-2">{selectedProposal.progress}%</span></div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white border-b pb-2">Contato</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-white dark:text-white border-b pb-2">Contato</h4>
                     <div className="space-y-2 text-sm">
-                      <div><span className="font-medium text-gray-700 dark:text-white">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
-                      <div><span className="font-medium text-gray-700 dark:text-white">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Email:</span> <span className="ml-2">{selectedProposal.email}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Telefone:</span> <span className="ml-2">({selectedProposal.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')})</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Documentos:</span> <span className="ml-2">{selectedProposal.documents}</span></div>
+                      <div><span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Última Atividade:</span> <span className="ml-2">{selectedProposal.lastActivity}</span></div>
                     </div>
                   </div>
                 </div>
               
               <div className="space-y-4">
-                <h4 className="font-semibold text-gray-900 dark:text-white border-b pb-2">Anexos</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white dark:text-white border-b pb-2">Anexos</h4>
                 <div className="space-y-2">
                   {selectedProposal.attachments.map((attachment) => (
-                    <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div key={attachment.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-blue-100 rounded">
                           {attachment.type === 'pdf' ? (
@@ -1688,8 +1688,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">{attachment.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-white">{attachment.size}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white dark:text-white">{attachment.name}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 dark:text-white">{attachment.size}</p>
                         </div>
                       </div>
                       <button
@@ -1699,7 +1699,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                           link.download = attachment.name;
                           link.click();
                         }}
-                        className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                        className="flex items-center px-3 py-1 text-sm bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded hover:bg-blue-700"
                       >
                         <Download className="w-4 h-4 mr-1" />
                         Baixar
@@ -1709,18 +1709,18 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 </div>
               </div>
                 
-                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                  <span className="font-medium text-gray-700 dark:text-white">Link do Cliente:</span>
+                <div className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-700 p-4 rounded-lg">
+                  <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-white">Link do Cliente:</span>
                   <div className="flex items-center mt-2 space-x-2">
                     <input
                       type="text"
                       value={selectedProposal.link}
                       readOnly
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 dark:bg-gray-800"
                     />
                     <button
                       onClick={() => handleCopyLink(selectedProposal.link)}
-                      className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                      className="px-3 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>
@@ -1730,7 +1730,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={() => setSelectedProposal(null)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-white bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600"
                   >
                     Fechar
                   </button>

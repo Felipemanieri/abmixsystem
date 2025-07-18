@@ -78,7 +78,7 @@ const VendorForm: React.FC = () => {
   if (isSubmitted) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+        <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
@@ -128,7 +128,7 @@ const VendorForm: React.FC = () => {
             </button>
             <button
               onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Segue o link para preenchimento da proposta de plano de saúde: ${generatedLink}`)}`)}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               Enviar WhatsApp
             </button>
@@ -147,7 +147,7 @@ const VendorForm: React.FC = () => {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
         <div className="space-y-6">
           <div className="flex items-center mb-6">
             <Building className="w-6 h-6 text-teal-600 mr-3" />
@@ -162,7 +162,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.nomeEmpresa}
                 onChange={(e) => handleInputChange('nomeEmpresa', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Ex: Empresa ABC Ltda"
               />
             </div>
@@ -174,7 +174,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.cnpj}
                 onChange={(e) => handleInputChange('cnpj', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="00.000.000/0000-00"
               />
             </div>
@@ -192,7 +192,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.planoContratado}
                 onChange={(e) => handleInputChange('planoContratado', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 <option value="">Selecione o plano</option>
                 {planOptions.map((plan) => (
@@ -208,7 +208,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.valor}
                 onChange={(e) => handleInputChange('valor', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="R$ 0,00"
               />
             </div>
@@ -222,7 +222,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.periodoVigencia}
                 onChange={(e) => handleInputChange('periodoVigencia', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Ex: 12 meses"
               />
             </div>
@@ -234,7 +234,7 @@ const VendorForm: React.FC = () => {
                 required
                 value={contractData.inicioVigencia}
                 onChange={(e) => handleInputChange('inicioVigencia', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -251,7 +251,7 @@ const VendorForm: React.FC = () => {
                 id="odontoConjugado"
                 checked={contractData.odontoConjugado}
                 onChange={(e) => handleInputChange('odontoConjugado', e.target.checked)}
-                className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
               />
               <label htmlFor="odontoConjugado" className="ml-2 text-sm font-medium text-gray-700">
                 Odonto Conjugado
@@ -264,7 +264,7 @@ const VendorForm: React.FC = () => {
                 id="compulsorio"
                 checked={contractData.compulsorio}
                 onChange={(e) => handleInputChange('compulsorio', e.target.checked)}
-                className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
               />
               <label htmlFor="compulsorio" className="ml-2 text-sm font-medium text-gray-700">
                 Compulsório
@@ -277,7 +277,7 @@ const VendorForm: React.FC = () => {
                 id="aproveitamentoCongenere"
                 checked={contractData.aproveitamentoCongenere}
                 onChange={(e) => handleInputChange('aproveitamentoCongenere', e.target.checked)}
-                className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
               />
               <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm font-medium text-gray-700">
                 Aproveitamento Congênere

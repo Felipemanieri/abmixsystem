@@ -336,7 +336,7 @@ export default function PlanilhaViewer() {
             <button
               onClick={forcarAtualizacao}
               disabled={isLoading}
-              className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
               Atualizar
@@ -344,7 +344,7 @@ export default function PlanilhaViewer() {
             <button
               onClick={exportarCSV}
               disabled={dadosFormatados.length === 0}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               <Download className="w-4 h-4 mr-2" />
               Baixar CSV
@@ -503,18 +503,18 @@ export default function PlanilhaViewer() {
           </div>
         ) : dadosFormatados.length === 0 ? (
           <div className="p-8 text-center">
-            <FileText className="h-12 w-12 text-gray-400 dark:text-white mx-auto mb-4" />
+            <FileText className="h-12 w-12 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Nenhuma proposta encontrada</p>
           </div>
         ) : (
-          <div className="overflow-x-auto overflow-y-auto max-h-96 border border-gray-300 rounded-lg">
+          <div className="overflow-x-auto overflow-y-auto max-h-96 border border-gray-300 dark:border-gray-600 rounded-lg">
             <table className="min-w-max w-full border-collapse">
-              <thead className="bg-gray-100 sticky top-0 z-10">
+              <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0 z-10">
                 <tr>
                   {colunas.map((coluna, index) => (
                     <th 
                       key={coluna} 
-                      className="px-3 py-2 text-left text-xs font-bold text-gray-800 dark:text-white border-r border-gray-300 min-w-[100px] max-w-[150px] whitespace-nowrap"
+                      className="px-3 py-2 text-left text-xs font-bold text-gray-800 dark:text-gray-200 dark:text-white border-r border-gray-300 dark:border-gray-600 min-w-[100px] max-w-[150px] whitespace-nowrap"
                       style={{ position: 'sticky', top: 0, backgroundColor: '#f3f4f6' }}
                     >
                       <div className="truncate" title={coluna}>
@@ -540,7 +540,7 @@ export default function PlanilhaViewer() {
                           {linha[coluna] ? (
                             <span className="text-gray-900">{String(linha[coluna])}</span>
                           ) : (
-                            <span className="text-gray-400 dark:text-white italic text-xs">[vazio]</span>
+                            <span className="text-gray-400 dark:text-gray-500 dark:text-white italic text-xs">[vazio]</span>
                           )}
                         </div>
                       </td>

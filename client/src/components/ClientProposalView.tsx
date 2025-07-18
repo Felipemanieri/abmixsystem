@@ -415,7 +415,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             <select
               value={person.parentesco || ''}
               onChange={(e) => type === 'titular' ? updateTitular(index, 'parentesco', e.target.value) : updateDependente(index, 'parentesco', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Selecione o parentesco</option>
@@ -437,7 +437,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.nomeCompleto}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'nomeCompleto', e.target.value) : updateDependente(index, 'nomeCompleto', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -450,7 +450,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.cpf}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'cpf', e.target.value) : updateDependente(index, 'cpf', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="000.000.000-00"
             required
           />
@@ -464,7 +464,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.rg}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'rg', e.target.value) : updateDependente(index, 'rg', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -477,7 +477,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="date"
             value={person.dataNascimento}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'dataNascimento', e.target.value) : updateDependente(index, 'dataNascimento', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -490,7 +490,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.nomeMae}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'nomeMae', e.target.value) : updateDependente(index, 'nomeMae', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -502,7 +502,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
           <select
             value={person.sexo}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'sexo', e.target.value) : updateDependente(index, 'sexo', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="">Selecione</option>
@@ -518,7 +518,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
           <select
             value={person.estadoCivil}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'estadoCivil', e.target.value) : updateDependente(index, 'estadoCivil', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecione</option>
             <option value="Solteiro(a)">Solteiro(a)</option>
@@ -537,7 +537,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="email"
             value={person.emailPessoal}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'emailPessoal', e.target.value) : updateDependente(index, 'emailPessoal', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -550,7 +550,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="tel"
             value={person.telefonePessoal}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'telefonePessoal', e.target.value) : updateDependente(index, 'telefonePessoal', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="(11) 99999-9999"
             required
           />
@@ -583,7 +583,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 }
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="00000-000"
             maxLength={9}
             required
@@ -598,7 +598,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.enderecoCompleto}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'enderecoCompleto', e.target.value) : updateDependente(index, 'enderecoCompleto', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Rua, número, complemento, bairro, cidade, estado"
             required
           />
@@ -612,7 +612,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="email"
             value={person.emailEmpresa}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'emailEmpresa', e.target.value) : updateDependente(index, 'emailEmpresa', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -624,7 +624,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="tel"
             value={person.telefoneEmpresa}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'telefoneEmpresa', e.target.value) : updateDependente(index, 'telefoneEmpresa', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="(11) 99999-9999"
           />
         </div>
@@ -637,7 +637,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.peso}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'peso', e.target.value) : updateDependente(index, 'peso', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Ex: 70"
           />
         </div>
@@ -650,7 +650,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             type="text"
             value={person.altura}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'altura', e.target.value) : updateDependente(index, 'altura', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Ex: 1.70"
           />
         </div>
@@ -662,7 +662,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
           <textarea
             value={person.dadosReembolso}
             onChange={(e) => type === 'titular' ? updateTitular(index, 'dadosReembolso', e.target.value) : updateDependente(index, 'dadosReembolso', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={2}
             placeholder="Banco, agência, conta corrente, PIX, etc."
           />
@@ -696,7 +696,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   if (isCompleted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-green-50">
-        <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md">
+        <div className="text-center bg-white p-8 rounded-lg shadow-lg dark:shadow-gray-900/50 max-w-md">
           <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-green-600 mb-2">Proposta Enviada!</h1>
           <p className="text-gray-600 mb-4">
@@ -713,9 +713,9 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg dark:shadow-gray-900/50 overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-600 text-white p-6">
+          <div className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white p-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">Completar Proposta de Plano de Saúde</h1>
@@ -740,7 +740,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.nomeEmpresa}
                   placeholder="Ex: Empresa ABC Ltda"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -750,7 +750,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.cnpj}
                   placeholder="00.000.000/0000-00"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -760,7 +760,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.planoContratado}
                   placeholder="Ex: Plano Empresarial Premium - Cobertura"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -770,7 +770,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.valor?.toString() || "0,00"}
                   placeholder="0,00"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -780,7 +780,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.inicioVigencia}
                   placeholder="dd/mm/aaaa"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -790,7 +790,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   type="text"
                   value={proposal.contractData.periodoMinimo || "Selecione o período"}
                   placeholder="Selecione o período"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600"
                   readOnly
                 />
               </div>
@@ -801,7 +801,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <input
                   type="checkbox"
                   checked={proposal.contractData.odontoConjugado}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                  className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded mr-3"
                   disabled
                 />
                 <label className="text-sm text-gray-700">Inclui cobertura odontológica</label>
@@ -812,7 +812,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   <input
                     type="checkbox"
                     checked={proposal.contractData.livreAdesao}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                    className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded mr-3"
                     disabled
                   />
                   <label className="text-sm text-gray-700">Livre adesão</label>
@@ -822,7 +822,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   <input
                     type="checkbox"
                     checked={proposal.contractData.compulsorio}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                    className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded mr-3"
                     disabled
                   />
                   <label className="text-sm text-gray-700">Compulsório</label>
@@ -833,7 +833,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <input
                   type="checkbox"
                   checked={proposal.contractData.aproveitamentoCongenere}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded mr-3"
+                  className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded mr-3"
                   disabled
                 />
                 <label className="text-sm text-gray-700">Aproveitamento de carência congênere</label>
@@ -878,7 +878,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 </div>
                 <button
                   onClick={addTitular}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
+                  className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
                   disabled={titulares.length >= 10}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -900,7 +900,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 </div>
                 <button
                   onClick={addDependente}
-                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center"
+                  className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center"
                   disabled={dependentes.length >= 20}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -944,7 +944,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 <h2 className="text-xl font-semibold text-gray-900">Enviar Documentos</h2>
               </div>
               
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6">
                 <div className="text-center mb-4">
                   <p className="text-lg text-gray-600 mb-2">Escolha como enviar seus documentos</p>
                   <p className="text-sm text-gray-500 dark:text-white mb-4">
@@ -952,7 +952,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                   </p>
                   
                   <div className="flex flex-wrap justify-center gap-4">
-                    <label className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 cursor-pointer inline-flex items-center">
+                    <label className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-6 py-3 rounded-md hover:bg-blue-700 cursor-pointer inline-flex items-center">
                       <Upload className="h-5 w-5 mr-2" />
                       Escolher Arquivo
                       <input
@@ -966,7 +966,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     
                     <button
                       onClick={handleCameraCapture}
-                      className="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
+                      className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-6 py-3 rounded-md hover:bg-green-700 inline-flex items-center"
                     >
                       <Camera className="h-5 w-5 mr-2" />
                       Tirar Foto
@@ -974,7 +974,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     
                     <button
                       onClick={handleGallerySelect}
-                      className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
+                      className="bg-purple-600 text-white dark:bg-purple-500 dark:text-white px-6 py-3 rounded-md hover:bg-purple-700 inline-flex items-center"
                     >
                       <Image className="h-5 w-5 mr-2" />
                       Da Galeria
@@ -1046,7 +1046,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     <input
                       type="text"
                       value={proposal.contractData.inicioVigencia}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700"
                       readOnly
                     />
                   </div>
@@ -1055,7 +1055,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                     <input
                       type="text"
                       value={proposal.contractData.periodoMinimo || '12 meses'}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700"
                       readOnly
                     />
                   </div>
@@ -1068,7 +1068,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleSave}
                 disabled={isSaving || isSubmitting}
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white px-8 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isSaving ? (
                   <>
@@ -1086,7 +1086,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleClearDraft}
                 disabled={isClearingDraft}
-                className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-red-600 text-white dark:bg-red-500 dark:text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isClearingDraft ? (
                   <>
@@ -1104,7 +1104,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || isSaving}
-                className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
+                className="bg-green-600 text-white dark:bg-green-500 dark:text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-lg font-medium"
               >
                 {isSubmitting ? (
                   <>
@@ -1126,7 +1126,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
       {/* Indicador de Salvamento Manual - Fixo no canto inferior direito */}
       {lastSaved && (
         <div className="fixed bottom-4 right-4 z-50">
-          <div className="flex items-center space-x-2 bg-white shadow-lg border border-gray-200 rounded-lg px-3 py-2">
+          <div className="flex items-center space-x-2 bg-white shadow-lg dark:shadow-gray-900/50 border border-gray-200 rounded-lg px-3 py-2">
             <button
               onClick={() => {
                 const now = new Date().toISOString();
@@ -1143,7 +1143,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
                 showNotification('Rascunho salvo manualmente', 'success');
               }}
               disabled={isLoadingDraft}
-              className="flex items-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+              className="flex items-center px-3 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
               title="Salvar rascunho manualmente"
             >
               {isLoadingDraft ? (
@@ -1161,7 +1161,7 @@ const ClientProposalView: React.FC<ClientProposalViewProps> = ({ token }) => {
             <button
               onClick={handleClearDraft}
               disabled={isClearingDraft}
-              className="flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+              className="flex items-center px-3 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
               title="Limpar rascunho salvo"
             >
               {isClearingDraft ? (

@@ -33,14 +33,14 @@ const GoogleDriveSetup: React.FC = () => {
       </div>
       
       {/* Passos */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-8 relative">
           {[1, 2, 3, 4].map((s) => (
             <div key={s} className="flex flex-col items-center z-10">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 step > s ? 'bg-green-100 text-green-600' : 
                 step === s ? 'bg-blue-100 text-blue-600' : 
-                'bg-gray-100 text-gray-400 dark:text-white'
+                'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 dark:text-white'
               }`}>
                 {step > s ? (
                   <Check className="w-5 h-5" />
@@ -49,7 +49,7 @@ const GoogleDriveSetup: React.FC = () => {
                 )}
               </div>
               <span className={`text-xs mt-2 ${
-                step >= s ? 'text-gray-700' : 'text-gray-400 dark:text-white'
+                step >= s ? 'text-gray-700' : 'text-gray-400 dark:text-gray-500 dark:text-white'
               }`}>
                 {s === 1 ? 'Preparação' : 
                  s === 2 ? 'Conexão' : 
@@ -58,7 +58,7 @@ const GoogleDriveSetup: React.FC = () => {
             </div>
           ))}
           
-          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-600 top-5"></div>
+          <div className="absolute left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 top-5"></div>
         </div>
         
         {step === 1 && (
@@ -86,7 +86,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-end">
               <button
                 onClick={() => setStep(2)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Continuar
               </button>
@@ -116,7 +116,7 @@ const GoogleDriveSetup: React.FC = () => {
               <p className="text-gray-700 font-medium mb-4">Conectar ao Google Drive</p>
               <button
                 onClick={handleConnect}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Autorizar Acesso
               </button>
@@ -125,7 +125,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => setStep(1)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 transition-colors"
+                className="px-4 py-2 text-gray-600 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
               >
                 Voltar
               </button>
@@ -156,7 +156,7 @@ const GoogleDriveSetup: React.FC = () => {
                 <input
                   type="text"
                   defaultValue="Abmix - Propostas"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               
@@ -167,7 +167,7 @@ const GoogleDriveSetup: React.FC = () => {
                 <input
                   type="text"
                   defaultValue="Abmix - Dados de Clientes"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               
@@ -176,7 +176,7 @@ const GoogleDriveSetup: React.FC = () => {
                   type="checkbox"
                   id="createFolderPerClient"
                   defaultChecked
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
                 />
                 <label htmlFor="createFolderPerClient" className="ml-2 text-sm text-gray-700">
                   Criar pasta separada para cada cliente
@@ -188,7 +188,7 @@ const GoogleDriveSetup: React.FC = () => {
                   type="checkbox"
                   id="organizeDocs"
                   defaultChecked
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
                 />
                 <label htmlFor="organizeDocs" className="ml-2 text-sm text-gray-700">
                   Organizar documentos por tipo (pessoais, empresariais, etc.)
@@ -207,7 +207,7 @@ const GoogleDriveSetup: React.FC = () => {
             <div className="flex justify-between">
               <button
                 onClick={() => setStep(2)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-600 transition-colors"
+                className="px-4 py-2 text-gray-600 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
               >
                 Voltar
               </button>
@@ -265,7 +265,7 @@ const GoogleDriveSetup: React.FC = () => {
               
               <button
                 onClick={handleFinish}
-                className="flex-1 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                className="flex-1 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
               >
                 <Check className="w-4 h-4 mr-2" />
                 Concluir Configuração
@@ -276,7 +276,7 @@ const GoogleDriveSetup: React.FC = () => {
       </div>
       
       {/* Dicas */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Dicas e Informações</h2>
         
         <div className="space-y-4">

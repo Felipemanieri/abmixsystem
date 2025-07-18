@@ -153,7 +153,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
         {/* Botão voltar minimalista */}
         <button
           onClick={onBack}
-          className="flex items-center text-slate-600 dark:text-white hover:text-slate-800 dark:text-white mb-8 transition-colors bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-white/50"
+          className="flex items-center text-slate-600 dark:text-white hover:text-slate-800 dark:text-white mb-8 transition-colors bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm dark:shadow-gray-900/30 hover:shadow-md border border-white/50"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar aos Portais
@@ -173,7 +173,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             </div>
             
             {/* Ícone do portal com gradiente */}
-            <div className={`w-16 h-16 bg-gradient-to-br ${config.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+            <div className={`w-16 h-16 bg-gradient-to-br ${config.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg dark:shadow-gray-900/50`}>
               <IconComponent className="w-8 h-8 text-white" />
             </div>
             
@@ -197,7 +197,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400"
+                    className="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="seu@email.com"
                   />
                 </div>
@@ -215,7 +215,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-11 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400"
+                    className="w-full pl-11 pr-11 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="••••••••"
                   />
                   <button
@@ -248,7 +248,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-gradient-to-r ${config.gradient} text-white py-3 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none`}
+                className={`w-full bg-gradient-to-r ${config.gradient} text-white py-3 px-4 rounded-xl font-medium shadow-lg dark:shadow-gray-900/50 hover:shadow-xl dark:shadow-gray-900/50 transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none`}
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center">

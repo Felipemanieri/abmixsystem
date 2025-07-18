@@ -203,11 +203,11 @@ const FinancialArea: React.FC = () => {
       case 'pending_validation':
         return 'bg-orange-100 text-orange-800';
       case 'validated':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       case 'sent_to_automation':
         return 'bg-purple-100 text-purple-800';
       default:
-        return 'bg-gray-100 text-gray-800 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -247,7 +247,7 @@ const FinancialArea: React.FC = () => {
 
   const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
     const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium ${
+    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg dark:shadow-gray-900/50 text-white font-medium ${
       type === 'success' ? 'bg-green-500' : 
       type === 'error' ? 'bg-red-500' : 'bg-blue-500'
     }`;
@@ -273,7 +273,7 @@ const FinancialArea: React.FC = () => {
           {financialStats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">{stat.name}</p>
@@ -300,7 +300,7 @@ const FinancialArea: React.FC = () => {
       {/* Quick Actions */}
       {showQuickActions && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+          <div className="bg-white p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
             <div className="flex items-center">
               <div className="p-3 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
                 <Calculator className="w-6 h-6 text-green-600" />
@@ -312,7 +312,7 @@ const FinancialArea: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+          <div className="bg-white p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
             <div className="flex items-center">
               <div className="p-3 bg-blue-100 rounded-full group-hover:bg-blue-200 transition-colors">
                 <BarChart3 className="w-6 h-6 text-blue-600" />
@@ -324,7 +324,7 @@ const FinancialArea: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+          <div className="bg-white p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
             <div className="flex items-center">
               <div className="p-3 bg-purple-100 rounded-full group-hover:bg-purple-200 transition-colors">
                 <PieChart className="w-6 h-6 text-purple-600" />
@@ -336,7 +336,7 @@ const FinancialArea: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
+          <div className="bg-white p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 hover:shadow-md transition-all duration-200 cursor-pointer group">
             <div className="flex items-center">
               <div className="p-3 bg-orange-100 rounded-full group-hover:bg-orange-200 transition-colors">
                 <Wallet className="w-6 h-6 text-orange-600" />
@@ -352,7 +352,7 @@ const FinancialArea: React.FC = () => {
 
       {/* Category Performance */}
       {showCategoryPerformance && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Performance por Categoria</h2>
           <div className="space-y-4">
             {categoryStats.map((category) => (
@@ -362,7 +362,7 @@ const FinancialArea: React.FC = () => {
                   <span className="text-sm font-medium text-gray-900">{category.name}</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="w-32 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                  <div className="w-32 bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2">
                     <div 
                       className="bg-green-500 h-2 rounded-full" 
                       style={{ width: `${category.percentage}%` }}
@@ -378,7 +378,7 @@ const FinancialArea: React.FC = () => {
       )}
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Propostas para Validação</h2>
@@ -386,19 +386,19 @@ const FinancialArea: React.FC = () => {
           </div>
           <div className="flex flex-wrap gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-white" />
               <input
                 type="text"
                 placeholder="Buscar propostas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 pl-10"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 pl-10"
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               <option value="pending_validation">Aguardando Validação</option>
               <option value="validated">Validadas</option>
@@ -409,11 +409,11 @@ const FinancialArea: React.FC = () => {
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <button 
               onClick={() => {setSearchTerm(''); setFilterDate(''); setSelectedStatus('all');}}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 transition-colors"
+              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 transition-colors"
             >
               <Filter className="w-4 h-4 inline mr-1" />
               Limpar Filtros
@@ -423,7 +423,7 @@ const FinancialArea: React.FC = () => {
       </div>
 
       {/* Proposals Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -456,7 +456,7 @@ const FinancialArea: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50">
+                <tr key={proposal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
@@ -486,7 +486,7 @@ const FinancialArea: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <FileText className="w-4 h-4 text-gray-400 dark:text-white mr-1" />
+                      <FileText className="w-4 h-4 text-gray-400 dark:text-gray-500 dark:text-white mr-1" />
                       <span className="text-sm text-gray-900">{proposal.documents}</span>
                     </div>
                   </td>
@@ -548,7 +548,7 @@ const FinancialArea: React.FC = () => {
                 </h3>
                 <button 
                   onClick={() => setSelectedProposal(null)}
-                  className="text-gray-400 dark:text-white hover:text-gray-600"
+                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -648,7 +648,7 @@ const FinancialArea: React.FC = () => {
                         value={observations}
                         onChange={(e) => setObservations(e.target.value)}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                         placeholder="Adicione observações sobre a validação..."
                       />
                     </div>
@@ -676,7 +676,7 @@ const FinancialArea: React.FC = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => setSelectedProposal(null)}
-                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:bg-gray-600"
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:bg-gray-600 dark:bg-gray-600"
                         >
                           Cancelar
                         </button>
@@ -741,7 +741,7 @@ const FinancialArea: React.FC = () => {
       )}
 
       {/* Toggle Controls */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 p-4">
         <h3 className="text-sm font-medium text-gray-700 mb-3">Personalizar Dashboard</h3>
         <div className="flex flex-wrap gap-4">
           <div className="flex items-center">
@@ -750,7 +750,7 @@ const FinancialArea: React.FC = () => {
               id="showStats"
               checked={showFinancialStats}
               onChange={() => setShowFinancialStats(!showFinancialStats)}
-              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
             />
             <label htmlFor="showStats" className="ml-2 text-sm text-gray-600">
               Mostrar Estatísticas
@@ -762,7 +762,7 @@ const FinancialArea: React.FC = () => {
               id="showQuickActions"
               checked={showQuickActions}
               onChange={() => setShowQuickActions(!showQuickActions)}
-              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
             />
             <label htmlFor="showQuickActions" className="ml-2 text-sm text-gray-600">
               Mostrar Ações Rápidas
@@ -774,7 +774,7 @@ const FinancialArea: React.FC = () => {
               id="showCategoryPerformance"
               checked={showCategoryPerformance}
               onChange={() => setShowCategoryPerformance(!showCategoryPerformance)}
-              className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              className="rounded border-gray-300 dark:border-gray-600 text-teal-600 focus:ring-teal-500"
             />
             <label htmlFor="showCategoryPerformance" className="ml-2 text-sm text-gray-600">
               Mostrar Performance por Categoria

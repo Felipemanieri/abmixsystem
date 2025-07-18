@@ -73,13 +73,13 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
   if (!isOpen) return null;
   
   return (
-    <div className="absolute top-16 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[80vh] flex flex-col">
+    <div className="absolute top-16 right-0 w-80 bg-white rounded-lg shadow-xl dark:shadow-gray-900/50 border border-gray-200 z-50 max-h-[80vh] flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <h3 className="font-semibold text-gray-900">Notificações</h3>
         <button 
           onClick={onClose}
-          className="text-gray-400 dark:text-white hover:text-gray-600"
+          className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600"
         >
           <X className="w-4 h-4" />
         </button>
@@ -119,7 +119,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
           filteredNotifications.map((notification) => (
             <div
               key={notification.id}
-              className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${
+              className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${
                 !notification.read ? 'bg-blue-50' : ''
               }`}
               onClick={() => onMarkAsRead(notification.id)}
@@ -131,7 +131,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900">{notification.title}</p>
                   <p className="text-xs text-gray-500 dark:text-white mt-1">{notification.message}</p>
-                  <p className="text-xs text-gray-400 dark:text-white mt-1">{formatTimeDifference(notification.timestamp)}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 dark:text-white mt-1">{formatTimeDifference(notification.timestamp)}</p>
                 </div>
               </div>
             </div>

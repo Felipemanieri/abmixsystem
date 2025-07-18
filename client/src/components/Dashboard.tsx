@@ -139,19 +139,19 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'client_filling':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200';
       case 'docs_pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
       case 'sent_to_financial':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       case 'pending_validation':
         return 'bg-orange-100 text-orange-800';
       case 'validated':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
       case 'sent_to_automation':
         return 'bg-purple-100 text-purple-800';
       default:
-        return 'bg-gray-100 text-gray-800 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -172,7 +172,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div key={stat.name} className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.name}</p>
@@ -196,7 +196,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
       </div>
 
       {/* Recent Proposals */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             {userRole === 'vendor' ? 'Minhas Propostas Recentes' : 'Propostas para Validação'}
@@ -235,7 +235,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {recentProposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50">
+                <tr key={proposal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
@@ -261,7 +261,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
                   {userRole === 'vendor' && (
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mr-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 rounded-full h-2 mr-2">
                           <div 
                             className="bg-teal-600 h-2 rounded-full" 
                             style={{ width: `${proposal.progress}%` }}
@@ -297,7 +297,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {userRole === 'vendor' ? (
           <>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-teal-100 rounded-full">
                   <FileText className="w-6 h-6 text-teal-600" />
@@ -309,7 +309,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-blue-100 rounded-full">
                   <Link className="w-6 h-6 text-blue-600" />
@@ -321,7 +321,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-purple-100 rounded-full">
                   <Calendar className="w-6 h-6 text-purple-600" />
@@ -335,7 +335,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
           </>
         ) : (
           <>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-orange-100 rounded-full">
                   <AlertCircle className="w-6 h-6 text-orange-600" />
@@ -347,7 +347,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-green-100 rounded-full">
                   <TrendingUp className="w-6 h-6 text-green-600" />
@@ -359,7 +359,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userRole }) => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div className="bg-white p-6 rounded-lg shadow-sm dark:shadow-gray-900/30 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
               <div className="flex items-center">
                 <div className="p-3 bg-blue-100 rounded-full">
                   <DollarSign className="w-6 h-6 text-blue-600" />

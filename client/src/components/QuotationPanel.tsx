@@ -188,7 +188,7 @@ const QuotationPanel: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Formulário de Nova Cotação */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Calculator className="w-6 h-6 text-blue-600 mr-3" />
@@ -196,7 +196,7 @@ const QuotationPanel: React.FC = () => {
           </div>
           <button
             onClick={adicionarCotacao}
-            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="flex items-center px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             <Plus className="w-5 h-5 mr-2" />
             Adicionar Cotação
@@ -213,7 +213,7 @@ const QuotationPanel: React.FC = () => {
             <select
               value={quotationData.operadora}
               onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             >
               <option value="">Selecione a operadora</option>
               {operadoras.map(op => (
@@ -231,7 +231,7 @@ const QuotationPanel: React.FC = () => {
             <select
               value={quotationData.tipoPlano}
               onChange={(e) => setQuotationData(prev => ({ ...prev, tipoPlano: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             >
               <option value="">Selecione o tipo</option>
               {tiposPlano.map(tipo => (
@@ -252,12 +252,12 @@ const QuotationPanel: React.FC = () => {
                 min="1"
                 value={quotationData.numeroVidas}
                 onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-                className="flex-1 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                className="flex-1 px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 placeholder="1"
               />
               <button
                 onClick={() => setShowDistribuicaoModal(true)}
-                className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-4 py-3 bg-purple-600 text-white dark:bg-purple-500 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
                 title="Distribuição de Vidas"
               >
                 <Users className="w-5 h-5" />
@@ -278,7 +278,7 @@ const QuotationPanel: React.FC = () => {
                 const value = e.target.value.replace(/[^\d.,]/g, '');
                 setQuotationData(prev => ({ ...prev, valor: value }));
               }}
-              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               placeholder="Ex: 1.250,00"
             />
           </div>
@@ -293,7 +293,7 @@ const QuotationPanel: React.FC = () => {
               type="date"
               value={quotationData.validade}
               onChange={(e) => setQuotationData(prev => ({ ...prev, validade: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </div>
 
@@ -307,7 +307,7 @@ const QuotationPanel: React.FC = () => {
               type="date"
               value={quotationData.dataEnvio}
               onChange={(e) => setQuotationData(prev => ({ ...prev, dataEnvio: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </div>
         </div>
@@ -319,7 +319,7 @@ const QuotationPanel: React.FC = () => {
             Anexar Arquivos
           </label>
           
-          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center mb-4">
+          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-lg p-6 text-center mb-4">
             <input
               type="file"
               multiple
@@ -329,8 +329,8 @@ const QuotationPanel: React.FC = () => {
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             />
             <label htmlFor="file-upload" className="cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 dark:text-white mx-auto mb-2" />
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-2" />
+              <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">
                 Clique para anexar arquivos ou arraste aqui
               </p>
               <p className="text-xs text-gray-500 dark:text-white mt-1">
@@ -367,13 +367,13 @@ const QuotationPanel: React.FC = () => {
       </div>
 
       {/* Lista de Cotações Cadastradas */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
             Cotações Cadastradas ({cotacoesCadastradas.length})
           </h3>
           {cotacoesCadastradas.length > 0 && (
-            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+            <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
               {cotacoesCadastradas.length} cotação{cotacoesCadastradas.length > 1 ? 'ões' : ''}
             </span>
           )}
@@ -381,9 +381,9 @@ const QuotationPanel: React.FC = () => {
 
         {cotacoesCadastradas.length === 0 ? (
           <div className="text-center py-12">
-            <Calculator className="w-16 h-16 text-gray-400 dark:text-white mx-auto mb-4" />
+            <Calculator className="w-16 h-16 text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <p className="text-gray-500 dark:text-white text-lg">Nenhuma cotação cadastrada ainda.</p>
-            <p className="text-gray-400 dark:text-white text-sm mt-1">
+            <p className="text-gray-400 dark:text-gray-500 dark:text-white text-sm mt-1">
               Use o formulário acima para adicionar sua primeira cotação.
             </p>
           </div>
@@ -392,47 +392,47 @@ const QuotationPanel: React.FC = () => {
             {cotacoesCadastradas.map((cotacao, index) => (
               <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 relative">
                 <div className="absolute top-4 right-4">
-                  <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-medium">
+                  <span className="bg-blue-600 text-white dark:bg-blue-500 dark:text-white text-xs px-3 py-1 rounded-full font-medium">
                     #{index + 1}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Operadora</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Operadora</span>
                     <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo do Plano</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Tipo do Plano</span>
                     <p className="text-sm text-gray-900 dark:text-white">{cotacao.tipoPlano}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Nº de Vidas</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Nº de Vidas</span>
                     <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.numeroVidas}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Valor</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Valor</span>
                     <p className="text-lg font-bold text-green-600">R$ {cotacao.valor}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Validade</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Validade</span>
                     <p className="text-sm text-gray-900 dark:text-white">
                       {cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Data de Envio</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Data de Envio</span>
                     <p className="text-sm text-gray-900 dark:text-white">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Arquivos Anexados</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 dark:text-gray-500">Arquivos Anexados</span>
                     <p className="text-sm text-gray-900 dark:text-white">
-                      <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs font-medium">
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium">
                         <FileText className="w-3 h-3 mr-1" />
                         {cotacao.arquivos.length} arquivo(s)
                       </span>
@@ -443,14 +443,14 @@ const QuotationPanel: React.FC = () => {
                 <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => enviarWhatsApp(cotacao)}
-                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                    className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     WhatsApp
                   </button>
                   <button
                     onClick={() => removerCotacao(cotacao.id)}
-                    className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                    className="flex items-center px-4 py-2 bg-red-600 text-white dark:bg-red-500 dark:text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Remover
@@ -471,12 +471,12 @@ const QuotationPanel: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">Distribuição de Vidas</h3>
                 <button
                   onClick={() => setShowDistribuicaoModal(false)}
-                  className="text-gray-400 dark:text-white hover:text-gray-600 dark:text-gray-400"
+                  className="text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-600 dark:text-gray-400 dark:text-gray-500"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 mt-2">
                 Distribua o número de vidas por faixa etária
               </p>
             </div>
@@ -503,7 +503,7 @@ const QuotationPanel: React.FC = () => {
                           const value = Math.max(0, parseInt(e.target.value) || 0);
                           setDistribuicaoVidas(prev => ({ ...prev, [faixa.key]: value }));
                         }}
-                        className="w-16 px-2 py-1 text-center border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                        className="w-16 px-2 py-1 text-center border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                       />
                       <button
                         onClick={() => ajustarDistribuicao(faixa.key, 1)}
@@ -526,20 +526,20 @@ const QuotationPanel: React.FC = () => {
               <div className="flex justify-between">
                 <button
                   onClick={limparDistribuicao}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 transition-colors"
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 transition-colors"
                 >
                   Limpar Tudo
                 </button>
                 <div className="space-x-3">
                   <button
                     onClick={() => setShowDistribuicaoModal(false)}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 transition-colors"
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 transition-colors"
                   >
                     Cancelar
                   </button>
                   <button
                     onClick={aplicarDistribuicao}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     Aplicar
                   </button>

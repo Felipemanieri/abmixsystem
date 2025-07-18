@@ -129,7 +129,7 @@ const ProposalProgressTracker: React.FC<ProposalProgressTrackerProps> = ({
         </span>
       </div>
       
-      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+      <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
         <div 
           className={`h-2 rounded-full transition-all duration-700 ease-in-out ${getProgressColor()}`}
           style={{ width: `${progress}%` }}

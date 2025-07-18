@@ -135,8 +135,8 @@ export default function ControleSenhas() {
               onClick={() => setShowAllPasswords(!showAllPasswords)}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 showAllPasswords 
-                  ? 'bg-red-600 text-white hover:bg-red-700' 
-                  : 'bg-gray-200 dark:bg-gray-600 text-gray-700 hover:bg-gray-300 dark:bg-gray-600'
+                  ? 'bg-red-600 text-white dark:bg-red-500 dark:text-white hover:bg-red-700' 
+                  : 'bg-gray-200 dark:bg-gray-600 dark:bg-gray-600 text-gray-700 hover:bg-gray-300 dark:bg-gray-600'
               }`}
             >
               {showAllPasswords ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
@@ -144,7 +144,7 @@ export default function ControleSenhas() {
             </button>
             <button
               onClick={exportPasswordList}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar Lista
@@ -203,12 +203,12 @@ export default function ControleSenhas() {
             placeholder="Buscar por nome ou email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg"
           />
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="p-2 hover:bg-gray-100 rounded"
+              className="p-2 hover:bg-gray-100 dark:bg-gray-700 rounded"
             >
               <X className="w-4 h-4 text-gray-500 dark:text-white" />
             </button>
@@ -241,7 +241,7 @@ export default function ControleSenhas() {
 
         {loadingSystemUsers ? (
           <div className="p-8 text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-white mx-auto mb-4" />
+            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Carregando usuários...</p>
           </div>
         ) : (
@@ -259,7 +259,7 @@ export default function ControleSenhas() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredSystemUsers.map((user: any) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="p-4 font-medium">{user.name}</td>
                     <td className="p-4 text-gray-600">{user.email}</td>
                     <td className="p-4">
@@ -281,7 +281,7 @@ export default function ControleSenhas() {
                           </button>
                         </div>
                       ) : (
-                        <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                        <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">
                           {showAllPasswords ? user.password : '••••••••'}
                         </code>
                       )}
@@ -293,7 +293,7 @@ export default function ControleSenhas() {
                     </td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        user.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800 dark:text-white'
+                        user.active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white'
                       }`}>
                         {user.active ? 'Ativo' : 'Inativo'}
                       </span>
@@ -313,7 +313,7 @@ export default function ControleSenhas() {
                               setEditingUser(null);
                               setNewPassword('');
                             }}
-                            className="p-1 text-gray-600 hover:bg-gray-50 rounded"
+                            className="p-1 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -350,7 +350,7 @@ export default function ControleSenhas() {
 
         {loadingVendors ? (
           <div className="p-8 text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-white mx-auto mb-4" />
+            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 dark:text-gray-500 dark:text-white mx-auto mb-4" />
             <p className="text-gray-600">Carregando vendedores...</p>
           </div>
         ) : (
@@ -367,7 +367,7 @@ export default function ControleSenhas() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredVendors.map((vendor: any) => (
-                  <tr key={vendor.id} className="hover:bg-gray-50">
+                  <tr key={vendor.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="p-4 font-medium">{vendor.name}</td>
                     <td className="p-4 text-gray-600">{vendor.email}</td>
                     <td className="p-4">
@@ -389,13 +389,13 @@ export default function ControleSenhas() {
                           </button>
                         </div>
                       ) : (
-                        <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                        <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">
                           {showAllPasswords ? (vendor.password || '120784') : '••••••••'}
                         </code>
                       )}
                     </td>
                     <td className="p-4">
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                      <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs font-medium">
                         Ativo
                       </span>
                     </td>
@@ -414,7 +414,7 @@ export default function ControleSenhas() {
                               setEditingUser(null);
                               setNewPassword('');
                             }}
-                            className="p-1 text-gray-600 hover:bg-gray-50 rounded"
+                            className="p-1 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded"
                           >
                             <X className="w-4 h-4" />
                           </button>

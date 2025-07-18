@@ -112,8 +112,8 @@ export default function BackupManager() {
 
   const getStatusColor = (status: string) => {
     return status === 'sucesso' 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-red-100 text-red-800';
+      ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
+      : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
   };
 
   return (
@@ -132,7 +132,7 @@ export default function BackupManager() {
             <button
               onClick={() => executeBackup('incremental')}
               disabled={isBackingUp || isRestoring}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 dark:text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isBackingUp ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Archive className="w-4 h-4 mr-2" />}
               Backup Incremental
@@ -140,7 +140,7 @@ export default function BackupManager() {
             <button
               onClick={() => executeBackup('complete')}
               disabled={isBackingUp || isRestoring}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-500 dark:text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               {isBackingUp ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Database className="w-4 h-4 mr-2" />}
               Backup Completo
@@ -201,7 +201,7 @@ export default function BackupManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Frequência</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">
                 <option>Diário às 02:00</option>
                 <option>A cada 6 horas</option>
                 <option>Semanal</option>
@@ -210,7 +210,7 @@ export default function BackupManager() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Retenção</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg">
                 <option>Manter últimos 30 backups</option>
                 <option>Manter últimos 60 backups</option>
                 <option>Manter últimos 90 backups</option>
@@ -260,7 +260,7 @@ export default function BackupManager() {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {backupHistory.map((backup) => (
-                <tr key={backup.id} className="hover:bg-gray-50">
+                <tr key={backup.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td className="p-4">
                     <div>
                       <div className="font-medium">{backup.date.toLocaleDateString('pt-BR')}</div>
@@ -270,8 +270,8 @@ export default function BackupManager() {
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                       backup.type === 'Completo' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-blue-100 text-blue-800'
+                        ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
+                        : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
                     }`}>
                       {backup.type}
                     </span>
@@ -280,7 +280,7 @@ export default function BackupManager() {
                   <td className="p-4">
                     <div className="flex flex-wrap gap-1">
                       {backup.tables.map((table) => (
-                        <span key={table} className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs">
+                        <span key={table} className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 rounded text-xs">
                           {table}
                         </span>
                       ))}
