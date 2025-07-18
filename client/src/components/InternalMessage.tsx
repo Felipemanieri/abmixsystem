@@ -47,6 +47,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     attachments: [] as File[]
   });
   const [unreadCount, setUnreadCount] = useState(0);
+  const [dragActive, setDragActive] = useState(false);
 
   // Sistema de mensagens limpo - sem dados demo
   const [messages, setMessages] = useState<Message[]>([]);
@@ -307,6 +308,31 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     }));
   };
 
+  // Funções de drag and drop EXATAS do VendorPortal_backup
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const novosArquivos = Array.from(e.dataTransfer.files);
+      setComposeData(prev => ({
+        ...prev,
+        attachments: [...prev.attachments, ...novosArquivos]
+      }));
+    }
+  };
+
   const formatTimestamp = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -532,13 +558,23 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Anexos
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
+                  <div
+                    className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                      dragActive 
+                        ? 'border-gray-500 bg-gray-50 dark:bg-gray-800' 
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
+                    }`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                  >
                     <div className="text-center">
                       <label className="cursor-pointer">
                         <div className="flex flex-col items-center">
                           <Paperclip className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
                           <span className="text-sm text-gray-600 dark:text-gray-400">
-                            Clique para anexar arquivos
+                            Arraste arquivos aqui ou clique para anexar
                           </span>
                         </div>
                         <input
