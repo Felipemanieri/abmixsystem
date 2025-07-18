@@ -973,15 +973,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           )}
         </div>
 
-        {/* Botões de Ação - Todos na mesma linha */}
+        {/* Botões de Ação - 4 botões sem Adicionar Cotação */}
         <div className="flex items-center gap-2 mt-8">
-          <button
-            onClick={adicionarCotacao}
-            className="flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs"
-          >
-            <Plus className="w-3 h-3 mr-1" />
-            Adicionar Cotação
-          </button>
           <button
             onClick={limparFormulario}
             className="flex items-center px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-xs"
@@ -1233,7 +1226,16 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
         )}
 
-
+        {/* Botão Adicionar de volta */}
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={adicionarCotacao}
+            className="flex items-center px-6 py-2 bg-blue-800 dark:bg-blue-900 text-white dark:bg-gray-800 dark:bg-gray-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Adicionar Cotação
+          </button>
+        </div>
       </div>
 
       {/* Lista de Cotações */}
