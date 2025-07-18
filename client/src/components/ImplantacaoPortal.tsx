@@ -146,16 +146,16 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
 
   // Inicializar status dos proposals reais e escutar mudanças
   useEffect(() => {
-    const initializeStatuses = () => {
-      const statusMap = new Map<string, ProposalStatus>();
-      realProposalsData.forEach(proposal => {
-        statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
-      });
-      setProposalStatuses(statusMap);
-    };
+    if (!realProposalsData || realProposalsData.length === 0) return;
+    
+    const statusMap = new Map<string, ProposalStatus>();
+    realProposalsData.forEach(proposal => {
+      statusMap.set(proposal.id, statusManager.getStatus(proposal.id));
+    });
+    setProposalStatuses(statusMap);
+  }, [realProposalsData.length]);
 
-    initializeStatuses();
-
+  useEffect(() => {
     const handleStatusChange = (proposalId: string, newStatus: ProposalStatus) => {
       setProposalStatuses(prev => new Map(prev.set(proposalId, newStatus)));
       showNotification(`Status da proposta ${proposalId} alterado para: ${STATUS_CONFIG[newStatus].label}`, 'success');
@@ -166,7 +166,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
     return () => {
       statusManager.unsubscribe(handleStatusChange);
     };
-  }, [statusManager, realProposalsData]);
+  }, []);
 
   const handleSelectProposal = (proposalId: string) => {
     console.log('Selecionando proposta:', proposalId);
