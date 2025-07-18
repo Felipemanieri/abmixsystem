@@ -1580,6 +1580,279 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
         </div>
+
+        {/* Configuração Múltiplas Instâncias Google */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Globe className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurar Múltiplas Instâncias Google</h3>
+          </div>
+
+          {/* Configuração 3 Google Drives */}
+          <div className="mb-8">
+            <h4 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+              <HardDrive className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              Configuração dos 3 Google Drives
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Drive 1 - Principal */}
+              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-blue-800 dark:text-blue-200">Drive 1 - Principal</h5>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">URL do Drive</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://drive.google.com/drive/folders/..."
+                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Pasta Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Propostas/Ativas"
+                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Automação</label>
+                    <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="realtime">Tempo Real</option>
+                      <option value="manual">Manual</option>
+                      <option value="scheduled">Agendado</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
+                    Configurar Drive 1
+                  </button>
+                </div>
+              </div>
+
+              {/* Drive 2 - Backup */}
+              <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-green-800 dark:text-green-200">Drive 2 - Backup</h5>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">URL do Drive</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://drive.google.com/drive/folders/..."
+                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Pasta Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Backup/Diario"
+                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Automação</label>
+                    <select className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="daily">Diário</option>
+                      <option value="hourly">A cada hora</option>
+                      <option value="manual">Manual</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                    Configurar Drive 2
+                  </button>
+                </div>
+              </div>
+
+              {/* Drive 3 - Arquivo */}
+              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-purple-800 dark:text-purple-200">Drive 3 - Arquivo</h5>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">URL do Drive</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://drive.google.com/drive/folders/..."
+                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Pasta Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Arquivo/Historico"
+                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Automação</label>
+                    <select className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="monthly">Mensal</option>
+                      <option value="weekly">Semanal</option>
+                      <option value="manual">Manual</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors">
+                    Configurar Drive 3
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Configuração 3 Google Sheets */}
+          <div>
+            <h4 className="font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+              <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+              Configuração das 3 Google Sheets
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Sheet 1 - Operacional */}
+              <div className="border border-blue-200 dark:border-blue-600 rounded-lg p-4 bg-blue-50 dark:bg-blue-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-blue-800 dark:text-blue-200">Sheet 1 - Operacional</h5>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">URL da Planilha</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://docs.google.com/spreadsheets/d/..."
+                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Aba Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Propostas_Ativas"
+                      className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-blue-700 dark:text-blue-300 mb-1">Sincronização</label>
+                    <select className="w-full px-2 py-1 text-xs border border-blue-300 dark:border-blue-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="realtime">Tempo Real</option>
+                      <option value="5min">5 minutos</option>
+                      <option value="manual">Manual</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors">
+                    Configurar Sheet 1
+                  </button>
+                </div>
+              </div>
+
+              {/* Sheet 2 - Financeiro */}
+              <div className="border border-green-200 dark:border-green-600 rounded-lg p-4 bg-green-50 dark:bg-green-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-green-800 dark:text-green-200">Sheet 2 - Financeiro</h5>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">URL da Planilha</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://docs.google.com/spreadsheets/d/..."
+                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Aba Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Financeiro_Consolidado"
+                      className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-green-700 dark:text-green-300 mb-1">Sincronização</label>
+                    <select className="w-full px-2 py-1 text-xs border border-green-300 dark:border-green-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="hourly">A cada hora</option>
+                      <option value="daily">Diário</option>
+                      <option value="manual">Manual</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                    Configurar Sheet 2
+                  </button>
+                </div>
+              </div>
+
+              {/* Sheet 3 - Relatórios */}
+              <div className="border border-purple-200 dark:border-purple-600 rounded-lg p-4 bg-purple-50 dark:bg-purple-900">
+                <div className="flex items-center justify-between mb-3">
+                  <h5 className="font-medium text-purple-800 dark:text-purple-200">Sheet 3 - Relatórios</h5>
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">URL da Planilha</label>
+                    <input 
+                      type="text" 
+                      placeholder="https://docs.google.com/spreadsheets/d/..."
+                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Aba Destino</label>
+                    <input 
+                      type="text" 
+                      placeholder="Relatorios_Gerenciais"
+                      className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-purple-700 dark:text-purple-300 mb-1">Sincronização</label>
+                    <select className="w-full px-2 py-1 text-xs border border-purple-300 dark:border-purple-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                      <option value="daily">Diário</option>
+                      <option value="weekly">Semanal</option>
+                      <option value="manual">Manual</option>
+                    </select>
+                  </div>
+                  <button className="w-full px-3 py-2 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors">
+                    Configurar Sheet 3
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botões de Ação Global */}
+          <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t border-gray-200 dark:border-gray-600">
+            <button 
+              onClick={() => alert('Testando todas as conexões...')}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Testar Todas Conexões
+            </button>
+            <button 
+              onClick={() => alert('Sincronizando todas as instâncias...')}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Sincronizar Tudo
+            </button>
+            <button 
+              onClick={() => alert('Configurações salvas!')}
+              className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              Salvar Configurações
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
