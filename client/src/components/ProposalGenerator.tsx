@@ -1645,7 +1645,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-blue-100 dark:bg-gray-700 border border-blue-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-blue-200 dark:hover:bg-gray-600 transition-colors">
+              <label htmlFor="escolher-arquivo" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                 <input
                   type="file"
                   multiple
@@ -1654,9 +1654,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   id="escolher-arquivo"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                 />
-                <FileText className="w-8 h-8 text-blue-700 dark:text-gray-300 mb-2" />
-                <span className="text-sm font-medium text-blue-800 dark:text-gray-300">Escolher Arquivo</span>
-                <span className="text-xs text-blue-700 dark:text-gray-400">Do computador/celular</span>
+                <FileText className="w-8 h-8 text-gray-600 dark:text-gray-300 mb-2" />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Escolher Arquivo</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">Do computador/celular</span>
               </label>
 
               <label htmlFor="tirar-foto" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
@@ -1820,7 +1820,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex justify-between">
               <button
                 onClick={limparFormulario}
-                className="flex items-center px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors font-medium border border-red-400"
+                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium shadow-md"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Limpar Formulário
