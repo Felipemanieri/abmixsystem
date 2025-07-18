@@ -894,16 +894,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               </div>
             )}
 
-            {/* Botão Adicionar Cotação */}
-            <div className="flex justify-end mt-6">
-              <button
-                onClick={salvarCotacao}
-                className="flex items-center px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Adicionar Cotação
-              </button>
-            </div>
+
           </div>
 
           {/* Seção Cotações Cadastradas */}
