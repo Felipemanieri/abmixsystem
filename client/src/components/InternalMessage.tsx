@@ -317,19 +317,19 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl w-full max-w-4xl h-[80vh] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-6xl h-[95vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-4 rounded-t-xl flex items-center justify-between">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center">
-            <MessageSquare className="w-5 h-5 mr-2" />
-            <h2 className="text-lg font-semibold">Mensagens Internas</h2>
+            <MessageSquare className="w-6 h-6 text-gray-600 dark:text-gray-400 mr-3" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Sistema de Mensagens Internas</h2>
           </div>
-          <button 
+          <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
         
@@ -437,7 +437,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
           {/* Main Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {activeTab === 'compose' ? (
-              <div className="flex-1 flex flex-col p-4">
+              <div className="flex-1 flex flex-col p-4 overflow-y-auto">
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Destinatário 
@@ -491,16 +491,16 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   />
                 </div>
                 
-                <div className="flex-1 mb-4">
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Mensagem
                   </label>
                   <textarea
                     value={composeData.content}
                     onChange={(e) => setComposeData({...composeData, content: e.target.value})}
-                    className="w-full h-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 resize-none dark:bg-gray-700 dark:text-white"
+                    className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 resize-none dark:bg-gray-700 dark:text-white"
                     placeholder="Digite sua mensagem aqui..."
-                    rows={8}
+                    rows={6}
                   />
                 </div>
 
@@ -555,8 +555,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center">
-                  
+                <div className="flex justify-end items-center mt-6 pt-4 border-t border-gray-200 dark:border-gray-600">
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setActiveTab('inbox')}
