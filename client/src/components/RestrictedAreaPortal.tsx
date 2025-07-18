@@ -121,6 +121,18 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
   const [notifications, setNotifications] = useState([]);
   
+  // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
+  const [timeConfigs, setTimeConfigs] = useState({
+    googleDrive: { active: true, interval: '30s' },
+    googleSheets: { active: true, interval: '1s' },
+    googleForms: { active: true, interval: '10m' },
+    googleDocs: { active: true, interval: '5m' },
+    backupAuto: { active: true, interval: '24h' },
+    apiRequests: { active: true, interval: '1s' }
+  });
+  
+  const [allPaused, setAllPaused] = useState(false);
+  
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
@@ -308,6 +320,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 'automacao', label: 'Automação', icon: Bot },
     { id: 'integracoes', label: 'Integrações', icon: Link },
     { id: 'drive', label: 'Google Drive', icon: HardDrive },
+    { id: 'google-conexoes', label: 'Google Conexões', icon: Globe },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
     { id: 'tempo', label: 'Configurações do Tempo', icon: Clock },
     { id: 'sistema', label: 'Sistema', icon: Settings }
@@ -1106,86 +1119,250 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     );
   }
 
-  function renderTempoSection() {
-    const [timeConfigs, setTimeConfigs] = useState({
-      googleDrive: { active: true, interval: '30s' },
-      googleForms: { active: true, interval: '10m' },
-      apiRequests: { active: true, interval: '1s' },
-      dataSync: { active: true, interval: '2m' },
-      backupAuto: { active: false, interval: '24h' }
+  // Funções para configurações de tempo - MOVIDAS PARA O NÍVEL PRINCIPAL
+  const toggleModule = (module: string) => {
+    setTimeConfigs(prev => ({
+      ...prev,
+      [module]: { ...prev[module], active: !prev[module].active }
+    }));
+  };
+
+  const updateInterval = (module: string, interval: string) => {
+    setTimeConfigs(prev => ({
+      ...prev,
+      [module]: { ...prev[module], interval }
+    }));
+  };
+
+  const pauseAll = () => {
+    setAllPaused(true);
+    setTimeConfigs(prev => {
+      const newConfigs = { ...prev };
+      Object.keys(newConfigs).forEach(key => {
+        newConfigs[key] = { ...newConfigs[key], active: false };
+      });
+      return newConfigs;
     });
+  };
 
-    const [allPaused, setAllPaused] = useState(false);
-    
-    const toggleModule = (module: string) => {
-      setTimeConfigs(prev => ({
-        ...prev,
-        [module]: { ...prev[module], active: !prev[module].active }
-      }));
-    };
-
-    const updateInterval = (module: string, interval: string) => {
-      setTimeConfigs(prev => ({
-        ...prev,
-        [module]: { ...prev[module], interval }
-      }));
-    };
-
-    const pauseAll = () => {
-      setAllPaused(true);
-      setTimeConfigs(prev => {
-        const newConfigs = { ...prev };
-        Object.keys(newConfigs).forEach(key => {
-          newConfigs[key] = { ...newConfigs[key], active: false };
-        });
-        return newConfigs;
+  const startAll = () => {
+    setAllPaused(false);
+    setTimeConfigs(prev => {
+      const newConfigs = { ...prev };
+      Object.keys(newConfigs).forEach(key => {
+        newConfigs[key] = { ...newConfigs[key], active: true };
       });
-    };
+      return newConfigs;
+    });
+  };
 
-    const startAll = () => {
-      setAllPaused(false);
-      setTimeConfigs(prev => {
-        const newConfigs = { ...prev };
-        Object.keys(newConfigs).forEach(key => {
-          newConfigs[key] = { ...newConfigs[key], active: true };
-        });
-        return newConfigs;
-      });
+  const getModuleColor = (module: string) => {
+    const colors = {
+      googleDrive: 'bg-blue-500',
+      googleSheets: 'bg-green-500',
+      googleForms: 'bg-purple-500',
+      googleDocs: 'bg-yellow-500',
+      backupAuto: 'bg-red-500',
+      apiRequests: 'bg-orange-500'
     };
+    return colors[module] || 'bg-gray-500';
+  };
 
-    const getModuleColor = (module: string) => {
-      const colors = {
-        googleDrive: 'bg-blue-500',
-        googleForms: 'bg-purple-500',
-        apiRequests: 'bg-orange-500',
-        dataSync: 'bg-cyan-500',
-        backupAuto: 'bg-red-500'
-      };
-      return colors[module] || 'bg-gray-500';
+  const getModuleName = (module: string) => {
+    const names = {
+      googleDrive: 'Google Drive',
+      googleSheets: 'Google Sheets',
+      googleForms: 'Google Forms',
+      googleDocs: 'Google Docs',
+      backupAuto: 'Backup Automático',
+      apiRequests: 'Requisições API'
     };
+    return names[module] || module;
+  };
 
-    const getModuleName = (module: string) => {
-      const names = {
-        googleDrive: 'Google Drive',
-        googleForms: 'Google Forms',
-        apiRequests: 'Requisições API',
-        dataSync: 'Sincronização de Dados',
-        backupAuto: 'Backup Automático'
-      };
-      return names[module] || module;
+  const getIntervalOptions = (module: string) => {
+    const options = {
+      googleDrive: ['30s', '1m', '5m', 'manual'],
+      googleSheets: ['1s', '5s', '30s', 'manual'],
+      googleForms: ['5m', '10m', '30m', 'manual'],
+      googleDocs: ['2m', '5m', '10m', 'manual'],
+      backupAuto: ['1h', '6h', '24h', 'manual'],
+      apiRequests: ['1s', '5s', '30s', 'manual']
     };
+    return options[module] || ['1s', '5s', '30s', 'manual'];
+  };
 
-    const getIntervalOptions = (module: string) => {
-      const options = {
-        googleDrive: ['30s', '1m', '5m', 'manual'],
-        googleForms: ['5m', '10m', '30m', 'manual'],
-        apiRequests: ['1s', '5s', '30s', 'manual'],
-        dataSync: ['30s', '1m', '2m', 'manual'],
-        backupAuto: ['1h', '6h', '24h', 'manual']
-      };
-      return options[module] || ['1s', '5s', '30s', 'manual'];
-    };
+  function renderGoogleConexoesSection() {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex items-center mb-6">
+            <Globe className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-3" />
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Conexões</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Configurações e integrações com serviços Google</p>
+            </div>
+          </div>
 
+          {/* Status das Integrações */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Drive</span>
+                </div>
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              </div>
+              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
+            </div>
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Sheets</span>
+                </div>
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              </div>
+              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
+            </div>
+            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  <span className="text-sm font-medium text-green-900 dark:text-green-200">Google Forms</span>
+                </div>
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              </div>
+              <p className="text-xs text-green-700 dark:text-green-300 mt-1">Conectado e sincronizado</p>
+            </div>
+          </div>
+
+          {/* Configurações de API */}
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Configurações de API</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google Client ID</label>
+                <input
+                  type="text"
+                  placeholder="seu-google-client-id"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google Client Secret</label>
+                <input
+                  type="password"
+                  placeholder="••••••••••••••••"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Google API Key</label>
+              <input
+                type="password"
+                placeholder="••••••••••••••••••••••••••••••••••••••••"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+            </div>
+            <div className="mt-4 flex space-x-3">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Salvar Configurações
+              </button>
+              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                Testar Conexão
+              </button>
+            </div>
+          </div>
+
+          {/* Serviços Google */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Google Drive */}
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="flex items-center mb-3">
+                <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-2" />
+                <h4 className="font-semibold text-gray-900 dark:text-white">Google Drive</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Armazenamento e organização de documentos</p>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Espaço usado:</span>
+                  <span className="text-gray-900 dark:text-white">8.2 GB / 15 GB</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Arquivos:</span>
+                  <span className="text-gray-900 dark:text-white">1,834 arquivos</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Pastas:</span>
+                  <span className="text-gray-900 dark:text-white">247 pastas</span>
+                </div>
+              </div>
+              <button className="w-full mt-3 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                Configurar Drive
+              </button>
+            </div>
+
+            {/* Google Sheets */}
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="flex items-center mb-3">
+                <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
+                <h4 className="font-semibold text-gray-900 dark:text-white">Google Sheets</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Planilhas e dados em tempo real</p>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Planilhas:</span>
+                  <span className="text-gray-900 dark:text-white">47 ativas</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Linhas:</span>
+                  <span className="text-gray-900 dark:text-white">2,847 linhas</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Sync:</span>
+                  <span className="text-gray-900 dark:text-white">98.3% sucesso</span>
+                </div>
+              </div>
+              <button className="w-full mt-3 px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors">
+                Configurar Sheets
+              </button>
+            </div>
+
+            {/* Google Forms */}
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="flex items-center mb-3">
+                <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
+                <h4 className="font-semibold text-gray-900 dark:text-white">Google Forms</h4>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Formulários e coleta de dados</p>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Forms:</span>
+                  <span className="text-gray-900 dark:text-white">23 ativos</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Respostas:</span>
+                  <span className="text-gray-900 dark:text-white">1,247 respostas</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-500">Status:</span>
+                  <span className="text-gray-900 dark:text-white">Ativo</span>
+                </div>
+              </div>
+              <button className="w-full mt-3 px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors">
+                Configurar Forms
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderTempoSection() {
     const activeModules = Object.keys(timeConfigs).filter(module => timeConfigs[module].active).length;
     const totalModules = Object.keys(timeConfigs).length;
 
@@ -1482,6 +1659,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {activeTab === 'automacao' && renderAutomacaoSection()}
         {activeTab === 'integracoes' && renderIntegracoesSection()}
         {activeTab === 'drive' && renderDriveSection()}
+        {activeTab === 'google-conexoes' && renderGoogleConexoesSection()}
         {activeTab === 'tempo' && renderTempoSection()}
         {activeTab === 'sistema' && renderSistemaSection()}
       </main>
