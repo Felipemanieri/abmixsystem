@@ -2730,16 +2730,16 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border bg-gray-700 text-white-b bg-gray-50 dark:bg-gray-900 dark:bg-gray-700">
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">ID</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">CLIENTE</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">VENDEDOR</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PLANO</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">VALOR</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">STATUS</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PRIORIDADE</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">PROGRESSO</th>
-                <th className="text-white text-white dark:text-white left py-3 px-4 font-medium">AÇÕES</th>
+              <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">ID</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">CLIENTE</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">VENDEDOR</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">PLANO</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">VALOR</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">STATUS</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">PRIORIDADE</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">PROGRESSO</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">AÇÕES</th>
               </tr>
             </thead>
             <tbody>
@@ -2750,41 +2750,41 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 const abmId = proposal.abmId || `ABM${proposal.id.slice(-3)}`;
                 
                 return (
-                  <tr key={proposal.id} className="border bg-gray-700 text-white-b hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700">
-                    <td className="text-white py-3 px-4">
+                  <tr key={proposal.id} className="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="py-3 px-4">
                       <button
                         onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                        className="text-white dark:text-white blue-600 hover:text-blue-800 dark:text-white font-medium"
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 font-medium"
                         title="Ver Drive"
                       >
                         {abmId}
                       </button>
                     </td>
-                    <td className="text-white py-3 px-4">
-                      <div className="font-medium text-white">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
+                    <td className="py-3 px-4">
+                      <div className="font-medium text-gray-900 dark:text-white">{contractData.nomeEmpresa || 'Empresa não informada'}</div>
                     </td>
-                    <td className="text-white py-3 px-4">
+                    <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                          <span className="text-white dark:text-white green-600 dark:text-green-400 text-xs font-medium">
+                          <span className="text-green-600 dark:text-green-400 text-xs font-medium">
                             {getVendorName(proposal.vendorId).charAt(0)}
                           </span>
                         </div>
-                        <span className="text-white dark:text-white sm">{getVendorName(proposal.vendorId)}</span>
+                        <span className="text-sm text-gray-900 dark:text-white">{getVendorName(proposal.vendorId)}</span>
                       </div>
                     </td>
-                    <td className="text-white py-3 px-4 text-sm">
+                    <td className="py-3 px-4 text-sm text-gray-900 dark:text-white">
                       {contractData.planoContratado || 'Plano não informado'}
                     </td>
-                    <td className="text-white py-3 px-4 font-medium">
+                    <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">
                       {contractData.valor || 'R$ 0,00'}
                     </td>
-                    <td className="text-white py-3 px-4">
+                    <td className="py-3 px-4">
                       <StatusBadge 
                         status={currentStatus}
                       />
                     </td>
-                    <td className="text-white py-3 px-4">
+                    <td className="py-3 px-4">
                       <select
                         value={proposalPriorities[proposal.id] || 'media'}
                         onChange={(e) => handlePriorityChange(proposal.id, e.target.value as 'alta' | 'media' | 'baixa')}
@@ -2797,7 +2797,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         <option className="text-black bg-white" value="baixa">Baixa</option>
                       </select>
                     </td>
-                    <td className="text-white py-3 px-4">
+                    <td className="py-3 px-4">
                       <ProgressBar 
                         proposal={proposal} 
                         size="sm" 
@@ -2805,18 +2805,18 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                         className="max-w-24"
                       />
                     </td>
-                    <td className="text-white py-3 px-4">
+                    <td className="py-3 px-4">
                       <div className="flex space-x-2">
                         <button
                           onClick={() => window.open(`https://drive.google.com/drive/folders/${proposal.id}`, '_blank')}
-                          className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800 dark:bg-blue-900 rounded"
+                          className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800 rounded"
                           title="Ver Drive"
                         >
                           <Eye size={14} />
                         </button>
                         <button
                           onClick={() => window.open(`/client/${proposal.clientToken}`, '_blank')}
-                          className="p-1 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-800 dark:bg-green-900 rounded"
+                          className="p-1 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-800 rounded"
                           title="Link do Cliente"
                         >
                           <ExternalLink size={14} />
@@ -2831,7 +2831,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         </div>
         
         {filteredProposals.length === 0 && (
-          <div className="text-white dark:text-white center py-8 text-white dark:text-white dark:text-white dark:text-white">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             Nenhuma proposta encontrada com os filtros aplicados.
           </div>
         )}
