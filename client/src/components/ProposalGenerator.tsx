@@ -766,9 +766,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
   };
 
   const renderPersonForm = (person: PersonData, type: 'titular' | 'dependente', index: number) => (
-    <div key={person.id} className="bg-gray-50 p-6 rounded-lg space-y-4">
+    <div key={person.id} className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
           <User className="w-5 h-5 mr-2" />
           {type === 'titular' ? `Titular ${index + 1}` : `Dependente ${index + 1}`}
         </h3>
@@ -784,7 +784,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Nome Completo *
           </label>
           <input
@@ -797,13 +797,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'nomeCompleto', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="Nome completo sem abreviações"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             CPF *
           </label>
           <input
@@ -816,13 +816,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'cpf', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="000.000.000-00"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             RG *
           </label>
           <input
@@ -835,13 +835,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'rg', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="00.000.000-0"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Data de Nascimento *
           </label>
           <input
@@ -854,19 +854,19 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'dataNascimento', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
           />
         </div>
 
         {type === 'dependente' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Parentesco *
             </label>
             <select
               value={person.parentesco || ''}
               onChange={(e) => updateDependente(index, 'parentesco', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             >
               <option value="">Selecione</option>
               <option value="cônjuge">Cônjuge</option>
@@ -879,7 +879,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         )}
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Nome da Mãe *
           </label>
           <input
@@ -892,13 +892,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'nomeMae', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="Nome completo da mãe"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Sexo *
           </label>
           <select
@@ -910,7 +910,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'sexo', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="masculino">Masculino</option>
@@ -919,7 +919,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Estado Civil *
           </label>
           <select
@@ -931,7 +931,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'estadoCivil', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
           >
             <option value="">Selecione</option>
             <option value="solteiro">Solteiro(a)</option>
@@ -942,7 +942,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Peso (kg)
           </label>
           <input
@@ -955,13 +955,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'peso', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="Ex: 70"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Altura (cm)
           </label>
           <input
@@ -974,13 +974,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'altura', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="Ex: 170"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Email Pessoal *
           </label>
           <input
@@ -993,13 +993,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'emailPessoal', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="email@exemplo.com"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Telefone Pessoal *
           </label>
           <input
@@ -1012,13 +1012,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'telefonePessoal', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="(00) 00000-0000"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Email Empresa
           </label>
           <input
@@ -1031,13 +1031,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'emailEmpresa', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="email@empresa.com"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Telefone Empresa
           </label>
           <input
@@ -1050,13 +1050,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'telefoneEmpresa', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="(00) 0000-0000"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             CEP *
           </label>
           <input
@@ -1090,14 +1090,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 }
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="00000-000"
             maxLength={9}
           />
         </div>
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Endereço Completo *
           </label>
           <input
@@ -1110,13 +1110,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'enderecoCompleto', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             placeholder="Rua, número, complemento, bairro, cidade, estado"
           />
         </div>
 
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Dados para Reembolso
           </label>
           <textarea
@@ -1128,7 +1128,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 updateDependente(index, 'dadosReembolso', e.target.value);
               }
             }}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
             rows={3}
             placeholder="Banco, agência, conta, PIX..."
           />
@@ -1143,20 +1143,20 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
     <div className="max-w-6xl mx-auto">
       <button
         onClick={onBack}
-        className="flex items-center text-gray-600 hover:text-gray-800 dark:text-white mb-6 transition-colors"
+        className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-white mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Voltar ao Dashboard
       </button>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 p-8">
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 Nova Proposta de Plano de Saúde
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Preencha todos os dados para gerar uma proposta completa
               </p>
             </div>
@@ -1179,7 +1179,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Building className="w-5 h-5 text-blue-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Dados do Contrato
                 </h2>
               </div>
@@ -1195,7 +1195,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Nome da Empresa *
                 </label>
                 <input
@@ -1203,17 +1203,17 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   value={contractData.nomeEmpresa}
                   onChange={(e) => setContractData(prev => ({ ...prev, nomeEmpresa: e.target.value }))}
                   readOnly={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                   placeholder="Ex: Empresa ABC Ltda"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   CNPJ *
                 </label>
                 <input
@@ -1221,17 +1221,17 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   value={contractData.cnpj}
                   onChange={(e) => setContractData(prev => ({ ...prev, cnpj: e.target.value }))}
                   readOnly={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                   placeholder="00.000.000/0000-00"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Plano Contratado *
                 </label>
                 <input
@@ -1239,17 +1239,17 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   value={contractData.planoContratado}
                   onChange={(e) => setContractData(prev => ({ ...prev, planoContratado: e.target.value }))}
                   readOnly={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                   placeholder="Ex: Plano Empresarial Premium - Cobertura Nacional"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Valor Mensal (R$) *
                 </label>
                 <input
@@ -1257,17 +1257,17 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   value={contractData.valor}
                   onChange={(e) => setContractData(prev => ({ ...prev, valor: e.target.value }))}
                   readOnly={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                   placeholder="0,00"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Início da Vigência *
                 </label>
                 <input
@@ -1275,26 +1275,26 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   value={contractData.inicioVigencia}
                   onChange={(e) => setContractData(prev => ({ ...prev, inicioVigencia: e.target.value }))}
                   readOnly={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Período mínimo de vigência *
                 </label>
                 <select
                   value={contractData.periodoMinimo || ''}
                   onChange={(e) => setContractData(prev => ({ ...prev, periodoMinimo: e.target.value }))}
                   disabled={contractFieldsReadOnly}
-                  className={`w-full p-3 border border-gray-300 rounded-lg ${
+                  className={`w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg ${
                     contractFieldsReadOnly 
-                      ? 'bg-gray-100 cursor-not-allowed text-gray-600' 
-                      : 'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      ? 'bg-gray-100 cursor-not-allowed text-gray-600 dark:text-gray-400' 
+                      : 'focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent'
                   }`}
                 >
                   <option value="">Selecione o período</option>
@@ -1313,11 +1313,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     checked={contractData.odontoConjugado}
                     onChange={(e) => setContractData(prev => ({ ...prev, odontoConjugado: e.target.checked }))}
                     disabled={contractFieldsReadOnly}
-                    className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                    className={`w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 ${
                       contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   />
-                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="odontoConjugado" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Inclui cobertura odontológica
                   </label>
                 </div>
@@ -1330,11 +1330,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       checked={contractData.livreAdesao}
                       onChange={(e) => setContractData(prev => ({ ...prev, livreAdesao: e.target.checked }))}
                       disabled={contractFieldsReadOnly}
-                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                      className={`w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 ${
                         contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     />
-                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700">
+                    <label htmlFor="livreAdesao" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                       Livre adesão
                     </label>
                   </div>
@@ -1346,11 +1346,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       checked={contractData.compulsorio}
                       onChange={(e) => setContractData(prev => ({ ...prev, compulsorio: e.target.checked }))}
                       disabled={contractFieldsReadOnly}
-                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                      className={`w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 ${
                         contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     />
-                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700">
+                    <label htmlFor="compulsorio" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                       Compulsório
                     </label>
                   </div>
@@ -1363,11 +1363,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     checked={contractData.aproveitamentoCongenere}
                     onChange={(e) => setContractData(prev => ({ ...prev, aproveitamentoCongenere: e.target.checked }))}
                     disabled={contractFieldsReadOnly}
-                    className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 ${
+                    className={`w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 ${
                       contractFieldsReadOnly ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   />
-                  <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="aproveitamentoCongenere" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Aproveitamento de carência congênere
                   </label>
                 </div>
@@ -1380,7 +1380,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <User className="w-5 h-5 text-green-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Dados dos Titulares
                 </h2>
               </div>
@@ -1405,7 +1405,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Users className="w-5 h-5 text-purple-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Dependentes
                 </h2>
               </div>
@@ -1419,8 +1419,8 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             </div>
             
             {dependentes.length === 0 ? (
-              <div className="bg-gray-50 p-6 rounded-lg text-center">
-                <p className="text-gray-500 dark:text-white">Nenhum dependente adicionado</p>
+              <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg text-center">
+                <p className="text-gray-500 dark:text-gray-400 dark:text-white">Nenhum dependente adicionado</p>
                 <p className="text-sm text-gray-400 dark:text-white mt-1">
                   Clique em "Adicionar Dependente" para incluir familiares
                 </p>
@@ -1439,7 +1439,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Settings className="w-5 h-5 text-orange-600 mr-2" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Controles Internos
                 </h2>
               </div>
@@ -1469,23 +1469,23 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="reuniao"
                     checked={internalData.reuniao}
                     onChange={(e) => setInternalData(prev => ({ ...prev, reuniao: e.target.checked }))}
-                    className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                    className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded focus:ring-orange-500"
                   />
-                  <label htmlFor="reuniao" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="reuniao" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Venda em reunião
                   </label>
                 </div>
 
                 {internalData.reuniao && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Nome da Reunião
                     </label>
                     <input
                       type="text"
                       value={internalData.nomeReuniao}
                       onChange={(e) => setInternalData(prev => ({ ...prev, nomeReuniao: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Nome da reunião"
                     />
                   </div>
@@ -1497,49 +1497,49 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     id="vendaDupla"
                     checked={internalData.vendaDupla}
                     onChange={(e) => setInternalData(prev => ({ ...prev, vendaDupla: e.target.checked }))}
-                    className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                    className="w-4 h-4 text-orange-600 border-gray-300 dark:border-gray-600 rounded focus:ring-orange-500"
                   />
-                  <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-700">
+                  <label htmlFor="vendaDupla" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Venda dupla
                   </label>
                 </div>
 
                 {internalData.vendaDupla && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Nome do Parceiro
                     </label>
                     <input
                       type="text"
                       value={internalData.nomeVendaDupla}
                       onChange={(e) => setInternalData(prev => ({ ...prev, nomeVendaDupla: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Nome do vendedor parceiro"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Desconto (%)
                   </label>
                   <input
                     type="text"
                     value={internalData.desconto}
                     onChange={(e) => setInternalData(prev => ({ ...prev, desconto: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     placeholder="0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Origem da Venda
                   </label>
                   <select
                     value={internalData.origemVenda}
                     onChange={(e) => setInternalData(prev => ({ ...prev, origemVenda: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     <option value="">Selecione a origem</option>
                     <option value="Base Abmix">Base Abmix</option>
@@ -1551,13 +1551,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Autorizador do Desconto
                   </label>
                   <select
                     value={internalData.autorizadorDesconto}
                     onChange={(e) => setInternalData(prev => ({ ...prev, autorizadorDesconto: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     <option value="">Selecione o autorizador</option>
                     <option value="Michelle Manieri">Michelle Manieri</option>
@@ -1567,13 +1567,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Observações Financeiras
                   </label>
                   <textarea
                     value={internalData.observacoesFinanceiras}
                     onChange={(e) => setInternalData(prev => ({ ...prev, observacoesFinanceiras: e.target.value }))}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     rows={3}
                     placeholder="Observações para o setor financeiro..."
                   />
@@ -1586,20 +1586,20 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           <div className="bg-green-50 p-6 rounded-lg">
             <div className="flex items-center mb-4">
               <Info className="w-5 h-5 text-green-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Observações para o Cliente
               </h2>
             </div>
             
             <div className="space-y-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Escreva instruções específicas que aparecerão para o cliente ao completar a proposta.
               </p>
               
               <textarea
                 value={internalData.observacoesCliente}
                 onChange={(e) => setInternalData(prev => ({ ...prev, observacoesCliente: e.target.value }))}
-                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                 rows={4}
                 placeholder="Exemplo: Lembre-se de enviar todos os documentos em boa qualidade. Para dúvidas específicas, entre em contato através do chat..."
               />
@@ -1614,16 +1614,16 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Seção de Cotações */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center mb-6">
               <Calculator className="w-5 h-5 text-blue-600 mr-2" />
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Anexar Cotação
               </h2>
             </div>
 
             {/* Área de Upload com Drag & Drop */}
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center mb-4">
               <input
                 type="file"
                 multiple
@@ -1634,10 +1634,10 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
               />
               <label htmlFor="file-upload-cotacao" className="cursor-pointer">
                 <Upload className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-700 mb-2">
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Arraste arquivos aqui ou escolha uma opção
                 </p>
-                <p className="text-sm text-gray-500 dark:text-white">
+                <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-white">
                   Suporte para PDF, DOC, DOCX, JPG, PNG - Sem limite de quantidade
                 </p>
               </label>
@@ -1692,13 +1692,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Operadora */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Operadora *
                 </label>
                 <select
                   value={quotationData.operadora}
                   onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 >
                   <option value="">Selecione a operadora</option>
                   <option value="Amil">Amil</option>
@@ -1715,13 +1715,13 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Tipo do Plano */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Tipo do Plano *
                 </label>
                 <select
                   value={quotationData.tipoPlano || ''}
                   onChange={(e) => setQuotationData(prev => ({ ...prev, tipoPlano: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 >
                   <option value="">Selecione o tipo</option>
                   <option value="Empresarial">Empresarial</option>
@@ -1733,7 +1733,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
               {/* Número de Vidas */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Número de Vidas *
                 </label>
                 <input
@@ -1741,14 +1741,14 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                   min="1"
                   value={quotationData.numeroVidas}
                   onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                   placeholder="1"
                 />
               </div>
 
               {/* Valor */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Valor (R$) *
                 </label>
                 <input
@@ -1758,34 +1758,34 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                     const value = e.target.value.replace(/[^\d.,]/g, '');
                     setQuotationData(prev => ({ ...prev, valor: value }));
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                   placeholder="Ex: 1.250,00"
                 />
               </div>
 
               {/* Validade da Cotação */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Validade da Cotação *
                 </label>
                 <input
                   type="date"
                   value={quotationData.validade || ''}
                   onChange={(e) => setQuotationData(prev => ({ ...prev, validade: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
               </div>
 
               {/* Data de Envio */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Data de Envio *
                 </label>
                 <input
                   type="date"
                   value={quotationData.dataEnvio || new Date().toISOString().split('T')[0]}
                   onChange={(e) => setQuotationData(prev => ({ ...prev, dataEnvio: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 />
               </div>
             </div>
@@ -1793,16 +1793,16 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             {/* Lista de Arquivos Anexados */}
             {arquivosAnexados.length > 0 && (
               <div className="mb-6 space-y-2">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Arquivos Anexados ({arquivosAnexados.length})
                 </p>
                 <div className="space-y-2">
                   {arquivosAnexados.map((arquivo, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
                       <div className="flex items-center">
-                        <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
-                        <span className="text-sm text-gray-700">{arquivo.name}</span>
-                        <span className="text-xs text-gray-500 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
+                        <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-white mr-2" />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{arquivo.name}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
                       </div>
                       <button
                         onClick={() => removerArquivo(index)}
@@ -1829,9 +1829,9 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
           </div>
 
           {/* Seção Cotações Cadastradas */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Cotações Cadastradas ({cotacoesCadastradas.length})
               </h3>
               {cotacoesCadastradas.length > 0 && (
@@ -1844,7 +1844,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             {cotacoesCadastradas.length === 0 ? (
               <div className="text-center py-8">
                 <Calculator className="w-12 h-12 text-gray-400 dark:text-white mx-auto mb-4" />
-                <p className="text-gray-500 dark:text-white text-sm">
+                <p className="text-gray-500 dark:text-gray-400 dark:text-white text-sm">
                   Nenhuma cotação cadastrada ainda.
                 </p>
                 <p className="text-gray-400 dark:text-white text-xs mt-1">
@@ -1854,7 +1854,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             ) : (
               <div className="space-y-4">
                 {cotacoesCadastradas.map((cotacao, index) => (
-                  <div key={cotacao.id} className="bg-gray-50 p-5 rounded-lg border border-gray-200 relative">
+                  <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 p-5 rounded-lg border border-gray-200 dark:border-gray-700 relative">
                     {/* Número da cotação */}
                     <div className="absolute top-3 right-3">
                       <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium">
@@ -1864,35 +1864,35 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Operadora</span>
-                        <p className="text-sm font-bold text-gray-900">{cotacao.operadora}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Operadora</span>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.operadora}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
-                        <p className="text-sm text-gray-900">{cotacao.tipoPlano}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo do Plano</span>
+                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.tipoPlano}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
-                        <p className="text-sm font-bold text-gray-900">{cotacao.numeroVidas}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Nº de Vidas</span>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.numeroVidas}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Valor</span>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Valor</span>
                         <p className="text-lg font-bold text-green-600">R$ {cotacao.valor}</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Validade</span>
-                        <p className="text-sm text-gray-900">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Validade</span>
+                        <p className="text-sm text-gray-900 dark:text-white">{cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Data de Envio</span>
-                        <p className="text-sm text-gray-900">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Data de Envio</span>
+                        <p className="text-sm text-gray-900 dark:text-white">{new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}</p>
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-gray-600">Arquivos Anexados</span>
-                        <p className="text-sm text-gray-900">
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Arquivos Anexados</span>
+                        <p className="text-sm text-gray-900 dark:text-white">
                           <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs font-medium">
                             <FileText className="w-3 h-3 mr-1" />
                             {cotacao.arquivos} arquivo(s)
@@ -1901,7 +1901,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
                       </div>
                     </div>
 
-                    <div className="flex justify-end space-x-3 pt-3 border-t border-gray-200">
+                    <div className="flex justify-end space-x-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                       <button
                         onClick={() => enviarWhatsApp(cotacao)}
                         className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
@@ -1977,7 +1977,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
       {/* Indicador de Salvamento Automático - Fixo no canto inferior direito */}
       {lastSaved && (
         <div className="fixed bottom-4 right-4 z-50">
-          <div className="flex items-center space-x-2 bg-white shadow-lg border border-gray-200 rounded-lg px-3 py-2">
+          <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2">
             <div className="flex items-center text-xs text-green-600">
               <button
                 onClick={() => {
@@ -2009,7 +2009,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             </div>
             <button
               onClick={handleClearDraft}
-              className="text-xs text-gray-500 dark:text-white hover:text-red-600 p-1 rounded transition-colors"
+              className="text-xs text-gray-500 dark:text-gray-400 dark:text-white hover:text-red-600 p-1 rounded transition-colors"
               title="Limpar rascunho salvo"
             >
               <Trash2 className="w-3 h-3" />

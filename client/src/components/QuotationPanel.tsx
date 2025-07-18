@@ -188,11 +188,11 @@ const QuotationPanel: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Formulário de Nova Cotação */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Calculator className="w-6 h-6 text-blue-600 mr-3" />
-            <h2 className="text-2xl font-bold text-gray-900">Painel de Cotações</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Painel de Cotações</h2>
           </div>
           <button
             onClick={adicionarCotacao}
@@ -206,14 +206,14 @@ const QuotationPanel: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {/* Operadora */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Building className="w-4 h-4 inline mr-1" />
               Operadora *
             </label>
             <select
               value={quotationData.operadora}
               onChange={(e) => setQuotationData(prev => ({ ...prev, operadora: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             >
               <option value="">Selecione a operadora</option>
               {operadoras.map(op => (
@@ -224,14 +224,14 @@ const QuotationPanel: React.FC = () => {
 
           {/* Tipo do Plano */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <FileText className="w-4 h-4 inline mr-1" />
               Tipo de Plano *
             </label>
             <select
               value={quotationData.tipoPlano}
               onChange={(e) => setQuotationData(prev => ({ ...prev, tipoPlano: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             >
               <option value="">Selecione o tipo</option>
               {tiposPlano.map(tipo => (
@@ -242,7 +242,7 @@ const QuotationPanel: React.FC = () => {
 
           {/* Número de Vidas */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Users className="w-4 h-4 inline mr-1" />
               Número de Vidas *
             </label>
@@ -252,7 +252,7 @@ const QuotationPanel: React.FC = () => {
                 min="1"
                 value={quotationData.numeroVidas}
                 onChange={(e) => setQuotationData(prev => ({ ...prev, numeroVidas: parseInt(e.target.value) || 1 }))}
-                className="flex-1 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 placeholder="1"
               />
               <button
@@ -267,7 +267,7 @@ const QuotationPanel: React.FC = () => {
 
           {/* Valor */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <DollarSign className="w-4 h-4 inline mr-1" />
               Valor (R$) *
             </label>
@@ -278,14 +278,14 @@ const QuotationPanel: React.FC = () => {
                 const value = e.target.value.replace(/[^\d.,]/g, '');
                 setQuotationData(prev => ({ ...prev, valor: value }));
               }}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               placeholder="Ex: 1.250,00"
             />
           </div>
 
           {/* Validade da Cotação */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Calendar className="w-4 h-4 inline mr-1" />
               Validade da Cotação *
             </label>
@@ -293,13 +293,13 @@ const QuotationPanel: React.FC = () => {
               type="date"
               value={quotationData.validade}
               onChange={(e) => setQuotationData(prev => ({ ...prev, validade: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </div>
 
           {/* Data de Envio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               <Calendar className="w-4 h-4 inline mr-1" />
               Data de Envio *
             </label>
@@ -307,19 +307,19 @@ const QuotationPanel: React.FC = () => {
               type="date"
               value={quotationData.dataEnvio}
               onChange={(e) => setQuotationData(prev => ({ ...prev, dataEnvio: e.target.value }))}
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
             />
           </div>
         </div>
 
         {/* Anexar Arquivos */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
             <FileText className="w-4 h-4 inline mr-1" />
             Anexar Arquivos
           </label>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4">
+          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center mb-4">
             <input
               type="file"
               multiple
@@ -330,7 +330,7 @@ const QuotationPanel: React.FC = () => {
             />
             <label htmlFor="file-upload" className="cursor-pointer">
               <Upload className="w-8 h-8 text-gray-400 dark:text-white mx-auto mb-2" />
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Clique para anexar arquivos ou arraste aqui
               </p>
               <p className="text-xs text-gray-500 dark:text-white mt-1">
@@ -341,15 +341,15 @@ const QuotationPanel: React.FC = () => {
 
           {arquivos.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-700">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Arquivos Anexados ({arquivos.length})
               </p>
               <div className="space-y-2">
                 {arquivos.map((arquivo, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
                     <div className="flex items-center">
                       <FileText className="w-4 h-4 text-gray-500 dark:text-white mr-2" />
-                      <span className="text-sm text-gray-700">{arquivo.name}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{arquivo.name}</span>
                       <span className="text-xs text-gray-500 dark:text-white ml-2">({formatFileSize(arquivo.size)})</span>
                     </div>
                     <button
@@ -367,9 +367,9 @@ const QuotationPanel: React.FC = () => {
       </div>
 
       {/* Lista de Cotações Cadastradas */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-900">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
             Cotações Cadastradas ({cotacoesCadastradas.length})
           </h3>
           {cotacoesCadastradas.length > 0 && (
@@ -390,7 +390,7 @@ const QuotationPanel: React.FC = () => {
         ) : (
           <div className="space-y-4">
             {cotacoesCadastradas.map((cotacao, index) => (
-              <div key={cotacao.id} className="bg-gray-50 p-6 rounded-lg border border-gray-200 relative">
+              <div key={cotacao.id} className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 relative">
                 <div className="absolute top-4 right-4">
                   <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-medium">
                     #{index + 1}
@@ -399,39 +399,39 @@ const QuotationPanel: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Operadora</span>
-                    <p className="text-sm font-bold text-gray-900">{cotacao.operadora}</p>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Operadora</span>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.operadora}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Tipo do Plano</span>
-                    <p className="text-sm text-gray-900">{cotacao.tipoPlano}</p>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo do Plano</span>
+                    <p className="text-sm text-gray-900 dark:text-white">{cotacao.tipoPlano}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Nº de Vidas</span>
-                    <p className="text-sm font-bold text-gray-900">{cotacao.numeroVidas}</p>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Nº de Vidas</span>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">{cotacao.numeroVidas}</p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Valor</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Valor</span>
                     <p className="text-lg font-bold text-green-600">R$ {cotacao.valor}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Validade</span>
-                    <p className="text-sm text-gray-900">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Validade</span>
+                    <p className="text-sm text-gray-900 dark:text-white">
                       {cotacao.validade ? new Date(cotacao.validade).toLocaleDateString('pt-BR') : '-'}
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Data de Envio</span>
-                    <p className="text-sm text-gray-900">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Data de Envio</span>
+                    <p className="text-sm text-gray-900 dark:text-white">
                       {new Date(cotacao.dataEnvio).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-600">Arquivos Anexados</span>
-                    <p className="text-sm text-gray-900">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Arquivos Anexados</span>
+                    <p className="text-sm text-gray-900 dark:text-white">
                       <span className="inline-flex items-center px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs font-medium">
                         <FileText className="w-3 h-3 mr-1" />
                         {cotacao.arquivos.length} arquivo(s)
@@ -440,7 +440,7 @@ const QuotationPanel: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => enviarWhatsApp(cotacao)}
                     className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
@@ -465,18 +465,18 @@ const QuotationPanel: React.FC = () => {
       {/* Modal Distribuição de Vidas */}
       {showDistribuicaoModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full m-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full m-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-gray-900">Distribuição de Vidas</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Distribuição de Vidas</h3>
                 <button
                   onClick={() => setShowDistribuicaoModal(false)}
-                  className="text-gray-400 dark:text-white hover:text-gray-600"
+                  className="text-gray-400 dark:text-white hover:text-gray-600 dark:text-gray-400"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                 Distribua o número de vidas por faixa etária
               </p>
             </div>
@@ -484,8 +484,8 @@ const QuotationPanel: React.FC = () => {
             <div className="p-6">
               <div className="space-y-4 mb-6">
                 {faixasEtarias.map((faixa) => (
-                  <div key={faixa.key} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <span className="font-medium text-gray-700 min-w-[80px]">
+                  <div key={faixa.key} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                    <span className="font-medium text-gray-700 dark:text-gray-300 min-w-[80px]">
                       {faixa.label}
                     </span>
                     <div className="flex items-center space-x-3">
@@ -503,7 +503,7 @@ const QuotationPanel: React.FC = () => {
                           const value = Math.max(0, parseInt(e.target.value) || 0);
                           setDistribuicaoVidas(prev => ({ ...prev, [faixa.key]: value }));
                         }}
-                        className="w-16 px-2 py-1 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-16 px-2 py-1 text-center border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                       />
                       <button
                         onClick={() => ajustarDistribuicao(faixa.key, 1)}
@@ -526,14 +526,14 @@ const QuotationPanel: React.FC = () => {
               <div className="flex justify-between">
                 <button
                   onClick={limparDistribuicao}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 transition-colors"
                 >
                   Limpar Tudo
                 </button>
                 <div className="space-x-3">
                   <button
                     onClick={() => setShowDistribuicaoModal(false)}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-900 transition-colors"
                   >
                     Cancelar
                   </button>

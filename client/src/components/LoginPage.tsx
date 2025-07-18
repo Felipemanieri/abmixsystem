@@ -141,7 +141,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
   const IconComponent = config.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Fundo geométrico sutil inspirado no logo Abmix */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-100/30 to-teal-100/30 rounded-full blur-3xl"></div>
@@ -153,16 +153,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
         {/* Botão voltar minimalista */}
         <button
           onClick={onBack}
-          className="flex items-center text-slate-600 dark:text-white hover:text-slate-800 dark:text-white mb-8 transition-colors bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-white/50"
+          className="flex items-center text-slate-600 dark:text-white hover:text-slate-800 dark:text-white mb-8 transition-colors bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm hover:shadow-md border border-white/50"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar aos Portais
         </button>
 
         {/* Card principal de login */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden">
+        <div className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 dark:border-gray-700 overflow-hidden">
           {/* Seção superior com logo e identificação do portal */}
-          <div className="p-8 text-center border-b border-gray-100/50">
+          <div className="p-8 text-center border-b border-gray-100/50 dark:border-gray-700">
             {/* Logo Abmix */}
             <div className="flex justify-center mb-6">
               <img 
@@ -187,7 +187,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Campo de email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-white mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-200 mb-2">
                   Email
                 </label>
                 <div className="relative">
@@ -197,7 +197,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-white placeholder-slate-400"
+                    className="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400"
                     placeholder="seu@email.com"
                   />
                 </div>
@@ -205,7 +205,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
 
               {/* Campo de senha */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-white mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-200 mb-2">
                   Senha
                 </label>
                 <div className="relative">
@@ -215,7 +215,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-11 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-white placeholder-slate-400"
+                    className="w-full pl-11 pr-11 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-gray-200 placeholder-slate-400 dark:placeholder-gray-400"
                     placeholder="••••••••"
                   />
                   <button

@@ -75,7 +75,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       case 'completed':
         return 'bg-green-100 text-green-800';
       default:
-        return 'bg-gray-100 text-gray-800 dark:text-white';
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 dark:text-white';
     }
   };
 
@@ -147,7 +147,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
     <div className="space-y-6">
       <button
         onClick={onBack}
-        className="flex items-center text-gray-600 hover:text-gray-800 dark:text-white transition-colors"
+        className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:text-gray-200 dark:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Voltar ao Dashboard
@@ -164,11 +164,11 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.name} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div key={stat.name} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{stat.name}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
                 </div>
                 <div className={`p-3 bg-${stat.color}-100 rounded-full`}>
                   <Icon className={`w-6 h-6 text-${stat.color}-600`} />
@@ -180,13 +180,13 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Filtrar Propostas</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filtrar Propostas</h2>
           <select
             value={selectedFilter}
             onChange={(e) => setSelectedFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">Todas</option>
             <option value="client_filling">Cliente Preenchendo</option>
@@ -197,15 +197,15 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
       </div>
 
       {/* Proposals Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Propostas ({filteredProposals.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                   Cliente
@@ -230,17 +230,17 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
               {filteredProposals.map((proposal) => (
-                <tr key={proposal.id} className="hover:bg-gray-50">
+                <tr key={proposal.id} className="hover:bg-gray-50 dark:bg-gray-900">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{proposal.client}</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{proposal.client}</div>
                       <div className="text-sm text-gray-500 dark:text-white">{proposal.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{proposal.plan}</div>
+                    <div className="text-sm text-gray-900 dark:text-white">{proposal.plan}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -258,7 +258,7 @@ const ProposalTracker: React.FC<ProposalTrackerProps> = ({ onBack }) => {
                           style={{ width: `${proposal.progress}%` }}
                         ></div>
                       </div>
-                      <span className="text-sm text-gray-600 min-w-0">{proposal.progress}%</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400 min-w-0">{proposal.progress}%</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-white">
