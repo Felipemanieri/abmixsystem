@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { Database, BarChart3, RefreshCw, Trash2, CheckCircle, Monitor, AlertTriangle } from 'lucide-react';
+import { Database, BarChart3, RefreshCw, Trash2, CheckCircle, Monitor, AlertTriangle, X, Eye, EyeOff } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function DataControlPanel() {
   const queryClient = useQueryClient();
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [notification, setNotification] = useState<{type: 'success' | 'error' | 'warning', message: string} | null>(null);
 
   // Buscar estatísticas do sistema
   const { data: systemStats, refetch: refetchStats } = useQuery({
@@ -44,31 +48,41 @@ export default function DataControlPanel() {
       queryClient.invalidateQueries({ queryKey: ['/api/proposals'] });
       queryClient.invalidateQueries({ queryKey: ['/api/system/stats'] });
       refetchStats();
-      alert('✅ Todas as propostas foram zeradas com sucesso!');
+      setNotification({
+        type: 'success',
+        message: '✅ Todas as propostas foram zeradas com sucesso!'
+      });
     },
     onError: () => {
-      alert('❌ Erro ao zerar propostas do sistema');
+      setNotification({
+        type: 'error',
+        message: '❌ Erro ao zerar propostas do sistema'
+      });
     }
   });
 
   const handleClearProposals = () => {
-    const confirmed = window.confirm(
-      '⚠️ ATENÇÃO: Deseja realmente ZERAR TODAS AS PROPOSTAS?\n\n' +
-      'Esta ação é IRREVERSÍVEL e removerá:\n' +
-      '• Todas as propostas do sistema\n' +
-      '• Contadores de estatísticas\n' +
-      '• Dados do rodapé e painéis\n\n' +
-      'Digite "CONFIRMAR" para prosseguir.'
-    );
-    
-    if (confirmed) {
-      const confirmText = prompt('Digite "CONFIRMAR" para zerar todas as propostas:');
-      if (confirmText === 'CONFIRMAR') {
-        clearProposalsMutation.mutate();
-      } else {
-        alert('Operação cancelada. Texto não confere.');
-      }
+    setShowPasswordModal(true);
+    setPassword('');
+    setNotification(null);
+  };
+
+  const confirmClearProposals = () => {
+    if (password !== 'CONFIRMAR') {
+      setNotification({
+        type: 'error',
+        message: 'Senha incorreta. Digite exatamente: CONFIRMAR'
+      });
+      return;
     }
+
+    setShowPasswordModal(false);
+    setPassword('');
+    clearProposalsMutation.mutate();
+    setNotification({
+      type: 'success',
+      message: 'Comando executado com sucesso!'
+    });
   };
 
   return (
@@ -194,6 +208,115 @@ export default function DataControlPanel() {
           </div>
         </div>
       </div>
+
+      {/* Notificação */}
+      {notification && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          notification.type === 'success' ? 'bg-green-100 border border-green-300 text-green-800' :
+          notification.type === 'error' ? 'bg-red-100 border border-red-300 text-red-800' :
+          'bg-yellow-100 border border-yellow-300 text-yellow-800'
+        }`}>
+          <div className="flex items-center justify-between">
+            <span className="font-medium">{notification.message}</span>
+            <button 
+              onClick={() => setNotification(null)}
+              className="ml-3 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação por Senha */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-96 max-w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Confirmar Ação Crítica</h3>
+              <button 
+                onClick={() => setShowPasswordModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="mb-6">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4 mb-4">
+                <div className="flex items-center mb-2">
+                  <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+                  <span className="font-medium text-red-900 dark:text-red-100">ATENÇÃO: Ação Irreversível</span>
+                </div>
+                <p className="text-sm text-red-700 dark:text-red-300">
+                  Esta ação irá DELETAR PERMANENTEMENTE todas as propostas do banco de dados. 
+                  Todos os contadores serão zerados e não será possível recuperar os dados.
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Digite a senha de confirmação:
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Digite: CONFIRMAR"
+                    className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Senha necessária: <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">CONFIRMAR</code>
+                </p>
+              </div>
+            </div>
+
+            {notification && (
+              <div className={`mb-4 p-3 rounded-lg ${
+                notification.type === 'error' ? 'bg-red-100 border border-red-300 text-red-800' : ''
+              }`}>
+                <span className="text-sm font-medium">{notification.message}</span>
+              </div>
+            )}
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowPasswordModal(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmClearProposals}
+                disabled={clearProposalsMutation.isPending}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center"
+              >
+                {clearProposalsMutation.isPending ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Processando...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Confirmar e Zerar
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
