@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, FileText, DollarSign, Settings, Users } from 'lucide-react';
+import { ArrowLeft, Lock, Eye, EyeOff, Mail, Info, Shield, AlertCircle, User, FileText, DollarSign, Settings, Users, Calculator, Crown } from 'lucide-react';
 // import AbmixLogo from './AbmixLogo';
 
 interface LoginPageProps {
@@ -68,14 +68,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
     financial: {
       title: 'Portal Financeiro',
       subtitle: 'Validação, aprovação e análise financeira',
-      icon: DollarSign,
+      icon: Calculator,
       gradient: 'from-teal-400 via-cyan-500 to-blue-600',
       accent: 'blue',
     },
     supervisor: {
       title: 'Portal Supervisor',
       subtitle: 'Supervisão, relatórios e gestão de equipe',
-      icon: Users,
+      icon: Crown,
       gradient: 'from-blue-500 via-teal-500 to-cyan-600',
       accent: 'slate',
     },
