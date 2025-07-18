@@ -50,29 +50,17 @@ function App() {
 
   // Carrega configurações globais dos portais
   useEffect(() => {
-    const loadPortalVisibility = async () => {
-      try {
-        const response = await fetch('/api/portal-visibility');
-        if (response.ok) {
-          const data = await response.json();
-          setPortalVisibility(data);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar visibilidade dos portais:', error);
-      }
-    };
-    
-    loadPortalVisibility();
+    // Configurações padrão sem necessidade de API
+    setPortalVisibility({
+      showClientPortal: true,
+      showVendorPortal: true,
+      showFinancialPortal: true,
+      showImplementationPortal: true,
+      showSupervisorPortal: true
+    });
 
-    // Listener para recarregar configurações quando mudarem na área restrita
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'PORTAL_VISIBILITY_CHANGED') {
-        loadPortalVisibility();
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+    // Sistema funcionando normalmente
+    console.log('Sistema Abmix carregado com sucesso');
   }, []);
 
   // Verificar URLs específicas para acesso direto aos portais
