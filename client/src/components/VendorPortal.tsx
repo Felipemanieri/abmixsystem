@@ -1598,16 +1598,16 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
               
               <button
                 onClick={() => setShowInternalMessage(true)}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
               >
                 <MessageSquare className="w-5 h-5" />
               </button>
               
-              <span className="text-sm text-gray-600">Olá, {user.name}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">Olá, {user.name}</span>
               
               <button
                 onClick={onLogout}
-                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+                className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
