@@ -302,7 +302,7 @@ function App() {
             <div 
               onClick={() => setCurrentPortal('client')}
               className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-blue-200 dark:border-blue-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-blue-500 dark:hover:border-blue-400"
-              style={{ width: '240px', height: '280px', minWidth: '240px', minHeight: '280px' }}
+              style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
             >
             {/* Status Indicator */}
             <div className="absolute top-0 right-0 m-2 flex items-center">
@@ -322,10 +322,6 @@ function App() {
                 Acessar Portal
               </div>
             </div>
-            {/* Status Indicator */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
-              <span className="text-green-600">🟢 Online</span>
-            </div>
           </div>
           )}
 
@@ -334,7 +330,7 @@ function App() {
           <div 
             onClick={() => setCurrentPortal('vendor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-green-500 dark:hover:border-green-400"
-            style={{ width: '240px', height: '280px', minWidth: '240px', minHeight: '280px' }}
+            style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
             {/* Status Indicator */}
             <div className="absolute top-0 right-0 m-2 flex items-center">
@@ -354,10 +350,6 @@ function App() {
                 Acessar Portal
               </div>
             </div>
-            {/* Status Indicator */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
-              <span className="text-green-600">🟢 Online</span>
-            </div>
           </div>
           )}
 
@@ -366,7 +358,7 @@ function App() {
           <div 
             onClick={() => setCurrentPortal('implementation')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-teal-200 dark:border-teal-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-teal-500 dark:hover:border-teal-400"
-            style={{ width: '240px', height: '280px', minWidth: '240px', minHeight: '280px' }}
+            style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
             {/* Status Indicator */}
             <div className="absolute top-0 right-0 m-2 flex items-center">
@@ -386,10 +378,6 @@ function App() {
                 Acessar Portal
               </div>
             </div>
-            {/* Status Indicator */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
-              <span className="text-green-600">🟢 Online</span>
-            </div>
           </div>
           )}
 
@@ -398,7 +386,7 @@ function App() {
           <div 
             onClick={() => setCurrentPortal('financial')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-purple-200 dark:border-purple-700 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-purple-500 dark:hover:border-purple-400"
-            style={{ width: '240px', height: '280px', minWidth: '240px', minHeight: '280px' }}
+            style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
             {/* Status Indicator */}
             <div className="absolute top-0 right-0 m-2 flex items-center">
@@ -418,10 +406,6 @@ function App() {
                 Acessar Portal
               </div>
             </div>
-            {/* Status Indicator */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
-              <span className="text-green-600">🟢 Online</span>
-            </div>
           </div>
           )}
 
@@ -430,7 +414,7 @@ function App() {
           <div 
             onClick={() => setCurrentPortal('supervisor')}
             className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border-2 border-gray-300 dark:border-gray-600 p-4 hover:shadow-3xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 relative overflow-hidden hover:border-gray-600 dark:hover:border-gray-400"
-            style={{ width: '240px', height: '280px', minWidth: '240px', minHeight: '280px' }}
+            style={{ width: '220px', height: '280px', minWidth: '220px', minHeight: '280px' }}
           >
             {/* Status Indicator */}
             <div className="absolute top-0 right-0 m-2 flex items-center">
@@ -449,10 +433,6 @@ function App() {
                 <ArrowRight className="w-4 h-4 mr-2" />
                 Acessar Portal
               </div>
-            </div>
-            {/* Status Indicator */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-sm font-medium">
-              <span className="text-green-600">🟢 Online</span>
             </div>
           </div>
           )}
