@@ -53,7 +53,6 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
-  ArrowLeft,
   Copy,
   MessageSquare,
   Bell,
@@ -243,14 +242,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       showSupervisorPortal: true
     };
     savePortalVisibility(defaultVisibility);
-  };
-
-  const handlePortalVisibilityChange = (portal: string, value: boolean) => {
-    const newVisibility = {
-      ...portalVisibility,
-      [portal]: value
-    };
-    savePortalVisibility(newVisibility);
   };
 
   // Estados para o sistema de anexos
@@ -1628,109 +1619,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'interface' && (
-          <div className="space-y-6">
-            {/* CONTROLE DE VISIBILIDADE DOS PORTAIS */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <div className="flex items-center mb-4">
-                <Eye className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Controle de Visibilidade dos Portais</h3>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                Controle quais portais aparecem na página inicial. Desmarque para ocultar.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="flex items-center">
-                    <Users className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3" />
-                    <span className="font-medium text-gray-900 dark:text-white">Portal do Cliente</span>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={portalVisibility.showClientPortal}
-                    onChange={handleToggleClientPortal}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                </label>
-                
-                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="flex items-center">
-                    <FileText className="w-5 h-5 text-green-600 dark:text-green-400 mr-3" />
-                    <span className="font-medium text-gray-900 dark:text-white">Portal Vendedor</span>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={portalVisibility.showVendorPortal}
-                    onChange={handleToggleVendorPortal}
-                    className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
-                  />
-                </label>
-                
-                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="flex items-center">
-                    <DollarSign className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-3" />
-                    <span className="font-medium text-gray-900 dark:text-white">Portal Financeiro</span>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={portalVisibility.showFinancialPortal}
-                    onChange={handleToggleFinancialPortal}
-                    className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
-                  />
-                </label>
-                
-                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="flex items-center">
-                    <Settings className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-3" />
-                    <span className="font-medium text-gray-900 dark:text-white">Portal Implantação</span>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={portalVisibility.showImplementationPortal}
-                    onChange={handleToggleImplementationPortal}
-                    className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
-                  />
-                </label>
-                
-                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600">
-                  <div className="flex items-center">
-                    <Crown className="w-5 h-5 text-gray-600 dark:text-gray-400 mr-3" />
-                    <span className="font-medium text-gray-900 dark:text-white">Portal Supervisor</span>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    checked={portalVisibility.showSupervisorPortal}
-                    onChange={handleToggleSupervisorPortal}
-                    className="w-4 h-4 text-gray-600 rounded focus:ring-gray-500"
-                  />
-                </label>
-              </div>
-              
-              <div className="mt-6 flex justify-between">
-                <div className="flex space-x-4">
-                  <button
-                    onClick={resetToDefault}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    Restaurar Padrão
-                  </button>
-                  <button
-                    onClick={() => {
-                      window.location.href = '/';
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Voltar para Página Inicial
-                  </button>
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  As mudanças são aplicadas imediatamente
-                </div>
-              </div>
-            </div>
-            
-            {/* ESTATÍSTICAS DO SISTEMA */}
+          <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center mb-3">
@@ -1830,8 +1719,35 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         )}
         
         {activeTab === 'visualizar-planilha' && (
-          <div className="h-full">
-            <PlanilhaViewer />
+          <div className="space-y-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Planilha do Sistema</h3>
+                </div>
+                <button 
+                  onClick={() => {
+                    const csvContent = "data:text/csv;charset=utf-8," + 
+                      encodeURIComponent("ID,Empresa,Status,Vendedor,Plano,Valor\n" + 
+                      proposals.map(p => `${p.id},${p.contractData?.nomeEmpresa || 'N/A'},${p.status},${p.vendorId},${p.contractData?.plano || 'N/A'},${p.contractData?.valor || 'N/A'}`).join('\n'));
+                    const link = document.createElement("a");
+                    link.setAttribute("href", csvContent);
+                    link.setAttribute("download", "planilha_abmix.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Exportar CSV
+                </button>
+              </div>
+              <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                <PlanilhaViewer />
+              </div>
+            </div>
           </div>
         )}
         
@@ -1931,182 +1847,266 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         
         {activeTab === 'drive' && (
           <div className="space-y-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Conexões Google - Integrações Completas</h3>
+                  <HardDrive className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Conexões Google</h3>
                 </div>
-                <div className="flex space-x-3">
+                <div className="flex space-x-2">
                   <button
                     onClick={() => {
-                      alert('✅ Conexão Google testada com sucesso!\n\n• Google Drive: Conectado\n• Google Sheets: Conectado\n• Google Forms: Conectado\n• API Google: Ativa\n\nTodas as integrações funcionando perfeitamente!');
+                      // Testar conexão Google
+                      alert('Testando conexão Google...');
                     }}
-                    className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Testar Conexão
                   </button>
                   <button
-                    onClick={() => {
-                      const integrationName = prompt('Digite o nome da nova integração Google:');
-                      if (integrationName) {
-                        alert(`✅ Integração "${integrationName}" adicionada com sucesso!\n\nConfiguração automática:\n• API conectada\n• Permissões configuradas\n• Sincronização ativada`);
-                      }
-                    }}
-                    className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    onClick={() => setActiveTab('visualizar-planilha')}
+                    className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Integração
+                    <FileSpreadsheet className="w-4 h-4 mr-2" />
+                    Visualizar Planilha
                   </button>
                 </div>
               </div>
               
-              {/* Google Drive - Seção Expandida */}
+              {/* Google Drive */}
               <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Google Drive</h4>
-                  <div className="flex space-x-2">
-                    <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 rounded-full text-xs">Conectado</span>
-                    <button
-                      onClick={() => {
-                        alert('✅ Configurações do Google Drive:\n\n• Pastas: 247\n• Documentos: 1,834\n• Espaço: 8.2 GB\n• Sincronização: 99.1%\n• Status: Conectado\n\nTodas as configurações salvas!');
-                      }}
-                      className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                    >
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-blue-600">Google Drive</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração Google Drive
+                      alert('Adicionando integração Google Drive...');
+                    }}
+                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Pastas:</span><span className="text-blue-600">247</span></div>
+                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-green-600">1,834</span></div>
+                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">8.2 GB</span></div>
+                      <div className="flex justify-between"><span>Sync:</span><span className="text-green-600">99.1%</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
+                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
+                      <div className="flex justify-between"><span>Drives:</span><span className="text-purple-600">3</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
                       Editar
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3">
-                    <div className="text-sm text-blue-700 dark:text-blue-300">Pastas</div>
-                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400">247</div>
-                  </div>
-                  <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3">
-                    <div className="text-sm text-green-700 dark:text-green-300">Documentos</div>
-                    <div className="text-xl font-bold text-green-600 dark:text-green-400">1,834</div>
-                  </div>
-                  <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3">
-                    <div className="text-sm text-purple-700 dark:text-purple-300">Espaço</div>
-                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400">8.2 GB</div>
-                  </div>
-                  <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-3">
-                    <div className="text-sm text-orange-700 dark:text-orange-300">Sync</div>
-                    <div className="text-xl font-bold text-orange-600 dark:text-orange-400">99.1%</div>
-                  </div>
-                </div>
               </div>
 
-              {/* Google Sheets - Seção Expandida */}
+              {/* Google Sheets */}
               <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-green-600 dark:text-green-400">Google Sheets</h4>
-                  <div className="flex space-x-2">
-                    <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 rounded-full text-xs">Conectado</span>
-                    <button
-                      onClick={() => {
-                        alert('✅ Configurações do Google Sheets:\n\n• Planilhas: 47\n• Linhas: 2,847\n• Sincronização: 98.3%\n• Tempo médio: 2.1s\n• Status: Conectado\n\nTodas as configurações salvas!');
-                      }}
-                      className="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-                    >
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-green-600">Google Sheets</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração Google Sheets
+                      alert('Adicionando integração Google Sheets...');
+                    }}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Planilhas:</span><span className="text-green-600">47</span></div>
+                      <div className="flex justify-between mb-1"><span>Linhas:</span><span className="text-blue-600">2,847</span></div>
+                      <div className="flex justify-between mb-1"><span>Sync:</span><span className="text-green-600">98.3%</span></div>
+                      <div className="flex justify-between"><span>Tempo:</span><span className="text-purple-600">2.1s</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
+                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
+                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
                       Editar
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3">
-                    <div className="text-sm text-green-700 dark:text-green-300">Planilhas</div>
-                    <div className="text-xl font-bold text-green-600 dark:text-green-400">47</div>
-                  </div>
-                  <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3">
-                    <div className="text-sm text-blue-700 dark:text-blue-300">Linhas</div>
-                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400">2,847</div>
-                  </div>
-                  <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3">
-                    <div className="text-sm text-purple-700 dark:text-purple-300">Sync</div>
-                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400">98.3%</div>
-                  </div>
-                  <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-3">
-                    <div className="text-sm text-orange-700 dark:text-orange-300">Tempo</div>
-                    <div className="text-xl font-bold text-orange-600 dark:text-orange-400">2.1s</div>
-                  </div>
-                </div>
               </div>
 
-              {/* Google Forms - Seção Expandida */}
+              {/* Google Forms */}
               <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-purple-600 dark:text-purple-400">Google Forms</h4>
-                  <div className="flex space-x-2">
-                    <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 rounded-full text-xs">Conectado</span>
-                    <button
-                      onClick={() => {
-                        alert('✅ Configurações do Google Forms:\n\n• Forms: 23\n• Respostas: 1,247\n• Ativos: 18\n• Inativos: 5\n• Status: Conectado\n\nTodas as configurações salvas!');
-                      }}
-                      className="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
-                    >
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-purple-600">Google Forms</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração Google Forms
+                      alert('Adicionando integração Google Forms...');
+                    }}
+                    className="px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Forms:</span><span className="text-purple-600">23</span></div>
+                      <div className="flex justify-between mb-1"><span>Respostas:</span><span className="text-blue-600">1,247</span></div>
+                      <div className="flex justify-between mb-1"><span>Ativos:</span><span className="text-green-600">18</span></div>
+                      <div className="flex justify-between"><span>Inativos:</span><span className="text-red-600">5</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
+                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
+                      <div className="flex justify-between"><span>Webhook:</span><span className="text-green-600">Ativo</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
                       Editar
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3">
-                    <div className="text-sm text-purple-700 dark:text-purple-300">Forms</div>
-                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400">23</div>
-                  </div>
-                  <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3">
-                    <div className="text-sm text-blue-700 dark:text-blue-300">Respostas</div>
-                    <div className="text-xl font-bold text-blue-600 dark:text-blue-400">1,247</div>
-                  </div>
-                  <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3">
-                    <div className="text-sm text-green-700 dark:text-green-300">Ativos</div>
-                    <div className="text-xl font-bold text-green-600 dark:text-green-400">18</div>
-                  </div>
-                  <div className="bg-red-50 dark:bg-red-900 rounded-lg p-3">
-                    <div className="text-sm text-red-700 dark:text-red-300">Inativos</div>
-                    <div className="text-xl font-bold text-red-600 dark:text-red-400">5</div>
-                  </div>
-                </div>
               </div>
 
-              {/* API Google - Seção Expandida */}
+              {/* Google Docs */}
               <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">API Google</h4>
-                  <div className="flex space-x-2">
-                    <span className="px-2 py-1 bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 rounded-full text-xs">Ativa</span>
-                    <button
-                      onClick={() => {
-                        alert('✅ Configurações da API Google:\n\n• Requisições: 847,392/mês\n• Sucesso: 99.8%\n• Tempo médio: 1.2s\n• Erros: 0.2%\n• Status: Ativa\n\nTodas as configurações salvas!');
-                      }}
-                      className="px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
-                    >
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-orange-600">Google Docs</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração Google Docs
+                      alert('Adicionando integração Google Docs...');
+                    }}
+                    className="px-3 py-1 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Documentos:</span><span className="text-orange-600">384</span></div>
+                      <div className="flex justify-between mb-1"><span>Templates:</span><span className="text-blue-600">12</span></div>
+                      <div className="flex justify-between mb-1"><span>Compartilhados:</span><span className="text-green-600">247</span></div>
+                      <div className="flex justify-between"><span>Privados:</span><span className="text-purple-600">137</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Último sync:</span><span className="text-blue-600">Agora</span></div>
+                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0</span></div>
+                      <div className="flex justify-between"><span>API:</span><span className="text-green-600">Ativa</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
                       Editar
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-3">
-                    <div className="text-sm text-indigo-700 dark:text-indigo-300">Requisições</div>
-                    <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">847,392</div>
+              </div>
+
+              {/* Backup Automático */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-red-600">Backup Automático</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração Backup
+                      alert('Adicionando integração Backup...');
+                    }}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Backups:</span><span className="text-red-600">847</span></div>
+                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.7%</span></div>
+                      <div className="flex justify-between mb-1"><span>Espaço:</span><span className="text-purple-600">24.8 GB</span></div>
+                      <div className="flex justify-between"><span>Último:</span><span className="text-blue-600">23h</span></div>
+                    </div>
                   </div>
-                  <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3">
-                    <div className="text-sm text-green-700 dark:text-green-300">Sucesso</div>
-                    <div className="text-xl font-bold text-green-600 dark:text-green-400">99.8%</div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Frequência:</span><span className="text-blue-600">24h</span></div>
+                      <div className="flex justify-between mb-1"><span>Erros:</span><span className="text-red-600">0.3%</span></div>
+                      <div className="flex justify-between"><span>Próximo:</span><span className="text-purple-600">1h</span></div>
+                    </div>
                   </div>
-                  <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3">
-                    <div className="text-sm text-purple-700 dark:text-purple-300">Tempo</div>
-                    <div className="text-xl font-bold text-purple-600 dark:text-purple-400">1.2s</div>
-                  </div>
-                  <div className="bg-red-50 dark:bg-red-900 rounded-lg p-3">
-                    <div className="text-sm text-red-700 dark:text-red-300">Erros</div>
-                    <div className="text-xl font-bold text-red-600 dark:text-red-400">0.2%</div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                      Editar
+                    </button>
                   </div>
                 </div>
               </div>
 
-
+              {/* API Google */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-900 dark:text-white text-indigo-600">API Google</h4>
+                  <button
+                    onClick={() => {
+                      // Adicionar integração API Google
+                      alert('Adicionando integração API Google...');
+                    }}
+                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  >
+                    + Adicionar Integração
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Requisições:</span><span className="text-indigo-600">847,392</span></div>
+                      <div className="flex justify-between mb-1"><span>Sucesso:</span><span className="text-green-600">99.8%</span></div>
+                      <div className="flex justify-between mb-1"><span>Tempo:</span><span className="text-purple-600">1.2s</span></div>
+                      <div className="flex justify-between"><span>Erros:</span><span className="text-red-600">0.2%</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between mb-1"><span>Status:</span><span className="text-green-600">Conectado</span></div>
+                      <div className="flex justify-between mb-1"><span>Quota:</span><span className="text-blue-600">78%</span></div>
+                      <div className="flex justify-between mb-1"><span>Limite:</span><span className="text-orange-600">1M/dia</span></div>
+                      <div className="flex justify-between"><span>Reset:</span><span className="text-purple-600">6h</span></div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <button className="w-full px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
+                      Editar
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
