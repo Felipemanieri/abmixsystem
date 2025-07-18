@@ -856,9 +856,6 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                   alt="Abmix" 
                   className="h-10 w-auto mr-3"
                 />
-                <div className="w-10 h-10 bg-gradient-to-r from-teal-600 to-teal-700 rounded-xl flex items-center justify-center">
-                  <Settings className="w-6 h-6 text-white" />
-                </div>
                 <span className="ml-3 text-xl font-bold text-gray-900 dark:text-white dark:text-white">Portal Implantação</span>
               </div>
             </div>
