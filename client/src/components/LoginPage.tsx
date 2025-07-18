@@ -237,7 +237,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-600 dark:text-slate-200" />
                   <input
                     type="email"
                     required
@@ -255,7 +255,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ portal, onLogin, onBack }) => {
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-600 dark:text-slate-200" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
