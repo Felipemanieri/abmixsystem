@@ -936,14 +936,14 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <div className="flex space-x-2">
             <button
               onClick={() => setShowAddTargetForm(true)}
-              className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
             >
               <Plus size={16} />
               Meta Individual
             </button>
             <button
               onClick={() => setShowAddTeamTargetForm(true)}
-              className="bg-green-600 text-white bg-green-800 dark:bg-green-900 px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2"
             >
               <Plus size={16} />
               Meta da Equipe
@@ -1169,7 +1169,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddTarget}
-                className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Salvar Meta
               </button>
@@ -1264,7 +1264,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddTeamTarget}
-                className="px-4 py-2 bg-green-600 text-white bg-green-800 dark:bg-green-900 rounded-lg hover:bg-green-700"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 Salvar Meta
               </button>
@@ -1698,7 +1698,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     setSelectedVendorForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
                 >
                   <option className="text-black bg-white" value="">Selecione um vendedor</option>
                   <option className="text-black bg-white" value="all">Todos os Vendedores</option>
@@ -1715,7 +1715,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="date"
                   value={dataInicio}
                   onChange={(e) => setDataInicio(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
                 />
               </div>
 
@@ -1726,7 +1726,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   type="date"
                   value={dataFim}
                   onChange={(e) => setDataFim(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
                 />
               </div>
 
@@ -1739,7 +1739,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     setSelectedStatusForChart(e.target.value);
                     setShowChart(true);
                   }}
-                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
                 >
                   <option className="text-black bg-white" value="">Selecione um status</option>
                   <option className="text-black bg-white" value="all">Todos os Status</option> className="text-white"
@@ -1760,7 +1760,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   setDataFim('');
                   setShowChart(false);
                 }}
-                className="px-4 py-2 bg-gray-700 text-white hover:bg-gray-600 text-sm border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:bg-gray-700"
+                className="px-4 py-2 bg-gray-600 text-white hover:bg-gray-500 text-sm border border-gray-300 rounded-md"
               >
                 Limpar Filtros
               </button>
@@ -2024,7 +2024,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </button>
                 <button
                   onClick={exportReport}
-                  className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Exportar
                 </button>
@@ -2068,7 +2068,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 </button>
                 <button
                   onClick={saveCurrentFilter}
-                  className="px-4 py-2 bg-green-600 text-white bg-green-800 dark:bg-green-900 rounded-lg hover:bg-green-700"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                 >
                   Salvar
                 </button>
@@ -2221,7 +2221,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.tipo}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, tipo: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option className="text-black bg-white" value="completo">📊 Relatório Completo</option>
                     <option className="text-black bg-white" value="individual">👤 Por Vendedor Individual</option>
@@ -2236,7 +2236,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.vendedor}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, vendedor: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option className="text-black bg-white" value="">Todos os Vendedores</option>
                     {uniqueVendors && uniqueVendors.map(vendor => (
@@ -2250,7 +2250,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                   <select
                     value={reportFilters.status}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                   >
                     <option className="text-black bg-white" value="">Todos os Status</option> className="text-white"
                     {STATUS_CONFIG && Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2268,7 +2268,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataInicio}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataInicio: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                     placeholder="Exemplo"
                   />
                 </div>
@@ -2279,7 +2279,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                     type="date"
                     value={reportFilters.dataFim}
                     onChange={(e) => setReportFilters(prev => ({ ...prev, dataFim: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white focus:outline-none focus:ring-1 focus:ring-blue-400"
                     placeholder="Exemplo"
                   />
                 </div>
@@ -2297,7 +2297,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium text-blue-700 dark:text-white bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded hover:bg-blue-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-blue-600 text-white border border-blue-200 rounded hover:bg-blue-100 transition-colors"
                     >
                       7 dias
                     </button>
@@ -2311,7 +2311,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium text-green-700 dark:text-white bg-green-50 dark:bg-green-900 border border-green-200 rounded hover:bg-green-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-green-600 text-white border border-green-200 rounded hover:bg-green-100 transition-colors"
                     >
                       15 dias
                     </button>
@@ -2325,7 +2325,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                           dataFim: hoje.toISOString().split('T')[0]
                         }));
                       }}
-                      className="flex-1 px-2 py-2 text-xs font-medium text-purple-700 dark:text-white bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded hover:bg-purple-100 transition-colors"
+                      className="flex-1 px-2 py-2 text-xs font-medium bg-purple-600 text-white border border-purple-200 rounded hover:bg-purple-100 transition-colors"
                     >
                       30 dias
                     </button>
@@ -2357,7 +2357,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       window.open(sheetsUrl, '_blank');
                       showNotification('Abrindo Google Sheets com dados filtrados', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-green-700 dark:text-white bg-green-50 dark:bg-green-900 border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-green-600 text-white border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
                   >
                     📋 Abrir Google Sheets
                   </button>
@@ -2379,7 +2379,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       document.body.removeChild(link);
                       showNotification('Arquivo Excel baixado com sucesso!', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-blue-700 dark:text-white bg-blue-50 dark:bg-blue-900 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-blue-600 text-white border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                   >
                     💾 Salvar em Excel
                   </button>
@@ -2391,7 +2391,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                       window.open(driveUrl, '_blank');
                       showNotification('Abrindo Google Drive - Pasta Propostas', 'success');
                     }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-purple-700 dark:text-white bg-purple-50 dark:bg-purple-900 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-purple-600 text-white border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
                   >
                     📁 Abrir Google Drive
                   </button>
@@ -2533,7 +2533,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
           <h3 className="text-white dark:text-white lg font-semibold">Gerenciar Equipe</h3>
           <button
             onClick={() => setShowAddVendorForm(true)}
-            className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
           >
             <UserPlus size={16} />
             Adicionar Vendedor
@@ -2645,7 +2645,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               </button>
               <button
                 onClick={handleAddVendor}
-                className="px-4 py-2 bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Adicionar
               </button>
@@ -2690,7 +2690,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <select
                 value={filterVendor}
                 onChange={(e) => setFilterVendor(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
               >
                 <option className="text-black bg-white" value="">Todos os vendedores</option>
                 {vendors.map(vendor => (
@@ -2704,7 +2704,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
               >
                 <option className="text-black bg-white" value="">Todos os status</option>
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -2719,7 +2719,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
                 type="date"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-700 text-white text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: white; background-color: #1f2937;"
                 placeholder="Exemplo"
               />
             </div>
@@ -3019,7 +3019,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg w-full max-w-7xl h-[90vh] overflow-y-auto">
             {/* Header do Modal */}
-            <div className="bg-blue-600 text-white bg-blue-800 dark:bg-blue-900 p-4 rounded-t-lg flex justify-between items-center">
+            <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <span className="text-white dark:text-white 2xl">👁️</span>
                 <h2 className="text-white dark:text-white xl font-bold">Visualizar Relatório - EXCEL</h2>
