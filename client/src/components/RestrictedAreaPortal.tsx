@@ -952,6 +952,157 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
 
+          {/* Configurações Avançadas Google APIs */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Configurações Avançadas Google APIs</h4>
+            </div>
+            
+            {/* Google Drive - 3 configurações */}
+            <div className="mb-6">
+              <h5 className="font-medium text-blue-700 dark:text-blue-300 mb-3 flex items-center">
+                <HardDrive className="w-4 h-4 mr-2" />
+                Google Drive
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Upload de Arquivos</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="realtime">Tempo Real (atual)</option>
+                    <option value="5">5 segundos</option>
+                    <option value="10">10 segundos</option>
+                    <option value="30">30 segundos</option>
+                    <option value="60">1 minuto</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Organização de Pastas</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="60">1 minuto (atual)</option>
+                    <option value="30">30 segundos</option>
+                    <option value="180">3 minutos</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Sincronização de Metadados</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                    <option value="300">5 minutos (atual)</option>
+                    <option value="60">1 minuto</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="10800">3 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Google Sheets - 3 configurações */}
+            <div className="mb-6">
+              <h5 className="font-medium text-green-700 dark:text-green-300 mb-3 flex items-center">
+                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                Google Sheets
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Atualização de Dados</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="manual">Manual (atual)</option>
+                    <option value="60">1 minuto</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="10800">3 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Backup Automático</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="86400">24 horas (atual)</option>
+                    <option value="43200">12 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="10800">3 horas</option>
+                    <option value="3600">1 hora</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Validação de Fórmulas</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500">
+                    <option value="1800">30 minutos (atual)</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="7200">2 horas</option>
+                    <option value="10800">3 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Google Forms e Google Docs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 className="font-medium text-purple-700 dark:text-purple-300 mb-3 flex items-center">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Google Forms
+                </h5>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Coleta de Respostas</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500">
+                    <option value="300">5 minutos (atual)</option>
+                    <option value="60">1 minuto</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="10800">3 horas</option>
+                    <option value="21600">6 horas</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <h5 className="font-medium text-orange-700 dark:text-orange-300 mb-3 flex items-center">
+                  <FileCheck className="w-4 h-4 mr-2" />
+                  Google Docs
+                </h5>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Geração de Documentos</label>
+                  <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
+                    <option value="manual">Manual (atual)</option>
+                    <option value="realtime">Tempo Real</option>
+                    <option value="60">1 minuto</option>
+                    <option value="300">5 minutos</option>
+                    <option value="600">10 minutos</option>
+                    <option value="900">15 minutos</option>
+                    <option value="1800">30 minutos</option>
+                    <option value="3600">1 hora</option>
+                    <option value="disabled">Desabilitado</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Integrações Externas */}
           <div className="bg-teal-50 dark:bg-teal-900 rounded-lg p-6 mb-6">
             <div className="flex items-center mb-4">
