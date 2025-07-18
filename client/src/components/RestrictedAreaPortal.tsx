@@ -64,10 +64,10 @@ import {
 } from 'lucide-react';
 import GoogleDriveSetup from './GoogleDriveSetup';
 import IntegrationGuide from './IntegrationGuide';
-import UserManagementDashboard from './UserManagementDashboard';
+import SimpleUserManagement from './SimpleUserManagement';
 import SystemFooter from './SystemFooter';
 
-import UnifiedUserManagement from './UnifiedUserManagement';
+import SimplePasswordManagement from './SimplePasswordManagement';
 import PlanilhaViewer from './PlanilhaViewer';
 import LogsViewer from './LogsViewer';
 import InternalMessage from './InternalMessage';
@@ -284,10 +284,10 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
         )}
 
         {/* Aba Gestão Usuários */}
-        {activeTab === 'usuarios' && <UserManagementDashboard />}
+        {activeTab === 'usuarios' && <SimpleUserManagement />}
 
         {/* Aba Controle Senhas */}
-        {activeTab === 'senhas' && <UnifiedUserManagement />}
+        {activeTab === 'senhas' && <SimplePasswordManagement />}
 
         {/* Aba Visualizar Planilha */}
         {activeTab === 'planilha' && <PlanilhaViewer />}
