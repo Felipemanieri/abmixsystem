@@ -193,7 +193,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
         >
           <MessageSquare className="w-4 h-4" />
           {userRole && (
-            <span className="absolute -top-1 -right-1 bg-red-50 dark:bg-red-9000 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-red-500 dark:bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               2
             </span>
           )}
