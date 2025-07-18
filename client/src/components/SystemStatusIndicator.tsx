@@ -3,45 +3,18 @@ import { Wifi, WifiOff } from 'lucide-react';
 
 export default function SystemStatusIndicator() {
   const [isOnline, setIsOnline] = useState(true);
-  const [lastCheck, setLastCheck] = useState<Date>(new Date());
 
   useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const response = await fetch('/api/proposals', { 
-          method: 'HEAD',
-          cache: 'no-cache'
-        });
-        setIsOnline(response.ok);
-        setLastCheck(new Date());
-      } catch {
-        setIsOnline(false);
-        setLastCheck(new Date());
-      }
-    };
+    // Simplificado - apenas verifica o status do navegador
+    setIsOnline(navigator.onLine);
 
-    // Verificação inicial
-    checkStatus();
-
-    // Verificação a cada 10 segundos
-    const interval = setInterval(checkStatus, 10000);
-
-    // Listeners para eventos de rede
-    const handleOnline = () => {
-      setIsOnline(true);
-      setLastCheck(new Date());
-    };
-    
-    const handleOffline = () => {
-      setIsOnline(false);
-      setLastCheck(new Date());
-    };
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
     return () => {
-      clearInterval(interval);
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
