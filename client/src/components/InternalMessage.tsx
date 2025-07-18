@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Send, User, MessageSquare, Clock, Search, Filter, Download, FileText, Trash2, Paperclip, UserPlus } from 'lucide-react';
+import DiscreteNotification from './DiscreteNotification';
 
 interface Message {
   id: string;
@@ -48,6 +49,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
   const [unreadCount, setUnreadCount] = useState(0);
   const [dragActive, setDragActive] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   // Sistema de mensagens limpo - FORÇAR LIMPEZA TOTAL
   const [messages, setMessages] = useState<Message[]>([]);
@@ -210,7 +213,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
 
   const handleSendMessage = () => {
     if (!composeData.recipient || !composeData.subject || !composeData.content) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
+      setNotificationMessage('Por favor, preencha todos os campos obrigatórios.');
+      setShowNotification(true);
       return;
     }
 
@@ -240,12 +244,14 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
       
       console.log(`Mensagem geral enviada para ${recipients.length} usuários`);
-      alert(`Mensagem geral enviada para ${recipients.length} usuários!`);
+      setNotificationMessage(`Mensagem geral enviada para ${recipients.length} usuários!`);
+      setShowNotification(true);
     } else {
       // Para mensagem individual, enviar APENAS para a pessoa escolhida
       const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
       if (!selectedUser) {
-        alert('Destinatário não encontrado.');
+        setNotificationMessage('Destinatário não encontrado.');
+        setShowNotification(true);
         return;
       }
 
@@ -271,7 +277,8 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
 
       console.log(`APENAS ${composeData.recipient} foi notificado`);
-      alert('Mensagem enviada apenas para a pessoa escolhida!');
+      setNotificationMessage('Mensagem enviada com sucesso!');
+      setShowNotification(true);
     }
 
     setComposeData({
@@ -753,6 +760,14 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
           </div>
         </div>
       </div>
+      
+      {/* Notificação Discreta Verde */}
+      <DiscreteNotification
+        message={notificationMessage}
+        type="success"
+        show={showNotification}
+        onClose={() => setShowNotification(false)}
+      />
     </div>
   );
 };

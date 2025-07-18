@@ -2902,7 +2902,7 @@ export function SupervisorPortal({ user, onLogout }: SupervisorPortalProps) {
               onClick={() => setShowNotifications(!showNotifications)}
               className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative"
             >
-              <Bell size={20} />
+              {/* SINO REMOVIDO */}
               {/* NOTIFICAÇÕES DESABILITADAS - SEM CONTADOR */}
             </button>
             

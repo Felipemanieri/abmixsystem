@@ -798,7 +798,7 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 text-gray-400 dark:text-gray-500 dark:text-white hover:text-gray-500 dark:text-white dark:text-gray-500 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
-                <Bell className="h-6 w-6" />
+                {/* SINO REMOVIDO */}
                 {/* NOTIFICAÇÕES DESABILITADAS - SEM CONTADOR */}
               </button>
               

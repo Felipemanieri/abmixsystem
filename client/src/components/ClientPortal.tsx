@@ -559,7 +559,7 @@ const ClientPortal: React.FC<ClientPortalProps> = ({ user, onLogout }) => {
                 className="relative p-2 text-gray-600 dark:text-white hover:text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                <Bell className="w-5 h-5" />
+                {/* SINO REMOVIDO */}
                 {/* CONTADOR DESABILITADO */}
               </button>
               

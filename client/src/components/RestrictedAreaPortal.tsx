@@ -1184,7 +1184,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   onClick={() => setShowNotifications(true)}
                   className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full transition-colors"
                 >
-                  <Bell className="w-5 h-5" />
+                  {/* SINO REMOVIDO */}
                   {/* NOTIFICAÇÕES DESABILITADAS */}
                 </button>
               </div>

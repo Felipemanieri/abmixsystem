@@ -868,7 +868,7 @@ const ImplantacaoPortal: React.FC<ImplantacaoPortalProps> = ({ user, onLogout })
                 className="relative p-2 text-gray-600 dark:text-white dark:text-gray-500 dark:text-white hover:text-gray-900 dark:text-white dark:text-white hover:bg-gray-100 dark:bg-gray-700 rounded-full transition-colors"
                 onClick={() => setShowNotifications(!showNotifications)}
               >
-                <Bell className="w-5 h-5" />
+                {/* SINO REMOVIDO */}
                 {/* NOTIFICAÇÕES DESABILITADAS */}
               </button>
               
