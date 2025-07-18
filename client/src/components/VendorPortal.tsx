@@ -1233,16 +1233,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
           </div>
         )}
 
-        {/* Botão Adicionar */}
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={adicionarCotacao}
-            className="flex items-center px-6 py-2 bg-blue-800 dark:bg-blue-900 text-white dark:bg-gray-800 dark:bg-gray-9000 dark:text-white rounded-md hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Adicionar Cotação
-          </button>
-        </div>
+
       </div>
 
       {/* Lista de Cotações */}
