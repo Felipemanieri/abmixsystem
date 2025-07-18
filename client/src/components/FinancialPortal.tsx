@@ -793,9 +793,9 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -805,8 +805,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
                 className="h-10 w-auto mr-3"
               />
               <div className="ml-4">
-                <h1 className="text-xl font-semibold text-gray-900">Portal Financeiro</h1>
-                <p className="text-sm text-gray-500">Gestão financeira e análises</p>
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Portal Financeiro</h1>
+                <p className="text-sm text-gray-500 dark:text-gray-300">Gestão financeira e análises</p>
               </div>
             </div>
             

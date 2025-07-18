@@ -1049,17 +1049,17 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <Lock className="w-8 h-8 text-red-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Área Restrita</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Área Restrita</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Bem-vindo, {user.name}</span>
+              <span className="text-gray-600 dark:text-gray-300">Bem-vindo, {user.name}</span>
               <button
                 onClick={onLogout}
                 className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
@@ -1073,7 +1073,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       </header>
 
       {/* Tabs Navigation */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8">
             {tabs.map((tab) => {

@@ -177,30 +177,49 @@ function App() {
 
   // If accessing client proposal via direct link
   if (clientProposalToken) {
-    return <ClientProposalView token={clientProposalToken} />;
+    return (
+      <ThemeProvider>
+        <ThemeToggle />
+        <ClientProposalView token={clientProposalToken} />
+      </ThemeProvider>
+    );
   }
 
   // Se não está logado e não está na home, mostrar login
   if (!currentUser && currentPortal !== 'home') {
-    return <LoginPage portal={currentPortal} onLogin={handleLogin} onBack={() => setCurrentPortal('home')} />;
+    return (
+      <ThemeProvider>
+        <ThemeToggle />
+        <LoginPage portal={currentPortal} onLogin={handleLogin} onBack={() => setCurrentPortal('home')} />
+      </ThemeProvider>
+    );
   }
 
   // Se está logado, mostrar o portal correspondente
   if (currentUser) {
-    switch (currentUser.role) {
-      case 'vendor':
-        return <VendorPortal user={currentUser} onLogout={handleLogout} />;
-      case 'client':
-        return <ClientPortal user={currentUser} onLogout={handleLogout} />;
-      case 'financial':
-        return <FinancialPortal user={currentUser} onLogout={handleLogout} />;
-      case 'implementation':
-        return <ImplantacaoPortal user={currentUser} onLogout={handleLogout} />;
-      case 'supervisor':
-        return <SupervisorPortal user={currentUser} onLogout={handleLogout} />;
-      case 'restricted':
-        return <RestrictedAreaPortal user={currentUser} onLogout={handleLogout} />;
-    }
+    return (
+      <ThemeProvider>
+        <ThemeToggle />
+        {(() => {
+          switch (currentUser.role) {
+            case 'vendor':
+              return <VendorPortal user={currentUser} onLogout={handleLogout} />;
+            case 'client':
+              return <ClientPortal user={currentUser} onLogout={handleLogout} />;
+            case 'financial':
+              return <FinancialPortal user={currentUser} onLogout={handleLogout} />;
+            case 'implementation':
+              return <ImplantacaoPortal user={currentUser} onLogout={handleLogout} />;
+            case 'supervisor':
+              return <SupervisorPortal user={currentUser} onLogout={handleLogout} />;
+            case 'restricted':
+              return <RestrictedAreaPortal user={currentUser} onLogout={handleLogout} />;
+            default:
+              return null;
+          }
+        })()}
+      </ThemeProvider>
+    );
   }
 
   // Página inicial com seleção de portais
