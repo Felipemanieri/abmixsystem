@@ -156,7 +156,7 @@ function App() {
     <ThemeProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-slate-800 dark:bg-slate-900 shadow-lg">
+      <header className="bg-white dark:bg-slate-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -169,7 +169,7 @@ function App() {
               </div>
               <button
                 onClick={() => setCurrentPortal('restricted')}
-                className="flex items-center text-sm font-medium text-white hover:text-teal-300 transition-colors"
+                className="flex items-center text-sm font-medium text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 transition-colors"
               >
                 <Lock className="w-4 h-4 mr-1.5" />
                 Área Restrita
@@ -177,9 +177,9 @@ function App() {
             </div>
             <div className="flex items-center space-x-6">
               <div className="hidden md:flex items-center space-x-6">
-                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Sobre</a>
-                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Suporte</a>
-                <a href="#" className="text-white hover:text-teal-300 font-medium transition-colors">Atualizar</a>
+                <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Sobre</a>
+                <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Suporte</a>
+                <a href="#" className="text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors">Atualizar</a>
               </div>
               <ThemeToggle />
             </div>

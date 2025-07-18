@@ -33,7 +33,7 @@ export default function ThemeToggle() {
 
   return (
     <div className="flex items-center space-x-3">
-      <span className="text-sm text-white font-medium">Light</span>
+      <span className="text-sm text-gray-700 dark:text-white font-medium">Light</span>
       
       <button
         onClick={toggleTheme}
@@ -57,7 +57,7 @@ export default function ThemeToggle() {
         </div>
       </button>
       
-      <span className="text-sm text-white font-medium">Dark</span>
+      <span className="text-sm text-gray-700 dark:text-white font-medium">Dark</span>
     </div>
   );
 }
