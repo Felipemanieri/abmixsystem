@@ -1071,7 +1071,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       <div className="space-y-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center mb-6">
-            <Settings className="w-6 h-6 text-gray-600 dark:text-white mr-3" />
+            <Settings className="w-6 h-6 text-gray-600 dark:text-gray-300 mr-3" />
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">Configurações do Sistema</h3>
           </div>
 
@@ -1080,28 +1080,28 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <h4 className="font-medium text-gray-900 dark:text-white">Status do Sistema</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-white">Servidor</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Servidor</span>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
                     <span className="text-sm text-green-600 dark:text-green-400">Online</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-white">Banco de Dados</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Banco de Dados</span>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
                     <span className="text-sm text-green-600 dark:text-green-400">Conectado</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-white">Google APIs</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Google APIs</span>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
                     <span className="text-sm text-green-600 dark:text-green-400">Funcionando</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-white">Backup</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Backup</span>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-1" />
                     <span className="text-sm text-green-600 dark:text-green-400">Atualizado</span>
@@ -1114,19 +1114,19 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               <h4 className="font-medium text-gray-900 dark:text-white">Informações do Sistema</h4>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-white">Versão:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Versão:</span>
                   <span className="text-gray-900 dark:text-white">v2.1.0</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-white">Última atualização:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Última atualização:</span>
                   <span className="text-gray-900 dark:text-white">16/01/2025</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-white">Usuários ativos:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Usuários ativos:</span>
                   <span className="text-gray-900 dark:text-white">12</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-white">Propostas totais:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Propostas totais:</span>
                   <span className="text-gray-900 dark:text-white">247</span>
                 </div>
               </div>
