@@ -113,8 +113,11 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
   // Estados para modais
   const [showDriveConfigModal, setShowDriveConfigModal] = useState(false);
   const [showSheetsConfigModal, setShowSheetsConfigModal] = useState(false);
+  const [showFormsConfigModal, setShowFormsConfigModal] = useState(false);
+  const [showDocsConfigModal, setShowDocsConfigModal] = useState(false);
   const [showWhatsAppConfigModal, setShowWhatsAppConfigModal] = useState(false);
   const [showBackupConfigModal, setShowBackupConfigModal] = useState(false);
+  const [showApiConfigModal, setShowApiConfigModal] = useState(false);
   const [showDriveManagementModal, setShowDriveManagementModal] = useState(false);
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
@@ -1088,41 +1091,97 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
 
           {/* Google Sheets - Múltiplas Planilhas */}
           <div className="bg-green-50 dark:bg-green-900 rounded-lg p-6 mb-6">
-            <div className="flex items-center mb-4">
-              <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Sheets - Integrações</h4>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <FileSpreadsheet className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Sheets - Integrações</h4>
+              </div>
+              <div className="flex space-x-3">
+                <button 
+                  onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
+                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Abrir Sheets
+                </button>
+                <button 
+                  onClick={() => setShowSheetsConfigModal(true)}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Configurações
+                </button>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <FileSpreadsheet className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-green-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Planilha Operacional</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Dados dos clientes e propostas</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">47</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Planilhas Ativas</div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowSheetsConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <TableProperties className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-green-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Planilha Financeiro</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Controle financeiro e pagamentos</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">2,847</div>
-                <div className="text-sm text-blue-600 dark:text-blue-400">Linhas Preenchidas</div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowSheetsConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <RefreshCw className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-green-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Planilha Relatórios</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Relatórios e análises</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">98.3%</div>
-                <div className="text-sm text-purple-600 dark:text-purple-400">Sync Rate</div>
-              </div>
-              
-              <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Clock className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://docs.google.com/spreadsheets/', '_blank')}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowSheetsConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
                 </div>
-                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">2.1s</div>
-                <div className="text-sm text-orange-600 dark:text-orange-400">Tempo Médio</div>
               </div>
             </div>
           </div>
@@ -1130,48 +1189,146 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
           {/* Google Forms e Google Docs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Forms - Integrações</h4>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <FileText className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">23</div>
-                  <div className="text-sm text-purple-600 dark:text-purple-400">Forms Ativos</div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
+                  <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Forms - Integrações</h4>
                 </div>
-                
-                <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <MessageSquare className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
+                    className="flex items-center px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors text-sm"
+                  >
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    Abrir Forms
+                  </button>
+                  <button 
+                    onClick={() => setShowFormsConfigModal(true)}
+                    className="flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    <Settings className="w-3 h-3 mr-1" />
+                    Config
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full mr-3 bg-purple-400"></div>
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">Formulário Clientes</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Coleta de dados dos clientes</div>
+                    </div>
                   </div>
-                  <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">1,247</div>
-                  <div className="text-sm text-indigo-600 dark:text-indigo-400">Respostas</div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
+                      className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button 
+                      onClick={() => setShowFormsConfigModal(true)}
+                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full mr-3 bg-purple-400"></div>
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">Formulário Feedback</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Avaliação e sugestões</div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => window.open('https://docs.google.com/forms/', '_blank')}
+                      className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button 
+                      onClick={() => setShowFormsConfigModal(true)}
+                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <FileCheck className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Docs - Integrações</h4>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <FileCheck className="w-8 h-8 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">384</div>
-                  <div className="text-sm text-orange-600 dark:text-orange-400">Documentos</div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <FileCheck className="w-5 h-5 text-orange-600 dark:text-orange-400 mr-2" />
+                  <h4 className="font-medium text-gray-900 dark:text-white text-lg">Google Docs - Integrações</h4>
                 </div>
-                
-                <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <FileType className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://docs.google.com/document/', '_blank')}
+                    className="flex items-center px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors text-sm"
+                  >
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    Abrir Docs
+                  </button>
+                  <button 
+                    onClick={() => setShowDocsConfigModal(true)}
+                    className="flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    <Settings className="w-3 h-3 mr-1" />
+                    Config
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full mr-3 bg-orange-400"></div>
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">Template Proposta</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Modelo de proposta padrão</div>
+                    </div>
                   </div>
-                  <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">12</div>
-                  <div className="text-sm text-yellow-600 dark:text-yellow-400">Templates</div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => window.open('https://docs.google.com/document/', '_blank')}
+                      className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button 
+                      onClick={() => setShowDocsConfigModal(true)}
+                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full mr-3 bg-orange-400"></div>
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">Template Contrato</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">Modelo de contrato padrão</div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => window.open('https://docs.google.com/document/', '_blank')}
+                      className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button 
+                      onClick={() => setShowDocsConfigModal(true)}
+                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1179,82 +1336,171 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
 
           {/* Backup Automático */}
           <div className="bg-red-50 dark:bg-red-900 rounded-lg p-6 mb-6">
-            <div className="flex items-center mb-4">
-              <Database className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Backup Automático - Integrações</h4>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Database className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white text-lg">Backup Automático - Integrações</h4>
+              </div>
+              <div className="flex space-x-3">
+                <button 
+                  onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
+                  className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Abrir Backup
+                </button>
+                <button 
+                  onClick={() => setShowBackupConfigModal(true)}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Configurações
+                </button>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Database className="w-8 h-8 text-red-600 dark:text-red-400" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-red-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Backup Completo</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Backup completo do banco de dados</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">847</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Backups Realizados</div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowBackupConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-red-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Backup Incremental</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Backup apenas das mudanças</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">99.7%</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Taxa de Sucesso</div>
-              </div>
-              
-              <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <HardDrive className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://drive.google.com/drive/folders/backup', '_blank')}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowBackupConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
                 </div>
-                <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">24.8 GB</div>
-                <div className="text-sm text-blue-600 dark:text-blue-400">Espaço Backup</div>
-              </div>
-              
-              <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Clock className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">23h</div>
-                <div className="text-sm text-purple-600 dark:text-purple-400">Último Backup</div>
               </div>
             </div>
           </div>
 
           {/* API Google - Configurações Gerais */}
           <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-6">
-            <div className="flex items-center mb-4">
-              <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
-              <h4 className="font-medium text-gray-900 dark:text-white text-lg">API Google - Integrações Gerais</h4>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
+                <h4 className="font-medium text-gray-900 dark:text-white text-lg">API Google - Integrações Gerais</h4>
+              </div>
+              <div className="flex space-x-3">
+                <button 
+                  onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
+                  className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Abrir Console API
+                </button>
+                <button 
+                  onClick={() => setShowApiConfigModal(true)}
+                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Configurações
+                </button>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Globe className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-indigo-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">API Drive</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Gerenciamento de arquivos</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-indigo-900 dark:text-indigo-200">847,392</div>
-                <div className="text-sm text-indigo-600 dark:text-indigo-400">Requisições/Mês</div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
+                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowApiConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-indigo-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">API Sheets</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Gerenciamento de planilhas</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-green-900 dark:text-green-200">99.8%</div>
-                <div className="text-sm text-green-600 dark:text-green-400">Taxa de Sucesso</div>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
+                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowApiConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
+                </div>
               </div>
-              
-              <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Zap className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 rounded-full mr-3 bg-indigo-400"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">API OAuth</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">Autenticação e autorização</div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-orange-900 dark:text-orange-200">1.2s</div>
-                <div className="text-sm text-orange-600 dark:text-orange-400">Tempo Médio</div>
-              </div>
-              
-              <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => window.open('https://console.cloud.google.com/apis/', '_blank')}
+                    className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                  >
+                    Abrir
+                  </button>
+                  <button 
+                    onClick={() => setShowApiConfigModal(true)}
+                    className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                  >
+                    Editar
+                  </button>
                 </div>
-                <div className="text-2xl font-bold text-red-900 dark:text-red-200">0.2%</div>
-                <div className="text-sm text-red-600 dark:text-red-400">Taxa de Erro</div>
               </div>
             </div>
           </div>
@@ -2256,6 +2502,156 @@ export default function RestrictedAreaPortal({ onLogout }: RestrictedAreaPortalP
                   setShowBackupConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Configuração Google Forms */}
+      {showFormsConfigModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center mb-4">
+              <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-3" />
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Forms</h3>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">URL do Formulário</label>
+                <input
+                  type="url"
+                  placeholder="https://forms.google.com/..."
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tipo de Formulário</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500">
+                  <option value="cliente">Formulário Cliente</option>
+                  <option value="feedback">Formulário Feedback</option>
+                  <option value="avaliacao">Formulário Avaliação</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowFormsConfigModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  alert('Formulário configurado com sucesso!');
+                  setShowFormsConfigModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-purple-600 text-white dark:bg-purple-600 dark:text-white rounded-lg hover:bg-purple-700 dark:hover:bg-purple-500 transition-colors"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Configuração Google Docs */}
+      {showDocsConfigModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center mb-4">
+              <FileCheck className="w-6 h-6 text-orange-600 dark:text-orange-400 mr-3" />
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar Google Docs</h3>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">URL do Documento</label>
+                <input
+                  type="url"
+                  placeholder="https://docs.google.com/document/..."
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tipo de Template</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
+                  <option value="proposta">Template Proposta</option>
+                  <option value="contrato">Template Contrato</option>
+                  <option value="relatorio">Template Relatório</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowDocsConfigModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  alert('Template configurado com sucesso!');
+                  setShowDocsConfigModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-orange-600 text-white dark:bg-orange-600 dark:text-white rounded-lg hover:bg-orange-700 dark:hover:bg-orange-500 transition-colors"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Configuração API Google */}
+      {showApiConfigModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center mb-4">
+              <Globe className="w-6 h-6 text-indigo-600 dark:text-indigo-400 mr-3" />
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Configurar API Google</h3>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">API Key</label>
+                <input
+                  type="password"
+                  placeholder="Chave da API Google"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tipo de API</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="drive">Google Drive API</option>
+                  <option value="sheets">Google Sheets API</option>
+                  <option value="oauth">Google OAuth API</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowApiConfigModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  alert('API configurada com sucesso!');
+                  setShowApiConfigModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-indigo-600 text-white dark:bg-indigo-600 dark:text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-500 transition-colors"
               >
                 Salvar
               </button>
