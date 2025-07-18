@@ -33,13 +33,13 @@ export default function ThemeToggle() {
 
   return (
     <div className="flex items-center space-x-3">
-      <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Light</span>
+      <span className="text-sm text-white font-medium">Light</span>
       
       <button
         onClick={toggleTheme}
-        className="relative w-12 h-6 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+        className="relative w-12 h-6 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
         style={{
-          backgroundColor: theme === 'light' ? '#6B7280' : '#059669'
+          backgroundColor: theme === 'light' ? '#6B7280' : '#14B8A6'
         }}
       >
         {/* Toggle circle */}
@@ -57,7 +57,7 @@ export default function ThemeToggle() {
         </div>
       </button>
       
-      <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Dark</span>
+      <span className="text-sm text-white font-medium">Dark</span>
     </div>
   );
 }

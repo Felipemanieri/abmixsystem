@@ -163,12 +163,12 @@ function App() {
                 <img 
                   src="/65be871e-f7a6-4f31-b1a9-cd0729a73ff8 copy copy.png" 
                   alt="Abmix" 
-                  className="h-8 w-auto"
+                  className="h-10 w-auto"
                 />
               </div>
               <button
                 onClick={() => setCurrentPortal('restricted')}
-                className="flex items-center px-3 py-1.5 text-sm font-medium text-white bg-slate-700 hover:bg-slate-600 rounded-md transition-colors"
+                className="flex items-center text-sm font-medium text-white hover:text-teal-300 transition-colors"
               >
                 <Lock className="w-4 h-4 mr-1.5" />
                 Área Restrita
