@@ -47,35 +47,9 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
     attachments: [] as File[]
   });
   const [unreadCount, setUnreadCount] = useState(0);
-  const [dragActive, setDragActive] = useState(false);
 
   // Sistema de mensagens limpo - sem dados demo
   const [messages, setMessages] = useState<Message[]>([]);
-
-  // Funções de drag and drop para anexos
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const novosArquivos = Array.from(e.dataTransfer.files);
-      setComposeData(prev => ({
-        ...prev,
-        attachments: [...prev.attachments, ...novosArquivos]
-      }));
-    }
-  };
   
   // Sistema de detecção automática de usuários do banco de dados
   const [availableUsers, setAvailableUsers] = useState<User[]>([]);
@@ -224,10 +198,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
   });
 
   const handleSendMessage = () => {
-    console.log("Tentando enviar mensagem:", composeData);
-    
     if (!composeData.recipient || !composeData.subject || !composeData.content) {
-      console.log("Campos obrigatórios não preenchidos:", { recipient: composeData.recipient, subject: composeData.subject, content: composeData.content });
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -561,23 +532,13 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Anexos
                   </label>
-                  <div 
-                    className={`border-2 border-dashed rounded-lg p-4 transition-colors ${
-                      dragActive 
-                        ? 'border-gray-500 bg-gray-50 dark:bg-gray-800' 
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-                    }`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  >
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4">
                     <div className="text-center">
                       <label className="cursor-pointer">
                         <div className="flex flex-col items-center">
                           <Paperclip className="w-8 h-8 text-gray-400 dark:text-gray-500 mb-2" />
                           <span className="text-sm text-gray-600 dark:text-gray-400">
-                            Clique para anexar arquivos ou arraste aqui
+                            Clique para anexar arquivos
                           </span>
                         </div>
                         <input
@@ -626,10 +587,7 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
                       Cancelar
                     </button>
                     <button
-                      onClick={() => {
-                        console.log("Botão enviar clicado");
-                        handleSendMessage();
-                      }}
+                      onClick={handleSendMessage}
                       className="flex items-center px-4 py-2 text-sm text-white bg-gray-600 dark:bg-gray-700 rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
                     >
                       <Send className="w-4 h-4 mr-2" />
