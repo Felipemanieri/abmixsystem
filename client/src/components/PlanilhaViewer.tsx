@@ -310,7 +310,7 @@ export default function PlanilhaViewer() {
   return (
     <div className="space-y-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        {/* CABEÇALHO PRINCIPAL */}
+        {/* CABEÇALHO PRINCIPAL COMPLETO */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <FileSpreadsheet className="w-8 h-8 text-green-600 dark:text-green-400 mr-3" />
