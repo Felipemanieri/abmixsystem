@@ -1051,7 +1051,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
               >
                 <Settings className="w-4 h-4 mr-2" />
-                Editar
+                Configurações
               </button>
             </div>
           </div>
@@ -1129,7 +1129,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 }}
                 className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
               >
-                Editar
+                Configurações
               </button>
             </div>
           </div>
@@ -1158,7 +1158,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 }}
                 className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
               >
-                Editar
+                Configurações
               </button>
             </div>
           </div>
@@ -1187,7 +1187,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 }}
                 className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors"
               >
-                Editar
+                Configurações
               </button>
             </div>
           </div>
@@ -1224,7 +1224,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 }}
                 className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
               >
-                Editar
+                Configurações
               </button>
             </div>
           </div>
@@ -1261,7 +1261,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 }}
                 className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
               >
-                Editar
+                Configurações
               </button>
             </div>
           </div>
