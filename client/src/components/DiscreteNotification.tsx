@@ -47,16 +47,16 @@ const DiscreteNotification: React.FC<DiscreteNotificationProps> = ({
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 max-w-sm animate-slide-in-right">
-      <div className={`${getColors()} border rounded-lg p-3 shadow-sm flex items-center space-x-2`}>
-        <CheckCircle className="w-4 h-4 flex-shrink-0" />
+    <div className="fixed top-4 right-4 z-[9999] max-w-sm shadow-lg">
+      <div className={`${getColors()} border rounded-lg p-4 shadow-md flex items-center space-x-3 animate-in slide-in-from-right-2 duration-300`}>
+        <CheckCircle className="w-5 h-5 flex-shrink-0" />
         <span className="text-sm font-medium flex-1">{message}</span>
         <button
           onClick={() => {
             setIsVisible(false);
             if (onClose) onClose();
           }}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-gray-400 hover:text-gray-600 transition-colors ml-2"
         >
           <X className="w-4 h-4" />
         </button>

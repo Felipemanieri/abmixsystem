@@ -238,8 +238,9 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
       
       console.log(`✓ Mensagem geral enviada para ${recipients.length} usuários`);
-      setNotificationMessage(`Mensagem geral enviada para ${recipients.length} usuários!`);
+      setNotificationMessage(`✓ Mensagem geral enviada para ${recipients.length} usuários!`);
       setShowNotification(true);
+      console.log('Ativando notificação de mensagem geral');
     } else {
       // Para mensagem individual, enviar APENAS para a pessoa escolhida
       const selectedUser = availableUsers.find(user => user.name === composeData.recipient);
@@ -271,8 +272,9 @@ const InternalMessage: React.FC<InternalMessageProps> = ({ isOpen, onClose, curr
       localStorage.setItem('internalMessages', JSON.stringify(updatedMessages));
 
       console.log(`✓ Mensagem enviada para ${composeData.recipient}`);
-      setNotificationMessage('Mensagem enviada com sucesso!');
+      setNotificationMessage('✓ Mensagem enviada com sucesso!');
       setShowNotification(true);
+      console.log('Ativando notificação de sucesso');
     }
 
     setComposeData({
