@@ -1175,11 +1175,11 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
 
         <div className="space-y-8">
           {/* Dados do Contrato */}
-          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded-lg">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Building className="w-5 h-5 text-gray-300 mr-2" />
-                <h2 className="text-xl font-semibold text-white dark:text-white">
+                <Building className="w-5 h-5 text-gray-600 dark:text-gray-300 mr-2" />
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Dados do Contrato
                 </h2>
               </div>
@@ -1195,7 +1195,7 @@ const ProposalGenerator: React.FC<ProposalGeneratorProps> = ({ onBack, currentVe
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Nome da Empresa *
                 </label>
                 <input

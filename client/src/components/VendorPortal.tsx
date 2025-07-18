@@ -569,9 +569,9 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         </button>
       </div>
 
-      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-xl p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Módulo de Cotação</h1>
-        <p className="text-gray-300">Gere cotações personalizadas para seus clientes</p>
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+        <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Módulo de Cotação</h1>
+        <p className="text-gray-600 dark:text-gray-300">Gere cotações personalizadas para seus clientes</p>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6">
@@ -1624,8 +1624,8 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeView === 'dashboard' && (
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white dark:text-white mb-2">Dashboard do Vendedor</h1>
-            <p className="text-white dark:text-gray-500 dark:text-white">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard do Vendedor</h1>
+            <p className="text-gray-600 dark:text-gray-300">Gerencie suas propostas e acompanhe o progresso dos clientes</p>
           </div>
         )}
         
