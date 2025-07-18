@@ -782,10 +782,10 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
 
             {/* Botões de Upload */}
             <div className="grid grid-cols-3 gap-4 mb-4">
-              <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-gray-800 dark:bg-gray-900 border-2 border-blue-200 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors">
-                <FileText className="w-8 h-8 text-blue-300 dark:text-blue-200 dark:text-blue-400 mb-2" />
-                <span className="text-sm font-medium text-blue-300 dark:text-blue-200 dark:text-blue-400">Escolher Arquivo</span>
-                <span className="text-xs text-blue-500 dark:text-blue-400">Do computador/celular</span>
+              <label htmlFor="file-upload-cotacao" className="flex flex-col items-center justify-center p-6 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <FileText className="w-8 h-8 text-gray-600 dark:text-gray-400 mb-2" />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Escolher Arquivo</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">Do computador/celular</span>
               </label>
 
               <button
@@ -920,7 +920,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
         <div className="flex justify-end space-x-4 mt-8">
           <button
             onClick={limparFormulario}
-            className="flex items-center px-6 py-2 bg-gray-50 dark:bg-gray-900 dark:bg-gray-7000 text-white rounded-md hover:bg-gray-600 transition-colors"
+            className="flex items-center px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
           >
             <X className="w-4 h-4 mr-2" />
             Limpar Formulário
