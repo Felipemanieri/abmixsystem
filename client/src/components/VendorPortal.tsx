@@ -177,7 +177,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     {
       name: 'Propostas Ativas',
       value: realProposals?.length?.toString() || '0',
-      change: '',
+      change: '0',
       changeType: 'positive',
       icon: FileText,
       color: 'blue',
@@ -201,7 +201,7 @@ const VendorPortal: React.FC<VendorPortalProps> = ({ user, onLogout }) => {
     {
       name: 'Finalizadas',
       value: realProposals?.filter(p => p.clientCompleted)?.length?.toString() || '0',
-      change: '',
+      change: '0',
       changeType: 'positive',
       icon: CheckCircle,
       color: 'green',
