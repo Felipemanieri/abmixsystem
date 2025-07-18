@@ -850,6 +850,256 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
 
+          {/* Notificações e Alertas */}
+          <div className="bg-red-50 dark:bg-red-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Notificações e Alertas</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Notificações Push</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="realtime">Tempo Real (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Alertas de Status</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="30">30 segundos (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="180">3 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Verificação de Email</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500">
+                  <option value="600">10 minutos (atual)</option>
+                  <option value="300">5 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="43200">12 horas</option>
+                  <option value="86400">24 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Backup e Segurança */}
+          <div className="bg-indigo-50 dark:bg-indigo-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Backup e Segurança</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Backup Automático</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="86400">24 horas (atual)</option>
+                  <option value="43200">12 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="10800">3 horas</option>
+                  <option value="3600">1 hora</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Verificação de Segurança</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="3600">1 hora (atual)</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="43200">12 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Log de Auditoria</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+                  <option value="realtime">Tempo Real (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Integrações Externas */}
+          <div className="bg-teal-50 dark:bg-teal-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Link className="w-5 h-5 text-teal-600 dark:text-teal-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Integrações Externas</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Webhooks Make.com</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500">
+                  <option value="realtime">Tempo Real (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="10">10 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">APIs Terceiros</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500">
+                  <option value="600">10 minutos (atual)</option>
+                  <option value="300">5 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Sincronização WhatsApp</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500">
+                  <option value="manual">Manual (atual)</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="10800">3 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Monitoramento e Performance */}
+          <div className="bg-cyan-50 dark:bg-cyan-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Monitor className="w-5 h-5 text-cyan-600 dark:text-cyan-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Monitoramento e Performance</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Verificação de Status dos Portais</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500">
+                  <option value="30">30 segundos (atual)</option>
+                  <option value="60">1 minuto</option>
+                  <option value="180">3 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Análise de Performance</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500">
+                  <option value="300">5 minutos (atual)</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="3600">1 hora</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Métricas do Sistema</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500">
+                  <option value="60">1 minuto (atual)</option>
+                  <option value="30">30 segundos</option>
+                  <option value="180">3 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Automação e Tarefas */}
+          <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-6 mb-6">
+            <div className="flex items-center mb-4">
+              <Bot className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <h4 className="font-medium text-gray-900 dark:text-white text-lg">Automação e Tarefas</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tarefas Agendadas</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="3600">1 hora (atual)</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="900">15 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="10800">3 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="43200">12 horas</option>
+                  <option value="86400">24 horas</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Processamento de Filas</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="10">10 segundos (atual)</option>
+                  <option value="5">5 segundos</option>
+                  <option value="30">30 segundos</option>
+                  <option value="60">1 minuto</option>
+                  <option value="180">3 minutos</option>
+                  <option value="300">5 minutos</option>
+                  <option value="600">10 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Limpeza Automática</label>
+                <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500">
+                  <option value="86400">24 horas (atual)</option>
+                  <option value="43200">12 horas</option>
+                  <option value="21600">6 horas</option>
+                  <option value="10800">3 horas</option>
+                  <option value="3600">1 hora</option>
+                  <option value="1800">30 minutos</option>
+                  <option value="disabled">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           {/* Botões de Ação */}
           <div className="flex flex-wrap gap-3">
             <button
