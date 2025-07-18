@@ -858,15 +858,8 @@ const FinancialPortal: React.FC<FinancialPortalProps> = ({ user, onLogout }) => 
           <div className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/30 border border-gray-100 dark:border-gray-700 p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white dark:text-white mb-6">Área Financeira Completa</h2>
             <p className="text-gray-600 dark:text-white dark:text-gray-500 dark:text-white mb-4">
-              Esta área permite validar propostas, aprovar ou rejeitar documentos, e enviar para automação.
+              Esta área permite validar propostas, aprovar ou rejeitar documentos.
             </p>
-            <button
-              onClick={() => setShowAutomationModal(true)}
-              className="px-4 py-2 bg-purple-600 text-white dark:bg-purple-50 dark:bg-purple-9000 dark:text-white rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              <Zap className="w-4 h-4 mr-2 inline-block" />
-              Enviar Proposta para Automação
-            </button>
           </div>
         </div>
       )}

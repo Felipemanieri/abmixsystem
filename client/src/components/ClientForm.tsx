@@ -420,9 +420,9 @@ const ClientForm: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg p-6 text-white mb-6">
-        <h1 className="text-2xl font-bold mb-2">Formulário do Cliente</h1>
-        <p className="text-teal-100">Preencha seus dados pessoais e anexe os documentos</p>
+      <div className="bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg p-6 text-gray-700 dark:text-gray-300 mb-6 border border-gray-300 dark:border-gray-600">
+        <h1 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-200">Formulário do Cliente</h1>
+        <p className="text-gray-600 dark:text-gray-400">Preencha seus dados pessoais e anexe os documentos</p>
       </div>
 
       {/* Contract Info (Read Only) */}
