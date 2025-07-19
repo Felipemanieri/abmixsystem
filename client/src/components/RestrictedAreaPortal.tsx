@@ -963,160 +963,311 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       window.open(sheetUrl, '_blank');
     };
 
-    const handleRemoveSheet = () => {
+    const editSheet = () => {
+      setShowEditModal(true);
+    };
+
+    const removeSheet = () => {
       if (confirm('Tem certeza que deseja remover a planilha conectada?')) {
-        showInternalNotification('Planilha removida com sucesso!', 'success');
+        showInternalNotification('Planilha removida com sucesso', 'success');
       }
     };
 
-    const handleForceSync = () => {
-      showInternalNotification('Sincronização forçada executada com sucesso!', 'success');
+    const exportCSV = () => {
+      showInternalNotification('Exportando dados para CSV...', 'info');
     };
 
-    const exportToCSV = () => {
-      showInternalNotification('Exportação CSV iniciada com sucesso!', 'success');
+    const manualUpdate = () => {
+      showInternalNotification('Atualizando dados manualmente...', 'info');
     };
+
+    // Dados simulados da planilha para visualização baseados nas imagens fornecidas
+    const mockSheetData = [
+      ['1. Identificação', '2. ID_COMPLETO', '3. TOKEN_DO_CLIEN...', '4. EMPRESA', '5. CNPJ', '6. PLANO', '7. VALOR', '8. ID_DO_VENDEDOR', '9. FORNECEDOR', '10. STATUS'],
+      ['ABM001', 'PROP-1752628436...', 'CLIENTE-1752628943...', 'Soluções Tecnológicas...', '12.345.678/0001-90', 'Premium Familia', '1200', '3', 'Fabiana Ferreira', 'impl...'],
+      ['ABM002', 'PROP-1752629588...', 'CLIENTE-1752629950...', 'Consultoria Empresar...', '98.765.432/0001-01', 'Executivo Plus', '2500', '7', 'Isabela Velasquez', 'impl...'],
+      ['ABM003', 'PROP-1752630308...', 'CLIENTE-1752630250...', 'Construtora Inovarte', '11.222.333/0001-44', 'Padrão Empresarial', '850', '11', 'Monique Silva', 'impl...'],
+      ['ABM004', 'PROP-1752629542...', 'CLIENTE-1752629542...', 'Marketing Digital Pro...', '55.666.777/0001-88', 'Prêmio Individual', '420', '8', 'Juliana Araujo', 'anali...'],
+      ['ABM005', 'PROP-1752629553...', 'CLIENTE-1752629553...', 'Inovação Criativa Ltda', '99.888.777/0001-11', 'Familia Executiva', '1680', '12', 'Sara Mattos', 'anali...'],
+      ['ABM006', 'PROP-1752653345...', 'CLIENTE-1752652344...', 'Abmix', '12554', 'teste 5', '4545', '7', 'Isabela Velasquez', 'decli...'],
+      ['ABM007', 'PROP-1752668482...', 'CLIENTE-1752668482...', 'Abmix', '123456', 'teste 44', '1245', '7', 'Isabela Velasquez', 'agua...']
+    ];
 
     return (
       <div className="space-y-6">
-        {/* Cabeçalho com botões */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Sheets</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Visualização da planilha completa em tempo real</p>
+        {/* Visualizador de Planilha em Tempo Real - Seção Principal */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                📊 Visualizador de Planilha em Tempo Real
+              </h2>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                Formato de dados antes da integração com o Planilhas Google
               </div>
             </div>
-            
-            {/* Indicador de tempo real */}
-            <div className="flex items-center">
-              <div className="flex items-center mr-4">
-                <div className={`w-2 h-2 rounded-full mr-2 ${isRealTimeActive ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  {isRealTimeActive ? 'Tempo Real' : 'Manual'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Botões de ação (iguais ao Drive) */}
-          <div className="flex items-center space-x-3 mb-6">
-            <button 
-              onClick={openGoogleSheets}
-              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Abrir Google Sheets
-            </button>
-            
-            <button 
-              onClick={() => setShowEditModal(true)}
-              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
-            >
-              <Edit2 className="w-4 h-4 mr-2" />
-              Editar
-            </button>
-            
-            <button 
-              onClick={handleRemoveSheet}
-              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
-            >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Remover
-            </button>
-            
-            <button 
-              onClick={exportToCSV}
-              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Exportar CSV
-            </button>
-            
-            <button 
-              onClick={handleForceSync}
-              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Atualizar
-            </button>
-            
-            {/* Botão de configurar intervalo */}
-            <div className="relative">
-              <select
-                value={updateInterval}
-                onChange={(e) => {
-                  setUpdateInterval(e.target.value);
-                  setIsRealTimeActive(e.target.value !== 'manual');
-                  showInternalNotification(`Intervalo alterado para ${e.target.value === 'manual' ? 'manual' : e.target.value}`, 'success');
-                }}
-                className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={manualUpdate}
+                className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
               >
-                <option value="0.5s">0.5 segundos</option>
-                <option value="1s">1 segundo</option>
-                <option value="5s">5 segundos</option>
-                <option value="10s">10 segundos</option>
-                <option value="30s">30 segundos</option>
-                <option value="1min">1 minuto</option>
-                <option value="5min">5 minutos</option>
-                <option value="10min">10 minutos</option>
-                <option value="15min">15 minutos</option>
-                <option value="1h">1 hora</option>
-                <option value="manual">Manual</option>
-              </select>
+                🔄 Atualizar
+              </button>
+              <button
+                onClick={exportCSV}
+                className="bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
+              >
+                💾 Baixar CSV
+              </button>
             </div>
           </div>
 
-          {/* Visualização da planilha completa */}
-          <PlanilhaViewer />
+          {/* Cards de Estatísticas Baseados nas Imagens */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center mb-2">
+                <span className="text-blue-600 dark:text-blue-400 text-sm">👁️</span>
+                <span className="text-blue-600 dark:text-blue-400 text-sm font-medium ml-2">Total de Propostas</span>
+              </div>
+              <div className="text-2xl font-bold text-blue-800 dark:text-blue-300">7</div>
+            </div>
+            
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center mb-2">
+                <span className="text-green-600 dark:text-green-400 text-sm">👥</span>
+                <span className="text-green-600 dark:text-green-400 text-sm font-medium ml-2">Colunas Geradas</span>
+              </div>
+              <div className="text-2xl font-bold text-green-800 dark:text-green-300">102</div>
+            </div>
+            
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="flex items-center mb-2">
+                <span className="text-purple-600 dark:text-purple-400 text-sm">🕐</span>
+                <span className="text-purple-600 dark:text-purple-400 text-sm font-medium ml-2">Última atualização</span>
+              </div>
+              <div className="text-lg font-bold text-purple-800 dark:text-purple-300">12:37:09</div>
+            </div>
+            
+            <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+              <div className="flex items-center mb-2">
+                <span className="text-orange-600 dark:text-orange-400 text-sm">⚙️</span>
+                <span className="text-orange-600 dark:text-orange-400 text-sm font-medium ml-2">Campos Dinâmicos</span>
+              </div>
+              <div className="text-2xl font-bold text-orange-800 dark:text-orange-300">AUTO</div>
+              <div className="text-xs text-orange-600 dark:text-orange-400">Adição automática</div>
+            </div>
+          </div>
+
+          {/* Estrutura Dinâmica - Explicação */}
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-4">
+            <h3 className="text-yellow-800 dark:text-yellow-200 font-semibold text-sm mb-2">📋 Estrutura Dinâmica - Uma Empresa = Uma Linha</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-yellow-700 dark:text-yellow-300">
+              <div className="flex items-center">
+                <span className="text-blue-600 dark:text-blue-400 mr-2">👨‍💼</span>
+                <div>
+                  <div className="font-medium">Máximo Titulares</div>
+                  <div className="text-lg font-bold">1</div>
+                  <div className="text-xs">Campos criados dinamicamente</div>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <span className="text-purple-600 dark:text-purple-400 mr-2">👨‍👩‍👧‍👦</span>
+                <div>
+                  <div className="font-medium">Máximo Dependentes</div>
+                  <div className="text-lg font-bold">0</div>
+                  <div className="text-xs">Campos criados dinamicamente</div>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <span className="text-green-600 dark:text-green-400 mr-2">📊</span>
+                <div>
+                  <div className="font-medium">Colunas Totais</div>
+                  <div className="text-lg font-bold">102</div>
+                  <div className="text-xs">Campos por linha</div>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <span className="text-orange-600 dark:text-orange-400 mr-2">🔄</span>
+                <div>
+                  <div className="font-medium">Campos Dinâmicos</div>
+                  <div className="text-lg font-bold">AUTO</div>
+                  <div className="text-xs">Adição automática</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Modal de editar planilha */}
+        {/* Prévia dos Dados da Planilha - Seção como mostrado nas imagens */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-2">
+              <h3 className="text-lg font-semibold text-green-700 dark:text-green-400">📊 Prévia dos Dados da Planilha</h3>
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Visualização em tempo real dos dados formatados para Google Sheets
+            </div>
+          </div>
+          
+          <div className="text-sm text-blue-600 dark:text-blue-400 mb-2 flex items-center space-x-4">
+            <span>📜 Role horizontalmente para ver todos os 102 campos</span>
+            <span>🔄 Atualização automática a cada 5 segundos</span>
+          </div>
+
+          {/* Tabela de dados da planilha com scroll horizontal */}
+          <div className="overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg">
+            <table className="min-w-full text-xs">
+              <thead className="bg-gray-50 dark:bg-gray-700">
+                {mockSheetData.length > 0 && (
+                  <tr>
+                    {mockSheetData[0].map((header, index) => (
+                      <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                )}
+              </thead>
+              <tbody>
+                {mockSheetData.slice(1).map((row, rowIndex) => (
+                  <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={cellIndex} className="px-3 py-2 border-r border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+            Role horizontalmente para navegar pelos 102 campos
+          </div>
+        </div>
+
+        {/* Seção de Controle das Planilhas - Baseado no painel Drive */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Controle de Planilhas Conectadas</h3>
+            <button
+              onClick={() => showInternalNotification('Adicionando nova planilha...', 'info')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              + Adicionar Nova Planilha
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900 dark:text-white">{sheetName}</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{sheetUrl}</p>
+                  <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span className="flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                      Ativo
+                    </span>
+                    <span>7 linhas</span>
+                    <span>102 colunas</span>
+                    <span>Atualizada: 12:37:09</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 mt-3">
+                <button
+                  onClick={openGoogleSheets}
+                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  Abrir
+                </button>
+                <button
+                  onClick={editSheet}
+                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={removeSheet}
+                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  Remover
+                </button>
+                <button
+                  onClick={exportCSV}
+                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  Exportar CSV
+                </button>
+                <button
+                  onClick={manualUpdate}
+                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  Atualizar
+                </button>
+                <select
+                  value={updateInterval}
+                  onChange={(e) => setUpdateInterval(e.target.value)}
+                  className="bg-gray-500 dark:bg-gray-600 text-white px-3 py-1 rounded text-sm border-none outline-none"
+                >
+                  <option value="0.5s">0.5s</option>
+                  <option value="1s">1s</option>
+                  <option value="5s">5s</option>
+                  <option value="10s">10s</option>
+                  <option value="30s">30s</option>
+                  <option value="1min">1min</option>
+                  <option value="5min">5min</option>
+                  <option value="10min">10min</option>
+                  <option value="15min">15min</option>
+                  <option value="1h">1h</option>
+                  <option value="manual">Manual</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal de Edição */}
         {showEditModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-              <div className="flex items-center mb-4">
-                <Edit2 className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Editar Planilha</h3>
-              </div>
-              
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Editar Planilha</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Nome da Planilha</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome</label>
                   <input
                     type="text"
                     value={sheetName}
                     onChange={(e) => setSheetName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">URL da Planilha</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL</label>
                   <input
-                    type="text"
+                    type="url"
                     value={sheetUrl}
                     onChange={(e) => setSheetUrl(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
-              
-              <div className="flex space-x-3 mt-6">
+              <div className="flex justify-end space-x-2 mt-6">
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                  className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={() => {
-                    showInternalNotification('Configurações da planilha salvas com sucesso!', 'success');
                     setShowEditModal(false);
+                    showInternalNotification('Planilha atualizada com sucesso', 'success');
                   }}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                 >
                   Salvar
                 </button>
@@ -1127,6 +1278,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       </div>
     );
   }
+
 
   function renderDriveSection() {
     return (

@@ -1,0 +1,73 @@
+Na aba “Google Sheets” dentro da área restrita, faça igual ao painel do Drive, MAS inclua também as funções que aparecem nas imagens enviadas:
+
+1. Conexão e Gerenciamento
+Botão “Adicionar Nova Planilha” (conectar quantas quiser)
+
+Lista de planilhas conectadas, cada uma com:
+
+Nome (editável)
+
+Link para abrir no Google Sheets
+
+Status (ativo/inativo)
+
+Última atualização (data/hora)
+
+Total de linhas e colunas
+
+Botões cinza claro, lado a lado:
+
+Abrir (abre Google Sheets)
+
+Editar (nome/link)
+
+Remover (com confirmação)
+
+Exportar CSV
+
+Atualizar (manual)
+
+Configurar Tempo de Atualização
+(menu: 0.5s, 1s, 5s, 10s, 30s, 1min, 5min, 10min, 15min, 1h, Manual)
+
+2. VISÃO GERAL (igual às imagens enviadas)
+Mostra informações reais da planilha:
+
+Nome da planilha
+
+Total de colunas e linhas
+
+Última atualização
+
+Status (ativo)
+
+Não mostrar cards coloridos ou números fake — apenas os dados REAIS da planilha.
+
+3. VISUALIZAÇÃO EM TEMPO REAL
+Exibir a planilha completa ao vivo, igual ao Google Sheets, com todas as linhas e colunas.
+
+Atualização automática conforme tempo configurado.
+
+Permitir scroll horizontal e vertical.
+
+Se editar pelo site, já salva no Google Sheets.
+
+4. PRÉVIA DOS DADOS / ESTRUTURA DAS COLUNAS
+Exibir seção com os nomes de todas as colunas da planilha (igual ao bloco “Estrutura Completa das Colunas” das suas imagens).
+
+Permitir criar nova planilha personalizada, escolhendo manualmente as colunas (caixa de seleção).
+
+Para a planilha principal, todas as colunas do sistema já aparecem obrigatórias.
+
+Regras Finais
+Não misturar com funções ou dados de outro serviço.
+
+Não mostrar gráficos, widgets, números fake ou cartões coloridos.
+
+Todas as notificações devem aparecer dentro do painel, de forma discreta e profissional.
+
+Mesma organização, estilo e botões do painel Drive.
+
+Resumo:
+Faça a aba “Google Sheets” igual à do Drive, com todos os botões, tempo, visualização ao vivo da planilha completa, seção de prévia dos dados e estrutura das colunas, tudo como nas imagens enviadas.
+
