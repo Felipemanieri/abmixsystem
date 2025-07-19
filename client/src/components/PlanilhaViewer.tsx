@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search, Database, BarChart3 } from 'lucide-react';
+import { FileSpreadsheet, Download, RefreshCw, ExternalLink, Eye, Filter, Search, Database, BarChart3, Info, Users } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { generateDynamicSheet, type DynamicSheetData } from '@shared/dynamicSheetGenerator';
 import { useRealTimeSheetSync } from '@shared/realTimeSheetSync';
@@ -380,6 +380,26 @@ export default function PlanilhaViewer() {
           </div>
         </div>
 
+        {/* Informações da Estrutura Horizontal Fixa */}
+        <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900 dark:to-green-900 rounded-lg p-4 mb-6">
+          <div className="flex items-center mb-3">
+            <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sistema de Planilha Horizontal Fixa</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 1:</strong> Uma empresa = uma linha única</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 2:</strong> Campos fixos: TITULAR1-3, DEPENDENTE1-5</p>
+              <p className="text-gray-700 dark:text-gray-300"><strong>REGRA 3:</strong> Campos vazios permitidos (ficam em branco)</p>
+            </div>
+            <div>
+              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 4:</strong> Jamais criar nova linha para mesma empresa</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 5:</strong> Estrutura horizontal (dados lado a lado)</p>
+              <p className="text-gray-700 dark:text-gray-300"><strong>REGRA 6:</strong> Campos agrupados por pessoa</p>
+            </div>
+          </div>
+        </div>
+
         {/* Estatísticas Dinâmicas em Tempo Real */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center">
@@ -388,27 +408,27 @@ export default function PlanilhaViewer() {
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
             </div>
             <div className="text-2xl font-bold text-blue-900 dark:text-blue-200">{filteredData.length}</div>
-            <div className="text-sm text-blue-600 dark:text-blue-400">Propostas Filtradas</div>
+            <div className="text-sm text-blue-600 dark:text-blue-400">Propostas Ativas</div>
           </div>
           <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
+              <Users className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
             <div className="text-2xl font-bold text-green-900 dark:text-green-200">
               {dynamicSheetData?.maxTitulares || 3}
             </div>
-            <div className="text-sm text-green-600 dark:text-green-400">Máx. Titulares</div>
+            <div className="text-sm text-green-600 dark:text-green-400">Titulares (expansível)</div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <FileSpreadsheet className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
+              <Users className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
               <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
             </div>
             <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">
               {dynamicSheetData?.maxDependentes || 5}
             </div>
-            <div className="text-sm text-purple-600 dark:text-purple-400">Máx. Dependentes</div>
+            <div className="text-sm text-purple-600 dark:text-purple-400">Dependentes (expansível)</div>
           </div>
           <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">
@@ -418,7 +438,7 @@ export default function PlanilhaViewer() {
             <div className="text-2xl font-bold text-yellow-900 dark:text-yellow-200">
               {dynamicSheetData?.totalColumns || 50}
             </div>
-            <div className="text-sm text-yellow-600 dark:text-yellow-400">Total Colunas</div>
+            <div className="text-sm text-yellow-600 dark:text-yellow-400">Colunas Totais</div>
           </div>
           <div className="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">

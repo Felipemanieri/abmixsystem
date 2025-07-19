@@ -1,5 +1,11 @@
-// SISTEMA DE DETECÇÃO AUTOMÁTICA DINÂMICA
-// Cria colunas automaticamente baseado nos dados reais das propostas
+// SISTEMA DE PLANILHA HORIZONTAL FIXA COM EXPANSÃO AUTOMÁTICA
+// 
+// REGRA 1: UMA EMPRESA = UMA LINHA ÚNICA - Cada proposta ocupa apenas uma linha horizontal
+// REGRA 2: CAMPOS FIXOS PRÉ-DEFINIDOS - TITULAR1-3, DEPENDENTE1-5 (expande se necessário)
+// REGRA 3: CAMPOS VAZIOS PERMITIDOS - Campos não preenchidos ficam em branco
+// REGRA 4: JAMAIS CRIAR NOVA LINHA PARA MESMA EMPRESA - Sempre atualizar linha existente
+// REGRA 5: ESTRUTURA HORIZONTAL - Todos os dados lado a lado na mesma linha
+// REGRA 6: CAMPOS AGRUPADOS - Titular1_Nome, Titular1_CPF ficam juntos
 
 export interface DynamicSheetData {
   headers: string[];
@@ -15,42 +21,41 @@ export function analyzeDynamicStructure(proposals: any[]): {
   maxDependentes: number;
   totalColumns: number;
 } {
-  let maxTitulares = 1; // Mínimo: pelo menos 1 titular sempre
-  let maxDependentes = 0; // Mínimo: 0 dependentes (pode não ter)
+  // ESTRUTURA HORIZONTAL FIXA - REGRAS 2 e 3
+  const maxTitulares = 3; // FIXO: TITULAR1, TITULAR2, TITULAR3
+  const maxDependentes = 5; // FIXO: DEPENDENTE1, DEPENDENTE2, DEPENDENTE3, DEPENDENTE4, DEPENDENTE5
   
-  // ANÁLISE AUTOMÁTICA DOS DADOS REAIS - DETECÇÃO ILIMITADA
+  // DETECÇÃO DINÂMICA PARA EXPANSÃO AUTOMÁTICA SE NECESSÁRIO
+  let realMaxTitulares = maxTitulares;
+  let realMaxDependentes = maxDependentes;
+  
   for (const proposal of proposals) {
     const titulares = proposal.titulares || [];
     const dependentes = proposal.dependentes || [];
     
-    // Detectar quantos titulares existem (pelo menos 1)
-    if (titulares.length > maxTitulares) {
-      maxTitulares = titulares.length;
+    // Se alguma empresa tem mais titulares/dependentes, expandir automaticamente
+    if (titulares.length > realMaxTitulares) {
+      realMaxTitulares = titulares.length;
     }
     
-    // Detectar quantos dependentes existem (pode ser 0)
-    if (dependentes.length > maxDependentes) {
-      maxDependentes = dependentes.length;
+    if (dependentes.length > realMaxDependentes) {
+      realMaxDependentes = dependentes.length;
     }
   }
   
-  // GARANTIR MÍNIMOS FUNCIONAIS APENAS SE NECESSÁRIO
-  if (maxTitulares < 3) maxTitulares = 3; // Mínimo 3 para layout
-  if (maxDependentes < 5) maxDependentes = 5; // Mínimo 5 para layout
-  
-  // Calcular total de colunas
+  // Calcular total de colunas baseado na estrutura real detectada
   const baseColumns = 8; // ID, LINK, EMPRESA, CNPJ, VENDEDOR, PLANO, VALOR, STATUS
   const contractColumns = 6; // ODONTO, LIVRE_ADESAO, COMPULSORIO, APROVEITAMENTO, INICIO, PERIODO
   const internalColumns = 9; // REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, ORIGEM, AUTORIZADOR, OBS_FINANCEIRAS, OBS_CLIENTE
-  const titularColumns = maxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular
-  const dependenteColumns = maxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente
+  const titularColumns = realMaxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular
+  const dependenteColumns = realMaxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente
   const extraColumns = 2; // ANEXOS, DATA_CONTRATO
   
   const totalColumns = baseColumns + contractColumns + internalColumns + titularColumns + dependenteColumns + extraColumns;
   
   return {
-    maxTitulares,
-    maxDependentes,
+    maxTitulares: realMaxTitulares,
+    maxDependentes: realMaxDependentes,
     totalColumns
   };
 }
@@ -58,7 +63,7 @@ export function analyzeDynamicStructure(proposals: any[]): {
 export function generateDynamicHeaders(maxTitulares: number, maxDependentes: number): string[] {
   const headers = [];
   
-  // CAMPOS FIXOS OBRIGATÓRIOS
+  // CAMPOS FIXOS OBRIGATÓRIOS - REGRA 5
   headers.push('ID', 'LINK_CLIENTE', 'EMPRESA', 'CNPJ', 'VENDEDOR', 'PLANO', 'VALOR', 'STATUS');
   
   // INFORMAÇÕES DO CONTRATO
@@ -67,7 +72,8 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   // INFORMAÇÕES INTERNAS
   headers.push('REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE');
   
-  // TITULARES DINÂMICOS (baseado no máximo detectado)
+  // TITULARES - REGRA 6 (CAMPOS AGRUPADOS)
+  // Criação automática baseada no máximo detectado, mas sempre pelo menos 3
   for (let i = 1; i <= maxTitulares; i++) {
     headers.push(
       `TITULAR${i}_NOME`,
@@ -78,7 +84,8 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
     );
   }
   
-  // DEPENDENTES DINÂMICOS (baseado no máximo detectado)
+  // DEPENDENTES - REGRA 6 (CAMPOS AGRUPADOS)
+  // Criação automática baseada no máximo detectado, mas sempre pelo menos 5
   for (let i = 1; i <= maxDependentes; i++) {
     headers.push(
       `DEPENDENTE${i}_NOME`,
@@ -100,6 +107,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
   const titulares = proposal.titulares || [];
   const dependentes = proposal.dependentes || [];
   
+  // REGRA 1: UMA EMPRESA = UMA LINHA ÚNICA
   // CAMPOS FIXOS OBRIGATÓRIOS
   row.push(
     proposal.abmId || `ABM${proposal.id?.slice(-3) || '001'}`,
@@ -112,7 +120,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     proposal.status || 'observacao'
   );
   
-  // INFORMAÇÕES DO CONTRATO
+  // INFORMAÇÕES DO CONTRATO (preenchidas pelo vendedor)
   row.push(
     contractData.odontoConjugado ? 'Sim' : 'Não',
     contractData.livreAdesao ? 'Sim' : 'Não',
@@ -122,7 +130,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     contractData.periodoMinimo || ''
   );
   
-  // INFORMAÇÕES INTERNAS
+  // INFORMAÇÕES INTERNAS (preenchidas pelo vendedor - campos internos)
   row.push(
     internalData.reuniao ? 'Sim' : 'Não',
     internalData.nomeReuniao || '',
@@ -135,10 +143,12 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     internalData.observacoesCliente || ''
   );
   
-  // TITULARES DINÂMICOS
+  // REGRA 3: CAMPOS VAZIOS PERMITIDOS
+  // REGRA 6: CAMPOS AGRUPADOS - TITULARES
   for (let i = 0; i < maxTitulares; i++) {
     const titular = titulares[i];
-    if (titular) {
+    if (titular && titular.nomeCompleto) {
+      // Titular existe - preencher dados
       row.push(
         titular.nomeCompleto || '',
         titular.cpf || '',
@@ -147,22 +157,24 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
         titular.telefonePessoal || ''
       );
     } else {
-      // Campos vazios para titulares não existentes
+      // REGRA 3: Titular não existe - campos ficam em branco
       row.push('', '', '', '', '');
     }
   }
   
-  // DEPENDENTES DINÂMICOS
+  // REGRA 3: CAMPOS VAZIOS PERMITIDOS
+  // REGRA 6: CAMPOS AGRUPADOS - DEPENDENTES
   for (let i = 0; i < maxDependentes; i++) {
     const dependente = dependentes[i];
-    if (dependente) {
+    if (dependente && dependente.nomeCompleto) {
+      // Dependente existe - preencher dados
       row.push(
         dependente.nomeCompleto || '',
         dependente.cpf || '',
         dependente.parentesco || ''
       );
     } else {
-      // Campos vazios para dependentes não existentes
+      // REGRA 3: Dependente não existe - campos ficam em branco
       row.push('', '', '');
     }
   }
