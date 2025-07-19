@@ -162,10 +162,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   // Função para remover planilha
   const removeSheet = (sheetId: number) => {
-    if (confirm('Tem certeza que deseja remover esta planilha?')) {
-      setConnectedSheets(prev => prev.filter(sheet => sheet.id !== sheetId));
-      showInternalNotification('Planilha removida com sucesso!', 'success');
-    }
+    setConnectedSheets(prev => prev.filter(sheet => sheet.id !== sheetId));
+    showInternalNotification('Planilha removida com sucesso!', 'success');
   };
   
   // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
@@ -184,15 +182,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddSheetModal, setShowAddSheetModal] = useState(false);
-  const [connectedSheets, setConnectedSheets] = useState([
-    {
-      id: 1,
-      name: 'Planilha Principal - Sistema Abmix',
-      url: 'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit',
-      status: 'Ativo',
-      lastUpdate: new Date().toLocaleString('pt-BR')
-    }
-  ]);
+  const [connectedSheets, setConnectedSheets] = useState([]);
   
   const [allPaused, setAllPaused] = useState(false);
   
@@ -1012,9 +1002,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     };
 
     const removeMainSheet = () => {
-      if (confirm('Tem certeza que deseja remover a planilha conectada?')) {
-        showInternalNotification('Planilha principal removida com sucesso!', 'success');
-      }
+      showInternalNotification('Planilha principal removida com sucesso!', 'success');
     };
 
     const exportCSV = () => {
