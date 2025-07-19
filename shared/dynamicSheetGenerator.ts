@@ -21,11 +21,15 @@ export interface DynamicSheetData {
 export function analyzeDynamicStructure(proposals: any[]): {
   maxTitulares: number;
   maxDependentes: number;
+  maxVendorAttachments: number;
+  maxClientAttachments: number;
   totalColumns: number;
 } {
   // REGRA 2: CAMPOS FIXOS PRÉ-DEFINIDOS com estrutura mínima garantida
   let maxTitulares = 3; // TITULAR1, TITULAR2, TITULAR3 sempre criados
   let maxDependentes = 5; // DEPENDENTE1, DEPENDENTE2, DEPENDENTE3, DEPENDENTE4, DEPENDENTE5 sempre criados
+  let maxVendorAttachments = 3; // Mínimo 3 anexos do vendedor
+  let maxClientAttachments = 3; // Mínimo 3 anexos do cliente
   
   // DETECÇÃO AUTOMÁTICA ILIMITADA - EXPANDE CONFORME NECESSÁRIO
   // REGRA 2: Estrutura mínima garantida + expansão automática
@@ -42,6 +46,14 @@ export function analyzeDynamicStructure(proposals: any[]): {
     if (dependentes.length > maxDependentes) {
       maxDependentes = dependentes.length;
     }
+    
+    // Detectar máximo de anexos para expansão automática
+    if (proposal.vendorAttachments?.length > maxVendorAttachments) {
+      maxVendorAttachments = proposal.vendorAttachments.length;
+    }
+    if (proposal.clientAttachments?.length > maxClientAttachments) {
+      maxClientAttachments = proposal.clientAttachments.length;
+    }
   }
   
   // Calcular total de colunas baseado na detecção automática
@@ -54,16 +66,21 @@ export function analyzeDynamicStructure(proposals: any[]): {
   const dependenteColumns = maxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente
   const extraColumns = 2; // ANEXOS, DATA_CONTRATO
   
-  const totalColumns = baseColumns + contractColumns + internalColumns + workflowColumns + attachmentColumns + titularColumns + dependenteColumns + extraColumns;
+  const vendorAttachmentLinks = maxVendorAttachments * 2; // NOME, LINK para cada anexo do vendedor
+  const clientAttachmentLinks = maxClientAttachments * 2; // NOME, LINK para cada anexo do cliente
+  
+  const totalColumns = baseColumns + contractColumns + internalColumns + workflowColumns + attachmentColumns + vendorAttachmentLinks + clientAttachmentLinks + titularColumns + dependenteColumns + extraColumns;
   
   return {
     maxTitulares,
     maxDependentes,
+    maxVendorAttachments,
+    maxClientAttachments,
     totalColumns
   };
 }
 
-export function generateDynamicHeaders(maxTitulares: number, maxDependentes: number): string[] {
+export function generateDynamicHeaders(maxTitulares: number, maxDependentes: number, maxVendorAttachments = 3, maxClientAttachments = 3): string[] {
   const headers = [];
   
   // CAMPOS FIXOS OBRIGATÓRIOS - REGRA 5
@@ -78,8 +95,19 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   // CAMPOS DE CONTROLE E WORKFLOW (que os portais podem alterar)
   headers.push('PRIORITY', 'CLIENT_COMPLETED', 'VENDOR_NAME', 'UPDATED_AT');
   
-  // CAMPOS DE ANEXOS E DOCUMENTOS
+  // CAMPOS DE ANEXOS E DOCUMENTOS + LINKS DINÂMICOS
   headers.push('VENDOR_ATTACHMENTS_COUNT', 'CLIENT_ATTACHMENTS_COUNT', 'TOTAL_DOCUMENTS');
+  
+  // LINKS DE ANEXOS DINÂMICOS - EXPANDE CONFORME QUANTIDADE DE DOCUMENTOS
+  // Criar campos dinâmicos para links de anexos do vendedor (mínimo 3)
+  for (let i = 1; i <= maxVendorAttachments; i++) {
+    headers.push(`VENDOR_ANEXO${i}_NOME`, `VENDOR_ANEXO${i}_LINK`);
+  }
+  
+  // Criar campos dinâmicos para links de anexos do cliente (mínimo 3)
+  for (let i = 1; i <= maxClientAttachments; i++) {
+    headers.push(`CLIENT_ANEXO${i}_NOME`, `CLIENT_ANEXO${i}_LINK`);
+  }
   
   // TITULARES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
   // Cria automaticamente quantos titulares forem necessários (1, 2, 5, 10, 50...)
@@ -109,7 +137,7 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   return headers;
 }
 
-export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, maxDependentes: number): any[] {
+export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, maxDependentes: number, maxVendorAttachments: number, maxClientAttachments: number): any[] {
   const row = [];
   const contractData = proposal.contractData || {};
   const internalData = proposal.internalData || {};
@@ -169,6 +197,28 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     (proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0)
   );
   
+  // LINKS DE ANEXOS DO VENDEDOR - DINÂMICOS
+  const vendorAttachments = proposal.vendorAttachments || [];
+  for (let i = 0; i < maxVendorAttachments; i++) {
+    const attachment = vendorAttachments[i];
+    if (attachment) {
+      row.push(attachment.name || '', attachment.url || '');
+    } else {
+      row.push('', ''); // REGRA 3: Campos vazios permitidos
+    }
+  }
+  
+  // LINKS DE ANEXOS DO CLIENTE - DINÂMICOS
+  const clientAttachments = proposal.clientAttachments || [];
+  for (let i = 0; i < maxClientAttachments; i++) {
+    const attachment = clientAttachments[i];
+    if (attachment) {
+      row.push(attachment.name || '', attachment.url || '');
+    } else {
+      row.push('', ''); // REGRA 3: Campos vazios permitidos
+    }
+  }
+  
   // REGRA 3: CAMPOS VAZIOS PERMITIDOS
   // REGRA 6: CAMPOS AGRUPADOS - TITULARES
   for (let i = 0; i < maxTitulares; i++) {
@@ -216,14 +266,14 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
 
 export function generateDynamicSheet(proposals: any[]): DynamicSheetData {
   // ANÁLISE AUTOMÁTICA DA ESTRUTURA
-  const { maxTitulares, maxDependentes, totalColumns } = analyzeDynamicStructure(proposals);
+  const { maxTitulares, maxDependentes, maxVendorAttachments, maxClientAttachments, totalColumns } = analyzeDynamicStructure(proposals);
   
   // GERAR CABEÇALHOS DINÂMICOS
-  const headers = generateDynamicHeaders(maxTitulares, maxDependentes);
+  const headers = generateDynamicHeaders(maxTitulares, maxDependentes, maxVendorAttachments, maxClientAttachments);
   
   // GERAR DADOS DINÂMICOS
   const data = proposals.map(proposal => 
-    formatProposalToDynamicRow(proposal, maxTitulares, maxDependentes)
+    formatProposalToDynamicRow(proposal, maxTitulares, maxDependentes, maxVendorAttachments, maxClientAttachments)
   );
   
   return {
