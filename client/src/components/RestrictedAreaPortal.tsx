@@ -114,6 +114,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showWhatsAppConfigModal, setShowWhatsAppConfigModal] = useState(false);
   const [showBackupConfigModal, setShowBackupConfigModal] = useState(false);
   const [showDriveManagementModal, setShowDriveManagementModal] = useState(false);
+  const [showAddDriveModal, setShowAddDriveModal] = useState(false);
+  const [showEditDriveModal, setShowEditDriveModal] = useState(false);
+  const [editingDrive, setEditingDrive] = useState(null);
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -318,7 +321,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     { id: 4, nome: 'Documentos Templates', url: 'https://docs.google.com/document/d/1jkl012', status: 'ativo', espaco: '12 templates', usado: '384 docs', tipo: 'Google Docs', icon: 'FileText', cor: 'orange' },
     { id: 5, nome: 'Backup Automático', url: 'https://drive.google.com/drive/folders/1mno345', status: 'ativo', espaco: '24.8 GB', usado: '847 backups', tipo: 'Backup', icon: 'Database', cor: 'red' }
   ]);
-  const [novoDrive, setNovoDrive] = useState({ nome: '', url: '', tipo: 'drive' });
+  const [novoDrive, setNovoDrive] = useState({ nome: '', url: '', observacao: '' });
   const [abaAtiva, setAbaAtiva] = useState('drive');
 
   // Dados dos status (conforme imagem fornecida)
@@ -1078,106 +1081,106 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Integrações Google - Completas</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Drive - Gerenciamento</h3>
             </div>
-            <div className="flex space-x-3">
-              <button 
-                onClick={openGoogleDrive}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Abrir Drive
-              </button>
-              <button 
-                onClick={() => {
-                  setAbaAtiva('drive');
-                  setShowDriveManagementModal(true);
-                }}
-                className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Configurações
-              </button>
-            </div>
+            <button 
+              onClick={() => setShowAddDriveModal(true)}
+              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Adicionar Novo Drive
+            </button>
           </div>
 
-          {/* Estatísticas compactas */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-            <div className="bg-blue-50 dark:bg-blue-900 rounded-lg p-3 text-center">
-              <div className="text-lg font-bold text-blue-900 dark:text-blue-200">247</div>
-              <div className="text-xs text-blue-600 dark:text-blue-400">Pastas</div>
-            </div>
-            <div className="bg-green-50 dark:bg-green-900 rounded-lg p-3 text-center">
-              <div className="text-lg font-bold text-green-900 dark:text-green-200">1,834</div>
-              <div className="text-xs text-green-600 dark:text-green-400">Documentos</div>
-            </div>
-            <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-3 text-center">
-              <div className="text-lg font-bold text-purple-900 dark:text-purple-200">8.2 GB</div>
-              <div className="text-xs text-purple-600 dark:text-purple-400">Armazenamento</div>
-            </div>
-            <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-3 text-center">
-              <div className="text-lg font-bold text-orange-900 dark:text-orange-200">99.1%</div>
-              <div className="text-xs text-orange-600 dark:text-orange-400">Sync Rate</div>
-            </div>
-          </div>
-
-          {/* Google Sheets - Única seção */}
-          <div className="bg-green-50 dark:bg-green-900 rounded-lg p-4">
-            <h4 className="font-medium text-green-900 dark:text-green-200 mb-3 flex items-center">
-              <FileSpreadsheet className="w-5 h-5 mr-2" />
-              Google Sheets
-            </h4>
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-green-600 dark:text-green-400">
-                47 planilhas • 2,847 linhas • 98.3% sync
+          {/* Lista de Drives Conectados */}
+          <div className="space-y-4">
+            <h4 className="font-medium text-gray-900 dark:text-white mb-4">Drives Conectados</h4>
+            
+            {drives.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <HardDrive className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>Nenhum drive conectado</p>
+                <p className="text-sm">Clique em "Adicionar Novo Drive" para começar</p>
               </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => setAbaAtiva('visualizar-planilha')}
-                  className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-                >
-                  Visualizar
-                </button>
-                <button 
-                  onClick={() => {
-                    setAbaAtiva('sheets');
-                    setShowDriveManagementModal(true);
-                  }}
-                  className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                >
-                  Configurações
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Lista de Drives Configurados */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 dark:text-white mb-4">Drives Configurados</h4>
-            <div className="space-y-3">
-              {drives.map((drive) => (
-                <div key={drive.id} className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
-                  <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full mr-3 ${drive.status === 'ativo' ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                    <div>
-                      <div className="font-medium text-gray-900 dark:text-white">{drive.nome}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{drive.usado} / {drive.espaco}</div>
+            ) : (
+              <div className="space-y-3">
+                {drives.map((drive) => (
+                  <div key={drive.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center flex-1">
+                        <div className={`w-3 h-3 rounded-full mr-4 ${
+                          drive.status === 'ativo' ? 'bg-green-400' : 'bg-red-400'
+                        }`}></div>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center mb-2">
+                            <h5 className="font-medium text-gray-900 dark:text-white text-lg mr-3">
+                              {drive.nome}
+                            </h5>
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              drive.status === 'ativo' 
+                                ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                                : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                            }`}>
+                              {drive.status}
+                            </span>
+                          </div>
+                          
+                          <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                            Capacidade: {drive.usado} / {drive.espaco}
+                          </div>
+                          
+                          {drive.observacao && (
+                            <div className="text-sm text-gray-500 dark:text-gray-400 italic">
+                              {drive.observacao}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-2 ml-4">
+                        <button 
+                          onClick={() => window.open(drive.url, '_blank')}
+                          className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          title="Abrir Drive"
+                        >
+                          <ExternalLink className="w-4 h-4 mr-1" />
+                          Abrir
+                        </button>
+                        
+                        <button 
+                          onClick={() => {
+                            setEditingDrive(drive);
+                            setShowEditDriveModal(true);
+                          }}
+                          className="flex items-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                          title="Editar Nome"
+                        >
+                          <Edit2 className="w-4 h-4 mr-1" />
+                          Editar
+                        </button>
+                        
+                        <button 
+                          onClick={() => {
+                            if (confirm(`Tem certeza que deseja remover o drive "${drive.nome}"?`)) {
+                              if (confirm(`ATENÇÃO: Esta ação é irreversível. Confirma a remoção do drive "${drive.nome}"?`)) {
+                                setDrives(drives.filter(d => d.id !== drive.id));
+                                showInternalNotification(`Drive "${drive.nome}" removido com sucesso!`, 'success');
+                              }
+                            }
+                          }}
+                          className="flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                          title="Remover Drive"
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Remover
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button 
-                      onClick={() => window.open(drive.url, '_blank')}
-                      className="px-3 py-1 text-sm bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
-                    >
-                      Abrir
-                    </button>
-                    <button className="px-3 py-1 text-sm bg-gray-600 text-white dark:bg-gray-600 dark:text-white rounded hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors">
-                      Editar
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -2219,6 +2222,190 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 className="ml-4 flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Adicionar Novo Drive */}
+      {showAddDriveModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Plus className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Adicionar Novo Drive</h3>
+              </div>
+              <button
+                onClick={() => setShowAddDriveModal(false)}
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Nome do Drive *
+                </label>
+                <input
+                  type="text"
+                  value={novoDrive.nome}
+                  onChange={(e) => setNovoDrive({...novoDrive, nome: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Ex: Drive Principal"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  URL do Google Drive *
+                </label>
+                <input
+                  type="url"
+                  value={novoDrive.url}
+                  onChange={(e) => setNovoDrive({...novoDrive, url: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="https://drive.google.com/drive/folders/..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Observação (Opcional)
+                </label>
+                <input
+                  type="text"
+                  value={novoDrive.observacao}
+                  onChange={(e) => setNovoDrive({...novoDrive, observacao: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Ex: Drive para documentos principais"
+                />
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowAddDriveModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  if (novoDrive.nome && novoDrive.url) {
+                    const newDrive = {
+                      id: Date.now(),
+                      nome: novoDrive.nome,
+                      url: novoDrive.url,
+                      status: 'ativo',
+                      usado: '0 GB',
+                      espaco: '15 GB',
+                      observacao: novoDrive.observacao
+                    };
+                    setDrives([...drives, newDrive]);
+                    setNovoDrive({ nome: '', url: '', observacao: '' });
+                    setShowAddDriveModal(false);
+                    showInternalNotification('Drive adicionado com sucesso!', 'success');
+                  } else {
+                    showInternalNotification('Preencha todos os campos obrigatórios.', 'error');
+                  }
+                }}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Adicionar Drive
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar Drive */}
+      {showEditDriveModal && editingDrive && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Edit2 className="w-6 h-6 text-gray-600 dark:text-gray-400 mr-3" />
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Editar Drive</h3>
+              </div>
+              <button
+                onClick={() => {
+                  setShowEditDriveModal(false);
+                  setEditingDrive(null);
+                }}
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Nome do Drive *
+                </label>
+                <input
+                  type="text"
+                  value={editingDrive.nome}
+                  onChange={(e) => setEditingDrive({...editingDrive, nome: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  URL do Google Drive *
+                </label>
+                <input
+                  type="url"
+                  value={editingDrive.url}
+                  onChange={(e) => setEditingDrive({...editingDrive, url: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Observação (Opcional)
+                </label>
+                <input
+                  type="text"
+                  value={editingDrive.observacao || ''}
+                  onChange={(e) => setEditingDrive({...editingDrive, observacao: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowEditDriveModal(false);
+                  setEditingDrive(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  if (editingDrive.nome && editingDrive.url) {
+                    setDrives(drives.map(drive => 
+                      drive.id === editingDrive.id ? editingDrive : drive
+                    ));
+                    setShowEditDriveModal(false);
+                    setEditingDrive(null);
+                    showInternalNotification('Drive editado com sucesso!', 'success');
+                  } else {
+                    showInternalNotification('Preencha todos os campos obrigatórios.', 'error');
+                  }
+                }}
+                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Salvar Alterações
               </button>
             </div>
           </div>
