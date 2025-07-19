@@ -1456,7 +1456,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         <option value="">Selecione o departamento</option>
                         <option value="Comercial">Comercial</option>
                         <option value="Financeiro">Financeiro</option>
-                        <option value="Implementação">Implementação</option>
+                        <option value="Implantação">Implantação</option>
                         <option value="Supervisão">Supervisão</option>
                         <option value="Administração">Administração</option>
                         <option value="Sistema">Sistema</option>
