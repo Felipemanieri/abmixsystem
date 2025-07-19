@@ -118,8 +118,29 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
-  // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
-  const [notifications, setNotifications] = useState([]);
+  // Sistema interno de notificações (sem alerts do navegador)
+  const [internalNotifications, setInternalNotifications] = useState<Array<{
+    id: string;
+    message: string;
+    type: 'success' | 'error' | 'info';
+    timestamp: Date;
+  }>>([]);
+  
+  // Função para adicionar notificação interna
+  const addInternalNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    const newNotification = {
+      id: Date.now().toString(),
+      message,
+      type,
+      timestamp: new Date()
+    };
+    setInternalNotifications(prev => [newNotification, ...prev.slice(0, 4)]); // Manter apenas 5 notificações
+    
+    // Remover automaticamente após 5 segundos
+    setTimeout(() => {
+      setInternalNotifications(prev => prev.filter(n => n.id !== newNotification.id));
+    }, 5000);
+  };
   
   // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
   const [timeConfigs, setTimeConfigs] = useState({
@@ -187,12 +208,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           detail: newVisibility 
         }));
         
-        // Notificação visual de sucesso
-        alert('✅ Configuração de portal atualizada com sucesso!');
+        // Notificação interna no painel
+        addInternalNotification('Configuração de portal atualizada com sucesso!', 'success');
       }
     } catch (error) {
       console.error('Erro ao salvar visibilidade dos portais:', error);
-      alert('❌ Erro ao salvar configuração. Tente novamente.');
+      addInternalNotification('Erro ao salvar configuração. Tente novamente.', 'error');
     }
   };
 
