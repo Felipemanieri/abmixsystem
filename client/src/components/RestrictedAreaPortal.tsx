@@ -118,8 +118,29 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
+  // Estado para notificações internas elegantes
+  const [internalNotification, setInternalNotification] = useState({
+    show: false,
+    message: '',
+    type: 'success' as 'success' | 'error' | 'info'
+  });
+  
   // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
   const [notifications, setNotifications] = useState([]);
+
+  // Função para mostrar notificação interna elegante
+  const showInternalNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    setInternalNotification({
+      show: true,
+      message,
+      type
+    });
+    
+    // Auto-ocultar após 4 segundos
+    setTimeout(() => {
+      setInternalNotification(prev => ({ ...prev, show: false }));
+    }, 4000);
+  };
   
   // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
   const [timeConfigs, setTimeConfigs] = useState({
@@ -187,12 +208,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           detail: newVisibility 
         }));
         
-        // Notificação visual de sucesso
-        alert('✅ Configuração de portal atualizada com sucesso!');
+        // Notificação interna elegante
+        showInternalNotification('Portal atualizado com sucesso!', 'success');
       }
     } catch (error) {
       console.error('Erro ao salvar visibilidade dos portais:', error);
-      alert('❌ Erro ao salvar configuração. Tente novamente.');
+      showInternalNotification('Erro ao salvar configuração. Tente novamente.', 'error');
     }
   };
 
@@ -400,13 +421,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       const result = await response.json();
       
       if (response.ok) {
-        alert(`✅ ${result.message}\n\nÚltima atualização: ${new Date(result.timestamp).toLocaleString('pt-BR')}`);
+        showInternalNotification(`${result.message} - Última atualização: ${new Date(result.timestamp).toLocaleString('pt-BR')}`, 'success');
       } else {
-        alert(`❌ Erro na sincronização: ${result.error}`);
+        showInternalNotification(`Erro na sincronização: ${result.error}`, 'error');
       }
     } catch (error) {
       console.error('Erro ao sincronizar:', error);
-      alert('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+      showInternalNotification('Erro de conexão. Verifique sua internet e tente novamente.', 'error');
     }
   };
 
@@ -1690,9 +1711,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       };
                       setDrives([...drives, newDrive]);
                       setNovoDrive({ nome: '', url: '', tipo: 'drive' });
-                      alert('Integração adicionada com sucesso!');
+                      showInternalNotification('Integração adicionada com sucesso!', 'success');
                     } else {
-                      alert('Preencha todos os campos obrigatórios.');
+                      showInternalNotification('Preencha todos os campos obrigatórios.', 'error');
                     }
                   }}
                   className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
@@ -1819,7 +1840,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                                 onClick={() => {
                                   if (confirm(`Tem certeza que deseja excluir a integração "${drive.nome}"?`)) {
                                     setDrives(drives.filter(d => d.id !== drive.id));
-                                    alert('Integração excluída com sucesso!');
+                                    showInternalNotification('Integração excluída com sucesso!', 'success');
                                   }
                                 }}
                                 className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
@@ -2065,7 +2086,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  alert('Configurações do WhatsApp salvas com sucesso!');
+                  showInternalNotification('Configurações do WhatsApp salvas com sucesso!', 'success');
                   setShowWhatsAppConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -2132,7 +2153,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  alert('Configurações de backup salvas! Próximo backup: hoje às 02:00');
+                  showInternalNotification('Configurações de backup salvas! Próximo backup: hoje às 02:00', 'success');
                   setShowBackupConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
@@ -2162,6 +2183,48 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         />
       )}
       
+      {/* Notificação Interna Elegante */}
+      {internalNotification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right duration-300">
+          <div className={`
+            flex items-center p-4 rounded-lg shadow-lg border-l-4 min-w-80 max-w-md
+            ${internalNotification.type === 'success' 
+              ? 'bg-green-50 dark:bg-green-900 border-green-500 text-green-800 dark:text-green-200' 
+              : internalNotification.type === 'error'
+                ? 'bg-red-50 dark:bg-red-900 border-red-500 text-red-800 dark:text-red-200'
+                : 'bg-blue-50 dark:bg-blue-900 border-blue-500 text-blue-800 dark:text-blue-200'
+            }
+          `}>
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                {internalNotification.type === 'success' && (
+                  <CheckCircle className="w-6 h-6 text-green-500 dark:text-green-400" />
+                )}
+                {internalNotification.type === 'error' && (
+                  <X className="w-6 h-6 text-red-500 dark:text-red-400" />
+                )}
+                {internalNotification.type === 'info' && (
+                  <AlertTriangle className="w-6 h-6 text-blue-500 dark:text-blue-400" />
+                )}
+              </div>
+              
+              <div className="ml-3 flex-1">
+                <p className="text-sm font-medium">
+                  {internalNotification.message}
+                </p>
+              </div>
+              
+              <button
+                onClick={() => setInternalNotification(prev => ({ ...prev, show: false }))}
+                className="ml-4 flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* System Footer */}
       <SystemFooter />
     </div>
