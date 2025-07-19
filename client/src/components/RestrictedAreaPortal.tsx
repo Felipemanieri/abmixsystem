@@ -165,6 +165,18 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   
   const [allPaused, setAllPaused] = useState(false);
   
+  // Hooks useQuery movidos para o nível superior para evitar conflitos de hooks
+  const { data: realProposals = [] } = useQuery({
+    queryKey: ['/api/proposals'],
+    refetchInterval: 5000,
+    enabled: activeTab === 'google-sheets'
+  });
+
+  const { data: vendors = [] } = useQuery({
+    queryKey: ['/api/vendors'],
+    enabled: activeTab === 'google-sheets'
+  });
+  
   useEffect(() => {
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
@@ -999,15 +1011,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       window.location.reload();
     };
 
-    // Buscar dados reais das propostas
-    const { data: realProposals = [] } = useQuery({
-      queryKey: ['/api/proposals'],
-      refetchInterval: 5000
-    });
-
-    const { data: vendors = [] } = useQuery({
-      queryKey: ['/api/vendors']
-    });
+    // Usar dados já carregados no nível superior
 
     // Gerar estrutura real da planilha baseada nos dados do sistema
     const generateRealSheetData = () => {
