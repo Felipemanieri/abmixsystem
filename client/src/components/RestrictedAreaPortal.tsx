@@ -969,29 +969,149 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
     const removeSheet = () => {
       if (confirm('Tem certeza que deseja remover a planilha conectada?')) {
-        showInternalNotification('Planilha removida com sucesso', 'success');
+        // Remoção da planilha sem notificação visual
+        console.log('Planilha removida');
       }
     };
 
     const exportCSV = () => {
-      showInternalNotification('Exportando dados para CSV...', 'info');
+      // Exportar dados reais para CSV
+      if (realSheetData.length > 0) {
+        const csvContent = realSheetData.map(row => 
+          row.map(cell => `"${cell}"`).join(',')
+        ).join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `abmix-planilha-${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     };
 
     const manualUpdate = () => {
-      showInternalNotification('Atualizando dados manualmente...', 'info');
+      // Atualização manual sem notificação
+      window.location.reload();
     };
 
-    // Dados simulados da planilha para visualização baseados nas imagens fornecidas
-    const mockSheetData = [
-      ['1. Identificação', '2. ID_COMPLETO', '3. TOKEN_DO_CLIEN...', '4. EMPRESA', '5. CNPJ', '6. PLANO', '7. VALOR', '8. ID_DO_VENDEDOR', '9. FORNECEDOR', '10. STATUS'],
-      ['ABM001', 'PROP-1752628436...', 'CLIENTE-1752628943...', 'Soluções Tecnológicas...', '12.345.678/0001-90', 'Premium Familia', '1200', '3', 'Fabiana Ferreira', 'impl...'],
-      ['ABM002', 'PROP-1752629588...', 'CLIENTE-1752629950...', 'Consultoria Empresar...', '98.765.432/0001-01', 'Executivo Plus', '2500', '7', 'Isabela Velasquez', 'impl...'],
-      ['ABM003', 'PROP-1752630308...', 'CLIENTE-1752630250...', 'Construtora Inovarte', '11.222.333/0001-44', 'Padrão Empresarial', '850', '11', 'Monique Silva', 'impl...'],
-      ['ABM004', 'PROP-1752629542...', 'CLIENTE-1752629542...', 'Marketing Digital Pro...', '55.666.777/0001-88', 'Prêmio Individual', '420', '8', 'Juliana Araujo', 'anali...'],
-      ['ABM005', 'PROP-1752629553...', 'CLIENTE-1752629553...', 'Inovação Criativa Ltda', '99.888.777/0001-11', 'Familia Executiva', '1680', '12', 'Sara Mattos', 'anali...'],
-      ['ABM006', 'PROP-1752653345...', 'CLIENTE-1752652344...', 'Abmix', '12554', 'teste 5', '4545', '7', 'Isabela Velasquez', 'decli...'],
-      ['ABM007', 'PROP-1752668482...', 'CLIENTE-1752668482...', 'Abmix', '123456', 'teste 44', '1245', '7', 'Isabela Velasquez', 'agua...']
-    ];
+    // Buscar dados reais das propostas
+    const { data: realProposals = [] } = useQuery({
+      queryKey: ['/api/proposals'],
+      refetchInterval: 5000
+    });
+
+    const { data: vendors = [] } = useQuery({
+      queryKey: ['/api/vendors']
+    });
+
+    // Gerar estrutura real da planilha baseada nos dados do sistema
+    const generateRealSheetData = () => {
+      if (realProposals.length === 0) return [];
+      
+      // Cabeçalhos da planilha baseados na estrutura real do sistema
+      const headers = [
+        'ID', 'LINK_CLIENTE', 'EMPRESA', 'CNPJ', 'VENDEDOR', 'PLANO', 'VALOR', 'STATUS',
+        'ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CARENCIA', 'INICIO_VIGENCIA', 'PERIODO_MINIMO',
+        'REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE'
+      ];
+
+      // Detectar máximo de titulares e dependentes nos dados reais
+      let maxTitulares = 1;
+      let maxDependentes = 0;
+      
+      realProposals.forEach(proposal => {
+        const titulares = proposal.titulares || [];
+        const dependentes = proposal.dependentes || [];
+        if (titulares.length > maxTitulares) maxTitulares = titulares.length;
+        if (dependentes.length > maxDependentes) maxDependentes = dependentes.length;
+      });
+
+      // Adicionar colunas dinâmicas baseadas nos dados reais
+      for (let i = 1; i <= maxTitulares; i++) {
+        headers.push(`TITULAR${i}_NOME`, `TITULAR${i}_CPF`, `TITULAR${i}_RG`, `TITULAR${i}_EMAIL`, `TITULAR${i}_TELEFONE`);
+      }
+      
+      for (let i = 1; i <= maxDependentes; i++) {
+        headers.push(`DEPENDENTE${i}_NOME`, `DEPENDENTE${i}_CPF`, `DEPENDENTE${i}_PARENTESCO`);
+      }
+      
+      headers.push('ANEXOS', 'DATA_CONTRATO');
+
+      // Gerar linhas de dados reais
+      const rows = realProposals.map(proposal => {
+        const contractData = proposal.contractData || {};
+        const internalData = proposal.internalData || {};
+        const titulares = proposal.titulares || [];
+        const dependentes = proposal.dependentes || [];
+        const vendorName = vendors.find(v => v.id === proposal.vendorId)?.name || 'Vendedor não identificado';
+
+        const row = [
+          proposal.abmId || `ABM${proposal.id?.slice(-3) || '001'}`,
+          `https://abmix.com/client-proposal/${proposal.clientToken}`,
+          contractData.nomeEmpresa || '',
+          contractData.cnpj || '',
+          vendorName,
+          contractData.planoContratado || '',
+          contractData.valor || '',
+          proposal.status || 'observacao',
+          contractData.incluiOdonto ? 'Sim' : 'Não',
+          contractData.livreAdesao ? 'Sim' : 'Não',
+          contractData.compulsorio ? 'Sim' : 'Não',
+          contractData.aproveitamentoCarencia ? 'Sim' : 'Não',
+          contractData.inicioVigencia || '',
+          contractData.periodoMinimo || '',
+          internalData.reuniao ? 'Sim' : 'Não',
+          internalData.nomeReuniao || '',
+          internalData.vendaDupla ? 'Sim' : 'Não',
+          internalData.nomeVendaDupla || '',
+          internalData.desconto || '',
+          internalData.origemVenda || '',
+          internalData.autorizadorDesconto || '',
+          internalData.observacoesFinanceiras || '',
+          internalData.observacoesCliente || ''
+        ];
+
+        // Adicionar dados dos titulares
+        for (let i = 0; i < maxTitulares; i++) {
+          const titular = titulares[i] || {};
+          row.push(
+            titular.nome || '',
+            titular.cpf || '',
+            titular.rg || '',
+            titular.email || '',
+            titular.telefone || ''
+          );
+        }
+
+        // Adicionar dados dos dependentes
+        for (let i = 0; i < maxDependentes; i++) {
+          const dependente = dependentes[i] || {};
+          row.push(
+            dependente.nome || '',
+            dependente.cpf || '',
+            dependente.parentesco || ''
+          );
+        }
+
+        // Campos extras
+        row.push(
+          proposal.vendorAttachments ? proposal.vendorAttachments.length.toString() : '0',
+          proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('pt-BR') : ''
+        );
+
+        return row;
+      });
+
+      return [headers, ...rows];
+    };
+
+    const realSheetData = generateRealSheetData();
+    const totalProposals = realProposals.length;
+    const totalColumns = realSheetData.length > 0 ? realSheetData[0].length : 0;
 
     return (
       <div className="space-y-6">
@@ -1022,80 +1142,84 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
           </div>
 
-          {/* Cards de Estatísticas Baseados nas Imagens */}
+          {/* Cards de Estatísticas Baseados nos Dados Reais */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
               <div className="flex items-center mb-2">
-                <span className="text-blue-600 dark:text-blue-400 text-sm">👁️</span>
+                <span className="text-blue-600 dark:text-blue-400 text-sm">📋</span>
                 <span className="text-blue-600 dark:text-blue-400 text-sm font-medium ml-2">Total de Propostas</span>
               </div>
-              <div className="text-2xl font-bold text-blue-800 dark:text-blue-300">7</div>
+              <div className="text-2xl font-bold text-blue-800 dark:text-blue-300">{totalProposals}</div>
             </div>
             
             <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
               <div className="flex items-center mb-2">
-                <span className="text-green-600 dark:text-green-400 text-sm">👥</span>
-                <span className="text-green-600 dark:text-green-400 text-sm font-medium ml-2">Colunas Geradas</span>
+                <span className="text-green-600 dark:text-green-400 text-sm">📊</span>
+                <span className="text-green-600 dark:text-green-400 text-sm font-medium ml-2">Colunas da Planilha</span>
               </div>
-              <div className="text-2xl font-bold text-green-800 dark:text-green-300">102</div>
+              <div className="text-2xl font-bold text-green-800 dark:text-green-300">{totalColumns}</div>
             </div>
             
             <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
               <div className="flex items-center mb-2">
                 <span className="text-purple-600 dark:text-purple-400 text-sm">🕐</span>
-                <span className="text-purple-600 dark:text-purple-400 text-sm font-medium ml-2">Última atualização</span>
+                <span className="text-purple-600 dark:text-purple-400 text-sm font-medium ml-2">Última Atualização</span>
               </div>
-              <div className="text-lg font-bold text-purple-800 dark:text-purple-300">12:37:09</div>
+              <div className="text-lg font-bold text-purple-800 dark:text-purple-300">
+                {new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit', second: '2-digit'})}
+              </div>
             </div>
             
             <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
               <div className="flex items-center mb-2">
-                <span className="text-orange-600 dark:text-orange-400 text-sm">⚙️</span>
-                <span className="text-orange-600 dark:text-orange-400 text-sm font-medium ml-2">Campos Dinâmicos</span>
+                <span className="text-orange-600 dark:text-orange-400 text-sm">🔄</span>
+                <span className="text-orange-600 dark:text-orange-400 text-sm font-medium ml-2">Status do Sistema</span>
               </div>
-              <div className="text-2xl font-bold text-orange-800 dark:text-orange-300">AUTO</div>
-              <div className="text-xs text-orange-600 dark:text-orange-400">Adição automática</div>
+              <div className="text-lg font-bold text-orange-800 dark:text-orange-300">ATIVO</div>
+              <div className="text-xs text-orange-600 dark:text-orange-400">Sincronizando</div>
             </div>
           </div>
 
-          {/* Estrutura Dinâmica - Explicação */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-4">
-            <h3 className="text-yellow-800 dark:text-yellow-200 font-semibold text-sm mb-2">📋 Estrutura Dinâmica - Uma Empresa = Uma Linha</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-yellow-700 dark:text-yellow-300">
-              <div className="flex items-center">
-                <span className="text-blue-600 dark:text-blue-400 mr-2">👨‍💼</span>
-                <div>
-                  <div className="font-medium">Máximo Titulares</div>
-                  <div className="text-lg font-bold">1</div>
-                  <div className="text-xs">Campos criados dinamicamente</div>
+          {/* Estrutura Real da Planilha */}
+          {totalProposals > 0 && (
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-4">
+              <h3 className="text-yellow-800 dark:text-yellow-200 font-semibold text-sm mb-2">📋 Estrutura Real da Planilha - {totalProposals} Propostas</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-yellow-700 dark:text-yellow-300">
+                <div className="flex items-center">
+                  <span className="text-blue-600 dark:text-blue-400 mr-2">👨‍💼</span>
+                  <div>
+                    <div className="font-medium">Máximo Titulares</div>
+                    <div className="text-lg font-bold">{realProposals.reduce((max, p) => Math.max(max, (p.titulares || []).length), 1)}</div>
+                    <div className="text-xs">Detectado automaticamente</div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <span className="text-purple-600 dark:text-purple-400 mr-2">👨‍👩‍👧‍👦</span>
-                <div>
-                  <div className="font-medium">Máximo Dependentes</div>
-                  <div className="text-lg font-bold">0</div>
-                  <div className="text-xs">Campos criados dinamicamente</div>
+                <div className="flex items-center">
+                  <span className="text-purple-600 dark:text-purple-400 mr-2">👨‍👩‍👧‍👦</span>
+                  <div>
+                    <div className="font-medium">Máximo Dependentes</div>
+                    <div className="text-lg font-bold">{realProposals.reduce((max, p) => Math.max(max, (p.dependentes || []).length), 0)}</div>
+                    <div className="text-xs">Detectado automaticamente</div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <span className="text-green-600 dark:text-green-400 mr-2">📊</span>
-                <div>
-                  <div className="font-medium">Colunas Totais</div>
-                  <div className="text-lg font-bold">102</div>
-                  <div className="text-xs">Campos por linha</div>
+                <div className="flex items-center">
+                  <span className="text-green-600 dark:text-green-400 mr-2">📊</span>
+                  <div>
+                    <div className="font-medium">Campos Base</div>
+                    <div className="text-lg font-bold">23</div>
+                    <div className="text-xs">Campos fixos + internos</div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <span className="text-orange-600 dark:text-orange-400 mr-2">🔄</span>
-                <div>
-                  <div className="font-medium">Campos Dinâmicos</div>
-                  <div className="text-lg font-bold">AUTO</div>
-                  <div className="text-xs">Adição automática</div>
+                <div className="flex items-center">
+                  <span className="text-orange-600 dark:text-orange-400 mr-2">🔄</span>
+                  <div>
+                    <div className="font-medium">Campos Dinâmicos</div>
+                    <div className="text-lg font-bold">{totalColumns - 23}</div>
+                    <div className="text-xs">Titulares + dependentes</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Prévia dos Dados da Planilha - Seção como mostrado nas imagens */}
@@ -1110,40 +1234,47 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
           
           <div className="text-sm text-blue-600 dark:text-blue-400 mb-2 flex items-center space-x-4">
-            <span>📜 Role horizontalmente para ver todos os 102 campos</span>
+            <span>📜 Role horizontalmente para ver todos os {totalColumns} campos</span>
             <span>🔄 Atualização automática a cada 5 segundos</span>
+            <span>📊 {totalProposals} propostas carregadas</span>
           </div>
 
-          {/* Tabela de dados da planilha com scroll horizontal */}
+          {/* Tabela de dados reais da planilha */}
           <div className="overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg">
-            <table className="min-w-full text-xs">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                {mockSheetData.length > 0 && (
+            {realSheetData.length > 0 ? (
+              <table className="min-w-full text-xs">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    {mockSheetData[0].map((header, index) => (
+                    {realSheetData[0].map((header, index) => (
                       <th key={index} className="px-3 py-2 text-left font-medium text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600 whitespace-nowrap">
                         {header}
                       </th>
                     ))}
                   </tr>
-                )}
-              </thead>
-              <tbody>
-                {mockSheetData.slice(1).map((row, rowIndex) => (
-                  <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}>
-                    {row.map((cell, cellIndex) => (
-                      <td key={cellIndex} className="px-3 py-2 border-r border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {realSheetData.slice(1).map((row, rowIndex) => (
+                    <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}>
+                      {row.map((cell, cellIndex) => (
+                        <td key={cellIndex} className="px-3 py-2 border-r border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                          {cell || ''}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                <div className="mb-4">📋</div>
+                <div className="text-sm">Nenhuma proposta encontrada no sistema</div>
+                <div className="text-xs mt-2">Aguardando propostas para gerar a estrutura da planilha</div>
+              </div>
+            )}
           </div>
           
           <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
-            Role horizontalmente para navegar pelos 102 campos
+            {totalColumns > 0 ? `Role horizontalmente para navegar pelos ${totalColumns} campos` : 'A estrutura da planilha será gerada automaticamente quando propostas forem criadas'}
           </div>
         </div>
 
@@ -1152,7 +1283,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Controle de Planilhas Conectadas</h3>
             <button
-              onClick={() => showInternalNotification('Adicionando nova planilha...', 'info')}
+              onClick={() => console.log('Adicionando nova planilha...')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               + Adicionar Nova Planilha
@@ -1170,9 +1301,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                       Ativo
                     </span>
-                    <span>7 linhas</span>
-                    <span>102 colunas</span>
-                    <span>Atualizada: 12:37:09</span>
+                    <span>{totalProposals} linhas</span>
+                    <span>{totalColumns} colunas</span>
+                    <span>Atualizada: {new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit', second: '2-digit'})}</span>
                   </div>
                 </div>
               </div>
@@ -1265,7 +1396,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 <button
                   onClick={() => {
                     setShowEditModal(false);
-                    showInternalNotification('Planilha atualizada com sucesso', 'success');
+                    console.log('Planilha atualizada');
                   }}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                 >
