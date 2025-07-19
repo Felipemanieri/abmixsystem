@@ -15,24 +15,28 @@ export function analyzeDynamicStructure(proposals: any[]): {
   maxDependentes: number;
   totalColumns: number;
 } {
-  let maxTitulares = 3; // Mínimo garantido
-  let maxDependentes = 5; // Mínimo garantido
+  let maxTitulares = 1; // Mínimo: pelo menos 1 titular sempre
+  let maxDependentes = 0; // Mínimo: 0 dependentes (pode não ter)
   
-  // ANÁLISE AUTOMÁTICA DOS DADOS REAIS
+  // ANÁLISE AUTOMÁTICA DOS DADOS REAIS - DETECÇÃO ILIMITADA
   for (const proposal of proposals) {
     const titulares = proposal.titulares || [];
     const dependentes = proposal.dependentes || [];
     
-    // Detectar quantos titulares existem
+    // Detectar quantos titulares existem (pelo menos 1)
     if (titulares.length > maxTitulares) {
       maxTitulares = titulares.length;
     }
     
-    // Detectar quantos dependentes existem
+    // Detectar quantos dependentes existem (pode ser 0)
     if (dependentes.length > maxDependentes) {
       maxDependentes = dependentes.length;
     }
   }
+  
+  // GARANTIR MÍNIMOS FUNCIONAIS APENAS SE NECESSÁRIO
+  if (maxTitulares < 3) maxTitulares = 3; // Mínimo 3 para layout
+  if (maxDependentes < 5) maxDependentes = 5; // Mínimo 5 para layout
   
   // Calcular total de colunas
   const baseColumns = 8; // ID, LINK, EMPRESA, CNPJ, VENDEDOR, PLANO, VALOR, STATUS
@@ -110,10 +114,10 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
   
   // INFORMAÇÕES DO CONTRATO
   row.push(
-    contractData.incluiOdonto ? 'Sim' : 'Não',
+    contractData.odontoConjugado ? 'Sim' : 'Não',
     contractData.livreAdesao ? 'Sim' : 'Não',
     contractData.compulsorio ? 'Sim' : 'Não',
-    contractData.aproveitamentoCarencia ? 'Sim' : 'Não',
+    contractData.aproveitamentoCongenere ? 'Sim' : 'Não',
     contractData.inicioVigencia || '',
     contractData.periodoMinimo || ''
   );
@@ -136,7 +140,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     const titular = titulares[i];
     if (titular) {
       row.push(
-        titular.nome || '',
+        titular.nomeCompleto || '',
         titular.cpf || '',
         titular.rg || '',
         titular.emailPessoal || '',
@@ -153,7 +157,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     const dependente = dependentes[i];
     if (dependente) {
       row.push(
-        dependente.nome || '',
+        dependente.nomeCompleto || '',
         dependente.cpf || '',
         dependente.parentesco || ''
       );
