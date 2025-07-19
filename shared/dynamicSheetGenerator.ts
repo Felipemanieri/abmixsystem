@@ -1,11 +1,13 @@
-// SISTEMA DE PLANILHA HORIZONTAL FIXA COM EXPANSÃO AUTOMÁTICA
+// SISTEMA DE PLANILHA HORIZONTAL COM EXPANSÃO AUTOMÁTICA ILIMITADA
 // 
 // REGRA 1: UMA EMPRESA = UMA LINHA ÚNICA - Cada proposta ocupa apenas uma linha horizontal
-// REGRA 2: CAMPOS FIXOS PRÉ-DEFINIDOS - TITULAR1-3, DEPENDENTE1-5 (expande se necessário)
+// REGRA 2: CAMPOS CRIADOS AUTOMATICAMENTE - TITULAR1, TITULAR2... DEPENDENTE1, DEPENDENTE2... (SEM LIMITE)
 // REGRA 3: CAMPOS VAZIOS PERMITIDOS - Campos não preenchidos ficam em branco
 // REGRA 4: JAMAIS CRIAR NOVA LINHA PARA MESMA EMPRESA - Sempre atualizar linha existente
 // REGRA 5: ESTRUTURA HORIZONTAL - Todos os dados lado a lado na mesma linha
 // REGRA 6: CAMPOS AGRUPADOS - Titular1_Nome, Titular1_CPF ficam juntos
+// 
+// TITULARES E DEPENDENTES: SEM LIMITES - Sistema cria campos automaticamente conforme necessário
 
 export interface DynamicSheetData {
   headers: string[];
@@ -21,41 +23,39 @@ export function analyzeDynamicStructure(proposals: any[]): {
   maxDependentes: number;
   totalColumns: number;
 } {
-  // ESTRUTURA HORIZONTAL FIXA - REGRAS 2 e 3
-  const maxTitulares = 3; // FIXO: TITULAR1, TITULAR2, TITULAR3
-  const maxDependentes = 5; // FIXO: DEPENDENTE1, DEPENDENTE2, DEPENDENTE3, DEPENDENTE4, DEPENDENTE5
+  // EXPANSÃO ILIMITADA - SEM LIMITES FIXOS
+  let maxTitulares = 1; // Mínimo: pelo menos 1 titular sempre existe
+  let maxDependentes = 0; // Mínimo: pode não ter dependentes
   
-  // DETECÇÃO DINÂMICA PARA EXPANSÃO AUTOMÁTICA SE NECESSÁRIO
-  let realMaxTitulares = maxTitulares;
-  let realMaxDependentes = maxDependentes;
-  
+  // DETECÇÃO AUTOMÁTICA ILIMITADA - QUALQUER QUANTIDADE
   for (const proposal of proposals) {
     const titulares = proposal.titulares || [];
     const dependentes = proposal.dependentes || [];
     
-    // Se alguma empresa tem mais titulares/dependentes, expandir automaticamente
-    if (titulares.length > realMaxTitulares) {
-      realMaxTitulares = titulares.length;
+    // Detectar máximo real de titulares (SEM LIMITE)
+    if (titulares.length > maxTitulares) {
+      maxTitulares = titulares.length;
     }
     
-    if (dependentes.length > realMaxDependentes) {
-      realMaxDependentes = dependentes.length;
+    // Detectar máximo real de dependentes (SEM LIMITE)
+    if (dependentes.length > maxDependentes) {
+      maxDependentes = dependentes.length;
     }
   }
   
-  // Calcular total de colunas baseado na estrutura real detectada
+  // Calcular total de colunas baseado na detecção ilimitada
   const baseColumns = 8; // ID, LINK, EMPRESA, CNPJ, VENDEDOR, PLANO, VALOR, STATUS
   const contractColumns = 6; // ODONTO, LIVRE_ADESAO, COMPULSORIO, APROVEITAMENTO, INICIO, PERIODO
   const internalColumns = 9; // REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, ORIGEM, AUTORIZADOR, OBS_FINANCEIRAS, OBS_CLIENTE
-  const titularColumns = realMaxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular
-  const dependenteColumns = realMaxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente
+  const titularColumns = maxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular (ILIMITADO)
+  const dependenteColumns = maxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente (ILIMITADO)
   const extraColumns = 2; // ANEXOS, DATA_CONTRATO
   
   const totalColumns = baseColumns + contractColumns + internalColumns + titularColumns + dependenteColumns + extraColumns;
   
   return {
-    maxTitulares: realMaxTitulares,
-    maxDependentes: realMaxDependentes,
+    maxTitulares,
+    maxDependentes,
     totalColumns
   };
 }
@@ -72,8 +72,8 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   // INFORMAÇÕES INTERNAS
   headers.push('REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE');
   
-  // TITULARES - REGRA 6 (CAMPOS AGRUPADOS)
-  // Criação automática baseada no máximo detectado, mas sempre pelo menos 3
+  // TITULARES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
+  // Cria automaticamente quantos titulares forem necessários (1, 2, 5, 10, 50...)
   for (let i = 1; i <= maxTitulares; i++) {
     headers.push(
       `TITULAR${i}_NOME`,
@@ -84,8 +84,8 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
     );
   }
   
-  // DEPENDENTES - REGRA 6 (CAMPOS AGRUPADOS)
-  // Criação automática baseada no máximo detectado, mas sempre pelo menos 5
+  // DEPENDENTES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
+  // Cria automaticamente quantos dependentes forem necessários (0, 1, 3, 20, 100...)
   for (let i = 1; i <= maxDependentes; i++) {
     headers.push(
       `DEPENDENTE${i}_NOME`,

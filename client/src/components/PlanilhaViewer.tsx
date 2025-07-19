@@ -380,16 +380,16 @@ export default function PlanilhaViewer() {
           </div>
         </div>
 
-        {/* Informações da Estrutura Horizontal Fixa */}
+        {/* Informações da Estrutura Horizontal com Expansão Ilimitada */}
         <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900 dark:to-green-900 rounded-lg p-4 mb-6">
           <div className="flex items-center mb-3">
             <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sistema de Planilha Horizontal Fixa</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sistema de Planilha Horizontal - Expansão Ilimitada</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 1:</strong> Uma empresa = uma linha única</p>
-              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 2:</strong> Campos fixos: TITULAR1-3, DEPENDENTE1-5</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 2:</strong> Campos criados automaticamente (SEM LIMITE)</p>
               <p className="text-gray-700 dark:text-gray-300"><strong>REGRA 3:</strong> Campos vazios permitidos (ficam em branco)</p>
             </div>
             <div>
@@ -397,6 +397,12 @@ export default function PlanilhaViewer() {
               <p className="text-gray-700 dark:text-gray-300 mb-2"><strong>REGRA 5:</strong> Estrutura horizontal (dados lado a lado)</p>
               <p className="text-gray-700 dark:text-gray-300"><strong>REGRA 6:</strong> Campos agrupados por pessoa</p>
             </div>
+          </div>
+          <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+              <strong>✨ EXPANSÃO AUTOMÁTICA:</strong> Titulares e dependentes não têm limites. 
+              Sistema cria TITULAR1, TITULAR2, TITULAR3... e DEPENDENTE1, DEPENDENTE2... automaticamente conforme necessário.
+            </p>
           </div>
         </div>
 
@@ -418,7 +424,7 @@ export default function PlanilhaViewer() {
             <div className="text-2xl font-bold text-green-900 dark:text-green-200">
               {dynamicSheetData?.maxTitulares || 3}
             </div>
-            <div className="text-sm text-green-600 dark:text-green-400">Titulares (expansível)</div>
+            <div className="text-sm text-green-600 dark:text-green-400">Titulares (ilimitado)</div>
           </div>
           <div className="bg-purple-50 dark:bg-purple-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">
@@ -428,7 +434,7 @@ export default function PlanilhaViewer() {
             <div className="text-2xl font-bold text-purple-900 dark:text-purple-200">
               {dynamicSheetData?.maxDependentes || 5}
             </div>
-            <div className="text-sm text-purple-600 dark:text-purple-400">Dependentes (expansível)</div>
+            <div className="text-sm text-purple-600 dark:text-purple-400">Dependentes (ilimitado)</div>
           </div>
           <div className="bg-yellow-50 dark:bg-yellow-900 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">

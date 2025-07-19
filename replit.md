@@ -154,6 +154,21 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Sistema de Expansão Ilimitada de Titulares e Dependentes (Jan 19, 2025)
+- **Removidas todas as limitações fixas de titulares e dependentes**:
+  - Sistema agora permite qualquer quantidade de titulares (1, 2, 5, 10, 50...)
+  - Sistema agora permite qualquer quantidade de dependentes (0, 1, 3, 20, 100...)
+  - Detecção automática sem limites máximos pré-definidos
+  - Expansão automática da planilha baseada nos dados reais inseridos
+- **6 regras da estrutura horizontal mantidas**:
+  - REGRA 1: Uma empresa = uma linha única
+  - REGRA 2: Campos criados automaticamente (TITULAR1, TITULAR2... DEPENDENTE1, DEPENDENTE2...) - SEM LIMITE
+  - REGRA 3: Campos vazios permitidos (ficam em branco)
+  - REGRA 4: Jamais criar nova linha para mesma empresa
+  - REGRA 5: Estrutura horizontal (todos os dados lado a lado)
+  - REGRA 6: Campos agrupados (Titular1_Nome, Titular1_CPF ficam juntos)
+- **Interface atualizada**: Mostra "ilimitado" nas estatísticas de titulares e dependentes
+
 ### Padronização Visual dos Botões Google Drive (Jan 19, 2025)
 - **Implementado esquema de cores unificado cinza claro para todos os botões**:
   - Todos os botões (Abrir, Editar, Remover, Backup Manual, Configurar Intervalo) agora usam tons de cinza
