@@ -197,8 +197,65 @@ function App() {
     );
   }
 
-  // Se está logado, mostrar o portal correspondente
+  // Se está logado, verificar se o portal está ativo antes de renderizar
   if (currentUser) {
+    // Verificar se o portal está desativado
+    const isPortalDisabled = (role: string) => {
+      switch (role) {
+        case 'client':
+          return !portalVisibility.showClientPortal;
+        case 'vendor':
+          return !portalVisibility.showVendorPortal;
+        case 'financial':
+          return !portalVisibility.showFinancialPortal;
+        case 'implementation':
+          return !portalVisibility.showImplementationPortal;
+        case 'supervisor':
+          return !portalVisibility.showSupervisorPortal;
+        case 'restricted':
+          return false; // Área restrita sempre ativa
+        default:
+          return true;
+      }
+    };
+
+    // Se o portal está desativado, mostrar mensagem e forçar logout
+    if (isPortalDisabled(currentUser.role)) {
+      return (
+        <ThemeProvider>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full text-center">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-red-600 dark:text-red-400" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  Portal Desativado
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Este portal foi temporariamente desativado pelo administrador do sistema.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Entre em contato com o administrador ou tente novamente mais tarde.
+                </p>
+                
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                >
+                  Voltar à Página Inicial
+                </button>
+              </div>
+            </div>
+          </div>
+        </ThemeProvider>
+      );
+    }
+
+    // Portal ativo - renderizar normalmente
     return (
       <ThemeProvider>
         {(() => {
