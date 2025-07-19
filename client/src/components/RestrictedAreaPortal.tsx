@@ -1161,20 +1161,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 Formato de dados antes da integração com o Planilhas Google
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={manualUpdate}
-                className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                🔄 Atualizar
-              </button>
-              <button
-                onClick={exportCSV}
-                className="bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                💾 Baixar CSV
-              </button>
-            </div>
+
           </div>
 
           {/* Cards de Estatísticas Baseados nos Dados Reais */}
