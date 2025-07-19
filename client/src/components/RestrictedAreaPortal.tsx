@@ -484,7 +484,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   };
 
   // Função para adicionar nova planilha
-  const addNewSheet = (newSheet: { name: string; url: string; observation: string }) => {
+  const addNewSheet = (newSheet: { name: string; url: string; observation: string; department: string; owner: string; shareLink: string }) => {
     const now = new Date();
     const sheetId = Date.now();
     
@@ -503,6 +503,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       name: newSheet.name,
       url: cleanUrl,
       observation: newSheet.observation || '',
+      department: newSheet.department,
+      owner: newSheet.owner,
+      shareLink: newSheet.shareLink || '',
       status: 'Ativo',
       lastUpdate: now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}),
       createdAt: now.toISOString()
@@ -511,7 +514,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     setConnectedSheets(prev => [...prev, sheet]);
     setShowAddSheetModal(false);
     
-    showInternalNotification(`Planilha "${newSheet.name}" adicionada com sucesso!`, 'success');
+    showInternalNotification(`Planilha "${newSheet.name}" adicionada com sucesso ao departamento ${newSheet.department}!`, 'success');
   };
 
   const configureAutomation = (type: string) => {
@@ -1339,16 +1342,44 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                           <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mr-3">
                             <span className="text-green-600 dark:text-green-400 text-sm">📋</span>
                           </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
+                              {sheet.department && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                  🏢 {sheet.department}
+                                </span>
+                              )}
+                            </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-96">{sheet.url}</p>
+                            {sheet.owner && (
+                              <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                                👤 <span className="font-medium">Proprietário:</span> {sheet.owner}
+                              </p>
+                            )}
                           </div>
                         </div>
                         
                         {sheet.observation && (
                           <div className="mb-2 ml-11">
                             <p className="text-xs text-gray-600 dark:text-gray-400 italic">
-                              💡 {sheet.observation}
+                              💡 <span className="font-medium">Observação:</span> {sheet.observation}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {sheet.shareLink && (
+                          <div className="mb-2 ml-11">
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              🔗 <span className="font-medium">Link Compartilhamento:</span> 
+                              <a 
+                                href={sheet.shareLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-blue-600 dark:text-blue-400 hover:underline ml-1"
+                              >
+                                Acessar
+                              </a>
                             </p>
                           </div>
                         )}
@@ -1388,7 +1419,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
         {/* Modal de Adição de Nova Planilha */}
         {showAddSheetModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Adicionar Nova Planilha</h3>
               <form onSubmit={(e) => {
                 e.preventDefault();
@@ -1396,21 +1427,43 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 const newSheet = {
                   name: formData.get('name') as string,
                   url: formData.get('url') as string,
-                  observation: formData.get('observation') as string
+                  observation: formData.get('observation') as string,
+                  department: formData.get('department') as string,
+                  owner: formData.get('owner') as string,
+                  shareLink: formData.get('shareLink') as string
                 };
                 addNewSheet(newSheet);
               }}>
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Planilha *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder="Ex: Planilha Vendas 2025"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Planilha *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="Ex: Planilha Vendas 2025"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Departamento *</label>
+                      <select
+                        name="department"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="">Selecione o departamento</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Implementação">Implementação</option>
+                        <option value="Supervisão">Supervisão</option>
+                        <option value="Administração">Administração</option>
+                        <option value="Sistema">Sistema</option>
+                      </select>
+                    </div>
                   </div>
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link/ID do Google Sheets *</label>
                     <input
@@ -1424,6 +1477,34 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       Cole a URL completa ou apenas o ID da planilha
                     </p>
                   </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Proprietário *</label>
+                    <input
+                      type="text"
+                      name="owner"
+                      required
+                      placeholder="Ex: João Silva - comercial@abmix.com.br"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Nome e email do responsável pela planilha
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link de Compartilhamento (opcional)</label>
+                    <input
+                      type="url"
+                      name="shareLink"
+                      placeholder="https://docs.google.com/spreadsheets/d/.../edit?usp=sharing"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Link público para compartilhamento (se diferente do link principal)
+                    </p>
+                  </div>
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Observação (opcional)</label>
                     <textarea
