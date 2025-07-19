@@ -118,29 +118,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [showInternalMessage, setShowInternalMessage] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
-  // Sistema interno de notificações (sem alerts do navegador)
-  const [internalNotifications, setInternalNotifications] = useState<Array<{
-    id: string;
-    message: string;
-    type: 'success' | 'error' | 'info';
-    timestamp: Date;
-  }>>([]);
-  
-  // Função para adicionar notificação interna
-  const addInternalNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
-    const newNotification = {
-      id: Date.now().toString(),
-      message,
-      type,
-      timestamp: new Date()
-    };
-    setInternalNotifications(prev => [newNotification, ...prev.slice(0, 4)]); // Manter apenas 5 notificações
-    
-    // Remover automaticamente após 5 segundos
-    setTimeout(() => {
-      setInternalNotifications(prev => prev.filter(n => n.id !== newNotification.id));
-    }, 5000);
-  };
+  // DESABILITAR TODAS AS NOTIFICAÇÕES DO RESTRICTED AREA PORTAL
+  const [notifications, setNotifications] = useState([]);
   
   // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
   const [timeConfigs, setTimeConfigs] = useState({
@@ -158,9 +137,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     // FORÇAR NOTIFICAÇÕES VAZIAS SEMPRE
     setNotifications([]);
     // Notificações removidas
-    
-    // Sistema de notificações internas carregado
-    addInternalNotification('Sistema de notificações internas carregado com sucesso', 'success');
   }, [user.name]);
   
   // Estados para configurações
@@ -211,12 +187,12 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           detail: newVisibility 
         }));
         
-        // Notificação interna no painel
-        addInternalNotification('Configuração de portal atualizada com sucesso!', 'success');
+        // Notificação visual de sucesso
+        alert('✅ Configuração de portal atualizada com sucesso!');
       }
     } catch (error) {
       console.error('Erro ao salvar visibilidade dos portais:', error);
-      addInternalNotification('Erro ao salvar configuração. Tente novamente.', 'error');
+      alert('❌ Erro ao salvar configuração. Tente novamente.');
     }
   };
 
@@ -424,13 +400,13 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       const result = await response.json();
       
       if (response.ok) {
-        addInternalNotification(`${result.message} - Última atualização: ${new Date(result.timestamp).toLocaleString('pt-BR')}`, 'success');
+        alert(`✅ ${result.message}\n\nÚltima atualização: ${new Date(result.timestamp).toLocaleString('pt-BR')}`);
       } else {
-        addInternalNotification(`Erro na sincronização: ${result.error}`, 'error');
+        alert(`❌ Erro na sincronização: ${result.error}`);
       }
     } catch (error) {
       console.error('Erro ao sincronizar:', error);
-      addInternalNotification('Erro de conexão. Verifique sua internet e tente novamente.', 'error');
+      alert('❌ Erro de conexão. Verifique sua internet e tente novamente.');
     }
   };
 
@@ -1470,59 +1446,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
-      {/* Notificações Internas - Fixadas no topo */}
-      {internalNotifications.length > 0 && (
-        <div className="fixed top-4 right-4 z-50 space-y-2">
-          {internalNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`
-                max-w-sm p-4 rounded-lg shadow-lg border-l-4 bg-white dark:bg-gray-800
-                ${notification.type === 'success' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : ''}
-                ${notification.type === 'error' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}
-                ${notification.type === 'info' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : ''}
-                transform transition-all duration-300 animate-in slide-in-from-right
-              `}
-            >
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  {notification.type === 'success' && (
-                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                  )}
-                  {notification.type === 'error' && (
-                    <X className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  )}
-                  {notification.type === 'info' && (
-                    <AlertTriangle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  )}
-                </div>
-                <div className="ml-3 flex-1">
-                  <p className={`
-                    text-sm font-medium
-                    ${notification.type === 'success' ? 'text-green-800 dark:text-green-200' : ''}
-                    ${notification.type === 'error' ? 'text-red-800 dark:text-red-200' : ''}
-                    ${notification.type === 'info' ? 'text-blue-800 dark:text-blue-200' : ''}
-                  `}>
-                    {notification.message}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {notification.timestamp.toLocaleTimeString('pt-BR')}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setInternalNotifications(prev => 
-                    prev.filter(n => n.id !== notification.id)
-                  )}
-                  className="ml-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2142,7 +2065,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  addInternalNotification('Configurações do WhatsApp salvas com sucesso!', 'success');
+                  alert('Configurações do WhatsApp salvas com sucesso!');
                   setShowWhatsAppConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -2209,7 +2132,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  addInternalNotification('Configurações de backup salvas! Próximo backup: hoje às 02:00', 'success');
+                  alert('Configurações de backup salvas! Próximo backup: hoje às 02:00');
                   setShowBackupConfigModal(false);
                 }}
                 className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
