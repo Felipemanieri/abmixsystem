@@ -164,11 +164,35 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       
       if (response.ok) {
         setPortalVisibility(newVisibility);
-        // Força recarregamento da página principal
+        
+        // Múltiplas formas de notificar a mudança
+        // 1. PostMessage para a janela principal
         window.parent.postMessage({ type: 'PORTAL_VISIBILITY_CHANGED' }, '*');
+        
+        // 2. PostMessage para todas as janelas abertas
+        if (window.opener) {
+          window.opener.postMessage({ type: 'PORTAL_VISIBILITY_CHANGED' }, '*');
+        }
+        
+        // 3. Broadcast para todas as abas/janelas do mesmo domínio
+        const bc = new BroadcastChannel('portal-changes');
+        bc.postMessage({ type: 'PORTAL_VISIBILITY_CHANGED', data: newVisibility });
+        
+        // 4. Salvar no localStorage para detecção de mudanças
+        localStorage.setItem('portal-visibility-timestamp', Date.now().toString());
+        localStorage.setItem('portal-visibility', JSON.stringify(newVisibility));
+        
+        // 5. Disparar evento personalizado
+        window.dispatchEvent(new CustomEvent('portalVisibilityChanged', { 
+          detail: newVisibility 
+        }));
+        
+        // Notificação visual de sucesso
+        alert('✅ Configuração de portal atualizada com sucesso!');
       }
     } catch (error) {
       console.error('Erro ao salvar visibilidade dos portais:', error);
+      alert('❌ Erro ao salvar configuração. Tente novamente.');
     }
   };
 

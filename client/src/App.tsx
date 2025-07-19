@@ -50,7 +50,6 @@ function App() {
 
   // Carrega configurações globais dos portais
   useEffect(() => {
-    // Configurações padrão sem necessidade de API
     const loadPortalVisibility = async () => {
       try {
         const response = await fetch('/api/portal-visibility');
@@ -65,20 +64,103 @@ function App() {
     
     loadPortalVisibility();
 
-    // Escuta mudanças da área restrita
+    // 1. Escuta mudanças via PostMessage
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'PORTAL_VISIBILITY_CHANGED') {
         loadPortalVisibility();
+        // Se usuário está logado em portal desativado, fazer logout
+        if (currentUser && isPortalDisabled(currentUser.role)) {
+          handleLogout();
+        }
       }
     };
     
+    // 2. Escuta mudanças via BroadcastChannel
+    const bc = new BroadcastChannel('portal-changes');
+    const handleBroadcast = (event: MessageEvent) => {
+      if (event.data?.type === 'PORTAL_VISIBILITY_CHANGED') {
+        if (event.data.data) {
+          setPortalVisibility(event.data.data);
+        } else {
+          loadPortalVisibility();
+        }
+        // Se usuário está logado em portal desativado, fazer logout
+        if (currentUser && isPortalDisabled(currentUser.role)) {
+          handleLogout();
+        }
+      }
+    };
+    
+    // 3. Escuta mudanças via evento personalizado
+    const handleCustomEvent = (event: CustomEvent) => {
+      if (event.detail) {
+        setPortalVisibility(event.detail);
+        // Se usuário está logado em portal desativado, fazer logout
+        if (currentUser && isPortalDisabled(currentUser.role)) {
+          handleLogout();
+        }
+      }
+    };
+    
+    // 4. Polling do localStorage para detectar mudanças
+    let lastTimestamp = localStorage.getItem('portal-visibility-timestamp');
+    const checkLocalStorage = () => {
+      const currentTimestamp = localStorage.getItem('portal-visibility-timestamp');
+      if (currentTimestamp && currentTimestamp !== lastTimestamp) {
+        lastTimestamp = currentTimestamp;
+        const storedData = localStorage.getItem('portal-visibility');
+        if (storedData) {
+          try {
+            const data = JSON.parse(storedData);
+            setPortalVisibility(data);
+            // Se usuário está logado em portal desativado, fazer logout
+            if (currentUser && isPortalDisabled(currentUser.role)) {
+              handleLogout();
+            }
+          } catch (e) {
+            console.error('Erro ao parsear dados do localStorage:', e);
+          }
+        }
+      }
+    };
+    
+    const storageInterval = setInterval(checkLocalStorage, 1000);
+    
+    // Registrar listeners
     window.addEventListener('message', handleMessage);
+    bc.addEventListener('message', handleBroadcast);
+    window.addEventListener('portalVisibilityChanged', handleCustomEvent as EventListener);
 
-    // Sistema funcionando normalmente
     console.log('Sistema Abmix carregado com sucesso');
     
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      bc.removeEventListener('message', handleBroadcast);
+      window.removeEventListener('portalVisibilityChanged', handleCustomEvent as EventListener);
+      clearInterval(storageInterval);
+      bc.close();
+    };
+  }, [currentUser]);
+
+  // Função auxiliar para verificar se portal está desativado
+  const isPortalDisabled = (role: string) => {
+    switch (role) {
+      case 'client':
+        return !portalVisibility.showClientPortal;
+      case 'vendor':
+        return !portalVisibility.showVendorPortal;
+      case 'financial':
+        return !portalVisibility.showFinancialPortal;
+      case 'implementation':
+        return !portalVisibility.showImplementationPortal;
+      case 'supervisor':
+        return !portalVisibility.showSupervisorPortal;
+      case 'restricted':
+        return false;
+      default:
+        return true;
+    }
+  };
 
   // Verificar URLs específicas para acesso direto aos portais
   useEffect(() => {
@@ -199,25 +281,6 @@ function App() {
 
   // Se está logado, verificar se o portal está ativo antes de renderizar
   if (currentUser) {
-    // Verificar se o portal está desativado
-    const isPortalDisabled = (role: string) => {
-      switch (role) {
-        case 'client':
-          return !portalVisibility.showClientPortal;
-        case 'vendor':
-          return !portalVisibility.showVendorPortal;
-        case 'financial':
-          return !portalVisibility.showFinancialPortal;
-        case 'implementation':
-          return !portalVisibility.showImplementationPortal;
-        case 'supervisor':
-          return !portalVisibility.showSupervisorPortal;
-        case 'restricted':
-          return false; // Área restrita sempre ativa
-        default:
-          return true;
-      }
-    };
 
     // Se o portal está desativado, mostrar mensagem e forçar logout
     if (isPortalDisabled(currentUser.role)) {
