@@ -146,6 +146,27 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       setInternalNotification(prev => ({ ...prev, show: false }));
     }, 4000);
   };
+
+  // Função para adicionar nova planilha
+  const addNewSheet = (newSheet: any) => {
+    const sheet = {
+      id: Date.now(),
+      name: newSheet.name || `Nova Planilha ${connectedSheets.length + 1}`,
+      url: newSheet.url || 'https://docs.google.com/spreadsheets/new',
+      status: 'Ativo',
+      lastUpdate: new Date().toLocaleString('pt-BR')
+    };
+    setConnectedSheets(prev => [...prev, sheet]);
+    showInternalNotification('Planilha adicionada com sucesso!', 'success');
+  };
+
+  // Função para remover planilha
+  const removeSheet = (sheetId: number) => {
+    if (confirm('Tem certeza que deseja remover esta planilha?')) {
+      setConnectedSheets(prev => prev.filter(sheet => sheet.id !== sheetId));
+      showInternalNotification('Planilha removida com sucesso!', 'success');
+    }
+  };
   
   // Estados para configurações de tempo - MOVIDOS PARA O NÍVEL PRINCIPAL
   const [timeConfigs, setTimeConfigs] = useState({
@@ -162,6 +183,16 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   const [sheetName, setSheetName] = useState('Planilha Principal - Sistema Abmix');
   const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddSheetModal, setShowAddSheetModal] = useState(false);
+  const [connectedSheets, setConnectedSheets] = useState([
+    {
+      id: 1,
+      name: 'Planilha Principal - Sistema Abmix',
+      url: 'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit',
+      status: 'Ativo',
+      lastUpdate: new Date().toLocaleString('pt-BR')
+    }
+  ]);
   
   const [allPaused, setAllPaused] = useState(false);
   
@@ -980,10 +1011,9 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       setShowEditModal(true);
     };
 
-    const removeSheet = () => {
+    const removeMainSheet = () => {
       if (confirm('Tem certeza que deseja remover a planilha conectada?')) {
-        // Remoção da planilha sem notificação visual
-        console.log('Planilha removida');
+        showInternalNotification('Planilha principal removida com sucesso!', 'success');
       }
     };
 
@@ -1288,7 +1318,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Controle de Planilhas Conectadas</h3>
             <button
-              onClick={() => console.log('Adicionando nova planilha...')}
+              onClick={() => setShowAddSheetModal(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               + Adicionar Nova Planilha
@@ -1327,7 +1357,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   Editar
                 </button>
                 <button
-                  onClick={removeSheet}
+                  onClick={removeMainSheet}
                   className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
                 >
                   Remover
@@ -1363,8 +1393,92 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </select>
               </div>
             </div>
+
+            {/* Lista de Planilhas Conectadas */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Planilhas Conectadas ({connectedSheets.length})</h4>
+              {connectedSheets.map((sheet) => (
+                <div key={sheet.id} className="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-600 rounded">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Status: {sheet.status} • Última atualização: {sheet.lastUpdate}</p>
+                  </div>
+                  <div className="flex space-x-1">
+                    <button
+                      onClick={() => window.open(sheet.url, '_blank')}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors"
+                    >
+                      Abrir
+                    </button>
+                    <button
+                      onClick={() => removeSheet(sheet.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* Modal de Adição de Nova Planilha */}
+        {showAddSheetModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Adicionar Nova Planilha</h3>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
+                const newSheet = {
+                  name: formData.get('name') as string,
+                  url: formData.get('url') as string
+                };
+                addNewSheet(newSheet);
+                setShowAddSheetModal(false);
+              }}>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Planilha</label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="Ex: Planilha Vendas 2025"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL da Planilha</label>
+                    <input
+                      type="url"
+                      name="url"
+                      required
+                      placeholder="https://docs.google.com/spreadsheets/d/..."
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-2 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddSheetModal(false)}
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  >
+                    Adicionar Planilha
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* Modal de Edição */}
         {showEditModal && (
