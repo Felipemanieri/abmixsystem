@@ -1,0 +1,108 @@
+ ABA GOOGLE DRIVE (COM FUNÇÃO DE TODOS OS BOTÕES)
+Edite somente a aba já existente “Google Drive”.
+Não misture outras abas ou serviços.
+NÃO recuperar nada antigo/apagado.
+NÃO apagar funções já existentes.
+
+INFORMAÇÕES EXIBIDAS (NO MESMO LOCAL DA CAPACIDADE):
+Nome do proprietário do Drive
+
+Data de criação do Drive
+
+Link de compartilhamento (ícone/link)
+
+Última modificação em arquivo (data/hora)
+
+Data da última sincronização
+
+Quantidade de arquivos e pastas
+
+Capacidade usada/total
+
+BOTÕES (LADO A LADO, MESMA LINHA):
+Abrir:
+
+Abre o Google Drive no navegador.
+
+Editar:
+
+Edita o nome e o link do drive.
+
+Remover:
+
+Remove o drive da lista (só após confirmação do usuário).
+
+Backup Manual:
+
+Ao clicar, faz backup na hora, independente do intervalo configurado.
+
+Notifica no painel quando terminar (ou erro).
+
+Configurar Intervalo de Backup:
+
+Abre uma lista de opções para definir de quanto em quanto tempo o sistema faz backup automático desse drive.
+
+Opções de intervalo:
+
+1 segundo
+
+5 segundos
+
+10 segundos
+
+30 segundos
+
+1 minuto
+
+5 minutos
+
+10 minutos
+
+15 minutos
+
+1 hora
+
+5 horas
+
+10 horas
+
+24 horas
+
+Manual (só faz se clicar no botão “Backup Manual”)
+
+Mostra no painel qual intervalo está ativo para cada drive.
+
+REGRAS
+Todos botões devem ser bonitos, discretos, lado a lado.
+
+Todas notificações (backup feito, erro, alerta) aparecem DENTRO do painel.
+
+Nunca excluir drive sem o usuário clicar em Remover e confirmar.
+
+Não misturar nada de outros serviços Google.
+
+Não trazer de volta informações apagadas/antigas.
+
+Layout limpo, igual exemplo já enviado.
+
+EXEMPLO VISUAL
+less
+Copiar
+Editar
+Abmix sistema     ativo
+Capacidade: 0 GB / 15 GB
+Proprietário: Felipe Manieri
+Criado em: 19/07/2025
+Link Compartilhamento: [🔗]
+Última modificação: 19/07/2025 11:20
+Última sync: 19/07/2025 11:20
+Arquivos: 1.834 | Pastas: 247
+
+[ Abrir ] [ Editar ] [ Remover ] [ Backup Manual ] [ Configurar Intervalo ▼ ]
+(Opção selecionada: 5 minutos)
+Resumo para dev:
+
+Os botões “Backup Manual” e “Configurar Intervalo” devem ser funcionais, lado a lado dos demais.
+O botão de intervalo deve listar todas as opções acima, e o backup manual executa backup imediatamente.
+Todas notificações aparecem no painel.
+

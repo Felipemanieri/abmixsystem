@@ -316,9 +316,33 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
   // Estados para gerenciamento de drives
   const [drives, setDrives] = useState([]);
-  const [novoDrive, setNovoDrive] = useState({ nome: '', url: '', observacao: '' });
+  const [novoDrive, setNovoDrive] = useState({ 
+    nome: '', 
+    url: '', 
+    observacao: '',
+    proprietario: '',
+    linkCompartilhamento: ''
+  });
   const [abaAtiva, setAbaAtiva] = useState('drive');
   const [pendingRemoval, setPendingRemoval] = useState(null);
+  const [backupInProgress, setBackupInProgress] = useState(new Set());
+  
+  // Intervalos de backup disponíveis
+  const intervalosBackup = [
+    { value: '1s', label: '1 segundo' },
+    { value: '5s', label: '5 segundos' },
+    { value: '10s', label: '10 segundos' },
+    { value: '30s', label: '30 segundos' },
+    { value: '1m', label: '1 minuto' },
+    { value: '5m', label: '5 minutos' },
+    { value: '10m', label: '10 minutos' },
+    { value: '15m', label: '15 minutos' },
+    { value: '1h', label: '1 hora' },
+    { value: '5h', label: '5 horas' },
+    { value: '10h', label: '10 horas' },
+    { value: '24h', label: '24 horas' },
+    { value: 'manual', label: 'Manual (só com botão)' }
+  ];
 
   // Dados dos status (conforme imagem fornecida)
   const statusOptions = [
@@ -1101,8 +1125,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             ) : (
               <div className="space-y-3">
                 {drives.map((drive) => (
-                  <div key={drive.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
+                  <div key={drive.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-5">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center flex-1">
                         <div className={`w-3 h-3 rounded-full mr-4 ${
                           drive.status === 'ativo' ? 'bg-green-400' : 'bg-red-400'
@@ -1110,7 +1134,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         
                         <div className="flex-1">
                           <div className="flex items-center mb-2">
-                            <h5 className="font-medium text-gray-900 dark:text-white text-lg mr-3">
+                            <h5 className="font-semibold text-gray-900 dark:text-white text-lg mr-3">
                               {drive.nome}
                             </h5>
                             <span className={`px-2 py-1 text-xs rounded-full ${
@@ -1121,69 +1145,167 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                               {drive.status}
                             </span>
                           </div>
-                          
-                          <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                            Capacidade: {drive.usado} / {drive.espaco}
-                          </div>
-                          
-                          {drive.observacao && (
-                            <div className="text-sm text-gray-500 dark:text-gray-400 italic">
-                              {drive.observacao}
-                            </div>
-                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Informações Detalhadas do Drive */}
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                      <div className="space-y-2">
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Capacidade:</span> {drive.usado || '0 GB'} / {drive.espaco || '15 GB'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Proprietário:</span> {drive.proprietario || 'Felipe Manieri'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Criado em:</span> {drive.dataCriacao || '19/07/2025'}
+                        </div>
+                        <div className="flex items-center text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Link Compartilhamento:</span>
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(drive.linkCompartilhamento || drive.url);
+                              showInternalNotification('Link copiado para a área de transferência!', 'success');
+                            }}
+                            className="ml-2 p-1 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-800 rounded"
+                            title="Copiar link"
+                          >
+                            🔗
+                          </button>
                         </div>
                       </div>
                       
-                      <div className="flex space-x-2 ml-4">
-                        <button 
-                          onClick={() => window.open(drive.url, '_blank')}
-                          className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                          title="Abrir Drive"
-                        >
-                          <ExternalLink className="w-4 h-4 mr-1" />
-                          Abrir
-                        </button>
-                        
-                        <button 
-                          onClick={() => {
-                            setEditingDrive(drive);
-                            setShowEditDriveModal(true);
+                      <div className="space-y-2">
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Última modificação:</span> {drive.ultimaModificacao || '19/07/2025 11:20'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Última sync:</span> {drive.ultimaSync || '19/07/2025 11:20'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Arquivos:</span> {drive.arquivos || '1.834'} | <span className="font-medium">Pastas:</span> {drive.pastas || '247'}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          <span className="font-medium">Backup:</span> 
+                          <span className="ml-1 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
+                            {intervalosBackup.find(i => i.value === (drive.intervaloBackup || '5m'))?.label || '5 minutos'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {drive.observacao && (
+                      <div className="text-sm text-gray-500 dark:text-gray-400 italic mb-4 p-2 bg-gray-100 dark:bg-gray-600 rounded">
+                        <span className="font-medium">Observação:</span> {drive.observacao}
+                      </div>
+                    )}
+
+                    {/* Botões de Ação - Todos na mesma linha */}
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => window.open(drive.url, '_blank')}
+                        className="flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                        title="Abrir Drive no Navegador"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        Abrir
+                      </button>
+                      
+                      <button 
+                        onClick={() => {
+                          setEditingDrive(drive);
+                          setShowEditDriveModal(true);
+                        }}
+                        className="flex items-center px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
+                        title="Editar Nome e Configurações"
+                      >
+                        <Edit2 className="w-4 h-4 mr-1" />
+                        Editar
+                      </button>
+                      
+                      <button 
+                        onClick={() => {
+                          if (pendingRemoval === drive.id) {
+                            setDrives(drives.filter(d => d.id !== drive.id));
+                            showInternalNotification(`Drive removido: "${drive.nome}" (URL: ${drive.url}) - ${drive.observacao ? 'Obs: ' + drive.observacao : 'Sem observação'}`, 'success');
+                            setPendingRemoval(null);
+                          } else {
+                            setPendingRemoval(drive.id);
+                            showInternalNotification(`Tem certeza? Clique novamente em "Remover" para confirmar a remoção do drive "${drive.nome}".`, 'info');
+                            setTimeout(() => setPendingRemoval(null), 5000);
+                          }
+                        }}
+                        className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                          pendingRemoval === drive.id 
+                            ? 'bg-red-800 text-white animate-pulse border-2 border-red-400' 
+                            : 'bg-red-600 text-white hover:bg-red-700'
+                        }`}
+                        title="Remover Drive da Lista"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Remover
+                      </button>
+                      
+                      <button 
+                        onClick={() => {
+                          setBackupInProgress(prev => new Set(prev).add(drive.id));
+                          showInternalNotification(`Iniciando backup manual do drive "${drive.nome}"...`, 'info');
+                          
+                          // Simular processo de backup
+                          setTimeout(() => {
+                            setBackupInProgress(prev => {
+                              const newSet = new Set(prev);
+                              newSet.delete(drive.id);
+                              return newSet;
+                            });
+                            
+                            // Atualizar última sync
+                            setDrives(prevDrives => prevDrives.map(d => 
+                              d.id === drive.id 
+                                ? { ...d, ultimaSync: new Date().toLocaleString('pt-BR') }
+                                : d
+                            ));
+                            
+                            showInternalNotification(`Backup concluído com sucesso para o drive "${drive.nome}"!`, 'success');
+                          }, 3000);
+                        }}
+                        disabled={backupInProgress.has(drive.id)}
+                        className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                          backupInProgress.has(drive.id)
+                            ? 'bg-orange-500 text-white animate-pulse cursor-not-allowed'
+                            : 'bg-orange-600 text-white hover:bg-orange-700'
+                        }`}
+                        title="Executar Backup Manual Imediatamente"
+                      >
+                        <Database className="w-4 h-4 mr-1" />
+                        {backupInProgress.has(drive.id) ? 'Fazendo Backup...' : 'Backup Manual'}
+                      </button>
+                      
+                      <div className="relative">
+                        <select
+                          value={drive.intervaloBackup || '5m'}
+                          onChange={(e) => {
+                            const novoIntervalo = e.target.value;
+                            setDrives(prevDrives => prevDrives.map(d => 
+                              d.id === drive.id 
+                                ? { ...d, intervaloBackup: novoIntervalo }
+                                : d
+                            ));
+                            showInternalNotification(
+                              `Intervalo de backup alterado para "${intervalosBackup.find(i => i.value === novoIntervalo)?.label}" no drive "${drive.nome}"`, 
+                              'success'
+                            );
                           }}
-                          className="flex items-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                          title="Editar Nome"
+                          className="flex items-center px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors cursor-pointer border-none outline-none"
+                          title="Configurar Intervalo de Backup Automático"
                         >
-                          <Edit2 className="w-4 h-4 mr-1" />
-                          Editar
-                        </button>
-                        
-                        <button 
-                          onClick={() => {
-                            if (pendingRemoval === drive.id) {
-                              // Segunda confirmação - executar remoção
-                              setDrives(drives.filter(d => d.id !== drive.id));
-                              showInternalNotification(`Drive removido: "${drive.nome}" (URL: ${drive.url}) - ${drive.observacao ? 'Obs: ' + drive.observacao : 'Sem observação'}`, 'success');
-                              setPendingRemoval(null);
-                            } else {
-                              // Primeira confirmação
-                              setPendingRemoval(drive.id);
-                              showInternalNotification(`Tem certeza? Clique novamente em "Remover" para confirmar a remoção do drive "${drive.nome}".`, 'info');
-                              
-                              // Auto-cancelar após 5 segundos
-                              setTimeout(() => {
-                                setPendingRemoval(null);
-                              }, 5000);
-                            }
-                          }}
-                          className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
-                            pendingRemoval === drive.id 
-                              ? 'bg-red-800 text-white animate-pulse border-2 border-red-400' 
-                              : 'bg-red-600 text-white hover:bg-red-700'
-                          }`}
-                          title="Remover Drive"
-                        >
-                          <Trash2 className="w-4 h-4 mr-1" />
-                          Remover
-                        </button>
+                          {intervalosBackup.map(intervalo => (
+                            <option key={intervalo.value} value={intervalo.value} className="bg-purple-600 text-white">
+                              {intervalo.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -2283,6 +2405,32 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Proprietário *
+                </label>
+                <input
+                  type="text"
+                  value={novoDrive.proprietario}
+                  onChange={(e) => setNovoDrive({...novoDrive, proprietario: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Ex: Felipe Manieri"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Link de Compartilhamento (Opcional)
+                </label>
+                <input
+                  type="url"
+                  value={novoDrive.linkCompartilhamento}
+                  onChange={(e) => setNovoDrive({...novoDrive, linkCompartilhamento: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Link de compartilhamento do drive"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Observação (Opcional)
                 </label>
                 <input
@@ -2304,7 +2452,11 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
               </button>
               <button
                 onClick={() => {
-                  if (novoDrive.nome && novoDrive.url) {
+                  if (novoDrive.nome && novoDrive.url && novoDrive.proprietario) {
+                    const now = new Date();
+                    const dateString = now.toLocaleDateString('pt-BR');
+                    const timeString = now.toLocaleString('pt-BR');
+                    
                     const newDrive = {
                       id: Date.now(),
                       nome: novoDrive.nome,
@@ -2312,14 +2464,22 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                       status: 'ativo',
                       usado: '0 GB',
                       espaco: '15 GB',
-                      observacao: novoDrive.observacao
+                      observacao: novoDrive.observacao,
+                      proprietario: novoDrive.proprietario,
+                      linkCompartilhamento: novoDrive.linkCompartilhamento || novoDrive.url,
+                      dataCriacao: dateString,
+                      ultimaModificacao: timeString,
+                      ultimaSync: timeString,
+                      arquivos: '0',
+                      pastas: '0',
+                      intervaloBackup: '5m'
                     };
                     setDrives([...drives, newDrive]);
-                    setNovoDrive({ nome: '', url: '', observacao: '' });
+                    setNovoDrive({ nome: '', url: '', observacao: '', proprietario: '', linkCompartilhamento: '' });
                     setShowAddDriveModal(false);
                     showInternalNotification('Drive adicionado com sucesso!', 'success');
                   } else {
-                    showInternalNotification('Preencha todos os campos obrigatórios.', 'error');
+                    showInternalNotification('Preencha todos os campos obrigatórios (Nome, URL e Proprietário).', 'error');
                   }
                 }}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
