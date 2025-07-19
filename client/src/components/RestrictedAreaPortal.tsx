@@ -147,18 +147,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     }, 4000);
   };
 
-  // Função para adicionar nova planilha
-  const addNewSheet = (newSheet: any) => {
-    const sheet = {
-      id: Date.now(),
-      name: newSheet.name || `Nova Planilha ${connectedSheets.length + 1}`,
-      url: newSheet.url || 'https://docs.google.com/spreadsheets/new',
-      status: 'Ativo',
-      lastUpdate: new Date().toLocaleString('pt-BR')
-    };
-    setConnectedSheets(prev => [...prev, sheet]);
-    showInternalNotification('Planilha adicionada com sucesso!', 'success');
-  };
+
 
   // Função para remover planilha
   const removeSheet = (sheetId: number) => {
@@ -492,6 +481,37 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
       console.error('Erro ao sincronizar:', error);
       showInternalNotification('Erro de conexão. Verifique sua internet e tente novamente.', 'error');
     }
+  };
+
+  // Função para adicionar nova planilha
+  const addNewSheet = (newSheet: { name: string; url: string; observation: string }) => {
+    const now = new Date();
+    const sheetId = Date.now();
+    
+    // Extrair ID da planilha se URL completa for fornecida
+    let cleanUrl = newSheet.url;
+    const sheetIdMatch = newSheet.url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    if (sheetIdMatch) {
+      cleanUrl = `https://docs.google.com/spreadsheets/d/${sheetIdMatch[1]}/edit`;
+    } else if (!newSheet.url.startsWith('http')) {
+      // Se apenas ID foi fornecido, construir URL completa
+      cleanUrl = `https://docs.google.com/spreadsheets/d/${newSheet.url}/edit`;
+    }
+
+    const sheet = {
+      id: sheetId,
+      name: newSheet.name,
+      url: cleanUrl,
+      observation: newSheet.observation || '',
+      status: 'Ativo',
+      lastUpdate: now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}),
+      createdAt: now.toISOString()
+    };
+
+    setConnectedSheets(prev => [...prev, sheet]);
+    setShowAddSheetModal(false);
+    
+    showInternalNotification(`Planilha "${newSheet.name}" adicionada com sucesso!`, 'success');
   };
 
   const configureAutomation = (type: string) => {
@@ -1312,24 +1332,51 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 </div>
               ) : (
                 connectedSheets.map((sheet) => (
-                  <div key={sheet.id} className="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-600 rounded">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Status: {sheet.status} • Última atualização: {sheet.lastUpdate}</p>
-                    </div>
-                    <div className="flex space-x-1">
-                      <button
-                        onClick={() => window.open(sheet.url, '_blank')}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors"
-                      >
-                        Abrir
-                      </button>
-                      <button
-                        onClick={() => removeSheet(sheet.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors"
-                      >
-                        Remover
-                      </button>
+                  <div key={sheet.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mr-3">
+                            <span className="text-green-600 dark:text-green-400 text-sm">📋</span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-96">{sheet.url}</p>
+                          </div>
+                        </div>
+                        
+                        {sheet.observation && (
+                          <div className="mb-2 ml-11">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 italic">
+                              💡 {sheet.observation}
+                            </p>
+                          </div>
+                        )}
+                        
+                        <div className="ml-11 flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center">
+                            <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                            {sheet.status}
+                          </span>
+                          <span>📅 {sheet.lastUpdate}</span>
+                          <span>🔗 Conectada</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex space-x-1 ml-4">
+                        <button
+                          onClick={() => window.open(sheet.url, '_blank')}
+                          className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition-colors"
+                        >
+                          Abrir
+                        </button>
+                        <button
+                          onClick={() => removeSheet(sheet.id)}
+                          className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition-colors"
+                        >
+                          Remover
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -1348,31 +1395,43 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                 const formData = new FormData(e.target as HTMLFormElement);
                 const newSheet = {
                   name: formData.get('name') as string,
-                  url: formData.get('url') as string
+                  url: formData.get('url') as string,
+                  observation: formData.get('observation') as string
                 };
                 addNewSheet(newSheet);
-                setShowAddSheetModal(false);
               }}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Planilha</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Planilha *</label>
                     <input
                       type="text"
                       name="name"
                       required
                       placeholder="Ex: Planilha Vendas 2025"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL da Planilha</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link/ID do Google Sheets *</label>
                     <input
-                      type="url"
+                      type="text"
                       name="url"
                       required
-                      placeholder="https://docs.google.com/spreadsheets/d/..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      placeholder="https://docs.google.com/spreadsheets/d/... ou apenas o ID"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Cole a URL completa ou apenas o ID da planilha
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Observação (opcional)</label>
+                    <textarea
+                      name="observation"
+                      rows={3}
+                      placeholder="Ex: Planilha para controle de vendas do Q1 2025"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    ></textarea>
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2 mt-6">
