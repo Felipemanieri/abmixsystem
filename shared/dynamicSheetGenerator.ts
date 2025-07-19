@@ -46,12 +46,14 @@ export function analyzeDynamicStructure(proposals: any[]): {
   // Calcular total de colunas baseado na detecção automática
   const baseColumns = 8; // ID, LINK, EMPRESA, CNPJ, VENDEDOR, PLANO, VALOR, STATUS
   const contractColumns = 6; // ODONTO, LIVRE_ADESAO, COMPULSORIO, APROVEITAMENTO, INICIO, PERIODO
-  const internalColumns = 9; // REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, ORIGEM, AUTORIZADOR, OBS_FINANCEIRAS, OBS_CLIENTE
+  const internalColumns = 11; // REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, ORIGEM, AUTORIZADOR, OBS_FINANCEIRAS, OBS_CLIENTE, OBS_SUPERVISOR, OBS_IMPLEMENTACAO
+  const workflowColumns = 4; // PRIORITY, CLIENT_COMPLETED, VENDOR_NAME, UPDATED_AT
+  const attachmentColumns = 3; // VENDOR_ATTACHMENTS_COUNT, CLIENT_ATTACHMENTS_COUNT, TOTAL_DOCUMENTS
   const titularColumns = maxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular
   const dependenteColumns = maxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente
   const extraColumns = 2; // ANEXOS, DATA_CONTRATO
   
-  const totalColumns = baseColumns + contractColumns + internalColumns + titularColumns + dependenteColumns + extraColumns;
+  const totalColumns = baseColumns + contractColumns + internalColumns + workflowColumns + attachmentColumns + titularColumns + dependenteColumns + extraColumns;
   
   return {
     maxTitulares,
@@ -69,8 +71,14 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   // INFORMAÇÕES DO CONTRATO
   headers.push('ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 'INICIO_VIGENCIA', 'PERIODO_MINIMO');
   
-  // INFORMAÇÕES INTERNAS
-  headers.push('REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE');
+  // INFORMAÇÕES INTERNAS E OBSERVAÇÕES DOS PORTAIS
+  headers.push('REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE', 'OBS_SUPERVISOR', 'OBS_IMPLEMENTACAO');
+  
+  // CAMPOS DE CONTROLE E WORKFLOW (que os portais podem alterar)
+  headers.push('PRIORITY', 'CLIENT_COMPLETED', 'VENDOR_NAME', 'UPDATED_AT');
+  
+  // CAMPOS DE ANEXOS E DOCUMENTOS
+  headers.push('VENDOR_ATTACHMENTS_COUNT', 'CLIENT_ATTACHMENTS_COUNT', 'TOTAL_DOCUMENTS');
   
   // TITULARES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
   // Cria automaticamente quantos titulares forem necessários (1, 2, 5, 10, 50...)
@@ -130,7 +138,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     contractData.periodoMinimo || ''
   );
   
-  // INFORMAÇÕES INTERNAS (preenchidas pelo vendedor - campos internos)
+  // INFORMAÇÕES INTERNAS E OBSERVAÇÕES DOS PORTAIS
   row.push(
     internalData.reuniao ? 'Sim' : 'Não',
     internalData.nomeReuniao || '',
@@ -140,7 +148,24 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
     internalData.origemVenda || '',
     internalData.autorizadorDesconto || '',
     internalData.observacoesFinanceiras || '',
-    internalData.observacoesCliente || ''
+    internalData.observacoesCliente || '',
+    internalData.observacoesSupervisor || '',
+    internalData.observacoesImplementacao || ''
+  );
+  
+  // CAMPOS DE CONTROLE E WORKFLOW
+  row.push(
+    proposal.priority || 'medium',
+    proposal.clientCompleted ? 'Sim' : 'Não',
+    proposal.vendorName || '',
+    proposal.updatedAt ? new Date(proposal.updatedAt).toLocaleDateString('pt-BR') : ''
+  );
+  
+  // CAMPOS DE ANEXOS E DOCUMENTOS
+  row.push(
+    proposal.vendorAttachments?.length || 0,
+    proposal.clientAttachments?.length || 0,
+    (proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0)
   );
   
   // REGRA 3: CAMPOS VAZIOS PERMITIDOS
@@ -181,7 +206,7 @@ export function formatProposalToDynamicRow(proposal: any, maxTitulares: number, 
   
   // CAMPOS EXTRAS
   row.push(
-    (proposal.vendorAttachments?.length || 0) + (proposal.clientAttachments?.length || 0),
+    'Ver Anexos',
     proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR')
   );
   
