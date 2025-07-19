@@ -154,6 +154,17 @@ The application provides role-based portals with specific functionality:
 
 ## Recent Changes
 
+### Padronização Visual dos Botões Google Drive (Jan 19, 2025)
+- **Implementado esquema de cores unificado cinza claro para todos os botões**:
+  - Todos os botões (Abrir, Editar, Remover, Backup Manual, Configurar Intervalo) agora usam tons de cinza
+  - Cores padronizadas: bg-gray-500 dark:bg-gray-600 para estado normal
+  - Hover consistente: hover:bg-gray-600 dark:hover:bg-gray-700
+  - Removidas completamente as cores azul, vermelho, laranja e roxo conforme solicitado
+  - Visual profissional e limpo mantendo acessibilidade em ambos os modos (claro/escuro)
+  - Contraste adequado para leitura em ambos os temas
+  - Botão de remoção mantém animação de confirmação com cores cinza mais escuras
+  - Select de configuração de intervalo também atualizado para cinza consistente
+
 ### Sistema de Tempo Integrado no Portal Restrito (Jan 18, 2025)
 - **Implementado Sistema de Tempo Integrado completo na aba "Configurações do Tempo"**:
   - Controle manual completo para todos os módulos Google (Drive, Sheets, Forms)

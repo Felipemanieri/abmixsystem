@@ -1105,7 +1105,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <button 
               onClick={() => setShowAddDriveModal(true)}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Novo Drive
@@ -1205,7 +1205,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     <div className="flex flex-wrap gap-2">
                       <button 
                         onClick={() => window.open(drive.url, '_blank')}
-                        className="flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                        className="flex items-center px-3 py-2 bg-gray-500 dark:bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
                         title="Abrir Drive no Navegador"
                       >
                         <ExternalLink className="w-4 h-4 mr-1" />
@@ -1217,7 +1217,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                           setEditingDrive(drive);
                           setShowEditDriveModal(true);
                         }}
-                        className="flex items-center px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
+                        className="flex items-center px-3 py-2 bg-gray-500 dark:bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
                         title="Editar Nome e Configurações"
                       >
                         <Edit2 className="w-4 h-4 mr-1" />
@@ -1238,8 +1238,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         }}
                         className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
                           pendingRemoval === drive.id 
-                            ? 'bg-red-800 text-white animate-pulse border-2 border-red-400' 
-                            : 'bg-red-600 text-white hover:bg-red-700'
+                            ? 'bg-gray-700 dark:bg-gray-800 text-white animate-pulse border-2 border-gray-400 dark:border-gray-500' 
+                            : 'bg-gray-500 dark:bg-gray-600 text-white hover:bg-gray-600 dark:hover:bg-gray-700'
                         }`}
                         title="Remover Drive da Lista"
                       >
@@ -1273,8 +1273,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         disabled={backupInProgress.has(drive.id)}
                         className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
                           backupInProgress.has(drive.id)
-                            ? 'bg-orange-500 text-white animate-pulse cursor-not-allowed'
-                            : 'bg-orange-600 text-white hover:bg-orange-700'
+                            ? 'bg-gray-600 dark:bg-gray-700 text-white animate-pulse cursor-not-allowed'
+                            : 'bg-gray-500 dark:bg-gray-600 text-white hover:bg-gray-600 dark:hover:bg-gray-700'
                         }`}
                         title="Executar Backup Manual Imediatamente"
                       >
@@ -1297,11 +1297,11 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                               'success'
                             );
                           }}
-                          className="flex items-center px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors cursor-pointer border-none outline-none"
+                          className="flex items-center px-3 py-2 bg-gray-500 dark:bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors cursor-pointer border-none outline-none"
                           title="Configurar Intervalo de Backup Automático"
                         >
                           {intervalosBackup.map(intervalo => (
-                            <option key={intervalo.value} value={intervalo.value} className="bg-purple-600 text-white">
+                            <option key={intervalo.value} value={intervalo.value} className="bg-gray-500 dark:bg-gray-600 text-white">
                               {intervalo.label}
                             </option>
                           ))}
@@ -2482,7 +2482,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     showInternalNotification('Preencha todos os campos obrigatórios (Nome, URL e Proprietário).', 'error');
                   }
                 }}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
               >
                 Adicionar Drive
               </button>
@@ -2572,7 +2572,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                     showInternalNotification('Preencha todos os campos obrigatórios.', 'error');
                   }
                 }}
-                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
               >
                 Salvar Alterações
               </button>
