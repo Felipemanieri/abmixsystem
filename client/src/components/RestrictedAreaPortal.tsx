@@ -1301,99 +1301,39 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
           </div>
 
           <div className="space-y-4">
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <h4 className="font-medium text-gray-900 dark:text-white">{sheetName}</h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{sheetUrl}</p>
-                  <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                    <span className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                      Ativo
-                    </span>
-                    <span>{totalProposals} linhas</span>
-                    <span>{totalColumns} colunas</span>
-                    <span>Atualizada: {new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit', second: '2-digit'})}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-2 mt-3">
-                <button
-                  onClick={openGoogleSheets}
-                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                >
-                  Abrir
-                </button>
-                <button
-                  onClick={editSheet}
-                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={removeMainSheet}
-                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                >
-                  Remover
-                </button>
-                <button
-                  onClick={exportCSV}
-                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                >
-                  Exportar CSV
-                </button>
-                <button
-                  onClick={manualUpdate}
-                  className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                >
-                  Atualizar
-                </button>
-                <select
-                  value={updateInterval}
-                  onChange={(e) => setUpdateInterval(e.target.value)}
-                  className="bg-gray-500 dark:bg-gray-600 text-white px-3 py-1 rounded text-sm border-none outline-none"
-                >
-                  <option value="0.5s">0.5s</option>
-                  <option value="1s">1s</option>
-                  <option value="5s">5s</option>
-                  <option value="10s">10s</option>
-                  <option value="30s">30s</option>
-                  <option value="1min">1min</option>
-                  <option value="5min">5min</option>
-                  <option value="10min">10min</option>
-                  <option value="15min">15min</option>
-                  <option value="1h">1h</option>
-                  <option value="manual">Manual</option>
-                </select>
-              </div>
-            </div>
-
             {/* Lista de Planilhas Conectadas */}
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Planilhas Conectadas ({connectedSheets.length})</h4>
-              {connectedSheets.map((sheet) => (
-                <div key={sheet.id} className="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-600 rounded">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Status: {sheet.status} • Última atualização: {sheet.lastUpdate}</p>
-                  </div>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => window.open(sheet.url, '_blank')}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors"
-                    >
-                      Abrir
-                    </button>
-                    <button
-                      onClick={() => removeSheet(sheet.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors"
-                    >
-                      Remover
-                    </button>
-                  </div>
+              {connectedSheets.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg">
+                  <div className="mb-2">📋</div>
+                  <div className="text-sm">Nenhuma planilha conectada</div>
+                  <div className="text-xs mt-1">Use o botão "Adicionar Nova Planilha" para conectar uma planilha</div>
                 </div>
-              ))}
+              ) : (
+                connectedSheets.map((sheet) => (
+                  <div key={sheet.id} className="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-600 rounded">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{sheet.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Status: {sheet.status} • Última atualização: {sheet.lastUpdate}</p>
+                    </div>
+                    <div className="flex space-x-1">
+                      <button
+                        onClick={() => window.open(sheet.url, '_blank')}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors"
+                      >
+                        Abrir
+                      </button>
+                      <button
+                        onClick={() => removeSheet(sheet.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
