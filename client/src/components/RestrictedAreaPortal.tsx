@@ -315,15 +315,10 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   });
 
   // Estados para gerenciamento de drives
-  const [drives, setDrives] = useState([
-    { id: 1, nome: 'Drive Principal', url: 'https://drive.google.com/drive/folders/1FAIpQLScQKE8BjIZJ-abmix-proposals', status: 'ativo', espaco: '15 GB', usado: '8.2 GB', tipo: 'Google Drive', icon: 'HardDrive', cor: 'blue' },
-    { id: 2, nome: 'Planilha Propostas', url: 'https://docs.google.com/spreadsheets/d/1def456', status: 'ativo', espaco: '2,847 linhas', usado: '47 planilhas', tipo: 'Google Sheets', icon: 'FileSpreadsheet', cor: 'green' },
-    { id: 3, nome: 'Formulário Cliente', url: 'https://docs.google.com/forms/d/1ghi789', status: 'ativo', espaco: '1,247 respostas', usado: '23 forms', tipo: 'Google Forms', icon: 'FileText', cor: 'purple' },
-    { id: 4, nome: 'Documentos Templates', url: 'https://docs.google.com/document/d/1jkl012', status: 'ativo', espaco: '12 templates', usado: '384 docs', tipo: 'Google Docs', icon: 'FileText', cor: 'orange' },
-    { id: 5, nome: 'Backup Automático', url: 'https://drive.google.com/drive/folders/1mno345', status: 'ativo', espaco: '24.8 GB', usado: '847 backups', tipo: 'Backup', icon: 'Database', cor: 'red' }
-  ]);
+  const [drives, setDrives] = useState([]);
   const [novoDrive, setNovoDrive] = useState({ nome: '', url: '', observacao: '' });
   const [abaAtiva, setAbaAtiva] = useState('drive');
+  const [pendingRemoval, setPendingRemoval] = useState(null);
 
   // Dados dos status (conforme imagem fornecida)
   const statusOptions = [
@@ -1163,14 +1158,27 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                         
                         <button 
                           onClick={() => {
-                            if (confirm(`Tem certeza que deseja remover o drive "${drive.nome}"?`)) {
-                              if (confirm(`ATENÇÃO: Esta ação é irreversível. Confirma a remoção do drive "${drive.nome}"?`)) {
-                                setDrives(drives.filter(d => d.id !== drive.id));
-                                showInternalNotification(`Drive "${drive.nome}" removido com sucesso!`, 'success');
-                              }
+                            if (pendingRemoval === drive.id) {
+                              // Segunda confirmação - executar remoção
+                              setDrives(drives.filter(d => d.id !== drive.id));
+                              showInternalNotification(`Drive removido: "${drive.nome}" (URL: ${drive.url}) - ${drive.observacao ? 'Obs: ' + drive.observacao : 'Sem observação'}`, 'success');
+                              setPendingRemoval(null);
+                            } else {
+                              // Primeira confirmação
+                              setPendingRemoval(drive.id);
+                              showInternalNotification(`Tem certeza? Clique novamente em "Remover" para confirmar a remoção do drive "${drive.nome}".`, 'info');
+                              
+                              // Auto-cancelar após 5 segundos
+                              setTimeout(() => {
+                                setPendingRemoval(null);
+                              }, 5000);
                             }
                           }}
-                          className="flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                          className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
+                            pendingRemoval === drive.id 
+                              ? 'bg-red-800 text-white animate-pulse border-2 border-red-400' 
+                              : 'bg-red-600 text-white hover:bg-red-700'
+                          }`}
                           title="Remover Drive"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />
