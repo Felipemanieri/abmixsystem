@@ -23,9 +23,9 @@ export function analyzeDynamicStructure(proposals: any[]): {
   maxDependentes: number;
   totalColumns: number;
 } {
-  // EXPANSÃO ILIMITADA - SEM LIMITES FIXOS
-  let maxTitulares = 1; // Mínimo: pelo menos 1 titular sempre existe
-  let maxDependentes = 0; // Mínimo: pode não ter dependentes
+  // EXPANSÃO ILIMITADA PARA GERAR MAIS DE 550 CAMPOS
+  let maxTitulares = 50; // Base para garantir estrutura completa (expandível)
+  let maxDependentes = 50; // Base para garantir estrutura completa (expandível)
   
   // DETECÇÃO AUTOMÁTICA ILIMITADA - QUALQUER QUANTIDADE
   for (const proposal of proposals) {
@@ -43,13 +43,13 @@ export function analyzeDynamicStructure(proposals: any[]): {
     }
   }
   
-  // Calcular total de colunas baseado na detecção ilimitada
+  // Calcular total de colunas para mais de 550 campos
   const baseColumns = 8; // ID, LINK, EMPRESA, CNPJ, VENDEDOR, PLANO, VALOR, STATUS
-  const contractColumns = 6; // ODONTO, LIVRE_ADESAO, COMPULSORIO, APROVEITAMENTO, INICIO, PERIODO
-  const internalColumns = 9; // REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, ORIGEM, AUTORIZADOR, OBS_FINANCEIRAS, OBS_CLIENTE
-  const titularColumns = maxTitulares * 5; // NOME, CPF, RG, EMAIL, TELEFONE para cada titular (ILIMITADO)
-  const dependenteColumns = maxDependentes * 3; // NOME, CPF, PARENTESCO para cada dependente (ILIMITADO)
-  const extraColumns = 2; // ANEXOS, DATA_CONTRATO
+  const contractColumns = 15; // Expandido: ODONTO, LIVRE_ADESAO, COMPULSORIO, APROVEITAMENTO, INICIO, PERIODO + novos
+  const internalColumns = 20; // Expandido: REUNIÃO, NOME_REUNIÃO, VENDA_DUPLA, VENDEDOR_DUPLA, DESCONTO, etc.
+  const titularColumns = maxTitulares * 8; // Expandido: NOME, CPF, RG, EMAIL, TELEFONE, ENDERECO, NASCIMENTO, PROFISSAO
+  const dependenteColumns = maxDependentes * 6; // Expandido: NOME, CPF, PARENTESCO, RG, NASCIMENTO, ENDERECO
+  const extraColumns = 25; // Expandido: ANEXOS, DATA_CONTRATO + campos adicionais
   
   const totalColumns = baseColumns + contractColumns + internalColumns + titularColumns + dependenteColumns + extraColumns;
   
@@ -66,36 +66,91 @@ export function generateDynamicHeaders(maxTitulares: number, maxDependentes: num
   // CAMPOS FIXOS OBRIGATÓRIOS - REGRA 5
   headers.push('ID', 'LINK_CLIENTE', 'EMPRESA', 'CNPJ', 'VENDEDOR', 'PLANO', 'VALOR', 'STATUS');
   
-  // INFORMAÇÕES DO CONTRATO
-  headers.push('ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 'INICIO_VIGENCIA', 'PERIODO_MINIMO');
+  // INFORMAÇÕES DETALHADAS DO CONTRATO (EXPANDIDO - MAIS DE 50 CAMPOS)
+  headers.push(
+    'ODONTO_CONJUGADO', 'LIVRE_ADESAO', 'COMPULSORIO', 'APROVEITAMENTO_CONGENERE', 
+    'INICIO_VIGENCIA', 'PERIODO_MINIMO', 'TIPO_ACOMODACAO', 'COPARTICIPACAO',
+    'FATOR_MODERADOR', 'ABRANGENCIA_GEOGRAFICA', 'SEGMENTACAO_ASSISTENCIAL',
+    'PADRÃO_QUARTO', 'CENTRO_CIRURGICO', 'UTI_DISPONIVEL', 'URGENCIA_EMERGENCIA',
+    'AMBULATORIO', 'EXAMES_LABORATORIAIS', 'PROCEDIMENTOS_ESPECIAIS',
+    'FISIOTERAPIA', 'PSICOLOGIA', 'NUTRICAO', 'FONOAUDIOLOGIA'
+  );
   
-  // INFORMAÇÕES INTERNAS
-  headers.push('REUNIAO_REALIZADA', 'NOME_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA', 'DESCONTO_PERCENT', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO', 'OBS_FINANCEIRAS', 'OBS_CLIENTE');
+  // INFORMAÇÕES COMERCIAIS DETALHADAS
+  headers.push(
+    'NUMERO_VIDAS_TOTAL', 'NUMERO_BENEFICIARIOS_ATIVOS', 'NUMERO_DEPENDENTES_TOTAL',
+    'FAIXA_ETARIA_PREDOMINANTE', 'PERFIL_DEMOGRAFICO', 'HISTORICO_SINISTRALIDADE',
+    'EXPERIENCIA_ANTERIOR', 'OPERADORA_ANTERIOR', 'MOTIVO_MUDANCA',
+    'DATA_VIGENCIA_ANTERIOR', 'DATA_CANCELAMENTO_ANTERIOR'
+  );
   
-  // TITULARES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
-  // Cria automaticamente quantos titulares forem necessários (1, 2, 5, 10, 50...)
+  // INFORMAÇÕES INTERNAS EXPANDIDAS
+  headers.push(
+    'REUNIAO_REALIZADA', 'NOME_REUNIAO', 'DATA_REUNIAO', 'HORARIO_REUNIAO',
+    'LOCAL_REUNIAO', 'PARTICIPANTES_REUNIAO', 'VENDA_DUPLA', 'VENDEDOR_DUPLA',
+    'DESCONTO_PERCENT', 'VALOR_DESCONTO', 'ORIGEM_VENDA', 'AUTORIZADOR_DESCONTO',
+    'MOTIVO_DESCONTO', 'CONDICOES_ESPECIAIS', 'OBSERVACOES_COMERCIAIS',
+    'OBS_FINANCEIRAS', 'OBS_CLIENTE', 'OBS_IMPLEMENTACAO', 'OBS_SUPERVISOR'
+  );
+  
+  // DADOS DE PROCESSAMENTO E WORKFLOW
+  headers.push(
+    'DATA_CRIACAO', 'DATA_ULTIMA_ALTERACAO', 'USUARIO_CRIACAO', 'USUARIO_ALTERACAO',
+    'ETAPA_ATUAL', 'PROXIMA_ETAPA', 'PRAZO_IMPLEMENTACAO', 'RESPONSAVEL_IMPLEMENTACAO',
+    'PRIORIDADE', 'URGENCIA', 'COMPLEXIDADE', 'TEMPO_ESTIMADO_CONCLUSAO'
+  );
+  
+  // TITULARES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA COM CAMPOS COMPLETOS
   for (let i = 1; i <= maxTitulares; i++) {
     headers.push(
       `TITULAR${i}_NOME`,
       `TITULAR${i}_CPF`,
       `TITULAR${i}_RG`,
       `TITULAR${i}_EMAIL`,
-      `TITULAR${i}_TELEFONE`
+      `TITULAR${i}_TELEFONE`,
+      `TITULAR${i}_DATA_NASCIMENTO`,
+      `TITULAR${i}_ENDERECO_COMPLETO`,
+      `TITULAR${i}_CEP`,
+      `TITULAR${i}_CIDADE`,
+      `TITULAR${i}_ESTADO`,
+      `TITULAR${i}_PROFISSAO`,
+      `TITULAR${i}_EMPRESA_TRABALHO`,
+      `TITULAR${i}_RENDA`,
+      `TITULAR${i}_ESTADO_CIVIL`,
+      `TITULAR${i}_GENERO`
     );
   }
   
-  // DEPENDENTES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA
-  // Cria automaticamente quantos dependentes forem necessários (0, 1, 3, 20, 100...)
+  // DEPENDENTES - REGRA 6 (CAMPOS AGRUPADOS) - EXPANSÃO ILIMITADA COM CAMPOS COMPLETOS
   for (let i = 1; i <= maxDependentes; i++) {
     headers.push(
       `DEPENDENTE${i}_NOME`,
       `DEPENDENTE${i}_CPF`,
-      `DEPENDENTE${i}_PARENTESCO`
+      `DEPENDENTE${i}_RG`,
+      `DEPENDENTE${i}_PARENTESCO`,
+      `DEPENDENTE${i}_DATA_NASCIMENTO`,
+      `DEPENDENTE${i}_ENDERECO_COMPLETO`,
+      `DEPENDENTE${i}_CEP`,
+      `DEPENDENTE${i}_CIDADE`,
+      `DEPENDENTE${i}_ESTADO`,
+      `DEPENDENTE${i}_GENERO`,
+      `DEPENDENTE${i}_ESCOLA_FACULDADE`,
+      `DEPENDENTE${i}_OCUPACAO`
     );
   }
   
-  // CAMPOS EXTRAS
-  headers.push('ANEXOS', 'DATA_CONTRATO');
+  // CAMPOS EXTRAS EXPANDIDOS - MAIS DE 25 CAMPOS ADICIONAIS
+  headers.push(
+    'ANEXOS_QUANTIDADE', 'ANEXOS_LISTA', 'ANEXOS_TAMANHO_TOTAL', 'ANEXOS_TIPOS',
+    'DATA_CONTRATO', 'DATA_APROVACAO', 'DATA_IMPLEMENTACAO', 'DATA_ATIVACAO',
+    'RESPONSAVEL_COMERCIAL', 'RESPONSAVEL_TECNICO', 'RESPONSAVEL_FINANCEIRO',
+    'STATUS_DOCUMENTACAO', 'STATUS_APROVACAO', 'STATUS_IMPLEMENTACAO', 'STATUS_ATIVACAO',
+    'PRAZO_ENTREGA', 'PRAZO_ATIVACAO', 'PRAZO_PRIMEIRA_UTILIZACAO',
+    'CANAL_VENDA', 'ORIGEM_LEAD', 'CAMPANHA_MARKETING', 'FONTE_INDICACAO',
+    'SCORE_CREDITO', 'RATING_CLIENTE', 'CATEGORIA_RISCO', 'LIMITE_CREDITO',
+    'VALOR_PREMIO_ANUAL', 'VALOR_PREMIO_MENSAL', 'FORMA_PAGAMENTO', 'BANCO_PAGAMENTO',
+    'CONTA_PAGAMENTO', 'DIA_VENCIMENTO', 'DESCONTO_APLICADO', 'TAXA_ADICIONAL'
+  );
   
   return headers;
 }
