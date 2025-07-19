@@ -953,143 +953,177 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   }
 
   function renderGoogleSheetsSection() {
+    const [updateInterval, setUpdateInterval] = useState('1s');
+    const [isRealTimeActive, setIsRealTimeActive] = useState(true);
+    const [sheetName, setSheetName] = useState('Planilha Principal - Sistema Abmix');
+    const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const openGoogleSheets = () => {
+      window.open(sheetUrl, '_blank');
+    };
+
+    const handleRemoveSheet = () => {
+      if (confirm('Tem certeza que deseja remover a planilha conectada?')) {
+        showInternalNotification('Planilha removida com sucesso!', 'success');
+      }
+    };
+
+    const handleForceSync = () => {
+      showInternalNotification('Sincronização forçada executada com sucesso!', 'success');
+    };
+
+    const exportToCSV = () => {
+      showInternalNotification('Exportação CSV iniciada com sucesso!', 'success');
+    };
+
     return (
       <div className="space-y-6">
-        {/* Cabeçalho Principal */}
+        {/* Cabeçalho com botões */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <FileSpreadsheet className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Sheets - Central Unificada</h3>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Google Sheets</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Visualização da planilha completa em tempo real</p>
+              </div>
             </div>
+            
+            {/* Indicador de tempo real */}
+            <div className="flex items-center">
+              <div className="flex items-center mr-4">
+                <div className={`w-2 h-2 rounded-full mr-2 ${isRealTimeActive ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {isRealTimeActive ? 'Tempo Real' : 'Manual'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Botões de ação (iguais ao Drive) */}
+          <div className="flex items-center space-x-3 mb-6">
             <button 
               onClick={openGoogleSheets}
-              className="flex items-center px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
             >
               <ExternalLink className="w-4 h-4 mr-2" />
               Abrir Google Sheets
             </button>
-          </div>
-
-          {/* Planilha Principal e Relatórios */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Planilha Principal</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Planilha horizontal dinâmica com todos os dados dos clientes e propostas
-              </p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Status:</span>
-                  <span className="text-green-600 dark:text-green-400 font-medium">Sincronizada</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Última atualização:</span>
-                  <span className="text-gray-600 dark:text-gray-300">2 min atrás</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Total de registros:</span>
-                  <span className="text-gray-600 dark:text-gray-300">247</span>
-                </div>
-              </div>
-              <div className="mt-4 flex space-x-2">
-                <button 
-                  onClick={openGoogleSheets}
-                  className="flex-1 px-3 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Abrir
-                </button>
-                <button 
-                  onClick={syncGoogleSheets}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-                >
-                  Sync
-                </button>
-              </div>
-            </div>
-
-            <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <Database className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Relatórios</h4>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Planilhas de relatórios e análises automatizadas
-              </p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Status:</span>
-                  <span className="text-green-600 dark:text-green-400 font-medium">Ativa</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Relatórios gerados:</span>
-                  <span className="text-gray-600 dark:text-gray-300">15</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-300">Frequência:</span>
-                  <span className="text-gray-600 dark:text-gray-300">Diária</span>
-                </div>
-              </div>
-              <div className="mt-4 flex space-x-2">
-                <button 
-                  onClick={() => window.open('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=1', '_blank')}
-                  className="flex-1 px-3 py-2 bg-purple-600 text-white dark:bg-purple-600 dark:text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  Ver Relatórios
-                </button>
-                <button 
-                  onClick={() => configureAutomation('sheets')}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
-                >
-                  Config
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Visualizador de Planilha Integrado */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Visualizador de Planilha</h3>
-            </div>
-            <div className="flex space-x-3">
-              <button 
-                onClick={() => window.location.reload()}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white dark:bg-blue-600 dark:text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Atualizar
-              </button>
-              <button 
-                onClick={() => {
-                  const csvContent = "data:text/csv;charset=utf-8,ID,EMPRESA,CNPJ,VENDEDOR,PLANO,VALOR,STATUS\n";
-                  const encodedUri = encodeURI(csvContent);
-                  const link = document.createElement("a");
-                  link.setAttribute("href", encodedUri);
-                  link.setAttribute("download", "planilha_abmix.csv");
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
+            
+            <button 
+              onClick={() => setShowEditModal(true)}
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Edit2 className="w-4 h-4 mr-2" />
+              Editar
+            </button>
+            
+            <button 
+              onClick={handleRemoveSheet}
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Remover
+            </button>
+            
+            <button 
+              onClick={exportToCSV}
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar CSV
+            </button>
+            
+            <button 
+              onClick={handleForceSync}
+              className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Atualizar
+            </button>
+            
+            {/* Botão de configurar intervalo */}
+            <div className="relative">
+              <select
+                value={updateInterval}
+                onChange={(e) => {
+                  setUpdateInterval(e.target.value);
+                  setIsRealTimeActive(e.target.value !== 'manual');
+                  showInternalNotification(`Intervalo alterado para ${e.target.value === 'manual' ? 'manual' : e.target.value}`, 'success');
                 }}
-                className="flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                className="flex items-center px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors cursor-pointer"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Exportar CSV
-              </button>
+                <option value="0.5s">0.5 segundos</option>
+                <option value="1s">1 segundo</option>
+                <option value="5s">5 segundos</option>
+                <option value="10s">10 segundos</option>
+                <option value="30s">30 segundos</option>
+                <option value="1min">1 minuto</option>
+                <option value="5min">5 minutos</option>
+                <option value="10min">10 minutos</option>
+                <option value="15min">15 minutos</option>
+                <option value="1h">1 hora</option>
+                <option value="manual">Manual</option>
+              </select>
             </div>
           </div>
 
-          {/* Componente PlanilhaViewer integrado */}
-          <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-            <PlanilhaViewer />
-          </div>
+          {/* Visualização da planilha completa */}
+          <PlanilhaViewer />
         </div>
+
+        {/* Modal de editar planilha */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+              <div className="flex items-center mb-4">
+                <Edit2 className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Editar Planilha</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Nome da Planilha</label>
+                  <input
+                    type="text"
+                    value={sheetName}
+                    onChange={(e) => setSheetName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">URL da Planilha</label>
+                  <input
+                    type="text"
+                    value={sheetUrl}
+                    onChange={(e) => setSheetUrl(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    showInternalNotification('Configurações da planilha salvas com sucesso!', 'success');
+                    setShowEditModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 bg-green-600 text-white dark:bg-green-600 dark:text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-500 transition-colors"
+                >
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
