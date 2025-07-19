@@ -40,6 +40,7 @@ import {
   ExternalLink,
   Plus,
   Edit,
+  Edit2,
   Trash2,
   X,
   Folder,
