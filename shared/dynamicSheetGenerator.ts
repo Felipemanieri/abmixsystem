@@ -23,21 +23,22 @@ export function analyzeDynamicStructure(proposals: any[]): {
   maxDependentes: number;
   totalColumns: number;
 } {
-  // EXPANSÃO ILIMITADA - SEM LIMITES FIXOS
-  let maxTitulares = 1; // Mínimo: pelo menos 1 titular sempre existe
-  let maxDependentes = 0; // Mínimo: pode não ter dependentes
+  // REGRA 2: CAMPOS FIXOS PRÉ-DEFINIDOS com estrutura mínima garantida
+  let maxTitulares = 3; // TITULAR1, TITULAR2, TITULAR3 sempre criados
+  let maxDependentes = 5; // DEPENDENTE1, DEPENDENTE2, DEPENDENTE3, DEPENDENTE4, DEPENDENTE5 sempre criados
   
-  // DETECÇÃO AUTOMÁTICA ILIMITADA - QUALQUER QUANTIDADE
+  // DETECÇÃO AUTOMÁTICA ILIMITADA - EXPANDE CONFORME NECESSÁRIO
+  // REGRA 2: Estrutura mínima garantida + expansão automática
   for (const proposal of proposals) {
     const titulares = proposal.titulares || [];
     const dependentes = proposal.dependentes || [];
     
-    // Detectar máximo real de titulares (SEM LIMITE)
+    // Se tem mais titulares que o mínimo, expande automaticamente
     if (titulares.length > maxTitulares) {
       maxTitulares = titulares.length;
     }
     
-    // Detectar máximo real de dependentes (SEM LIMITE)
+    // Se tem mais dependentes que o mínimo, expande automaticamente  
     if (dependentes.length > maxDependentes) {
       maxDependentes = dependentes.length;
     }
