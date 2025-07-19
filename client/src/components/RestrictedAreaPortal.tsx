@@ -178,8 +178,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   // Estados para Google Sheets - MOVIDOS PARA O TOPO
   const [updateInterval, setUpdateInterval] = useState('1s');
   const [isRealTimeActive, setIsRealTimeActive] = useState(true);
-  const [sheetName, setSheetName] = useState('Planilha Principal - Sistema Abmix');
-  const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
+  const [sheetName, setSheetName] = useState('');
+  const [sheetUrl, setSheetUrl] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddSheetModal, setShowAddSheetModal] = useState(false);
   const [connectedSheets, setConnectedSheets] = useState([]);
@@ -213,8 +213,8 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   });
   
   const [sheetsConfig, setSheetsConfig] = useState({
-    connected: true,
-    sheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+    connected: false,
+    sheetId: '',
     autoUpdate: true,
     syncFrequency: 'Tempo Real'
   });
