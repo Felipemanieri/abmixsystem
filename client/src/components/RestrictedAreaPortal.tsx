@@ -153,8 +153,14 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     googleForms: { active: true, interval: '10m' },
     googleDocs: { active: true, interval: '5m' },
     backupAuto: { active: true, interval: '24h' },
-    apiRequests: { active: true, interval: '1s' }
   });
+
+  // Estados para Google Sheets - MOVIDOS PARA O TOPO
+  const [updateInterval, setUpdateInterval] = useState('1s');
+  const [isRealTimeActive, setIsRealTimeActive] = useState(true);
+  const [sheetName, setSheetName] = useState('Planilha Principal - Sistema Abmix');
+  const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
+  const [showEditModal, setShowEditModal] = useState(false);
   
   const [allPaused, setAllPaused] = useState(false);
   
@@ -953,12 +959,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
   }
 
   function renderGoogleSheetsSection() {
-    const [updateInterval, setUpdateInterval] = useState('1s');
-    const [isRealTimeActive, setIsRealTimeActive] = useState(true);
-    const [sheetName, setSheetName] = useState('Planilha Principal - Sistema Abmix');
-    const [sheetUrl, setSheetUrl] = useState('https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit');
-    const [showEditModal, setShowEditModal] = useState(false);
-
     const openGoogleSheets = () => {
       window.open(sheetUrl, '_blank');
     };
@@ -1360,7 +1360,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
     }));
   };
 
-  const updateInterval = (module: string, interval: string) => {
+  const updateModuleInterval = (module: string, interval: string) => {
     setTimeConfigs(prev => ({
       ...prev,
       [module]: { ...prev[module], interval }
@@ -1507,7 +1507,7 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
                   <span className="text-sm text-gray-600 dark:text-gray-400">Intervalo:</span>
                   <select
                     value={config.interval}
-                    onChange={(e) => updateInterval(module, e.target.value)}
+                    onChange={(e) => updateModuleInterval(module, e.target.value)}
                     disabled={!config.active}
                     className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm disabled:opacity-50"
                   >
