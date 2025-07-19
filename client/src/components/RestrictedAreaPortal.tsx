@@ -1163,30 +1163,6 @@ export default function RestrictedAreaPortal({ user, onLogout }: RestrictedAreaP
             </div>
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => setShowAddSheetModal(true)}
-                className="bg-purple-500 dark:bg-purple-600 hover:bg-purple-600 dark:hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                ➕ Adicionar
-              </button>
-              <button
-                onClick={removeMainSheet}
-                className="bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                🗑️ Remover
-              </button>
-              <button
-                onClick={openGoogleSheets}
-                className="bg-orange-500 dark:bg-orange-600 hover:bg-orange-600 dark:hover:bg-orange-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                🔗 Abrir
-              </button>
-              <button
-                onClick={editSheet}
-                className="bg-yellow-500 dark:bg-yellow-600 hover:bg-yellow-600 dark:hover:bg-yellow-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
-              >
-                ✏️ Editar
-              </button>
-              <button
                 onClick={manualUpdate}
                 className="bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center"
               >
